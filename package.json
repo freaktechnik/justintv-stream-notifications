@@ -2,7 +2,7 @@
 	{"type": "integer", "name": "updateInterval", "value": 30, "title": "Update Interval"},
 	{"type": "string", "name": "channelList", "title": "Channels"},
 	{"type": "string", "name": "usernameList", "title": "Users"},
-	{"type": "bool", "name": "autoUsername", "title": "Auto detect username"}
+	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true}
 ],
 "contributors": [],
 "icon64": "data/icon64.png",
