@@ -1,0 +1,19 @@
+{"license": "LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0.html)", "preferences": [
+	{"type": "integer", "name": "updateInterval", "value": 30, "title": "Update Interval"},
+	{"type": "string", "name": "channelList", "title": "Channels"},
+	{"type": "string", "name": "usernameList", "title": "Users"},
+	{"type": "bool", "name": "autoUsername", "title": "Auto detect username"}
+],
+"contributors": [],
+"icon64": "data/icon64.png",
+"url": "",
+"description": "This add-on displays a notification when a channel on justin.tv resp. twitch goes live. Which channels are checked for being live is fully customizable.",
+"author": "freaktechnik",
+"name": "justintv-stream-notifications",
+"dependencies": ["api-utils", "addon-kit"],
+"version": "2.2.2",
+"lib": "lib",
+"fullName": "Justin.tv Stream Notifications",
+"main": "main",
+"id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4",
+"icon": "data/icon.png"}

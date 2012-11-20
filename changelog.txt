@@ -1,0 +1,4 @@
+changelog
+2.2.2
+	- Using URL provided by the API
+	- New icon for the panel
