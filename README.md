@@ -11,6 +11,8 @@ The add-on gives you full control: you can even customize the interval of the ad
 
 The notification shows the title of the stream and the channel name, as well as the channel's profile picture. A click on the notification focuses the tab with the channel page, if already opened, or opens a new tab to watch the stream.
 
+To check for missed notifications or to tune in to a channel later, the extension provides a panel with a list of currently live channels.
+
 Official Download
 =============
 https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
