@@ -7,7 +7,7 @@
 "contributors": [],
 "icon64": "data/icon64.png",
 "url": "",
-"description": "This add-on displays a notification when a channel on justin.tv resp. twitch goes live. Which channels are checked for being live is fully customizable.",
+"description": "This displays a notification when a channel on justin.tv resp. twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
 "author": "freaktechnik",
 "name": "justintv-stream-notifications",
 "dependencies": ["api-utils", "addon-kit"],
