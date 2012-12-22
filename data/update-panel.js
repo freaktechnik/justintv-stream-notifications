@@ -8,6 +8,7 @@ addon.port.on("add", function (channel) {
 	link.appendChild(image);
 	link.appendChild(textNode);
     link.href = 'javascript:openTab("http://'+channel.url[0]+'")';
+	link.title = channel.title;
     element.appendChild(link);
     document.getElementById('channels').appendChild(element);
 	updatePanel();
