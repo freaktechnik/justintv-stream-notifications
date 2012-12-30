@@ -11,3 +11,5 @@ changelog
 2.2.5
     - Widget tooltip change depending on the number of livestreams.
     - fixed not iterable tabs
+2.2.6
+    - Fixed refresh button not working
