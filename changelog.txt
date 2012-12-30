@@ -8,3 +8,5 @@ changelog
 2.2.4
     - refresh button in panel
     - 0 means no automatic refresh
+2.2.5
+    - Widget tooltip change depending on the number of livestreams.
