@@ -2,3 +2,6 @@ changelog
 2.2.2
 	- Using URL provided by the API
 	- New icon for the panel
+2.2.3
+    - Don't show a notification when the focussed tab is the streampage
+    - Update panel even if the focussed tab is the channelpage
