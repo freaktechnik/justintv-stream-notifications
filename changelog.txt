@@ -10,3 +10,4 @@ changelog
     - 0 means no automatic refresh
 2.2.5
     - Widget tooltip change depending on the number of livestreams.
+    - fixed not iterable tabs
