@@ -31,11 +31,13 @@ function showMessage() {
 	if(document.getElementById('channels').getElementsByTagName("LI").length>0&&document.getElementById("channelslive").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'block';
 		document.getElementById("channels").style.display = 'block';
+        document.getElementById("refresh").style.display = 'block';
 		document.getElementById("channelsoffline").style.display = 'none';
 	}
 	else if(document.getElementById('channels').getElementsByTagName("LI").length==0&&document.getElementById("channelsoffline").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'none';
 		document.getElementById("channels").style.display = 'none';
+        document.getElementById("refresh").style.display = 'none';
 		document.getElementById("channelsoffline").style.display = 'block';
 	}
 }
@@ -43,6 +45,10 @@ function showMessage() {
 function updatePanel() {
 	showMessage();
 	resizePanel();
+}
+
+function forceRefresh() {
+    addon.port.emit("refresh");
 }
 
 window.onload = resizePanel;

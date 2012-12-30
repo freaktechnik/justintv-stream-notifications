@@ -5,7 +5,23 @@
 		body {
 			width: 200px;
 			font: message-box;
+            overflow: hidden;
 		}
+        #refresh {
+            float: right;
+            height: 14px;
+            width: 14px;
+            padding: 1px;
+            background-image: url('chrome://browser/skin/reload-stop-go.png');
+            outline: none;
+            cursor: default;
+        }
+        #refresh:hover {
+            background-position: 0 -14px;
+        }
+        #refresh:active {
+            background-position: 0 -28px;
+        }
         ul,h2,li {
 			margin: 0;
 			padding: 0;
@@ -25,9 +41,10 @@
     <script src="update-panel.js"></script>
 </head>
 <body>
+    <a href="javascript:forceRefresh();" style="display:none;" id="refresh"></a>
 	<h2 data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline"></h2>
     <h2 data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive"></h2>
-    <ul id="channels" style="display: none;">
+    <ul id="channels" style="display:none;">
     </ul>
 </body>
 </html>

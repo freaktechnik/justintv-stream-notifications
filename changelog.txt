@@ -5,3 +5,6 @@ changelog
 2.2.3
     - Don't show a notification when the focussed tab is the streampage
     - Update panel even if the focussed tab is the channelpage
+2.2.4
+    - refresh button in panel
+    - 0 means no automatic refresh
