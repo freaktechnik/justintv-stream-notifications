@@ -13,3 +13,5 @@ changelog
     - fixed not iterable tabs
 2.2.6
     - Fixed refresh button not working
+    - Links not underlined in panel
+    - Fixed button tooltip
