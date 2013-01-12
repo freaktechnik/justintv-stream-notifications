@@ -16,3 +16,4 @@ changelog
     - Links not underlined in panel
     - Fixed button tooltip
     - No scrollbar in panel for long streamnames
+    - Don't hide refresh button

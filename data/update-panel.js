@@ -14,30 +14,29 @@ addon.port.on("add", function (channel) {
 	updatePanel();
 });
 
-addon.port.on("remove", function(channel) {
-    document.getElementById('channels').removeChild(document.getElementById(channel)); 
-	updatePanel();
-});
-
 function openTab(url) {
     addon.port.emit("openTab",url);
 }
 
 function resizePanel() {
-	addon.port.emit("resizePanel",[document.body.scrollWidth>212?document.body.scrollWidth:212,document.body.scrollHeight]);
+    var h,width,padding=parseInt(window.getComputedStyle(document.body,null).marginLeft);
+    do {
+        h = document.body.scrollHeight;
+        width = document.body.scrollWidth>addon.options.minWidth ? document.body.scrollWidth : addon.options.minWidth;
+        document.body.style.width = width+"px";
+    }while(h!=document.body.scrollHeight);
+	addon.port.emit("resizePanel",[width+2*padding,h+2*padding]);
 }
 
 function showMessage() {
 	if(document.getElementById('channels').getElementsByTagName("LI").length>0&&document.getElementById("channelslive").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'block';
 		document.getElementById("channels").style.display = 'block';
-        document.getElementById("refresh").style.display = 'block';
 		document.getElementById("channelsoffline").style.display = 'none';
 	}
 	else if(document.getElementById('channels').getElementsByTagName("LI").length==0&&document.getElementById("channelsoffline").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'none';
 		document.getElementById("channels").style.display = 'none';
-        document.getElementById("refresh").style.display = 'none';
 		document.getElementById("channelsoffline").style.display = 'block';
 	}
 }
@@ -50,5 +49,10 @@ function updatePanel() {
 function forceRefresh() {
     addon.port.emit("refresh");
 }
+
+addon.port.on("remove", function(channel) {
+    document.getElementById('channels').removeChild(document.getElementById(channel)); 
+	updatePanel();
+});
 
 window.onload = resizePanel;

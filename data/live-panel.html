@@ -1,12 +1,12 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <style type="text/css">
-		body {
-			width: 200px;
-			font: message-box;
+        body {
+            font: message-box;
             overflow: hidden;
-		}
+        }
         #refresh {
             float: right;
             height: 14px;
@@ -22,32 +22,31 @@
         #refresh:active {
             background-position: 0 -28px;
         }
-        ul,h2,li {
-			margin: 0;
-			padding: 0;
-			margin-left: .1em;
-		}
-		ul {
+        ul,b,li {
+            margin: 0;
+            padding: 0;
+            margin-left: .1em;
+        }
+        ul {
             list-style: none;
-		}
-		li {
-			margin-top: .2em;
-		}
-		li img {
-			height: 1em;
-			margin-right: .2em;
-		}
-        
+        }
+        li {
+            margin-top: .2em;
+        }
+        li img {
+            height: 1em;
+            margin-right: .2em;
+        }
         li a:link {
             text-decoration: none;
         }
     </style>
-    <script src="update-panel.js"></script>
+    <script type="text/javascript" src="update-panel.js"></script>
 </head>
 <body>
-    <a href="javascript:forceRefresh()" style="display:none;" id="refresh"></a>
-	<h2 data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline"></h2>
-    <h2 data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive"></h2>
+    <a href="javascript:forceRefresh()" id="refresh"></a>
+    <b data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline"></b>
+    <b data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive"></b>
     <ul id="channels" style="display:none;">
     </ul>
 </body>
