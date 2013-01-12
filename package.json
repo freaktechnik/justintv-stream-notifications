@@ -2,7 +2,10 @@
 	{"type": "integer", "name": "updateInterval", "value": 30, "title": "Update Interval"},
 	{"type": "string", "name": "channelList", "title": "Channels", "value":""},
 	{"type": "string", "name": "usernameList", "title": "Users","value":""},
-	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true}
+	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true},
+    {"type": "bool", "name": "onlineNotification", "title": "Show a notification when a stream goes online", "value":true},
+    {"type": "bool", "name": "titleChangeNotification", "title": "Show a notification when a stream changes the title", "value":true},
+    {"type": "bool", "name": "offlineNotification", "title": "Show a notification when a stream goes offline", "value":false}
 ],
 "contributors": [],
 "icon64": "data/icon64.png",
@@ -11,7 +14,7 @@
 "author": "freaktechnik",
 "name": "justintv-stream-notifications",
 "dependencies": ["api-utils", "addon-kit"],
-"version": "2.2.6",
+"version": "2.3",
 "lib": "lib",
 "fullName": "Justin.tv Stream Notifications",
 "main": "main",

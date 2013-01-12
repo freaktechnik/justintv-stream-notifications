@@ -11,9 +11,11 @@ changelog
 2.2.5
     - Widget tooltip change depending on the number of livestreams.
     - fixed not iterable tabs
-2.2.6
+2.3
     - Fixed refresh button not working
     - Links not underlined in panel
     - Fixed button tooltip
     - No scrollbar in panel for long streamnames
     - Don't hide refresh button
+    - add notifications for title change
+    - enable configuration for notifications

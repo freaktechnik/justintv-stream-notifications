@@ -2,7 +2,7 @@ addon.port.on("add", function (channel) {
     var element = document.createElement('li');
     var link = document.createElement('a');
 	var image = new Image();
-	image.src = channel.image;
+	image.src = channel.image[0];
 	var textNode = document.createTextNode (channel.names[0]);
     element.id = channel.names[0];
 	link.appendChild(image);
