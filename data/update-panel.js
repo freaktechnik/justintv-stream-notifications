@@ -24,7 +24,7 @@ function openTab(url) {
 }
 
 function resizePanel() {
-	addon.port.emit("resizePanel",[212,document.body.scrollHeight]);
+	addon.port.emit("resizePanel",[document.body.scrollWidth>212?document.body.scrollWidth:212,document.body.scrollHeight]);
 }
 
 function showMessage() {
