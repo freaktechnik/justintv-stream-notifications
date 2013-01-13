@@ -19,3 +19,5 @@ changelog
     - Don't hide refresh button
     - add notifications for title change
     - enable configuration for notifications
+    - fixed favorites fetching
+    - properly catching inexisting streams -> less error console junk
