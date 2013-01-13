@@ -20,4 +20,5 @@ changelog
     - add notifications for title change
     - enable configuration for notifications
     - fixed favorites fetching
+    - fixed not stopping to check a channel when removed in soem cases
     - properly catching inexisting streams -> less error console junk
