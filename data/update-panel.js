@@ -1,3 +1,8 @@
+/*
+ * Created by Martin Giger
+ * Licensed under LGPLv3
+ */
+
 addon.port.on("add", function(channel) {
     var element = document.createElement('li');
     var link = document.createElement('a');
