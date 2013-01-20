@@ -16,9 +16,10 @@ changelog
     - Links not underlined in panel
     - Fixed button tooltip
     - No scrollbar in panel for long streamnames
-    - Don't hide refresh button
+    - Don't hide refresh button when no channel is online
     - add notifications for title change
-    - enable configuration for notifications
+    - add offline notifications
+    - add configuration for notifications
     - fixed favorites fetching
-    - fixed not stopping to check a channel when removed in soem cases
-    - properly catching inexisting streams -> less error console junk
+    - fixed removing channels in some cases
+    - properly catching most of the errors

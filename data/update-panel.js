@@ -1,5 +1,4 @@
 addon.port.on("add", function(channel) {
-    addon.port.emit("log",channel.image);
     var element = document.createElement('li');
     var link = document.createElement('a');
 	var image = new Image();
