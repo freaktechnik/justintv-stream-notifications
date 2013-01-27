@@ -55,9 +55,14 @@ function forceRefresh() {
     addon.port.emit("refresh");
 }
 
+function onLoad() {
+    addon.port.emit("loaded");
+    resizePanel();
+}
+
 addon.port.on("remove", function(channel) {
     document.getElementById('channels').removeChild(document.getElementById(channel)); 
 	updatePanel();
 });
 
-window.onload = resizePanel;
+window.onload = onLoad;
