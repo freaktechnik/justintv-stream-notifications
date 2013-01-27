@@ -1,4 +1,4 @@
-# Justin.tv Streaming Notifications
+# Justin.tv Stream Notifications
 
 This is an add-on for firefox, based on the Mozilla add-on SDK.
 
