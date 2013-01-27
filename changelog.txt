@@ -23,3 +23,10 @@ changelog
     - fixed favorites fetching
     - fixed removing channels in some cases
     - properly catching most of the errors
+2.3.1
+    - Corrected some error response handling
+2.4
+    - Update and First run infopages
+    - Ignore spaces in username lists
+2.5
+    -Use local storage
