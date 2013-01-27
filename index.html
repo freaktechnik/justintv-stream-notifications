@@ -1,74 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Justintv-stream-notifications : This add-on displays a notification when a channel on justin.tv resp. twitch.tv goes live. Which channels are checked for being live is fully customizable." />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Justintv-stream-notifications by freaktechnik</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Justintv-stream-notifications</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Justintv-stream-notifications</h1>
+        <p class="header">This add-on displays a notification when a channel on justin.tv resp. twitch.tv goes live. Which channels are checked for being live is fully customizable.</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/freaktechnik/justintv-stream-notifications">View on GitHub</a>
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/freaktechnik/justintv-stream-notifications/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/freaktechnik/justintv-stream-notifications/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/freaktechnik/justintv-stream-notifications">View On GitHub</a></li>
+        </ul>
 
-          <h1 id="project_title">Justintv-stream-notifications</h1>
-          <h2 id="project_tagline">This add-on displays a notification when a channel on justin.tv resp. twitch.tv goes live. Which channels are checked for being live is fully customizable.</h2>
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/freaktechnik">freaktechnik</a></p>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/freaktechnik/justintv-stream-notifications/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/freaktechnik/justintv-stream-notifications/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+      </header>
+      <section>
+        <h1>Justin.tv Streaming Notifications</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>This is an add-on for firefox, based on the Mozilla add-on SDK.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<h2>Description</h2>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>Knowing when your favorite <a href="http://justin.tv">justin.tv</a> or <a href="http://twitch.tv">twitch</a> channels go live is hard. Most streamer notify their fan base via twitter. This add-on displays a notification when a streamer goes live.
+The streams monitored can be set three different ways:
+Automatically let the add-on search for your login name on <a href="http://justin.tv">justin.tv</a> and <a href="http://twitch.tv">twitch</a> and displaying notifications for your favorites, displaying notifications for favorites of defined users or just notifications for channels defined in the options. The best thing: you can use all three features to define monitored channels at once.
+The add-on gives you full control: you can even customize the interval of the add-on refreshing the state of the channels.</p>
 
-<h3>Designer Templates</h3>
+<p>The add-on can show a notification on different events: when a channel foes live, it changes its title or it goes offline.
+A notification shows the title of the stream and the channel name, as well as the channel's profile picture. A click on the notification focuses the tab with the channel page, if already opened, or opens a new tab to watch the stream.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>To check for missed notifications or to tune in to a channel later, the extension provides a panel with a list of currently live channels. The panel button changes its appearance, so you can see in one glance, whether any channel is online. You can manually refresh the channel statuses from the panel.</p>
 
-<h3>Rather Drive Stick?</h3>
+<h2>Official Download</h2>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p><a href="https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/">https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/</a></p>
 
-<h3>Authors and Contributors</h3>
+<h2>License</h2>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>This project is licensed under the LGPLv3 license.</p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Justintv-stream-notifications maintained by <a href="https://github.com/freaktechnik">freaktechnik</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
-
-    
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>
