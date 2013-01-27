@@ -1,6 +1,6 @@
 # Justin.tv Stream Notifications
 
-This is an add-on for firefox, based on the Mozilla add-on SDK.
+This is an add-on for Firefox, based on the Mozilla add-on SDK.
 
 ## Description
 
@@ -20,4 +20,4 @@ https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
 
 ## License
 
-This project is licensed under the LGPLv3 license.
+This project is licensed under the [LGPLv3 license](http://www.gnu.org/licenses/lgpl-3.0.html).
