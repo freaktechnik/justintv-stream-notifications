@@ -308,6 +308,11 @@ a.buttons:hover {
 
 /* Section - for main page content */
 
+nav {
+  width: 650px;
+  float: right;
+}
+
 section {
   width:650px;
   float:right;
@@ -332,7 +337,7 @@ footer {
     margin:0;
   }
 
-  header, section, footer {
+  header, section, footer, nav {
     float:none;
     position:static;
     width:auto;
@@ -344,6 +349,11 @@ footer {
 		padding:0;
 	}
 
+  nav {
+    padding: 20px 84px 20px 0;
+    margin: 0 0 20px;
+  }
+    
   header {
     padding-right:320px;
   }
@@ -377,6 +387,11 @@ footer {
 	section {
     padding:10px 0 10px 20px;
     margin:0 0 30px;
+  }
+  
+  nav {
+    padding: 10px 0;
+    margin: 0 0 30px;
   }
 
 	footer {
