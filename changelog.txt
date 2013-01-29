@@ -29,4 +29,6 @@ changelog
     - Update and First run infopages
     - Ignore spaces in username lists
 2.5
-    -Use local storage
+    - Use local storage
+    - Minor speed-ups
+    - Fixed new Twitch channel pages not being recognized
