@@ -12,15 +12,15 @@ addon.port.on("add", function(channel) {
     element.id = channel.names[0];
 	link.appendChild(image);
 	link.appendChild(textNode);
-    link.href = 'javascript:openTab("http://'+channel.url[0]+'")';
+    link.href = 'javascript:openTab('+channel.names[1]+')';
 	link.title = channel.title;
     element.appendChild(link);
     document.getElementById('channels').appendChild(element);
 	updatePanel();
 });
 
-function openTab(url) {
-    addon.port.emit("openTab",url);
+function openTab(channel) {
+    addon.port.emit("openTab",channel);
 }
 
 function resizePanel() {
