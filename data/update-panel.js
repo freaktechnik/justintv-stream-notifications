@@ -12,7 +12,7 @@ addon.port.on("add", function(channel) {
     element.id = channel.names[0];
 	link.appendChild(image);
 	link.appendChild(textNode);
-    link.href = 'javascript:openTab('+channel.names[1]+')';
+    link.href = 'javascript:openTab("'+channel.names[1]+'")';
 	link.title = channel.title;
     element.appendChild(link);
     document.getElementById('channels').appendChild(element);
