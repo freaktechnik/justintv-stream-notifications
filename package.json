@@ -6,7 +6,12 @@
 	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true},
     {"type": "bool", "name": "onlineNotification", "title": "Show a notification when a stream goes online", "value":true},
     {"type": "bool", "name": "titleChangeNotification", "title": "Show a notification when a stream changes the title", "value":true},
-    {"type": "bool", "name": "offlineNotification", "title": "Show a notification when a stream goes offline", "value":false}
+    {"type": "bool", "name": "offlineNotification", "title": "Show a notification when a stream goes offline", "value":false},
+    {"type": "menulist", "name": "panelAccess", "title": "Open the panel with a", "value":0,"options":
+        [
+            {"value":"0","label":"Add-on Bar Widget"},
+            {"value":"1","label":"Toolbar button"}
+        ]}
 ],
 "contributors": [],
 "icon64": "data/icon64.png",
