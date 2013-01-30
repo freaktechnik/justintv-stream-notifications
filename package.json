@@ -9,8 +9,8 @@
     {"type": "bool", "name": "offlineNotification", "title": "Show a notification when a stream goes offline", "value":false},
     {"type": "menulist", "name": "panelAccess", "title": "Open the panel with a", "value":0,"options":
         [
-            {"value":"0","label":"Add-on Bar Widget"},
-            {"value":"1","label":"Toolbar button"}
+            {"value":"0","label":"widget"},
+            {"value":"1","label":"button"}
         ]}
 ],
 "contributors": [],
