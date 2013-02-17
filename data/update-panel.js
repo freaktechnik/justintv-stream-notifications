@@ -35,16 +35,24 @@ function resizePanel() {
 
 function showMessage() {
     var l = document.getElementById('live').getElementsByTagName("LI").length;
-	if(l>0&&document.getElementById("channelslive").style.display=='none') {
-		document.getElementById("channelslive").style.display = 'block';
+    var channelslive = document.getElementById('channelslive');
+	if(l>0&&channelslive.style.display=='none') {
+		channelslive.style.display = 'block';
 		document.getElementById("live").style.display = 'block';
 		document.getElementById("channelsoffline").style.display = 'none';
 	}
-	else if(l==0&&document.getElementById("channelsoffline").style.display=='none') {
-		document.getElementById("channelslive").style.display = 'none';
+	else if(l==0&&channelslive.style.display=='block') {
+		channelslive.style.display = 'none';
 		document.getElementById("live").style.display = 'none';
 		document.getElementById("channelsoffline").style.display = 'block';
 	}
+    
+    var lo = document.getElementById('offline-list').getElementsByTagName("LI").length;
+    var arrow = document.getElementById('arrow');
+    if(lo>0&&arrow.style.display=='none')
+        arrow.style.display='block';
+    else if(lo==0&&arrow.style.display=='block')
+        arrow.stylte.display='none';
 }
 
 function updatePanel() {

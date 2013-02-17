@@ -34,3 +34,4 @@ changelog
     - Fixed new Twitch channel pages not being recognized
 2.6
     - Open archive page for offline channels
+    - Offline channels can be shown in panel
