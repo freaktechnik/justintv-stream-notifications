@@ -32,3 +32,5 @@ changelog
     - Use local storage
     - Minor speed-ups
     - Fixed new Twitch channel pages not being recognized
+2.6
+    - Open archive page for offline channels

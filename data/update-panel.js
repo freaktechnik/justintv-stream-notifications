@@ -15,7 +15,7 @@ addon.port.on("add", function(channel) {
     link.href = 'javascript:openTab("'+channel.login+'")';
 	link.title = channel.title;
     element.appendChild(link);
-    document.getElementById('channels').appendChild(element);
+    document.getElementById('offline-list').appendChild(element);
 	updatePanel();
 });
 
@@ -34,14 +34,15 @@ function resizePanel() {
 }
 
 function showMessage() {
-	if(document.getElementById('channels').getElementsByTagName("LI").length>0&&document.getElementById("channelslive").style.display=='none') {
+    var l = document.getElementById('live').getElementsByTagName("LI").length;
+	if(l>0&&document.getElementById("channelslive").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'block';
-		document.getElementById("channels").style.display = 'block';
+		document.getElementById("live").style.display = 'block';
 		document.getElementById("channelsoffline").style.display = 'none';
 	}
-	else if(document.getElementById('channels').getElementsByTagName("LI").length==0&&document.getElementById("channelsoffline").style.display=='none') {
+	else if(l==0&&document.getElementById("channelsoffline").style.display=='none') {
 		document.getElementById("channelslive").style.display = 'none';
-		document.getElementById("channels").style.display = 'none';
+		document.getElementById("live").style.display = 'none';
 		document.getElementById("channelsoffline").style.display = 'block';
 	}
 }
@@ -60,9 +61,27 @@ function onLoad() {
     resizePanel();
 }
 
+function toggleOffline() {
+    document.getElementById('offline').classList.toggle('openlist');
+    document.getElementById('arrow').classList.toggle('rotated');
+    updatePanel();
+}
+
 addon.port.on("remove", function(channel) {
-    document.getElementById('channels').removeChild(document.getElementById(channel)); 
+    document.getElementById('live').removeChild(document.getElementById(channel)); 
 	updatePanel();
+});
+
+addon.port.on("move", function(channel) {
+    var node = document.getElementById(channel.login).cloneNode(true);
+    var origin = 'offline-list', destination = 'live';
+    if(!channel.live) {
+        origin = 'live';
+        destination = 'offline-list';
+    }
+    document.getElementById(origin).removeChild(document.getElementById(channel.login));
+    document.getElementById(destination).appendChild(node);
+    updatePanel();
 });
 
 window.onload = onLoad;

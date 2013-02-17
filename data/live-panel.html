@@ -20,7 +20,7 @@
             outline: none;
             cursor: default;
         }
-        #refresh:hover {
+        #refresh:hover, #refresh:focus {
             background-position: 0 -14px;
         }
         #refresh:active {
@@ -44,6 +44,28 @@
         li a:link {
             text-decoration: none;
         }
+        
+        #offline {
+            height: 0;
+            visibility: hidden;
+            overflow: hidden;
+        }
+        .openlist {
+            height:-moz-initial !important;
+            visibility: visible !important;
+        }
+        
+        #offline img {
+            filter: grayscale(100%);
+        }
+        #arrow {
+            -moz-appearance: menulist-button;
+            width: 100%;
+            height: 15px;
+        }
+        .rotated {
+            transform: rotate(180deg);
+        }
     </style>
     <script type="text/javascript" src="update-panel.js"></script>
 </head>
@@ -51,7 +73,13 @@
     <a href="javascript:forceRefresh()" id="refresh"></a>
     <b data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline"></b>
     <b data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive"></b>
-    <ul id="channels" style="display:none;">
+    <ul id="live" style="display:none;">
     </ul>
+    <div id="offline">
+        <b data-l10n-id="live_panel_label_channels_offline"></b>
+        <ul id="offline-list">
+        </ul>
+    </div>
+    <button id="arrow" onclick="toggleOffline()"></button>
 </body>
 </html>
