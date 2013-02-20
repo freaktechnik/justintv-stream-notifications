@@ -52,7 +52,7 @@ function showMessage() {
     if(lo>0&&arrow.style.display=='none')
         arrow.style.display='block';
     else if(lo==0&&arrow.style.display=='block')
-        arrow.stylte.display='none';
+        arrow.style.display='none';
 }
 
 function updatePanel() {
