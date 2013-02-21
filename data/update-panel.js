@@ -75,8 +75,8 @@ function toggleOffline() {
     updatePanel();
 }
 
-addon.port.on("remove", function(channel) {
-    document.getElementById('live').removeChild(document.getElementById(channel)); 
+addon.port.on("remove", function(channel) { 
+    document.getElementById('offline-list').removeChild(document.getElementById(channel)); 
 	updatePanel();
 });
 
