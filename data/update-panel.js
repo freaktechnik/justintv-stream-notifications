@@ -66,6 +66,9 @@ function forceRefresh() {
 
 function onLoad() {
     addon.port.emit("loaded");
+    document.addEventListener("dragstart",function(e) {
+        e.preventDefault();
+    });
     resizePanel();
 }
 
