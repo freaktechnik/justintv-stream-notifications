@@ -36,3 +36,5 @@ changelog
     - Open archive page for offline channels
     - Offline channels can be shown in panel
     - Only one request per channel is sent a time
+    - Disable dragging and highlighting in the panel
+
