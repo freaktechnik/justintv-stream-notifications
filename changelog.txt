@@ -37,4 +37,7 @@ changelog
     - Offline channels can be shown in panel
     - Only one request per channel is sent a time
     - Disable dragging and highlighting in the panel
-
+2.6.1
+    - Fetching all favorites of a user
+    - Better request retrying behaviour
+    - Fixed sometimes channels not getting removed from panel
