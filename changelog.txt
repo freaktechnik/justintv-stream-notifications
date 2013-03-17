@@ -41,3 +41,5 @@ changelog
     - Fetching all favorites of a user
     - Better request retrying behaviour
     - Fixed sometimes channels not getting removed from panel
+2.6.2
+    - Fix startup panel & event initialization
