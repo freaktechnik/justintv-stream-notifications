@@ -51,8 +51,11 @@ function showMessage() {
     var arrow = document.getElementById('arrow');
     if(lo>0&&arrow.style.display=='none')
         arrow.style.display='block';
-    else if(lo==0&&arrow.style.display=='block')
+    else if(lo==0&&arrow.style.display=='block') {
         arrow.style.display='none';
+        arrow.classList.remove('rotated');
+        document.getElementById("offline").classList.remove('openlist');
+    }
 }
 
 function updatePanel() {
@@ -79,7 +82,7 @@ function toggleOffline() {
 }
 
 addon.port.on("remove", function(channel) { 
-    document.getElementById('offline-list').removeChild(document.getElementById(channel)); 
+    document.getElementById('offline-list').removeChild(document.getElementById(channel));
 	updatePanel();
 });
 
