@@ -7,10 +7,14 @@
 <head>
     <meta charset="utf-8">
     <style type="text/css">
+        html {
+            overflow-y: hidden;
+        }
         body {
             font: message-box;
             -moz-user-select: none;
             cursor: default;
+            overflow-y: hidden;
         }
         #refresh {
             float: right;
@@ -60,6 +64,9 @@
         #offline img {
             filter: grayscale(100%);
         }
+        #wrapper {
+            margin-bottom: -10px;
+        }
         #arrow {
             background-image: url("chrome://global/skin/arrow/arrow-dn.gif");
             background-position: center;
@@ -81,14 +88,16 @@
 </head>
 <body>
     <a href="javascript:forceRefresh()" id="refresh"></a>
-    <b data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline">No channel is live at the moment</b>
-    <b data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive">Currently live:</b>
-    <ul id="live" style="display:none;">
-    </ul>
-    <div id="offline">
-        <b data-l10n-id="live_panel_label_channels_offline">Offline:</b>
-        <ul id="offline-list">
+    <div id="wrapper">
+        <b data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline">No channel is live at the moment</b>
+        <b data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive">Currently live:</b>
+        <ul id="live" style="display:none;">
         </ul>
+        <div id="offline">
+            <b data-l10n-id="live_panel_label_channels_offline">Offline:</b>
+            <ul id="offline-list">
+            </ul>
+        </div>
     </div>
     <button id="arrow" onclick="toggleOffline()" style="display:none;" label="Show offline channels"></button>
 </body>

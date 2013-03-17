@@ -24,14 +24,23 @@ function openTab(channel) {
 }
 
 function resizePanel() {
-    var h,width,padding=parseInt(window.getComputedStyle(document.body,null).marginLeft);
+    //document.getElementById("refresh").style.display = "none";
+    //document.getElementById("arrow").style.display = "none";
+    document.body.style.overflow = "hidden";
+    var h,width,padding=parseInt(window.getComputedStyle(document.body,null).marginLeft),w=document.body;
     do {
-        h = document.body.scrollHeight;
-        width = document.body.scrollWidth>addon.options.minWidth ? document.body.scrollWidth : addon.options.minWidth;
+        h = w.scrollHeight;
+        width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
         document.body.style.width = width+"px";
-    }while(h!=document.body.scrollHeight);
-	addon.port.emit("resizePanel",[width+2*padding,h+2*padding]);
+    }while(h!=w.scrollHeight);
+    //document.getElementById("refresh").style.display = "block";
+    document.body.style.width = "";
+	addon.port.emit("resizePanel",[width+2*padding+2,h+2*padding]);
 }
+addon.port.on("resizeDone",function() {
+    document.body.style.overflow = "visible";
+});
+
 
 function showMessage() {
     var l = document.getElementById('live').getElementsByTagName("LI").length;
