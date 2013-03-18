@@ -24,7 +24,7 @@
                 ],
 "name": "justintv-stream-notifications",
 "dependencies": ["api-utils", "addon-kit"],
-"version": "2.6.2",
+"version": "2.6.3",
 "lib": "lib",
 "fullName": "Justin.tv Stream Notifications",
 "main": "main",

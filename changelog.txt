@@ -43,3 +43,7 @@ changelog
     - Fixed sometimes channels not getting removed from panel
 2.6.2
     - Fix startup panel & event initialization
+2.6.3
+    - Advanced network & API error handling
+    - Added scrollbar to panel if needed
+    - Fixed channel removing for some edge cases
