@@ -47,3 +47,5 @@ changelog
     - Advanced network & API error handling
     - Added scrollbar to panel if needed
     - Fixed channel removing for some edge cases
+    - Channel gets removed when removed from favorites (on startup only)
+    - Major code refactoring
