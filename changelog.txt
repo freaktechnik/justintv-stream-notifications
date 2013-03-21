@@ -49,3 +49,4 @@ changelog
     - Fixed channel removing for some edge cases
     - Channel gets removed when removed from favorites (on startup only)
     - Major code refactoring
+    - Better theme compatibility of panel
