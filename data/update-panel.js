@@ -27,7 +27,7 @@ function resizePanel() {
     //document.getElementById("refresh").style.display = "none";
     //document.getElementById("arrow").style.display = "none";
     document.body.style.overflow = "hidden";
-    var h,width,padding=parseInt(window.getComputedStyle(document.body,null).marginLeft),w=document.body;
+    var h,width,padding=parseInt(window.getComputedStyle(document.body).marginLeft),w=document.body;
     do {
         h = w.scrollHeight;
         width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
