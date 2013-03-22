@@ -3,8 +3,7 @@
  * Licensed under LGPLv3
  */
 
-"use strict";
-
+try {
 
 addon.port.on("add", function(channel) {
     var element = document.createElement('li');
@@ -27,8 +26,8 @@ function openTab(channel) {
 }
 
 function resizePanel() {
-    document.getElementById("refresh").style.display = "none";
-    document.getElementById("arrow").style.display = "none";
+    //document.getElementById("refresh").style.display = "none";
+    //document.getElementById("arrow").style.display = "none";
     document.body.style.overflow = "hidden";
     var h,width,padding=parseInt(window.getComputedStyle(document.body).marginLeft),w=document.body;
     do {
@@ -36,7 +35,7 @@ function resizePanel() {
         width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
         document.body.style.width = width+"px";
     }while(h!=w.scrollHeight);
-    document.getElementById("refresh").style.display = "block";
+    //document.getElementById("refresh").style.display = "block";
     document.body.style.width = "";
 	addon.port.emit("resizePanel",[width+2*padding+2,h+2*padding]);
 }
@@ -62,8 +61,9 @@ function showMessage() {
     
     var lo = document.getElementById('offline-list').getElementsByTagName("LI").length;
     var arrow = document.getElementById('arrow');
-    if(lo>0&&arrow.style.display=='none')
+    if(lo>0&&arrow.style.display=='none') {
         arrow.style.display='block';
+    }
     else if(lo==0&&arrow.style.display=='block') {
         arrow.style.display='none';
         arrow.classList.remove('rotated');
@@ -86,7 +86,7 @@ function onLoad() {
         e.preventDefault();
     });
     resizePanel();
-    getReloadbuttonShit();
+    getReloadbuttonStyle();
 }
 
 function toggleOffline() {
@@ -121,83 +121,75 @@ window.onload = onLoad;
     Yes, there's regex.
 */
 
-function getReloadbuttonShit() {
-    try {
-        // splits the css file into rule blocks
-        var ss = addon.options.css.split("}");
-        var refresh = document.getElementById("refresh");
-        var n,h,a,i,na;
-        
-        // I chose three ifs, since sometimes the hover and active state are in the same declaration.
-        // I could possibly restructure the code to allow if/else if constructs, but the regex would
-        // get even more complicated.
-        // basically na defines, wether it should look for a default state.
-        // a,h,n & i are the rules for the different states and declarations
-        
-        for(var rule in ss) {
-            na = false;
-            // should match any declaration for active state
-            if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:active/)&&!a) {
-                var temp = getBackgroundPosition(ss[rule]);
-                if(temp&&!a) {
-                    na = true;
-                    a=temp;
-                    addon.port.emit("log",a);
-                    refresh.addEventListener("mousedown",function(e) {
-                        addon.port.emit("log",a);
-                        refresh.style.backgroundPosition = a;
-                    });
-                }
-            }
-            // should match any declaration ONLY for hover state
-            if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*,|#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*\s*\{/)&&!h) {
-                var temp = getBackgroundPosition(ss[rule]);
-                if(temp&&!h) {
-                    na = true;
-                    h=temp;
-                    refresh.addEventListener("mouseover",function(e) {
-                        refresh.style.backgroundPosition = h;
-                    });
-                    refresh.addEventListener("focus",function(e) {
-                        refresh.style.backgroundPosition = h;
-                    });
-                    refresh.addEventListener("mouseup",function(e) {
-                        refresh.style.backgroundPosition = h;
-                    });
-                }
-            }
-            if(ss[rule].contains("#urlbar-reload-button")&&!na) {
-                var temp = getBackgroundPosition(ss[rule]);
-                if(temp&&!n) {
-                    n=temp;
-                    refresh.style.backgroundPosition = n;
-                    refresh.addEventListener("mouseout",function(e) {
-                        refresh.style.backgroundPosition = n;
-                    });
-                    refresh.addEventListener("blur",function(e) {
-                        refresh.style.backgroundPosition = n;
-                    });
-                }
-                var img = getBackgroundImage(ss[rule])
-                if(!i&&img) {
-                    i = true;
-                    refresh.style.backgroundImage = img;
-                }
-                //document.getElementById("refresh").style.height = height+"px";
-                //document.getElementById("refresh").style.width = width+"px";
-            }
-            else if(ss[rule].contains("#urlbar > toolbarbutton")&&!i) {
-                var img = getBackgroundImage(ss[rule]);
-                if(img) {
-                    i = true;
-                    refresh.style.backgroundImage = img;
-                }
+function getReloadbuttonStyle() {
+    // splits the css file into rule blocks
+    var ss = addon.options.css.split("}");
+    var refresh = document.getElementById("refresh");
+    var n,h,a,i,na;
+    
+    // I chose three ifs, since sometimes the hover and active state are in the same declaration.
+    // I could possibly restructure the code to allow if/else if constructs, but the regex would
+    // get even more complicated.
+    // basically na defines, wether it should look for a default state.
+    // a,h,n & i are the rules for the different states and declarations
+    
+    for(var rule in ss) {
+        na = false;
+        // should match any declaration for active state
+        if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:active/)&&!a) {
+            var temp = getBackgroundPosition(ss[rule]);
+            if(temp&&!a) {
+                na = true;
+                a=temp;
+                refresh.addEventListener("mousedown",function(e) {
+                    refresh.style.backgroundPosition = a;
+                });
             }
         }
-    }
-    catch(e) {
-        addon.port.emit("log",e.lineNumber);
-        //console.log(e);
+        // should match any declaration ONLY for hover state
+        if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*,|#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*\s*\{/)&&!h) {
+            var temp = getBackgroundPosition(ss[rule]);
+            if(temp&&!h) {
+                na = true;
+                h=temp;
+                refresh.addEventListener("mouseover",function(e) {
+                    refresh.style.backgroundPosition = h;
+                });
+                refresh.addEventListener("focus",function(e) {
+                    refresh.style.backgroundPosition = h;
+                });
+                refresh.addEventListener("mouseup",function(e) {
+                    refresh.style.backgroundPosition = h;
+                });
+            }
+        }
+        if(ss[rule].contains("#urlbar-reload-button")&&!na) {
+            var temp = getBackgroundPosition(ss[rule]);
+            if(temp&&!n) {
+                n=temp;
+                refresh.style.backgroundPosition = n;
+                refresh.addEventListener("mouseout",function(e) {
+                    refresh.style.backgroundPosition = n;
+                });
+                refresh.addEventListener("blur",function(e) {
+                    refresh.style.backgroundPosition = n;
+                });
+            }
+            var img = getBackgroundImage(ss[rule])
+            if(!i&&img) {
+                i = true;
+                refresh.style.backgroundImage = img;
+            }
+            //document.getElementById("refresh").style.height = height+"px";
+            //document.getElementById("refresh").style.width = width+"px";
+        }
+        else if(ss[rule].contains("#urlbar > toolbarbutton")&&!i) {
+            var img = getBackgroundImage(ss[rule]);
+            if(img) {
+                i = true;
+                refresh.style.backgroundImage = img;
+            }
+        }
     }
 }
 
@@ -251,4 +243,10 @@ function getBackgroundImage(r) {
         return substr[0];
     }
     return false;
+}
+
+}
+catch(e) {
+    addon.port.emit("log",e.lineNumber);
+    //console.log(e);
 }
