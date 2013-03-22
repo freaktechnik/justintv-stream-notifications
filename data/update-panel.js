@@ -3,7 +3,7 @@
  * Licensed under LGPLv3
  */
 
-"use strict";
+//"use strict";
 
 
 addon.port.on("add", function(channel) {
@@ -116,32 +116,113 @@ window.onload = onLoad;
 
 function getReloadbuttonShit() {
     try {
-        var textNode = document.styleSheets[1].cssRules,r;
-        for(var rule in textNode) {
-            r = textNode[rule].cssText;
-            if(r.contains("#urlbar-reload-button:not([disabled]):hover")) {
-                // reformulate as onmouseover event, since this is insecure
-                document.styleSheets[0].insertRule("#refresh:hover, #refresh:focus { background-position:"+getBackgroundPosition(r)+";}",0);
+        var ss = addon.options.css.split("}");
+        var refresh = document.getElementById("refresh");
+        var r,b,n,h,a,i;
+        var s = [];
+        for(var rule in ss) {
+            if(ss[rule].contains("#urlbar-reload-button:not([disabled]):hover:active")&&!a) {
+                a=true;
+                s.push(getBackgroundPosition(ss[rule]));
+                addon.port.emit("log",s[2]);
+                refresh.addEventListener("mousedown",function(e) {
+                    addon.port.emit("log",s[2]);
+                    refresh.style.backgroundPosition = s[2];
+                });
             }
-            else if(r.contains("#urlbar-reload-button")) {
-                document.getElementById("refresh").style.backgroundPosition = getBackgroundPosition(r);
+            else if(ss[rule].contains("#urlbar-reload-button:not([disabled]):hover")&&!h) {
+                h=true;
+                s.push(getBackgroundPosition(ss[rule]));
+                addon.port.emit("log",s[1]);
+                refresh.addEventListener("mouseover",function(e) {
+                    addon.port.emit("log",s[1]);
+                    refresh.style.backgroundPosition = s[1];
+                });
+                refresh.addEventListener("focus",function(e) {
+                    addon.port.emit("log",s[1]);
+                    refresh.style.backgroundPosition = s[1];
+                });
+                refresh.addEventListener("mouseup",function(e) {
+                    addon.port.emit("log",s[1]);
+                    refresh.style.backgroundPosition = s[1];
+                });
+            }
+            else if(ss[rule].contains("#urlbar-reload-button")) {
+                var temp = getBackgroundPosition(ss[rule]);
+                if(temp&&!n) {
+                    s.push(temp);
+                    n=true;
+                    addon.port.emit("log",s[0]);
+                    refresh.style.backgroundPosition = s[0];
+                    refresh.addEventListener("mouseout",function(e) {
+                        addon.port.emit("log",s[0]);
+                        refresh.style.backgroundPosition = s[0];
+                    });
+                    refresh.addEventListener("blur",function(e) {
+                        addon.port.emit("log",s[0]);
+                        refresh.style.backgroundPosition = s[0];
+                    });
+                }
+                if(!i) {
+                    i = true;
+                    refresh.style.backgroundImage = getBackgroundImage(ss[rule]);
+                }
                 //document.getElementById("refresh").style.height = height+"px";
                 //document.getElementById("refresh").style.width = width+"px";
             }
         }
     }
     catch(e) {
-        addon.port.emit("log",e);
+        addon.port.emit("log",e.lineNumber);
+        //console.log(e);
     }
 }
 
 function getBackgroundPosition(r) {
-    var i = r.indexOf("-moz-image-region: rect(")+24;
-    var substr = r.substring(i,r.indexOf(")",i));
-    substr = substr.replace("px","","g");
-    substr = substr.replace(" ","","g");
-    var dimensions = substr.split(",");
+    var i = r.search(/-moz-image-region:\s*rect\(/)+24,dimensions = [],substr;
+    if(i>23) {
+        substr = r.substring(i,r.indexOf(")",i));
+        substr = substr.replace("px","","g");
+        substr = substr.replace(" ","","g");
+        dimensions = substr.split(",");
+        dimensions[0] = -dimensions[0];
+    }
+    else if(r.contains("background-position")) {
+        i = r.indexOf("background-position:")+20;
+        substr = r.substring(i,r.indexOf(";",i));
+        substr.split(" ");
+        dimensions[0] = substr[1];
+        dimensions[3] = substr[0];
+    }
+    else if(r.contains("background")&&!r.contains("background-")) {
+        i = r.indexOf("background:")+11;
+        substr = r.substring(i,r.indexOf(";",i));
+        substr.split(" ");
+        dimensions[0] = substr[2];
+        dimensions[3] = substr[1];
+    }
+    else {
+        return false;
+    }
     //var height = dimensions[2]-dimensions[0];
     //var width = dimensions[1]-dimensions[3];
-    return dimensions[3]+"px "+(-dimensions[0])+"px";
+    return dimensions[3]+"px "+dimensions[0]+"px";
+}
+
+function getBackgroundImage(r) {
+    var i = r.indexOf('list-style-image:')+17;
+    if(i>16) {
+        addon.port.emit("log",r.substring(i,r.indexOf(";",i)));
+        return r.substring(i,r.indexOf(";",i));
+    }
+    else if(r.contains("background-image")) {
+        i = r.indexOf("background-image:")+17;
+        return r.substring(i,indexOf(";",i));
+    }
+    else if(r.contains("background")) {
+        i = r.indexOf("background:")+11;
+        var substr = r.substring(i,r.indexOf(";",i));
+        substr.split(" ");
+        return substr[0];
+    }
 }
