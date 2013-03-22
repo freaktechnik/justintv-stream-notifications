@@ -118,49 +118,54 @@ function getReloadbuttonShit() {
     try {
         var ss = addon.options.css.split("}");
         var refresh = document.getElementById("refresh");
-        var r,b,n,h,a,i;
-        var s = [];
+        var r,b,n,h,a,i,na;
         for(var rule in ss) {
-            if(ss[rule].contains("#urlbar-reload-button:not([disabled]):hover:active")&&!a) {
-                a=true;
-                s.push(getBackgroundPosition(ss[rule]));
-                addon.port.emit("log",s[2]);
-                refresh.addEventListener("mousedown",function(e) {
-                    addon.port.emit("log",s[2]);
-                    refresh.style.backgroundPosition = s[2];
-                });
+            na = false;
+            if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:active/)&&!a) {
+                na = true;
+                var temp = getBackgroundPosition(ss[rule]);
+                if(temp&&!a) {
+                    a=temp;
+                    addon.port.emit("log",a);
+                    refresh.addEventListener("mousedown",function(e) {
+                        addon.port.emit("log",a);
+                        refresh.style.backgroundPosition = a;
+                    });
+                }
             }
-            else if(ss[rule].contains("#urlbar-reload-button:not([disabled]):hover")&&!h) {
-                h=true;
-                s.push(getBackgroundPosition(ss[rule]));
-                addon.port.emit("log",s[1]);
-                refresh.addEventListener("mouseover",function(e) {
-                    addon.port.emit("log",s[1]);
-                    refresh.style.backgroundPosition = s[1];
-                });
-                refresh.addEventListener("focus",function(e) {
-                    addon.port.emit("log",s[1]);
-                    refresh.style.backgroundPosition = s[1];
-                });
-                refresh.addEventListener("mouseup",function(e) {
-                    addon.port.emit("log",s[1]);
-                    refresh.style.backgroundPosition = s[1];
-                });
+            if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*,|#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*\s*\{/)&&!h) {
+                na = true;
+                var temp = getBackgroundPosition(ss[rule]);
+                if(temp&&!h) {
+                    h=temp;
+                    addon.port.emit("log",h);
+                    refresh.addEventListener("mouseover",function(e) {
+                        addon.port.emit("log",h);
+                        refresh.style.backgroundPosition = h;
+                    });
+                    refresh.addEventListener("focus",function(e) {
+                        addon.port.emit("log",h);
+                        refresh.style.backgroundPosition = h;
+                    });
+                    refresh.addEventListener("mouseup",function(e) {
+                        addon.port.emit("log",h);
+                        refresh.style.backgroundPosition = h;
+                    });
+                }
             }
-            else if(ss[rule].contains("#urlbar-reload-button")) {
+            if(ss[rule].contains("#urlbar-reload-button")&&!na) {
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!n) {
-                    s.push(temp);
-                    n=true;
-                    addon.port.emit("log",s[0]);
-                    refresh.style.backgroundPosition = s[0];
+                    n=temp;
+                    addon.port.emit("log",n);
+                    refresh.style.backgroundPosition = n;
                     refresh.addEventListener("mouseout",function(e) {
-                        addon.port.emit("log",s[0]);
-                        refresh.style.backgroundPosition = s[0];
+                        addon.port.emit("log",n);
+                        refresh.style.backgroundPosition = n;
                     });
                     refresh.addEventListener("blur",function(e) {
-                        addon.port.emit("log",s[0]);
-                        refresh.style.backgroundPosition = s[0];
+                        addon.port.emit("log",n);
+                        refresh.style.backgroundPosition = n;
                     });
                 }
                 if(!i) {
@@ -169,6 +174,10 @@ function getReloadbuttonShit() {
                 }
                 //document.getElementById("refresh").style.height = height+"px";
                 //document.getElementById("refresh").style.width = width+"px";
+            }
+            else if(ss[rule].contains("#urlbar > toolbarbutton")&&!i) {
+                i = true;
+                refresh.style.backgroundImage = getBackgroundImage(ss[rule]);
             }
         }
     }
@@ -181,11 +190,12 @@ function getReloadbuttonShit() {
 function getBackgroundPosition(r) {
     var i = r.search(/-moz-image-region:\s*rect\(/)+24,dimensions = [],substr;
     if(i>23) {
+        if(r.contains("-moz-image-region:rect(")) i--;
         substr = r.substring(i,r.indexOf(")",i));
-        substr = substr.replace("px","","g");
         substr = substr.replace(" ","","g");
         dimensions = substr.split(",");
-        dimensions[0] = -dimensions[0];
+        dimensions[0] = "-"+dimensions[0];
+        dimensions[3] = "-"+dimensions[3];
     }
     else if(r.contains("background-position")) {
         i = r.indexOf("background-position:")+20;
@@ -206,7 +216,7 @@ function getBackgroundPosition(r) {
     }
     //var height = dimensions[2]-dimensions[0];
     //var width = dimensions[1]-dimensions[3];
-    return dimensions[3]+"px "+dimensions[0]+"px";
+    return dimensions[3]+" "+dimensions[0];
 }
 
 function getBackgroundImage(r) {
