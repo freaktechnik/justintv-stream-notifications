@@ -3,6 +3,9 @@
  * Licensed under LGPLv3
  */
 
+"use strict";
+
+
 addon.port.on("add", function(channel) {
     var element = document.createElement('li');
     var link = document.createElement('a');
@@ -24,8 +27,8 @@ function openTab(channel) {
 }
 
 function resizePanel() {
-    //document.getElementById("refresh").style.display = "none";
-    //document.getElementById("arrow").style.display = "none";
+    document.getElementById("refresh").style.display = "none";
+    document.getElementById("arrow").style.display = "none";
     document.body.style.overflow = "hidden";
     var h,width,padding=parseInt(window.getComputedStyle(document.body).marginLeft),w=document.body;
     do {
@@ -33,10 +36,11 @@ function resizePanel() {
         width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
         document.body.style.width = width+"px";
     }while(h!=w.scrollHeight);
-    //document.getElementById("refresh").style.display = "block";
+    document.getElementById("refresh").style.display = "block";
     document.body.style.width = "";
 	addon.port.emit("resizePanel",[width+2*padding+2,h+2*padding]);
 }
+
 addon.port.on("resizeDone",function() {
     document.body.style.overflow = "visible";
 });
@@ -111,21 +115,33 @@ addon.port.on("move", function(channel) {
 window.onload = onLoad;
 
 function getReloadbuttonShit() {
-    var textNode = document.styleSheets[1].cssRules,r,substr,dimensions,height,width,i;
-    for(var rule in textNode) {
-        r = textNode[rule].cssText;
-        if(r.contains("#urlbar-reload-button")) {
-            i = r.indexOf("-moz-image-region: rect(")+24;
-            substr = r.substring(i,r.indexOf(")",i));
-            substr = substr.replace("px","","g");
-            substr = substr.replace(" ","","g");
-            dimensions = substr.split(",");
-            height = dimensions[2]-dimensions[0];
-            width = dimensions[1]-dimensions[3];
-            document.getElementById("refresh").style.backgroundPosition = dimensions[0]+"px "+dimensions[3]+"px";
-            document.getElementById("refresh").style.height = height+"px";
-            document.getElementById("refresh").style.width = width+"px";
-            break;
+    try {
+        var textNode = document.styleSheets[1].cssRules,r;
+        for(var rule in textNode) {
+            r = textNode[rule].cssText;
+            if(r.contains("#urlbar-reload-button:not([disabled]):hover")) {
+                // reformulate as onmouseover event, since this is insecure
+                document.styleSheets[0].insertRule("#refresh:hover, #refresh:focus { background-position:"+getBackgroundPosition(r)+";}",0);
+            }
+            else if(r.contains("#urlbar-reload-button")) {
+                document.getElementById("refresh").style.backgroundPosition = getBackgroundPosition(r);
+                //document.getElementById("refresh").style.height = height+"px";
+                //document.getElementById("refresh").style.width = width+"px";
+            }
         }
     }
+    catch(e) {
+        addon.port.emit("log",e);
+    }
+}
+
+function getBackgroundPosition(r) {
+    var i = r.indexOf("-moz-image-region: rect(")+24;
+    var substr = r.substring(i,r.indexOf(")",i));
+    substr = substr.replace("px","","g");
+    substr = substr.replace(" ","","g");
+    var dimensions = substr.split(",");
+    //var height = dimensions[2]-dimensions[0];
+    //var width = dimensions[1]-dimensions[3];
+    return dimensions[3]+"px "+(-dimensions[0])+"px";
 }
