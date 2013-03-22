@@ -3,7 +3,7 @@
  * Licensed under LGPLv3
  */
 
-//"use strict";
+"use strict";
 
 
 addon.port.on("add", function(channel) {
@@ -114,13 +114,29 @@ addon.port.on("move", function(channel) {
 
 window.onload = onLoad;
 
+/* 
+    The following functions get the rules from css, which defien the image appearance for the refresh button of the awesomebar.
+    Those styles then get applied to the refresh button of the panel.
+    No, there is no simpler solution.
+    Yes, there's regex.
+*/
+
 function getReloadbuttonShit() {
     try {
+        // splits the css file into rule blocks
         var ss = addon.options.css.split("}");
         var refresh = document.getElementById("refresh");
-        var r,b,n,h,a,i,na;
+        var n,h,a,i,na;
+        
+        // I chose three ifs, since sometimes the hover and active state are in the same declaration.
+        // I could possibly restructure the code to allow if/else if constructs, but the regex would
+        // get even more complicated.
+        // basically na defines, wether it should look for a default state.
+        // a,h,n & i are the rules for the different states and declarations
+        
         for(var rule in ss) {
             na = false;
+            // should match any declaration for active state
             if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:active/)&&!a) {
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!a) {
@@ -133,22 +149,19 @@ function getReloadbuttonShit() {
                     });
                 }
             }
+            // should match any declaration ONLY for hover state
             if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*,|#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*\s*\{/)&&!h) {
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!h) {
                     na = true;
                     h=temp;
-                    addon.port.emit("log",h);
                     refresh.addEventListener("mouseover",function(e) {
-                        addon.port.emit("log",h);
                         refresh.style.backgroundPosition = h;
                     });
                     refresh.addEventListener("focus",function(e) {
-                        addon.port.emit("log",h);
                         refresh.style.backgroundPosition = h;
                     });
                     refresh.addEventListener("mouseup",function(e) {
-                        addon.port.emit("log",h);
                         refresh.style.backgroundPosition = h;
                     });
                 }
@@ -157,14 +170,11 @@ function getReloadbuttonShit() {
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!n) {
                     n=temp;
-                    addon.port.emit("log",n);
                     refresh.style.backgroundPosition = n;
                     refresh.addEventListener("mouseout",function(e) {
-                        addon.port.emit("log",n);
                         refresh.style.backgroundPosition = n;
                     });
                     refresh.addEventListener("blur",function(e) {
-                        addon.port.emit("log",n);
                         refresh.style.backgroundPosition = n;
                     });
                 }
@@ -191,6 +201,7 @@ function getReloadbuttonShit() {
     }
 }
 
+// creates the argument for background-position based on different possible formats from the source
 function getBackgroundPosition(r) {
     var i = r.search(/-moz-image-region:\s*rect\(/)+24,dimensions = [],substr;
     if(i>23) {
@@ -223,10 +234,10 @@ function getBackgroundPosition(r) {
     return dimensions[3]+" "+dimensions[0];
 }
 
+// gets the image url
 function getBackgroundImage(r) {
     var i = r.indexOf('list-style-image:')+17;
     if(i>16) {
-        addon.port.emit("log",r.substring(i,r.indexOf(";",i)));
         return r.substring(i,r.indexOf(";",i));
     }
     else if(r.contains("background-image")) {
