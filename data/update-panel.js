@@ -122,9 +122,9 @@ function getReloadbuttonShit() {
         for(var rule in ss) {
             na = false;
             if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:active/)&&!a) {
-                na = true;
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!a) {
+                    na = true;
                     a=temp;
                     addon.port.emit("log",a);
                     refresh.addEventListener("mousedown",function(e) {
@@ -134,9 +134,9 @@ function getReloadbuttonShit() {
                 }
             }
             if(ss[rule].match(/#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*,|#urlbar-reload-button[a-z\-:\(\)\[\]]*:hover[a-z\-:\(\)\[\]]*(?!:active)[a-z\-:\(\)\[\]]*\s*\{/)&&!h) {
-                na = true;
                 var temp = getBackgroundPosition(ss[rule]);
                 if(temp&&!h) {
+                    na = true;
                     h=temp;
                     addon.port.emit("log",h);
                     refresh.addEventListener("mouseover",function(e) {
@@ -168,16 +168,20 @@ function getReloadbuttonShit() {
                         refresh.style.backgroundPosition = n;
                     });
                 }
-                if(!i) {
+                var img = getBackgroundImage(ss[rule])
+                if(!i&&img) {
                     i = true;
-                    refresh.style.backgroundImage = getBackgroundImage(ss[rule]);
+                    refresh.style.backgroundImage = img;
                 }
                 //document.getElementById("refresh").style.height = height+"px";
                 //document.getElementById("refresh").style.width = width+"px";
             }
             else if(ss[rule].contains("#urlbar > toolbarbutton")&&!i) {
-                i = true;
-                refresh.style.backgroundImage = getBackgroundImage(ss[rule]);
+                var img = getBackgroundImage(ss[rule]);
+                if(img) {
+                    i = true;
+                    refresh.style.backgroundImage = img;
+                }
             }
         }
     }
@@ -229,10 +233,11 @@ function getBackgroundImage(r) {
         i = r.indexOf("background-image:")+17;
         return r.substring(i,indexOf(";",i));
     }
-    else if(r.contains("background")) {
+    else if(r.contains("background")&&!r.contains("background-")) {
         i = r.indexOf("background:")+11;
         var substr = r.substring(i,r.indexOf(";",i));
         substr.split(" ");
         return substr[0];
     }
+    return false;
 }
