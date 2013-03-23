@@ -190,6 +190,11 @@ function getReloadbuttonStyle() {
                 refresh.style.backgroundImage = img;
             }
         }
+        
+        // stop the search when we have everything we need
+        if ( a&&h&&i&&n ) {
+            break;
+        }
     }
 }
 
