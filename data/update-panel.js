@@ -142,7 +142,9 @@ function getReloadbuttonStyle() {
                 na = true;
                 a=temp;
                 refresh.addEventListener("mousedown",function(e) {
-                    refresh.style.backgroundPosition = a;
+                    if(e.button==1) {
+                        refresh.style.backgroundPosition = a;
+                    }
                 });
             }
         }
@@ -159,7 +161,9 @@ function getReloadbuttonStyle() {
                     refresh.style.backgroundPosition = h;
                 });
                 refresh.addEventListener("mouseup",function(e) {
-                    refresh.style.backgroundPosition = h;
+                    if(e.button==1) {
+                        refresh.style.backgroundPosition = h;
+                    }
                 });
             }
         }
