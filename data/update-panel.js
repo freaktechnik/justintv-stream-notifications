@@ -3,8 +3,6 @@
  * Licensed under LGPLv3
  */
 
-try {
-
 addon.port.on("add", function(channel) {
     var element = document.createElement('li');
     var link = document.createElement('a');
@@ -252,10 +250,4 @@ function getBackgroundImage(r) {
         return substr[0];
     }
     return false;
-}
-
-}
-catch(e) {
-    addon.port.emit("log",e.lineNumber);
-    //console.log(e);
 }
