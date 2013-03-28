@@ -8,7 +8,9 @@ exports['test 500 Error'] = function(test) {
     test.assertEqual(main.checkResponse({'status':500}),2,"500 Errors are detected correctly");
 };
 exports['test json Error'] = function(test) {
-    test.assertEqual(main.checkResponse({'status':200,'json':{'error':"couldn't find user"}}),2,"json Errors are detected correctly");
+    test.assertEqual(main.checkResponse({'status':200,'json':{'error':"couldn't find user"}}),0,"json user Errors are detected correctly");
+    test.assertEqual(main.checkResponse({'status':200,'json':{'error':"couldn't find channel"}}),0,"json channel Errors are detected correctly");
+    test.assertEqual(main.checkResponse({'status':200,'json':{'error':"a"}}),2,"other json Errors are detected correctly");
 };
 exports['test offline'] = function(test) {
     test.assertEqual(main.checkResponse({'status':0}),0,"Offline is detected correctly");
