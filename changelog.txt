@@ -50,3 +50,8 @@ changelog
     - Channel gets removed when removed from favorites (on startup only)
     - Major code refactoring
     - Better theme compatibility of panel
+2.6.4
+    - Actually make the panlecontent overflow again
+    - Always show the toolbarbutton when activating it
+    - Fixed offline notifications
+    - Use unique tab ids from SDK 1.14
