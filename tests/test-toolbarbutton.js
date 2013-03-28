@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 'use strict';
 
-const windows = require("windows").browserWindows;
+const windows = require("sdk/windows").browserWindows;
 const toolbarbutton = require("toolbarbutton");
 //const { Loader } = require('sdk/test/loader');
 const winUtils = require('sdk/window/utils');
