@@ -34,6 +34,7 @@ function resizePanel() {
         document.body.style.width = width+"px";
     }while(h!=w.scrollHeight);
     //document.getElementById("refresh").style.display = "block";
+    document.body.style.overflow = "auto";
     document.body.style.width = "";
 	addon.port.emit("resizePanel",[width+2*padding+2,h+2*padding]);
 }
