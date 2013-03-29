@@ -55,3 +55,5 @@ changelog
     - Always show the toolbarbutton when activating it
     - Fixed offline notifications
     - Use unique tab ids from SDK 1.14
+    - Updating logging behaviour to match SDK 1.14
+    - Fixed loading on startup
