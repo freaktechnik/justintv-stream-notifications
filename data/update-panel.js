@@ -153,7 +153,7 @@ function getReloadbuttonStyle() {
             if(temp&&!h) {
                 na = true;
                 h=temp;
-                refresh.addEventListener("mouseover",function(e) {
+                refresh.addEventListener("mouseenter",function(e) {
                     refresh.style.backgroundPosition = h;
                 });
                 refresh.addEventListener("focus",function(e) {
@@ -171,7 +171,7 @@ function getReloadbuttonStyle() {
             if(temp&&!n) {
                 n=temp;
                 refresh.style.backgroundPosition = n;
-                refresh.addEventListener("mouseout",function(e) {
+                refresh.addEventListener("mouseleave",function(e) {
                     refresh.style.backgroundPosition = n;
                 });
                 refresh.addEventListener("blur",function(e) {

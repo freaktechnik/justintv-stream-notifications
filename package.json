@@ -23,7 +23,7 @@
                     "Erik Vold"
                 ],
 "name": "justintv-stream-notifications",
-"dependencies": ["api-utils", "addon-kit","vold-utils"],
+"dependencies": ["vold-utils"],
 "version": "2.6.4",
 "lib": "lib",
 "fullName": "Justin.tv Stream Notifications",
