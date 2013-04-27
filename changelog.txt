@@ -51,9 +51,11 @@ changelog
     - Major code refactoring
     - Better theme compatibility of panel
 2.6.4
-    - Actually make the panlecontent overflow again
+    - Actually make the panelcontent overflow again
     - Always show the toolbarbutton when activating it
     - Fixed offline notifications
     - Use unique tab ids from SDK 1.14
     - Updating logging behaviour to match SDK 1.14
     - Fixed loading on startup
+2.7
+    - Whole new request handling. Should allow better experience with a lot of channels.
