@@ -11,7 +11,6 @@ addon.port.on("add", function(channel) {
 	var textNode = document.createTextNode(channel.name);
     var span = document.createElement('span');
     var desc = document.createTextNode(channel.title);
-    var br = document.createElement('br');
     span.appendChild(desc);
     
     element.addEventListener("mouseenter",function(e) {
@@ -22,6 +21,8 @@ addon.port.on("add", function(channel) {
         }
         element.style.color = channel.style.color;
         if(element.parentNode.id=="live") {
+            span.style.display = 'block';
+            span.style.visibility = 'visible';
             resizePanel();
         }
     },true);
@@ -33,8 +34,10 @@ addon.port.on("add", function(channel) {
         }
         element.style.color = '';
         if(element.parentNode.id=="live") {
+            span.style.display = '';
+            span.style.visibility = '';
             resizePanel();
-        }        
+        }
     },true);
     
     element.id = channel.login;
@@ -43,7 +46,6 @@ addon.port.on("add", function(channel) {
     link.href = 'javascript:openTab("'+channel.login+'")';
 	link.title = channel.title;
     element.appendChild(link);
-        //element.appendChild(br);
     element.appendChild(span);
     document.getElementById('offline-list').appendChild(element);
 	updatePanel();
