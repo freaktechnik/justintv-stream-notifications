@@ -14,10 +14,13 @@ addon.port.on("add", function(channel) {
     span.appendChild(desc);
     
     element.addEventListener("mouseenter",function(e) {
-        element.style.backgroundColor = channel.style.bg;
         link.style.color = channel.style.linkColor;
         if(channel.style.hasBgImage) {
-            element.style.backgroundImage = channel.style.bgImage;
+            element.style.background = 'url("'+channel.style.bgImage+'") cover, rgba('
+            +getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.6)';
+        }
+        else {
+            element.style.background = channel.style.bg;
         }
         element.style.color = channel.style.color;
         if(element.parentNode.id=="live") {
@@ -50,6 +53,10 @@ addon.port.on("add", function(channel) {
     document.getElementById('offline-list').appendChild(element);
 	updatePanel();
 });
+
+function getRGBValue(string,index) {
+    return parseInt("0x"+string.slice(1+index*2,3+index*2),16);
+}
 
 function openTab(channel) {
     addon.port.emit("openTab",channel);
