@@ -10,36 +10,39 @@
     <style type="text/css">
         html {
             overflow-y: hidden;
+            padding: 0;
+            margin: 0;
         }
         body {
             font: message-box;
             -moz-user-select: none;
             cursor: default;
             overflow-y: hidden;
+            padding: 0;
+            margin: 0;
+            padding-top: .5em;
+            padding-bottom: calc(0.5em);
         }
         #refresh {
             float: right;
             padding: 1px;
-            /*background-image: url('chrome://browser/skin/reload-stop-go.png');*/
+            margin-right: .5em;
             outline: none;
             cursor: default;
             min-height: 14px;
             min-width: 14px;
         }
-        /*#refresh:hover, #refresh:focus {
-            background-position: 0 -14px;
-        }
-        #refresh:active {
-            background-position: 0 -28px;
-        }*/
-        ul,b,li {
+        b,li {
             margin: 0;
             padding: 0;
-            margin-left: .1em;
+            padding-left: .5em;
+            padding-right: .5em;
         }
         ul {
+            margin: 0;
+            padding: 0;
             list-style: none;
-            margin-bottom: .2em;
+            margin-bottom: 10px;
         }
         li {
             margin-top: .2em;
@@ -53,8 +56,15 @@
             color: currentColor;
             display: block;
         }
-        li a:hover {
-            color: GrayText;
+        li span {
+            display: none;
+            visibility: hidden;
+            
+            text-overflow: ellipsis;
+        }
+        #live li:hover span {
+            visibility: visible;
+            display: block;
         }
         
         #offline {

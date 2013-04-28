@@ -9,12 +9,42 @@ addon.port.on("add", function(channel) {
 	var image = new Image();
 	image.src = channel.image[0];
 	var textNode = document.createTextNode(channel.name);
+    var span = document.createElement('span');
+    var desc = document.createTextNode(channel.title);
+    var br = document.createElement('br');
+    span.appendChild(desc);
+    
+    element.addEventListener("mouseenter",function(e) {
+        element.style.backgroundColor = channel.style.bg;
+        link.style.color = channel.style.linkColor;
+        if(channel.style.hasBgImage) {
+            element.style.backgroundImage = channel.style.bgImage;
+        }
+        element.style.color = channel.style.color;
+        if(element.parentNode.id=="live") {
+            resizePanel();
+        }
+    },true);
+    element.addEventListener("mouseleave",function(e) {
+        element.style.backgroundColor = '';
+        link.style.color = '';
+        if(channel.style.hasBgImage) {
+            element.style.backgroundImage = '';
+        }
+        element.style.color = '';
+        if(element.parentNode.id=="live") {
+            resizePanel();
+        }        
+    },true);
+    
     element.id = channel.login;
 	link.appendChild(image);
 	link.appendChild(textNode);
     link.href = 'javascript:openTab("'+channel.login+'")';
 	link.title = channel.title;
     element.appendChild(link);
+        //element.appendChild(br);
+    element.appendChild(span);
     document.getElementById('offline-list').appendChild(element);
 	updatePanel();
 });
@@ -27,7 +57,7 @@ function resizePanel() {
     //document.getElementById("refresh").style.display = "none";
     //document.getElementById("arrow").style.display = "none";
     document.body.style.overflow = "hidden";
-    var h,width,padding=parseInt(window.getComputedStyle(document.body).marginLeft),w=document.body;
+    var h,width,w=document.body;
     do {
         h = w.scrollHeight;
         width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
@@ -36,7 +66,7 @@ function resizePanel() {
     //document.getElementById("refresh").style.display = "block";
     document.body.style.overflow = "auto";
     document.body.style.width = "";
-	addon.port.emit("resizePanel",[width+2*padding+2,h+2*padding]);
+	addon.port.emit("resizePanel",[width,h]);
 }
 
 addon.port.on("resizeDone",function() {
@@ -100,13 +130,19 @@ addon.port.on("remove", function(channel) {
 });
 
 addon.port.on("move", function(channel) {
-    var node = document.getElementById(channel.login).cloneNode(true);
     var origin = 'offline-list', destination = 'live';
     if(!channel.live) {
         origin = 'live';
         destination = 'offline-list';
     }
-    document.getElementById(origin).removeChild(document.getElementById(channel.login));
+    
+    var node = document.getElementById(origin).removeChild(document.getElementById(channel.login));
+    if(channel.live) {
+        node.getElementsByTagName('a')[0].title = channel.title;
+        var span = node.getElementsByTagName('span')[0];
+        span.removeChild(span.childNodes[0])
+        span.appendChild(document.createTextNode(channel.title));
+    }
     document.getElementById(destination).appendChild(node);
     updatePanel();
 });
