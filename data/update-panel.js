@@ -11,13 +11,14 @@ addon.port.on("add", function(channel) {
 	var textNode = document.createTextNode(channel.name);
     var span = document.createElement('span');
     var desc = document.createTextNode(channel.title);
+    var bgHelper = document.createElement('div');
     span.appendChild(desc);
     
     element.addEventListener("mouseenter",function(e) {
         link.style.color = channel.style.linkColor;
         if(channel.style.hasBgImage) {
-            element.style.background = 'url("'+channel.style.bgImage+'") cover, rgba('
-            +getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.6)';
+            element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
+            bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
         }
         else {
             element.style.background = channel.style.bg;
@@ -34,6 +35,7 @@ addon.port.on("add", function(channel) {
         link.style.color = '';
         if(channel.style.hasBgImage) {
             element.style.backgroundImage = '';
+            bgHelper.style.backgroundColor = '';
         }
         element.style.color = '';
         if(element.parentNode.id=="live") {
@@ -48,8 +50,9 @@ addon.port.on("add", function(channel) {
 	link.appendChild(textNode);
     link.href = 'javascript:openTab("'+channel.login+'")';
 	link.title = channel.title;
-    element.appendChild(link);
-    element.appendChild(span);
+    bgHelper.appendChild(link);
+    bgHelper.appendChild(span);
+    element.appendChild(bgHelper);
     document.getElementById('offline-list').appendChild(element);
 	updatePanel();
 });
