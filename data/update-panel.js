@@ -14,38 +14,40 @@ addon.port.on("add", function(channel) {
     var bgHelper = document.createElement('div');
     span.appendChild(desc);
     
-    element.addEventListener("mouseenter",function(e) {
-        link.style.color = channel.style.linkColor;
-        if(channel.style.hasBgImage) {
-            element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
-            bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
-        }
-        else {
-            element.style.background = channel.style.bg;
-        }
-        element.style.color = channel.style.color;
-        element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
-        if(element.parentNode.id=="live") {
-            span.style.display = 'block';
-            span.style.visibility = 'visible';
-            resizePanel();
-        }
-    },true);
-    element.addEventListener("mouseleave",function(e) {
-        element.style.backgroundColor = '';
-        link.style.color = '';
-        if(channel.style.hasBgImage) {
-            element.style.backgroundImage = '';
-            bgHelper.style.backgroundColor = '';
-        }
-        element.style.color = '';
-        element.style.textShadow = '';
-        if(element.parentNode.id=="live") {
-            span.style.display = '';
-            span.style.visibility = '';
-            resizePanel();
-        }
-    },true);
+    if(addon.options.advancedStyling) {
+        element.addEventListener("mouseenter",function(e) {
+            link.style.color = channel.style.linkColor;
+            if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+                element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
+                bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
+            }
+            else {
+                element.style.background = channel.style.bg;
+            }
+            element.style.color = channel.style.color;
+            element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
+            if(element.parentNode.id=="live") {
+                span.style.display = 'block';
+                span.style.visibility = 'visible';
+                resizePanel();
+            }
+        },true);
+        element.addEventListener("mouseleave",function(e) {
+            element.style.backgroundColor = '';
+            link.style.color = '';
+            if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+                element.style.backgroundImage = '';
+                bgHelper.style.backgroundColor = '';
+            }
+            element.style.color = '';
+            element.style.textShadow = '';
+            if(element.parentNode.id=="live") {
+                span.style.display = '';
+                span.style.visibility = '';
+                resizePanel();
+            }
+        },true);
+    }
     
     element.id = channel.login;
 	link.appendChild(image);
@@ -68,8 +70,6 @@ function openTab(channel) {
 }
 
 function resizePanel() {
-    //document.getElementById("refresh").style.display = "none";
-    //document.getElementById("arrow").style.display = "none";
     document.body.style.overflow = "hidden";
     var h,width,w=document.body;
     do {
@@ -77,7 +77,6 @@ function resizePanel() {
         width = w.scrollWidth>addon.options.minWidth ? w.scrollWidth : addon.options.minWidth;
         document.body.style.width = width+"px";
     }while(h!=w.scrollHeight);
-    //document.getElementById("refresh").style.display = "block";
     document.body.style.overflow = "auto";
     document.body.style.width = "";
 	addon.port.emit("resizePanel",[width,h]);
