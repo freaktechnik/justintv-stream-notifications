@@ -1,6 +1,6 @@
 {"license": "LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0.html)",
 "preferences": [
-	{"type": "integer", "name": "updateInterval", "value": 30, "title": "Update Interval"},
+	{"type": "integer", "name": "updateInterval", "value": 20, "title": "Update Interval"},
 	{"type": "string", "name": "channelList", "title": "Channels", "value":""},
 	{"type": "string", "name": "usernameList", "title": "Users","value":""},
 	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true},
