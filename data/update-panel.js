@@ -167,9 +167,12 @@ window.onload = onLoad;
     Yes, there's regex.
 */
 
-addon.port.on("cssLoaded", getReloadbuttonStyle);
+addon.port.on("cssLoaded", function(css) {
+    getReloadbuttonStyle(css);
+});
 
 function getReloadbuttonStyle(css) {
+    console.log("processing stylesheets for reload button");
     // splits the css file into rule blocks
     var ss = css.split("}");
     var refresh = document.getElementById("refresh");
