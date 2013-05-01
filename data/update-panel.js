@@ -127,7 +127,6 @@ function onLoad() {
         e.preventDefault();
     });
     resizePanel();
-    getReloadbuttonStyle();
 }
 
 function toggleOffline() {
@@ -168,9 +167,11 @@ window.onload = onLoad;
     Yes, there's regex.
 */
 
-function getReloadbuttonStyle() {
+addon.port.on("cssLoaded", getReloadbuttonStyle);
+
+function getReloadbuttonStyle(css) {
     // splits the css file into rule blocks
-    var ss = addon.options.css.split("}");
+    var ss = css.split("}");
     var refresh = document.getElementById("refresh");
     var n,h,a,i,na;
     
