@@ -159,6 +159,18 @@ addon.port.on("move", function(channel) {
     updatePanel();
 });
 
+addon.port.on("updateTitle", function(channel) {
+    updateTitle(channel);
+    updatePanel();
+});
+
+function updateTitle(channel) {
+    node.getElementsByTagName('a')[0].title = channel.title;
+    var span = node.getElementsByTagName('span')[0];
+    span.removeChild(span.childNodes[0])
+    span.appendChild(document.createTextNode(channel.title));
+}
+
 window.onload = onLoad;
 
 /* 
