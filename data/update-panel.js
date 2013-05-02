@@ -147,26 +147,28 @@ addon.port.on("remove", function(channel) {
 
 addon.port.on("move", function(channel) {
     var origin = 'offline-list', destination = 'live';
+
     if(!channel.live) {
         origin = 'live';
         destination = 'offline-list';
-        
-        if(addon.options.showTitle) {            
-            span.style.display = '';
-            span.style.visibility = '';
-        }
-    }
-    else if(addon.options.showTitle) {
-        span.style.display = 'block';
-        span.style.visibility = 'visible';
     }
 
     var node = document.getElementById(origin).removeChild(document.getElementById(channel.login));
+    var span = node.getElementsByTagName('span')[0];
     if(channel.live) {
         node.getElementsByTagName('a')[0].title = channel.title;
-        var span = node.getElementsByTagName('span')[0];
+        
         span.removeChild(span.childNodes[0])
         span.appendChild(document.createTextNode(channel.title));
+        
+        if(addon.options.showTitle) {
+            span.style.display = 'block';
+            span.style.visibility = 'visible';
+        }
+    }
+    else if(addon.options.showTitle) {            
+        span.style.display = '';
+        span.style.visibility = '';
     }
     document.getElementById(destination).appendChild(node);
     updatePanel();
