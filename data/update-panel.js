@@ -26,7 +26,7 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = channel.style.color;
             element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
-            if(element.parentNode.id=="live") {
+            if(element.parentNode.id=="live"&&!addon.options.showTitle) {
                 span.style.display = 'block';
                 span.style.visibility = 'visible';
                 resizePanel();
@@ -41,12 +41,16 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = '';
             element.style.textShadow = '';
-            if(element.parentNode.id=="live") {
+            if(element.parentNode.id=="live"&&!addon.options.showTitle) {
                 span.style.display = '';
                 span.style.visibility = '';
                 resizePanel();
             }
         },true);
+    }
+    if(element.parentNode.id=="live"&&addon.options.showTitle) {
+        span.style.display = 'block';
+        span.style.visibility = 'visible';
     }
     
     element.id = channel.login;
@@ -146,8 +150,17 @@ addon.port.on("move", function(channel) {
     if(!channel.live) {
         origin = 'live';
         destination = 'offline-list';
+        
+        if(addon.options.showTitle) {            
+            span.style.display = '';
+            span.style.visibility = '';
+        }
     }
-    
+    else if(addon.options.showTitle) {
+        span.style.display = 'block';
+        span.style.visibility = 'visible';
+    }
+
     var node = document.getElementById(origin).removeChild(document.getElementById(channel.login));
     if(channel.live) {
         node.getElementsByTagName('a')[0].title = channel.title;

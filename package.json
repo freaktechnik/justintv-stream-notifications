@@ -13,6 +13,7 @@
             {"value":"1","label":"button"}
         ]},
      {"type": "bool", "name": "channelBackground", "title": "Show channelbackground on hover", "value": true},
+     {"type": "bool", "name": "alwaysShowTitle", "title": "Always show the stream title in the panel", "value": false},
      {"type": "bool", "name": "updateTab", "title": "Open a tab with update info after an update", "value":true}
 ],
 "contributors": [],
