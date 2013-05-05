@@ -74,6 +74,7 @@ function openTab(channel) {
 }
 
 function resizePanel() {
+    console.log("resizing panel");
     document.body.style.overflow = "hidden";
     var h,width,w=document.body;
     do {
