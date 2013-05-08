@@ -26,7 +26,7 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = channel.style.color;
             element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
-            if(element.parentNode.id=="live"&&!addon.options.showTitle) {
+            if(channel.live&&!addon.options.showTitle) {
                 span.style.display = 'block';
                 span.style.visibility = 'visible';
                 resizePanel();
@@ -41,14 +41,14 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = '';
             element.style.textShadow = '';
-            if(element.parentNode.id=="live"&&!addon.options.showTitle) {
+            if(channel.live&&!addon.options.showTitle) {
                 span.style.display = '';
                 span.style.visibility = '';
                 resizePanel();
             }
         },true);
     }
-    if(element.parentNode.id=="live"&&addon.options.showTitle) {
+    if(channel.live&&addon.options.showTitle) {
         span.style.display = 'block';
         span.style.visibility = 'visible';
     }

@@ -59,6 +59,7 @@ changelog
     - Fixed loading on startup
 2.7
     - Whole new request handling. Should allow better experience with a lot of channels.
-    - Better panel: displays title of stream and adapts the hover style to the channels style
+    - Better panel: displays title of stream and adapts the hover style to the channels style (customizeable!)
     - Loading speed improvements and decreases (so expect it to be the same)
+    - about:config only preferences for power users
     
