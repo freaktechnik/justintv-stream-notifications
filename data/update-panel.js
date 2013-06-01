@@ -35,7 +35,7 @@ addon.port.on("add", function(channel) {
             else {
                 element.style.background = channel.style.bg;
             }
-            element.style.color = channel.style.color;
+            span.style.color = channel.style.color;
             element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
             if(element.parentNode.id=='live-list'&&!addon.options.showTitle) {
                 span.classList.remove("hidden");
@@ -49,7 +49,7 @@ addon.port.on("add", function(channel) {
                 element.style.backgroundImage = '';
                 bgHelper.style.backgroundColor = '';
             }
-            element.style.color = '';
+            span.style.color = '';
             element.style.textShadow = '';
             if(element.parentNode.id=='live-list'&&!addon.options.showTitle) {
                 span.classList.add("hidden");
@@ -61,10 +61,10 @@ addon.port.on("add", function(channel) {
     element.id = channel.login;
 	link.appendChild(image);
 	link.appendChild(textNode);
+    link.appendChild(span);
     link.href = 'javascript:openTab("'+channel.login+'")';
 	link.title = channel.title;
     bgHelper.appendChild(link);
-    bgHelper.appendChild(span);
     element.appendChild(bgHelper);
     document.getElementById('offline-list').appendChild(element);
 	updatePanel();
