@@ -35,14 +35,14 @@
         b,li,ul {
             margin: 0;
             padding: 0;
-        }
-        b,li div {
-            padding-left: .5em;
-            padding-right: .5em;
+            list-style: none;
         }
         ul {
-            list-style: none;
-            margin-bottom: 10px;
+            margin-bottom: .4em;
+        }
+        b,li>div {
+            padding-left: .5em;
+            padding-right: .5em;
         }
         li {
             margin-top: .2em;
@@ -59,30 +59,14 @@
             padding-bottom: .2em;
             padding-top: .2em;
         }
-        li span {
-            display: none;
-            visibility: hidden;
-            
+        li>div>div {            
             text-overflow: ellipsis;
             padding-bottom: .2em;
-            margin-left: 1.2em;
-        }
-        
-        #offline {
-            height: 0;
-            visibility: hidden;
-            overflow: hidden;
-        }
-        .openlist {
-            height:-moz-initial !important;
-            visibility: visible !important;
+            margin-left: 1.2em;            
         }
         
         #offline img {
             filter: grayscale(100%);
-        }
-        #wrapper {
-            margin-bottom: -10px;
         }
         #arrow {
             background-image: url("chrome://global/skin/arrow/arrow-dn.gif");
@@ -95,27 +79,33 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            border-radius: 1em;
         }
         #arrow.rotated {
             background-image: url("chrome://global/skin/arrow/arrow-up.gif") !important;
+        }
+        
+        .hidden {
+            display: none;
+            visibilitY: hidden;
         }
     </style>
 </head>
 <body>
     <a href="javascript:forceRefresh()" id="refresh" title="Refresh"></a>
     <div id="wrapper">
-        <b data-l10n-id="live_panel_label_offline" style="display:block;" id="channelsoffline">No channel is live at the moment</b>
-        <b data-l10n-id="live_panel_label_online" style="display:none;" id="channelslive">Currently live:</b>
-        <ul id="live" style="display:none;">
-        </ul>
-        <div id="offline">
+        <b data-l10n-id="live_panel_label_offline" id="channelsoffline">No channel is live at the moment</b>
+        <div id="live" class="hidden">
+            <b data-l10n-id="live_panel_label_online" id="channelslive">Currently live:</b>
+            <ul id="live-list">
+            </ul>
+        </div>
+        <div id="offline" class="hidden">
             <b data-l10n-id="live_panel_label_channels_offline">Offline:</b>
             <ul id="offline-list">
             </ul>
         </div>
-        <b data-l10n-id="live_panel_loading" style="display:none;" id="loader">Loading...</b>
+        <b data-l10n-id="live_panel_loading" class="hidden" id="loader">Loading...</b>
     </div>
-    <button id="arrow" onclick="toggleOffline()" style="display:none;" label="Show offline channels"></button>
+    <button id="arrow" onclick="toggleOffline()" class="hidden" label="Show offline channels"></button>
 </body>
 </html>

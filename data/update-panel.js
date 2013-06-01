@@ -4,10 +4,13 @@
  */
  
 addon.port.on("loadStart",function() {
-    document.getElementById("loader").style.display = "block";
+    document.getElementById("loader").classList.remove("hidden");
+    resizePanel();
+    
 });
 addon.port.on("loadEnd",function() {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader").classList.add("hidden");
+    resizePanel();
 });
 
 addon.port.on("add", function(channel) {
@@ -16,12 +19,13 @@ addon.port.on("add", function(channel) {
 	var image = new Image();
 	image.src = channel.image[0];
 	var textNode = document.createTextNode(channel.name);
-    var span = document.createElement('span');
+    var span = document.createElement('div');
     var desc = document.createTextNode(channel.title);
     var bgHelper = document.createElement('div');
     span.appendChild(desc);
     
     if(addon.options.advancedStyling) {
+        span.classList.add("hidden");
         element.addEventListener("mouseenter",function(e) {
             link.style.color = channel.style.linkColor;
             if(channel.style.hasBgImage&&addon.options.backgroundImage) {
@@ -33,9 +37,8 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = channel.style.color;
             element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
-            if(element.parentNode.id=='live'&&!addon.options.showTitle) {
-                span.style.display = 'block';
-                span.style.visibility = 'visible';
+            if(element.parentNode.id=='live-list'&&!addon.options.showTitle) {
+                span.classList.remove("hidden");
                 resizePanel();
             }
         },true);
@@ -48,16 +51,11 @@ addon.port.on("add", function(channel) {
             }
             element.style.color = '';
             element.style.textShadow = '';
-            if(element.parentNode.id=='live'&&!addon.options.showTitle) {
-                span.style.display = '';
-                span.style.visibility = '';
+            if(element.parentNode.id=='live-list'&&!addon.options.showTitle) {
+                span.classList.add("hidden");
                 resizePanel();
             }
         },true);
-    }
-    if(channel.live&&addon.options.showTitle) {
-        span.style.display = 'block';
-        span.style.visibility = 'visible';
     }
     
     element.id = channel.login;
@@ -100,28 +98,26 @@ addon.port.on("resizeDone",function() {
 
 
 function showMessage() {
-    var l = document.getElementById('live').getElementsByTagName("LI").length;
-    var channelslive = document.getElementById('channelslive');
-	if(l>0&&channelslive.style.display=='none') {
-		channelslive.style.display = 'block';
-		document.getElementById("live").style.display = 'block';
-		document.getElementById("channelsoffline").style.display = 'none';
+    var l = document.getElementById('live-list').getElementsByTagName("LI").length;
+    var live = document.getElementById('live');
+	if(l>0&&live.classList.contains("hidden")) {
+		live.classList.remove("hidden");
+		document.getElementById("channelsoffline").classList.add("hidden");
 	}
-	else if(l==0&&channelslive.style.display=='block') {
-		channelslive.style.display = 'none';
-		document.getElementById("live").style.display = 'none';
-		document.getElementById("channelsoffline").style.display = 'block';
+	else if(l==0&&!live.classList.contains("hidden")) {
+		live.classList.add("hidden");
+		document.getElementById("channelsoffline").classList.remove("hidden");
 	}
     
     var lo = document.getElementById('offline-list').getElementsByTagName("LI").length;
     var arrow = document.getElementById('arrow');
-    if(lo>0&&arrow.style.display=='none') {
-        arrow.style.display='block';
+    if(lo>0&&arrow.classList.contains('hidden')) {
+        arrow.classList.remove('hidden');
     }
-    else if(lo==0&&arrow.style.display=='block') {
-        arrow.style.display='none';
+    else if(lo==0&&!arrow.classList.contains('hidden')) {
+        arrow.classList.add('hidden');
         arrow.classList.remove('rotated');
-        document.getElementById("offline").classList.remove('openlist');
+        document.getElementById("offline").classList.add('hidden');
     }
 }
 
@@ -134,6 +130,12 @@ function forceRefresh() {
     addon.port.emit("refresh");
 }
 
+function toggleOffline() {
+    document.getElementById("offline").classList.toggle("hidden");
+    document.getElementById("arrow").classList.toggle("rotated");
+    resizePanel();
+}
+
 function onLoad() {
     addon.port.emit("loaded");
     document.addEventListener("dragstart",function(e) {
@@ -142,41 +144,29 @@ function onLoad() {
     resizePanel();
 }
 
-function toggleOffline() {
-    document.getElementById('offline').classList.toggle('openlist');
-    document.getElementById('arrow').classList.toggle('rotated');
-    updatePanel();
-}
-
 addon.port.on("remove", function(channel) { 
     document.getElementById('offline-list').removeChild(document.getElementById(channel));
 	updatePanel();
 });
 
 addon.port.on("move", function(channel) {
-    var origin = 'offline-list', destination = 'live';
+    var origin = 'offline-list', destination = 'live-list';
 
     if(!channel.live) {
-        origin = 'live';
+        origin = 'live-list';
         destination = 'offline-list';
     }
 
     var node = document.getElementById(origin).removeChild(document.getElementById(channel.login));
-    var span = node.getElementsByTagName('span')[0];
+    var span = node.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
     if(channel.live) {
         node.getElementsByTagName('a')[0].title = channel.title;
         
         span.removeChild(span.childNodes[0])
         span.appendChild(document.createTextNode(channel.title));
-        
-        if(addon.options.showTitle) {
-            span.style.display = 'block';
-            span.style.visibility = 'visible';
-        }
     }
-    else if(addon.options.showTitle) {            
-        span.style.display = '';
-        span.style.visibility = '';
+    if(addon.options.showTitle&&span.classList.contains("hidden")) {            
+        span.classList.remove("hidden");
     }
     document.getElementById(destination).appendChild(node);
     updatePanel();
@@ -189,7 +179,7 @@ addon.port.on("updateTitle", function(channel) {
 
 function updateTitle(channel) {
     node.getElementsByTagName('a')[0].title = channel.title;
-    var span = node.getElementsByTagName('span')[0];
+    var span = node.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
     span.removeChild(span.childNodes[0])
     span.appendChild(document.createTextNode(channel.title));
 }
