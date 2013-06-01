@@ -2,6 +2,13 @@
  * Created by Martin Giger
  * Licensed under LGPLv3
  */
+ 
+addon.port.on("loadStart",function() {
+    document.getElementById("loader").style.display = "block";
+});
+addon.port.on("loadEnd",function() {
+    document.getElementById("loader").style.display = "none";
+});
 
 addon.port.on("add", function(channel) {
     var element = document.createElement('li');
