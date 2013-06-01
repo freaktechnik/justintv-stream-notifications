@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Justin.tv Stream Notifications about:config Settings</title>
+    <link type="image/PNG" size="32x32" rel="icon" href="favicon.png" >
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <nav>
+        <a href="/">&lt; Home</a>
+      </nav>
+      <header>
+        <h1 class="header">Justin.tv Stream Notifications</h1>
+        <p class="header">This add-on displays a notification when a channel on justin.tv resp. twitch.tv goes live. Which channels are checked for being live is fully customizable.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://addons.mozilla.org/firefox/downloads/latest/justintv-stream-notificatio/">Download XPI</a></li>
+          <li><a class="buttons github" href="https://github.com/freaktechnik/justintv-stream-notifications">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/freaktechnik">freaktechnik</a></p>
+
+
+      </header>
+      <section>
+        <h1>about:config Settings</h1>
+        <p>Justin.tv Stream Notifications has some advanced settings, only customizeable via about:config.</p>
+        
+        <h2>Open about:config</h2>
+        <p>To open about:confg, open a new tab and enter "about:config" into the URL-bar (without the quotes). If you never used about:config before you will see a message, asking you to be cautious about what you do. You can break Firefox with about:config tweaks pretty easily.</p>
+        
+        <h2>Available Settings</h2>
+        <p>Justin.tv Stream Notifications offers the following hidden settings:</p>
+        <ul>
+            <li><b>queue.ratio</b> (Default: 2) Defines the part of the queue fetched minimally at a time. It will always fetch at least one request. the value is reciproke to the actual used ratio.</li>
+            <li><b>queue.maxRequestBatchSize</b> (Default: 8) The maximal number of requests fetched at once.</li>
+            <li><b>panel.minWidth</b> (Default: 212) The minimal width in pixels of the panel.</li>
+            <li><b>panel.advancedStyle</b> (Default: true) When enabled uses colors from the channel for hover styling. To restore old behaviour, disable this preference.</li>
+            <li><b>justintv.backgroundImageName</b> Default: <code>channel_background_image_url</code>) The property name from the fetched channel object for the image displayed in the background of the hover effect. Alternatives: <code>screen_cap_url_large</code> (screenshot of the stream)</li>
+            <li><b>justintv.apiKey</b> API ey for justin.tv for higher rate limit.</li>
+            <li><b>justintv.ignoreRatelimit</b> (Default: false) Completely ignores the rate-limit check</li>
+            <li><b>debug</b> (Default: false) Disables SS.</li>
+        </ul>
+        
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
