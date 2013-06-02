@@ -23,9 +23,9 @@ addon.port.on("add", function(channel) {
     var desc = document.createTextNode(channel.title);
     var bgHelper = document.createElement('div');
     span.appendChild(desc);
+    span.classList.add("hidden");
     
     if(addon.options.advancedStyling) {
-        span.classList.add("hidden");
         element.addEventListener("mouseenter",function(e) {
             link.style.color = channel.style.linkColor;
             if(channel.style.hasBgImage&&addon.options.backgroundImage) {
