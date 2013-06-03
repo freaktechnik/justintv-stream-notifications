@@ -164,9 +164,12 @@ addon.port.on("move", function(channel) {
         
         span.removeChild(span.childNodes[0])
         span.appendChild(document.createTextNode(channel.title));
+        if(addon.options.showTitle&&span.classList.contains("hidden"))
+            span.classList.remove("hidden");
     }
-    if(addon.options.showTitle&&span.classList.contains("hidden")) {            
-        span.classList.remove("hidden");
+    else {
+        if(addon.options.showTitle)
+            span.classList.add("hidden");
     }
     document.getElementById(destination).appendChild(node);
     updatePanel();
