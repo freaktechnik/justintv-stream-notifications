@@ -41,7 +41,7 @@ addon.port.on("add", function(channel) {
                 span.classList.remove("hidden");
                 resizePanel();
             }
-        },true);
+        },false);
         element.addEventListener("mouseleave",function(e) {
             element.style.backgroundColor = '';
             link.style.color = '';
@@ -55,7 +55,7 @@ addon.port.on("add", function(channel) {
                 span.classList.add("hidden");
                 resizePanel();
             }
-        },true);
+        },false);
     }
     
     element.id = channel.login;
