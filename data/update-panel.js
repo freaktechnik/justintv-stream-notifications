@@ -28,7 +28,9 @@ addon.port.on("add", function(channel) {
     if(addon.options.advancedStyling) {
         element.addEventListener("mouseenter",function(e) {
             link.style.color = channel.style.linkColor;
+            link.style.backgroundColor = 'transparent';
             if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+                element.style.backgroundColor = 'transparent';
                 element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
                 bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
             }
@@ -44,6 +46,7 @@ addon.port.on("add", function(channel) {
         },false);
         element.addEventListener("mouseleave",function(e) {
             element.style.backgroundColor = '';
+            link.style.backgroundColor = '';
             link.style.color = '';
             if(channel.style.hasBgImage&&addon.options.backgroundImage) {
                 element.style.backgroundImage = '';
@@ -56,6 +59,9 @@ addon.port.on("add", function(channel) {
                 resizePanel();
             }
         },false);
+    }
+    else {
+        element.classList.add("simple");
     }
     
     element.id = channel.login;

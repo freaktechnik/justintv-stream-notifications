@@ -40,12 +40,11 @@
         ul {
             margin-bottom: .4em;
         }
-        b,li>div {
+        b,li a {
             padding-left: .5em;
             padding-right: .5em;
         }
         li {
-            margin-top: .2em;
             background-size: cover !important;
         }
         li img {
@@ -54,15 +53,23 @@
         }
         li a:link {
             text-decoration: none;
+            display: block;
             color: currentColor;
+            cursor: default;
+            outline: none;
             padding-bottom: .2em;
             padding-top: .2em;
-            cursor: default;
+        }
+        .simple li a:hover, li a:focus {
+            color: -moz-MenuHoverText;
+        }
+        .simple:hover, li a:focus {
+            background-color: -moz-MenuHover;
         }
         li a>div {            
             text-overflow: ellipsis;
-            padding-bottom: .2em;
-            margin-left: 1.2em;            
+            /*padding-bottom: .2em;*/
+            margin-left: 1.2em;
         }
         
         #offline img {
