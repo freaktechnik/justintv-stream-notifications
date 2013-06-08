@@ -77,7 +77,11 @@ addon.port.on("add", function(channel) {
 });
 
 function getRGBValue(string,index) {
-    return parseInt("0x"+string.slice(1+index*2,3+index*2),16);
+    var args = [1+index*2];
+    if(3+index*2<string.length)
+        args.push(3+index*2);
+
+    return parseInt(string.slice.apply(string,args),16);
 }
 
 function openTab(channel) {
