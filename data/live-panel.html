@@ -99,20 +99,18 @@
 </head>
 <body>
     <a href="javascript:forceRefresh()" id="refresh" title="Refresh"></a>
-    <div id="wrapper">
-        <b data-l10n-id="live_panel_label_offline" id="channelsoffline">No channel is live at the moment</b>
-        <div id="live" class="hidden">
-            <b data-l10n-id="live_panel_label_online" id="channelslive">Currently live:</b>
-            <ul id="live-list">
-            </ul>
-        </div>
-        <div id="offline" class="hidden">
-            <b data-l10n-id="live_panel_label_channels_offline">Offline:</b>
-            <ul id="offline-list">
-            </ul>
-        </div>
-        <b data-l10n-id="live_panel_loading" class="hidden" id="loader">Loading...</b>
+    <b data-l10n-id="live_panel_label_offline" id="channelsoffline">No channel is live at the moment</b>
+    <div id="live" class="hidden">
+        <b data-l10n-id="live_panel_label_online" id="channelslive">Currently live:</b>
+        <ul id="live-list">
+        </ul>
     </div>
+    <div id="offline" class="hidden">
+        <b data-l10n-id="live_panel_label_channels_offline">Offline:</b>
+        <ul id="offline-list">
+        </ul>
+    </div>
+    <b data-l10n-id="live_panel_loading" class="hidden" id="loader">Loading...</b>
     <button id="arrow" onclick="toggleOffline()" class="hidden" label="Show offline channels"></button>
 </body>
 </html>
