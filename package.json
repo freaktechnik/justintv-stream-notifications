@@ -1,8 +1,10 @@
 {"license": "LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0.html)",
 "preferences": [
 	{"type": "integer", "name": "updateInterval", "value": 20, "title": "Update Interval"},
-	{"type": "string", "name": "channelList", "title": "Channels", "value":""},
-	{"type": "string", "name": "usernameList", "title": "Users","value":""},
+	{"type": "string", "name": "justintvchannelList", "title": "Justin.tv Channels", "value":""},
+	{"type": "string", "name": "justintvusernameList", "title": "Justin.tv Users","value":""},
+    {"type": "string", "name": "twitchchannelList", "title": "Twitch Channels", "value":""},
+	{"type": "string", "name": "twitchusernameList", "title": "Twitch Users","value":""},
 	{"type": "bool", "name": "autoUsername", "title": "Auto detect username", "value":true},
     {"type": "bool", "name": "onlineNotification", "title": "Show a notification when a stream goes online", "value":true},
     {"type": "bool", "name": "titleChangeNotification", "title": "Show a notification when a stream changes the title", "value":true},
