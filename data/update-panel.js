@@ -68,7 +68,7 @@ addon.port.on("add", function(channel) {
 	link.appendChild(image);
 	link.appendChild(textNode);
     link.appendChild(span);
-    link.href = 'javascript:openTab("'+channel.login+'","'+channel.type+')';
+    link.href = 'javascript:openTab("'+channel.login+'","'+channel.type+'")';
 	link.title = channel.title;
     bgHelper.appendChild(link);
     element.appendChild(bgHelper);
