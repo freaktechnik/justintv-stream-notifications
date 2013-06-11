@@ -22,6 +22,9 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+b {
+  font-weight: bold;
+}
 
 /* Base text styles */
 
