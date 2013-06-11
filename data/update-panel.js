@@ -64,11 +64,11 @@ addon.port.on("add", function(channel) {
         element.classList.add("simple");
     }
     
-    element.id = channel.login;
+    element.id = channel.type+'-'+channel.login;
 	link.appendChild(image);
 	link.appendChild(textNode);
     link.appendChild(span);
-    link.href = 'javascript:openTab("'+channel.login+'")';
+    link.href = 'javascript:openTab("'+channel.login+'","'+channel.type+')';
 	link.title = channel.title;
     bgHelper.appendChild(link);
     element.appendChild(bgHelper);
@@ -84,8 +84,8 @@ function getRGBValue(string,index) {
     return parseInt(string.slice.apply(string,args),16);
 }
 
-function openTab(channel) {
-    addon.port.emit("openTab",channel);
+function openTab(channel,type) {
+    addon.port.emit("openTab",channel,type);
 }
 
 function resizePanel() {
@@ -154,20 +154,21 @@ function onLoad() {
     resizePanel();
 }
 
-addon.port.on("remove", function(channel) { 
-    document.getElementById('offline-list').removeChild(document.getElementById(channel));
+addon.port.on("remove", function(channel,type) { 
+    document.getElementById('offline-list').removeChild(document.getElementById(type+'-'+channel));
 	updatePanel();
 });
 
 addon.port.on("move", function(channel) {
     var origin = 'offline-list', destination = 'live-list';
+    var id = channel.type+'-'+channel.login;
 
     if(!channel.live) {
         origin = 'live-list';
         destination = 'offline-list';
     }
 
-    var node = document.getElementById(origin).removeChild(document.getElementById(channel.login));
+    var node = document.getElementById(origin).removeChild(document.getElementById(id));
     var span = node.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
     if(channel.live) {
         node.getElementsByTagName('a')[0].title = channel.title;
@@ -191,9 +192,10 @@ addon.port.on("updateTitle", function(channel) {
 });
 
 function updateTitle(channel) {
+    var node = document.getElementById(channel.type+'-'+channel.login);
     node.getElementsByTagName('a')[0].title = channel.title;
     var span = node.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
-    span.removeChild(span.childNodes[0])
+    span.removeChild(span.childNodes[0]);
     span.appendChild(document.createTextNode(channel.title));
 }
 
