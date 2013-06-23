@@ -235,11 +235,7 @@ function getReloadbuttonStyle(css) {
                 a=temp;
                 refresh.addEventListener("mousedown",function(e) {
                     if(e.button==0) {
-                        refresh.style.backgroundPosition = a[0]+" "+a[1];
-                        if(a[2])
-                            refresh.style.height = a[2];
-                        if(a[3])
-                            refresh.style.width = a[3];
+                        applyStyles(refresh,a);
                     }
                 });
             }
@@ -251,26 +247,14 @@ function getReloadbuttonStyle(css) {
                 na = true;
                 h=temp;
                 refresh.addEventListener("mouseenter",function(e) {
-                    refresh.style.backgroundPosition = h[0]+" "+h[1];
-                    if(h[2])
-                        refresh.style.height = h[2];
-                    if(h[3])
-                        refresh.style.width = h[3];
+                    applyStyles(refresh,n);
                 });
                 refresh.addEventListener("focus",function(e) {
-                    refresh.style.backgroundPosition = h[0]+" "+h[1];
-                    if(h[2])
-                        refresh.style.height = h[2];
-                    if(h[3])
-                        refresh.style.width = h[3];
+                    applyStyles(refresh,h);
                 });
                 refresh.addEventListener("mouseup",function(e) {
                     if(e.button==0) {
-                        refresh.style.backgroundPosition = h[0]+" "+h[1];
-                        if(h[2])
-                            refresh.style.height = h[2];
-                        if(h[3])
-                            refresh.style.width = h[3];
+                        applyStyles(refresh,h);
                     }
                 });
             }
@@ -279,24 +263,12 @@ function getReloadbuttonStyle(css) {
             var temp = getBackgroundPosition(ss[rule]);
             if(temp&&!n) {
                 n=temp;
-                refresh.style.backgroundPosition = n[0]+" "+n[1];
-                if(n[2])
-                    refresh.style.height = n[2];
-                if(n[3])
-                    refresh.style.width = n[3];
+                applyStyles(refresh,n);
                 refresh.addEventListener("mouseleave",function(e) {
-                    refresh.style.backgroundPosition = n;
-                    if(n[2])
-                        refresh.style.height = n[2];
-                    if(n[3])
-                        refresh.style.width = n[3];
+                    applyStyles(refresh,n);
                 });
                 refresh.addEventListener("blur",function(e) {
-                    refresh.style.backgroundPosition = n;
-                    if(n[2])
-                        refresh.style.height = n[2];
-                    if(n[3])
-                        refresh.style.width = n[3];
+                    applyStyles(refresh,n);
                 });
             }
             var img = getBackgroundImage(ss[rule])
@@ -304,8 +276,6 @@ function getReloadbuttonStyle(css) {
                 i = true;
                 refresh.style.backgroundImage = img;
             }
-            //document.getElementById("refresh").style.height = height+"px";
-            //document.getElementById("refresh").style.width = width+"px";
         }
         else if(ss[rule].contains("#urlbar > toolbarbutton")&&!i) {
             var img = getBackgroundImage(ss[rule]);
@@ -320,6 +290,15 @@ function getReloadbuttonStyle(css) {
             break;
         }
     }
+}
+
+// applies the style to the provided element, needs an arra returned by getBackgroundPosition
+function applyStyles(element,styleArray) {
+    element.style.backgroundPosition = styleArray[0]+" "+styleArray[1];
+    if(styleArray[2])
+        element.style.height = styleArray[2];
+    if(styleArray[3])
+        element.style.width = styleArray[3];
 }
 
 // creates the argument for background-position based on different possible formats from the source
@@ -357,17 +336,19 @@ function getBackgroundPosition(r) {
         return false;
     }
     
-    var m = getMesurement(dimensions[0]);
+    var m = getUnit(dimensions[0]);
     height = height+m;
     width = width+m;
     
     return [dimensions[3],dimensions[0],height,width];
 }
 
-function getMesurement(string) {
+// gets the unit used in a rule
+function getUnit(string) {
     return string.substring(string.length-2);
 }
 
+// those two get the height/width styles from the ruleset if possible
 function getHeight(r) {
     var i;
     if(r.contains("height")) {
