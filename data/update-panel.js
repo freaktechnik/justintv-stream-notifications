@@ -235,7 +235,11 @@ function getReloadbuttonStyle(css) {
                 a=temp;
                 refresh.addEventListener("mousedown",function(e) {
                     if(e.button==0) {
-                        refresh.style.backgroundPosition = a;
+                        refresh.style.backgroundPosition = a[0]+" "+a[1];
+                        if(a[2])
+                            refresh.style.height = a[2];
+                        if(a[3])
+                            refresh.style.width = a[3];
                     }
                 });
             }
@@ -247,14 +251,26 @@ function getReloadbuttonStyle(css) {
                 na = true;
                 h=temp;
                 refresh.addEventListener("mouseenter",function(e) {
-                    refresh.style.backgroundPosition = h;
+                    refresh.style.backgroundPosition = h[0]+" "+h[1];
+                    if(h[2])
+                        refresh.style.height = h[2];
+                    if(h[3])
+                        refresh.style.width = h[3];
                 });
                 refresh.addEventListener("focus",function(e) {
-                    refresh.style.backgroundPosition = h;
+                    refresh.style.backgroundPosition = h[0]+" "+h[1];
+                    if(h[2])
+                        refresh.style.height = h[2];
+                    if(h[3])
+                        refresh.style.width = h[3];
                 });
                 refresh.addEventListener("mouseup",function(e) {
                     if(e.button==0) {
-                        refresh.style.backgroundPosition = h;
+                        refresh.style.backgroundPosition = h[0]+" "+h[1];
+                        if(h[2])
+                            refresh.style.height = h[2];
+                        if(h[3])
+                            refresh.style.width = h[3];
                     }
                 });
             }
@@ -263,12 +279,24 @@ function getReloadbuttonStyle(css) {
             var temp = getBackgroundPosition(ss[rule]);
             if(temp&&!n) {
                 n=temp;
-                refresh.style.backgroundPosition = n;
+                refresh.style.backgroundPosition = n[0]+" "+n[1];
+                if(n[2])
+                    refresh.style.height = n[2];
+                if(n[3])
+                    refresh.style.width = n[3];
                 refresh.addEventListener("mouseleave",function(e) {
                     refresh.style.backgroundPosition = n;
+                    if(n[2])
+                        refresh.style.height = n[2];
+                    if(n[3])
+                        refresh.style.width = n[3];
                 });
                 refresh.addEventListener("blur",function(e) {
                     refresh.style.backgroundPosition = n;
+                    if(n[2])
+                        refresh.style.height = n[2];
+                    if(n[3])
+                        refresh.style.width = n[3];
                 });
             }
             var img = getBackgroundImage(ss[rule])
@@ -296,12 +324,14 @@ function getReloadbuttonStyle(css) {
 
 // creates the argument for background-position based on different possible formats from the source
 function getBackgroundPosition(r) {
-    var i = r.search(/-moz-image-region:\s*rect\(/)+24,dimensions = [],substr;
+    var i = r.search(/-moz-image-region:\s*rect\(/)+24,dimensions = [],substr,height,width;
     if(i>23) {
         if(r.contains("-moz-image-region:rect(")) i--;
         substr = r.substring(i,r.indexOf(")",i));
         substr = substr.replace(" ","","g");
         dimensions = substr.split(",");
+        height = dimensions[2]-dimensions[0];
+        width = dimensions[1]-dimensions[3];
         dimensions[0] = "-"+dimensions[0];
         dimensions[3] = "-"+dimensions[3];
     }
@@ -311,6 +341,8 @@ function getBackgroundPosition(r) {
         substr.split(" ");
         dimensions[0] = substr[1];
         dimensions[3] = substr[0];
+        height = getHeight(r);
+        width = getWidth(r);        
     }
     else if(r.contains("background")&&!r.contains("background-")) {
         i = r.indexOf("background:")+11;
@@ -318,13 +350,39 @@ function getBackgroundPosition(r) {
         substr.split(" ");
         dimensions[0] = substr[2];
         dimensions[3] = substr[1];
+        height = getHeight(r);
+        width = getWidth(r);   
     }
     else {
         return false;
     }
-    //var height = dimensions[2]-dimensions[0];
-    //var width = dimensions[1]-dimensions[3];
-    return dimensions[3]+" "+dimensions[0];
+    
+    var m = getMesurement(dimensions[0]);
+    height = height+m;
+    width = width+m;
+    
+    return [dimensions[3],dimensions[0],height,width];
+}
+
+function getMesurement(string) {
+    return string.substring(string.length-2);
+}
+
+function getHeight(r) {
+    var i;
+    if(r.contains("height")) {
+        i = r.indexOf("height:")+7;
+        return r.substring(i,r.indexOf(";",i));
+    }
+    return null;
+}
+function getWidth(r) {
+    var i;
+    if(r.contains("width")) {
+        i = r.indexOf("width:")+6;
+        return r.substring(i,r.indexOf(";",i));
+    }
+    return null;
 }
 
 // gets the image url
