@@ -64,4 +64,9 @@ changelog
     - Loading speed improvements and decreases (so expect it to be the same)
     - about:config only preferences for power users
     - Twitch re-added
+2.7.1
+    - Fetching channel statusses in as few requests as possible
+    - Refreshing favorites in runtime
+    - Small improovments to panel style
+
     
