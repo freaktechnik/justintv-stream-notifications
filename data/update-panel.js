@@ -247,7 +247,7 @@ function getReloadbuttonStyle(css) {
                 na = true;
                 h=temp;
                 refresh.addEventListener("mouseenter",function(e) {
-                    applyStyles(refresh,n);
+                    applyStyles(refresh,h);
                 });
                 refresh.addEventListener("focus",function(e) {
                     applyStyles(refresh,h);
