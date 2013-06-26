@@ -309,8 +309,8 @@ function getBackgroundPosition(r) {
         substr = r.substring(i,r.indexOf(")",i));
         substr = substr.replace(" ","","g");
         dimensions = substr.split(",");
-        height = dimensions[2]-dimensions[0];
-        width = dimensions[1]-dimensions[3];
+        height = parseInt(dimensions[2],10)-parseInt(dimensions[0]);
+        width = parseInt(dimensions[1])-parseInt(dimensions[3]);
         dimensions[0] = "-"+dimensions[0];
         dimensions[3] = "-"+dimensions[3];
     }
