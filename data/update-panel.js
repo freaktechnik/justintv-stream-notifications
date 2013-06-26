@@ -309,8 +309,8 @@ function getBackgroundPosition(r) {
         substr = r.substring(i,r.indexOf(")",i));
         substr = substr.replace(" ","","g");
         dimensions = substr.split(",");
-        height = parseInt(dimensions[2],10)-parseInt(dimensions[0]);
-        width = parseInt(dimensions[1])-parseInt(dimensions[3]);
+        height = parseInt(dimensions[2],10)-parseInt(dimensions[0],10);
+        width = parseInt(dimensions[1],10)-parseInt(dimensions[3],10);
         dimensions[0] = "-"+dimensions[0];
         dimensions[3] = "-"+dimensions[3];
     }
@@ -330,7 +330,7 @@ function getBackgroundPosition(r) {
         dimensions[0] = substr[2];
         dimensions[3] = substr[1];
         height = getHeight(r);
-        width = getWidth(r);   
+        width = getWidth(r);
     }
     else {
         return false;
@@ -345,6 +345,9 @@ function getBackgroundPosition(r) {
 
 // gets the unit used in a rule
 function getUnit(string) {
+    if(parseInt(string,10)==0) {
+        return "px";
+    }
     return string.substring(string.length-2);
 }
 
@@ -353,7 +356,7 @@ function getHeight(r) {
     var i;
     if(r.contains("height")) {
         i = r.indexOf("height:")+7;
-        return r.substring(i,r.indexOf(";",i));
+        return parseInt(r.substring(i,r.indexOf(";",i)),10);
     }
     return null;
 }
