@@ -68,5 +68,6 @@ changelog
     - Fetching channel statusses in as few requests as possible
     - Refreshing favorites in runtime
     - Small improovments to panel style
-
+2.7.2
+    - Fix justin.tv status requests
     
