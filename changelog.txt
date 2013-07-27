@@ -70,4 +70,7 @@ changelog
     - Small improovments to panel style
 2.7.2
     - Fix justin.tv status requests
+2.7.3
+    - Fix getting user favorites with the fix from 2.7.2
+    - Remove favorite channels when a user is removed
     
