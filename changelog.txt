@@ -73,4 +73,5 @@ changelog
 2.7.3
     - Fix getting user favorites with the fix from 2.7.2
     - Remove favorite channels when a user is removed
-    
+2.7.4
+    - Fix a bug in the automatic user detection
