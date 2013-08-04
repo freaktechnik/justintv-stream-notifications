@@ -75,3 +75,7 @@ changelog
     - Remove favorite channels when a user is removed
 2.7.4
     - Fix a bug in the automatic user detection
+2.8
+    - Add a different notification for title changes
+    - Fix twitch archive link
+    - Add a context menu to channels in the panel
