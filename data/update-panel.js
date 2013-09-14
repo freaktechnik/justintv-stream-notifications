@@ -65,6 +65,7 @@ addon.port.on("add", function(channel) {
     }
     
     element.id = channel.type+'-'+channel.login;
+    //element.contextmenu = 'context';
 	link.appendChild(image);
 	link.appendChild(textNode);
     link.appendChild(span);
