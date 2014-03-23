@@ -162,3 +162,10 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+#scratch crap
+*.js~
+*.json~
+*.txt~
+*.html~
+*.css~
