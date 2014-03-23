@@ -1,0 +1,80 @@
+/* 
+ *  Created by Martin Giger
+ *  Licensed under LGPLv3
+ */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    
+    -moz-user-select: none;
+    overflow: hidden;
+    
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+}
+
+.toolbar {
+    margin: 0;
+    padding: .5em;
+    -moz-appearance: toolbar;
+    
+    display: block;
+}
+
+.toolbar button {
+    -moz-appearance: toolbarbutton;
+}
+
+#content {
+    flex: 1 1 100%;
+    display: flex;
+    
+    flex-direction: row;
+    flex-flow: row;
+}
+
+#list {
+    padding-left: 0;
+    margin: 0;
+    overflow-y: auto;
+
+    flex: 3 1 75%;
+    order: 1;
+}
+
+#list>li {
+    -moz-appearance: menuitem;
+    font: message-box;
+    color: currentColor;
+    
+    list-style-type: none;
+    height: 4em;
+
+    cursor: default;
+}
+
+#list>li:hover {
+    color: -moz-MenuHoverText;
+}
+
+.panel {
+    font: message-box;
+    color: WindowText;
+    background-color: Window;
+    border-left: 1px solid ActiveBorder;
+
+    flex: 1 1 25%;
+    order: 2;
+    
+    padding: .5em;
+}
+
+.panel>section {
+    margin-bottom: .5em;
+}

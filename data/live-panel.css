@@ -1,0 +1,92 @@
+/* 
+ *  Created by Martin Giger
+ *  Licensed under LGPLv3
+ */
+
+html {
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+}
+body {
+    font: message-box;
+    -moz-user-select: none;
+    cursor: default;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+    padding-top: .5em;
+    padding-bottom: calc(0.5em);
+}
+#refresh {
+    float: right;
+    padding: 1px;
+    margin-right: .5em;
+    outline: none;
+    cursor: default;
+    min-height: 14px;
+    min-width: 14px;
+}
+b,li,ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul {
+    margin-bottom: .4em;
+}
+.bwrapper,li a {
+    padding-left: .5em;
+    padding-right: .5em;
+}
+li {
+    background-size: cover !important;
+}
+li img {
+    height: 1em;
+    margin-right: .2em;
+}
+li a:link {
+    text-decoration: none;
+    display: block;
+    color: currentColor;
+    cursor: default;
+    outline: none;
+    padding-bottom: .2em;
+    padding-top: .2em;
+}
+.simple li a:hover, li a:focus {
+    color: -moz-MenuHoverText;
+}
+.simple:hover, li a:focus {
+    background-color: -moz-MenuHover;
+}
+li a>div {            
+    text-overflow: ellipsis;
+    /*padding-bottom: .2em;*/
+    margin-left: 1.2em;
+}
+
+#offline img {
+    filter: grayscale(100%);
+}
+#arrow {
+    background-image: url("chrome://global/skin/arrow/arrow-dn.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    width: 100%;
+    height: 10px;
+    border: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+#arrow.rotated {
+    background-image: url("chrome://global/skin/arrow/arrow-up.gif") !important;
+}
+
+.hidden {
+    display: none;
+    visibilitY: hidden;
+}
