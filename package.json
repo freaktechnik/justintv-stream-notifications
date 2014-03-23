@@ -19,7 +19,7 @@
 "description": "This displays a notification when a channel on justin.tv resp. twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
 "author": "freaktechnik",
 "name": "justintv-stream-notifications",
-"version": "2.8",
+"version": "2.8.2",
 "lib": "lib",
 "fullName": "Justin.tv Stream Notifications",
 "main": "main",
