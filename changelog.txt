@@ -79,7 +79,10 @@ changelog
     - Add a different notification for title changes
     - Fix twitch archive link
     - Add a context menu to channels in the panel
+2.8.1
+    - Fix random channels appearing
+    - Fix notification muting when going backwards
+2.8.2
+    - Update button for australis
 3.0
-    - Add australis button
     - Add new channels manager and the last piece to allow more channel providers
-
