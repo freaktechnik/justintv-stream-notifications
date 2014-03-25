@@ -164,8 +164,4 @@ pip-log.txt
 .DS_Store
 
 #scratch crap
-*.js~
-*.json~
-*.txt~
-*.html~
-*.css~
+*~
