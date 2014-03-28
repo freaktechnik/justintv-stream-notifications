@@ -84,3 +84,4 @@ changelog
     - Fix notification muting when going backwards
 2.8.2
     - Update button for australis
+    - Fix a bug where channels were not removed when all the sources for it were removed
