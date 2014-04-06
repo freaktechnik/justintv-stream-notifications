@@ -9,7 +9,6 @@
     <script type="text/javascript" src="update-panel.js"></script>
     <style type="text/css">
         html {
-            overflow-y: hidden;
             padding: 0;
             margin: 0;
         }
@@ -17,7 +16,6 @@
             font: message-box;
             -moz-user-select: none;
             cursor: default;
-            overflow-y: hidden;
             padding: 0;
             margin: 0;
             padding-top: .5em;
@@ -31,6 +29,9 @@
             cursor: default;
             min-height: 14px;
             min-width: 14px;
+        }
+        b {
+            line-height: 1.5em;
         }
         b,li,ul {
             margin: 0;
@@ -46,8 +47,12 @@
         }
         li {
             background-size: cover !important;
+            overflow: hidden;
         }
-        li img {
+        #live li {
+            min-height: 120px;
+        }
+        li .avatar {
             height: 1em;
             margin-right: .2em;
         }
@@ -72,7 +77,7 @@
             margin-left: 1.2em;
         }
         
-        #offline img {
+        #offline .avatar {
             filter: grayscale(100%);
         }
         #arrow {

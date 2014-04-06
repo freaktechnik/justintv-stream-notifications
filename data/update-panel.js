@@ -14,14 +14,17 @@ addon.port.on("loadEnd",function() {
 });
 
 addon.port.on("add", function(channel) {
-    var element = document.createElement('li');
-    var link = document.createElement('a');
-	var image = new Image();
+    var element = document.createElement('li'),
+        bgHelper = document.createElement('div'),
+            link = document.createElement('a'),
+                image = new Image(),
+                    textNode = document.createTextNode(channel.name),
+                    span = document.createElement('div'),
+                        desc = document.createTextNode(channel.title);
+
 	image.src = channel.image[0];
-	var textNode = document.createTextNode(channel.name);
-    var span = document.createElement('div');
-    var desc = document.createTextNode(channel.title);
-    var bgHelper = document.createElement('div');
+    image.classList.add("avatar");
+    
     span.appendChild(desc);
     span.classList.add("hidden");
     
@@ -29,13 +32,15 @@ addon.port.on("add", function(channel) {
         element.addEventListener("mouseenter",function(e) {
             link.style.color = channel.style.linkColor;
             link.style.backgroundColor = 'transparent';
-            if(channel.style.hasBgImage&&addon.options.backgroundImage) {
-                element.style.backgroundColor = 'transparent';
-                element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
-                bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
-            }
-            else {
-                element.style.background = channel.style.bg;
+            if(element.parentNode.id!='live-list') {
+                if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+                    element.style.backgroundColor = 'transparent';
+                    element.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
+                    bgHelper.style.backgroundColor =  'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
+                }
+                else {
+                    element.style.background = channel.style.bg;
+                }
             }
             span.style.color = channel.style.color;
             element.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
@@ -45,12 +50,14 @@ addon.port.on("add", function(channel) {
             }
         },false);
         element.addEventListener("mouseleave",function(e) {
-            element.style.backgroundColor = '';
             link.style.backgroundColor = '';
             link.style.color = '';
-            if(channel.style.hasBgImage&&addon.options.backgroundImage) {
-                element.style.backgroundImage = '';
-                bgHelper.style.backgroundColor = '';
+            if(element.parentNode.id!='live-list') {
+                element.style.backgroundColor = '';
+                if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+                    element.style.backgroundImage = '';
+                    bgHelper.style.backgroundColor = '';
+                }
             }
             span.style.color = '';
             element.style.textShadow = '';
@@ -70,6 +77,7 @@ addon.port.on("add", function(channel) {
 	link.appendChild(textNode);
     link.appendChild(span);
     link.href = 'javascript:openTab("'+channel.login+'","'+channel.type+'")';
+    element.onclick = function() {openTab(channel.login,channel.type)};
 	link.title = channel.title;
     bgHelper.appendChild(link);
     element.appendChild(bgHelper);
@@ -173,13 +181,27 @@ addon.port.on("move", function(channel) {
     var span = node.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
     if(channel.live) {
         node.getElementsByTagName('a')[0].title = channel.title;
-        
+        if(!channel.style.hasBgImage||!addon.options.backgroundImage) {
+            node.style.backgroundColor = 'transparent';
+            if(channel.style.bg)
+                node.getElementsByTagName('div')[0].style.backgroundColor = 'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.7)';
+        }
+        node.style.backgroundImage = 'url("'+channel.thumbnail+'")';
+
         span.removeChild(span.childNodes[0])
         span.appendChild(document.createTextNode(channel.title));
         if(addon.options.showTitle&&span.classList.contains("hidden"))
             span.classList.remove("hidden");
     }
     else {
+        if(channel.style.hasBgImage&&addon.options.backgroundImage) {
+            node.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
+        }
+        else {
+            node.style.backgroundImage = '';
+            node.style.backgroundColor = '';
+            node.style.background = channel.style.bg;
+        }
         if(addon.options.showTitle)
             span.classList.add("hidden");
     }
@@ -199,6 +221,11 @@ function updateTitle(channel) {
     span.removeChild(span.childNodes[0]);
     span.appendChild(document.createTextNode(channel.title));
 }
+
+addon.port.on("updateThumb", function(channel) {
+    var node = document.getElementById(channel.type+'-'+channel.login);
+    node.style.backgroundImage = 'url("'+channel.thumbnail+'")';
+});
 
 window.onload = onLoad;
 
