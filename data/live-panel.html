@@ -83,7 +83,11 @@
         }
         
         #offline .avatar {
-            filter: grayscale(100%);
+            /*filter: grayscale(100%);*/
+            filter: url(filter.svg#grayscale);
+        }
+        #offline li:hover .avatar {
+            filter: none;
         }
         #arrow {
             background-image: url("chrome://global/skin/arrow/arrow-dn.gif");
@@ -103,11 +107,13 @@
         
         .hidden {
             display: none;
-            visibilitY: hidden;
+            visibility: hidden;
         }
     </style>
 </head>
 <body>
+  <image xlink:href="/files/3716/Test_Form_5.jpeg" filter="url(#grayscale)" width="276px" height="184px"></image>
+
     <!-- ToDo 
     <menu id="context" type="context">
         <menuitem label="Refresh channel status" onclick="refreshChannel()" data-l10n-id="context_refresh"></menuitem>

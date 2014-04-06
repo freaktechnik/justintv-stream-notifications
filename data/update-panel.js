@@ -58,9 +58,9 @@ addon.port.on("add", function(channel) {
                     element.style.backgroundImage = '';
                     bgHelper.style.backgroundColor = '';
                 }
+                element.style.textShadow = '';
             }
             span.style.color = '';
-            element.style.textShadow = '';
             if(element.parentNode.id=='live-list'&&!addon.options.showTitle) {
                 span.classList.add("hidden");
                 resizePanel();
@@ -183,8 +183,8 @@ addon.port.on("move", function(channel) {
         node.getElementsByTagName('a')[0].title = channel.title;
         if(!channel.style.hasBgImage||!addon.options.backgroundImage) {
             node.style.backgroundColor = 'transparent';
-            if(channel.style.bg)
-                node.getElementsByTagName('div')[0].style.backgroundColor = 'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.7)';
+            node.getElementsByTagName('div')[0].style.backgroundColor = 'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.7)';
+            node.style.textShadow = "0 0 1px "+channel.style.bg+", 0 0 3px "+channel.style.bg+", 0 0 5px "+channel.style.bg;
         }
         node.style.backgroundImage = 'url("'+channel.thumbnail+'")';
 
@@ -196,12 +196,14 @@ addon.port.on("move", function(channel) {
     else {
         if(channel.style.hasBgImage&&addon.options.backgroundImage) {
             node.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
+            node.getElementsByTagName('div')[0].style.backgroundColor = 'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
         }
         else {
             node.style.backgroundImage = '';
             node.style.backgroundColor = '';
             node.style.background = channel.style.bg;
         }
+        node.style.textShadow = "";
         if(addon.options.showTitle)
             span.classList.add("hidden");
     }
