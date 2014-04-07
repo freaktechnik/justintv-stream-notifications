@@ -50,7 +50,6 @@ addon.port.on("add", function(channel) {
             }
         },false);
         element.addEventListener("mouseleave",function(e) {
-            link.style.backgroundColor = '';
             link.style.color = '';
             if(element.parentNode.id!='live-list') {
                 element.style.backgroundColor = '';
@@ -196,14 +195,13 @@ addon.port.on("move", function(channel) {
     else {
         if(channel.style.hasBgImage&&addon.options.backgroundImage) {
             node.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
-            node.getElementsByTagName('div')[0].style.backgroundColor = 'rgba('+getRGBValue(channel.style.bg,0)+','+getRGBValue(channel.style.bg,1)+','+getRGBValue(channel.style.bg,2)+',0.5)';
         }
         else {
             node.style.backgroundImage = '';
             node.style.backgroundColor = '';
-            node.getElementsByTagName('div')[0].style.backgroundColor = '';
             node.style.background = channel.style.bg;
         }
+        node.getElementsByTagName('div')[0].style.backgroundColor = '';
         node.style.textShadow = "";
         if(addon.options.showTitle)
             span.classList.add("hidden");
