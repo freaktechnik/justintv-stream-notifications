@@ -201,6 +201,7 @@ addon.port.on("move", function(channel) {
         else {
             node.style.backgroundImage = '';
             node.style.backgroundColor = '';
+            node.getElementsByTagName('div')[0].style.backgroundColor = '';
             node.style.background = channel.style.bg;
         }
         node.style.textShadow = "";
