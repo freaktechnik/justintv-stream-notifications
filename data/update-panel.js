@@ -18,9 +18,9 @@ addon.port.on("add", function(channel) {
         bgHelper = document.createElement('div'),
             link = document.createElement('a'),
                 image = new Image(),
-                    textNode = document.createTextNode(channel.name),
-                    span = document.createElement('div'),
-                        desc = document.createTextNode(channel.title);
+                textNode = document.createTextNode(channel.name),
+                span = document.createElement('div'),
+                    desc = document.createTextNode(channel.title);
 
 	image.src = channel.image[0];
     image.classList.add("avatar");
@@ -76,6 +76,7 @@ addon.port.on("add", function(channel) {
 	link.appendChild(textNode);
     link.appendChild(span);
     link.href = 'javascript:openTab("'+channel.login+'","'+channel.type+'")';
+    link.onclick = function(e) {e.preventDefault()};
     element.onclick = function() {openTab(channel.login,channel.type)};
 	link.title = channel.title;
     bgHelper.appendChild(link);
