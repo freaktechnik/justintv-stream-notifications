@@ -193,14 +193,8 @@ addon.port.on("move", function(channel) {
             span.classList.remove("hidden");
     }
     else {
-        if(channel.style.hasBgImage&&addon.options.backgroundImage) {
-            node.style.backgroundImage = 'url("'+channel.style.bgImage+'")';
-        }
-        else {
-            node.style.backgroundImage = '';
-            node.style.backgroundColor = '';
-            node.style.background = channel.style.bg;
-        }
+        node.style.backgroundImage = '';
+        node.style.backgroundColor = '';
         node.getElementsByTagName('div')[0].style.backgroundColor = '';
         node.style.textShadow = "";
         if(addon.options.showTitle)
