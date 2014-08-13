@@ -1,5 +1,5 @@
-var justintv = require('./twitch');
-var baseprovider = require('./baseprovider');
+var justintv = require('../lib/twitch');
+var baseprovider = require('../lib/baseprovider');
 
 exports['test checkResponse'] = function(test) {
     test.assertEqual(justintv.checkResponse({'status':403}),0,"403 Errors are detected correctly");

@@ -1,4 +1,4 @@
-var { exactArraySearch, randomDelayNumber, RequestQueue } = require('./utils');
+var { exactArraySearch, randomDelayNumber, RequestQueue } = require('../lib/utils');
 
 exports['test exactArraySearch'] = function(test) {
     test.assert(exactArraySearch([1,2,3,4],1));

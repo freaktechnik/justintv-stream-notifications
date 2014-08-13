@@ -1,4 +1,4 @@
-var main = require('./main');
+var main = require('../lib/main');
 
 /*
 exports['test changing button style'] = function(test) {

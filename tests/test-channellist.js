@@ -1,5 +1,5 @@
-var { Channel, ChannelList, Sources, Source, UpdateQueue } = require('./channellist');
-var baseprovider = require('./baseprovider');
+var { Channel, ChannelList, Sources, Source, UpdateQueue } = require('../lib/channellist');
+var baseprovider = require('../lib/baseprovider');
 
 exports['test channel url comparison'] = function(test) {
     var channel = getFullChannel();
