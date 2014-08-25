@@ -85,6 +85,10 @@ changelog
 2.8.2
     - Update button for australis
     - Fix a bug where channels were not removed when all the sources for them were removed
+2.9
+    - Panel with streampreviews
+    - Removed Justin.tv
+    - Migrated Justin.tv channels to twitch
 3.0.0
     - Add new channels manager, which is the last piece to allow more channel providers
     - Three new styles for the panel
