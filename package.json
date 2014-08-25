@@ -174,3 +174,4 @@
     "test": "node_modules/jpm/bin/jpm test -v"
   }
 }
+
