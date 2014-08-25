@@ -22,8 +22,6 @@
     {"type": "string", "name": "twitch_clientId", "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden":true},
     {"type": "string", "name": "twitch_backgroundImageName", "title":"Twitch Background Image Key Name", "value": "background", "hidden":true},
     
-    {"type": "string", "name": "justintvchannelList", "title": "Justin.tv Channels", "hidden": true},
-    {"type": "string", "name": "justintvusernameList", "title": "Justin.tv Users", "hidden": true},
     {"type": "string", "name": "twichchannelList", "title": "Twitch Channels", "hidden": true},
     {"type": "string", "name": "twitchusernameList", "title": "Twitch Users", "hidden": true},
     {"type": "bool", "name": "autoUsername", "title": "Auto detect username", "hidden": true}
