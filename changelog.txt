@@ -89,3 +89,5 @@ changelog
     - Panel with streampreviews
     - Removed Justin.tv
     - Migrated Justin.tv channels to twitch
+2.9.1
+    - Fixed migrating the panel width
