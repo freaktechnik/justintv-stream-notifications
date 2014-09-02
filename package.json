@@ -18,6 +18,10 @@
 "homepage": "http://jtvn.humanoids.be/",
 "description": "This displays a notification when a channel on twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
 "author": "freaktechnik",
+"translators": [
+    "manueljrs",
+    "alan2loin"
+],
 "name": "justintv-stream-notifications",
 "version": "2.9.2",
 "lib": "lib",
