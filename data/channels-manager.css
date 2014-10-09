@@ -1,6 +1,6 @@
 /* 
  *  Created by Martin Giger
- *  Licensed under LGPLv3
+ *  Licensed under MPL 2.0
  */
 
 html, body {
@@ -39,7 +39,7 @@ body {
     flex-flow: row;
 }
 
-#list {
+.selectableItemsList {
     padding-left: 0;
     margin: 0;
     overflow-y: auto;
@@ -48,7 +48,7 @@ body {
     order: 1;
 }
 
-#list>li {
+.selectableItemsList>li {
     -moz-appearance: menuitem;
     font: message-box;
     color: currentColor;
@@ -59,7 +59,7 @@ body {
     cursor: default;
 }
 
-#list>li:hover {
+.selectableItemsList>li:hover {
     color: -moz-MenuHoverText;
 }
 
