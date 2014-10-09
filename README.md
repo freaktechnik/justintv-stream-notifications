@@ -20,4 +20,4 @@ https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
 
 ## License
 
-This project is licensed under the [LGPLv3 license](http://www.gnu.org/licenses/lgpl-3.0.html).
+See [LICENSE](LICENSE).
