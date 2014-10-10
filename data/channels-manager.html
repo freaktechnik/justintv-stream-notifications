@@ -7,26 +7,33 @@
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
     </head>
     <body>
-        <menu type="toolbar" class="toolbar">
-            <button id="addChannel">Add Channel...</button>
-            <button id="import">Add Channels followed by User...</button>
-            <button id="autoImport">Auto Import followed Channels...</button>
-        </menu>
         <div id="content">
-            <ul id="channels" class="selectableItemsList">
-            </ul>
-            <ul id="users" class="selectableItemsList">
-            </ul>
-            <div id="sidebar" class="panel">
-                <section>
-                    <caption name="provider">Select Provider</caption>
-                    <select id="providerDropdown" caption="provider">
+            <div class="tabbed">
+                <ul class="tabstrip">
+                    <li data-tab="1">Channels</li>
+                    <li data-tab="2">Users</li>
+                </ul>
+                <ul id="channels" class="selectableItemsList tabcontent" data-tab="1">
+                </ul>
+                <ul id="users" class="selectableItemsList tabcontent" data-tab="2">
+                </ul>
+            <div id="sidebar" class="panel tabbed">
+                <ul class="tabstrip">
+                    <li id="addChannel" data-tab="1">Add Channel</li>
+                    <li id="import" data-tab="2">Add Channels followed by User</li>
+                    <li id="autoImport" data-tab="3">Auto Import followed Channels</li>
+                </ul>
+                <div class="tabcontent" data-tab="">
+                    <section>
+                        <caption name="provider">Select Provider</caption>
+                        <select id="providerDropdown" caption="provider">
                     </select>
-                </section>
-                <section>
-                    <label name="name">Channel Name</label>
-                    <input type="text" label="name" id="channelNameField" disabled="true">
-                </section>
+                    </section>
+                    <section>
+                        <label name="name">Channel Name</label>
+                        <input type="text" label="name" id="channelNameField" disabled="true">
+                    </section>
+                </div>
             </div>
         </div>
     </body>
