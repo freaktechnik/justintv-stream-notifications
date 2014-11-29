@@ -23,7 +23,7 @@
     "alan2loin"
 ],
 "name": "justintv-stream-notifications",
-"version": "2.9.2",
+"version": "2.9.3",
 "lib": "lib",
 "fullName": "Stream Notifier",
 "main": "main",
