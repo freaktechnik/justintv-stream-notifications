@@ -9,22 +9,22 @@
 // Add-on communication backend
 
 var providers;
-addon.port.on("add", function(channel){
+self.port.on("add", function(channel){
     addChannel(channel);
 });
-addon.port.on("remove", function(channelId){
+self.port.on("remove", function(channelId){
     removeChannel(channelId);
 });
-addon.port.on("update", function(channel){
+self.port.on("update", function(channel){
     updateChannel(channel);
 });
-addon.port.on("adduser", function(user){
+self.port.on("adduser", function(user){
     addUser(user);
 });
-addon.port.on("removeuser", function(userId){
+self.port.on("removeuser", function(userId){
     removeUser(userId);
 });
-addon.port.on("initdata", function(options){
+self.port.on("initdata", function(options){
     providers = options.providers;
 
     document.addEventListener("ready", function() {
@@ -38,6 +38,7 @@ addon.port.on("initdata", function(options){
 });
 
 // Methods modifying the DOM
+self.port.emit("init");
 
 function addChannel(channel) {
     if(!hasChannel(channel.id)) {
