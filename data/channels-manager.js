@@ -27,18 +27,23 @@ self.port.on("removeuser", function(userId){
 self.port.on("initdata", function(options){
     providers = options.providers;
 
-    document.addEventListener("ready", function() {
-        options.channels.forEach(function(channel) {
-            addChannel(channel);
-        });
-        options.users.forEach(function(user) {
-            addUser(user);
-        });
+    var providerDropdown = document.querySelector("#providerDropdown");
+    for(var provider in providers) {
+        var option = document.createElement("option");
+        option.value = provider;
+        option.innerHTML = providers[provider].name;
+        providerDropdown.appendChild(option);
+    }
+
+    options.channels.forEach(function(channel) {
+        addChannel(channel);
+    });
+    options.users.forEach(function(user) {
+        addUser(user);
     });
 });
 
 // Methods modifying the DOM
-self.port.emit("init");
 
 function addChannel(channel) {
     if(!hasChannel(channel.id)) {
