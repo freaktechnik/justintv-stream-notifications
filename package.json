@@ -42,5 +42,9 @@
     },
     "devDependencies": {
         "jpm": "*"
+    },
+    "scripts": {
+        "test": "jpm test -v",
+        "preinstall": "jpm xpi"
     }
 }

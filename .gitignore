@@ -171,6 +171,7 @@ noe10s.json
 
 # node
 node_modules*
+npm-debug.log
 
 # jpm
 *.xpi
