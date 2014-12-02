@@ -5,25 +5,27 @@
         <title>Channels Manager</title>
 
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
+        <script type="text/javascript" src="tabbed.js"></script>
     </head>
     <body>
         <div id="content">
             <div class="tabbed">
-                <ul class="tabstrip">
-                    <li data-tab="1">Channels</li>
-                    <li data-tab="2">Users</li>
+                <ul class="tabstrip" role="tablist">
+                    <li role="tab" aria-controls="panel1">Channels</li>
+                    <li role="tab" aria-controls="panel2">Users</li>
                 </ul>
-                <ul id="channels" class="selectableItemsList tabcontent" data-tab="1">
+                <ul id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
                 </ul>
-                <ul id="users" class="selectableItemsList tabcontent" data-tab="2">
+                <ul id="users" class="selectableItemsList tabcontent" role="tabpanel" data-tab="2">
                 </ul>
+            </div>
             <div id="sidebar" class="panel tabbed">
-                <ul class="tabstrip">
-                    <li id="addChannel" data-tab="1">Add Channel</li>
-                    <li id="import" data-tab="2">Add Channels followed by User</li>
-                    <li id="autoImport" data-tab="3">Auto Import followed Channels</li>
+                <ul class="tabstrip" role="tablist">
+                    <li id="addChannel" role="tab" aria-controls="panel1">Add Channel</li>
+                    <li id="import" role="tab" aria-controls="panel2">Add Channels followed by User</li>
+                    <li id="autoImport" aria-controls="panel3">Auto Import followed Channels</li>
                 </ul>
-                <div class="tabcontent" data-tab="">
+                <div class="tabcontent" role="tabpanel" data-tab="1">
                     <section>
                         <caption name="provider">Select Provider</caption>
                         <select id="providerDropdown" caption="provider">

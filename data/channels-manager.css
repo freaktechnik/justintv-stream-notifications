@@ -19,6 +19,11 @@ body {
     flex-flow: column;
 }
 
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
 .toolbar {
     margin: 0;
     padding: .5em;

@@ -45,18 +45,31 @@ self.port.on("initdata", function(options){
 
 // Methods modifying the DOM
 
+var channels = document.querySelector("#channels"),
+    users    = document.querySelector("#users");
+
 function addChannel(channel) {
     if(!hasChannel(channel.id)) {
+        var channelNode = document.createElement("li");
+        channelNode.id        = channel.id;
+        channelNode.innerHTML = channel.login;
+        channels.appendChild(channelNode);
     }
 }
 
 function addUser(user) {
     if(!hasUser(user.id)) {
+        var userNode = document.createElement("li");
+        userNode.id        = user.id;
+        userNode.innerHTML = user.login;
+        users.appendChild(userNode);
     }
 }
 
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
+        var channelNode = channels.getElementById(channel.id);
+        channelNode.innerHTML = channel.login;
     }
 }
 
@@ -71,7 +84,10 @@ function removeUser(userId) {
 }
 
 function hasChannel(channelId) {
+    return !!channels.getElementById(channelId);
 }
 
 function hasUser(userId) {
+    return !!users.getElementById(userId);
 }
+
