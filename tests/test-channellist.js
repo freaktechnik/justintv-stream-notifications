@@ -1,15 +1,14 @@
-var { Channel, ChannelList, Sources, Source, UpdateQueue } = require('../lib/channellist');
-var baseprovider = require('../lib/baseprovider');
+var { ChannelList } = require('../lib/channellist');
 
-exports['test channel url comparison'] = function(test) {
+/*exports['test channel url comparison'] = function(test) {
     var channel = getFullChannel();
     test.assert(channel.compareUrl('http://foo.bar/lorem'));
     test.assert(channel.compareUrl('http://foo.bar/lorem/archive'));
     test.assert(!channel.compareUrl('http://asdf.com'));
-};
+};*/
 
 // depends on source.getfirstSourceType()
-exports['test first source object'] = function(test) {
+/*exports['test first source object'] = function(test) {
     var source = getFullChannel().getFirstSourceObject();
     test.assertEqual(source.type,Source.TYPE_USER);
     test.assertEqual(source.name,Source.TYPE_USER);
@@ -71,4 +70,4 @@ exports['test adding new request to queue'] = function(test) {
     test.assertEqual(i,1);
     test.assertEqual(i,q.queue[0].id);
     test.assertEqual(typeof(q.queue[0]),'object');
-};
+};*/
