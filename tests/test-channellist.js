@@ -1,3 +1,7 @@
+/*
+ * Created by Martin Giger
+ * Licensed under MPL 2.0
+ */
 var { ChannelList } = require('../lib/channellist');
 
 /*exports['test channel url comparison'] = function(test) {

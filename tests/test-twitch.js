@@ -1,3 +1,7 @@
+/*
+ * Created by Martin Giger
+ * Licensed under MPL 2.0
+ */
 var justintv = require('../lib/providers/twitch');
 /*
 exports['test checkResponse'] = function(test) {

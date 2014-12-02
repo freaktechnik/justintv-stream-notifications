@@ -1,3 +1,7 @@
+/*
+ * Created by Martin Giger
+ * Licensed under MPL 2.0
+ */
 var { exactArraySearch, randomDelayNumber } = require('../lib/utils');
 
 exports['test exactArraySearch'] = function(test) {

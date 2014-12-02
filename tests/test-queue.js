@@ -1,3 +1,7 @@
+/*
+ * Created by Martin Giger
+ * Licensed under MPL 2.0
+ */
 var { RequestQueue, UpdateQueue } = require('../lib/queue');
 
 exports['test adding new request to queue'] = function(test) {
