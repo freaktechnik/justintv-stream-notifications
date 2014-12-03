@@ -65,6 +65,12 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", function(ev
     }
 });
 
+document.querySelector("#autoAdd").addEventListener("click", function(evt) {
+    for(var provider in providers) {
+        self.port.emit("autoadd", provider);
+    }
+});
+
 document.querySelector("#showDialog").addEventListener("click", function(evt) {
     showDialog();
 });
@@ -108,11 +114,14 @@ popup.addEventListener("keypress", function(evt) {
     }        
 });
 
-popup.querySelector("input[type='submit']").addEventListener("click", function(evt) {
+popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
     popup.querySelector("dialog").removeAttribute("open");
     hideDialog();
-    // save data
+    if(popup.querySelector("#channelRadio").hasAttribute("checked"))
+        self.port.on("addchannel", popup.querySelector("#providerDropdown").value, popup.querySelector("#channelNameField").value);
+    else
+        self.port.on("adduser", popup.querySelector("#providerDropdown").value, popup.querySelector("#channelNameField").value);
     resetDialogForms();
 });
 
@@ -143,11 +152,13 @@ function updateChannel(channel) {
 
 function removeChannel(channelId) {
     if(hasChannel(channelId)) {
+        document.getElementById(channelId).remove();
     }
 }
 
 function removeUser(userId) {
     if(hasUser(userId)) {
+        document.getElementById(userId).remove();
     }
 }
 
