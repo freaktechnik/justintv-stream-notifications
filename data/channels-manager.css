@@ -44,7 +44,7 @@ body {
     flex-flow: row;
 }
 
-.selectableItemsList {
+.main {
     padding-left: 0;
     margin: 0;
     overflow-y: auto;

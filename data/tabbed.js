@@ -2,6 +2,8 @@
  *  Created by Martin Giger
  *  Licensed under MPL 2.0
  */
+var SELECTED_CLASS = "current";
+
 
 window.onload = function() {
     var roots = document.querySelectorAll(".tabbed");
@@ -24,9 +26,9 @@ function Tabbed(el) {
 
     var tabs = this.root.querySelectorAll(".tabstrip li"), that = this;
     for(var i = 0; i < tabs.length; ++i) {
-        tabs[i].tabIndex = -1;
+        tabs[i].setAttribute("tabindex", -1);
         tabs[i].addEventListener("click", function(evt) {
-            that.select(evt.currentTarget.dataset.tab);
+            that.select(parseInt(evt.currentTarget.dataset.tab, 10));
         });
         tabs[i].addEventListener("keypress", function(evt) {
             console.log(evt.keyCode+" "+that.current);
@@ -35,36 +37,37 @@ function Tabbed(el) {
                     that.select(that.current - 1);
             }
             else if(evt.keyCode == 39) { // right arrow key
-                if(that.current != that.length)
+                if(that.current < that.length)
                     that.select(that.current + 1);
             }
         });
     }
 
-    if(this.root.querySelectorAll(".tabstrip li.selected").length == 0 && this.length > 0) {
+    if(this.root.querySelectorAll(".tabstrip li."+SELECTED_CLASS).length == 0 && this.length > 0) {
         this.select(1);
     }
     else {
-        this.select(this.root.querySelector(".tabstrip li.selected").dataset.tab);
+        this.select(parseInt(this.root.querySelector(".tabstrip li."+SELECTED_CLASS).dataset.tab, 10));
     }
 }
 
 Tabbed.prototype.select = function(index) {
+    console.log("selecting tab "+index);
     if(index <= this.length && index > 0) {
-        var prevTab = this.root.querySelector(".tabstrip li.selected");
+        var prevTab = this.root.querySelector(".tabstrip li."+SELECTED_CLASS);
         if(prevTab) {
             prevTab.removeAttribute("aria-selected");
-            prevTab.classList.remove("current");
-            prevTab.tabIndex = -1;
-            hide(this.getContentByIndex(prevTab.dataset.tab));
+            prevTab.classList.remove(SELECTED_CLASS);
+            prevTab.setAttribute("tabindex", -1);
+            hide(this.getContentByIndex(parseInt(prevTab.dataset.tab, 10)));
         }
 
         this.current = index;
         var tab = this.getTabByIndex(index);
-        tab.setAttribute("aria-selected", "true");
-        tab.classList.add("current");
-        tab.tabIndex = 0;
         tab.focus();
+        tab.setAttribute("aria-selected", "true");
+        tab.classList.add(SELECTED_CLASS);
+        tab.setAttribute("tabindex", 0);
         show(this.getContentByIndex(index));    
     }
 };
@@ -72,7 +75,7 @@ Tabbed.prototype.select = function(index) {
 Tabbed.prototype.getTabByIndex = function(index) {
     var tabs = this.root.querySelectorAll(".tabstrip li");
     for(var i = 0; i < tabs.length; ++i) {
-        if(tabs[i].dataset.tab == index)
+        if(parseInt(tabs[i].dataset.tab, 10) == index)
             return tabs[i];
     }
 };
@@ -80,7 +83,7 @@ Tabbed.prototype.getTabByIndex = function(index) {
 Tabbed.prototype.getContentByIndex = function(index) {
     var contents = this.root.querySelectorAll(".tabcontent");
     for(var i = 0; i < contents.length; ++i) {
-        if(contents[i].dataset.tab == index)
+        if(parseInt(contents[i].dataset.tab, 10) == index)
             return contents[i];
     }
 };
