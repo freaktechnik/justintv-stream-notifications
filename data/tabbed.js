@@ -4,7 +4,6 @@
  */
 var SELECTED_CLASS = "current";
 
-
 window.onload = function() {
     var roots = document.querySelectorAll(".tabbed");
     for(var i = 0; i < roots.length; ++i) {
@@ -17,21 +16,22 @@ Tabbed.prototype.length = 0;
 Tabbed.prototype.current = 0;
 function Tabbed(el) {
     this.root = el;
-    this.length = this.root.querySelectorAll(".tabstrip li").length;
+    this.length = this.root.querySelectorAll(".tabstrip a").length;
 
     var tabContents = this.root.querySelectorAll(".tabcontent");
     for(var i = 0; i < tabContents.length; ++i) {
         hide(tabContents[i]);
     }
 
-    var tabs = this.root.querySelectorAll(".tabstrip li"), that = this;
+    var tabs = this.root.querySelectorAll(".tabstrip a"), that = this;
     for(var i = 0; i < tabs.length; ++i) {
         tabs[i].setAttribute("tabindex", -1);
         tabs[i].addEventListener("click", function(evt) {
+            evt.preventDefault();
             that.select(parseInt(evt.currentTarget.dataset.tab, 10));
         });
         tabs[i].addEventListener("keypress", function(evt) {
-            console.log(evt.keyCode+" "+that.current);
+            evt.preventDefault();
             if(evt.keyCode == 37) {// left arrow key
                 if(that.current != 1)
                     that.select(that.current - 1);
@@ -43,18 +43,17 @@ function Tabbed(el) {
         });
     }
 
-    if(this.root.querySelectorAll(".tabstrip li."+SELECTED_CLASS).length == 0 && this.length > 0) {
+    if(this.root.querySelectorAll(".tabstrip a."+SELECTED_CLASS).length == 0 && this.length > 0) {
         this.select(1);
     }
     else {
-        this.select(parseInt(this.root.querySelector(".tabstrip li."+SELECTED_CLASS).dataset.tab, 10));
+        this.select(parseInt(this.root.querySelector(".tabstrip a."+SELECTED_CLASS).dataset.tab, 10));
     }
 }
 
 Tabbed.prototype.select = function(index) {
-    console.log("selecting tab "+index);
     if(index <= this.length && index > 0) {
-        var prevTab = this.root.querySelector(".tabstrip li."+SELECTED_CLASS);
+        var prevTab = this.root.querySelector(".tabstrip a."+SELECTED_CLASS);
         if(prevTab) {
             prevTab.removeAttribute("aria-selected");
             prevTab.classList.remove(SELECTED_CLASS);
@@ -68,12 +67,14 @@ Tabbed.prototype.select = function(index) {
         tab.setAttribute("aria-selected", "true");
         tab.classList.add(SELECTED_CLASS);
         tab.setAttribute("tabindex", 0);
-        show(this.getContentByIndex(index));    
+        show(this.getContentByIndex(index));
+        var evObj = new CustomEvent("tabchanged", { detail: index });
+        this.root.dispatchEvent(evObj); 
     }
 };
 
 Tabbed.prototype.getTabByIndex = function(index) {
-    var tabs = this.root.querySelectorAll(".tabstrip li");
+    var tabs = this.root.querySelectorAll(".tabstrip a");
     for(var i = 0; i < tabs.length; ++i) {
         if(parseInt(tabs[i].dataset.tab, 10) == index)
             return tabs[i];

@@ -10,13 +10,19 @@ html, body {
 body {
     padding: 0;
     margin: 0;
+    font-family: sans;
     
     -moz-user-select: none;
-    overflow: hidden;
-    
-    display: flex;
-    flex-direction: column;
-    flex-flow: column;
+}
+
+
+.toolbar li, .tabbed li {
+    display: inline;
+    list-style-type: none;
+}
+
+main {
+    width: 100%;
 }
 
 .hidden {
@@ -24,33 +30,39 @@ body {
     visibility: hidden;
 }
 
+.tabstrip {
+    padding: 0;
+    margin: 0;
+    background: #2c24c5;
+}
+
+.tabstrip a:link, .tabstrip a:hover, .tabstrip a:active, .tabstrip a:visited {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding: 1em;
+}
+
+.tabstrip a.current {
+    background: #497dfe;
+}
+
 .toolbar {
     margin: 0;
-    padding: .5em;
-    -moz-appearance: toolbar;
+    padding: 0;
     
     display: block;
-}
-
-.toolbar button {
-    -moz-appearance: toolbarbutton;
-}
-
-#content {
-    flex: 1 1 100%;
-    display: flex;
+    width: 100%;
     
-    flex-direction: row;
-    flex-flow: row;
+    border-bottom: 1px solid #282ebe;
 }
 
-.main {
-    padding-left: 0;
-    margin: 0;
-    overflow-y: auto;
-
-    flex: 3 1 75%;
-    order: 1;
+.toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
+    color: initial;
+    text-decoration: none;
+    display: inline-block;
+    padding: 1em;
+    border-right: 1px solid #282ebe;
 }
 
 .selectableItemsList>li {
@@ -68,18 +80,26 @@ body {
     color: -moz-MenuHoverText;
 }
 
-.panel {
-    font: message-box;
-    color: WindowText;
-    background-color: Window;
-    border-left: 1px solid ActiveBorder;
-
-    flex: 1 1 25%;
-    order: 2;
-    
-    padding: .5em;
+#popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
 }
 
-.panel>section {
-    margin-bottom: .5em;
+#popup dialog {
+    display: inline-block;
+    background: white;
+    padding: 1em;
+    margin: 8em auto;
+    text-align: initial;
 }
+
+#popup dialog h1 {
+    font-size: 1.2em;
+    margin: .2em;
+}
+
