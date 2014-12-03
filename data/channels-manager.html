@@ -11,8 +11,8 @@
         <div id="content">
             <div class="tabbed">
                 <ul class="tabstrip" role="tablist">
-                    <li role="tab" aria-controls="panel1">Channels</li>
-                    <li role="tab" aria-controls="panel2">Users</li>
+                    <li role="tab" aria-controls="channels" data-tab="1">Channels</li>
+                    <li role="tab" aria-controls="users" data-tab="2">Users</li>
                 </ul>
                 <ul id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
                 </ul>
@@ -21,11 +21,11 @@
             </div>
             <div id="sidebar" class="panel tabbed">
                 <ul class="tabstrip" role="tablist">
-                    <li id="addChannel" role="tab" aria-controls="panel1">Add Channel</li>
-                    <li id="import" role="tab" aria-controls="panel2">Add Channels followed by User</li>
-                    <li id="autoImport" aria-controls="panel3">Auto Import followed Channels</li>
+                    <li id="addChannel" role="tab" aria-controls="panel1" data-tab="1">Add Channel</li>
+                    <li id="import" role="tab" aria-controls="panel2" data-tab="2">Add Channels followed by User</li>
+                    <li id="autoImport" aria-controls="panel3" data-tab="3">Auto Import followed Channels</li>
                 </ul>
-                <div class="tabcontent" role="tabpanel" data-tab="1">
+                <div id="panel1" class="tabcontent" role="tabpanel" data-tab="1">
                     <section>
                         <caption name="provider">Select Provider</caption>
                         <select id="providerDropdown" caption="provider">
