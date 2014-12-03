@@ -87,6 +87,19 @@ document.querySelector("#showDialog").addEventListener("click", function(evt) {
     showDialog();
 });
 
+document.querySelector("#removeItem").addEventListener("click", function(evt) {
+    if(users.classList.contains("hidden")) {
+        if(channels.querySelector(".selected")) {
+            //TODO extract numeric part from ID
+            self.port.emit("removechannel", parseInt(channels.querySelector(".selected").id, 10));
+        }
+    }
+    else {
+        if(users.querySelector(".selected"))
+            self.port.emit("removeuser", parseInt(users.querySelector(".selected").id, 10));
+    }
+});
+
 function hide(el) {
     el.classList.add("hidden");
     el.setAttribute("aria-hidden", "true");
