@@ -170,6 +170,9 @@ function addChannel(channel) {
         channelNode.appendChild(span);
         channelNode.appendChild(small);
         channels.appendChild(channelNode);
+
+        var evt = new CustomEvent("nodeadded", { detail: channelNode });
+        channels.dispatchEvent(evt);
     }
 }
 
@@ -189,6 +192,9 @@ function addUser(user) {
         userNode.appendChild(span);
         userNode.appendChild(small);
         users.appendChild(userNode);
+
+        var evt = new CustomEvent("nodeadded", { detail: userNode });
+        users.dispatchEvent(evt);
     }
 }
 
@@ -197,7 +203,7 @@ function updateChannel(channel) {
         var channelNode = channels.getElementById("channel"+channel.id),
             span = channelNode.querySelector("span");
         channelNode.querySelector("image").src = getBestImageForSize(channel, 50);
-        span.replaceChild(document.createTextNode(channel.uname), span.childNodes[0]);
+        span.replaceChild(document.createTextNode(channel.uname), span.firstChild);
     }
 }
 
