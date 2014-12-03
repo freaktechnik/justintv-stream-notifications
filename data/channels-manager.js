@@ -49,19 +49,31 @@ var channels = document.querySelector("#channels"),
     users    = document.querySelector("#users"),
     popup    = document.querySelector("#popup");
 
+function checkChannel() {
+    popup.querySelector("#channelRadio").checked = true;
+    popup.querySelector("#userRadio").checked = false;
+}
+
+function checkUser() {
+    popup.querySelector("#channelRadio").checked = false;
+    popup.querySelector("#userRadio").checked = true;
+}
+
 if(document.querySelector(".tabbed a.current").dataset.tab == 1) {
     hide(document.querySelector("#autoAdd"));
-    popup.querySelector("#channelRadio").setAttribute("checked", true);
+    checkChannel();
 }
+else
+    checkUser();
 
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
         hide(document.querySelector("#autoAdd"));
-        popup.querySelector("#channelRadio").setAttribute("checked", true);
+        checkChannel();
     }
     else if(evt.detail == 2) {
         show(document.querySelector("#autoAdd"));
-        popup.querySelector("#userRadio").setAttribute("checked", true);
+        checkUser();
     }
 });
 
@@ -118,10 +130,10 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
     popup.querySelector("dialog").removeAttribute("open");
     hideDialog();
-    if(popup.querySelector("#channelRadio").hasAttribute("checked"))
-        self.port.on("addchannel", popup.querySelector("#providerDropdown").value, popup.querySelector("#channelNameField").value);
+    if(popup.querySelector("#channelRadio").checked)
+        self.port.emit("addchannel", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
     else
-        self.port.on("adduser", popup.querySelector("#providerDropdown").value, popup.querySelector("#channelNameField").value);
+        self.port.emit("adduser", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
     resetDialogForms();
 });
 
@@ -163,10 +175,10 @@ function removeUser(userId) {
 }
 
 function hasChannel(channelId) {
-    return !!channels.getElementById(channelId);
+    return !!channels.querySelector("#"+channelId);
 }
 
 function hasUser(userId) {
-    return !!users.getElementById(userId);
+    return !!users.querySelector("#"+userId);
 }
 
