@@ -79,6 +79,7 @@ main {
 .selectableItemsList>li:hover, .selectableItemsList>li:focus {
     background: #2c24c5;
     color: white;
+    cursor: default;
 }
 
 #popup {
@@ -93,7 +94,7 @@ main {
 
 #popup dialog {
     display: inline-block;
-    background: initial;
+    background: white;
     padding: 1em;
     margin: 8em auto;
     text-align: initial;
