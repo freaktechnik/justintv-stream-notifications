@@ -72,8 +72,20 @@ main {
 
 .selectableItemsList>li {    
     list-style-type: none;
-    padding: .5em 0;
+    padding: 0;
     margin: 0;
+}
+
+.selectableItemsList>li img {
+    height: 50px;
+    width: 50px;
+    padding: .5em;
+    vertical-align: middle;
+}
+
+.selectableItemsList>li small {
+    margin-left: .3em;
+    color: grey;
 }
 
 .selectableItemsList>li:hover, .selectableItemsList>li:focus {

@@ -137,11 +137,38 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     resetDialogForms();
 });
 
+function getBestImageForSize(user, size) {
+    // shortcut if there's an image with the size demanded
+    if(user.image.hasOwnProperty(size.toString())) {
+        return user.image[size];
+    }
+    
+    // search next biggest image
+    var index = Number.MAX_VALUE;
+    Object.keys(user.image).forEach(function(s) {
+        s = parseInt(s, 10);
+        if(s > size && s < index) {
+            index = s;
+        }
+    });
+    return user.image[index];
+}
+
 function addChannel(channel) {
     if(!hasChannel(channel.id)) {
-        var channelNode = document.createElement("li");
-        channelNode.id        = "channel"+channel.id;
-        channelNode.innerHTML = channel.login;
+        var channelNode = document.createElement("li"),
+            image       = new Image(),
+            small       = document.createElement("small"),
+            span        = document.createElement("span"),
+            title       = document.createTextNode(channel.uname),
+            type        = document.createTextNode(channel.type);
+        image.src       = getBestImageForSize(channel, 50);
+        channelNode.id  = "channel"+channel.id;
+        small.appendChild(type);
+        span.appendChild(title);
+        channelNode.appendChild(image);
+        channelNode.appendChild(span);
+        channelNode.appendChild(small);
         channels.appendChild(channelNode);
     }
 }
@@ -149,16 +176,28 @@ function addChannel(channel) {
 function addUser(user) {
     if(!hasUser(user.id)) {
         var userNode = document.createElement("li");
-        userNode.id        = "user"+user.id;
-        userNode.innerHTML = user.login;
+            image    = new Image(),
+            small    = document.createElement("small"),
+            span     = document.createElement("span"),
+            title    = document.createTextNode(user.uname),
+            type     = document.createTextNode(user.type);
+        image.src    = getBestImageForSize(user, 50);
+        userNode.id  = "user"+user.id;
+        small.appendChild(type);
+        span.appendChild(title);
+        userNode.appendChild(image);
+        userNode.appendChild(span);
+        userNode.appendChild(small);
         users.appendChild(userNode);
     }
 }
 
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
-        var channelNode = channels.getElementById("channel"+channel.id);
-        channelNode.innerHTML = channel.login;
+        var channelNode = channels.getElementById("channel"+channel.id),
+            span = channelNode.querySelector("span");
+        channelNode.querySelector("image").src = getBestImageForSize(channel, 50);
+        span.replaceChild(document.createTextNode(channel.uname), span.childNodes[0]);
     }
 }
 
