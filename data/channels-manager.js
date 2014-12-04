@@ -11,20 +11,23 @@
 // Add-on communication backend
 
 var providers;
-self.port.on("add", function(channel){
+self.port.on("add", function(channel) {
     addChannel(channel);
 });
-self.port.on("remove", function(channelId){
+self.port.on("remove", function(channelId) {
     removeChannel(channelId);
 });
-self.port.on("update", function(channel){
+self.port.on("update", function(channel) {
     updateChannel(channel);
 });
-self.port.on("adduser", function(user){
+self.port.on("adduser", function(user) {
     addUser(user);
 });
-self.port.on("removeuser", function(userId){
+self.port.on("removeuser", function(userId) {
     removeUser(userId);
+});
+self.port.on("updateuser", function(user) {
+    updateUser(user);
 });
 self.port.on("initdata", function(options){
     providers = options.providers;
@@ -246,9 +249,18 @@ function addUser(user) {
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
         var channelNode = channels.getElementById("channel"+channel.id),
-            span = channelNode.querySelector("span");
+            span        = channelNode.querySelector("span");
         channelNode.querySelector("image").src = getBestImageForSize(channel, 50);
         span.replaceChild(document.createTextNode(channel.uname), span.firstChild);
+    }
+}
+
+function updateUser(user) {
+    if(hasUser(user.id)) {
+        var userNode = users.getElementById("user"+user.id),
+            span     = userNode.querySelector("span");
+        userNode.querySelector("image").src = getBestImageForSize(user, 50);
+        span.replaceChild(document.createTextNode(user.uname), span.firstChild);
     }
 }
 
