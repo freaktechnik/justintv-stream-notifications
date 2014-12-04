@@ -104,6 +104,20 @@ function getSelectedItemIds() {
     return items;
 }
 
+document.querySelector("#updateItem").addEventListener("click", function(evt) {
+    var selected = getSelectedItemIds();
+    if(users.classList.contains("hidden")) {
+        selected.forEach(function(channelId) {
+            self.port.emit("refreshchannel", channelId);
+        });
+    }
+    else {
+        selected.forEach(function(userId) {
+            self.port.emit("refreshuser", userId);
+        });
+    }
+});
+
 document.querySelector("#removeItem").addEventListener("click", function(evt) {
     var selected = getSelectedItemIds();
     if(users.classList.contains("hidden")) {
