@@ -57,12 +57,21 @@ main {
     border-bottom: 1px solid #282ebe;
 }
 
+.toolbar li.right {
+    float: right;
+}
+
 .toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
     color: initial;
     text-decoration: none;
     display: inline-block;
     padding: 1em;
     border-right: 1px solid #282ebe;
+}
+
+.toolbar li.right a {
+    border-left: 1px solid #282ebe;
+    border-right: none;
 }
 
 .selectableItemsList {

@@ -91,12 +91,12 @@ document.querySelector("#removeItem").addEventListener("click", function(evt) {
     if(users.classList.contains("hidden")) {
         if(channels.querySelector(".selected")) {
             //TODO extract numeric part from ID
-            self.port.emit("removechannel", parseInt(channels.querySelector(".selected").id, 10));
+            self.port.emit("removechannel", parseInt(channels.querySelector(".selected").id.substring(7), 10));
         }
     }
     else {
         if(users.querySelector(".selected"))
-            self.port.emit("removeuser", parseInt(users.querySelector(".selected").id, 10));
+            self.port.emit("removeuser", parseInt(users.querySelector(".selected").id.substring(4), 10));
     }
 });
 
