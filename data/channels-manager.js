@@ -6,6 +6,8 @@
  * Channels Manager content script
  */
 
+//TODO bulk selection
+
 // Add-on communication backend
 
 var providers;
@@ -87,16 +89,32 @@ document.querySelector("#showDialog").addEventListener("click", function(evt) {
     showDialog();
 });
 
-document.querySelector("#removeItem").addEventListener("click", function(evt) {
+function getSelectedItemIds() {
+    var items = [];
     if(users.classList.contains("hidden")) {
-        if(channels.querySelector(".selected")) {
-            //TODO extract numeric part from ID
-            self.port.emit("removechannel", parseInt(channels.querySelector(".selected").id.substring(7), 10));
+        for(var i = 0; i < channels.selectedOptions.length; ++i) {
+            items.push(parseInt(channels.selectedOptions[i].id.substring(7), 10));
         }
     }
     else {
-        if(users.querySelector(".selected"))
-            self.port.emit("removeuser", parseInt(users.querySelector(".selected").id.substring(4), 10));
+        for(var i = 0; i < users.selectedOptions.length; ++i) {
+            items.push(parseInt(users.selectedOptions[i].id.substring(4), 10));
+        }
+    }
+    return items;
+}
+
+document.querySelector("#removeItem").addEventListener("click", function(evt) {
+    var selected = getSelectedItemIds();
+    if(users.classList.contains("hidden")) {
+        selected.forEach(function(channelId) {
+            self.port.emit("removechannel", channelId);
+        });
+    }
+    else {
+        selected.forEach(function(userId) {
+            self.port.emit("removeuser", userId);
+        });
     }
 });
 
@@ -169,7 +187,7 @@ function getBestImageForSize(user, size) {
 
 function addChannel(channel) {
     if(!hasChannel(channel.id)) {
-        var channelNode = document.createElement("li"),
+        var channelNode = document.createElement("option"),
             image       = new Image(),
             small       = document.createElement("small"),
             span        = document.createElement("span"),
@@ -183,7 +201,7 @@ function addChannel(channel) {
         channelNode.appendChild(span);
         channelNode.appendChild(small);
         channels.appendChild(channelNode);
-
+        channels.size = channels.options.length;
         var evt = new CustomEvent("nodeadded", { detail: channelNode });
         channels.dispatchEvent(evt);
     }
@@ -191,7 +209,7 @@ function addChannel(channel) {
 
 function addUser(user) {
     if(!hasUser(user.id)) {
-        var userNode = document.createElement("li");
+        var userNode = document.createElement("option");
             image    = new Image(),
             small    = document.createElement("small"),
             span     = document.createElement("span"),
@@ -205,7 +223,7 @@ function addUser(user) {
         userNode.appendChild(span);
         userNode.appendChild(small);
         users.appendChild(userNode);
-
+        users.size = users.options.length;
         var evt = new CustomEvent("nodeadded", { detail: userNode });
         users.dispatchEvent(evt);
     }
@@ -223,12 +241,14 @@ function updateChannel(channel) {
 function removeChannel(channelId) {
     if(hasChannel(channelId)) {
         document.getElementById("channel"+channelId).remove();
+        channels.size = channels.options.length;
     }
 }
 
 function removeUser(userId) {
     if(hasUser(userId)) {
         document.getElementById("user"+userId).remove();
+        users.size = users.options.length;
     }
 }
 

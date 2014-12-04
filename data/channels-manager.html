@@ -6,7 +6,6 @@
 
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
         <script type="text/javascript" src="tabbed.js"></script>
-        <script type="text/javascript" src="selectable-list.js"></script>
     </head>
     <body>
         <main class="tabbed">
@@ -20,10 +19,10 @@
                 <li><a id="autoAdd" href="#">Auto add</a></li>
                 <li class="right"><a href="http://jtvn.humanoids.be/channels-manager-help.html">Help</a></li>
             </ul>
-            <ul id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
-            </ul>
-            <ul id="users" class="selectableItemsList tabcontent" role="tabpanel" data-tab="2">
-            </ul>
+            <select multiple id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
+            </select>
+            <select multiple id="users" class="selectableItemsList tabcontent" role="tabpanel" data-tab="2">
+            </select>
         </main>
         <div id="popup" class="hidden" aria-hidden="true">
             <dialog>
