@@ -11,6 +11,7 @@ body {
     padding: 0;
     margin: 0;
     font-family: sans;
+    line-height: 1.2em;
     
     -moz-user-select: none;
 }
@@ -78,7 +79,7 @@ main {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 6.4rem - 1px);
     border: none;
 }
 

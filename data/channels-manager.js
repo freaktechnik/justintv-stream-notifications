@@ -5,9 +5,6 @@
  *
  * Channels Manager content script
  */
-
-//TODO bulk selection
-
 // Add-on communication backend
 
 var providers;
@@ -74,12 +71,12 @@ else
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
         hide(document.querySelector("#autoAdd"));
-        document.querySelector(".tooblar").setAttribute("aria-controls", "channels");
+        document.querySelector(".toolbar").setAttribute("aria-controls", "channels");
         checkChannel();
     }
     else if(evt.detail == 2) {
         show(document.querySelector("#autoAdd"));
-        document.querySelector(".tooblar").setAttribute("aria-controls", "users");
+        document.querySelector(".toolbar").setAttribute("aria-controls", "users");
         checkUser();
     }
 });
@@ -220,7 +217,6 @@ function addChannel(channel) {
         channelNode.appendChild(span);
         channelNode.appendChild(small);
         channels.appendChild(channelNode);
-        channels.size = channels.options.length;
     }
 }
 
@@ -240,7 +236,6 @@ function addUser(user) {
         userNode.appendChild(span);
         userNode.appendChild(small);
         users.appendChild(userNode);
-        users.size = users.options.length;
     }
 }
 
@@ -265,14 +260,12 @@ function updateUser(user) {
 function removeChannel(channelId) {
     if(hasChannel(channelId)) {
         document.getElementById("channel"+channelId).remove();
-        channels.size = channels.options.length;
     }
 }
 
 function removeUser(userId) {
     if(hasUser(userId)) {
         document.getElementById("user"+userId).remove();
-        users.size = users.options.length;
     }
 }
 
