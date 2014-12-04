@@ -13,11 +13,11 @@
                 <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1">Channels</a></li>
                 <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2">Users</a></li>
             </ul>
-            <ul class="toolbar">
+            <ul role="toolbar" class="toolbar" aria-controls="channels">
                 <li><a id="showDialog" href="#popup">Add...</a></li>
                 <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)">Update</a></li>
                 <li><a id="removeItem" href="#" title="Remove the selected item(s)">Remove</a></li>
-                <li><a id="autoAdd" href="#" title="Add favorites of users for which the browser has credentials stored">Auto add</a></li>
+                <li><a id="autoAdd" class="hidden" href="#" title="Add favorites of users for which the browser has credentials stored" aria-controls="users" aria-hidden="true">Auto add</a></li>
                 <li class="right"><a href="http://jtvn.humanoids.be/channels-manager-help.html">Help</a></li>
             </ul>
             <select multiple id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">

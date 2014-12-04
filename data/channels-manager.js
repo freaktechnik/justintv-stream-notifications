@@ -74,10 +74,12 @@ else
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
         hide(document.querySelector("#autoAdd"));
+        document.querySelector(".tooblar").setAttribute("aria-controls", "channels");
         checkChannel();
     }
     else if(evt.detail == 2) {
         show(document.querySelector("#autoAdd"));
+        document.querySelector(".tooblar").setAttribute("aria-controls", "users");
         checkUser();
     }
 });
@@ -219,8 +221,6 @@ function addChannel(channel) {
         channelNode.appendChild(small);
         channels.appendChild(channelNode);
         channels.size = channels.options.length;
-        var evt = new CustomEvent("nodeadded", { detail: channelNode });
-        channels.dispatchEvent(evt);
     }
 }
 
@@ -241,8 +241,6 @@ function addUser(user) {
         userNode.appendChild(small);
         users.appendChild(userNode);
         users.size = users.options.length;
-        var evt = new CustomEvent("nodeadded", { detail: userNode });
-        users.dispatchEvent(evt);
     }
 }
 
