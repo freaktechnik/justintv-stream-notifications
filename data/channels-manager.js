@@ -241,18 +241,18 @@ function addUser(user) {
 
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
-        var channelNode = channels.getElementById("channel"+channel.id),
+        var channelNode = channels.querySelector("#channel"+channel.id),
             span        = channelNode.querySelector("span");
-        channelNode.querySelector("image").src = getBestImageForSize(channel, 50);
+        channelNode.querySelector("img").src = getBestImageForSize(channel, 50);
         span.replaceChild(document.createTextNode(channel.uname), span.firstChild);
     }
 }
 
 function updateUser(user) {
     if(hasUser(user.id)) {
-        var userNode = users.getElementById("user"+user.id),
+        var userNode = users.querySelector("#user"+user.id),
             span     = userNode.querySelector("span");
-        userNode.querySelector("image").src = getBestImageForSize(user, 50);
+        userNode.querySelector("img").src = getBestImageForSize(user, 50);
         span.replaceChild(document.createTextNode(user.uname), span.firstChild);
     }
 }
