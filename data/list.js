@@ -87,23 +87,20 @@ function setStyle(style) {
 
 // Find the node to inser before in order to keep the list sorted
 function findInsertionNodeIn(list, name) {
-    if(list.childNodes.length > 0) {
-        var node = list.firstChild;
+    var node = list.firstElementChild;
 
-        while(name.localeCompare(node.querySelector(".name").textContent) >= 0) {
-            node = node.nextSibling;
-        }
-        return node;
+    while(node && name.localeCompare(node.querySelector(".name").textContent) >= 0) {
+        node = node.nextSibling;
     }
-    else
-        return null;
+    console.log(node);
+    return node;
 }
 
 function insertChannel(channel, node) {
     if(channel.live)
-        live.insertBefore(findInsertionNodeIn(live, channel.uname), node);
+        live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
     else
-        offline.insertBefore(finInsertionNodeIn(offline, channel.uname), node);
+        offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
 }
 
 function getBestImageForSize(user, size) {
