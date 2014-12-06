@@ -122,6 +122,10 @@ a {
     vertical-align: middle;
 }
 
+#nochannels, #noonline {
+    padding: .3em;
+}
+
 .hidden {
     display: none;
     visibility: hidden;
