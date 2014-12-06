@@ -153,13 +153,19 @@ function addChannel(channel) {
     channelNode.appendChild(link);
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
     insertChannel(channel, channelNode);
+    hideNoChannels();
 }
 
 function removeChannel(channelId) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
-    if(channelNode.parentNode.id = "live" && live.childNodes.length < 2)
+    if(channelNode.parentNode.id = "live" && live.childElementCount < 2) {
+        displayNoOnline();
         addon.port.emit("offline");
+    }
     channelNode.remove();
+    if(live.childElementCount == 0 && offline.childElementCount == 0) {
+        displayNoChannels();
+    }
 }
 
 function updateNodeContent(channel) {
@@ -171,6 +177,7 @@ function updateNodeContent(channel) {
 }
 
 function makeChannelLive(channel) {
+    hideNoOnline();
     updateNodeContent(channel);
     if(!live.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
@@ -178,6 +185,25 @@ function makeChannelLive(channel) {
 
 function makeChannelOffline(channel) {
     insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
-    if(live.childNodes.length == 0)
+    if(live.childElementCount == 0) {
         addon.port.emit("offline");
+        displayNoOnline();
+    }
+}
+
+function displayNoOnline() {
+    show(document.getElementById("noonline"));
+}
+
+function hideNoOnline() {
+    hide(document.getElementById("noonline"));
+}
+
+function hideNoChannels() {
+    hide(document.getElementById("nochannels"));
+}
+
+function displayNoChannels() {
+    displayNoOnline();
+    show(document.getElementById("nochannels"));
 }

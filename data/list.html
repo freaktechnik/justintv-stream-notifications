@@ -26,10 +26,16 @@
                 <li><a id="refreshButton" href="#">Refresh</a></li>
                 <li><a id="configure" href="#" title="Opens the channel management tab">Manage</a></li>
             </ul>
-            <ul id="live" class="tabcontent" role="tabpanel" data-tab="1">
-            </ul>
-            <ul id="offline" class="tabcontent" role="tabpanel" data-tab="2">
-            </ul>
+            <section class="tabcontent" role="tabpanel" data-tab="1">
+                <span id="noonline">No channels online.</span>
+                <ul id="live">
+                </ul>
+            </section>
+            <section class="tabcontent" role="tabpanel" data-tab="2">
+                <span id="nochannels">No channels added.</span>
+                <ul id="offline">
+                </ul>
+            </section>
         </main>
     </body>
 </html>
