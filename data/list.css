@@ -16,6 +16,15 @@ body {
     -moz-user-select: none;
 }
 
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    margin: 0;
+}
+
 
 .toolbar li, .tabstrip li {
     display: inline;
@@ -58,26 +67,43 @@ body {
 .tabcontent li {
     padding: 0;
     margin: 0;
+    list-style: none;
 }
 
-.tabcontent li a:link, .tabcontent li a:hover, .tabcontent li a:active, .tabcontent li a:visited {
+.tabcontent li a, .tabcontent li a:link, .tabcontent li a:hover, .tabcontent li a:active, .tabcontent li a:visited {
     text-decoration: none;
     color: initial;
     cursor: context-menu;
+    padding: .3em;
+    display: block;
 }
 
-.compact li a>img, .default li a>img {
+.tabcontent li div img {
+    margin-right: .3em;
+    float: left;
+}
+
+.compact li a>img, .default li a>img, #offline li a>img {
     display: none;
     visibility: hidden;
 }
 
-.thumbnail li a>img {
-    width: 100%;
+.compact li a {
+    min-height: 1em;
 }
 
 .compact li div img {
+    vertical-align: text-bottom;
     width: 1em;
     height: 1em;
+}
+
+.default li a, .thumbnail li a {
+    min-height: 30px;
+}
+
+.thumbnail li a>img {
+    width: 100%;
 }
 
 .compact li .title  {
@@ -91,8 +117,9 @@ body {
 }
 
 .default li div img, .thumbnail li div img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
 }
 
 .hidden {
@@ -101,7 +128,7 @@ body {
 }
 
 /* Type specific styles */
-.twitch:hover {
-    background: rgba(0, 0, 0, 0.7);
-    color: violdet;
+.twitch a:hover {
+    background: #7550BA;
+    color: white !important;
 }

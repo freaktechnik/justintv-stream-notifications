@@ -2,6 +2,7 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
+//TODO empty list placeholders
 
 var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
@@ -21,11 +22,11 @@ const CONTEXTMENU_ID    = "context";
         addon.port.emit("refresh");
     });
     document.getElementById("contextRefresh").addEventListener("click", function() {
-        addon.port.emit("refresh", currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length));
+        addon.port.emit("refresh", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
     });
     document.getElementById("contextOpen").addEventListener("click", function() {
-        addon.port.emit("openArchive", currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length));
+        addon.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
     });
     addon.port.emit("ready");
@@ -92,7 +93,6 @@ function findInsertionNodeIn(list, name) {
     while(node && name.localeCompare(node.querySelector(".name").textContent) >= 0) {
         node = node.nextSibling;
     }
-    console.log(node);
     return node;
 }
 
@@ -121,27 +121,29 @@ function getBestImageForSize(user, size) {
 }
 
 function addChannel(channel) {
-    var channelNode = document.createElement("li"),
-        link        = document.createElement("a"),
-        name        = document.createTextNode(channel.uname),
-        span        = document.createElement("span"),
-        title       = document.createTextNode(channel.title),
-        titleSpan   = document.createElement("span"),
-        avatar      = new Image(),
-        thumbnail   = new Image(),
-        wrapper     = document.createElement("div");
-    avatar.src      = getBestImageForSize(channel, 40);
-    thumbnail.src   = channel.thumbnail;
-    span.appendChild(name);
-    span.classList.add("name");
+    var channelNode   = document.createElement("li"),
+        link          = document.createElement("a"),
+        name          = document.createTextNode(channel.uname),
+        spanName      = document.createElement("span"),
+        br            = document.createElement("br"),
+        title         = document.createTextNode(channel.title),
+        titleSpan     = document.createElement("span"),
+        avatar        = new Image(),
+        thumbnail     = new Image(),
+        wrapper       = document.createElement("div");
+    avatar.src        = getBestImageForSize(channel, 30);
+    thumbnail.src     = channel.thumbnail;
+    spanName.appendChild(name);
+    spanName.classList.add("name");
     titleSpan.appendChild(title);
     titleSpan.classList.add("title");
     wrapper.appendChild(avatar);
-    wrapper.appendChild(span);
+    wrapper.appendChild(spanName);
+    wrapper.appendChild(br);
     wrapper.appendChild(titleSpan);
     link.appendChild(thumbnail);
     link.appendChild(wrapper);
-    link.contextmenu = CONTEXTMENU_ID;
+    link.setAttribute("contextmenu", CONTEXTMENU_ID);
     link.addEventListener("click", open.bind(null, channel.id));
     channelNode.addEventListener("contextmenu", function(e) {
         currentMenuTarget = e.currentTarget;

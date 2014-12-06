@@ -5,6 +5,8 @@
  *
  * Channels Manager content script
  */
+//TODO Ctrl+A, Del etc.
+ 
 // Add-on communication backend
 
 var providers;
