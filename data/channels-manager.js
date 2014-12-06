@@ -46,6 +46,17 @@ self.port.on("initdata", function(options){
     });
 });
 
+self.port.on("isloading", function() {
+    document.querySelector("main").classList.add("loading");
+    users.classList.add("loading");
+    channels.classList.add("loading");
+});
+self.port.on("doneloading", function() {
+    document.querySelector("main").classList.remove("loading");
+    users.classList.remove("loading");
+    channels.classList.remove("loading");
+});
+
 // Methods modifying the DOM
 
 var channels = document.querySelector("#channels"),

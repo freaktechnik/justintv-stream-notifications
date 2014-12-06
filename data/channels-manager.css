@@ -2,7 +2,6 @@
  *  Created by Martin Giger
  *  Licensed under MPL 2.0
  */
-/* TODO set cursor to progress while fetching stuff */
 
 html, body {
     height: 100%;
@@ -25,6 +24,10 @@ body {
 
 main {
     width: 100%;
+}
+
+.loading {
+    cursor: progress !important;
 }
 
 .hidden {

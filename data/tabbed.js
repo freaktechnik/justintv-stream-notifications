@@ -98,4 +98,3 @@ function show(el) {
     el.classList.remove("hidden");
     el.removeAttribute("aria-hidden");
 }
-
