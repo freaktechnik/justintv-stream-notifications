@@ -5,7 +5,6 @@
  *
  * Channels Manager content script
  */
-//TODO Ctrl+A, Del etc.
  
 // Add-on communication backend
 
@@ -69,6 +68,28 @@ if(document.querySelector(".tabbed a.current").dataset.tab == 1) {
 }
 else
     checkUser();
+    
+document.addEventListener("keypress", function(evt) {
+    if(!popup.querySelector("dialog").hasAttribute("open")) {
+        console.log(evt.key+" ctrlkey:"+evt.ctrlKey);
+        if(evt.key == "a" && evt.ctrlKey) {
+            console.log("selecting avrathang");
+            evt.preventDefault();
+            var list;
+            if(users.classList.contains("hidden"))
+                list = channels;
+            else
+                list = users;
+                
+            for(var i = 0; i < list.options.length; ++i) {
+                list.item(i).setAttribute("selected", true);
+            }
+        }
+        else if(evt.key == "Del") {
+            removeSelectedItems();
+        }
+    }
+});
 
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
@@ -122,7 +143,7 @@ document.querySelector("#updateItem").addEventListener("click", function(evt) {
     }
 });
 
-document.querySelector("#removeItem").addEventListener("click", function(evt) {
+function removeSelectedItems() {
     var selected = getSelectedItemIds();
     if(users.classList.contains("hidden")) {
         selected.forEach(function(channelId) {
@@ -134,7 +155,9 @@ document.querySelector("#removeItem").addEventListener("click", function(evt) {
             self.port.emit("removeuser", userId);
         });
     }
-});
+}
+
+document.querySelector("#removeItem").addEventListener("click", removeSelectedItems());
 
 function hide(el) {
     el.classList.add("hidden");
@@ -169,7 +192,7 @@ popup.querySelector("input[type='button']").addEventListener("click", function(e
 });
 
 popup.addEventListener("keypress", function(evt) {
-    if(evt.keyCode == 27) {
+    if(evt.key == "Esc") {
         hideDialog();
         resetDialogForms();
     }        
