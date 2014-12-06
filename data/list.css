@@ -10,7 +10,7 @@ html, body {
 body {
     padding: 0;
     margin: 0;
-    font-family: sans;
+    font-family: sans-serif;
     line-height: 1.2em;
     
     -moz-user-select: none;
@@ -60,7 +60,9 @@ body {
     margin: 0;
 }
 
-.tabcontent li a {
+.tabcontent li a:link, .tabcontent li a:hover, .tabcontent li a:active, .tabcontent li a:visited {
+    text-decoration: none;
+    color: initial;
     cursor: context-menu;
 }
 

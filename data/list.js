@@ -77,10 +77,10 @@ function setStyle(style) {
             newClass = "default";
     }
     if(newClass != currentStyle) {
-        live.classList.add(newStyle);
+        live.classList.add(newClass);
         live.classList.remove(currentStyle);
-        offline.classList.add(newStyle);
-        offline.classLsit.remove(currentStyle);
+        offline.classList.add(newClass);
+        offline.classList.remove(currentStyle);
         currentStyle = newClass;
     }
 }

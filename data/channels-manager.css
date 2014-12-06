@@ -11,7 +11,7 @@ html, body {
 body {
     padding: 0;
     margin: 0;
-    font-family: sans;
+    font-family: sans-serif;
     line-height: 1.2em;
     
     -moz-user-select: none;
