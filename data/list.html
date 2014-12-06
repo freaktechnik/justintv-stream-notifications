@@ -12,19 +12,19 @@
         <link rel="stylesheet" type="text/css" href="list.css">
     </head>
     <body>
-        <!-- TODO
-        <menu id="context" type="context">
-            <menuitem label="Refresh channel status" onclick="refreshChannel()" data-l10n-id="context_refresh"></menuitem>
-            <menuitem label="Open channel's chat in a new tab or window" onclick=""></menuitem>
-        </menu>-->
+        <menu id="context" type="popup">
+            <menuitem id="contextRefresh" label="Refresh channel status" data-l10n-id="context_refresh"></menuitem>
+            <menuitem id="contextOpen"></menuitem>
+            <!--TODO <menuitem label="Open channel's chat in a new tab or window" onclick=""></menuitem>-->
+        </menu>
         <main class="tabbed">
             <ul class="tabstrip" role="tablist">
                 <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1">Live</a></li>
                 <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2">Offline</a></li>
             </ul>
             <ul class="toolbar" role="toolbar">
-                <li><a href="#">Refresh</a></li>
-                <li><a href=#" title="Opens the channel management tab">Manage</a></li>
+                <li><a id="refreshButton" href="#">Refresh</a></li>
+                <li><a id="configure" href="#" title="Opens the channel management tab">Manage</a></li>
             </ul>
             <ul id="live" class="tabcontent" role="tabpanel" data-tab="1">
             </ul>

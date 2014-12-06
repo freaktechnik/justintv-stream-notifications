@@ -12,6 +12,7 @@
         {"type": "integer", "name": "queue_maxRequestBatchSize",  "title": "Max Requests per Batch",  "value": 8, "hidden": true},
 
         {"type": "integer", "name": "panel_minWidth",             "title": "Minimum Panel width",  "value": 200,  "hidden": true},
+        {"type": "integer", "name": "panel_maxHeight",            "title": "Maximum Panel height", "value": 300,  "hidden": true},
         {"type": "bool",    "name": "panel_advancedStyle",        "title": "Advanced Panel style", "value": true, "hidden": true},
 
         {"type": "string",  "name": "twitch_clientId",            "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden": true},
