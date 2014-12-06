@@ -29,7 +29,9 @@ const CONTEXTMENU_ID    = "context";
         addon.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
     });
-    addon.port.emit("ready");
+    document.querySelector(".tabbed").addEventListener("tabchanged", function() {
+        resize();
+    });
  });
 
 // Set up port commmunication listeners
@@ -55,9 +57,9 @@ addon.port.on("setOffline", function(channel) {
     makeChannelOffline(channel);
 });
  
- function resize() {
-    //TODO actually make the height smaller if not needed
-    addon.port.emit("resize", [addon.options.panelWidth, addon.options.maxHeight]);
+function resize() {
+    var h = document.querySelector(".tabbed").scrollHeight < addon.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : addon.options.maxHeight;
+    addon.port.emit("resize", [addon.options.panelWidth, h]);
 }
 
 function open(channelId) {
@@ -84,6 +86,7 @@ function setStyle(style) {
         offline.classList.remove(currentStyle);
         currentStyle = newClass;
     }
+    resize();
 }
 
 // Find the node to inser before in order to keep the list sorted
@@ -101,6 +104,8 @@ function insertChannel(channel, node) {
         live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
     else
         offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
+    
+    resize();
 }
 
 function getBestImageForSize(user, size) {
@@ -166,6 +171,7 @@ function removeChannel(channelId) {
     if(live.childElementCount == 0 && offline.childElementCount == 0) {
         displayNoChannels();
     }
+    resize();
 }
 
 function updateNodeContent(channel) {
