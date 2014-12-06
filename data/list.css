@@ -50,6 +50,14 @@ body {
     right: 0;
 }
 
+.tabcontent li a {
+    cursor: context-menu;
+}
+
+.tabcontent li .compact {}
+.tabcontent li .default {}
+.tabcontent li .thumbnail {}
+
 .hidden {
     display: none;
     visibility: hidden;
