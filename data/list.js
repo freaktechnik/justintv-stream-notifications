@@ -90,7 +90,7 @@ function findInsertionNodeIn(list, name) {
     if(list.childNodes.length > 0) {
         var node = list.firstChild;
 
-        while(name.localeCompare(node.querySelector(TODO).textContent) >= 0) {
+        while(name.localeCompare(node.querySelector(".name").textContent) >= 0) {
             node = node.nextSibling;
         }
         return node;
@@ -106,17 +106,53 @@ function insertChannel(channel, node) {
         offline.insertBefore(finInsertionNodeIn(offline, channel.uname), node);
 }
 
+function getBestImageForSize(user, size) {
+    // shortcut if there's an image with the size demanded
+    if(user.image.hasOwnProperty(size.toString())) {
+        return user.image[size];
+    }
+    
+    // search next biggest image
+    var index = Number.MAX_VALUE;
+    Object.keys(user.image).forEach(function(s) {
+        s = parseInt(s, 10);
+        if(s > size && s < index) {
+            index = s;
+        }
+    });
+    return user.image[index];
+}
+
 function addChannel(channel) {
     var channelNode = document.createElement("li"),
-        link        = document.createElement("a");
-    //TODO
+        link        = document.createElement("a"),
+        name        = document.createTextNode(channel.uname),
+        span        = document.createElement("span"),
+        title       = document.createTextNode(channel.title),
+        titleSpan   = document.createElement("span"),
+        avatar      = new Image(),
+        thumbnail   = new Image(),
+        wrapper     = document.createElement("div");
+    avatar.src      = getBestImageForSize(channel, 40);
+    thumbnail.src   = channel.thumbnail;
+    span.appendChild(name);
+    span.classList.add("name");
+    titleSpan.appendChild(title);
+    titleSpan.classList.add("title");
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(span);
+    wrapper.appendChild(titleSpan);
+    link.appendChild(thumbnail);
+    link.appendChild(wrapper);
     link.contextmenu = CONTEXTMENU_ID;
     link.addEventListener("click", open.bind(null, channel.id));
-    link.addEventListener("contextmenu", function(e) {
+    channelNode.addEventListener("contextmenu", function(e) {
         currentMenuTarget = e.currentTarget;
-        document.getElementById("contextOpen").disabled ? e.currentTarget.parentNode.id == "offline";
+        document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
     });
+    channelNode.classList.add(channel.type);
     channelNode.appendChild(link);
+    channelNode.id = CHANNEL_ID_PREFIX+channel.id;
     insertChannel(channel, channelNode);
 }
 
@@ -127,8 +163,18 @@ function removeChannel(channelId) {
     channelNode.remove();
 }
 
+function updateNodeContent(channel) {
+    var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
+        titleNode = channelNode.querySelector(".title"),
+        titleText = document.createTextNode(channel.title);
+    titleNode.replaceChild(titleText, titleNode.firstChild);
+    channelNode.querySelector("a>img").src = channel.thumbnail;
+}
+
 function makeChannelLive(channel) {
-    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    updateNodeContent(channel);
+    if(!live.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
+        insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
 }
 
 function makeChannelOffline(channel) {
