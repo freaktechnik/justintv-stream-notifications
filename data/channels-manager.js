@@ -110,9 +110,7 @@ document.querySelector("#autoAdd").addEventListener("click", function(evt) {
     }
 });
 
-document.querySelector("#showDialog").addEventListener("click", function(evt) {
-    showDialog();
-});
+document.querySelector("#showDialog").addEventListener("click", showDialog);
 
 function getSelectedItemIds() {
     var items = [];
@@ -157,7 +155,7 @@ function removeSelectedItems() {
     }
 }
 
-document.querySelector("#removeItem").addEventListener("click", removeSelectedItems());
+document.querySelector("#removeItem").addEventListener("click", removeSelectedItems);
 
 function hide(el) {
     el.classList.add("hidden");
