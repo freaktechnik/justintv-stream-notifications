@@ -19,6 +19,15 @@ To check for missed notifications or to tune in to a channel later, the extensio
 
 https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
 
+## Build yourslef
+
+To build this extension you need npm. Open a command line and type
+```
+npm install jpm -g
+jpm xpi
+```
+to build an in Firefox installable .xpi file. For other uses of jpm consider its documentation.
+
 ## License
 
 See [LICENSE](LICENSE).
