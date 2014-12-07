@@ -70,3 +70,11 @@ exports['test queue clearing'] = function(test) {
     test.assert(!q.workingOnQueue());
 };
 
+exports['test adding new request to queue'] = function(test) {
+    var q = new UpdateQueue();
+    var i = q.addRequest({})
+    test.assertEqual(i,1);
+    test.assertEqual(i,q.queue[0].id);
+    test.assertEqual(typeof(q.queue[0]),'object');
+};
+

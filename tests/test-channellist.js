@@ -3,27 +3,7 @@
  * Licensed under MPL 2.0
  */
 var { ChannelList } = require('../lib/channellist');
-
-/*exports['test channel url comparison'] = function(test) {
-    var channel = getFullChannel();
-    test.assert(channel.compareUrl('http://foo.bar/lorem'));
-    test.assert(channel.compareUrl('http://foo.bar/lorem/archive'));
-    test.assert(!channel.compareUrl('http://asdf.com'));
-};*/
-
-// depends on source.getfirstSourceType()
-/*exports['test first source object'] = function(test) {
-    var source = getFullChannel().getFirstSourceObject();
-    test.assertEqual(source.type,Source.TYPE_USER);
-    test.assertEqual(source.name,Source.TYPE_USER);
-    test.assertEqual(source.channelType,'justintv');
-};
-
-function getFullChannel() {
-    return new Channel(Channel.FULL,new Source(Source.TYPE_USER,Source.TYPE_USER,'justintv'),{'url':'http://foo.bar/lorem','name':'lorem ipsum','login':'test','panelAvatar':'http://foo.bar/0.jpg',
-                        'notificationAvatar':'http://foo.bar/1.jpg','backgroundColor':'#ffffff','textColor':'#000000','linkColor':'#cccccc'});
-}
-
+/*
 exports['test ChannelList enumeration'] = function(test) {
     test.waitUntilDone();
     var channels = createDummyChannelList().channels;
@@ -66,12 +46,4 @@ function createDummyChannelList() {
     list.addChannel(ch2,
                     new Source(Source.TYPE_USERNAME,'yetAnotherChannel','twitch'),true);
     return list;
-}
-
-exports['test adding new request to queue'] = function(test) {
-    var q = new UpdateQueue();
-    var i = q.addRequest({})
-    test.assertEqual(i,1);
-    test.assertEqual(i,q.queue[0].id);
-    test.assertEqual(typeof(q.queue[0]),'object');
-};*/
+}*/
