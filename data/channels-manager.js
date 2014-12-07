@@ -82,9 +82,7 @@ else
     
 document.addEventListener("keypress", function(evt) {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
-        console.log(evt.key+" ctrlkey:"+evt.ctrlKey);
         if(evt.key == "a" && evt.ctrlKey) {
-            console.log("selecting avrathang");
             evt.preventDefault();
             var list;
             if(users.classList.contains("hidden"))
@@ -209,13 +207,15 @@ popup.addEventListener("keypress", function(evt) {
 
 popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
-    popup.querySelector("dialog").removeAttribute("open");
-    hideDialog();
-    if(popup.querySelector("#channelRadio").checked)
-        self.port.emit("addchannel", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
-    else
-        self.port.emit("adduser", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
-    resetDialogForms();
+    if(popup.querySelector("#channelNameField").value.length > 0) {
+        popup.querySelector("dialog").removeAttribute("open");
+        hideDialog();
+        if(popup.querySelector("#channelRadio").checked)
+            self.port.emit("addchannel", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
+        else
+            self.port.emit("adduser", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
+        resetDialogForms();
+    }
 });
 
 function getBestImageForSize(user, size) {

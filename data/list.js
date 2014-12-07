@@ -2,7 +2,6 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-//TODO empty list placeholders
 
 var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
@@ -58,6 +57,7 @@ addon.port.on("setOffline", function(channel) {
 });
  
 function resize() {
+    //TODO fixaroo
     var h = document.querySelector(".tabbed").scrollHeight < addon.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : addon.options.maxHeight;
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 }
