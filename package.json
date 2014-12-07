@@ -1,12 +1,12 @@
 {
     "preferences": [
         {"type": "control", "name": "manageChannels",             "title": "Manage Channels", "label": "Open Channels Manager"},
-	    {"type": "integer", "name": "updateInterval",             "title": "Update Interval", "value": 20},
+	    {"type": "integer", "name": "updateInterval",             "title": "Update Interval", "description":"Interval of the addon checking wether a stream is live in seconds. When 0, the states aren't automatically updated.", "value": 20},
         {"type": "bool",    "name": "onlineNotification",         "title": "Show a notification when a stream goes online", "value": true},
         {"type": "bool",    "name": "titleChangeNotification",    "title": "Show a notification when a stream changes the title", "value": true},
         {"type": "bool",    "name": "offlineNotification",        "title": "Show a notification when a stream goes offline", "value": false},
         {"type": "radio",   "name": "panel_style",                "title": "Panel item display style", "value":1, "options": [{"value":"0", "label":"Minimal"}, {"value":"1", "label":"Normal"}, {"value":"2", "label":"Big Thumbnail"}]},
-        {"type": "bool",    "name": "updateTab",                  "title": "Open a tab with update info after an update", "value": true},
+        {"type": "bool",    "name": "updateTab",                  "title": "Open a tab with update info after an update", "description":"A tab with informations about new features is opened when the extension is updated.", "value": true},
 
         {"type": "integer", "name": "queue_ratio",                "title": "Queue Request Treshhold", "value": 2, "hidden": true},
         {"type": "integer", "name": "queue_maxRequestBatchSize",  "title": "Max Requests per Batch",  "value": 8, "hidden": true},

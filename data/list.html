@@ -13,26 +13,26 @@
     </head>
     <body>
         <menu id="context" type="context">
-            <menuitem id="contextRefresh" label="Refresh channel status" data-l10n-id="context_refresh"></menuitem>
-            <menuitem id="contextOpen" label="Open Archive page"></menuitem>
-            <!--TODO <menuitem label="Open channel's chat in a new tab or window" onclick=""></menuitem>-->
+            <menuitem id="contextRefresh" label="Refresh Channel Status" data-l10n-id="context_refresh"></menuitem>
+            <menuitem id="contextOpen" label="Open Archive Page" data-l10n-id="context_open"></menuitem>
+            <!--TODO <menuitem label="Open Channel's Chat" data-l10n-id="context_chat"></menuitem>-->
         </menu>
         <main class="tabbed">
             <ul class="tabstrip" role="tablist">
-                <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1">Live</a></li>
-                <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2">Offline</a></li>
+                <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" data-l10n-id="panel_tab_live">Live</a></li>
+                <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
             </ul>
             <ul class="toolbar" role="toolbar">
-                <li><a id="refreshButton" href="#">Refresh</a></li>
-                <li><a id="configure" href="#" title="Opens the channel management tab">Manage</a></li>
+                <li><a id="refreshButton" href="#" title="Refresh the live statuses of all channels" data-l10n-id="panel_refresh">Refresh</a></li>
+                <li><a id="configure" href="#" title="Opens the channel management tab" data-l10n-id="panel_manage">Manage</a></li>
             </ul>
             <section class="tabcontent" role="tabpanel" data-tab="1">
-                <span id="noonline">No channels online.</span>
+                <span id="noonline" data-l10n-id="panel_nothing_live">Nobody in your list is live.</span>
                 <ul id="live">
                 </ul>
             </section>
             <section class="tabcontent" role="tabpanel" data-tab="2">
-                <span id="nochannels">No channels added.</span>
+                <span id="nochannels" data-l10n-id="panel_nothing">No channels added.</span>
                 <ul id="offline">
                 </ul>
             </section>

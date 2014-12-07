@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Channels Manager</title>
+        <title data-l10n-id="cm_title">Channels Manager</title>
 
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
         <script type="text/javascript" src="tabbed.js"></script>
@@ -10,15 +10,15 @@
     <body>
         <main class="tabbed">
             <ul class="tabstrip" role="tablist">
-                <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1">Channels</a></li>
-                <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2">Users</a></li>
+                <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1" data-l10n-id="cm_tab_channels">Channels</a></li>
+                <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2" data-l10n-id="cm_tab_users">Users</a></li>
             </ul>
             <ul role="toolbar" class="toolbar" aria-controls="channels">
-                <li><a id="showDialog" href="#popup">Add...</a></li>
-                <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)">Update</a></li>
-                <li><a id="removeItem" href="#" title="Remove the selected item(s)">Remove</a></li>
-                <li><a id="autoAdd" class="hidden" href="#" title="Add favorites of users for which the browser has credentials stored" aria-controls="users" aria-hidden="true">Auto add</a></li>
-                <li class="right"><a href="http://jtvn.humanoids.be/channels-manager-help.html">Help</a></li>
+                <li><a id="showDialog" href="#popup" data-l10n-id="cm_add">Add...</a></li>
+                <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</a></li>
+                <li><a id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</a></li>
+                <li><a id="autoAdd" class="hidden" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" aria-hidden="true" data-l10n-id="cm_autoAdd">Auto add</a></li>
+                <li class="right"><a href="http://jtvn.humanoids.be/channels-manager-help.html" data-l10n-id="cm_help">Help</a></li>
             </ul>
             <select multiple id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
             </select>
@@ -28,14 +28,14 @@
         <div id="popup" class="hidden" aria-hidden="true">
             <dialog>
                 <form method="dialog">
-                    <h1>Add new...</h1>
-                    <input type="radio" label="channel" id="channelRadio" name="accountType"><label for="channelRadio">Channel</label>
-                    <input type="radio" label="user" id="userRadio" name="accountType"><label for="userRadio">User</label><br>
-                    <label for="providerDropdown">Provider:</label>
+                    <h1 data-l10n-id="cm_dialog_title">Add new...</h1>
+                    <input type="radio" label="channel" id="channelRadio" name="accountType"><label for="channelRadio" data-l10n-id="cm_dialog_channel">Channel</label>
+                    <input type="radio" label="user" id="userRadio" name="accountType"><label for="userRadio" data-l10n-id="cm_dialog_user">User</label><br>
+                    <label for="providerDropdown" data-l10n-id="cm_dialog_providers">Provider:</label>
                     <select id="providerDropdown"></select><br>
-                    <label for="channelNameField">Username:</label>
+                    <label for="channelNameField" data-l10n-id="cm_dialog_username">Username:</label>
                     <input type="text" id="channelNameField"><br>
-                    <input type="button" value="Cancel"><input type="submit" value="Ok">
+                    <input type="button" value="Cancel" data-l10n-id="cm_dialog_cancel"><input type="submit" value="Ok" data-l10n-id="cm_dialog_submit">
                 </form>
             </dialog>
         </div>
