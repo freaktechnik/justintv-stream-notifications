@@ -20,24 +20,24 @@ function getChannel() {
     return channel;
 }
 /*
-exports['test open or focus tab'] = function(test, done) {
+exports['test open or focus tab'] = function(assert, done) {
     var channel = getChannel(), tabToClose;
     tabs.once("open", function(tab) {
-        test.assertEqual(tab.url, "http://foo.bar/lorem/archive");
+        assert.equal(tab.url, "http://foo.bar/lorem/archive");
         tab.once("activate", function(tab) {
-            test.assertEqual(tab.url, "http://foo.bar/lorem/archive");
+            assert.equal(tab.url, "http://foo.bar/lorem/archive");
             channel.live = true;
             tabToClose.close();
 
             tab.once("activate", function(tab) {
-                test.assertEqual(tab.url, "http://foo.bar/lorem/archive");
+                assert.equal(tab.url, "http://foo.bar/lorem/archive");
                 tab.close();
                 tabToClose.close();
                 tabs.once("open", function(tab) {
-                    test.assertEqual(tab.url, "http://foo.bar/lorem");
+                    assert.equal(tab.url, "http://foo.bar/lorem");
                     tab.close();
                     tabs.once("open", function(tab) {
-                        test.assertEqual(tab.url, "http://foo.bar/lorem/archive");
+                        assert.equal(tab.url, "http://foo.bar/lorem/archive");
                         tab.close(function() {
                             for(var t in tabs) {
                                 tabs[t].close();
@@ -64,3 +64,5 @@ exports['test open or focus tab'] = function(test, done) {
     channelUtils.selectOrOpenTab(channel);
 };
 */
+require("sdk/test").run(exports);
+
