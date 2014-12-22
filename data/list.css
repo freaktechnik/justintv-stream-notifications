@@ -74,8 +74,11 @@ a {
     text-decoration: none;
     color: initial;
     cursor: context-menu;
-    padding: .3em;
     display: block;
+}
+
+.compact li a, .default li a, #offline.thumbnail li a, #live.thumbnail li div {
+    padding: .3em;
 }
 
 .tabcontent li div img {
@@ -102,8 +105,20 @@ a {
     min-height: 30px;
 }
 
-.thumbnail li a>img {
+#live.thumbnail li a>img {
     width: 100%;
+    display: block;
+}
+
+#live.thumbnail li {
+    position: relative;
+    width: 100%;
+}
+
+#live.thumbnail li div {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
 
 .compact li .title  {
@@ -132,7 +147,12 @@ a {
 }
 
 /* Type specific styles */
-.twitch a:hover {
-    background: #7550BA;
+.twitch a:hover, .thumbnail .twitch a:hover div {
+    background: #7550BA !important;
     color: white !important;
+}
+
+#live.thumbnail .twitch  a div {
+    background: rgba(117, 80, 186, 0.7);
+    color: white;
 }

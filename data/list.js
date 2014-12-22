@@ -126,6 +126,18 @@ function getBestImageForSize(user, size) {
 }
 
 function addChannel(channel) {
+    /*
+     <li class="type" id="channel1">
+        <a href="" contextmenu="context">
+            <img src="thumbnail">
+            <div>
+                <img src="avatar">
+                <span class="name">ChannelName</span><br>
+                <span class="title">ChannelTitle</span>
+            </div>
+        </a>
+    </li>
+     */
     var channelNode   = document.createElement("li"),
         link          = document.createElement("a"),
         name          = document.createTextNode(channel.uname),
