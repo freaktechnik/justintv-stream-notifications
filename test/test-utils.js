@@ -15,12 +15,11 @@ exports['test exactArraySearch'] = function(assert) {
 };
 
 exports['test randomDelayNumber'] = function(assert, done) {    
-    var first;
-    for(var i = 0; i<100; i++) {
+    for(var i = 0, first; i<100; i++) {
         first = randomDelayNumber();
-        assert.equal(typeof(first),'number');
-        assert.ok(first>100);
-        assert.ok(first<115);
+        assert.equal(typeof(first),'number',(i+1)+"th random delay number is a number");
+        assert.ok(first>100, (i+1)+"th random delay number is bigger 100");
+        assert.ok(first<115, (i+1)+"th random delay number is smaller than 115");
     }
     done();
 };
