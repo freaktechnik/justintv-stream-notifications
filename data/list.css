@@ -77,7 +77,7 @@ a {
     display: block;
 }
 
-.compact li a, .default li a, #offline.thumbnail li a, #live.thumbnail li div {
+.compact li a, .default li a, #offline.thumbnail li a, #live.thumbnail li div, #nochannels, #noonline {
     padding: .3em;
 }
 
@@ -135,10 +135,6 @@ a {
     width: 30px;
     height: 30px;
     vertical-align: middle;
-}
-
-#nochannels, #noonline {
-    padding: .3em;
 }
 
 .hidden {
