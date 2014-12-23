@@ -28,7 +28,7 @@
     "name": "justintv-stream-notifications",
     "version": "3.0.0",
     "lib": "lib",
-    "title": "Stream Notifier",
+    "title": "Live Stream Notifier",
     "main": "lib/main",
     "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
     "icon": "data/icon.png",
