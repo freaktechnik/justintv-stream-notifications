@@ -73,7 +73,7 @@ function checkUser() {
     popup.querySelector("#userRadio").checked = true;
 }
 
-if(document.querySelector(".tabbed a.current").dataset.tab == 1) {
+if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbed a.current").dataset.tab == 1) {
     hide(document.querySelector("#autoAdd"));
     checkChannel();
 }
