@@ -15,7 +15,9 @@ exports.testProviders = function(assert) {
         assert.equal(typeof(provider.getUserFavorites), "function", "getUserFavorites is implemented");
         assert.equal(typeof(provider.getChannelDetails), "function", "getChannelDetails is implemented");
         assert.equal(typeof(provider.updateRequest), "function", "updateRequest is implemented");
+        assert.equal(typeof(provider.updateFavsRequest), "function", "updateFavsRequest is implemented");
         assert.equal(typeof(provider.removeRequest), "function", "removeRequest is implemented");
+        assert.equal(typeof(provider.removeFavsRequest), "function", "removeFavsRequest is implemented");
         assert.equal(typeof(provider.updateChannel), "function", "updateChannel is implemented");
         assert.equal(typeof(provider.updateChannels), "function", "updateChannels is implemented");
     }
