@@ -13,7 +13,6 @@
 
         {"type": "integer", "name": "panel_minWidth",             "title": "Minimum Panel width",  "value": 320,  "hidden": true},
         {"type": "integer", "name": "panel_maxHeight",            "title": "Maximum Panel height", "value": 400,  "hidden": true},
-        {"type": "bool",    "name": "panel_advancedStyle",        "title": "Advanced Panel style", "value": true, "hidden": true},
 
         {"type": "string",  "name": "twitch_clientId",            "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden": true},
         
