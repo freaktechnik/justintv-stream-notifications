@@ -7,7 +7,7 @@ var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
 const CONTEXTMENU_ID    = "context";
 
- window.addEventListener("load", function() {
+window.addEventListener("load", function() {
     live    = document.getElementById("live");
     offline = document.getElementById("offline");
     setStyle(addon.options.style);
@@ -27,6 +27,9 @@ const CONTEXTMENU_ID    = "context";
     document.getElementById("contextOpen").addEventListener("click", function() {
         addon.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
+    });
+    document.getElementById("contextChat").addEventListener("click", function() {
+        addon.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
     });
     document.querySelector(".tabbed").addEventListener("tabchanged", function() {
         resize();
