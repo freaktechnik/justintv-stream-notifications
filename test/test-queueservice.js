@@ -14,8 +14,10 @@ exports.testGetService = function(assert) {
 
 exports.testQueueService = function(assert) {
     let service = QueueService.getServiceForProvider("test");
-    assert.ok(Array.isArray(service.updateRequestIds));
-    assert.equal(service.updateRequestIds.length, 0);
+    assert.ok(Array.isArray(service.highPriorityRequestIds));
+    assert.ok(Array.isArray(service.lowPriorityRequestIds));
+    assert.equal(service.highPriorityRequestIds.length, 0);
+    assert.equal(service.lowPriorityRequestIds.length, 0);
 };
 
 exports.testQueueRequest = function(assert, done) {
@@ -35,24 +37,32 @@ exports.testQueueRequest = function(assert, done) {
 exports.testUpdateRequest = function(assert) {
     let service = QueueService.getServiceForProvider("test");
     service.queueUpdateRequest(["http://example.com"], {},
+        service.HIGH_PRIORITY,
         function() { console.log("requeue?"); return false; },
         function() { console.log("done"); }
     );
-    assert.equal(service.updateRequestIds.length, 1);
-    var id = service.updateRequestIds[0];
+    assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 1);
+    assert.equal(service.getRequestProperty(service.HIGH_PRIORITY), service.highPriorityRequestIds);
+    assert.equal(service.getRequestProperty(service.LOW_PRIORITY).length, 0);
+    var id = service.highPriorityRequestIds[0];
     // Replace them
     service.queueUpdateRequest(["http://example.com", "http:/example.com"], {},
+        service.HIGH_PRIORITY,
         function() { console.log("requeue?"); return false; },
         function() { console.log("done"); }
     );
-    assert.equal(service.updateRequestIds.length, 2);
-    assert.ok(service.updateRequestIds.every(function(i) {
+    assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 2);
+    assert.ok(service.getRequestProperty(service.HIGH_PRIORITY).every(function(i) {
         return i != id;
     }));
 
     // remove the requests
+    service.unqueueUpdateRequest(service.LOW_PRIORITY);
+    assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 2);
+    assert.equal(service.getRequestProperty(service.LOW_PRIORITY).length, 0);
+
     service.unqueueUpdateRequest();
-    assert.equal(service.updateRequestIds.length, 0);
+    assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 0);
 };
 
 // QueueService Events test
