@@ -129,7 +129,7 @@ exports['test channellist'] = function(assert, done) {
             list.addChannel(getChannel());
         },
         function testAddChannels(assert, next) {
-            //todo
+            //TODO
             next();
         },
         function testGetChannel(assert, next) {
