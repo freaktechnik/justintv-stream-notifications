@@ -56,8 +56,9 @@ addon.port.on("setOffline", function(channel) {
     makeChannelOffline(channel);
 });
  
+addon.port.on("resize", resize);
+
 function resize() {
-    //TODO fixaroo
     var h = document.querySelector(".tabbed").scrollHeight < addon.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : addon.options.maxHeight;
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 }
