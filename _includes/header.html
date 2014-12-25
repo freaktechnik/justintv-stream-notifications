@@ -2,9 +2,9 @@
 
   <div class="wrapper">
     {% if site.title == page.title %}
-      <a class="site-title active" href="{{ site.baseurl }}/">
+      <a class="site-title active" href="{{ site.baseurl }}/" rel="index">
     {% else %}
-      <a class="site-title" href="{{ site.baseurl }}/">
+      <a class="site-title" href="{{ site.baseurl }}/" rel="index">
     {% endif %}
     {{ site.title }}</a>
     <nav class="site-nav">
