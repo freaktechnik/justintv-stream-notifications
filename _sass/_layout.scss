@@ -17,8 +17,7 @@
     float: left;
     padding: 0 8px;
 
-    &,
-    &:visited {
+    &, &:visited, &:hover {
         color: $brand-text;
     }
 
