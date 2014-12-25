@@ -41,7 +41,7 @@ Refreshing the channels a user follows
  - Select the user to refresh the folowees of
  - Hit the "Refresh" button in the toolbar
 
-Not that this will never remove a channel. This is also done every so often for each user in the background while the browser is running.
+Note that this will never remove a channel. This is also done every so often for each user in the background while the browser is running.
 
 I removed a channel and now a user is gone
 ------------------------------------------
