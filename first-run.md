@@ -19,7 +19,7 @@ In the channels manager you can add channels directly, add all channels a user f
 How do I go to the settings?
 ----------------------------
  - Open the Add-ons manager in Firefox. To open it, click on the menu button and then "Add-ons" or open a new tab and type `about:addons`.
- - In the add-ons manager you click on the "Options" button for "Stream Notifier".
+ - In the add-ons manager you click on the "Options" button for "Live Stream Notifier".
  - That's it! You are now on the settings page!
 
 This extension is missing a supercool feature!
