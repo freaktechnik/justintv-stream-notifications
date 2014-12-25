@@ -11,7 +11,8 @@ exports.testProviders = function(assert) {
         provider = providers[p];
         assert.equal(typeof(provider.name), "string", "Name is a string");
         assert.equal(provider.name, provider.toString(), "toString and name return the same");
-        assert.ok(isValidURI(provider.authURL), "Auth URL is an URI");
+        assert.ok(Array.isArray(provider.authURL), "Auth URL is an Array");
+        assert.ok(provider.authURL.every(url => isValidURI(url)), "Auth URLs are valid");
         assert.equal(typeof(provider.getUserFavorites), "function", "getUserFavorites is implemented");
         assert.equal(typeof(provider.getChannelDetails), "function", "getChannelDetails is implemented");
         assert.equal(typeof(provider.updateRequest), "function", "updateRequest is implemented");
