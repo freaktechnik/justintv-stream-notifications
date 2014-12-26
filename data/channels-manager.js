@@ -35,7 +35,6 @@ self.port.on("initdata", function(options){
         var option = document.createElement("option");
         option.value = provider;
         option.innerHTML = providers[provider].name;
-        option.dataset.favorites = providers[provider].supports.favorites;
         providerDropdown.appendChild(option);
     }
 
@@ -80,6 +79,7 @@ if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbe
 }
 else
     checkUser();
+updateSelect();
     
 document.addEventListener("keypress", function(evt) {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
@@ -112,6 +112,7 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", function(ev
         document.querySelector(".toolbar").setAttribute("aria-controls", "users");
         checkUser();
     }
+    updateSelect();
 });
 
 document.querySelector("#autoAdd").addEventListener("click", function(evt) {
@@ -195,6 +196,7 @@ function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
 }
 
+//TODO Disabling options doesn't make them unselectable :(
 function showOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
@@ -205,17 +207,22 @@ function showOptions() {
 function hideOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
-        if(!providers[options[i].value].supports.favorites)
+        console.log(options[i].value);
+        if(!providers[options[i].value].supports.favorites) {
             options[i].disabled = true;
+        }
     }
 }
 
-document.querySelector("#channelRadio").addEventListener("change", function() {
-    if(document.querySelector("#channelRadio").checked)
+function updateSelect() {
+    if(popup.querySelector("#channelRadio").checked)
         showOptions();
     else
-        hodeOptions();
-});
+        hideOptions();
+}
+
+document.querySelector("#channelRadio").addEventListener("change", updateSelect);
+document.querySelector("#userRadio").addEventListener("change", updateSelect);
 
 popup.querySelector("input[type='button']").addEventListener("click", function(evt) {
     hideDialog();
