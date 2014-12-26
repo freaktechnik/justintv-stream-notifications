@@ -35,6 +35,7 @@ self.port.on("initdata", function(options){
         var option = document.createElement("option");
         option.value = provider;
         option.innerHTML = providers[provider].name;
+        option.dataset.favorites = providers[provider].supports.favorites;
         providerDropdown.appendChild(option);
     }
 
@@ -115,7 +116,8 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", function(ev
 
 document.querySelector("#autoAdd").addEventListener("click", function(evt) {
     for(var provider in providers) {
-        self.port.emit("autoadd", provider);
+        if(provider.supports.credentials)
+            self.port.emit("autoadd", provider);
     }
 });
 
@@ -192,6 +194,28 @@ function hideDialog() {
 function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
 }
+
+function showOptions() {
+    var options = document.querySelector("#providerDropdown").options;
+    for(var i = 0; i < options.length; ++i) {
+        options[i].disabled = false;
+    }
+}
+
+function hideOptions() {
+    var options = document.querySelector("#providerDropdown").options;
+    for(var i = 0; i < options.length; ++i) {
+        if(!providers[options[i].value].supports.favorites)
+            options[i].disabled = true;
+    }
+}
+
+document.querySelector("#channelRadio").addEventListener("change", function() {
+    if(document.querySelector("#channelRadio").checked)
+        showOptions();
+    else
+        hodeOptions();
+});
 
 popup.querySelector("input[type='button']").addEventListener("click", function(evt) {
     hideDialog();
