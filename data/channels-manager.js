@@ -32,10 +32,7 @@ self.port.on("initdata", function(options){
 
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var provider in providers) {
-        var option = document.createElement("option");
-        option.value = provider;
-        option.innerHTML = providers[provider].name;
-        providerDropdown.appendChild(option);
+        providerDropdown.appendChild(new Option(providers[provider].name, provider));
     }
 
     options.channels.forEach(function(channel) {
@@ -196,7 +193,6 @@ function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
 }
 
-//TODO Disabling options doesn't make them unselectable :(
 function showOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
@@ -207,9 +203,9 @@ function showOptions() {
 function hideOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
-        console.log(options[i].value);
         if(!providers[options[i].value].supports.favorites) {
-            options[i].disabled = true;
+            //options[i].disabled = true;
+            options[i].setAttribute("disabled", true);
         }
     }
 }

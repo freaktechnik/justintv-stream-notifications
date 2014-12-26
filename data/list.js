@@ -175,6 +175,8 @@ function addChannel(channel) {
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
     insertChannel(channel, channelNode);
     hideNoChannels();
+    if(channel.live)
+        hideNoOnline();
 }
 
 function removeChannel(channelId) {
