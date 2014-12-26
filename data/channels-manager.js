@@ -204,8 +204,7 @@ function hideOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
         if(!providers[options[i].value].supports.favorites) {
-            //options[i].disabled = true;
-            options[i].setAttribute("disabled", true);
+            options[i].disabled = true;
         }
     }
 }
