@@ -205,6 +205,7 @@ function hideOptions() {
     for(var i = 0; i < options.length; ++i) {
         if(!providers[options[i].value].supports.favorites) {
             options[i].disabled = true;
+            options[i].selected = false;
         }
     }
 }
