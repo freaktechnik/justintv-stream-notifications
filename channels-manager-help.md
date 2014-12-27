@@ -4,15 +4,13 @@
   layout: page
   group: navigation
 ---
-Adding a singe channel
-----------------------
+## Adding a singe channel
  - Click the "Add..." button on the left end of the toolbar
  - Select "Channel" in the popup
  - Enter the channel's username in the "Username" textfield
  - Click "Ok"
 
-Adding the channels a user follows
-----------------------------------
+## Adding the channels a user follows
  - Click the "Add..." button on the left end of the toolbar
  - Select "User" in the popup
  - Enter the user's username in the "Username" textfield
@@ -30,8 +28,7 @@ If you can change the settings of the user you want to add the subscriptions of 
 
 Live Stream Notifier should now be able to fetch this account's subscriptions.
 
-What's the "username" for...
--------------------------
+## What's the "username" for...
 ### Twitch
 The channel username, it's in the URL and below the stream. Case doesn't matter.
 ### Hitbox
@@ -41,38 +38,32 @@ The channel page URL without the `http://ustream.tv/` part. The extension curren
 ### YouTube
 The channel username, which is normally the URL for the channel without the `http://youtube.com/user/` part. The extension currently can't handle adding IDs directly.
 
-Automatically add channels I follow
---------------------------------
+## Automatically add channels I follow
  - Switch to the "Users" tab at the top
  - Click the "Auto add" button
 
 Note that this currently only works with Twitch due to API restrictions with the other providers.
 
-Remove a channel
-----------------
+## Remove a channel
  - Switch to the "Channels" tab at the top
  - Select channel in the list by clicking on it
  - Click the "Remove" button in the toolbar or hit the `Delete` key
 
-Remove a user
--------------
+## Remove a user
  - Switch to the "Users" tab at the top
  - Select the user to remove by clicking on it
  - Click the "Remove" button in the toolbar or hit the `Delete` key
 
-Refreshing the channels a user follows
---------------------------------------
+## Refreshing the channels a user follows
  - Switch to the "Users" tab at the top
  - Select the user to refresh the folowees of
  - Hit the "Refresh" button in the toolbar
 
 Note that this will never remove a channel. This is also done every so often for each user in the background while the browser is running.
 
-I removed a channel and now a user is gone
-------------------------------------------
+## I removed a channel and now a user is gone
 If a user follows a channel and the channel is removed, the user is removed too, because the channel would be re-added if the user's folowees would be refreshed.
 
-Removing multiple items
------------------------
+## Removing multiple items
 You can select multiple items in the channels or users list with the `Shift` and `Ctrl` key modifiers, as well as using `Ctrl`+`A`.
 
