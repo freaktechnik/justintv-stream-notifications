@@ -186,3 +186,19 @@ a {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
 }
 
+#live.thumbnail .livestream a div {
+    background: -moz-linear-gradient(center top, rgba(59, 59, 59, 0.7) 0%,
+        rgba(56, 56, 56, 0.7) 16%, rgba(30, 30, 30, 0.7) 80%,
+        rgba(25, 25, 25, 0.7) 98%, rgba(0, 0, 0, 0.7) 100%);
+    color: #FFF;
+}
+
+.livestream a:hover, .thumbnail .livestream a:hover div {
+    background: -moz-linear-gradient(center top, rgb(59, 59, 59) 0%,
+        rgb(56, 56, 56) 16%, rgb(30, 30, 30) 80%,
+        rgb(25, 25, 25) 98%, rgb(0, 0, 0) 100%) !important;
+    color: #FFF !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+
