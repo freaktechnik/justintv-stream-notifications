@@ -13,7 +13,7 @@ To open about:confg, open a new tab and enter `about:config` into the URL-bar. I
 
 Available Settings
 ------------------ 
-Live Stream Notifier offers the following hidden settings:
+Live Stream Notifier offers the following hidden settings in the `extensions.jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack` branch:
 
  - `queue_ratio` (Default: 2) Defines the part of the queue fetched minimally at a time. It will always fetch at least one request. The value is reciproke to the actual used ratio.
  - `queue_maxRequestBatchSize` (Default: 8) The maximal number of requests fetched at once.
@@ -21,4 +21,6 @@ Live Stream Notifier offers the following hidden settings:
  - `panel_maxHeight`(Default: 400) The maximal height in pixels of the panel.
  - `twitch_clientID` Twitch developer application client ID.
  - `youtube_apiKey` YouTube public application API key.
+
+Any other settings in this branch are either available through the add-on settings in the add-ons manager or no longer have any effect.
 
