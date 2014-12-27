@@ -275,7 +275,7 @@ function addChannel(channel) {
             small       = document.createElement("small"),
             span        = document.createElement("span"),
             title       = document.createTextNode(channel.uname),
-            type        = document.createTextNode(channel.type);
+            type        = document.createTextNode(providers[channel.type].name);
         image.src       = getBestImageForSize(channel, 50);
         channelNode.id  = "channel"+channel.id;
         small.appendChild(type);
@@ -294,7 +294,7 @@ function addUser(user) {
             small    = document.createElement("small"),
             span     = document.createElement("span"),
             title    = document.createTextNode(user.uname),
-            type     = document.createTextNode(user.type);
+            type     = document.createTextNode(providers[user.type].name);
         image.src    = getBestImageForSize(user, 50);
         userNode.id  = "user"+user.id;
         small.appendChild(type);
