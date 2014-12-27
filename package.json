@@ -15,6 +15,7 @@
         {"type": "integer", "name": "panel_maxHeight",            "title": "Maximum Panel height", "value": 400,  "hidden": true},
 
         {"type": "string",  "name": "twitch_clientId",            "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden": true},
+        {"type": "string",  "name": "youtube_apiKey",             "title": "YouTube API Key",  "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM", "hidden": true},
         
         {"type": "string",  "name": "twitchchannelList",          "title": "Twitch Channels",      "hidden": true},
         {"type": "string",  "name": "twitchusernameList",         "title": "Twitch Users",         "hidden": true},
