@@ -1,4 +1,4 @@
-# Justin.tv Stream Notifications
+# Live Stream Notifier
 [![Travis CI Builds](https://travis-ci.org/freaktechnik/justintv-stream-notifications.svg)](https://travis-ci.org/freaktechnik/justintv-stream-notifications)
 
 This is an add-on for Firefox, based on the Mozilla add-on SDK.
