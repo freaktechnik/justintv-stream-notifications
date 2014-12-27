@@ -18,10 +18,35 @@ Adding the channels a user follows
  - Enter the user's username in the "Username" textfield
  - Hit "Ok"
 
+Sadly not all APIs allow the extension to get the channels a user follows. And there's the special case YouTube:
+
+### It doesn't fetch the subscriptions of this YouTube user
+On YouTube, you can define if your subscriptions are public or not. The add-on can only read them if they are set to public.
+If you can change the settings of the user you want to add the subscriptions of follow these steps:
+
+ - Go to the [YouTube privacy settings](https://www.youtube.com/account_privacy)
+ - Uncheck the second checkbox "Mark all my subscriptions as private"
+ - Save the settings by hitting the save button at the top of the page
+
+Live Stream Notifier should now be able to fetch this account's subscriptions.
+
+What's the "username" for...
+-------------------------
+### Twitch
+The channel username, it's in the URL and below the stream. Case doesn't matter.
+### Hitbox
+The channel username, it's in the URL and below the stream.
+### Ustream
+The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
+### YouTube
+The channel username, which is normally the URL for the channel without the `http://youtube.com/user/` part. The extension currently can't handle adding IDs directly.
+
 Automatically add channels I follow
------------------------------------
+--------------------------------
  - Switch to the "Users" tab at the top
  - Click the "Auto add" button
+
+Note that this currently only works with Twitch due to API restrictions with the other providers.
 
 Remove a channel
 ----------------
