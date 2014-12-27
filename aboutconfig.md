@@ -20,4 +20,5 @@ Live Stream Notifier offers the following hidden settings:
  - `panel_minWidth` (Default: 320) The minimal width in pixels of the panel.
  - `panel_maxHeight`(Default: 400) The maximal height in pixels of the panel.
  - `twitch_clientID` Twitch developer application client ID.
+ - `youtube_apiKey` YouTube public application API key.
 
