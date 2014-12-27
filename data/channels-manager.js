@@ -32,7 +32,7 @@ self.port.on("initdata", function(options){
 
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var provider in providers) {
-        providerDropdown.appendChild(new Option(providers[provider].name, provider));
+        providerDropdown.add(new Option(providers[provider].name, provider));
     }
 
     options.channels.forEach(function(channel) {
