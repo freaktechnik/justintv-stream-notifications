@@ -29,12 +29,16 @@ If you can change the settings of the user you want to add the subscriptions of 
 Live Stream Notifier should now be able to fetch this account's subscriptions.
 
 ## What's the "username" for...
+
 ### Twitch
 The channel username, it's in the URL and below the stream. Case doesn't matter.
+
 ### Hitbox
 The channel username, it's in the URL and below the stream.
+
 ### Ustream
 The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
+
 ### YouTube
 The channel username, which is normally the URL for the channel without the `http://youtube.com/user/` part. The extension currently can't handle adding IDs directly.
 
