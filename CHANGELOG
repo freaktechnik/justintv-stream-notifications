@@ -93,4 +93,5 @@ changelog
     - Channels and users are now saved in a database instead of a plaintext file
     - Nearly every line of code in the extension has been rewritten
     - A completely new website
+    - Added support for Hitbox, Ustream and YouTube
 
