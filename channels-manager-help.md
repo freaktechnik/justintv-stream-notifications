@@ -36,6 +36,9 @@ The channel username, it's in the URL and as link-text to the profile above the 
 ### Hitbox
 The channel username, it's in the URL and below the stream.
 
+### Livestream
+The channel username on the classic livestream service, visible in the channel's URL.
+
 ### Ustream
 The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
 
