@@ -114,7 +114,7 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", function(ev
 
 document.querySelector("#autoAdd").addEventListener("click", function(evt) {
     for(var provider in providers) {
-        if(provider.supports.credentials)
+        if(providers[provider].supports.credentials)
             self.port.emit("autoadd", provider);
     }
 });
