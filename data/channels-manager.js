@@ -246,19 +246,25 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
 });
 
 function getBestImageForSize(user, size) {
+    size = parseInt(size, 10);
     // shortcut if there's an image with the size demanded
     if(user.image.hasOwnProperty(size.toString())) {
         return user.image[size];
     }
     
     // search next biggest image
-    var index = Number.MAX_VALUE;
+    var index = Number.MAX_VALUE, biggest = 0;
     Object.keys(user.image).forEach(function(s) {
         s = parseInt(s, 10);
-        if(s > size && s < index) {
+        if(s > size && s < index)
             index = s;
-        }
+        if(s > biggest)
+            biggest = s;
     });
+
+    if(index > biggest)
+        index = biggest;
+    
     return user.image[index];
 }
 
