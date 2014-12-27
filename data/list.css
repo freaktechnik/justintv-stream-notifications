@@ -144,14 +144,20 @@ a {
 }
 
 /* Type specific styles */
+
+#live.thumbnail .twitch  a div {
+    background: rgba(117, 80, 186, 0.7);
+    color: white;
+}
+
 .twitch a:hover, .thumbnail .twitch a:hover div {
     background: #7550BA !important;
     color: white !important;
 }
 
-#live.thumbnail .twitch  a div {
-    background: rgba(117, 80, 186, 0.7);
-    color: white;
+#live.thumbnail .hitbox a div {
+    background: rgba(20, 20, 20, 0.7);
+    color: #E6E6E6;
 }
 
 .hitbox a:hover, .thumbnail .hitbox a:hover div {
@@ -159,7 +165,13 @@ a {
     color: #E6E6E6 !important;
 }
 
-#live.thumbnail .hitbox a div {
-    background: rgba(20, 20, 20, 0.7);
-    color: #E6E6E6;
+#live.thumbnail .ustream a div {
+    background: rgba(255, 255, 255, 0.7);
+    color: #303030;
 }
+
+.ustream a:hover, .thumbnail .ustream a:hover div {
+    background: -moz-linear-gradient(center top , white 80%, #FAFAFA 100%) !important;
+    color: #303030 !important;
+}
+
