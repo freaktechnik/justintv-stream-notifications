@@ -31,7 +31,7 @@ Live Stream Notifier should now be able to fetch this account's subscriptions.
 ## What's the "username" for...
 
 ### Twitch
-The channel username, it's in the URL and below the stream. Case doesn't matter.
+The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
 
 ### Hitbox
 The channel username, it's in the URL and below the stream.
