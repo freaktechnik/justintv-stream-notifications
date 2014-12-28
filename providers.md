@@ -7,7 +7,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 Azubu
 -----
-[!icon]()[Azubu](http://azubu.tv) is an eSports streaming platform.
+![Azubu icon]()[Azubu](http://azubu.tv) is an eSports streaming platform.
 
 ### Features
 
@@ -21,7 +21,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
 
 Hitbox
 ------
-[!icon]()[Hitbox](http://hitbox.tv) is a pretty new game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
+![Hitbox icon]()[Hitbox](http://hitbox.tv) is a pretty new game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
 
 ### Features
 
@@ -32,7 +32,7 @@ Hitbox
 
 Livestream
 ----------
-[!icon]()[Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
+![Livestream icon]()[Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
 ### Features
 
@@ -42,7 +42,7 @@ Livestream
 
 MLG.tv
 ------
-[!icon]()[MLG.tv](http://tv.moajorleaguegaming.com) is another eSports streaming platform.
+![Majorleaguegaming icon]()[MLG.tv](http://tv.moajorleaguegaming.com) is another eSports streaming platform.
 
 ### Features
 
@@ -53,7 +53,7 @@ MLG.tv
 
 Twitch
 ------
-[!icon]()[Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
+![Twitch icon]()[Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
 
 ### Features
 
@@ -66,7 +66,7 @@ Twitch
 
 Ustream
 -------
-[!icon]()[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
+![Ustream icon]()[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
 
 ### Features
 
@@ -76,7 +76,7 @@ Ustream
 
 YouTube
 -------
-[!icon]()[YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
+![YouTube icon]()[YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
 
 ### Features
 
