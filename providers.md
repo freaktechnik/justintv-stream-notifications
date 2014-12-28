@@ -52,7 +52,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Separate chat page
  - Monitoring the status of channels
 
-![Twitch icon](/img/twitch-icon.png) Twitch
+![Twitch](/img/twitch-icon.png)
 ------
 [Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
 
