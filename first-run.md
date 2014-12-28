@@ -11,9 +11,13 @@ But now don't just close this page! It is here to help you getting started with 
 Get started
 -----------
 First thing to do is adding the channels you'd like to get notified about.
-The easiest way is by having your Twitch username saved in the Firefox password manager.
-You don't have an account for twitch? No problem, you can also enter a list of channels the add-on should check in the channels manager.
-To add the channels, open the channels manager either via the panel or the extension settings.
+
+The easiest way is to have the Add-on guess your favorite channels by looking at your logins, however this only works for a few of the available [providers](/providers/) and still needs a click on a button in the channels manager.
+
+You don't have an account for Twitch or any of the other [providers](/providers/)? No problem, you can also enter a list of channels the add-on should check in the channels manager.
+
+To add channels, open the channels manager either via the panel or the extension settings.
+
 In the channels manager you can add channels directly, add all channels a user follows or automatically add all the followed channels of all users you've saved the credentials for in Firefox.
 
 How do I go to the settings?
