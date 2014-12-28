@@ -2,6 +2,7 @@
   title: Providers
   permalink: /providers/
   layout: page
+  group: navigation
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
