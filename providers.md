@@ -5,9 +5,9 @@
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
-Azubu
+![Azubu icon](/img/azubu.png)
 -----
-![Azubu icon]()[Azubu](http://azubu.tv) is an eSports streaming platform.
+[Azubu](http://azubu.tv) is an eSports streaming platform.
 
 ### Features
 
@@ -19,9 +19,10 @@ Azubu
 
 Sadly, it's not possible to get the user's avatars, so all Azubu channels have the same icon.
 
-Hitbox
+![Hitbox icon](/img/hitbox-icon.png) Hitbox
 ------
-![Hitbox icon]()[Hitbox](http://hitbox.tv) is a pretty new game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
+
+[Hitbox](http://hitbox.tv) is a pretty new game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
 
 ### Features
 
@@ -30,9 +31,9 @@ Hitbox
  - Separate chat page
  - Monitoring the status of channels
 
-Livestream
+![Livestream icon](/img/livestream-logo.png)
 ----------
-![Livestream icon]()[Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
+[Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
 ### Features
 
@@ -40,9 +41,9 @@ Livestream
  - Separate chat page
  - Monitoring the status of channels
 
-MLG.tv
+![Majorleaguegaming icon](/img/mlg-logo.png)
 ------
-![Majorleaguegaming icon]()[MLG.tv](http://tv.moajorleaguegaming.com) is another eSports streaming platform.
+[MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform.
 
 ### Features
 
@@ -51,9 +52,9 @@ MLG.tv
  - Separate chat page
  - Monitoring the status of channels
 
-Twitch
+![Twitch icon](/img/twitch-icon.png)
 ------
-![Twitch icon]()[Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
+[Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
 
 ### Features
 
@@ -64,9 +65,9 @@ Twitch
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
 
-Ustream
+![Ustream icon](/img/ustream.png)
 -------
-![Ustream icon]()[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
+[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
 
 ### Features
 
@@ -74,9 +75,9 @@ Ustream
  - Separate chat page
  - Monitoring the status of channels
 
-YouTube
+![YouTube icon](/img/YouTube-logo-full_color.png)
 -------
-![YouTube icon]()[YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
+[YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
 
 ### Features
 
