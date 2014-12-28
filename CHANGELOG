@@ -94,4 +94,5 @@ changelog
     - Nearly every line of code in the extension has been rewritten
     - A completely new website
     - Added support for Hitbox, Ustream, Livestream and YouTube
+    - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
 
