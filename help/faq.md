@@ -1,9 +1,8 @@
 ---
   layout: page
   title: FAQ
-  permalink: /faq/
+  permalink: /help/faq/
   redirect_from: /faq.html
-  group: navigation
 ---
 I've just encountered a bug!
 ----------------------------

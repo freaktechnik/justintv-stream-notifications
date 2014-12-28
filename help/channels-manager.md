@@ -1,8 +1,7 @@
 ---
   title: Channels Manager Help
-  permalink: /channels-manager-help/
+  permalink: /help/channels-manager/
   layout: page
-  group: navigation
 ---
 ## Adding a singe channel
  - Click the "Add..." button on the left end of the toolbar
@@ -30,14 +29,20 @@ Live Stream Notifier should now be able to fetch this account's subscriptions.
 
 ## What's the "username" for...
 
-### Twitch
-The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
+### Azubu
+The username, however it is case sensitive.
 
 ### Hitbox
 The channel username, it's in the URL and below the stream.
 
 ### Livestream
 The channel username on the classic livestream service, visible in the channel's URL.
+
+### MLG.tv
+The channel page URL without the `http://tv.majorleaguegaming.com/channel/` part.
+
+### Twitch
+The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
 
 ### Ustream
 The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
@@ -49,7 +54,7 @@ The channel username, which is normally the URL for the channel without the `htt
  - Switch to the "Users" tab at the top
  - Click the "Auto add" button
 
-Note that this currently only works with Twitch due to API restrictions with the other providers.
+Note that this currently only works with Twitch and Azubu due to API restrictions with the other providers.
 
 ## Remove a channel
  - Switch to the "Channels" tab at the top
