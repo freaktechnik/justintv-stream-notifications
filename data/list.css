@@ -211,3 +211,13 @@ a {
     color: #FFF !important;
 }
 
+#live.thumbnail .azubu a div {
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFF;
+}
+
+.azubu a:hover, .thumbnail .azubu a:hover div {
+    background: #000 !important;
+    color: #FFF !important;
+}
+
