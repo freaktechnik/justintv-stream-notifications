@@ -31,7 +31,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Separate chat page
  - Monitoring the status of channels
 
-![Livestream icon](/img/livestream-logo.png)
+![Livestream](/img/livestream-logo.png)
 ----------
 [Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
@@ -41,7 +41,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Separate chat page
  - Monitoring the status of channels
 
-![Majorleaguegaming icon](/img/mlg-logo.png)
+![Majorleaguegaming](/img/mlg-logo.png)
 ------
 [MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform.
 
@@ -52,7 +52,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Separate chat page
  - Monitoring the status of channels
 
-![Twitch icon](/img/twitch-icon.png)
+![Twitch icon](/img/twitch-icon.png) Twitch
 ------
 [Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
 
@@ -65,7 +65,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
 
-![Ustream icon](/img/ustream.png)
+![Ustream](/img/ustream.png)
 -------
 [Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
 
@@ -75,7 +75,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu channels have t
  - Separate chat page
  - Monitoring the status of channels
 
-![YouTube icon](/img/YouTube-logo-full_color.png)
+![YouTube](/img/YouTube-logo-full_color.png)
 -------
 [YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
 
