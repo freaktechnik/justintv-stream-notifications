@@ -79,3 +79,6 @@ If a user follows a channel and the channel is removed, the user is removed too,
 ## Removing multiple items
 You can select multiple items in the channels or users list with the `Shift` and `Ctrl` key modifiers, as well as using `Ctrl`+`A`.
 
+## Find a channel or user
+The list of items in a tab can get pretty long. Thanks to the manager bieng like a website, you can use Firefox's "Find in Page" function (shortcut: `Ctrl`+`F`) to search in the channels manager.
+
