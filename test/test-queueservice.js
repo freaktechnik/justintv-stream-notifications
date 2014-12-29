@@ -18,6 +18,8 @@ exports.testQueueService = function(assert) {
     assert.ok(Array.isArray(service.lowPriorityRequestIds));
     assert.equal(service.highPriorityRequestIds.length, 0);
     assert.equal(service.lowPriorityRequestIds.length, 0);
+    assert.ok(service.HIGH_PRIORITY, "QueueService instance exposes HIGH_PRIORITY constant");
+    assert.ok(service.LOW_PRIORITY, "QueueService isntance exposes LOW_PRIORITY constant");
 };
 
 exports.testQueueRequest = function(assert, done) {
