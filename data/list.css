@@ -26,6 +26,10 @@ a {
     margin: 0;
 }
 
+nav {
+    position: sticky;
+    top: 0;
+}
 
 .toolbar li, .tabstrip li {
     display: inline;
