@@ -157,12 +157,12 @@ a {
 
 #live.thumbnail .hitbox a div {
     background: rgba(20, 20, 20, 0.7);
-    color: #E6E6E6;
+    color: #ACE600;
 }
 
 .hitbox a:hover, .thumbnail .hitbox a:hover div {
     background: #141414 !important;
-    color: #E6E6E6 !important;
+    color: #ACE600 !important;
 }
 
 #live.thumbnail .ustream a div {
@@ -213,11 +213,11 @@ a {
 
 #live.thumbnail .azubu a div {
     background: rgba(0, 0, 0, 0.7);
-    color: #FFF;
+    color: #3693E0;
 }
 
 .azubu a:hover, .thumbnail .azubu a:hover div {
     background: #000 !important;
-    color: #FFF !important;
+    color: #3693E0 !important;
 }
 
