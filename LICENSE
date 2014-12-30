@@ -1,3 +1,18 @@
 The files which make up this extension are developed by Martin Giger and licensed
 under the MPL 2.0 (http://mozilla.org/MPL/2.0/).
 
+# Font license info for the font embedded in data/list.css:
+
+## Font Awesome
+
+   Copyright (C) 2012 by Dave Gandy
+
+   Author:    Dave Gandy
+   License:   SIL ()
+   Homepage:  http://fortawesome.github.com/Font-Awesome/
+
+# Images
+
+The data/azubu.png belongs to http://azubu.tv.
+The other image files (data/iconXX.png and data/offlineXX.png) were created by Martin Giger.
+

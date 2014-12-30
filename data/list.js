@@ -11,6 +11,7 @@ window.addEventListener("load", function() {
     live    = document.getElementById("live");
     offline = document.getElementById("offline");
     setStyle(addon.options.style);
+    setExtrasVisibility(addon.options.extras);
     resize();
     document.getElementById("configure").addEventListener("click", function(e) {
         e.preventDefault();
@@ -39,6 +40,10 @@ window.addEventListener("load", function() {
 // Set up port commmunication listeners
 addon.port.on("setStyle", function(style) {
     setStyle(style);
+});
+
+addon.port.on("setExtras", function(visible) {
+    setExtrasVisibility(visible);
 });
 
 addon.port.on("addChannels", function(channels) {
@@ -93,6 +98,13 @@ function setStyle(style) {
     resize();
 }
 
+function setExtrasVisibility(visible) {
+    if(visible)
+        live.classList.add("extras");
+    else
+        live.classList.remove("extras");
+}
+
 // Find the node to inser before in order to keep the list sorted
 function findInsertionNodeIn(list, name) {
     var node = list.firstElementChild;
@@ -138,6 +150,14 @@ function addChannel(channel) {
                 <img src="avatar">
                 <span class="name">ChannelName</span><br>
                 <span class="title">ChannelTitle</span>
+                <aside>
+                    <span class="viewersWrapper">
+                        <span class="icon">v</span>&nbsp;<span class="viewers">0</span>
+                    </span>&nbsp;
+                    <span class="categoryWrapper">
+                        <span class="icon">c</span>&nbsp;<span class="category">Category</span>
+                    </span>
+                </aside>
             </div>
         </a>
     </li>
@@ -151,7 +171,14 @@ function addChannel(channel) {
         titleSpan     = document.createElement("span"),
         avatar        = new Image(),
         thumbnail     = new Image(),
-        wrapper       = document.createElement("div");
+        wrapper       = document.createElement("div"),
+        extra         = document.createElement("aside"),
+        viewersWrapper = document.createElement("span"),
+        viewersIcon   = document.createElement("span"),
+        viewers       = document.createElement("span"),
+        categoryWrapper = document.createElement("span"),
+        categoryIcon  = document.createElement("span"),
+        category      = document.createElement("span");
     avatar.src        = getBestImageForSize(channel, 30);
     thumbnail.src     = channel.thumbnail;
     spanName.appendChild(name);
@@ -162,6 +189,33 @@ function addChannel(channel) {
     wrapper.appendChild(spanName);
     wrapper.appendChild(br);
     wrapper.appendChild(titleSpan);
+
+    viewersWrapper.classList.add("viewersWrapper");
+    if(!channel.viewers && channel.viewers != 0)
+        viewersWrapper.classList.add("hidden");
+    viewersIcon.appendChild(document.createTextNode("v"));
+    viewersIcon.classList.add("icon");
+    viewersWrapper.appendChild(viewersIcon);
+    viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
+    viewers.classList.add("viewers");
+    viewers.appendChild(document.createTextNode(channel.viewers));
+    viewersWrapper.appendChild(viewers);
+    extra.appendChild(viewersWrapper);
+    extra.appendChild(document.createTextNode(" "));
+    categoryWrapper.classList.add("categoryWrapper");
+    if(!channel.category)
+        categoryWrapper.classList.add("hidden");
+    categoryIcon.appendChild(document.createTextNode("c"));
+    categoryIcon.classList.add("icon");
+    categoryWrapper.appendChild(categoryIcon);
+    categoryWrapper.appendChild(document.createTextNode("\u00a0"));
+    category.classList.add("category");
+    category.appendChild(document.createTextNode(channel.category));
+    categoryWrapper.appendChild(category);
+    extra.appendChild(categoryWrapper);
+
+    wrapper.appendChild(extra);
+
     link.appendChild(thumbnail);
     link.appendChild(wrapper);
     link.setAttribute("contextmenu", CONTEXTMENU_ID);
@@ -195,9 +249,24 @@ function removeChannel(channelId) {
 function updateNodeContent(channel) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
         titleNode = channelNode.querySelector(".title"),
-        titleText = document.createTextNode(channel.title);
+        titleText = document.createTextNode(channel.title),
+        viewers = channelNode.querySelector(".viewers"),
+        category = channelNode.querySelector(".category");
     titleNode.replaceChild(titleText, titleNode.firstChild);
+    
+    viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
+    if(!channel.viewers && channel.viewers != 0)
+        channelNode.querySelector(".viewersWrapper").classList.add("hidden");
+    else
+        channelNode.querySelector(".viewersWrapper").classList.remove("hidden");
+    category.replaceChild(document.createTextNode(channel.category), category.firstChild);
+    if(!channel.category)
+        channelNode.querySelector(".categoryWrapper").classList.add("hidden");
+    else
+        channelNode.querySelector(".categoryWrapper").classList.remove("hidden");
+
     channelNode.querySelector("a>img").src = channel.thumbnail;
+    channelNode.querySelector("a div img").src = getBestImageForSize(channel, 30);
 }
 
 function makeChannelLive(channel) {
