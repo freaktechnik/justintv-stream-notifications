@@ -7,72 +7,72 @@ var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
 const CONTEXTMENU_ID    = "context";
 
-window.addEventListener("load", function() {
+//window.addEventListener("load", function() {
     live    = document.getElementById("live");
     offline = document.getElementById("offline");
-    setStyle(addon.options.style);
-    setExtrasVisibility(addon.options.extras);
+    setStyle(self.options.style);
+    setExtrasVisibility(self.options.extras);
     resize();
     document.getElementById("configure").addEventListener("click", function(e) {
         e.preventDefault();
-        addon.port.emit("configure");
+        self.port.emit("configure");
     });
     document.getElementById("refreshButton").addEventListener("click", function(e) {
         e.preventDefault();
-        addon.port.emit("refresh");
+        self.port.emit("refresh");
     });
     document.getElementById("contextRefresh").addEventListener("click", function() {
-        addon.port.emit("refresh", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        self.port.emit("refresh", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
     });
     document.getElementById("contextOpen").addEventListener("click", function() {
-        addon.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        self.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
         currentMenuTarget = null;
     });
     document.getElementById("contextChat").addEventListener("click", function() {
-        addon.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        self.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
     });
     document.querySelector(".tabbed").addEventListener("tabchanged", function() {
         resize();
     });
- });
+//});
 
 // Set up port commmunication listeners
-addon.port.on("setStyle", function(style) {
+self.port.on("setStyle", function(style) {
     setStyle(style);
 });
 
-addon.port.on("setExtras", function(visible) {
+self.port.on("setExtras", function(visible) {
     setExtrasVisibility(visible);
 });
 
-addon.port.on("addChannels", function(channels) {
+self.port.on("addChannels", function(channels) {
     channels.forEach(function(channel) {
         addChannel(channel);
     });
 });
 
-addon.port.on("removeChannel", function(channelId) {
+self.port.on("removeChannel", function(channelId) {
     removeChannel(channelId);
 });
 
-addon.port.on("setOnline", function(channel) {
+self.port.on("setOnline", function(channel) {
     makeChannelLive(channel);
 });
 
-addon.port.on("setOffline", function(channel) {
+self.port.on("setOffline", function(channel) {
     makeChannelOffline(channel);
 });
  
-addon.port.on("resize", resize);
+self.port.on("resize", resize);
 
 function resize() {
-    var h = document.querySelector(".tabbed").scrollHeight < addon.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : addon.options.maxHeight;
-    addon.port.emit("resize", [addon.options.panelWidth, h]);
+    var h = document.querySelector(".tabbed").scrollHeight < self.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : self.options.maxHeight;
+    self.port.emit("resize", [self.options.panelWidth, h]);
 }
 
 function open(channelId) {
-    addon.port.emit("open", channelId);
+    self.port.emit("open", channelId);
 }
 
 function setStyle(style) {
@@ -237,7 +237,7 @@ function removeChannel(channelId) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
     if(channelNode.parentNode.id = "live" && live.childElementCount < 2) {
         displayNoOnline();
-        addon.port.emit("offline");
+        self.port.emit("offline");
     }
     channelNode.remove();
     if(live.childElementCount == 0 && offline.childElementCount == 0) {
@@ -279,7 +279,7 @@ function makeChannelLive(channel) {
 function makeChannelOffline(channel) {
     insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     if(live.childElementCount == 0) {
-        addon.port.emit("offline");
+        self.port.emit("offline");
         displayNoOnline();
     }
 }
@@ -300,3 +300,12 @@ function displayNoChannels() {
     displayNoOnline();
     show(document.getElementById("nochannels"));
 }
+
+function hide(el) {
+    el.classList.add("hidden");
+}
+
+function show(el) {
+    el.classList.remove("hidden");
+}
+
