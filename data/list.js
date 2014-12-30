@@ -235,7 +235,7 @@ function addChannel(channel) {
 
 function removeChannel(channelId) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
-    if(channelNode.parentNode.id = "live" && live.childElementCount < 2) {
+    if("live" == channelNode.parentNode.id && live.childElementCount < 2) {
         displayNoOnline();
         addon.port.emit("offline");
     }
