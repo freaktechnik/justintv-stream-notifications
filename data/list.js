@@ -265,8 +265,8 @@ function updateNodeContent(channel) {
     else
         channelNode.querySelector(".categoryWrapper").classList.remove("hidden");
 
-    channelNode.querySelector("a>img").src = channel.thumbnail;
-    channelNode.querySelector("a div img").src = getBestImageForSize(channel, 30);
+    channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
+    channelNode.querySelector("a div img").setAttribute("src", getBestImageForSize(channel, 30));
 }
 
 function makeChannelLive(channel) {
