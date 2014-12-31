@@ -18,8 +18,8 @@
         {"type": "string",  "name": "twitch_clientId",            "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden": true},
         {"type": "string",  "name": "youtube_apiKey",             "title": "YouTube API Key",  "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM", "hidden": true},
         
-        {"type": "string",  "name": "twitchchannelList",          "title": "Twitch Channels",      "hidden": true},
-        {"type": "string",  "name": "twitchusernameList",         "title": "Twitch Users",         "hidden": true},
+        {"type": "string",  "name": "twitchchannelList",          "title": "Twitch Channels",      "value":"", "hidden": true},
+        {"type": "string",  "name": "twitchusernameList",         "title": "Twitch Users",         "value":"", "hidden": true},
         {"type": "bool",    "name": "autoUsername",               "title": "Auto detect username", "hidden": true}
     ],
     "icon64": "data/icon64.png",
