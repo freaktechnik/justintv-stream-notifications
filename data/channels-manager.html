@@ -11,7 +11,7 @@
         <script type="text/javascript" src="tabbed.js"></script>
         <script type="text/javascript" src="filter.js"></script>
         <script type="text/javascript">
-            var filer = [
+            var filters = [
                 {
                     target: "option",
                     subtarget: "span"
@@ -23,7 +23,7 @@
             ];
             window.addEventListener("load", function() {
                 document.getElementById("searchField").addEventListener("keypress", function() {
-                    filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not(.hidden)"), filter);
+                    filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not(.hidden)"), filters);
                 });
             });
         </script>
