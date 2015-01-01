@@ -23,20 +23,23 @@ function filter(query, root, rules) {
 }
 
 function matches(node, query, rules) {
-    var target = node;
-    return rules.some(function(rule) {
-        rule.attribute = rule.attribute || "textContent";
-        if(rule.subtarget)
-            target = node.querySelector(rule.subtarget);
-        else
-            target = node;
+    var target = node,
+        queries = query.split(" ");
+    return queries.every(function(q) {
+        return rules.some(function(rule) {
+            rule.attribute = rule.attribute || "textContent";
+            if(rule.subtarget)
+                target = node.querySelector(rule.subtarget);
+            else
+                target = node;
 
-        if(rule.attribute == "class") {
-            return checkClasses(target, query);
-        }
-        else {            
-            return target[rule.attribute].toLowerCase().indexOf(query) != -1;
-        }
+            if(rule.attribute == "class") {
+                return checkClasses(target, q);
+            }
+            else {            
+                return target[rule.attribute].toLowerCase().indexOf(q) != -1;
+            }
+        });
     });
 }
 
