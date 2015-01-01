@@ -272,6 +272,15 @@ function getBestImageForSize(user, size) {
     return user.image[index];
 }
 
+var filters = [
+                {
+                    subtarget: "span"
+                },
+                {
+                    subtarget: "small"
+                }
+            ];
+
 function addChannel(channel) {
     /*
         DOM structure:
@@ -299,6 +308,8 @@ function addChannel(channel) {
         channelNode.appendChild(image);
         channelNode.appendChild(span);
         channelNode.appendChild(small);
+        if(!matches(channelNode, document.querySelector("#searchField").value, filters) && users.classList.contains("hidden"))
+            hide(channelNode);
         channels.appendChild(channelNode);
     }
 }
@@ -318,6 +329,8 @@ function addUser(user) {
         userNode.appendChild(image);
         userNode.appendChild(span);
         userNode.appendChild(small);
+        if(!matches(userNode, document.querySelector("#searchField").value, filters) && !users.classList.contains("hidden"))
+            hide(userNode);
         users.appendChild(userNode);
     }
 }

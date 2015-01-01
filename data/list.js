@@ -271,9 +271,8 @@ function addChannel(channel) {
     
     // hide the channel by if it's filtered out atm
     console.log(document.querySelector("#searchField").value);
-    if(matches(channelNode, document.querySelector("#searchField").value, filters)) {
+    if(!matches(channelNode, document.querySelector("#searchField").value, filters))
         hide(channelNode);
-    }
     
     insertChannel(channel, channelNode);
     hideNoChannels();
