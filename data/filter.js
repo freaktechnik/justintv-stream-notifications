@@ -7,24 +7,34 @@
  */
  
 function filter(query, root, rules) {
-    var node;
+    var nodes = root.children;
     if(query)
         query = query.toLowerCase();
 
-    rules.forEach(function(rule) {
-        rule.attribute = rule.attribute || "textContent";
-        node = root.querySelectorAll(rule.target);
-        for(var i = 0; i < node.length; ++i) {
-            if(query) {
-                if(node[i].querySelector(rule.subtarget)[rule.attribute].toLowerCase().indexOf(query) != -1)
-                    show(node[i]);
-                else
-                    hide(node[i]);
-            }
-            else {
-                show(node[i]);
-            }
+    for(var i = 0; i < nodes.length; ++i) {
+        if(query) {
+            if(matches(nodes[i], query, rules)
+                show(nodes[i]);
+            else
+                hode(nodes[i]);
         }
+        else {
+            show(nodes[i]);
+        }
+    }
+}
+
+function matches(node, query, rules) {
+    var target = node;
+    return rules.some(function(rule) {
+        rule.attribute = rule.attribute || "textContent";
+        if(rule.subtarget)
+            target = node.querySelector(rule.subtarget);
+        else
+            target = node;
+        
+        
+        return target[rule.attribute].toLowerCase().indexOf(query) != -1;
     });
 }
  
