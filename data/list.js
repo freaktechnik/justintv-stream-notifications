@@ -56,7 +56,7 @@ window.addEventListener("load", function() {
     var field = document.querySelector("#searchField");
     document.querySelector("#searchButton").addEventListener("click", function() {
         if(field.classList.contains("hidden"))
-            show(filed);
+            show(field);
         else
             hide(field);
     });
