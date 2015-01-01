@@ -59,15 +59,19 @@ window.addEventListener("load", function() {
             show(field);
         else
             hide(field);
+            
+        resize();
     });
     field.addEventListener("keyup", function(e) {
         if(e.key == "Enter") {
             hide(field);
+            resize();
             field.value = "";
         }
         else {
             filter(live, field.value, filters);
             filter(offline, field.value, filters);
+            resize();
         }
     });
  });
