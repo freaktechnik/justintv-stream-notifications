@@ -96,6 +96,9 @@ document.addEventListener("keypress", function(evt) {
         else if(evt.key == "Del") {
             removeSelectedItems();
         }
+        else if(evt.key == "f" && evt.ctrlKey) {
+            document.querySelector("#searchField").select();
+        }
     }
 });
 
