@@ -41,6 +41,11 @@ function matches(node, query, rules) {
 }
 
 function checkClasses(node, query) {
-    return query != "hidden" && node.className.toLowerCase().indexOf(query) != -1;
+    var classes = node.className.toLowerCase();
+    // remove hidden from the list of classes
+    if(node.classList.contains("hidden"))
+        classes = classes.replace("hidden", "").trim();
+
+    return classes.indexOf(query) != -1;
 }
  
