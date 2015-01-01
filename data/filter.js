@@ -14,7 +14,7 @@ function filter(query, root, rules) {
         node = root.querySelectorAll(rule.target);
         for(var i = 0; i < node.length; ++i) {
             if(query) {
-                if(node[i].querySelector(rule.subtarget)[rule.attribute].includes(query))
+                if(node[i].querySelector(rule.subtarget)[rule.attribute].indexOf(query) != -1)
                     show(node[i]);
                 else
                     hide(node[i]);
