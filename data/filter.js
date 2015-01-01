@@ -16,7 +16,7 @@ function filter(query, root, rules) {
             if(matches(nodes[i], query, rules))
                 show(nodes[i]);
             else
-                hode(nodes[i]);
+                hide(nodes[i]);
         }
         else {
             show(nodes[i]);
