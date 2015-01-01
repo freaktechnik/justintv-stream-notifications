@@ -7,7 +7,26 @@
 
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
         <link rel="icon" sizes="32x32" href="icon32.png">
+        <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="tabbed.js"></script>
+        <script type="text/javascript" src="filter.js"></script>
+        <script type="text/javascript">
+            var filer = [
+                {
+                    target: "option",
+                    subtarget: "span"
+                },
+                {
+                    target: "option",
+                    subtarget: "small"
+                }
+            ];
+            window.addEventListener("load", function() {
+                document.getElementById("searchField").addEventListener("keypress", function() {
+                    filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not(.hidden)"), filter);
+                });
+            });
+        </script>
     </head>
     <body>
         <main class="tabbed">
@@ -20,6 +39,7 @@
                 <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</a></li>
                 <li><a id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</a></li>
                 <li><a id="autoAdd" class="hidden" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" aria-hidden="true" data-l10n-id="cm_autoAdd">Auto add</a></li>
+                <li><input type="search" id="searchField"></li>
                 <li class="right"><a href="http://jtvn.humanoids.be/help/channels-manager/" target="_blank" hreflang="en" rel="help" data-l10n-id="cm_help">Help</a></li>
             </ul>
             <select multiple id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">

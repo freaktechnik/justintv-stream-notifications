@@ -269,6 +269,18 @@ function getBestImageForSize(user, size) {
 }
 
 function addChannel(channel) {
+    /*
+        DOM structure:
+        <option id="channelId">
+            <img src="">
+            <span>
+                Username
+            </span>
+            <small>
+                Type
+            </small>
+        </option>
+    */
     if(!hasChannel(channel.id)) {
         var channelNode = document.createElement("option"),
             image       = new Image(),
