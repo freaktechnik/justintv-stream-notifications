@@ -55,11 +55,13 @@ window.addEventListener("load", function() {
     
     var field = document.querySelector("#searchField");
     document.querySelector("#searchButton").addEventListener("click", function() {
-        if(field.classList.contains("hidden"))
+        if(field.classList.contains("hidden")) {
             show(field);
-        else
+            field.focus();
+        }
+        else {
             hide(field);
-            
+        }
         resize();
     });
     field.addEventListener("keyup", function(e) {
@@ -69,8 +71,8 @@ window.addEventListener("load", function() {
             field.value = "";
         }
         else {
-            filter(live, field.value, filters);
-            filter(offline, field.value, filters);
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
             resize();
         }
     });
