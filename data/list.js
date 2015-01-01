@@ -268,6 +268,12 @@ function addChannel(channel) {
     channelNode.classList.add(channel.type);
     channelNode.appendChild(link);
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
+    
+    // hide the channel by if it's filtered out atm
+    if(matches(document.querySelector("#searchField").value, channelNode, filters)) {
+        hide(channelNode);
+    }
+    
     insertChannel(channel, channelNode);
     hideNoChannels();
     if(channel.live)
