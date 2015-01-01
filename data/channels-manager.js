@@ -90,7 +90,7 @@ document.addEventListener("keypress", function(evt) {
                 
             var items = list.querySelectorAll("option:not(.hidden)");
             for(var i = 0; i < items.length; ++i) {
-                items[i].setAttribute("selected", true);
+                items[i].selected = true;
             }
         }
         else if(evt.key == "Del") {
