@@ -308,9 +308,9 @@ function addChannel(channel) {
         channelNode.appendChild(image);
         channelNode.appendChild(span);
         channelNode.appendChild(small);
-        if(!matches(channelNode, document.querySelector("#searchField").value, filters) && users.classList.contains("hidden"))
-            hide(channelNode);
         channels.appendChild(channelNode);
+        var evObj = new CustomEvent("itemadded", { detail: channelNode });
+        channels.dispatchEvent(evObj);
     }
 }
 
@@ -329,9 +329,9 @@ function addUser(user) {
         userNode.appendChild(image);
         userNode.appendChild(span);
         userNode.appendChild(small);
-        if(!matches(userNode, document.querySelector("#searchField").value, filters) && !users.classList.contains("hidden"))
-            hide(userNode);
         users.appendChild(userNode);
+        var evObj = new CustomEvent("itemadded", { detail: userNode });
+        users.dispatchEvent(evObj);
     }
 }
 

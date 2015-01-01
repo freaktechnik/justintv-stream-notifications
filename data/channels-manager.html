@@ -26,6 +26,14 @@
             
                 document.getElementById("searchField").addEventListener("keyup", listener);
                 document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
+                document.getElementById("channels").addEventListener("itemadded", function() {
+                    if(!document.getElementById("channels").classList.contains("hidden"))
+                        listener();
+                });
+                document.getElementById("users").addEventListener("itemadded", function() {
+                    if(!document.getElementById("users").classList.contains("hidden"))
+                        listener();
+                });
             });
         </script>
     </head>
