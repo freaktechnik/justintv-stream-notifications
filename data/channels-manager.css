@@ -31,7 +31,7 @@ main {
 }
 
 .hidden {
-    display: none !none;
+    display: none;
     visibility: hidden;
 }
 
