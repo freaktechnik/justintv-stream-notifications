@@ -96,4 +96,5 @@ changelog
     - A completely new website
     - Added support for Hitbox, Ustream, Livestream, MLG.tv, Azubu and YouTube
     - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
+    - Filter channels in the panel (and the channels manager)
 
