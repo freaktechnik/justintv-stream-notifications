@@ -9,6 +9,7 @@
 
         <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="tabbed.js"></script>
+        <script type="text/javascript" src="filter.js"></script>
         <script type="text/javascript" src="list.js"></script>
         <link rel="stylesheet" type="text/css" href="list.css">
     </head>
@@ -25,10 +26,12 @@
                     <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
                 </ul>
                 <ul class="toolbar" role="toolbar">
-                    <li><a id="refreshButton" href="#" title="Refresh the live statuses of all channels" data-l10n-id="panel_refresh">Refresh</a></li>
+                    <li><a id="searchButton" href="#" title="Filter channels by a string" data-l10n-id="panel_search" class="icon">s</a></li>
+                    <li><a id="refreshButton" href="#" title="Refresh the live statuses of all channels" data-l10n-id="panel_refresh" class="icon">r</a></li>
                     <li><a id="configure" href="#" title="Opens the channel management tab" data-l10n-id="panel_manage">Manage</a></li>
                 </ul>
             </nav>
+            <input type="search" class="hidden" id="searchField" placeholder="Filter..." data-l10n-id="cm_filter" aria-hidden="true">
             <section class="tabcontent" role="tabpanel" data-tab="1">
                 <span id="noonline" data-l10n-id="panel_nothing_live">Nobody in your list is live.</span>
                 <ul id="live">

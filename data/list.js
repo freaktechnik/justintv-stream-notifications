@@ -6,6 +6,23 @@
 var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
 const CONTEXTMENU_ID    = "context";
+const filters = [
+    {
+        attribute: "class"
+    },
+    {
+        subtarget: ".name"
+    },
+    {
+        subtarget: ".title"
+    },
+    {
+        subtarget: ".viewers"
+    },
+    {
+        subtarget: ".category"
+    }
+];
 
 window.addEventListener("load", function() {
     live    = document.getElementById("live");
@@ -34,6 +51,24 @@ window.addEventListener("load", function() {
     });
     document.querySelector(".tabbed").addEventListener("tabchanged", function() {
         resize();
+    });
+    
+    var field = document.querySelector("#searchField");
+    document.querySelector("#searchButton").addEventListener("click", function() {
+        if(field.classList.contains("hidden"))
+            show(filed);
+        else
+            hide(field);
+    });
+    field.addEventListener("keyup", function(e) {
+        if(e.key == "Enter") {
+            hide(field);
+            field.value = "";
+        }
+        else {
+            filter(live, field.value, filters);
+            filter(offline, field.value, filters);
+        }
     });
  });
 
