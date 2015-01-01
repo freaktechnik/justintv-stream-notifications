@@ -80,5 +80,5 @@ If a user follows a channel and the channel is removed, the user is removed too,
 You can select multiple items in the channels or users list with the `Shift` and `Ctrl` key modifiers, as well as using `Ctrl`+`A`.
 
 ## Find a certain item
-The channel manager's filter field, which is located to the right of the toolbar buttons. It can alternatively be focused by pressing `Ctrl` + `F`. It will filter out any items in the current tab that do not contain the filter in their display name or provider type.
+The channel manager's filter field, which is located to the right of the toolbar buttons. It can alternatively be focused by pressing `Ctrl` + `F`. It will filter out any items in the current tab that do not contain the filter in their display name or provider type. A space separates a filter, so filtering with "twitch b" will only display Twitch channels that contain a b in their name. However "twitch t" will display all twitch channels, since "Twitch" contains at least one t.
 
