@@ -18,11 +18,14 @@
                 {
                     subtarget: "small"
                 }
-            ];
+            ],
+            listener = function() {
+                filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not(.hidden)"), filters);
+            };
             window.addEventListener("load", function() {
-                document.getElementById("searchField").addEventListener("keyup", function() {
-                    filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not(.hidden)"), filters);
-                });
+            
+                document.getElementById("searchField").addEventListener("keyup", listener);
+                document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
             });
         </script>
     </head>
