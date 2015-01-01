@@ -88,8 +88,9 @@ document.addEventListener("keypress", function(evt) {
             else
                 list = users;
                 
-            for(var i = 0; i < list.options.length; ++i) {
-                list.item(i).setAttribute("selected", true);
+            var items = list.querySelectorAll("option:not(.hidden)");
+            for(var i = 0; i < items.length; ++i) {
+                items[i].setAttribute("selected", true);
             }
         }
         else if(evt.key == "Del") {

@@ -9,6 +9,8 @@
 function hide(el) {
     el.classList.add("hidden");
     el.setAttribute("aria-hidden", "true");
+    if(el.hasAttribute("selected"))
+        el.removeAttribute("selected");
 }
 
 function show(el) {
