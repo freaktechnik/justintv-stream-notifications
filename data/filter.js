@@ -13,7 +13,7 @@ function filter(query, root, rules) {
 
     for(var i = 0; i < nodes.length; ++i) {
         if(query) {
-            if(matches(nodes[i], query, rules)
+            if(matches(nodes[i], query, rules))
                 show(nodes[i]);
             else
                 hode(nodes[i]);
