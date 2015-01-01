@@ -24,7 +24,7 @@ function filter(query, root, rules) {
 
 function matches(node, query, rules) {
     var target = node;
-    return query && rules.some(function(rule) {
+    return rules.some(function(rule) {
         rule.attribute = rule.attribute || "textContent";
         if(rule.subtarget)
             target = node.querySelector(rule.subtarget);
