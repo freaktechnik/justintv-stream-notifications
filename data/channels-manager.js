@@ -71,7 +71,7 @@ function checkUser() {
 }
 
 if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbed a.current").dataset.tab == 1) {
-    hide(document.querySelector("#autoAdd"));
+    hide(document.querySelector("#autoAdd").parentNode);
     checkChannel();
 }
 else
@@ -100,12 +100,12 @@ document.addEventListener("keypress", function(evt) {
 
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
-        hide(document.querySelector("#autoAdd"));
+        hide(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "channels");
         checkChannel();
     }
     else if(evt.detail == 2) {
-        show(document.querySelector("#autoAdd"));
+        show(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "users");
         checkUser();
     }
