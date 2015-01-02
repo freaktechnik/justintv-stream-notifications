@@ -142,7 +142,9 @@ kbd.single {
     background-color: #eef;
 }
 
-code {
+code,
+kbd > kbd,
+kbd.single {
     padding: 1px 5px;
 }
 
