@@ -11,11 +11,11 @@ I've just encountered a bug!
 
 It doesn't display my favorite channels when they are online!
 -------------------------------------------------------------
-You probably haven't added any channels to the channels manager yet. To open it, click "Manage" in the panel or open it via the extension's settings.
+You probably haven't added any channels to the channels manager yet. To open it, click <samp>Manage</samp> in the panel or open it via the extension's settings.
 
 How do I go to the extension's settings?
 ----------------------------------------
-Open the Add-ons manager in Firefox. To open it, click on the menu button and then "Add-ons" or open a new tab and type `about:addons` in the URL-bar. Clicke the "Options" button in the row of this extension in Add-ons manager and you're done.
+Open the Add-ons manager in Firefox. To open it, click on the menu button and then <samp>Add-ons</samp> or open a new tab and type `about:addons` in the URL-bar. Click the <samp>Preferences<samp> button in the row of this extension in the Add-ons manager and you're done.
 
 I can't find a setting for something important
 -----------------------------------------

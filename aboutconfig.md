@@ -18,7 +18,7 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `queue_ratio` (Default: 2) Defines the part of the queue fetched minimally at a time. It will always fetch at least one request. The value is reciproke to the actual used ratio.
  - `queue_maxRequestBatchSize` (Default: 8) The maximal number of requests fetched at once.
  - `panel_minWidth` (Default: 320) The minimal width in pixels of the panel.
- - `panel_maxHeight`(Default: 400) The maximal height in pixels of the panel.
+ - `panel_maxHeight` (Default: 400) The maximal height in pixels of the panel.
  - `twitch_clientID` Twitch developer application client ID.
  - `youtube_apiKey` YouTube public application API key.
 
