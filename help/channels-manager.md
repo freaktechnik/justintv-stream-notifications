@@ -59,12 +59,12 @@ Note that this currently only works with Twitch and Azubu due to API restriction
 ## Remove a channel
  - Switch to the <samp>Channels</samp> tab at the top
  - Select channel in the list by clicking on it
- - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd>Delete</kbd> key
+ - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd class="s">Delete</kbd> key
 
 ## Remove a user
  - Switch to the <samp>Users</samp> tab at the top
  - Select the user to remove by clicking on it
- - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd>Delete</kbd> key
+ - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd class="s">Delete</kbd> key
 
 ## Refreshing the channels a user follows
  - Switch to the <samp>Users</samp> tab at the top
@@ -77,7 +77,7 @@ Note that this will never remove a channel. This is also done every so often for
 If a user follows a channel and the channel is removed, the user is removed too, because the channel would be re-added if the user's folowees would be refreshed.
 
 ## Removing multiple items
-You can select multiple items in the channels or users list with the <kbd>Shift</kbd> and <kbd>Ctrl</kbd> key modifiers, as well as using <kbd><kbd>Ctrl</kbd> + <kbd>A</kbd></kbd>.
+You can select multiple items in the channels or users list with the <kbd class="s">Shift</kbd> and <kbd class="s">Ctrl</kbd> key modifiers, as well as using <kbd><kbd>Ctrl</kbd> + <kbd>A</kbd></kbd>.
 
 ## Find a certain item
 The channel manager's filter field, which is located to the right of the toolbar buttons. It can alternatively be focused by pressing <kbd><kbd>Ctrl</kbd> + <kbd>F</kbd></kbd>. It will filter out any items in the current tab that do not contain the filter in their display name or provider type. A space separates a filter, so filtering with "twitch b" will only display Twitch channels that contain a b in their name. However "twitch t" will display all twitch channels, since "Twitch" contains at least one t.
