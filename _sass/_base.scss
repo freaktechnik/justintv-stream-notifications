@@ -120,13 +120,22 @@ blockquote {
     }
 }
 
+samp {
+    &::before, &::after {
+        content: '"';
+    }
+
+    font-family: initial;
+}
 
 
 /**
  * Code formatting
  */
 pre,
-code {
+code,
+kbd > kbd,
+kbd:not(>kbd) {
     font-size: 15px;
     border: 1px solid $grey-color-light;
     border-radius: 3px;
