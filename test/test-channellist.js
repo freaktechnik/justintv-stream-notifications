@@ -207,7 +207,7 @@ exports['test channellist'] = function(assert, done) {
         function testSetNewChannel(assert, next) {
             var newChannel = getChannel();
             newChannel.login = 'test_chan2';
-            newChannel.id = 2;
+            newChannel.id = 3;
             newChannel.live = true;
 
             list.once("channelupdated", function(channel) {
@@ -252,7 +252,7 @@ exports['test channellist'] = function(assert, done) {
         function testRemoveUsersByFavorite(assert, next) {
             list.getChannel(function(channel) {
                 list.once("userdeleted", function(user) {
-                    assert.equal(user.id, 1, "User has been deleted");
+                    assert.equal(user.id, 2, "User has been deleted");
                     next();
                 });
                 list.removeUsersWithFavorite(channel.id);
