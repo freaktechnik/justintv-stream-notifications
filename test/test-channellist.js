@@ -252,7 +252,7 @@ exports['test channellist'] = function(assert, done) {
         function testRemoveUsersByFavorite(assert, next) {
             list.getChannel(function(channel) {
                 list.once("userdeleted", function(user) {
-                    assert.equal(user.id, 1, "User has been deleted");
+                    assert.equal(user.id, 2, "User has been deleted");
                     next();
                 });
                 list.removeUsersWithFavorite(channel.id);
