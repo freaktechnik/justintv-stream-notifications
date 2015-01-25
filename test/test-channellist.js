@@ -125,7 +125,7 @@ exports['test channellist'] = function(assert, done) {
                 assert.ok(channels[0].id, "The channel has an ID");
                 assert.equal(channels[0].uname, "lorem ipsum");
                 list.removeChannel(channels[0].id);
-                next();
+                list.once("channeldeleted", () => { next() });
             });
             list.addChannel(getChannel());
         },
