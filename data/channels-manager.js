@@ -250,7 +250,7 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
 });
 
 function getBestImageForSize(user, size) {
-    size = parseInt(size, 10);
+    size = Math.round(parseInt(size, 10) * window.devicePixelRatio);
     // shortcut if there's an image with the size demanded
     if(user.image.hasOwnProperty(size.toString())) {
         return user.image[size];
