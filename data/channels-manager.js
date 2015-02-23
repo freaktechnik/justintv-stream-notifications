@@ -99,8 +99,11 @@ document.addEventListener("keypress", function(evt) {
         else if(evt.key == "f" && evt.ctrlKey) {
             document.querySelector("#searchField").select();
         }
+        else if(evt.key == "w" && evt.ctrlKey) {
+            self.port.emit("close");
+        }
     }
-});
+}, true);
 
 document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
     if(evt.detail == 1) {
