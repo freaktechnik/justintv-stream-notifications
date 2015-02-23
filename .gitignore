@@ -176,3 +176,6 @@ npm-debug.log
 # jpm
 *.xpi
 
+# scss/sass
+.sass-cache
+
