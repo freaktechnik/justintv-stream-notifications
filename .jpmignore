@@ -1,7 +1,7 @@
 *.xpi
 .*
 
-node_modules/
+node_modules/jpm/
 
 # Python
 python-lib/
