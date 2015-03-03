@@ -108,6 +108,13 @@
       "hidden": true
     },
     {
+      "type": "integer",
+      "name": "channellist_cacheTime",
+      "title": "Time to cache channel states while Firefox is closed",
+      "value": 600000,
+      "hidden": true
+    },
+    {
       "type": "string",
       "name": "twitchchannelList",
       "title": "Twitch Channels",
