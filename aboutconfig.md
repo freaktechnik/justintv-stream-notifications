@@ -21,7 +21,7 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `panel_maxHeight` (Default: 400) The maximal height in pixels of the panel.
  - `twitch_clientID` Twitch developer application client ID.
  - `youtube_apiKey` YouTube public application API key.
- - `channellist_cacheTime`(Default 600000) How long the channel states will be remembered while Firefox is closed.
+ - `channellist_cacheTime` (Default 600000) How long the channel states will be remembered while Firefox is closed.
 
 Any other settings in this branch are either available through the add-on settings in the add-ons manager or no longer have any effect.
 
