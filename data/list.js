@@ -61,20 +61,16 @@ window.addEventListener("load", function() {
         }
         else {
             hide(field);
+            field.value = "";
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
         }
         resize();
     });
-    field.addEventListener("keyup", function(e) {
-        if(e.key == "Enter") {
-            hide(field);
-            resize();
-            field.value = "";
-        }
-        else {
-            filter(field.value, live, filters);
-            filter(field.value, offline, filters);
-            resize();
-        }
+    field.addEventListener("keydown", function(e) {
+        filter(field.value, live, filters);
+        filter(field.value, offline, filters);
+        resize();
     });
  });
 
