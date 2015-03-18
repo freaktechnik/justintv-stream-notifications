@@ -67,7 +67,7 @@ window.addEventListener("load", function() {
         }
         resize();
     });
-    field.addEventListener("keydown", function(e) {
+    field.addEventListener("keyup", function(e) {
         filter(field.value, live, filters);
         filter(field.value, offline, filters);
         resize();
