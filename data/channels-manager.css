@@ -56,14 +56,27 @@ main {
     margin: 0;
     padding: 0;
     
-    display: block;
+    display: flex;
+    flex-direction: row;
     width: 100%;
     
     border-bottom: 1px solid #282ebe;
 }
 
-.toolbar li.right {
-    float: right;
+.toolbar .flex {
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+}
+
+.toolbar .flex input {
+    -moz-appearance: none;
+    border: none;
+    color: initial;
+    font-size: initial;
+    padding: 1em;
+    border-right: 1px solid #282ebe;
+    flex-grow: 1;
 }
 
 .toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
@@ -74,8 +87,7 @@ main {
     border-right: 1px solid #282ebe;
 }
 
-.toolbar li.right a {
-    border-left: 1px solid #282ebe;
+.toolbar li:last-child a {
     border-right: none;
 }
 
