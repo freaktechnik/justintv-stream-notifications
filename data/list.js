@@ -297,11 +297,14 @@ function removeChannel(channelId) {
 
 function updateNodeContent(channel) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
+        nameNode = channelNode.querySelector(".name"),
+        nameText = document.createTextNode(channel.uname),
         titleNode = channelNode.querySelector(".title"),
         titleText = document.createTextNode(channel.title),
         viewers = channelNode.querySelector(".viewers"),
         category = channelNode.querySelector(".category");
     titleNode.replaceChild(titleText, titleNode.firstChild);
+    nameNode.replaceChild(nameText, nameNode.firstChild);
     
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
     if(!channel.viewers && channel.viewers != 0)
