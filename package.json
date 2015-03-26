@@ -115,6 +115,13 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "android_intents",
+      "title": "Try to send an intent to open streams on Android",
+      "value": true,
+      "hidden": true
+    },
+    {
       "type": "string",
       "name": "twitchchannelList",
       "title": "Twitch Channels",
