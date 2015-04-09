@@ -142,7 +142,6 @@
       "hidden": true
     }
   ],
-  "icon64": "data/icon64.png",
   "homepage": "http://jtvn.humanoids.be/",
   "description": "This displays a notification when a channel on twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
   "author": "freaktechnik",
@@ -156,7 +155,6 @@
   "title": "Live Stream Notifier",
   "main": "lib/main",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-  "icon": "data/icon.png",
   "engines": {
     "firefox": ">=33.0a1",
     "fennec": ">=30.0a1"
