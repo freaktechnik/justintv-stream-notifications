@@ -5,7 +5,7 @@
  *
  * Channels Manager content script
  */
- 
+
 // Add-on communication backend
 
 var providers;
@@ -77,7 +77,7 @@ if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbe
 else
     checkUser();
 updateSelect();
-    
+
 document.addEventListener("keypress", function(evt) {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
         if(evt.key == "a" && evt.ctrlKey) {
@@ -87,7 +87,7 @@ document.addEventListener("keypress", function(evt) {
                 list = channels;
             else
                 list = users;
-                
+
             var items = list.querySelectorAll("option:not(.hidden)");
             for(var i = 0; i < items.length; ++i) {
                 items[i].selected = true;
@@ -236,7 +236,7 @@ popup.addEventListener("keypress", function(evt) {
     if(evt.key == "Esc") {
         hideDialog();
         resetDialogForms();
-    }        
+    }
 });
 
 popup.querySelector("form").addEventListener("submit", function(evt) {
@@ -258,7 +258,7 @@ function getBestImageForSize(user, size) {
     if(user.image.hasOwnProperty(size.toString())) {
         return user.image[size];
     }
-    
+
     // search next biggest image
     var index = Number.MAX_VALUE, biggest = 0;
     Object.keys(user.image).forEach(function(s) {
@@ -271,8 +271,14 @@ function getBestImageForSize(user, size) {
 
     if(index > biggest)
         index = biggest;
-    
+
     return user.image[index];
+}
+
+function getChannelUname(channel) {
+    if(channel.type == "twitch")
+        channel.uname = channel.uname.split(" ")[0];
+    return channel.uname;
 }
 
 var filters = [
@@ -302,7 +308,7 @@ function addChannel(channel) {
             image       = new Image(),
             small       = document.createElement("small"),
             span        = document.createElement("span"),
-            title       = document.createTextNode(channel.uname),
+            title       = document.createTextNode(getChannelUname(channel)),
             type        = document.createTextNode(providers[channel.type].name);
         image.src       = getBestImageForSize(channel, 50);
         channelNode.id  = "channel"+channel.id;
@@ -343,7 +349,7 @@ function updateChannel(channel) {
         var channelNode = channels.querySelector("#channel"+channel.id),
             span        = channelNode.querySelector("span");
         channelNode.querySelector("img").src = getBestImageForSize(channel, 50);
-        span.replaceChild(document.createTextNode(channel.uname), span.firstChild);
+        span.replaceChild(document.createTextNode(getChannelUname(channel)), span.firstChild);
     }
 }
 
