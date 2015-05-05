@@ -171,7 +171,6 @@
     "jpm": "*"
   },
   "scripts": {
-    "test": "node_modules/jpm/bin/jpm test -v",
-    "preinstall": "node_modules/jpm/bin/jpm xpi"
+    "test": "node_modules/jpm/bin/jpm test -v"
   }
 }
