@@ -143,8 +143,8 @@
     }
   ],
   "homepage": "http://jtvn.humanoids.be/",
-  "description": "This displays a notification when a channel on twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
-  "author": "freaktechnik",
+  "description": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
+  "author": "freaktechnik (http://humanoids.be)",
   "translators": [
     "manueljrs",
     "alan2loin"
@@ -153,7 +153,7 @@
   "version": "3.0.0",
   "lib": "lib",
   "title": "Live Stream Notifier",
-  "main": "lib/main",
+  "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
     "firefox": ">=38.0a1",
