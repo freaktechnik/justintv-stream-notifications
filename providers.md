@@ -18,7 +18,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
 
-Sadly, it's not possible to get the user's avatars, so all Azubu channels have the same icon.
+Sadly, it's not possible to get the user's avatars, so all Azubu users have the same icon (not the channels though!).
 
 ![Hitbox icon](/img/hitbox-icon.png) Hitbox
 ------
