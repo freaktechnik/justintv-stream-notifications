@@ -150,7 +150,7 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "lib": "lib",
   "title": "Live Stream Notifier",
   "main": "lib/main.js",
