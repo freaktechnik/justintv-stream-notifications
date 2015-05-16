@@ -117,16 +117,13 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", function(ev
         checkUser();
     }
     updateSelect();
-});
+}, false);
 
 document.querySelector("#autoAdd").addEventListener("click", function(evt) {
-    for(var provider in providers) {
-        if(providers[provider].supports.credentials)
-            self.port.emit("autoadd", provider);
-    }
-});
+    self.port.emit("autoadd");
+}, false);
 
-document.querySelector("#showDialog").addEventListener("click", showDialog);
+document.querySelector("#showDialog").addEventListener("click", showDialog, false);
 
 function getSelectedItemIds() {
     var items = [];
