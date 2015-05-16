@@ -6,7 +6,7 @@ var { RequestQueue, UpdateQueue } = require('../lib/queue');
 
 exports['test adding new request to queue'] = function(assert) {
     var q = new RequestQueue();
-    var i = q.addRequest({})
+    var i = q.addRequest({});
     assert.equal(i,1);
     assert.equal(i,q.queue[0].id);
     assert.equal(typeof(q.queue[0]),'object');
@@ -72,7 +72,7 @@ exports['test queue clearing'] = function(assert) {
 
 exports['test adding new request to queue'] = function(assert) {
     var q = new UpdateQueue();
-    var i = q.addRequest({})
+    var i = q.addRequest({});
     assert.equal(i,1);
     assert.equal(i,q.queue[0].id);
     assert.equal(typeof(q.queue[0]),'object');

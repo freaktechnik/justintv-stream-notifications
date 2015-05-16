@@ -34,7 +34,7 @@ exports.testPaginationHelper = function(assert, done) {
 
 
 exports.testPaginationHelperPageNumberGenerator = function(assert, done) {
-    const URL = "http://example.com/?offset=";    
+    const URL = "http://example.com/?offset=";
     var hash = "asdf", count = 0,
         ph = new PaginationHelper({
             url: URL,
@@ -47,7 +47,7 @@ exports.testPaginationHelperPageNumberGenerator = function(assert, done) {
                     assert.equal(url, URL+hash, "URL has hash the second time");
                 callback(count);
             },
-            getPageNumber(page, pageSize, data) {
+            getPageNumber: function(page, pageSize, data) {
                 assert.equal(page, "", "Initial page value was passed in correctly");
                 assert.equal(pageSize, 1, "Page size was passed in correctly");
                 assert.equal(data, count, "Correct data was passed to getPageNumber");

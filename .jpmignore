@@ -1,6 +1,8 @@
 *.xpi
 .*
 
+*dummyprovider.js
+
 node_modules/jpm/
 
 # Python
