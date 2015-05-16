@@ -3,7 +3,12 @@
 
 *dummyprovider.js
 
+*.md
+
 node_modules/jpm/
+*docs*
+
+*CHANGELOG*
 
 # Python
 python-lib/
