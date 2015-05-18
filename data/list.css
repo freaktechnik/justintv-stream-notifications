@@ -1,4 +1,4 @@
-/* 
+/*
  *  Created by Martin Giger
  *  Licensed under the MPL 2.0
  */
@@ -12,7 +12,7 @@ body {
     margin: 0;
     font-family: sans-serif;
     line-height: 1.2em;
-    
+
     -moz-user-select: none;
     overflow-x: hidden;
 }
@@ -60,7 +60,7 @@ nav {
     position: absolute;
     margin: 0;
     padding: 0;
-    
+
     top: 0;
     right: 0;
 }
@@ -220,6 +220,16 @@ nav {
 .azubu a:hover, .thumbnail .azubu a:hover div {
     background: #000 !important;
     color: #3693E0 !important;
+}
+
+#live.thumbnail .beam a div {
+    background: rgba(17, 19, 27, 0.7);
+    color: white;
+}
+
+.beam a:hover, .thumbnail .beam a:hover div {
+    background: #11131B !important;
+    color: white;
 }
 
 /* Icon font from fontello */
