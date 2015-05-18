@@ -9,6 +9,7 @@
 // Add-on communication backend
 
 var providers;
+
 self.port.on("add", function(channel) {
     addChannel(channel);
 });
@@ -32,7 +33,9 @@ self.port.on("initdata", function(options){
 
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var provider in providers) {
-        providerDropdown.add(new Option(providers[provider].name, provider));
+        if(!hasOption(provider)) {
+            providerDropdown.add(new Option(providers[provider].name, provider));
+        }
     }
 
     options.channels.forEach(function(channel) {
@@ -59,6 +62,16 @@ self.port.on("doneloading", function() {
 var channels = document.querySelector("#channels"),
     users    = document.querySelector("#users"),
     popup    = document.querySelector("#popup");
+    
+var hasOption = (provider) => {
+    var providerDropdown = document.querySelector("#providerDropdown");
+    for(var o of providerDropdown.options) {
+        if(o.value == provider) {
+            return true;
+        }
+    }
+    return false;
+};
 
 function checkChannel() {
     popup.querySelector("#channelRadio").checked = true;
