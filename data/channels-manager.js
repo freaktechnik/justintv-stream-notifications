@@ -106,7 +106,7 @@ document.addEventListener("keypress", function(evt) {
                 items[i].selected = true;
             }
         }
-        else if(evt.key == "Del") {
+        else if(evt.key == "Delete") {
             removeSelectedItems();
         }
         else if(evt.key == "f" && evt.ctrlKey) {
