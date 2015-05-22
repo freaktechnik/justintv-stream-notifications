@@ -93,7 +93,7 @@ changelog
     - Fixed migrating the panel width
 2.9.2
     - Fixed favorites pagination
-3.0.0
+3.0.0, 3.0.1
     - Add new channels manager, which is the last piece to allow more channel providers
     - Three new styles for the panel
     - An optional extra row of info for live channels in the panel showing the number of views and the category of a stream
@@ -105,4 +105,10 @@ changelog
     - Added support for Hitbox, Ustream, Livestream, MLG.tv, Azubu and YouTube
     - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
     - Filter channels in the panel (and the channels manager)
-
+3.1.0
+    - Fix channels not getting marked as offline if Firefox has been closed for more than ten minutes
+    - Don't try to update the channel statuses when in offline mode
+    - Get game name for MLG.tv channels
+    - Add beam.pro provider
+    - Show notification if a newly added channel is live
+    - Making less requests when possible
