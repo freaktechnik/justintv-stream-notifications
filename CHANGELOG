@@ -112,3 +112,5 @@ changelog
     - Add beam.pro provider
     - Show notification if a newly added channel is live
     - Making less requests when possible
+    - Fix updating a specific channel from the panel context menu
+    - Better handling of Twitch channels with spaces in the display name

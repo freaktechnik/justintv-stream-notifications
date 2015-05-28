@@ -48,11 +48,12 @@ window.addEventListener("load", function() {
     });
     document.getElementById("contextChat").addEventListener("click", function() {
         addon.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        currentMenuTarget = null;
     });
     document.querySelector(".tabbed").addEventListener("tabchanged", function() {
         resize();
     });
-    
+
     var field = document.querySelector("#searchField");
     document.querySelector("#searchButton").addEventListener("click", function() {
         if(field.classList.contains("hidden")) {
@@ -100,7 +101,7 @@ addon.port.on("setOnline", function(channel) {
 addon.port.on("setOffline", function(channel) {
     makeChannelOffline(channel);
 });
- 
+
 addon.port.on("resize", resize);
 
 function resize() {
@@ -157,7 +158,7 @@ function insertChannel(channel, node) {
         live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
     else
         offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
-    
+
     resize();
 }
 
@@ -167,7 +168,7 @@ function getBestImageForSize(user, size) {
     if(user.image.hasOwnProperty(size.toString())) {
         return user.image[size];
     }
-    
+
     // search next biggest image
     var index = Number.MAX_VALUE, biggest = 0;
     Object.keys(user.image).forEach(function(s) {
@@ -180,7 +181,7 @@ function getBestImageForSize(user, size) {
 
     if(index > biggest)
         index = biggest;
-    
+
     return user.image[index];
 }
 
@@ -234,7 +235,7 @@ function addChannel(channel) {
     wrapper.appendChild(titleSpan);
 
     viewersWrapper.classList.add("viewersWrapper");
-    if(!channel.viewers && channel.viewers != 0)
+    if(!("viewers" in channel) || channel.viewers < 0)
         viewersWrapper.classList.add("hidden");
     viewersIcon.appendChild(document.createTextNode("v"));
     viewersIcon.classList.add("icon");
@@ -270,12 +271,12 @@ function addChannel(channel) {
     channelNode.classList.add(channel.type);
     channelNode.appendChild(link);
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
-    
+
     // hide the channel by if it's filtered out atm
     console.log(document.querySelector("#searchField").value);
     if(!matches(channelNode, document.querySelector("#searchField").value, filters))
         hide(channelNode);
-    
+
     insertChannel(channel, channelNode);
     hideNoChannels();
     if(channel.live)
@@ -303,14 +304,16 @@ function updateNodeContent(channel) {
         titleText = document.createTextNode(channel.title),
         viewers = channelNode.querySelector(".viewers"),
         category = channelNode.querySelector(".category");
+
     titleNode.replaceChild(titleText, titleNode.firstChild);
     nameNode.replaceChild(nameText, nameNode.firstChild);
-    
+
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
-    if(!channel.viewers && channel.viewers != 0)
+    if(!("viewers" in channel) || channel.viewers < 0)
         channelNode.querySelector(".viewersWrapper").classList.add("hidden");
     else
         channelNode.querySelector(".viewersWrapper").classList.remove("hidden");
+
     category.replaceChild(document.createTextNode(channel.category), category.firstChild);
     if(!channel.category)
         channelNode.querySelector(".categoryWrapper").classList.add("hidden");
@@ -330,6 +333,7 @@ function makeChannelLive(channel) {
 
 function makeChannelOffline(channel) {
     insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    updateNodeContent(channel);
     if(live.childElementCount == 0) {
         addon.port.emit("offline");
         displayNoOnline();
