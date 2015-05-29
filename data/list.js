@@ -24,6 +24,10 @@ const filters = [
     }
 ];
 
+var getChannelIdFromId = function(id) {
+    return parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
+};
+
 window.addEventListener("load", function() {
     live    = document.getElementById("live");
     offline = document.getElementById("offline");
@@ -39,15 +43,15 @@ window.addEventListener("load", function() {
         addon.port.emit("refresh");
     });
     document.getElementById("contextRefresh").addEventListener("click", function() {
-        addon.port.emit("refresh", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        addon.port.emit("refresh", getChannelIdFromId(currentMenuTarget.id));
         currentMenuTarget = null;
     });
     document.getElementById("contextOpen").addEventListener("click", function() {
-        addon.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        addon.port.emit("openArchive", getChannelIdFromId(currentMenuTarget.id));
         currentMenuTarget = null;
     });
     document.getElementById("contextChat").addEventListener("click", function() {
-        addon.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
+        addon.port.emit("openChat", getChannelIdFromId(currentMenuTarget.id));
         currentMenuTarget = null;
     });
     document.querySelector(".tabbed").addEventListener("tabchanged", function() {
@@ -285,11 +289,17 @@ function addChannel(channel) {
 
 function removeChannel(channelId) {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
-    if("live" == channelNode.parentNode.id && live.childElementCount < 2) {
-        displayNoOnline();
-        addon.port.emit("offline");
+    if("live" == channelNode.parentNode.id) {
+        addon.port.emit("removedLive", channelId);
+        // Smaller two, since we remove the channel node after this, as we still
+        // needed its parent's id before.
+        if(live.childElementCount < 2) {
+            displayNoOnline();
+        }
     }
+
     channelNode.remove();
+
     if(live.childElementCount == 0 && offline.childElementCount == 0) {
         displayNoChannels();
     }
@@ -332,10 +342,10 @@ function makeChannelLive(channel) {
 }
 
 function makeChannelOffline(channel) {
-    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
+        insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
     if(live.childElementCount == 0) {
-        addon.port.emit("offline");
         displayNoOnline();
     }
 }
