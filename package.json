@@ -109,6 +109,13 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "twitch_showHosting",
+      "title": "Check if a Twitch Channel is hosting",
+      "value": true,
+      "hidden": true
+    },
+    {
       "type": "string",
       "name": "youtube_apiKey",
       "title": "YouTube API Key",

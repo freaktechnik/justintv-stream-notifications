@@ -6,6 +6,8 @@
 /* global addon */
 /* global filter */
 /* global matches */
+/* global show */
+/* global hide */
 
 var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
