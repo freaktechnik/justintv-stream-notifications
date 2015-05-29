@@ -1,4 +1,4 @@
-/* 
+/*
  *  Created by Martin Giger
  *  Licensed under MPL 2.0
  */
@@ -12,7 +12,7 @@ body {
     margin: 0;
     font-family: sans-serif;
     line-height: 1.2em;
-    
+
     -moz-user-select: none;
 }
 
@@ -30,7 +30,7 @@ main {
     cursor: progress !important;
 }
 
-.hidden {
+[hidden] {
     display: none !important;
     visibility: hidden;
 }
@@ -55,11 +55,11 @@ main {
 .toolbar {
     margin: 0;
     padding: 0;
-    
+
     display: flex;
     flex-direction: row;
     width: 100%;
-    
+
     border-bottom: 1px solid #282ebe;
 }
 
@@ -99,7 +99,7 @@ main {
     border: none;
 }
 
-.selectableItemsList>option {    
+.selectableItemsList>option {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -163,7 +163,7 @@ main {
     margin-bottom: -1em;
     padding: 1em;
     background: initial;
-    color: initial;    
+    color: initial;
 }
 
 
@@ -177,6 +177,6 @@ main {
     margin-right: -1em;
     padding: 1em;
     background: initial;
-    color: initial;    
+    color: initial;
 }
 

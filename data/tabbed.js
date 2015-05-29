@@ -1,7 +1,11 @@
-/* 
+/*
  *  Created by Martin Giger
  *  Licensed under MPL 2.0
  */
+
+/* global show */
+/* global hide */
+
 var SELECTED_CLASS = "current";
 
 window.onload = function() {
@@ -24,23 +28,26 @@ function Tabbed(el) {
     }
 
     var tabs = this.root.querySelectorAll(".tabstrip a"), that = this;
-    for(var i = 0; i < tabs.length; ++i) {
-        tabs[i].setAttribute("tabindex", -1);
-        tabs[i].addEventListener("click", function(evt) {
-            evt.preventDefault();
-            that.select(parseInt(evt.currentTarget.dataset.tab, 10));
-        });
-        tabs[i].addEventListener("keypress", function(evt) {
-            evt.preventDefault();
-            if(evt.key == "Left") {// left arrow key
-                if(that.current != 1)
-                    that.select(that.current - 1);
-            }
-            else if(evt.key == "Right") { // right arrow key
-                if(that.current < that.length)
-                    that.select(that.current + 1);
-            }
-        });
+    var clickListener = function(evt) {
+        evt.preventDefault();
+        that.select(parseInt(evt.currentTarget.dataset.tab, 10));
+    };
+    var keyListener = function(evt) {
+        evt.preventDefault();
+        if(evt.key == "Left") {// left arrow key
+            if(that.current != 1)
+                that.select(that.current - 1);
+        }
+        else if(evt.key == "Right") { // right arrow key
+            if(that.current < that.length)
+                that.select(that.current + 1);
+        }
+    };
+
+    for(var j = 0; j < tabs.length; ++j) {
+        tabs[j].setAttribute("tabindex", -1);
+        tabs[j].addEventListener("click", clickListener);
+        tabs[j].addEventListener("keypress", keyListener);
     }
 
     if(this.root.querySelectorAll(".tabstrip a."+SELECTED_CLASS).length == 0 && this.length > 0) {
@@ -69,7 +76,7 @@ Tabbed.prototype.select = function(index) {
         tab.setAttribute("tabindex", 0);
         show(this.getContentByIndex(index));
         var evObj = new CustomEvent("tabchanged", { detail: index });
-        this.root.dispatchEvent(evObj); 
+        this.root.dispatchEvent(evObj);
     }
 };
 

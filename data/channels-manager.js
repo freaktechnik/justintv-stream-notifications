@@ -6,7 +6,12 @@
  * Channels Manager content script
  */
 
+/* global self */
+/* global unsafeWindow */
+
 // Add-on communication backend
+
+var { hide, show } = unsafeWindow;
 
 var providers;
 
@@ -62,7 +67,7 @@ self.port.on("doneloading", function() {
 var channels = document.querySelector("#channels"),
     users    = document.querySelector("#users"),
     popup    = document.querySelector("#popup");
-    
+
 var hasOption = (provider) => {
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var o of providerDropdown.options) {
@@ -96,12 +101,12 @@ document.addEventListener("keypress", function(evt) {
         if(evt.key == "a" && evt.ctrlKey) {
             evt.preventDefault();
             var list;
-            if(users.classList.contains("hidden"))
+            if(users.hasAttribute("hidden"))
                 list = channels;
             else
                 list = users;
 
-            var items = list.querySelectorAll("option:not(.hidden)");
+            var items = list.querySelectorAll("option:not([hidden])");
             for(var i = 0; i < items.length; ++i) {
                 items[i].selected = true;
             }
@@ -139,14 +144,14 @@ document.querySelector("#autoAdd").addEventListener("click", function(evt) {
 document.querySelector("#showDialog").addEventListener("click", showDialog, false);
 
 function getSelectedItemIds() {
-    var items = [];
-    if(users.classList.contains("hidden")) {
-        for(var i = 0; i < channels.selectedOptions.length; ++i) {
+    let items = [];
+    if(users.hasAttribute("hidden")) {
+        for(let i = 0; i < channels.selectedOptions.length; ++i) {
             items.push(parseInt(channels.selectedOptions[i].id.substring(7), 10));
         }
     }
     else {
-        for(var i = 0; i < users.selectedOptions.length; ++i) {
+        for(let i = 0; i < users.selectedOptions.length; ++i) {
             items.push(parseInt(users.selectedOptions[i].id.substring(4), 10));
         }
     }
@@ -155,7 +160,7 @@ function getSelectedItemIds() {
 
 document.querySelector("#updateItem").addEventListener("click", function(evt) {
     var selected = getSelectedItemIds();
-    if(users.classList.contains("hidden")) {
+    if(users.hasAttribute("hidden")) {
         selected.forEach(function(channelId) {
             self.port.emit("refreshchannel", channelId);
         });
@@ -169,7 +174,7 @@ document.querySelector("#updateItem").addEventListener("click", function(evt) {
 
 function removeSelectedItems() {
     var selected = getSelectedItemIds();
-    if(users.classList.contains("hidden")) {
+    if(users.hasAttribute("hidden")) {
         selected.forEach(function(channelId) {
             self.port.emit("removechannel", channelId);
         });
@@ -182,16 +187,6 @@ function removeSelectedItems() {
 }
 
 document.querySelector("#removeItem").addEventListener("click", removeSelectedItems);
-
-function hide(el) {
-    el.classList.add("hidden");
-    el.setAttribute("aria-hidden", "true");
-}
-
-function show(el) {
-    el.classList.remove("hidden");
-    el.removeAttribute("aria-hidden");
-}
 
 function showDialog() {
     popup.querySelector("dialog").setAttribute("open", true);
@@ -291,15 +286,6 @@ function getChannelUname(channel) {
     return channel.uname;
 }
 
-var filters = [
-                {
-                    subtarget: "span"
-                },
-                {
-                    subtarget: "small"
-                }
-            ];
-
 function addChannel(channel) {
     /*
         DOM structure:
@@ -335,7 +321,7 @@ function addChannel(channel) {
 
 function addUser(user) {
     if(!hasUser(user.id)) {
-        var userNode = document.createElement("option");
+        let userNode = document.createElement("option"),
             image    = new Image(),
             small    = document.createElement("small"),
             span     = document.createElement("span"),

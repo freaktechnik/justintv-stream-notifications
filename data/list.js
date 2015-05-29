@@ -3,6 +3,10 @@
  * Licensed under MPL 2.0
  */
 
+/* global addon */
+/* global filter */
+/* global matches */
+
 var live, offline, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
 const CONTEXTMENU_ID    = "context";
@@ -60,7 +64,7 @@ window.addEventListener("load", function() {
 
     var field = document.querySelector("#searchField");
     document.querySelector("#searchButton").addEventListener("click", function() {
-        if(field.classList.contains("hidden")) {
+        if(field.hasAttribute("hidden")) {
             show(field);
             field.focus();
         }
@@ -240,7 +244,7 @@ function addChannel(channel) {
 
     viewersWrapper.classList.add("viewersWrapper");
     if(!("viewers" in channel) || channel.viewers < 0)
-        viewersWrapper.classList.add("hidden");
+        hide(viewersWrapper);
     viewersIcon.appendChild(document.createTextNode("v"));
     viewersIcon.classList.add("icon");
     viewersWrapper.appendChild(viewersIcon);
@@ -252,7 +256,7 @@ function addChannel(channel) {
     extra.appendChild(document.createTextNode(" "));
     categoryWrapper.classList.add("categoryWrapper");
     if(!channel.category)
-        categoryWrapper.classList.add("hidden");
+        hide(categoryWrapper);
     categoryIcon.appendChild(document.createTextNode("c"));
     categoryIcon.classList.add("icon");
     categoryWrapper.appendChild(categoryIcon);
@@ -320,15 +324,15 @@ function updateNodeContent(channel) {
 
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
     if(!("viewers" in channel) || channel.viewers < 0)
-        channelNode.querySelector(".viewersWrapper").classList.add("hidden");
+        hide(channelNode.querySelector(".viewersWrapper"));
     else
-        channelNode.querySelector(".viewersWrapper").classList.remove("hidden");
+        show(channelNode.querySelector(".viewersWrapper"));
 
     category.replaceChild(document.createTextNode(channel.category), category.firstChild);
     if(!channel.category)
-        channelNode.querySelector(".categoryWrapper").classList.add("hidden");
+        hide(channelNode.querySelector(".categoryWrapper"));
     else
-        channelNode.querySelector(".categoryWrapper").classList.remove("hidden");
+        show(channelNode.querySelector(".categoryWrapper"));
 
     channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
     channelNode.querySelector("a div img").setAttribute("src", getBestImageForSize(channel, 30));

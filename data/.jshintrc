@@ -1,0 +1,8 @@
+{
+  "predef": [ "console" ],
+  "esnext": true,
+  "moz": true,
+  "undef": true,
+  "unused": false,
+  "browser": true
+}

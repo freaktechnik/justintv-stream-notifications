@@ -133,7 +133,7 @@ nav {
 }
 
 .compact li a>img, .default li a>img, #offline li a>img , .compact li .title,
-#offline .title, .hidden, aside {
+#offline .title, [hidden], aside {
     display: none;
     visibility: hidden;
 }

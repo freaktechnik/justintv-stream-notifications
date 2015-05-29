@@ -5,7 +5,10 @@
  *
  * Node filtering script
  */
- 
+
+/* global show */
+/* global hide */
+
 function filter(query, root, rules) {
     var nodes = root.children;
 
@@ -36,7 +39,7 @@ function matches(node, query, rules) {
             if(rule.attribute == "class") {
                 return checkClasses(target, q);
             }
-            else {            
+            else {
                 return target[rule.attribute].toLowerCase().indexOf(q) != -1;
             }
         });
@@ -51,4 +54,4 @@ function checkClasses(node, query) {
 
     return classes.indexOf(query) != -1;
 }
- 
+
