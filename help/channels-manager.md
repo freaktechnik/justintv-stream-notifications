@@ -32,6 +32,9 @@ Live Stream Notifier should now be able to fetch this account's subscriptions.
 ### Azubu
 The username, however it is case sensitive.
 
+### Beam.pro
+The username of the channel.
+
 ### Hitbox
 The channel username, it's in the URL and below the stream.
 
