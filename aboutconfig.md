@@ -19,11 +19,13 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `queue_maxRequestBatchSize` (Default: 8) The maximal number of requests fetched at once.
  - `panel_minWidth` (Default: 320) The minimal width in pixels of the panel.
  - `panel_maxHeight` (Default: 400) The maximal height in pixels of the panel.
+ - `panel_badge` (Default: false) Show a badge with the number of live channels on the button.
  - `twitch_clientID` Twitch developer application client ID.
+ - `twitch_showHosting` (Default: true) Whether to check Twitch channels if they are hosting another channel.
  - `youtube_apiKey` YouTube public application API key.
  - `channellist_cacheTime` (Default: 600000) How long the channel states will be remembered while Firefox is closed.
 
 The `sdk` subbranch are Add-on SDK specific preferences and should not be changed, except for the `sdk.console.logLevel` preference.
 
-Any other settings in this branch are either available through the add-on settings in the add-ons manager or no longer have any effect.
+Any other settings in this branch are either available through the add-on settings in the add-ons manager or no longer have any effect. If preferences with a default value are not listed in your config they aren't available in your version of the extension yet.
 
