@@ -179,3 +179,5 @@ npm-debug.log
 # scss/sass
 .sass-cache
 
+.transifexrc
+

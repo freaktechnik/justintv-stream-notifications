@@ -21,12 +21,13 @@ https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
 
 ## Build yourslef
 
-To build this extension you need npm. Open a command line and type
+To build this extension you need npm, which will install grunt and jpm. Open a command line and type
 ```
-npm install jpm -g
-jpm xpi
+npm install grunt-cli
+npm install
+grunt build
 ```
-to build an in Firefox installable .xpi file. For other uses of jpm consider its documentation.
+to build an in Firefox installable .xpi file.
 
 ## License
 

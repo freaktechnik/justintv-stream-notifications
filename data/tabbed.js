@@ -50,7 +50,7 @@ function Tabbed(el) {
         tabs[j].addEventListener("keypress", keyListener);
     }
 
-    if(this.root.querySelectorAll(".tabstrip a."+SELECTED_CLASS).length == 0 && this.length > 0) {
+    if(this.root.querySelectorAll(".tabstrip a."+SELECTED_CLASS).length === 0 && this.length > 0) {
         this.select(1);
     }
     else {

@@ -4,5 +4,6 @@
   "moz": true,
   "undef": true,
   "unused": false,
-  "node": true
+  "node": true,
+  "eqnull": true
 }

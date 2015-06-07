@@ -132,7 +132,6 @@ function setStyle(style) {
         case 0:
             newClass = "compact";
             break;
-        case 1:
         default:
             newClass = "default";
     }
@@ -306,7 +305,7 @@ function removeChannel(channelId) {
 
     channelNode.remove();
 
-    if(live.childElementCount == 0 && offline.childElementCount == 0) {
+    if(live.childElementCount === 0 && offline.childElementCount === 0) {
         displayNoChannels();
     }
     resize();
@@ -351,7 +350,7 @@ function makeChannelOffline(channel) {
     if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
-    if(live.childElementCount == 0) {
+    if(live.childElementCount === 0) {
         displayNoOnline();
     }
 }

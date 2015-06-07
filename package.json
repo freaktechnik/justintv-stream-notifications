@@ -183,9 +183,15 @@
     "jetpack-homepanel": "^1.0.1"
   },
   "devDependencies": {
-    "jpm": "*"
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jpm": "^0.1.0",
+    "grunt-shell": "^1.1.2",
+    "grunt-transifex": "^0.1.1",
+    "jpm": "*",
+    "load-grunt-tasks": "^3.2.0"
   },
   "scripts": {
-    "test": "node_modules/jpm/bin/jpm test -v"
+    "test": "grunt --verbose"
   }
 }

@@ -41,7 +41,7 @@ exports.testPaginationHelperPageNumberGenerator = function(assert, done) {
             pageSize: 1,
             initialPage: "",
             request: function(url, callback) {
-                if(count == 0)
+                if(count === 0)
                     assert.equal(url, URL, "Initial URL is correct");
                 else
                     assert.equal(url, URL+hash, "URL has hash the second time");
