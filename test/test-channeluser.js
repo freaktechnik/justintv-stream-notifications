@@ -63,6 +63,8 @@ exports['test channel url comparison'] = function(assert) {
     assert.ok(!channel.compareUrl('http://example.com'));
     assert.ok(!channel.compareUrl('http://999.44'));
     assert.ok(!channel.compareUrl('ressource://justalocal/thing'));
+    assert.ok(!channel.compareUrl('about:addons'));
+    assert.ok(!channel.compareUrl(undefined));
 };
 
 require("sdk/test").run(exports);
