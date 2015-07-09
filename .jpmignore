@@ -6,6 +6,8 @@
 *.md
 
 node_modules/jpm/
+node_modules/grunt*
+node_modules/load-grunt-tasks/
 *docs*
 
 *CHANGELOG*

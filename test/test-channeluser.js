@@ -60,9 +60,11 @@ exports['test channel url comparison'] = function(assert) {
     assert.ok(channel.compareUrl('http://foo.bar/lorem/archive'));
     assert.ok(channel.compareUrl('https://foo.bar/lorem'));
     assert.ok(channel.compareUrl('https://foo.bar/lorem/archive'));
+    assert.ok(!channel.compareUrl('http://foo.bar/ipsum'));
+    assert.ok(!channel.compareUrl('https://foo.bar/ipsum/archive'));
     assert.ok(!channel.compareUrl('http://example.com'));
     assert.ok(!channel.compareUrl('http://999.44'));
-    assert.ok(!channel.compareUrl('ressource://justalocal/thing'));
+    assert.ok(!channel.compareUrl('ressource://local/thing'));
     assert.ok(!channel.compareUrl('about:addons'));
     assert.ok(!channel.compareUrl(undefined));
 };
