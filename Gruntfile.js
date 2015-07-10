@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         firefoxBinary: process.env.FIREFOX_BIN || '/usr/bin/firefox',
         shell: {
             jpmTest: {
-                command: 'jpm test -b <%= firefoxBinary %>'
+                command: 'jpm test -b <%= firefoxBinary %> --tbpl'
             }
         },
         jshint: {
