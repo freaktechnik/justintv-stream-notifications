@@ -47,7 +47,7 @@
             display: inline-block;
         }
     }
-    
+
 
     .page-link {
         &, &:visited {
@@ -260,4 +260,9 @@
             font-size: 18px;
         }
     }
+}
+
+.thumbnail {
+    max-width: 300px;
+    max-height: 200px;
 }
