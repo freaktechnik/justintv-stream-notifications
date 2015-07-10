@@ -266,3 +266,17 @@
     max-width: 300px;
     max-height: 200px;
 }
+
+.button {
+    padding: 1em;
+    font-size: 3em;
+    text-decoration: none;
+    border: 1px solid $grey-color-dark;
+    color: $grey-color-dark;
+    border-radius: .5em;
+
+    &:hover, &:active {
+        background: $grey-color-dark;
+        color: $brand-text;
+    }
+}
