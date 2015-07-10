@@ -263,13 +263,13 @@
 }
 
 .thumbnail {
-    max-width: 150px;
-    max-height: 100px;
+    max-width: 200px;
+    max-height: 150px;
 }
 
 .button {
     padding: .5em;
-    margin: .5em;
+    margin: .5em 0;
     font-size: 2em;
     text-decoration: none;
     border: 1px solid $grey-color-dark;
