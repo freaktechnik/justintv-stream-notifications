@@ -50,8 +50,13 @@ img {
 /**
  * Figures
  */
-figure > img {
-    display: block;
+
+figure {
+    display: inline-block;
+    
+    & > img {
+        display: block;
+    }
 }
 
 figcaption {
