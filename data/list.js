@@ -282,7 +282,6 @@ function addChannel(channel) {
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
 
     // hide the channel by if it's filtered out atm
-    console.log(document.querySelector("#searchField").value);
     if(!matches(channelNode, document.querySelector("#searchField").value, filters))
         hide(channelNode);
 
