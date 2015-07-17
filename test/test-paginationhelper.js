@@ -2,7 +2,7 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-const { PaginationHelper } = require("../lib/pagination-helper");
+const { PaginationHelper, promisedPaginationHelper } = require("../lib/pagination-helper");
 
 exports.testPaginationHelper = function(assert, done) {
     const URL = "http://example.com/?offset=";
@@ -70,6 +70,32 @@ exports.testPaginationHelperPageNumberGenerator = function(assert, done) {
                 return data;
             }
         });
+};
+
+exports.testPromisedPaginationHelper = function*(assert) {
+    const URL = "http://example.com/?offset=";
+    var count = 0;
+    let data = yield promisedPaginationHelper({
+        url: URL,
+        pageSize: 1,
+        request: function(url, callback) {
+            assert.equal(url, URL+count++, "request got the correct URL");
+            callback(count);
+        },
+        fetchNextPage: function(data) {
+            assert.equal(data, count, "fetchNextPage got the correct data");
+            return data < 1;
+        },
+        getItems: function(data) {
+            assert.equal(data, count, "getItems got the correct data");
+            return data;
+        }
+    });
+
+    assert.ok(Array.isArray(data), "data is an array");
+    assert.equal(data[0], 1, "First data element is has the correct value");
+    assert.equal(data[data.length-1], count, "Last data element has the correct value");
+    assert.equal(data.length, count, "data has the correct length");
 };
 
 require("sdk/test").run(exports);
