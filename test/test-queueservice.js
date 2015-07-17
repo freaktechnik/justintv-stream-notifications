@@ -22,18 +22,12 @@ exports.testQueueService = function(assert) {
     assert.ok(service.LOW_PRIORITY, "QueueService isntance exposes LOW_PRIORITY constant");
 };
 
-exports.testQueueRequest = function(assert, done) {
+exports.testQueueRequest = function*(assert) {
     let service = QueueService.getServiceForProvider("test");
-    service.queueRequest("http://example.com", {},
-        function(data) {
-            assert.pass("Requeueing function called");
-            return false;
-        },
-        function(data) {
-            assert.pass("Request completed");
-            done();
-        }
-    );
+    yield service.queueRequest("http://example.com", {}, (data) => {
+        assert.pass("Requeueing function called");
+        return false;
+    });
 };
 
 exports.testUpdateRequest = function(assert) {
@@ -74,14 +68,16 @@ exports.testQueueEvents = function(assert, done) {
         listener = function() {
             if(++count == 4) {
                 assert.pass("All "+count+" listeners called");
+                QueueService.removeQueueListeners(listener, listener);
                 done();
             }
             else {
+
                 assert.pass("Listener number "+count+" called");
             }
         };
     QueueService.addQueueListeners(listener, listener);
-    service.queueRequest("http://example.com", {}, listener, listener);
+    service.queueRequest("http://example.com", {}, listener).then(listener);
 };
 
 require("sdk/test").run(exports);
