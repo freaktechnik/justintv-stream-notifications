@@ -229,7 +229,7 @@ nav {
 
 .beam a:hover, .thumbnail .beam a:hover div {
     background: #11131B !important;
-    color: white;
+    color: white !important;
 }
 
 /* Icon font from fontello */

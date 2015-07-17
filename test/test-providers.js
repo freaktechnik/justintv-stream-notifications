@@ -3,7 +3,7 @@
  * Licensed under LGPLv3
  */
 const providers = require("../lib/providers"),
-       { isValidURI } = require("sdk/url");      
+       { isValidURI } = require("sdk/url");
 
 exports.testProviders = function(assert) {
     var provider;
