@@ -23,6 +23,7 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `twitch_clientID` Twitch developer application client ID.
  - `twitch_showHosting` (Default: true) Whether to check Twitch channels if they are hosting another channel.
  - `youtube_apiKey` YouTube public application API key.
+ - `mlg_showRebroadcasts` (Default: true) Shows streams that are being rebroadcastet as live when enabled.
  - `channellist_cacheTime` (Default: 600000) How long the channel states will be remembered while Firefox is closed.
 
 The `sdk` subbranch are Add-on SDK specific preferences and should not be changed, except for the `sdk.console.logLevel` preference.
