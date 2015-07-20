@@ -123,6 +123,13 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "mlg_showRebroadcasts",
+      "title": "Show rebroadcasts as live",
+      "value": true,
+      "hidden": true
+    },
+    {
       "type": "integer",
       "name": "channellist_cacheTime",
       "title": "Time to cache channel states while Firefox is closed",
