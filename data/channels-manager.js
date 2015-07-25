@@ -118,6 +118,9 @@ document.addEventListener("keypress", function(evt) {
             document.querySelector("#searchField").select();
             evt.preventDefault();
         }
+        else if(evt.key == "Help") {
+            window.open(document.querySelector("[rel='help']").href);
+        }
     }
     else {
         if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
