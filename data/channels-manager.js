@@ -116,9 +116,17 @@ document.addEventListener("keypress", function(evt) {
         }
         else if(evt.key == "f" && evt.ctrlKey) {
             document.querySelector("#searchField").select();
+            evt.preventDefault();
         }
-        else if(evt.key == "w" && evt.ctrlKey) {
-            self.port.emit("close");
+    }
+    else {
+        if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
+            hideDialog();
+            resetDialogForms();
+            evt.preventDefault();
+        }
+        else if(evt.key == "f" && evt.ctrlKey) {
+            evt.preventDefault();
         }
     }
 }, true);
@@ -235,13 +243,6 @@ document.querySelector("#userRadio").addEventListener("change", updateSelect);
 popup.querySelector("input[type='button']").addEventListener("click", function(evt) {
     hideDialog();
     resetDialogForms();
-});
-
-popup.addEventListener("keypress", function(evt) {
-    if(evt.key == "Esc") {
-        hideDialog();
-        resetDialogForms();
-    }
 });
 
 popup.querySelector("form").addEventListener("submit", function(evt) {

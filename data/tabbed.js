@@ -34,11 +34,11 @@ function Tabbed(el) {
     };
     var keyListener = function(evt) {
         evt.preventDefault();
-        if(evt.key == "Left") {// left arrow key
+        if(evt.key == "ArrowLeft") {// left arrow key
             if(that.current != 1)
                 that.select(that.current - 1);
         }
-        else if(evt.key == "Right") { // right arrow key
+        else if(evt.key == "ArrowRight") { // right arrow key
             if(that.current < that.length)
                 that.select(that.current + 1);
         }
