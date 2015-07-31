@@ -43,11 +43,18 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+        clean: {
+            locales: {
+                files: {
+                    src: [ 'locale/*.properties', '!locale/en.properties' ]
+                }
+            }
         }
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['transifex', 'jpm:xpi']);
+    grunt.registerTask('build', ['transifex', 'jpm:xpi', 'clean']);
 
     grunt.registerTask('default', ['test']);
 };
