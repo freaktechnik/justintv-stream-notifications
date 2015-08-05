@@ -162,34 +162,6 @@
       "name": "autoUsername",
       "title": "Auto detect username",
       "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_path",
-      "title": "Path to Livestreamer binary",
-      "value": "/usr/local/bin/livestreamer",
-      "hidden": true
-    },
-    {
-      "type": "bool",
-      "name": "livestreamer_enabled",
-      "title": "Streams get opened with Livestreamer by default if enabled",
-      "value": false,
-      "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_player",
-      "title": "Player to use",
-      "value": "/usr/bin/vlc",
-      "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_quality",
-      "title": "Quality preset to choose for the stream (safe bets are best and worst)",
-      "value": "best",
-      "hidden": true
     }
   ],
   "homepage": "http://jtvn.humanoids.be/",
