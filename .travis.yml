@@ -12,8 +12,7 @@ before_install:
 before_script:
 - npm install get-firefox grunt-cli -g
 - cd ..
-- get-firefox -p linux -t firefox.tar.bz2
-- tar -xjf firefox.tar.bz2
+- get-firefox -cvep linux
 - cd $TRAVIS_BUILD_DIR
 script:
 - export FIREFOX_BIN=$TRAVIS_BUILD_DIR/../firefox/firefox
