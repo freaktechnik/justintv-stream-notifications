@@ -1,12 +1,11 @@
-sudo: false
 language: node_js
-node_js:
-- '0.10'
+env:
+  global:
+  - DISPLAY=:99.0
+  - JPM_FIREFOX_BINARY=$TRAVIS_BUILD_DIR/../firefox/firefox
 before_install:
 - openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv
   -in .transifexrc.enc -out .transifexrc -d
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
 - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile
   --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 -extension RANDR
 before_script:
@@ -14,9 +13,6 @@ before_script:
 - cd ..
 - get-firefox -cvep linux
 - cd $TRAVIS_BUILD_DIR
-script:
-- export FIREFOX_BIN=$TRAVIS_BUILD_DIR/../firefox/firefox
-- npm test
 branches:
   except:
   - stable
