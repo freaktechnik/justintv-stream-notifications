@@ -15,5 +15,4 @@ before_script:
 - cd $TRAVIS_BUILD_DIR
 branches:
   except:
-  - stable
   - gh-pages
