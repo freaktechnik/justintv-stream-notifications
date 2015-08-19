@@ -2,7 +2,7 @@ module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
 
     grunt.initConfig({
-        firefoxBinary: process.env.FIREFOX_BIN || '/usr/bin/firefox',
+        firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox',
         shell: {
             jpmTest: {
                 command: 'jpm test -b <%= firefoxBinary %> --tbpl'
