@@ -8,7 +8,7 @@
   <article class="post-content">
     <p>Wait, don't just close this tab. If you don't want to see the changes when the add-on updates, just uncheck the "Open a tab with update info after an update" setting.</p>
     <h2>Changes in {{ page.version }}:</h2>
-    {% include find_release %}
+    {% capture release %}{{ page.github.releases || where "tag_name",page.version }}{% endcapture %}
     {% if release != nil %}
       {{ release.body | markdownify }}
     {% endif %}
