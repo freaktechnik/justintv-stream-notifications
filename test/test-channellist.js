@@ -178,9 +178,10 @@ exports['test channellist'] = function*(assert) {
     console.info("channelList.channelExists");
 
     let exists = yield list.channelExists('test_chan', 'test');
-    assert.ok(exists, "The test_Chan channel exists");
+    assert.ok(exists, "The test_chan channel exists");
 
-    yield expectReject(list.channelExists('doesnot', 'exist'));
+    let doesntexist = yield list.channelExists('doesnot', 'exist');
+    assert.ok(!doesntexist, "The doesnto channel doesn't exist");
 
     // Test liveStatus 1
     console.info("channelList.liveStatus 1");
