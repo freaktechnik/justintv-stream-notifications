@@ -1,5 +1,4 @@
 {% for r in site.github.releases %}
-  {{ r.tag_name }} == {{ page.version }}
   {% if r.tag_name == page.version %}
     {% assign release = r %}
     {% break %}
