@@ -110,7 +110,13 @@ changelog
     - Don't try to update the channel statuses when in offline mode
     - Get game name for MLG.tv channels
     - Add beam.pro provider
+    - Add picarto.tv provider
     - Show notification if a newly added channel is live
     - Making less requests when possible
     - Fix updating a specific channel from the panel context menu
     - Better handling of Twitch channels with spaces in the display name
+    - Fix keyboard shortcuts in channels manager
+    - Make MLG.tv rebroadcasts optional
+    - Make hosted Twitch channels optional
+    - Update translations
+    - Fix some oddities with behaviour when clicking to go to a channel
