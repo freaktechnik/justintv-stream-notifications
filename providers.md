@@ -20,10 +20,20 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 Sadly, it's not possible to get the user's avatars, so all Azubu users have the same icon (not the channels though!).
 
+![Beam.pro icon](/img/beampro.png)
+------
+[Beam.pro](https://beam.pro) is a game streaming platform.
+
+### Features
+
+ - Stream page
+ - Separate chat page
+ - Monitoring the status of channels
+
 ![Hitbox icon](/img/hitbox-icon.png) Hitbox
 ------
 
-[Hitbox](http://hitbox.tv) is a pretty new game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
+[Hitbox](http://hitbox.tv) is a game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
 
 ### Features
 
@@ -51,6 +61,15 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Stream page
  - Brackets disguised as archive
  - Separate chat page
+ - Monitoring the status of channels
+
+![Picarto.TV](/img/picarto.png)
+------
+[Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
+
+### Features
+
+ - Stream page
  - Monitoring the status of channels
 
 ![Twitch](/img/twitch-icon.png)

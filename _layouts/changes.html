@@ -9,7 +9,14 @@
   <article class="post-content">
     <p>Wait, don't just close this tab. If you don't want to see the changes when the add-on updates, just uncheck the "Open a tab with update info after an update" setting.</p>
     <h2>Changes in {{ page.version }}:</h2>
+    {{ include find_release }}
+    {% if release != nil %}
+      {{ release.body }}
+    {% endif %}
     {{ content }}
+    {% if release.draft %}
+        <em>This version is still a draft, so it might be broken!</em>
+    {% endif %}
     <h2>This version still can't do this nice thing!</h2>
     <p>I guess I've forgot to add it then. Remind me via <a href="mailto:{{ site.email }}" rel="author">e-Mail</a> or <a href="https://twitter.com/{{ site.twitter_username }}" title="@{{ site.twitter_username }}" rel="author">Twitter</a>.</p>
     <h2>Enjoy the extension?</h2>
