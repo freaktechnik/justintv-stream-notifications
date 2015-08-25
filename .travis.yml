@@ -17,3 +17,6 @@ before_script:
 branches:
   except:
   - gh-pages
+notifications:
+  email:
+    on_failure: change
