@@ -105,7 +105,7 @@ changelog
     - Added support for Hitbox, Ustream, Livestream, MLG.tv, Azubu and YouTube
     - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
     - Filter channels in the panel (and the channels manager)
-3.1.0
+3.1.0, 3.1.1
     - Fix channels not getting marked as offline if Firefox has been closed for more than ten minutes
     - Don't try to update the channel statuses when in offline mode
     - Get game name for MLG.tv channels
