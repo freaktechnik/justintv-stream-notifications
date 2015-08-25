@@ -42,7 +42,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Separate chat page
  - Monitoring the status of channels
 
-![Livestream](/img/livestream-logo.png)
+![Livestream icon](/img/livestream-logo.png)
 ----------
 [Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
@@ -52,7 +52,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Separate chat page
  - Monitoring the status of channels
 
-![Majorleaguegaming](/img/mlg-logo.png)
+![Majorleaguegaming icon](/img/mlg-logo.png)
 ------
 [MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform.
 
@@ -63,7 +63,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Separate chat page
  - Monitoring the status of channels
 
-![Picarto.TV](/img/picarto.png)
+![Picarto.TV icon](/img/picarto.png)
 ------
 [Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
 
@@ -72,7 +72,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Stream page
  - Monitoring the status of channels
 
-![Twitch](/img/twitch-icon.png)
+![Twitch textmark](/img/twitch-icon.png)
 ------
 [Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
 
@@ -85,7 +85,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
 
-![Ustream](/img/ustream.png)
+![Ustream logo](/img/ustream.png)
 -------
 [Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
 
@@ -95,7 +95,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
  - Separate chat page
  - Monitoring the status of channels
 
-![YouTube](/img/YouTube-logo-full_color.png)
+![YouTube logo](/img/YouTube-logo-full_color.png)
 -------
 [YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
 
