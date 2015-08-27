@@ -63,8 +63,7 @@
       "name": "panel_badge",
       "title": "Display badge counter",
       "description": "Displays the number of live channels on the button if any.",
-      "value": false,
-      "hidden": true
+      "value": false
     },
     {
       "type": "bool",
@@ -178,7 +177,7 @@
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
-    "firefox": ">=38.0a1",
+    "firefox": ">=42.0a1",
     "fennec": ">=38.0a1"
   },
   "license": "MPL-2.0",
