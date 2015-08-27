@@ -236,6 +236,16 @@ exports['test channellist'] = function*(assert) {
         assert.ok(channel instanceof Channel);
     });
 
+
+    // Test getChannelsByUserFavorites
+    console.info("channelList.getChannelsByUserFavorites");
+
+    let { login: userName, type: userType } = getUser();
+    user = yield list.getUser(userName, userType);
+    channels = yield list.getChannelsByUserFavorites(user);
+    assert.equal(channels.length, 1);
+    assert.equal(channels[0].login, user.favorites[0]);
+
     // Test removeUsersWithFavorite
     console.info("channelList.removeUsersWithFavorite");
 
