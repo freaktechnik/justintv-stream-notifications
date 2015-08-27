@@ -97,7 +97,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
 
 ![YouTube logo](/img/YouTube-logo-full_color.png)
 -------
-[YouTube](http://youtube.com) is the leading VOD platform and added livestreams due to market pressure (don't quote me on that).
+[YouTube](https://youtube.com) is the leading VOD platform and added livestreams, that can also be watched prettified on [YouTube Gaming](https://gaming.youtube.com). This extension supports streams on YouTube Gaming, but they aren't opened on Gaming.
 
 ### Features
 
