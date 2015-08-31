@@ -39,7 +39,7 @@ exports.expectReject = expectReject;
 const wait = (target, type, capture) => {
   let { promise, resolve, reject } = defer();
 
-  if (!arguments.length) {
+  if (!target) {
     setImmediate(resolve);
   }
   else if (typeof(target) === "number") {
