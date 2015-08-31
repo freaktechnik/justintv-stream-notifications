@@ -13,7 +13,7 @@ exports.testProviders = function(assert) {
         assert.equal(provider.name, provider.toString(), "toString and name return the same");
         assert.ok(Array.isArray(provider.authURL), "Auth URL is an Array");
         assert.ok(provider.authURL.every(url => isValidURI(url)), "Auth URLs are valid");
-        assert.ok(provider.hasOwnProperty("supports"), "Provider has a supports property");
+        assert.ok("supports" in provider, "Provider has a supports property");
         assert.equal(typeof(provider.supports.favorites), "boolean", "Provider says whether or not it supports adding favs");
         assert.equal(typeof(provider.supports.credentials), "boolean", "Provider states whether or not it supports adding favs from credentials");
         assert.ok((!provider.supports.favorites && !provider.supports.credentials) || provider.supports.favorites, "Supports config is valid");
