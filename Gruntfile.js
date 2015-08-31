@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                    src: ['**/*.js', '!node_modules/**/*']
+                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*']
                 }
             }
         },
@@ -48,6 +48,19 @@ module.exports = function(grunt) {
             locales: {
                 files: {
                     src: [ 'locale/*.properties', '!locale/en.properties' ]
+                }
+            },
+            docs: {
+                files: {
+                    src: ['doc']
+                }
+            }
+        },
+        jsdoc: {
+            dist: {
+                src: ['lib/**/*.js', 'README.md', 'package.json'],
+                options: {
+                    destination: 'doc'
                 }
             }
         }

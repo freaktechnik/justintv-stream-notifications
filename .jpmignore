@@ -5,7 +5,7 @@
 
 # Ignore documentation
 *.md
-*docs*
+*doc*
 
 # Ignore grunt and other npm stuff
 Gruntfile.js
