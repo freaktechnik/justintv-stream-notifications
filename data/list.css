@@ -252,6 +252,16 @@ nav {
     color: rgb(236, 82, 0) !important;
 }
 
+#live.thumbnail .newlivestream a div {
+    background: rgba(255, 255, 255, 0.7);
+    color: #CF202E;
+}
+
+.newlivestream a:hover, .thumbnail .newlivestream a:hover div {
+    background: white !important;
+    color: #CF202E !important;
+}
+
 /* Icon font from fontello */
 .icon {
     font-family: "extra-glyphs";

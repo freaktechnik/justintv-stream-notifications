@@ -123,3 +123,4 @@ changelog
 3.2.0
     - Add user favorites support to hitbox
     - Add gaming.tv provider
+    - Add support for new livestream
