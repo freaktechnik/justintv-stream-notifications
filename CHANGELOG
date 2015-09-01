@@ -122,3 +122,4 @@ changelog
     - Fix some oddities with behaviour when clicking to go to a channel
 3.2.0
     - Add user favorites support to hitbox
+    - Add gaming.tv provider
