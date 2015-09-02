@@ -32,7 +32,6 @@ module.exports = function(grunt) {
                     project: 'jtvn',
                     endpoint: 'http://beta.babelzilla.org/api/2/',
                     resources: ['enproperties'],
-                    languages: ['de', 'fr', 'es-MX'],
                     filename: '_lang_.properties',
                     templateFn: function(strings) {
                         return strings.sort(function(a, b) {
