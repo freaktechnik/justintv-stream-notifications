@@ -125,3 +125,4 @@ changelog
     - Add gaming.tv provider
     - Add support for new livestream
     - Update Picarto.TV for the new site
+    - Improve azubu user favorites import
