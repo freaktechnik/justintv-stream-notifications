@@ -61,7 +61,7 @@
     {
       "type": "bool",
       "name": "panel_badge",
-      "title": "Display badge counter",
+      "title": "Display counter badge",
       "description": "Displays the number of live channels on the button if any.",
       "value": false
     },

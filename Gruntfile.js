@@ -46,7 +46,7 @@ module.exports = function(grunt) {
         clean: {
             locales: {
                 files: {
-                    src: [ 'locale/*.properties', '!locale/en.properties' ]
+                    src: [ 'locale/*.properties', '!locale/en-US.properties' ]
                 }
             },
             docs: {
