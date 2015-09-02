@@ -243,7 +243,7 @@ function updateSelect() {
 document.querySelector("#channelRadio").addEventListener("change", updateSelect);
 document.querySelector("#userRadio").addEventListener("change", updateSelect);
 
-popup.querySelector("input[type='button']").addEventListener("click", function(evt) {
+popup.querySelector("button[type='button']").addEventListener("click", function(evt) {
     hideDialog();
     resetDialogForms();
 });
