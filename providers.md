@@ -18,8 +18,6 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
 
-Sadly, it's not possible to get the user's avatars, so all Azubu users have the same icon (not the channels though!).
-
 ![Beam.pro icon](/img/beampro.png)
 ------
 [Beam.pro](https://beam.pro) is a game streaming platform.
@@ -66,6 +64,7 @@ Sadly, it's not possible to get the user's avatars, so all Azubu users have the 
 ![Picarto.TV icon](/img/picarto.png)
 ------
 [Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
+Sadly the current implementation of this provider is broken.
 
 ### Features
 
