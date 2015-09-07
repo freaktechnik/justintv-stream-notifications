@@ -167,7 +167,7 @@
       "type": "string",
       "name": "livestreamer_path",
       "title": "Path to Livestreamer binary",
-      "value": "/usr/local/bin/livestreamer",
+      "value": "",
       "hidden": true
     },
     {
