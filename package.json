@@ -181,7 +181,7 @@
       "type": "string",
       "name": "livestreamer_player",
       "title": "Player to use",
-      "value": "/usr/bin/vlc",
+      "value": "",
       "hidden": true
     },
     {
