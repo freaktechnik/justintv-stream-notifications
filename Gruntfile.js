@@ -53,6 +53,11 @@ module.exports = function(grunt) {
                 files: {
                     src: ['doc']
                 }
+            },
+            build: {
+                files: {
+                    src: ['*.xpi']
+                }
             }
         },
         jsdoc: {
@@ -66,7 +71,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['transifex', 'jpm:xpi', 'clean']);
+    grunt.registerTask('build', ['transifex', 'jpm:xpi', 'clean:locales']);
 
     grunt.registerTask('default', ['test']);
 };
