@@ -10,7 +10,7 @@ before_install:
 - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile
   --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 -extension RANDR"
 before_script:
-- npm install get-firefox -g
+- npm install get-firefox grunt-cli -g
 - cd ..
 - get-firefox -cvep linux
 - cd $TRAVIS_BUILD_DIR
@@ -21,7 +21,6 @@ notifications:
   email:
     on_failure: change
 before_deploy:
-- npm install -g grunt-cli
 - grunt build
 deploy:
   provider: releases
