@@ -45,7 +45,7 @@ exports.testUpdateRequest = function(assert) {
     // Replace them
     service.queueUpdateRequest(["http://example.com", "http:/example.com"],
         service.HIGH_PRIORITY,
-        () => { console.log("done"); }
+        () => { console.log("done"); },
         {},
         () => { console.log("requeue?"); return false; }
 
