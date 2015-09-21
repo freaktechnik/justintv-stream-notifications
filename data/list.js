@@ -19,6 +19,7 @@ const filters = [
     {
         subtarget: ".name"
     },
+    },
     {
         subtarget: ".title"
     },
@@ -30,9 +31,7 @@ const filters = [
     }
 ];
 
-var getChannelIdFromId = function(id) {
-    return parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
-};
+var getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
 
 window.addEventListener("load", function() {
     live    = document.getElementById("live");
@@ -95,7 +94,7 @@ addon.port.on("setExtras", function(visible) {
 });
 
 addon.port.on("addChannels", function(channels) {
-    channels.forEach(function(channel) {
+    channels.forEach((channel) => {
         addChannel(channel);
     });
 });
@@ -114,16 +113,17 @@ addon.port.on("setOffline", function(channel) {
 
 addon.port.on("resize", resize);
 
-function resize() {
-    var h = document.querySelector(".tabbed").scrollHeight < addon.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : addon.options.maxHeight;
+var resize = () => {
+    let scrollHeight = document.querySelector(".tabbed").scrollHeight;
+    var h = scrollHeight < addon.options.maxHeight ? scrollHeight : addon.options.maxHeight;
     addon.port.emit("resize", [addon.options.panelWidth, h]);
-}
+};
 
-function open(channelId) {
+var open = (channelId) => {
     addon.port.emit("open", channelId);
-}
+};
 
-function setStyle(style) {
+var setStyle = (style) => {
     var newClass;
     switch(style) {
         case 2:
@@ -143,35 +143,35 @@ function setStyle(style) {
         currentStyle = newClass;
     }
     resize();
-}
+};
 
-function setExtrasVisibility(visible) {
+var setExtrasVisibility = (visible) => {
     if(visible)
         live.classList.add("extras");
     else
         live.classList.remove("extras");
-}
+};
 
 // Find the node to inser before in order to keep the list sorted
-function findInsertionNodeIn(list, name) {
+var findInsertionNodeIn = (list, name) => {
     var node = list.firstElementChild;
 
     while(node && name.localeCompare(node.querySelector(".name").textContent) >= 0) {
         node = node.nextSibling;
     }
     return node;
-}
+};
 
-function insertChannel(channel, node) {
+var insertChannel = (channel, node) => {
     if(channel.live)
         live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
     else
         offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
 
     resize();
-}
+};
 
-function getBestImageForSize(user, size) {
+var getBestImageForSize = (user, size) => {
     size = Math.round(parseInt(size, 10) * window.devicePixelRatio);
     // shortcut if there's an image with the size demanded
     if(user.image.hasOwnProperty(size.toString())) {
@@ -180,7 +180,7 @@ function getBestImageForSize(user, size) {
 
     // search next biggest image
     var index = Number.MAX_VALUE, biggest = 0;
-    Object.keys(user.image).forEach(function(s) {
+    Object.keys(user.image).forEach((s) => {
         s = parseInt(s, 10);
         if(s > size && s < index)
             index = s;
@@ -192,9 +192,14 @@ function getBestImageForSize(user, size) {
         index = biggest;
 
     return user.image[index];
-}
+};
 
-function addChannel(channel) {
+var contextMenuListener = (e) => {
+    currentMenuTarget = e.currentTarget;
+    document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
+};
+
+var addChannel = (channel) => {
     /*
      <li class="type" id="channel1">
         <a href="" contextmenu="context">
@@ -273,10 +278,7 @@ function addChannel(channel) {
     link.appendChild(wrapper);
     link.setAttribute("contextmenu", CONTEXTMENU_ID);
     link.addEventListener("click", open.bind(null, channel.id));
-    channelNode.addEventListener("contextmenu", function(e) {
-        currentMenuTarget = e.currentTarget;
-        document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
-    });
+    channelNode.addEventListener("contextmenu", contextMenuListener);
     channelNode.classList.add(channel.type);
     channelNode.appendChild(link);
     channelNode.id = CHANNEL_ID_PREFIX+channel.id;
@@ -289,9 +291,9 @@ function addChannel(channel) {
     hideNoChannels();
     if(channel.live)
         hideNoOnline();
-}
+};
 
-function removeChannel(channelId) {
+var removeChannel = (channelId) => {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
     if("live" == channelNode.parentNode.id) {
         addon.port.emit("removedLive", channelId);
@@ -308,9 +310,9 @@ function removeChannel(channelId) {
         displayNoChannels();
     }
     resize();
-}
+};
 
-function updateNodeContent(channel) {
+var updateNodeContent = (channel) => {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
         nameNode = channelNode.querySelector(".name"),
         nameText = document.createTextNode(channel.uname),
@@ -334,39 +336,42 @@ function updateNodeContent(channel) {
     else
         show(channelNode.querySelector(".categoryWrapper"));
 
-    channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
-    channelNode.querySelector("a div img").setAttribute("src", getBestImageForSize(channel, 30));
-}
+    // only update images if the user is online to avoid broken images
+    if(navigator.onLine) {
+        channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
+        channelNode.querySelector("a div img").setAttribute("src", getBestImageForSize(channel, 30));
+    }
+};
 
-function makeChannelLive(channel) {
+var makeChannelLive = (channel) => {
     hideNoOnline();
     updateNodeContent(channel);
     if(!live.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
-}
+};
 
-function makeChannelOffline(channel) {
+var makeChannelOffline = (channel) => {
     if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
     if(live.childElementCount === 0) {
         displayNoOnline();
     }
-}
+};
 
-function displayNoOnline() {
+var displayNoOnline = () => {
     show(document.getElementById("noonline"));
-}
+};
 
-function hideNoOnline() {
+var hideNoOnline = () => {
     hide(document.getElementById("noonline"));
-}
+};
 
-function hideNoChannels() {
+var hideNoChannels = () => {
     hide(document.getElementById("nochannels"));
-}
+};
 
-function displayNoChannels() {
+var displayNoChannels = () => {
     displayNoOnline();
     show(document.getElementById("nochannels"));
 }
