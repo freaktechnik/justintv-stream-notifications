@@ -19,7 +19,6 @@ const filters = [
     {
         subtarget: ".name"
     },
-    },
     {
         subtarget: ".title"
     },
@@ -119,7 +118,7 @@ var resize = () => {
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 };
 
-var open = (channelId) => {
+var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
 };
 
@@ -277,7 +276,7 @@ var addChannel = (channel) => {
     link.appendChild(thumbnail);
     link.appendChild(wrapper);
     link.setAttribute("contextmenu", CONTEXTMENU_ID);
-    link.addEventListener("click", open.bind(null, channel.id));
+    link.addEventListener("click", openChannel.bind(null, channel.id));
     channelNode.addEventListener("contextmenu", contextMenuListener);
     channelNode.classList.add(channel.type);
     channelNode.appendChild(link);
@@ -374,4 +373,4 @@ var hideNoChannels = () => {
 var displayNoChannels = () => {
     displayNoOnline();
     show(document.getElementById("nochannels"));
-}
+};
