@@ -112,7 +112,7 @@ document.addEventListener("keypress", function(evt) {
             }
         }
         else if(evt.key == "Delete") {
-            removeSelectedItems();
+            removeSelectedItems(evt.shiftKey);
         }
         else if(evt.key == "f" && evt.ctrlKey) {
             document.querySelector("#searchField").select();
@@ -183,7 +183,7 @@ document.querySelector("#updateItem").addEventListener("click", function(evt) {
     }
 });
 
-function removeSelectedItems() {
+function removeSelectedItems(removeFollows) {
     var selected = getSelectedItemIds();
     if(users.hasAttribute("hidden")) {
         selected.forEach(function(channelId) {
@@ -192,7 +192,7 @@ function removeSelectedItems() {
     }
     else {
         selected.forEach(function(userId) {
-            self.port.emit("removeuser", userId);
+            self.port.emit("removeuser", userId, removeFollows);
         });
     }
 }
