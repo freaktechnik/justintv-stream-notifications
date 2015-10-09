@@ -22,6 +22,7 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `panel_badge` (Default: false) Show a badge with the number of live channels on the button.
  - `twitch_clientID` Twitch developer application client ID.
  - `twitch_showHosting` (Default: true) Whether to check Twitch channels if they are hosting another channel.
+ - `twitch_showPlaylist` (Default: false) Whether to show channels playing a playlist of VODs as live.
  - `youtube_apiKey` YouTube public application API key.
  - `mlg_showRebroadcasts` (Default: true) Shows streams that are being rebroadcasted as live when enabled.
  - `channellist_cacheTime` (Default: 600000) How long the channel states will be remembered while Firefox is closed in miliseconds.
