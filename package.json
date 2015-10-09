@@ -115,6 +115,13 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "twitch_showPlaylist",
+      "title": "Show channels replaying recordings from a playlist as live",
+      "value": false,
+      "hidden": true
+    },
+    {
       "type": "string",
       "name": "youtube_apiKey",
       "title": "YouTube API Key",
