@@ -197,7 +197,7 @@ function removeSelectedItems(removeFollows) {
     }
 }
 
-document.querySelector("#removeItem").addEventListener("click", removeSelectedItems);
+document.querySelector("#removeItem").addEventListener("click", (e) => removeSelectedItems(e.shiftKey));
 
 function showDialog() {
     popup.querySelector("dialog").setAttribute("open", true);
