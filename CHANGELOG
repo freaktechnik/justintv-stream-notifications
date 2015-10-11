@@ -105,12 +105,24 @@ changelog
     - Added support for Hitbox, Ustream, Livestream, MLG.tv, Azubu and YouTube
     - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
     - Filter channels in the panel (and the channels manager)
-3.1.0
+3.1.0, 3.1.1
     - Fix channels not getting marked as offline if Firefox has been closed for more than ten minutes
     - Don't try to update the channel statuses when in offline mode
     - Get game name for MLG.tv channels
     - Add beam.pro provider
+    - Add picarto.tv provider
     - Show notification if a newly added channel is live
     - Making less requests when possible
     - Fix updating a specific channel from the panel context menu
     - Better handling of Twitch channels with spaces in the display name
+    - Fix keyboard shortcuts in channels manager
+    - Make MLG.tv rebroadcasts optional
+    - Make hosted Twitch channels optional
+    - Update translations
+    - Fix some oddities with behaviour when clicking to go to a channel
+3.2.0
+    - Add user favorites support to hitbox
+    - Add gaming.tv provider
+    - Add support for new livestream
+    - Update Picarto.TV for the new site
+    - Improve azubu user favorites import

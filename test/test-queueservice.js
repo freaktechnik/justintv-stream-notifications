@@ -32,25 +32,26 @@ exports.testQueueRequest = function*(assert) {
 
 exports.testUpdateRequest = function(assert) {
     let service = QueueService.getServiceForProvider("test");
-    service.queueUpdateRequest(["http://example.com"], {},
+    service.queueUpdateRequest(["http://example.com"],
         service.HIGH_PRIORITY,
-        function() { console.log("requeue?"); return false; },
-        function() { console.log("done"); }
+        () => { console.log("done"); },
+        {},
+        () => { console.log("requeue?"); return false; }
     );
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 1);
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY), service.highPriorityRequestIds);
     assert.equal(service.getRequestProperty(service.LOW_PRIORITY).length, 0);
     var id = service.highPriorityRequestIds[0];
     // Replace them
-    service.queueUpdateRequest(["http://example.com", "http:/example.com"], {},
+    service.queueUpdateRequest(["http://example.com", "http:/example.com"],
         service.HIGH_PRIORITY,
-        function() { console.log("requeue?"); return false; },
-        function() { console.log("done"); }
+        () => { console.log("done"); },
+        {},
+        () => { console.log("requeue?"); return false; }
+
     );
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 2);
-    assert.ok(service.getRequestProperty(service.HIGH_PRIORITY).every(function(i) {
-        return i != id;
-    }));
+    assert.ok(service.getRequestProperty(service.HIGH_PRIORITY).every((i) => i != id));
 
     // remove the requests
     service.unqueueUpdateRequest(service.LOW_PRIORITY);

@@ -61,10 +61,9 @@
     {
       "type": "bool",
       "name": "panel_badge",
-      "title": "Display badge counter",
+      "title": "Display counter badge",
       "description": "Displays the number of live channels on the button if any.",
-      "value": false,
-      "hidden": true
+      "value": false
     },
     {
       "type": "bool",
@@ -113,6 +112,13 @@
       "name": "twitch_showHosting",
       "title": "Check if a Twitch Channel is hosting",
       "value": true,
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "twitch_showPlaylist",
+      "title": "Show channels replaying recordings from a playlist as live",
+      "value": false,
       "hidden": true
     },
     {
@@ -200,13 +206,13 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "lib": "lib",
   "title": "Live Stream Notifier",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
-    "firefox": ">=38.0a1",
+    "firefox": ">=42.0a1",
     "fennec": ">=38.0a1"
   },
   "license": "MPL-2.0",
@@ -222,6 +228,7 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-jpm": "^0.1.0",
+    "grunt-jsdoc": "^0.6.8",
     "grunt-shell": "^1.1.2",
     "grunt-transifex": "^0.1.1",
     "jpm": "*",

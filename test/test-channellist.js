@@ -178,9 +178,10 @@ exports['test channellist'] = function*(assert) {
     console.info("channelList.channelExists");
 
     let exists = yield list.channelExists('test_chan', 'test');
-    assert.ok(exists, "The test_Chan channel exists");
+    assert.ok(exists, "The test_chan channel exists");
 
-    yield expectReject(list.channelExists('doesnot', 'exist'));
+    let doesntexist = yield list.channelExists('doesnot', 'exist');
+    assert.ok(!doesntexist, "The doesnto channel doesn't exist");
 
     // Test liveStatus 1
     console.info("channelList.liveStatus 1");
@@ -234,6 +235,16 @@ exports['test channellist'] = function*(assert) {
         console.log(channel.login);
         assert.ok(channel instanceof Channel);
     });
+
+
+    // Test getChannelsByUserFavorites
+    console.info("channelList.getChannelsByUserFavorites");
+
+    let { login: userName, type: userType } = getUser();
+    user = yield list.getUser(userName, userType);
+    channels = yield list.getChannelsByUserFavorites(user);
+    assert.equal(channels.length, 1);
+    assert.equal(channels[0].login, user.favorites[0]);
 
     // Test removeUsersWithFavorite
     console.info("channelList.removeUsersWithFavorite");

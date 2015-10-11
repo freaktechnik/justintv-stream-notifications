@@ -3,6 +3,7 @@
  * Licensed under MPL 2.0
  */
 const { PaginationHelper, promisedPaginationHelper } = require("../lib/pagination-helper");
+const { resolve } = require("sdk/core/promise");
 
 exports.testPaginationHelper = function(assert, done) {
     const URL = "http://example.com/?offset=";
@@ -10,13 +11,16 @@ exports.testPaginationHelper = function(assert, done) {
         ph = new PaginationHelper({
             url: URL,
             pageSize: 1,
-            request: function(url, callback) {
+            request: function(url, callback, initial) {
                 assert.equal(url, URL+count++, "request got the correct URL");
-                callback(count);
+                if(initial)
+                    callback(count);
+                else
+                    return resolve(count);
             },
             fetchNextPage: function(data) {
                 assert.equal(data, count, "fetchNextPage got the correct data");
-                return data < 1;
+                return data < 2;
             },
             onComplete: function(data) {
                 assert.ok(Array.isArray(data), "data is an array");

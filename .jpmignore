@@ -3,12 +3,16 @@
 
 *dummyprovider.js
 
+# Ignore documentation
 *.md
+*doc*
 
+# Ignore grunt and other npm stuff
+Gruntfile.js
+*.jshintrc
 node_modules/jpm/
 node_modules/grunt*
 node_modules/load-grunt-tasks/
-*docs*
 
 *CHANGELOG*
 

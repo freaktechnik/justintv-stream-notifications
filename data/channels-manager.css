@@ -77,6 +77,7 @@ main {
     padding: 1em;
     border-right: 1px solid #282ebe;
     flex-grow: 1;
+    height: 1.2em;
 }
 
 .toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
@@ -154,7 +155,7 @@ main {
     margin: .2em;
 }
 
-#popup input[type="button"] {
+#popup button[type="button"] {
     font-size: initial;
     border: none;
     border-top: 1px solid #282ebe;
@@ -167,7 +168,7 @@ main {
 }
 
 
-#popup input[type="submit"] {
+#popup button[type="submit"] {
     font-size: initial;
     border: none;
     float: right;
