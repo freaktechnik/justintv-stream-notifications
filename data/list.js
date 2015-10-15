@@ -32,94 +32,36 @@ const filters = [
 
 var getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
 
-window.addEventListener("load", function() {
-    live    = document.getElementById("live");
-    offline = document.getElementById("offline");
-    setStyle(addon.options.style);
-    setExtrasVisibility(addon.options.extras);
-    resize();
-    document.getElementById("configure").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("configure");
-    });
-    document.getElementById("refreshButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("refresh");
-    });
-    document.getElementById("contextRefresh").addEventListener("click", function() {
-        addon.port.emit("refresh", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextOpen").addEventListener("click", function() {
-        addon.port.emit("openArchive", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextChat").addEventListener("click", function() {
-        addon.port.emit("openChat", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.querySelector(".tabbed").addEventListener("tabchanged", function() {
-        resize();
-    });
-
-    var field = document.querySelector("#searchField");
-    document.querySelector("#searchButton").addEventListener("click", function() {
-        if(field.hasAttribute("hidden")) {
-            show(field);
-            field.focus();
-        }
-        else {
-            hide(field);
-            field.value = "";
-            filter(field.value, live, filters);
-            filter(field.value, offline, filters);
-        }
-        resize();
-    });
-    field.addEventListener("keyup", function(e) {
-        filter(field.value, live, filters);
-        filter(field.value, offline, filters);
-        resize();
-    });
- });
-
-// Set up port commmunication listeners
-addon.port.on("setStyle", function(style) {
-    setStyle(style);
-});
-
-addon.port.on("setExtras", function(visible) {
-    setExtrasVisibility(visible);
-});
-
-addon.port.on("addChannels", function(channels) {
-    channels.forEach((channel) => {
-        addChannel(channel);
-    });
-});
-
-addon.port.on("removeChannel", function(channelId) {
-    removeChannel(channelId);
-});
-
-addon.port.on("setOnline", function(channel) {
-    makeChannelLive(channel);
-});
-
-addon.port.on("setOffline", function(channel) {
-    makeChannelOffline(channel);
-});
-
-addon.port.on("resize", resize);
+var contextMenuCommand = function(event) {
+    addon.port.emit(event, getChannelIdFromId(currentMenuTarget.id));
+    currentMenuTarget = null;
+};
 
 var resize = () => {
-    let scrollHeight = document.querySelector(".tabbed").scrollHeight;
-    var h = scrollHeight < addon.options.maxHeight ? scrollHeight : addon.options.maxHeight;
+    var scrollHeight = document.querySelector(".tabbed").scrollHeight;
+    var h = Math.ceil(Math.min(scrollHeight, addon.options.maxHeight));
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 };
 
 var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
+};
+
+var displayNoOnline = () => {
+    show(document.getElementById("noonline"));
+};
+
+var hideNoOnline = () => {
+    hide(document.getElementById("noonline"));
+};
+
+var hideNoChannels = () => {
+    hide(document.getElementById("nochannels"));
+};
+
+var displayNoChannels = () => {
+    displayNoOnline();
+    show(document.getElementById("nochannels"));
 };
 
 var setStyle = (style) => {
@@ -200,7 +142,7 @@ var contextMenuListener = (e) => {
 
 var addChannel = (channel) => {
     /*
-     <li class="type" id="channel1">
+    <li class="type" id="channel1">
         <a href="" contextmenu="context">
             <img src="thumbnail">
             <div>
@@ -358,19 +300,64 @@ var makeChannelOffline = (channel) => {
     }
 };
 
-var displayNoOnline = () => {
-    show(document.getElementById("noonline"));
-};
+// Set up DOM listeners and all that.
+window.addEventListener("load", function() {
+    live = document.getElementById("live");
+    offline = document.getElementById("offline");
 
-var hideNoOnline = () => {
-    hide(document.getElementById("noonline"));
-};
+    setStyle(addon.options.style);
+    setExtrasVisibility(addon.options.extras);
+    resize();
 
-var hideNoChannels = () => {
-    hide(document.getElementById("nochannels"));
-};
+    document.getElementById("configure").addEventListener("click", function(e) {
+        e.preventDefault();
+        addon.port.emit("configure");
+    });
+    document.getElementById("refreshButton").addEventListener("click", function(e) {
+        e.preventDefault();
+        addon.port.emit("refresh");
+    });
+    document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
+    document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
+    document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.querySelector(".tabbed").addEventListener("tabchanged", resize);
 
-var displayNoChannels = () => {
-    displayNoOnline();
-    show(document.getElementById("nochannels"));
-};
+    var field = document.querySelector("#searchField");
+    document.querySelector("#searchButton").addEventListener("click", () => {
+        if(field.hasAttribute("hidden")) {
+            show(field);
+            field.focus();
+        }
+        else {
+            hide(field);
+            field.value = "";
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
+        }
+        resize();
+    });
+    field.addEventListener("keyup", (e) => {
+        filter(field.value, live, filters);
+        filter(field.value, offline, filters);
+        resize();
+    });
+ });
+
+// Set up port commmunication listeners
+addon.port.on("setStyle", setStyle);
+
+addon.port.on("setExtras", setExtrasVisibility);
+
+addon.port.on("addChannels", (channels) => {
+    channels.forEach((channel) => {
+        addChannel(channel);
+    });
+});
+
+addon.port.on("removeChannel", removeChannel);
+
+addon.port.on("setOnline", makeChannelLive);
+
+addon.port.on("setOffline", makeChannelOffline);
+
+addon.port.on("resize", resize);
