@@ -200,7 +200,7 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-jpm": "^0.1.0",
-    "grunt-jsdoc": "^0.6.8",
+    "grunt-jsdoc": "^1.0.0",
     "grunt-shell": "^1.1.2",
     "grunt-transifex": "^0.1.1",
     "jpm": "*",
