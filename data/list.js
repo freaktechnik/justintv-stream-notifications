@@ -347,7 +347,7 @@ window.addEventListener("load", function() {
         e.preventDefault();
         addon.port.emit("refresh");
         if(!explore.parentNode.hasAttribute("hidden"))
-            getFeaturedChannels(exploreSelect.value)
+            getFeaturedChannels(exploreSelect.value);
     });
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
@@ -363,7 +363,7 @@ window.addEventListener("load", function() {
     });
     exploreSelect.addEventListener("change", () => {
         if(field.hasAttribute("hidden"))
-            getFeaturedChannels(exploreSelect.value)
+            getFeaturedChannels(exploreSelect.value);
         else
             providerSearch(exploreSelect.value, field.value);
     });
