@@ -11,7 +11,9 @@
 
 var live, offline, explore, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
+const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
+const EXPLORE_CONTEXTMENU_ID = "explore-context"
 const filters = [
     {
         attribute: "class"
@@ -45,6 +47,10 @@ var resize = () => {
 
 var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
+};
+
+var openUrl = (url) => {
+    addon.port.emit("openurl", url);
 };
 
 var displayNoOnline = () => {
@@ -229,12 +235,14 @@ var buildChannel = (channel, unspecific = false) => {
             channelNode.id = CHANNEL_ID_PREFIX+channel.id;
             link.setAttribute("contextmenu", CONTEXTMENU_ID);
             link.addEventListener("click", openChannel.bind(null, channel.id));
-            channelNode.addEventListener("contextmenu", contextMenuListener);
         }
         else {
+            channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+            link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
+            link.addEventListener("click", openUrl.bind(null, channel.url[0]));
             //TODO open handler
-            //TODO context menu
         }
+        channelNode.addEventListener("contextmenu", contextMenuListener);
 
         return channelNode;
 };
@@ -352,6 +360,10 @@ window.addEventListener("load", function() {
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.getElementById("contextAdd").addEventListener("click", (e) => {
+        addon.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
+        currentMenuTarget = null;
+    });
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
         resize();
         if(e.detail === 3) {
@@ -422,7 +434,6 @@ var hasOption = (provider) => {
 };
 
 addon.port.on("providers", (providers) => {
-    console.log(providers);
     var providerDropdown = document.getElementById("exploreprovider");
     for(var provider of providers) {
         if(!hasOption(provider.type)) {
