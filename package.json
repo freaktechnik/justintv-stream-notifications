@@ -150,6 +150,13 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "find_mature",
+      "title": "Find mature content in the explore tab",
+      "value": true,
+      "hidden": true
+    },
+    {
       "type": "string",
       "name": "twitchchannelList",
       "title": "Twitch Channels",

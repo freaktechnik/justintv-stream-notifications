@@ -24,6 +24,7 @@
                 <ul class="tabstrip" role="tablist">
                     <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" data-l10n-id="panel_tab_live">Live</a></li>
                     <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
+                    <li role="presentation"><a href="#explore" role="tab" aria-controls="explore" data-tab="3" data-l10n-id="panel_tab_explore">Explore</a></li>
                 </ul>
                 <ul class="toolbar" role="toolbar">
                     <li><a id="searchButton" href="#" title="Filter channels by a string" data-l10n-id="panel_search" class="icon">s</a></li>
@@ -32,7 +33,7 @@
                 </ul>
             </nav>
             <input type="search" id="searchField" placeholder="Filter…" data-l10n-id="cm_filter" hidden>
-            <section class="tabcontent" role="tabpanel" data-tab="1">
+            <section class="tabcontent live" role="tabpanel" data-tab="1">
                 <span id="noonline" data-l10n-id="panel_nothing_live">Nobody in your list is live.</span>
                 <ul id="live">
                 </ul>
@@ -40,6 +41,14 @@
             <section class="tabcontent" role="tabpanel" data-tab="2">
                 <span id="nochannels" data-l10n-id="panel_nothing">No channels added.</span>
                 <ul id="offline">
+                </ul>
+            </section>
+            <section class="tabcontent live" role="tabpanel" data-tab="3">
+                <select id="exploreprovider">
+                </select>
+                <span id="loadingexplore" data-l10n-id="panel_loading">Loading channels...</span>
+                <span id="noresults" data-l10n-id="panel_no_results" hidden>No results.</span>
+                <ul id="featured">
                 </ul>
             </section>
         </main>
