@@ -77,6 +77,16 @@ var displayNoChannels = () => {
     show(document.getElementById("nochannels"));
 };
 
+var displayLoading = () => {
+    show(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.add("loading");
+};
+
+var hideLoading = () => {
+    hide(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.remove("loading");
+};
+
 var setStyle = (style) => {
     var newClass;
     switch(style) {
@@ -314,16 +324,6 @@ var makeChannelOffline = (channel) => {
         displayNoOnline();
 };
 
-var displayLoading = () => {
-    show(document.getElementById("loadingexplore"));
-    explore.parentNode.classList.add("loading");
-};
-
-var hideLoading = () => {
-    hide(document.getElementById("loadingexplore"));
-    explore.parentNode.classList.remove("loading");
-};
-
 var getFeaturedChannels = (type) => {
     displayLoading();
     addon.port.emit("explore", type);
@@ -351,15 +351,6 @@ var applySearchToExplore = (exploreSelect, field) => {
         providerSearch(exploreSelect.value, field.value);
 };
 
-// Set up port commmunication listeners
-addon.port.on("setStyle", setStyle);
-addon.port.on("setExtras", setExtrasVisibility);
-addon.port.on("addChannels", (channels) => channels.forEach(addChannel));
-addon.port.on("removeChannel", removeChannel);
-addon.port.on("setOnline", makeChannelLive);
-addon.port.on("setOffline", makeChannelOffline);
-addon.port.on("resize", resize);
-
 var hasOption = (provider) => {
     var providerDropdown = document.getElementById("exploreprovider");
     for(var o of providerDropdown.options) {
@@ -369,6 +360,15 @@ var hasOption = (provider) => {
     }
     return false;
 };
+
+// Set up port commmunication listeners
+addon.port.on("setStyle", setStyle);
+addon.port.on("setExtras", setExtrasVisibility);
+addon.port.on("addChannels", (channels) => channels.forEach(addChannel));
+addon.port.on("removeChannel", removeChannel);
+addon.port.on("setOnline", makeChannelLive);
+addon.port.on("setOffline", makeChannelOffline);
+addon.port.on("resize", resize);
 
 addon.port.on("addExploreProviders", (providers) => {
     var providerDropdown = document.getElementById("exploreprovider");
@@ -386,9 +386,9 @@ addon.port.on("setFeatured", (channels, type) => {
 
     hideLoading();
 
-    // Right, there are more and less efficient ways to do this. There are nicer
-    // and uglier ways. Decide.
-    explore.innerHTML = "";
+    while(explore.firstChild)
+        explore.firstChild.remove();
+
     if(channels.length === 0) {
         show(document.getElementById("noresults"));
     }
