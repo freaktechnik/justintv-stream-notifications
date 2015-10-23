@@ -150,23 +150,10 @@
       "hidden": true
     },
     {
-      "type": "string",
-      "name": "twitchchannelList",
-      "title": "Twitch Channels",
-      "value": "",
-      "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "twitchusernameList",
-      "title": "Twitch Users",
-      "value": "",
-      "hidden": true
-    },
-    {
-      "type": "bool",
-      "name": "autoUsername",
-      "title": "Auto detect username",
+      "type": "integer",
+      "name": "queueservice_maxRetries",
+      "title": "Maximum number of attempts before a request is discarded",
+      "value": 5,
       "hidden": true
     }
   ],
