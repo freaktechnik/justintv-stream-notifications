@@ -436,6 +436,7 @@ window.addEventListener("load", function() {
         applySearchToExplore(exploreSelect, field);
     });
     document.querySelector("#searchButton").addEventListener("click", (e) => {
+        e.preventDefault();
         if(field.hasAttribute("hidden")) {
             show(field);
             field.focus();
