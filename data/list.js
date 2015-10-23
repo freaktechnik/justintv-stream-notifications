@@ -389,8 +389,6 @@ addon.port.on("setFeatured", (channels, type, q) => {
     )
         return;
 
-    hideLoading();
-
     while(explore.hasChildNodes())
         explore.firstChild.remove();
 
@@ -404,6 +402,7 @@ addon.port.on("setFeatured", (channels, type, q) => {
         });
     }
 
+    hideLoading();
     resize();
 });
 
