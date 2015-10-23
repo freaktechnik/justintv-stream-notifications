@@ -345,7 +345,7 @@ var forwardEvent = (name, event) => {
 };
 
 var applySearchToExplore = (exploreSelect, field) => {
-    if(field.hasAttribute("hidden") || field.value == "")
+    if(field.hasAttribute("hidden") || field.value === "")
         getFeaturedChannels(exploreSelect.value);
     else
         providerSearch(exploreSelect.value, field.value);
