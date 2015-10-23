@@ -314,7 +314,7 @@ var makeChannelOffline = (channel) => {
         displayNoOnline();
 };
 
-var showLoading = () => {
+var displayLoading = () => {
     show(document.getElementById("loadingexplore"));
     explore.parentNode.classList.add("loading");
 };
@@ -325,12 +325,12 @@ var hideLoading = () => {
 };
 
 var getFeaturedChannels = (type) => {
-    showLoading();
+    displayLoading();
     addon.port.emit("explore", type);
 };
 
 var providerSearch = (type, query) => {
-    showLoading();
+    displayLoading();
     addon.port.emit("search", type, query);
 };
 
@@ -377,7 +377,7 @@ addon.port.on("addExploreProviders", (providers) => {
             providerDropdown.add(new Option(provider.name, provider.type));
         }
     }
-    showLoading();
+    displayLoading();
 });
 
 addon.port.on("setFeatured", (channels, type) => {
