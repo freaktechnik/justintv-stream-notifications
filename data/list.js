@@ -386,7 +386,7 @@ addon.port.on("setFeatured", (channels, type) => {
 
     hideLoading();
 
-    while(explore.firstChild)
+    while(explore.hasChildNodes())
         explore.firstChild.remove();
 
     if(channels.length === 0) {
