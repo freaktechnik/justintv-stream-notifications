@@ -447,6 +447,7 @@ window.addEventListener("load", function() {
             filter(field.value, live, filters);
             filter(field.value, offline, filters);
             e.target.setAttribute("aria-pressed", "false");
+            field.blur();
 
             if(!explore.parentNode.hasAttribute("hidden"))
                 applySearchToExplore(exploreSelect, field);
