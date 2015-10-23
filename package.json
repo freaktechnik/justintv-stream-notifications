@@ -154,7 +154,7 @@
       "name": "queueservice_maxRetries",
       "title": "Maximum number of attempts before a request is discarded",
       "value": 5,
-      "hidden: true
+      "hidden": true
     },
     {
       "type": "bool",
