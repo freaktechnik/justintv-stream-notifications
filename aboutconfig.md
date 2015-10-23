@@ -27,6 +27,7 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `mlg_showRebroadcasts` (Default: true) Shows streams that are being rebroadcasted as live when enabled.
  - `channellist_cacheTime` (Default: 600000) How long the channel states will be remembered while Firefox is closed in miliseconds.
  - `queueservice_maxRetries` (Default: 5) How many times a request is sent again until it is discarded.
+ - `find_mature` (Default: true) Hide mature rated results from the explore tab (only works with some providers).
 
 The `sdk` subbranch are Add-on SDK specific preferences and should not be changed, except for the `sdk.console.logLevel` preference.
 
