@@ -50,7 +50,7 @@ var openChannel = (channelId) => {
 };
 
 var openUrl = (url) => {
-    addon.port.emit("openurl", url);
+    addon.port.emit("openUrl", url);
 };
 
 var displayNoOnline = () => {
@@ -240,7 +240,6 @@ var buildChannel = (channel, unspecific = false) => {
             channelNode.id = EXPLORE_ID_PREFIX+channel.login;
             link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
             link.addEventListener("click", openUrl.bind(null, channel.url[0]));
-            //TODO open handler
         }
         channelNode.addEventListener("contextmenu", contextMenuListener);
 
@@ -352,6 +351,59 @@ var applySearchToExplore = (exploreSelect, field) => {
         providerSearch(exploreSelect.value, field.value);
 };
 
+// Set up port commmunication listeners
+addon.port.on("setStyle", setStyle);
+addon.port.on("setExtras", setExtrasVisibility);
+addon.port.on("addChannels", (channels) => channels.forEach(addChannel));
+addon.port.on("removeChannel", removeChannel);
+addon.port.on("setOnline", makeChannelLive);
+addon.port.on("setOffline", makeChannelOffline);
+addon.port.on("resize", resize);
+
+var hasOption = (provider) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    for(var o of providerDropdown.options) {
+        if(o.value == provider) {
+            return true;
+        }
+    }
+    return false;
+};
+
+addon.port.on("addExploreProviders", (providers) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    for(var provider of providers) {
+        if(!hasOption(provider.type)) {
+            providerDropdown.add(new Option(provider.name, provider.type));
+        }
+    }
+    show(document.getElementById("loadingexplore"));
+});
+
+addon.port.on("setFeatured", (channels, type) => {
+    if(type !== document.getElementById("exploreprovider").value)
+        return;
+
+    hide(document.getElementById("loadingexplore"));
+
+    // Right, there are more and less efficient ways to do this. There are nicer
+    // and uglier ways. Decide.
+    explore.innerHTML = "";
+    if(channels.length === 0) {
+        show(document.getElementById("noresults"));
+    }
+    else {
+        hide(document.getElementById("noresults"));
+        channels.forEach((channel) => {
+            explore.appendChild(buildChannel(channel, true));
+        });
+    }
+
+    // If the explore tab is currently visible, resize the panel
+    if(!explore.parentNode.hasAttribute("hidden"))
+        resize();
+});
+
 // Set up DOM listeners and all that.
 window.addEventListener("load", function() {
     live = document.getElementById("live");
@@ -406,67 +458,4 @@ window.addEventListener("load", function() {
     });
 
     addon.port.emit("ready");
- });
-
-// Set up port commmunication listeners
-addon.port.on("setStyle", setStyle);
-
-addon.port.on("setExtras", setExtrasVisibility);
-
-addon.port.on("addChannels", (channels) => {
-    channels.forEach((channel) => {
-        addChannel(channel);
-    });
-});
-
-addon.port.on("removeChannel", removeChannel);
-
-addon.port.on("setOnline", makeChannelLive);
-
-addon.port.on("setOffline", makeChannelOffline);
-
-addon.port.on("resize", resize);
-
-var hasOption = (provider) => {
-    var providerDropdown = document.getElementById("exploreprovider");
-    for(var o of providerDropdown.options) {
-        if(o.value == provider) {
-            return true;
-        }
-    }
-    return false;
-};
-
-addon.port.on("providers", (providers) => {
-    var providerDropdown = document.getElementById("exploreprovider");
-    for(var provider of providers) {
-        if(!hasOption(provider.type)) {
-            providerDropdown.add(new Option(provider.name, provider.type));
-        }
-    }
-    show(document.getElementById("loadingexplore"));
-});
-
-addon.port.on("explore", (channels, type) => {
-    if(type !== document.getElementById("exploreprovider").value)
-        return;
-
-    hide(document.getElementById("loadingexplore"));
-
-    // Right, there are more and less efficient ways to do this. There are nicer
-    // and uglier ways. Decide.
-    explore.innerHTML = "";
-    if(channels.length === 0) {
-        show(document.getElementById("noresults"));
-    }
-    else {
-        hide(document.getElementById("noresults"));
-        channels.forEach((channel) => {
-            explore.appendChild(buildChannel(channel, true));
-        });
-    }
-
-    // If the explore tab is currently visible, resize the panel
-    if(!explore.parentNode.hasAttribute("hidden"))
-        resize();
 });
