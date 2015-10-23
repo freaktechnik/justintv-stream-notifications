@@ -32,6 +32,10 @@ nav {
     z-index: 10;
 }
 
+.loading {
+    cursor: progress !important;
+}
+
 .toolbar li, .tabstrip li {
     display: inline;
     list-style-type: none;
@@ -87,7 +91,7 @@ nav {
     display: block;
 }
 
-.compact li a, .default li a, .thumbnail:not(.live) li a, .live.thumbnail li div, .tabcontent > span {
+.compact .tabcontent li a, .default .tabcontent li a, .thumbnail .tabcontent:not(.live) li a, .thumbnail .live li div, .tabcontent > span {
     padding: .3em;
 }
 
@@ -96,49 +100,49 @@ nav {
     float: left;
 }
 
-.compact li a {
+.compact .tabcontent li a {
     min-height: 1em;
 }
 
-.compact li div img {
+.compact .tabcontent li div img {
     vertical-align: text-bottom;
     width: 1em;
     height: 1em;
 }
 
-.default li a, .thumbnail li a {
+.default .tabcontent li a, .thumbnail .tabcontent li a {
     min-height: 30px;
 }
 
-.live.thumbnail li a>img {
+.thumbnail .live li a>img {
     width: 100%;
     display: block;
 }
 
-.live.thumbnail li {
+.thumbnail .live li {
     position: relative;
     width: 100%;
 }
 
-.live.thumbnail li div {
+.thumbnail .live li div {
     position: absolute;
     width: calc(100% - .6em);
     bottom: 0;
 }
 
-.default li div img, .thumbnail li div img {
+.default .tabcontent li div img, .thumbnail .tabcontent li div img {
     width: 30px;
     height: 30px;
     vertical-align: middle;
 }
 
-.compact li a>img, .default li a>img, #offline li a>img , .compact li .title,
+.compact .tabcontent li a>img, .default .tabcontent li a>img, .tabcontent:not(.live) li a>img , .compact .tabcontent li .title,
 .tabcontent:not(.live) .title, [hidden], aside {
     display: none;
     visibility: hidden;
 }
 
-.extras aside {
+.extras .live aside {
     display: block;
     visibility: visible;
     opacity: 0.7;
@@ -146,7 +150,7 @@ nav {
 
 /* Type specific styles */
 
-.live.thumbnail .twitch  a div {
+.thumbnail .live .twitch  a div {
     background: rgba(117, 80, 186, 0.7);
     color: white;
 }
@@ -156,7 +160,7 @@ nav {
     color: white !important;
 }
 
-.live.thumbnail .hitbox a div {
+.thumbnail .live .hitbox a div {
     background: rgba(20, 20, 20, 0.7);
     color: #ACE600;
 }
@@ -166,7 +170,7 @@ nav {
     color: #ACE600 !important;
 }
 
-.live.thumbnail .ustream a div {
+.thumbnail .live .ustream a div {
     background: rgba(255, 255, 255, 0.7);
     color: #303030;
 }
@@ -176,7 +180,7 @@ nav {
     color: #303030 !important;
 }
 
-.live.thumbnail .youtube a div {
+.thumbnail .live .youtube a div {
     background: rgba(204, 24, 30, 0.7);
     color: #FFF;
 }
@@ -187,7 +191,7 @@ nav {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.live.thumbnail .livestream a div {
+.thumbnail .live .livestream a div {
     background: -moz-linear-gradient(center top, rgba(59, 59, 59, 0.7) 0%,
         rgba(56, 56, 56, 0.7) 16%, rgba(30, 30, 30, 0.7) 80%,
         rgba(25, 25, 25, 0.7) 98%, rgba(0, 0, 0, 0.7) 100%);
@@ -202,7 +206,7 @@ nav {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
-.live.thumbnail .mlg a div {
+.thumbnail .live .mlg a div {
     background: rgba(60, 125, 230, 0.7);
     color: #FFF;
 }
@@ -212,7 +216,7 @@ nav {
     color: #FFF !important;
 }
 
-.live.thumbnail .azubu a div {
+.thumbnail .live .azubu a div {
     background: rgba(0, 0, 0, 0.7);
     color: #3693E0;
 }
@@ -222,7 +226,7 @@ nav {
     color: #3693E0 !important;
 }
 
-.live.thumbnail .beam a div {
+.thumbnail .live .beam a div {
     background: rgba(17, 19, 27, 0.7);
     color: white;
 }
@@ -232,7 +236,7 @@ nav {
     color: white !important;
 }
 
-.live.thumbnail .picarto a div {
+.thumbnail .live .picarto a div {
     background: rgba(37, 49, 63, 0.7);
     color: white;
 }
@@ -242,7 +246,7 @@ nav {
     color: white !important;
 }
 
-.live.thumbnail .gamingtv a div {
+.thumbnail .live .gamingtv a div {
     background: rgba(27, 28, 28, 0.7);
     color: rgb(236, 82, 0);
 }
@@ -252,7 +256,7 @@ nav {
     color: rgb(236, 82, 0) !important;
 }
 
-.live.thumbnail .newlivestream a div {
+.thumbnail .live .newlivestream a div {
     background: rgba(255, 255, 255, 0.7);
     color: #CF202E;
 }

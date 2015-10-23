@@ -32,6 +32,13 @@ const filters = [
     }
 ];
 
+var toggle = (node, condition) => {
+    if(condition)
+        show(node);
+    else
+        hide(node);
+};
+
 var getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
 
 var contextMenuCommand = function(event) {
@@ -83,26 +90,16 @@ var setStyle = (style) => {
             newClass = "default";
     }
     if(newClass != currentStyle) {
-        live.classList.add(newClass);
-        live.classList.remove(currentStyle);
-        offline.classList.add(newClass);
-        offline.classList.remove(currentStyle);
-        explore.classList.add(newClass);
-        explore.classList.remove(currentStyle);
+        var main = document.querySelector(".tabbed");
+        main.classList.add(newClass);
+        main.classList.remove(currentStyle);
         currentStyle = newClass;
     }
     resize();
 };
 
 var setExtrasVisibility = (visible) => {
-    if(visible) {
-        live.classList.add("extras");
-        explore.classList.add("extras");
-    }
-    else {
-        live.classList.remove("extras");
-        explore.classList.remove("extras");
-    }
+    document.querySelector(".tabbed").classList.toggle("extras", visible);
 };
 
 // Find the node to inser before in order to keep the list sorted
@@ -271,9 +268,9 @@ var removeChannel = (channelId) => {
 
     channelNode.remove();
 
-    if(live.childElementCount === 0 && offline.childElementCount === 0) {
+    if(live.childElementCount === 0 && offline.childElementCount === 0)
         displayNoChannels();
-    }
+
     resize();
 };
 
@@ -290,16 +287,10 @@ var updateNodeContent = (channel) => {
     nameNode.replaceChild(nameText, nameNode.firstChild);
 
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
-    if(!("viewers" in channel) || channel.viewers < 0)
-        hide(channelNode.querySelector(".viewersWrapper"));
-    else
-        show(channelNode.querySelector(".viewersWrapper"));
+    toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
 
     category.replaceChild(document.createTextNode(channel.category), category.firstChild);
-    if(!channel.category)
-        hide(channelNode.querySelector(".categoryWrapper"));
-    else
-        show(channelNode.querySelector(".categoryWrapper"));
+    toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
     // only update images if the user is online to avoid broken images
     if(navigator.onLine) {
@@ -319,18 +310,27 @@ var makeChannelOffline = (channel) => {
     if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
-    if(live.childElementCount === 0) {
+    if(live.childElementCount === 0)
         displayNoOnline();
-    }
+};
+
+var showLoading = () => {
+    show(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.add("loading");
+};
+
+var hideLoading = () => {
+    hide(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.remove("loading");
 };
 
 var getFeaturedChannels = (type) => {
-    show(document.getElementById("loadingexplore"));
+    showLoading();
     addon.port.emit("explore", type);
 };
 
 var providerSearch = (type, query) => {
-    show(document.getElementById("loadingexplore"));
+    showLoading();
     addon.port.emit("search", type, query);
 };
 
@@ -377,14 +377,14 @@ addon.port.on("addExploreProviders", (providers) => {
             providerDropdown.add(new Option(provider.name, provider.type));
         }
     }
-    show(document.getElementById("loadingexplore"));
+    showLoading();
 });
 
 addon.port.on("setFeatured", (channels, type) => {
     if(type !== document.getElementById("exploreprovider").value)
         return;
 
-    hide(document.getElementById("loadingexplore"));
+    hideLoading();
 
     // Right, there are more and less efficient ways to do this. There are nicer
     // and uglier ways. Decide.
@@ -399,9 +399,7 @@ addon.port.on("setFeatured", (channels, type) => {
         });
     }
 
-    // If the explore tab is currently visible, resize the panel
-    if(!explore.parentNode.hasAttribute("hidden"))
-        resize();
+    resize();
 });
 
 // Set up DOM listeners and all that.
@@ -445,6 +443,9 @@ window.addEventListener("load", function() {
             field.value = "";
             filter(field.value, live, filters);
             filter(field.value, offline, filters);
+
+            if(!explore.parentNode.hasAttribute("hidden"))
+                applySearchToExplore(exploreSelect, field);
         }
         resize();
     });
