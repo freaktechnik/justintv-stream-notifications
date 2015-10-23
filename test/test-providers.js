@@ -6,8 +6,8 @@ const providers = require("../lib/providers"),
        { isValidURI } = require("sdk/url");
 
 exports.testProviders = function(assert) {
-    var provider;
-    for(var p in providers) {
+    let provider;
+    for(let p in providers) {
         provider = providers[p];
         assert.equal(typeof(provider.name), "string", "Name is a string");
         assert.equal(provider.name, provider.toString(), "toString and name return the same");
@@ -25,6 +25,8 @@ exports.testProviders = function(assert) {
         assert.equal(typeof(provider.removeFavsRequest), "function", "removeFavsRequest is implemented");
         assert.equal(typeof(provider.updateChannel), "function", "updateChannel is implemented");
         assert.equal(typeof(provider.updateChannels), "function", "updateChannels is implemented");
+        assert.equal(typeof(provider.getFeaturedChannels), "function", "getFeaturedChannels is implemented");
+        assert.equal(typeof(provider.search), "function", "search is implemented");
     }
 };
 

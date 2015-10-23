@@ -13,7 +13,7 @@ var live, offline, explore, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
 const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
-const EXPLORE_CONTEXTMENU_ID = "explore-context"
+const EXPLORE_CONTEXTMENU_ID = "explore-context";
 const filters = [
     {
         attribute: "class"
@@ -335,6 +335,23 @@ var providerSearch = (type, query) => {
     addon.port.emit("search", type, query);
 };
 
+var externalContextMenuAdd = (e) => {
+    addon.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
+    currentMenuTarget = null;
+};
+
+var forwardEvent = (name, event) => {
+    event.preventDefault();
+    addon.port.emit(name);
+};
+
+var applySearchToExplore = (exploreSelect, field) => {
+    if(field.hasAttribute("hidden"))
+        getFeaturedChannels(exploreSelect.value);
+    else
+        providerSearch(exploreSelect.value, field.value);
+};
+
 // Set up DOM listeners and all that.
 window.addEventListener("load", function() {
     live = document.getElementById("live");
@@ -347,37 +364,24 @@ window.addEventListener("load", function() {
     setExtrasVisibility(addon.options.extras);
     resize();
 
-    document.getElementById("configure").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("configure");
-    });
+    document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
     document.getElementById("refreshButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("refresh");
+        forwardEvent("refresh", e);
         if(!explore.parentNode.hasAttribute("hidden"))
             getFeaturedChannels(exploreSelect.value);
     });
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
-    document.getElementById("contextAdd").addEventListener("click", (e) => {
-        addon.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
-        currentMenuTarget = null;
-    });
+    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
+        if(e.detail === 3)
+            applySearchToExplore(exploreSelect, field);
+
         resize();
-        if(e.detail === 3) {
-            if(field.hasAttribute("hidden"))
-                getFeaturedChannels(exploreSelect.value);
-            else
-                providerSearch(exploreSelect.value, field.value);
-        }
     });
     exploreSelect.addEventListener("change", () => {
-        if(field.hasAttribute("hidden"))
-            getFeaturedChannels(exploreSelect.value);
-        else
-            providerSearch(exploreSelect.value, field.value);
+        applySearchToExplore(exploreSelect, field);
     });
     document.querySelector("#searchButton").addEventListener("click", () => {
         if(field.hasAttribute("hidden")) {
