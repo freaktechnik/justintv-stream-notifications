@@ -242,16 +242,6 @@ nav {
     color: white !important;
 }
 
-#live.thumbnail .gamingtv a div {
-    background: rgba(27, 28, 28, 0.7);
-    color: rgb(236, 82, 0);
-}
-
-.gamingtv a:hover, .thumbnail .gamingtv a:hover div {
-    background: rgb(27, 28, 28) !important;
-    color: rgb(236, 82, 0) !important;
-}
-
 #live.thumbnail .newlivestream a div {
     background: rgba(255, 255, 255, 0.7);
     color: #CF202E;
