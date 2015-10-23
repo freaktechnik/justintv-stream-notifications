@@ -154,6 +154,13 @@
       "name": "queueservice_maxRetries",
       "title": "Maximum number of attempts before a request is discarded",
       "value": 5,
+      "hidden: true
+    },
+    {
+      "type": "bool",
+      "name": "find_mature",
+      "title": "Find mature content in the explore tab",
+      "value": true,
       "hidden": true
     }
   ],
