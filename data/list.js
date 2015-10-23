@@ -345,7 +345,7 @@ var forwardEvent = (name, event) => {
 };
 
 var applySearchToExplore = (exploreSelect, field) => {
-    if(field.hasAttribute("hidden"))
+    if(field.hasAttribute("hidden") || field.value == "")
         getFeaturedChannels(exploreSelect.value);
     else
         providerSearch(exploreSelect.value, field.value);
@@ -380,8 +380,13 @@ addon.port.on("addExploreProviders", (providers) => {
     displayLoading();
 });
 
-addon.port.on("setFeatured", (channels, type) => {
-    if(type !== document.getElementById("exploreprovider").value)
+addon.port.on("setFeatured", (channels, type, q) => {
+    var field = document.getElementById("searchField");
+    if(type !== document.getElementById("exploreprovider").value ||
+       (q !== null &&
+        !field.hasAttribute("hidden") &&
+        field.value != q)
+    )
         return;
 
     hideLoading();
@@ -453,7 +458,7 @@ window.addEventListener("load", function() {
         filter(field.value, live, filters);
         filter(field.value, offline, filters);
         if(!explore.parentNode.hasAttribute("hidden"))
-            providerSearch(exploreSelect.value, field.value);
+            applySearchToExplore(exploreSelect, field);
         else
             resize();
     });
