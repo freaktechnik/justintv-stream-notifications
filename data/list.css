@@ -56,7 +56,7 @@ nav {
     padding:.5em;
 }
 
-.tabstrip a.current, .toolbar a:hover, .toolbar a:active {
+.tabstrip a.current, .toolbar a:hover, .toolbar a:active, .toolbar a[aria-pressed="true"] {
     background: #497dfe;
 }
 

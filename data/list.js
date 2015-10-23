@@ -435,16 +435,18 @@ window.addEventListener("load", function() {
     exploreSelect.addEventListener("change", () => {
         applySearchToExplore(exploreSelect, field);
     });
-    document.querySelector("#searchButton").addEventListener("click", () => {
+    document.querySelector("#searchButton").addEventListener("click", (e) => {
         if(field.hasAttribute("hidden")) {
             show(field);
             field.focus();
+            e.target.setAttribute("aria-pressed", "true");
         }
         else {
             hide(field);
             field.value = "";
             filter(field.value, live, filters);
             filter(field.value, offline, filters);
+            e.target.setAttribute("aria-pressed", "false");
 
             if(!explore.parentNode.hasAttribute("hidden"))
                 applySearchToExplore(exploreSelect, field);
