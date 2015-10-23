@@ -381,11 +381,9 @@ addon.port.on("addExploreProviders", (providers) => {
 });
 
 addon.port.on("setFeatured", (channels, type, q) => {
-    var field = document.getElementById("searchField");
     if(type !== document.getElementById("exploreprovider").value ||
        (q !== null &&
-        !field.hasAttribute("hidden") &&
-        field.value != q)
+        document.getElementById("searchField").value != q)
     )
         return;
 
