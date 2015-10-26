@@ -1,4 +1,4 @@
-# ![](icon.png) Live Stream Notifier
+# ![](data/icon36.png) Live Stream Notifier
 [![Travis CI Builds](https://travis-ci.org/freaktechnik/justintv-stream-notifications.svg)](https://travis-ci.org/freaktechnik/justintv-stream-notifications)
 
 This is an add-on for Firefox, based on the Mozilla add-on SDK.
@@ -40,7 +40,7 @@ After the provider works, you'll have to add a string for the provider name in t
 
 To build this extension you need npm, which will install grunt and jpm. Open a command line and type
 ```
-npm install grunt-cli
+npm install -g grunt-cli
 npm install
 grunt build
 ```

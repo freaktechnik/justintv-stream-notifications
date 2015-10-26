@@ -150,23 +150,17 @@
       "hidden": true
     },
     {
-      "type": "string",
-      "name": "twitchchannelList",
-      "title": "Twitch Channels",
-      "value": "",
-      "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "twitchusernameList",
-      "title": "Twitch Users",
-      "value": "",
+      "type": "integer",
+      "name": "queueservice_maxRetries",
+      "title": "Maximum number of attempts before a request is discarded",
+      "value": 5,
       "hidden": true
     },
     {
       "type": "bool",
-      "name": "autoUsername",
-      "title": "Auto detect username",
+      "name": "find_mature",
+      "title": "Find mature content in the explore tab",
+      "value": true,
       "hidden": true
     },
     {
@@ -206,7 +200,7 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "lib": "lib",
   "title": "Live Stream Notifier",
   "main": "lib/main.js",
@@ -226,9 +220,12 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-jshint": "^0.11.2",
+    "grunt-githash": "^0.1.1",
     "grunt-jpm": "^0.1.0",
-    "grunt-jsdoc": "^0.6.8",
+    "grunt-jsdoc": "^1.0.0",
+    "grunt-package": "^0.1.3",
     "grunt-shell": "^1.1.2",
     "grunt-transifex": "^0.1.1",
     "jpm": "*",

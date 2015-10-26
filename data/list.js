@@ -9,9 +9,11 @@
 /* global show */
 /* global hide */
 
-var live, offline, currentMenuTarget, currentStyle;
+var live, offline, explore, currentMenuTarget, currentStyle;
 const CHANNEL_ID_PREFIX = "channel";
+const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
+const EXPLORE_CONTEXTMENU_ID = "explore-context";
 const filters = [
     {
         attribute: "class"
@@ -30,96 +32,59 @@ const filters = [
     }
 ];
 
+var toggle = (node, condition) => {
+    if(condition)
+        show(node);
+    else
+        hide(node);
+};
+
 var getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
 
-window.addEventListener("load", function() {
-    live    = document.getElementById("live");
-    offline = document.getElementById("offline");
-    setStyle(addon.options.style);
-    setExtrasVisibility(addon.options.extras);
-    resize();
-    document.getElementById("configure").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("configure");
-    });
-    document.getElementById("refreshButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        addon.port.emit("refresh");
-    });
-    document.getElementById("contextRefresh").addEventListener("click", function() {
-        addon.port.emit("refresh", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextOpen").addEventListener("click", function() {
-        addon.port.emit("openArchive", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextChat").addEventListener("click", function() {
-        addon.port.emit("openChat", getChannelIdFromId(currentMenuTarget.id));
-        currentMenuTarget = null;
-    });
-    document.querySelector(".tabbed").addEventListener("tabchanged", function() {
-        resize();
-    });
-
-    var field = document.querySelector("#searchField");
-    document.querySelector("#searchButton").addEventListener("click", function() {
-        if(field.hasAttribute("hidden")) {
-            show(field);
-            field.focus();
-        }
-        else {
-            hide(field);
-            field.value = "";
-            filter(field.value, live, filters);
-            filter(field.value, offline, filters);
-        }
-        resize();
-    });
-    field.addEventListener("keyup", function(e) {
-        filter(field.value, live, filters);
-        filter(field.value, offline, filters);
-        resize();
-    });
- });
-
-// Set up port commmunication listeners
-addon.port.on("setStyle", function(style) {
-    setStyle(style);
-});
-
-addon.port.on("setExtras", function(visible) {
-    setExtrasVisibility(visible);
-});
-
-addon.port.on("addChannels", function(channels) {
-    channels.forEach((channel) => {
-        addChannel(channel);
-    });
-});
-
-addon.port.on("removeChannel", function(channelId) {
-    removeChannel(channelId);
-});
-
-addon.port.on("setOnline", function(channel) {
-    makeChannelLive(channel);
-});
-
-addon.port.on("setOffline", function(channel) {
-    makeChannelOffline(channel);
-});
-
-addon.port.on("resize", resize);
+var contextMenuCommand = function(event) {
+    addon.port.emit(event, getChannelIdFromId(currentMenuTarget.id));
+    currentMenuTarget = null;
+};
 
 var resize = () => {
-    let scrollHeight = document.querySelector(".tabbed").scrollHeight;
-    var h = scrollHeight < addon.options.maxHeight ? scrollHeight : addon.options.maxHeight;
+    var scrollHeight = document.querySelector(".tabbed").scrollHeight;
+    var h = Math.ceil(Math.min(scrollHeight, addon.options.maxHeight));
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 };
 
 var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
+};
+
+var openUrl = (url) => {
+    addon.port.emit("openUrl", url);
+};
+
+var displayNoOnline = () => {
+    show(document.getElementById("noonline"));
+};
+
+var hideNoOnline = () => {
+    hide(document.getElementById("noonline"));
+};
+
+var hideNoChannels = () => {
+    hide(document.getElementById("nochannels"));
+};
+
+var displayNoChannels = () => {
+    displayNoOnline();
+    show(document.getElementById("nochannels"));
+};
+
+var displayLoading = () => {
+    show(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.add("loading");
+};
+
+var hideLoading = () => {
+    hide(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.remove("loading");
 };
 
 var setStyle = (style) => {
@@ -135,20 +100,16 @@ var setStyle = (style) => {
             newClass = "default";
     }
     if(newClass != currentStyle) {
-        live.classList.add(newClass);
-        live.classList.remove(currentStyle);
-        offline.classList.add(newClass);
-        offline.classList.remove(currentStyle);
+        var main = document.querySelector(".tabbed");
+        main.classList.add(newClass);
+        main.classList.remove(currentStyle);
         currentStyle = newClass;
     }
     resize();
 };
 
 var setExtrasVisibility = (visible) => {
-    if(visible)
-        live.classList.add("extras");
-    else
-        live.classList.remove("extras");
+    document.querySelector(".tabbed").classList.toggle("extras", visible);
 };
 
 // Find the node to inser before in order to keep the list sorted
@@ -198,90 +159,102 @@ var contextMenuListener = (e) => {
     document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
 };
 
+var buildChannel = (channel, unspecific = false) => {
+        /*
+        <li class="type" id="channel1">
+            <a href="" contextmenu="context">
+                <img src="thumbnail">
+                <div>
+                    <img src="avatar">
+                    <span class="name">ChannelName</span><br>
+                    <span class="title">ChannelTitle</span>
+                    <aside>
+                        <span class="viewersWrapper">
+                            <span class="icon">v</span>&nbsp;<span class="viewers">0</span>
+                        </span>&nbsp;
+                        <span class="categoryWrapper">
+                            <span class="icon">c</span>&nbsp;<span class="category">Category</span>
+                        </span>
+                    </aside>
+                </div>
+            </a>
+        </li>
+         */
+        var channelNode   = document.createElement("li"),
+            link          = document.createElement("a"),
+            name          = document.createTextNode(channel.uname),
+            spanName      = document.createElement("span"),
+            br            = document.createElement("br"),
+            title         = document.createTextNode(channel.title),
+            titleSpan     = document.createElement("span"),
+            avatar        = new Image(),
+            thumbnail     = new Image(),
+            wrapper       = document.createElement("div"),
+            extra         = document.createElement("aside"),
+            viewersWrapper = document.createElement("span"),
+            viewersIcon   = document.createElement("span"),
+            viewers       = document.createElement("span"),
+            categoryWrapper = document.createElement("span"),
+            categoryIcon  = document.createElement("span"),
+            category      = document.createElement("span");
+        avatar.src        = getBestImageForSize(channel, 30);
+        thumbnail.src     = channel.thumbnail;
+        spanName.appendChild(name);
+        spanName.classList.add("name");
+        titleSpan.appendChild(title);
+        titleSpan.classList.add("title");
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(spanName);
+        wrapper.appendChild(br);
+        wrapper.appendChild(titleSpan);
+
+        viewersWrapper.classList.add("viewersWrapper");
+        if(!("viewers" in channel) || channel.viewers < 0)
+            hide(viewersWrapper);
+        viewersIcon.appendChild(document.createTextNode("v"));
+        viewersIcon.classList.add("icon");
+        viewersWrapper.appendChild(viewersIcon);
+        viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
+        viewers.classList.add("viewers");
+        viewers.appendChild(document.createTextNode(channel.viewers));
+        viewersWrapper.appendChild(viewers);
+        extra.appendChild(viewersWrapper);
+        extra.appendChild(document.createTextNode(" "));
+        categoryWrapper.classList.add("categoryWrapper");
+        if(!channel.category)
+            hide(categoryWrapper);
+        categoryIcon.appendChild(document.createTextNode("c"));
+        categoryIcon.classList.add("icon");
+        categoryWrapper.appendChild(categoryIcon);
+        categoryWrapper.appendChild(document.createTextNode("\u00a0"));
+        category.classList.add("category");
+        category.appendChild(document.createTextNode(channel.category));
+        categoryWrapper.appendChild(category);
+        extra.appendChild(categoryWrapper);
+
+        wrapper.appendChild(extra);
+
+        link.appendChild(thumbnail);
+        link.appendChild(wrapper);
+        channelNode.classList.add(channel.type);
+        channelNode.appendChild(link);
+        if(!unspecific) {
+            channelNode.id = CHANNEL_ID_PREFIX+channel.id;
+            link.setAttribute("contextmenu", CONTEXTMENU_ID);
+            link.addEventListener("click", openChannel.bind(null, channel.id));
+        }
+        else {
+            channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+            link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
+            link.addEventListener("click", openUrl.bind(null, channel.url[0]));
+        }
+        channelNode.addEventListener("contextmenu", contextMenuListener);
+
+        return channelNode;
+};
+
 var addChannel = (channel) => {
-    /*
-     <li class="type" id="channel1">
-        <a href="" contextmenu="context">
-            <img src="thumbnail">
-            <div>
-                <img src="avatar">
-                <span class="name">ChannelName</span><br>
-                <span class="title">ChannelTitle</span>
-                <aside>
-                    <span class="viewersWrapper">
-                        <span class="icon">v</span>&nbsp;<span class="viewers">0</span>
-                    </span>&nbsp;
-                    <span class="categoryWrapper">
-                        <span class="icon">c</span>&nbsp;<span class="category">Category</span>
-                    </span>
-                </aside>
-            </div>
-        </a>
-    </li>
-     */
-    var channelNode   = document.createElement("li"),
-        link          = document.createElement("a"),
-        name          = document.createTextNode(channel.uname),
-        spanName      = document.createElement("span"),
-        br            = document.createElement("br"),
-        title         = document.createTextNode(channel.title),
-        titleSpan     = document.createElement("span"),
-        avatar        = new Image(),
-        thumbnail     = new Image(),
-        wrapper       = document.createElement("div"),
-        extra         = document.createElement("aside"),
-        viewersWrapper = document.createElement("span"),
-        viewersIcon   = document.createElement("span"),
-        viewers       = document.createElement("span"),
-        categoryWrapper = document.createElement("span"),
-        categoryIcon  = document.createElement("span"),
-        category      = document.createElement("span");
-    avatar.src        = getBestImageForSize(channel, 30);
-    thumbnail.src     = channel.thumbnail;
-    spanName.appendChild(name);
-    spanName.classList.add("name");
-    titleSpan.appendChild(title);
-    titleSpan.classList.add("title");
-    wrapper.appendChild(avatar);
-    wrapper.appendChild(spanName);
-    wrapper.appendChild(br);
-    wrapper.appendChild(titleSpan);
-
-    viewersWrapper.classList.add("viewersWrapper");
-    if(!("viewers" in channel) || channel.viewers < 0)
-        hide(viewersWrapper);
-    viewersIcon.appendChild(document.createTextNode("v"));
-    viewersIcon.classList.add("icon");
-    viewersWrapper.appendChild(viewersIcon);
-    viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
-    viewers.classList.add("viewers");
-    viewers.appendChild(document.createTextNode(channel.viewers));
-    viewersWrapper.appendChild(viewers);
-    extra.appendChild(viewersWrapper);
-    extra.appendChild(document.createTextNode(" "));
-    categoryWrapper.classList.add("categoryWrapper");
-    if(!channel.category)
-        hide(categoryWrapper);
-    categoryIcon.appendChild(document.createTextNode("c"));
-    categoryIcon.classList.add("icon");
-    categoryWrapper.appendChild(categoryIcon);
-    categoryWrapper.appendChild(document.createTextNode("\u00a0"));
-    category.classList.add("category");
-    category.appendChild(document.createTextNode(channel.category));
-    categoryWrapper.appendChild(category);
-    extra.appendChild(categoryWrapper);
-
-    wrapper.appendChild(extra);
-
-    link.appendChild(thumbnail);
-    link.appendChild(wrapper);
-    link.setAttribute("contextmenu", CONTEXTMENU_ID);
-    link.addEventListener("click", openChannel.bind(null, channel.id));
-    channelNode.addEventListener("contextmenu", contextMenuListener);
-    channelNode.classList.add(channel.type);
-    channelNode.appendChild(link);
-    channelNode.id = CHANNEL_ID_PREFIX+channel.id;
-
+    var channelNode = buildChannel(channel);
     // hide the channel by if it's filtered out atm
     if(!matches(channelNode, document.querySelector("#searchField").value, filters))
         hide(channelNode);
@@ -305,9 +278,9 @@ var removeChannel = (channelId) => {
 
     channelNode.remove();
 
-    if(live.childElementCount === 0 && offline.childElementCount === 0) {
+    if(live.childElementCount === 0 && offline.childElementCount === 0)
         displayNoChannels();
-    }
+
     resize();
 };
 
@@ -324,16 +297,10 @@ var updateNodeContent = (channel) => {
     nameNode.replaceChild(nameText, nameNode.firstChild);
 
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
-    if(!("viewers" in channel) || channel.viewers < 0)
-        hide(channelNode.querySelector(".viewersWrapper"));
-    else
-        show(channelNode.querySelector(".viewersWrapper"));
+    toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
 
     category.replaceChild(document.createTextNode(channel.category), category.firstChild);
-    if(!channel.category)
-        hide(channelNode.querySelector(".categoryWrapper"));
-    else
-        show(channelNode.querySelector(".categoryWrapper"));
+    toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
     // only update images if the user is online to avoid broken images
     if(navigator.onLine) {
@@ -353,24 +320,149 @@ var makeChannelOffline = (channel) => {
     if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
-    if(live.childElementCount === 0) {
+    if(live.childElementCount === 0)
         displayNoOnline();
+};
+
+var getFeaturedChannels = (type) => {
+    displayLoading();
+    addon.port.emit("explore", type);
+};
+
+var providerSearch = (type, query) => {
+    displayLoading();
+    addon.port.emit("search", type, query);
+};
+
+var externalContextMenuAdd = (e) => {
+    addon.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
+    currentMenuTarget = null;
+};
+
+var forwardEvent = (name, event) => {
+    event.preventDefault();
+    addon.port.emit(name);
+};
+
+var applySearchToExplore = (exploreSelect, field) => {
+    if(field.hasAttribute("hidden") || field.value === "")
+        getFeaturedChannels(exploreSelect.value);
+    else
+        providerSearch(exploreSelect.value, field.value);
+};
+
+var hasOption = (provider) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    for(var o of providerDropdown.options) {
+        if(o.value == provider) {
+            return true;
+        }
     }
+    return false;
 };
 
-var displayNoOnline = () => {
-    show(document.getElementById("noonline"));
-};
+// Set up port commmunication listeners
+addon.port.on("setStyle", setStyle);
+addon.port.on("setExtras", setExtrasVisibility);
+addon.port.on("addChannels", (channels) => channels.forEach(addChannel));
+addon.port.on("removeChannel", removeChannel);
+addon.port.on("setOnline", makeChannelLive);
+addon.port.on("setOffline", makeChannelOffline);
+addon.port.on("resize", resize);
 
-var hideNoOnline = () => {
-    hide(document.getElementById("noonline"));
-};
+addon.port.on("addExploreProviders", (providers) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    for(var provider of providers) {
+        if(!hasOption(provider.type)) {
+            providerDropdown.add(new Option(provider.name, provider.type));
+        }
+    }
+    displayLoading();
+});
 
-var hideNoChannels = () => {
-    hide(document.getElementById("nochannels"));
-};
+addon.port.on("setFeatured", (channels, type, q) => {
+    if(type !== document.getElementById("exploreprovider").value ||
+       (q !== null &&
+        document.getElementById("searchField").value != q)
+    )
+        return;
 
-var displayNoChannels = () => {
-    displayNoOnline();
-    show(document.getElementById("nochannels"));
-};
+    while(explore.hasChildNodes())
+        explore.firstChild.remove();
+
+    if(channels.length === 0) {
+        show(document.getElementById("noresults"));
+    }
+    else {
+        hide(document.getElementById("noresults"));
+        channels.forEach((channel) => {
+            explore.appendChild(buildChannel(channel, true));
+        });
+    }
+
+    hideLoading();
+    resize();
+});
+
+// Set up DOM listeners and all that.
+window.addEventListener("load", function() {
+    live = document.getElementById("live");
+    offline = document.getElementById("offline");
+    explore = document.getElementById("featured");
+    var exploreSelect = document.getElementById("exploreprovider");
+    var field = document.querySelector("#searchField");
+
+    setStyle(addon.options.style);
+    setExtrasVisibility(addon.options.extras);
+    resize();
+
+    document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
+    document.getElementById("refreshButton").addEventListener("click", function(e) {
+        forwardEvent("refresh", e);
+        if(!explore.parentNode.hasAttribute("hidden"))
+            getFeaturedChannels(exploreSelect.value);
+    });
+    document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
+    document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
+    document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
+    document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
+        if(e.detail === 3)
+            applySearchToExplore(exploreSelect, field);
+
+        resize();
+    });
+    exploreSelect.addEventListener("change", () => {
+        applySearchToExplore(exploreSelect, field);
+    });
+    document.querySelector("#searchButton").addEventListener("click", (e) => {
+        e.preventDefault();
+        if(field.hasAttribute("hidden")) {
+            show(field);
+            field.focus();
+            e.target.setAttribute("aria-pressed", "true");
+        }
+        else {
+            hide(field);
+            field.value = "";
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
+            e.target.setAttribute("aria-pressed", "false");
+            field.blur();
+
+            if(!explore.parentNode.hasAttribute("hidden"))
+                applySearchToExplore(exploreSelect, field);
+        }
+        resize();
+    });
+    field.addEventListener("keyup", (e) => {
+        filter(field.value, live, filters);
+        filter(field.value, offline, filters);
+        if(!explore.parentNode.hasAttribute("hidden"))
+            applySearchToExplore(exploreSelect, field);
+        else
+            resize();
+    });
+
+    addon.port.emit("ready");
+});
