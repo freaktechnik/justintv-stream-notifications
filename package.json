@@ -186,6 +186,9 @@
     "type": "git",
     "url": "https://github.com/freaktechnik/justintv-stream-notifications.git"
   },
+  "bugs": {
+    "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
+  },
   "dependencies": {
     "jetpack-homepanel": "^1.0.1"
   },
