@@ -3,9 +3,10 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        firefoxBinary: "<%= process.env.TRAVIS ? 'firefox':'firefox-trunk' %>",
         shell: {
             jpmTest: {
-                command: 'jpm test --tbpl'
+                command: 'jpm test --tbpl -b <%= firefoxBinary %>'
             }
         },
         jshint: {
@@ -21,7 +22,8 @@ module.exports = function(grunt) {
         jpm: {
             options: {
                 src: 'build/',
-                xpi: '.'
+                xpi: '.',
+                "firefox-bin": "<%= firefoxBinary %>"
             }
         },
         transifex: {
