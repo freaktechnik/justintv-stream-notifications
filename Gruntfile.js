@@ -15,7 +15,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*']
+                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*', '!build/**/*']
                 }
             }
         },
