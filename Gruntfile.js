@@ -2,7 +2,8 @@ module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
 
     grunt.initConfig({
-        firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox',
+        firefoxBinary: process.env.JPM_FIREFOX_BINARY || 'firefox-trunk',
+        pkg: grunt.file.readJSON("package.json"),
         shell: {
             jpmTest: {
                 command: 'jpm test -b <%= firefoxBinary %> --tbpl'
@@ -20,7 +21,7 @@ module.exports = function(grunt) {
         },
         jpm: {
             options: {
-                src: '.',
+                src: 'build/',
                 xpi: '.',
                 "firefox-bin": '<%= firefoxBinary %>'
             }
@@ -28,7 +29,7 @@ module.exports = function(grunt) {
         transifex: {
             mainProperties: {
                 options: {
-                    targetDir: './locale',
+                    targetDir: 'build/locale',
                     project: 'jtvn',
                     endpoint: 'http://beta.babelzilla.org/api/2/',
                     resources: ['enproperties'],
@@ -44,11 +45,6 @@ module.exports = function(grunt) {
             }
         },
         clean: {
-            locales: {
-                files: {
-                    src: [ 'locale/*.properties', '!locale/en-US.properties' ]
-                }
-            },
             docs: {
                 files: {
                     src: ['doc']
@@ -56,7 +52,12 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    src: ['*.xpi']
+                    src: ['*.xpi', 'build']
+                }
+            },
+            scratch: {
+                files: {
+                    src: ['**/*~']
                 }
             }
         },
@@ -67,11 +68,71 @@ module.exports = function(grunt) {
                     destination: 'doc'
                 }
             }
+        },
+        copy: {
+            build: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'data',
+                        src: ['**/*', '!**/*~'],
+                        dest: 'build/data'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'lib',
+                        src: ['**/*.js*', '!**/*~'],
+                        dest: 'build/lib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'test',
+                        src: ['**/*', '!**/*~'],
+                        dest: 'build/test'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'node_modules',
+                        src: ['jetpack-homepanel/**/*'],
+                        dest: 'build/node_modules'
+                    }
+                ]
+            }
+        },
+        "package": {
+            dev: {
+                pretty: 2,
+                srcDir: ".",
+                destDir: "build/",
+                add: {
+                    "version": "<%= pkg.version %>-alpha+<%= githash.main.short %>"
+                }
+            },
+            build: {
+                pretty: 2,
+                srcDir: '.',
+                destDir: 'build/',
+                remove: [
+                    "devDependencies",
+                    "scripts"
+                ],
+                add: {
+                    "engines": {
+                        "firefox": "<%= pkg.engines.firefox %>"
+                    }
+                }
+            }
+        },
+        githash: {
+            main: {
+                options: {}
+            }
         }
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['transifex', 'jpm:xpi', 'clean:locales']);
+    grunt.registerTask('build', ['copy', 'transifex', 'package:build', 'jpm:xpi']);
+    grunt.registerTask('dev', [ 'githash', 'copy', 'package:dev', 'jpm:xpi']);
 
     grunt.registerTask('default', ['test']);
 };

@@ -182,3 +182,4 @@ npm-debug.log
 .transifexrc
 
 doc/
+build/

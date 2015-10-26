@@ -40,7 +40,7 @@ After the provider works, you'll have to add a string for the provider name in t
 
 To build this extension you need npm, which will install grunt and jpm. Open a command line and type
 ```
-npm install grunt-cli
+npm install -g grunt-cli
 npm install
 grunt build
 ```
