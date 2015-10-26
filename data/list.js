@@ -56,8 +56,8 @@ var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
 };
 
-var openUrl = (url) => {
-    addon.port.emit("openUrl", url);
+var openUrl = (url, livestreamer) => {
+    addon.port.emit("openUrl", url, livestreamer);
 };
 
 var displayNoOnline = () => {
@@ -156,7 +156,9 @@ var getBestImageForSize = (user, size) => {
 
 var contextMenuListener = (e) => {
     currentMenuTarget = e.currentTarget;
-    document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
+    let isOffline = e.currentTarget.parentNode.id == "offline"
+    document.getElementById("contextOpen").disabled = isOffline;
+    document.getElementById("contextLivestreamer").disabled = isOffline;
 };
 
 var buildChannel = (channel, unspecific = false) => {
@@ -245,6 +247,7 @@ var buildChannel = (channel, unspecific = false) => {
         }
         else {
             channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+            channelNode.dataset.url = channel.url[0];
             link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
             link.addEventListener("click", openUrl.bind(null, channel.url[0]));
         }
@@ -339,6 +342,11 @@ var externalContextMenuAdd = (e) => {
     currentMenuTarget = null;
 };
 
+var externalContextMenuLivestreamer = (e) => {
+    openUrl(currentMenuTarget.dataset.url, true);
+    curentMenuTarget = null;
+};
+
 var forwardEvent = (name, event) => {
     event.preventDefault();
     addon.port.emit(name);
@@ -425,7 +433,9 @@ window.addEventListener("load", function() {
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.getElementById("contextLivestreamer").addEventListener("click", contextMenuCommand.bind(null, "openLivestreamer"));
     document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
+    document.getElementById("contextExploreLivestreamer").addEventListener("click", externalContextMenuLivestreamer);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
         if(e.detail === 3)
             applySearchToExplore(exploreSelect, field);

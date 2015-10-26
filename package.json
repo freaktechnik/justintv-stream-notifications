@@ -167,7 +167,7 @@
       "type": "bool",
       "name": "livestreamer_enabled",
       "title": "Always use Livestreamer",
-      "description": "Opens streams with Livestreamer by default",
+      "description": "Opens streams with Livestreamer by default.",
       "value": false
     },
     {
@@ -188,7 +188,7 @@
       "type": "string",
       "name": "livestreamer_quality",
       "title": "Livestreamer Quality Preset",
-      "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst)",
+      "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst).",
       "value": "best"
     }
   ],
