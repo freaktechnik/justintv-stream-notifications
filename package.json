@@ -170,32 +170,32 @@
       "hidden": true
     },
     {
+      "type": "bool",
+      "name": "livestreamer_enabled",
+      "title": "Always use Livestreamer",
+      "description": "Opens streams with Livestreamer by default",
+      "value": false
+    },
+    {
       "type": "string",
       "name": "livestreamer_path",
       "title": "Path to Livestreamer binary",
-      "value": "",
-      "hidden": true
-    },
-    {
-      "type": "bool",
-      "name": "livestreamer_enabled",
-      "title": "Streams get opened with Livestreamer by default if enabled",
-      "value": false,
-      "hidden": true
+      "description": "Absolute path to the Livestreamer binary. If not set default install locations are searched.",
+      "value": ""
     },
     {
       "type": "string",
       "name": "livestreamer_player",
-      "title": "Player to use",
-      "value": "",
-      "hidden": true
+      "title": "Livestreamer Player",
+      "description": "Player for Livestreamer to use. Defaults to VLC.",
+      "value": ""
     },
     {
       "type": "string",
       "name": "livestreamer_quality",
-      "title": "Quality preset to choose for the stream (safe bets are best and worst)",
-      "value": "best",
-      "hidden": true
+      "title": "Livestreamer Quality Preset",
+      "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst)",
+      "value": "best"
     }
   ],
   "homepage": "http://jtvn.humanoids.be/",
