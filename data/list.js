@@ -156,7 +156,7 @@ var getBestImageForSize = (user, size) => {
 
 var contextMenuListener = (e) => {
     currentMenuTarget = e.currentTarget;
-    let isOffline = e.currentTarget.parentNode.id == "offline"
+    var isOffline = e.currentTarget.parentNode.id == "offline";
     document.getElementById("contextOpen").disabled = isOffline;
     document.getElementById("contextLivestreamer").disabled = isOffline;
 };
@@ -344,7 +344,7 @@ var externalContextMenuAdd = (e) => {
 
 var externalContextMenuLivestreamer = (e) => {
     openUrl(currentMenuTarget.dataset.url, true);
-    curentMenuTarget = null;
+    currentMenuTarget = null;
 };
 
 var forwardEvent = (name, event) => {
