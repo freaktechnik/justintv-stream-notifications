@@ -86,15 +86,37 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
+                        cwd: 'node_modules',
+                        src: ['jetpack-homepanel/**/*'],
+                        dest: 'build/node_modules'
+                    },
+                    {
+                        expand: true,
+                        cwd: '.',
+                        src: ['LICENSE'],
+                        dest: 'build/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'data',
+                        src: ['icon.png', 'icon64.png'],
+                        dest: 'build/'
+                    }
+                ]
+            },
+            dev: {
+                files: [
+                    {
+                        expand: true,
                         cwd: 'test',
                         src: ['**/*', '!**/*~'],
                         dest: 'build/test'
                     },
                     {
                         expand: true,
-                        cwd: 'node_modules',
-                        src: ['jetpack-homepanel/**/*'],
-                        dest: 'build/node_modules'
+                        cwd: 'locale',
+                        src: ['*.properties'],
+                        dest: 'build/locale'
                     }
                 ]
             }
@@ -131,8 +153,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['copy', 'transifex', 'package:build', 'jpm:xpi']);
-    grunt.registerTask('dev', [ 'githash', 'copy', 'package:dev', 'jpm:xpi']);
+    grunt.registerTask('build', ['copy:build', 'transifex', 'package:build', 'jpm:xpi']);
+    grunt.registerTask('dev', [ 'githash', 'copy', 'copy:dev', 'package:dev', 'jpm:xpi']);
 
     grunt.registerTask('default', ['test']);
 };
