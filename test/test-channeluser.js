@@ -35,29 +35,6 @@ exports['test channel legacy'] = function(assert) {
     assert.ok(new Channel() instanceof Channel);
 };
 
-exports['test channel url comparison'] = function(assert) {
-    var channel = getChannel();
-    var testUrls = (channel) => {
-        assert.ok(channel.compareUrl('http://foo.bar/lorem'));
-        assert.ok(channel.compareUrl('http://foo.bar/lorem/archive'));
-        assert.ok(channel.compareUrl('https://foo.bar/lorem'));
-        assert.ok(channel.compareUrl('https://foo.bar/lorem/archive'));
-        assert.ok(channel.compareUrl('http://www.foo.bar/lorem'));
-        assert.ok(!channel.compareUrl('http://foo.bar/ipsum'));
-        assert.ok(!channel.compareUrl('https://foo.bar/ipsum/archive'));
-        assert.ok(!channel.compareUrl('http://example.com'));
-        assert.ok(!channel.compareUrl('http://999.44'));
-        assert.ok(!channel.compareUrl('ressource://local/thing'));
-        assert.ok(!channel.compareUrl('about:addons'));
-        assert.ok(!channel.compareUrl(undefined));
-    };
-
-    testUrls(channel);
-
-    channel.live = true;
-
-    testUrls(channel);
-};
 
 require("sdk/test").run(exports);
 

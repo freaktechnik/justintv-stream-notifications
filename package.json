@@ -174,7 +174,7 @@
       "type": "string",
       "name": "livestreamer_path",
       "title": "Path to Livestreamer binary",
-      "description": "Absolute path to the Livestreamer binary. If not set default install locations are searched.",
+      "description": "Absolute path to the Livestreamer binary. Is set by the extension if Livestreamer could be found in a known location.",
       "value": ""
     },
     {

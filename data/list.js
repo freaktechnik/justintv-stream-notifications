@@ -154,6 +154,23 @@ var getBestImageForSize = (user, size) => {
     return user.image[index];
 };
 
+var hideLivestreamerItems = () => {
+    hide(document.getElementById("contextLivestreamer"));
+    hide(document.getElementById("contextExploreLivestreamer"));
+};
+
+var showLivestreamerItems = () => {
+    show(document.getElementById("contextLivestreamer"));
+    show(document.getElementById("contextExploreLivestreamer"));
+};
+
+var toggleLivestreamerItems = (exists) => {
+    if(exists)
+        showLivestreamerItems();
+    else
+        hideLivestreamerItems();
+};
+
 var contextMenuListener = (e) => {
     currentMenuTarget = e.currentTarget;
     var isOffline = e.currentTarget.parentNode.id == "offline";
@@ -377,6 +394,7 @@ addon.port.on("removeChannel", removeChannel);
 addon.port.on("setOnline", makeChannelLive);
 addon.port.on("setOffline", makeChannelOffline);
 addon.port.on("resize", resize);
+addon.port.on("livestreamerExists", toggleLivestreamerItems);
 
 addon.port.on("addExploreProviders", (providers) => {
     var providerDropdown = document.getElementById("exploreprovider");
@@ -422,6 +440,7 @@ window.addEventListener("load", function() {
 
     setStyle(addon.options.style);
     setExtrasVisibility(addon.options.extras);
+    toggleLivestreamerItems(addon.options.livestreamer);
     resize();
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
