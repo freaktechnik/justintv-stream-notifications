@@ -21,7 +21,6 @@ defaults:
 gems:
   - jekyll-redirect-from
   - jekyll-sitemap
-  - jekyll-feed
 
 # Build settings
 markdown: kramdown
