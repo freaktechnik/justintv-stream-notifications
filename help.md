@@ -6,6 +6,7 @@
 ---
 
 There are a couple of really helpful pages already existing:
+
  - [Channels Manager Help](channels-manager/)
  - [Livestreamer Integration Help](livestreamer/)
  - [FAQ](faq/)
