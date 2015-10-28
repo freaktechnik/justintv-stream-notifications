@@ -14,7 +14,7 @@ defaults:
   -
     scope:
       path: "changes"
-      type: "article"
+      type: "pages"
     values:
       layout: "changes"
 
