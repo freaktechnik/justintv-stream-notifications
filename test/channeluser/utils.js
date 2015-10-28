@@ -19,8 +19,9 @@ exports.getUser = () => {
 exports.getChannel = () => {
     var channel = new Channel();
     channel.type = "test";
-    channel.url.push('http://foo.bar/lorem');
-    channel.archiveUrl = 'http://foo.bar/lorem/archive';
+    channel.url.push('http://www.foo.bar/lorem');
+    channel.archiveUrl = 'http://www.foo.bar/lorem/archive';
+    channel.chatUrl = 'http://www.foo.bar/lorem/chat';
     channel.uname='lorem ipsum';
     channel.login='test';
     channel.logo={'20':'http://foo.bar/0.jpg','40':'http://foo.bar/1.jpg'};

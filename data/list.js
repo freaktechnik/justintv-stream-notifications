@@ -56,8 +56,8 @@ var openChannel = (channelId) => {
     addon.port.emit("open", channelId);
 };
 
-var openUrl = (url) => {
-    addon.port.emit("openUrl", url);
+var openUrl = (url, livestreamer) => {
+    addon.port.emit("openUrl", url, livestreamer);
 };
 
 var displayNoOnline = () => {
@@ -154,9 +154,28 @@ var getBestImageForSize = (user, size) => {
     return user.image[index];
 };
 
+var hideLivestreamerItems = () => {
+    hide(document.getElementById("contextLivestreamer"));
+    hide(document.getElementById("contextExploreLivestreamer"));
+};
+
+var showLivestreamerItems = () => {
+    show(document.getElementById("contextLivestreamer"));
+    show(document.getElementById("contextExploreLivestreamer"));
+};
+
+var toggleLivestreamerItems = (exists) => {
+    if(exists)
+        showLivestreamerItems();
+    else
+        hideLivestreamerItems();
+};
+
 var contextMenuListener = (e) => {
     currentMenuTarget = e.currentTarget;
-    document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
+    var isOffline = e.currentTarget.parentNode.id == "offline";
+    document.getElementById("contextOpen").disabled = isOffline;
+    document.getElementById("contextLivestreamer").disabled = isOffline;
 };
 
 var buildChannel = (channel, unspecific = false) => {
@@ -245,6 +264,7 @@ var buildChannel = (channel, unspecific = false) => {
         }
         else {
             channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+            channelNode.dataset.url = channel.url[0];
             link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
             link.addEventListener("click", openUrl.bind(null, channel.url[0]));
         }
@@ -339,6 +359,11 @@ var externalContextMenuAdd = (e) => {
     currentMenuTarget = null;
 };
 
+var externalContextMenuLivestreamer = (e) => {
+    openUrl(currentMenuTarget.dataset.url, true);
+    currentMenuTarget = null;
+};
+
 var forwardEvent = (name, event) => {
     event.preventDefault();
     addon.port.emit(name);
@@ -369,6 +394,7 @@ addon.port.on("removeChannel", removeChannel);
 addon.port.on("setOnline", makeChannelLive);
 addon.port.on("setOffline", makeChannelOffline);
 addon.port.on("resize", resize);
+addon.port.on("livestreamerExists", toggleLivestreamerItems);
 
 addon.port.on("addExploreProviders", (providers) => {
     var providerDropdown = document.getElementById("exploreprovider");
@@ -414,6 +440,7 @@ window.addEventListener("load", function() {
 
     setStyle(addon.options.style);
     setExtrasVisibility(addon.options.extras);
+    toggleLivestreamerItems(addon.options.livestreamer);
     resize();
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
@@ -425,7 +452,9 @@ window.addEventListener("load", function() {
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.getElementById("contextLivestreamer").addEventListener("click", contextMenuCommand.bind(null, "openLivestreamer"));
     document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
+    document.getElementById("contextExploreLivestreamer").addEventListener("click", externalContextMenuLivestreamer);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
         if(e.detail === 3)
             applySearchToExplore(exploreSelect, field);

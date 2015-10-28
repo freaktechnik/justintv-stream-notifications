@@ -17,7 +17,7 @@ exports['test open or focus tab'] = function*(assert) {
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, "http://www.foo.bar/lorem/archive");
+    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened woth archive url for offline channel");
     tabs.open({url: "http://example.com"});
 
     let tabToClose = yield wait(tabs, "ready");
@@ -25,18 +25,17 @@ exports['test open or focus tab'] = function*(assert) {
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "activate");
 
+    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was correctly activated");
     tabToClose.close();
 
-    assert.equal(tabs.activeTab.url, "http://www.foo.bar/lorem/archive");
     channel.live = true;
 
-    tabs.open({url: "http://example.com"});
-    tabToClose = yield wait(tabs, "ready");
+    tabToClose = tabs.activeTab;
 
     channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "activate");
+    yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, "http://www.foo.bar/lorem/archive");
+    assert.equal(tabs.activeTab.url, channel.url[0], "New tab was opened for the live channel");
 
     tabToClose.close();
     tabs.activeTab.close();
@@ -44,13 +43,26 @@ exports['test open or focus tab'] = function*(assert) {
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, "http://www.foo.bar/lorem");
+    assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
     tabs.activeTab.close();
+};
 
-    channelUtils.selectOrOpenTab(channel, true);
+exports['test force open archive'] = function*(assert) {
+    let channel = getChannel();
+    channel.live = true;
+    channelUtils.selectOrOpenTab(channel, "archive");
     yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, "http://www.foo.bar/lorem/archive");
+    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened with the archive url despite the channel being live");
+    tabs.activeTab.close();
+};
+
+exports['test open chat'] = function*(assert) {
+    let channel = getChannel();
+    channelUtils.selectOrOpenTab(channel, "chat");
+    yield wait(tabs, "ready");
+
+    assert.equal(tabs.activeTab.url, channel.chatUrl, "Tab was opened with the url for the chat");
     tabs.activeTab.close();
 };
 
