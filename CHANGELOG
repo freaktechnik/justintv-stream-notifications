@@ -127,4 +127,5 @@ changelog
     - Improve azubu user favorites import
     - Add "Explore" tab to panel with featured streams
     - Add a provider-wide search in the "Explore" tab
-    - Add Livestreamer support
+    - Add Livestreamer (the program) support
+    - Add Streamup support

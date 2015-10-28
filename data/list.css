@@ -256,6 +256,16 @@ nav {
     color: #CF202E !important;
 }
 
+.thumbnail .live .streamup a div {
+    background: rgba(255, 255, 255, 0.7);
+    color: rgb(85, 98, 255);
+}
+
+.streamup a:hover, .thumbnail .streamup a:hover div {
+    background: white !important;
+    color: rgb(85, 98, 255) !important;
+}
+
 /* Icon font from fontello */
 .icon {
     font-family: "extra-glyphs";
