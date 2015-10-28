@@ -5,9 +5,12 @@
   group: navigation
 ---
 
-Having trouble with the Channels Manager? There's a help page explaining how it works: [Channels Manager Help](channels-manager/).
+There are a couple of really helpful pages already existing:
+ - [Channels Manager Help](channels-manager/)
+ - [Livestreamer Integration Help](livestreamer/)
+ - [FAQ](faq/)
 
-I've compiled some of the questions I'd have in the [FAQ](faq/).
+If your problem isn't solved by any of them, feel free to contact me.
 
 Contact
 -------
