@@ -14,13 +14,14 @@ defaults:
   -
     scope:
       path: "changes"
-      type: "pages"
+      type: "article"
     values:
       layout: "changes"
 
 gems:
   - jekyll-redirect-from
   - jekyll-sitemap
+  - jekyll-feed
 
 # Build settings
 markdown: kramdown
