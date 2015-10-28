@@ -127,7 +127,7 @@ module.exports = function(grunt) {
                 srcDir: ".",
                 destDir: "build/",
                 add: {
-                    "version": "<%= pkg.version %>.<%= githash.main.short %>-pre"
+                    "version": "<%= pkg.version %>.9999-pre"
                 }
             },
             build: {
