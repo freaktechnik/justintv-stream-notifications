@@ -180,8 +180,8 @@
     {
       "type": "string",
       "name": "livestreamer_player",
-      "title": "Livestreamer Player Path",
-      "description": "Absolute path to the player Livestreamer should use. Defaults to VLC.",
+      "title": "Livestreamer Player",
+      "description": "Command to execute the player Livestreamer should use. Defaults to VLC.",
       "value": ""
     },
     {
