@@ -156,7 +156,7 @@ var getBestImageForSize = (user, size) => {
 
 var toggleLivestreamerItems = (exists) => {
     toggle(document.getElementById("contextLivestreamer"), exists);
-    toggle(document.getElementById("contextExploreLivestreamer")), exists;
+    toggle(document.getElementById("contextExploreLivestreamer"), exists);
 };
 
 var contextMenuListener = (e) => {
@@ -254,7 +254,7 @@ var buildChannel = (channel, unspecific = false) => {
             channelNode.id = EXPLORE_ID_PREFIX+channel.login;
             channelNode.dataset.url = channel.url[0];
             link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
-            link.addEventListener("click", openUrl.bind(null, channel.url[0]));
+            link.addEventListener("click", openUrl.bind(null, channel.url[0], false));
         }
         channelNode.addEventListener("contextmenu", contextMenuListener);
 
