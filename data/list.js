@@ -154,21 +154,9 @@ var getBestImageForSize = (user, size) => {
     return user.image[index];
 };
 
-var hideLivestreamerItems = () => {
-    hide(document.getElementById("contextLivestreamer"));
-    hide(document.getElementById("contextExploreLivestreamer"));
-};
-
-var showLivestreamerItems = () => {
-    show(document.getElementById("contextLivestreamer"));
-    show(document.getElementById("contextExploreLivestreamer"));
-};
-
 var toggleLivestreamerItems = (exists) => {
-    if(exists)
-        showLivestreamerItems();
-    else
-        hideLivestreamerItems();
+    toggle(document.getElementById("contextLivestreamer"), exists);
+    toggle(document.getElementById("contextExploreLivestreamer")), exists;
 };
 
 var contextMenuListener = (e) => {
