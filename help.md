@@ -8,6 +8,7 @@
 There are a couple of really helpful pages already existing:
 
  - [Channels Manager Help](channels-manager/)
+ - [Panel Help](panel/)
  - [Livestreamer Integration Help](livestreamer/)
  - [FAQ](faq/)
 

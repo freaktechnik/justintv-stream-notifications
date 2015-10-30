@@ -17,6 +17,7 @@ defaults:
       type: "pages"
     values:
       layout: "changes"
+      group: "changes"
 
 gems:
   - jekyll-redirect-from
