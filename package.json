@@ -197,6 +197,13 @@
       "title": "Quality Preset used when all else fails",
       "value": "best",
       "hidden": true
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_extraArguments",
+      "title": "Comma separated extra arguments for livestreamer",
+      "value": "",
+      "hidden": true
     }
   ],
   "homepage": "http://jtvn.humanoids.be/",
