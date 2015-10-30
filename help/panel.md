@@ -35,11 +35,11 @@ More info can be shown, see [Extra info](#extra-info).
 # Panel Layouts
 The panel comes in three layouts:
 
- - Compact
+ - *Compact*
    The channels don't show their title when live and have a height of one line.
- - Normal
+ - *Normal*
    The channels are two lines high and show a bigger avatar.
- - Big Thumbnail
+ - *Big Thumbnail*
    Added to the layout for Normal, the thumbnail for the stream is shown as
    background.
 
