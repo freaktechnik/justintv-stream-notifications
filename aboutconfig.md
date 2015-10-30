@@ -28,6 +28,8 @@ Live Stream Notifier offers the following hidden settings in the `extensions.jid
  - `channellist_cacheTime` (Default: 600000) How long the channel states will be remembered while Firefox is closed in miliseconds.
  - `queueservice_maxRetries` (Default: 5) How many times a request is sent again until it is discarded.
  - `find_mature` (Default: true) Hide mature rated results from the explore tab (only works with some providers).
+ - `livestreamer_fallbackQuality` (Default: "best") The quality to use as default quality and if the set quality doesn't work.
+ - `livestreamer_extraArguments` (Default: "") See the [Livestramer Integration Help](/help/livestreamer#passing-arbitrary-arguments) for detailed documentation.
 
 The `sdk` subbranch are Add-on SDK specific preferences and should not be changed, except for the `sdk.console.logLevel` preference.
 

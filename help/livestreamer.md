@@ -21,7 +21,7 @@ If your browser was open during the installation, just restart it.
 
 If the extension can't find Livestreamer (the livestreamer path setting is empty),
 you will have to manually specify the full path to the Livestreamer executable
-(`livestreamer.exe` on Windows, `livestreamer` everywhere else).
+(`livestreamer.exe` on Windows, `livestreamer.app` on Mac OS, `livestreamer` everywhere else).
 
 # "Open with Livestreamer" is not working
 This means either Livestreamer can't find VLC or the player you specified in the
@@ -33,3 +33,49 @@ Livestreamer will then try to open the stream with that player.
 
 # I want to watch all streams with Livestreamer
 Just toggle the "Always use Livestreamer" setting.
+
+# Advanced quality control
+The default behaviour of the quality selection is to first try with the user-set
+quality in the add-on preferences and then fall back to a fail-safe quality.
+The fail-save quality is always passed as `--default-stream` argument.
+
+You can exploit this to for example use `--stream-sorting-exlude` as your
+default quality to watch lower quality streams if available, but the argument
+gets dismissed if there's no stream of the given filter available.
+
+# Passing arbitrary arguments
+You can pass any argument by setting the [about:config](/aboutconfig) preference
+`livestreamer_extraArguments` to a comma separated list of arguments. The extra
+arguments should not have any extra white space separating them for the comma
+and a comma should always be between two arguments, else the extension might
+break. See the [Livestreamer documentation](http://docs.livestreamer.io/cli.html#command-line-usage)
+for all possible arguments.
+
+# Generated livestreamer commands
+`{name}` is the value of an [about:config](/aboutconfig) preference with the
+indicated name. Some of them are exposed in the extension preferences.
+
+`[url]` is the url of the livestream to open.
+
+Note that `{livestreamer_quality}` is replaced with `{livestreamer_fallbackQuality}`
+if the command failed (see [Advanced quality control](#advanced-quality-control)).
+
+`{livestreamer_extraArguments}` get split up by each comma and appended as an
+argument each (see [Passing arbitrary arguments](#passing-arbitrary-arguments))
+
+## Normal without player set
+```sh
+{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality}
+```
+
+## Normal with player set
+```sh
+{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player}
+```
+
+## With extra arguments and player set
+```sh
+{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player} {livestreamer_extraArguments}
+```
+
+
