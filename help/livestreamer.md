@@ -64,16 +64,19 @@ if the command failed (see [Advanced quality control](#advanced-quality-control)
 argument each (see [Passing arbitrary arguments](#passing-arbitrary-arguments))
 
 ## Normal without player set
+
 ```sh
 {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality}
 ```
 
 ## Normal with player set
+
 ```sh
 {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player}
 ```
 
 ## With extra arguments and player set
+
 ```sh
 {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player} {livestreamer_extraArguments}
 ```
