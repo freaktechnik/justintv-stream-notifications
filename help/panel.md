@@ -15,8 +15,8 @@ desired location.
 The button shows if channels are live. It can even show a little counter of how
 many channels are live. This can be enabled in the add-on preferences.
 
-If there are live channels the button looks like ![]() (with a red dot in the
-middle) and if all are offline it looks like ![]() (with a white dot in the
+If there are live channels the button looks like ![](/img/icon18.png) (with a red dot in the
+middle) and if all are offline it looks like ![](/img/offline18.png) (with a white dot in the
 middle).
 
 # Channels in the panel
