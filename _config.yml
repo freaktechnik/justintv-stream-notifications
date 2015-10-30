@@ -9,6 +9,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://jtvn.humanoids.be" # the base hostname & protocol for your site
 twitter_username: freaktechnik
 github_username:  freaktechnik/justintv-stream-notifications
+amo_slug: justintv-stream-notificatio
 
 defaults:
   -
