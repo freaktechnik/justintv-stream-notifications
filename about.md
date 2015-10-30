@@ -17,14 +17,14 @@ Gaming is these days.
 I eventually decided to generalize the extension as version 2.0 to support any
 Justin.tv or Twitch channel. That's where the short name "jtvn" and the
 addons.mozilla.org URL come from. It was called "Justin.tv Stream Notifications".
-The first version under that version got release on November XX 2011.
+The first version under that version got release on November 4th 2012.
 
 The panel was added soon after and then I started to slowly generalize the
 extension to support multiple providers.
 
 Generalizing it for any provider needed a lot of work, but also made the
 extension solider than ever. The initial version with support for other providers
-than Twitch and Justin.tv was released as version 3.0.0 on XXXX 2015.
+than Twitch and Justin.tv was released as version 3.0.0 on May 16th 2015.
 
 Sadly Justin.tv got shut down before 3.0.0 was finished and I had to pull that
 code out. I also decided to do the rebranding to "Live Stream Notifier" and the
