@@ -13,11 +13,12 @@ desired location.
 
 ## Live state indication
 The button shows if channels are live. It can even show a little counter of how
-many channels are live. This can be enabled in the add-on preferences.
+many channels are live. This can be enabled in the add-on preferences with
+<samp>Show counter badge</samp>.
 
-If there are live channels the button looks like ![](/img/icon18.png) (with a red dot in the
-middle) and if all are offline it looks like ![](/img/offline18.png) (with a white dot in the
-middle).
+If there are live channels the button looks like ![](/img/icon18.png) (with a
+red dot in the middle) and if all are offline it looks like
+![](/img/offline18.png) (with a white dot in the middle).
 
 # Channels in the panel
 The panel is designed to always show a list of channels. At the top, you can
@@ -43,7 +44,7 @@ The panel comes in three layouts:
    background.
 
 # Extra info
-When the <samp>Show extra info in panel</samp> preference in the add-on
+When the <samp>Extra info in panel</samp> preference in the add-on
 settings is enabled, each live channel has an extra line of information.
 The extra infos are only shown when the specific meta information is available
 from the provider.
@@ -53,8 +54,9 @@ Currently the extras include nuber of viewers and the category of the stream.
 # Search
 When clicking on the magnifying glass icon in the top right of the panel a text
 input field for search is shown. It filters the current list with the given
-strings, [like in the channels manager](/help/channels-manager#find-a-certain-item), just that it searches in all potentially
-displayed information - even in the extras when they're hidden.
+strings, [like in the channels manager](/help/channels-manager#find-a-certain-item),
+just that it searches in all potentially displayed information - even in the
+extras when they're hidden.
 
 # The explore tab
 The panel's third tab is a special tab with content that is not controlled by
