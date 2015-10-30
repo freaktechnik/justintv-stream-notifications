@@ -44,6 +44,9 @@ The channel username on the classic livestream service, visible in the channel's
 ### MLG.tv
 The channel page URL without the `http://tv.majorleaguegaming.com/channel/` part.
 
+### Picarto
+The username in the URL of the channel.
+
 ### Twitch
 The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
 
