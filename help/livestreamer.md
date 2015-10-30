@@ -23,7 +23,7 @@ If the extension can't find Livestreamer (the livestreamer path setting is empty
 you will have to manually specify the full path to the Livestreamer executable
 (`livestreamer.exe` on Windows, `livestreamer.app` on Mac OS, `livestreamer` everywhere else).
 
-# "Open with Livestreamer" is not working
+# <samp>Open with Livestreamer</samp> is not working
 This means either Livestreamer can't find VLC or the player you specified in the
 extension settings or the quality defined in the settings is not available for
 that stream.
@@ -32,7 +32,7 @@ The player path should be an absolute path to the executable of the player.
 Livestreamer will then try to open the stream with that player.
 
 # I want to watch all streams with Livestreamer
-Just toggle the "Always use Livestreamer" setting.
+Just toggle the <samp>Always use Livestreamer</samp> setting.
 
 # Advanced quality control
 The default behaviour of the quality selection is to first try with the user-set
