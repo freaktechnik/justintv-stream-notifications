@@ -190,6 +190,13 @@
       "title": "Livestreamer Quality Preset",
       "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst).",
       "value": "best"
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_fallbackQuality",
+      "title": "Quality Preset used when all else fails",
+      "value": "best",
+      "hidden": true
     }
   ],
   "homepage": "http://jtvn.humanoids.be/",
