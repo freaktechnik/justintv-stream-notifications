@@ -9,14 +9,14 @@
 /* global show */
 /* global hide */
 
-var live, offline, explore, currentMenuTarget, currentStyle;
+var live, offline, explore, currentMenuTarget, currentStyle, providers;
 const CHANNEL_ID_PREFIX = "channel";
 const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
 const EXPLORE_CONTEXTMENU_ID = "explore-context";
 const filters = [
     {
-        attribute: "class"
+        subtarget: ".provider"
     },
     {
         subtarget: ".name"
@@ -182,6 +182,9 @@ var buildChannel = (channel, unspecific = false) => {
                         <span class="categoryWrapper">
                             <span class="icon">c</span>&nbsp;<span class="category">Category</span>
                         </span>
+                        <span class="providerWrapper">
+                            <span class="icon">p</span>&nbsp;<span class="provider">Provider</span>
+                        </span>
                     </aside>
                 </div>
             </a>
@@ -203,7 +206,10 @@ var buildChannel = (channel, unspecific = false) => {
             viewers       = document.createElement("span"),
             categoryWrapper = document.createElement("span"),
             categoryIcon  = document.createElement("span"),
-            category      = document.createElement("span");
+            category      = document.createElement("span"),
+            providerWrapper = document.createElement("span"),
+            providerIcon = document.createElement("span"),
+            provider = document.createElement("span");
         avatar.src        = getBestImageForSize(channel, 30);
         thumbnail.src     = channel.thumbnail;
         spanName.appendChild(name);
@@ -238,6 +244,16 @@ var buildChannel = (channel, unspecific = false) => {
         category.appendChild(document.createTextNode(channel.category));
         categoryWrapper.appendChild(category);
         extra.appendChild(categoryWrapper);
+        extra.appendChild(document.createTextNode(" "));
+        providerWrapper.classList.add("providerWrapper");
+        providerIcon.appendChild(document.createTextNode("p"));
+        providerIcon.classList.add("icon");
+        providerWrapper.appendChild(providerIcon);
+        providerWrapper.appendChild(document.createTextNode("\u00a0"));
+        provider.classList.add("provider");
+        provider.appendChild(document.createTextNode(providers[channel.type].name));
+        providerWrapper.appendChild(provider);
+        extra.appendChild(providerWrapper);
 
         wrapper.appendChild(extra);
 
@@ -374,6 +390,16 @@ var hasOption = (provider) => {
     return false;
 };
 
+var addExploreProviders = (exploreProviders) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    exploreProviders.forEach((p) => {
+        if(!hasOption(p)) {
+            providerDropdown.add(new Option(providers[p].name, p));
+        }
+    });
+    displayLoading();
+};
+
 // Set up port commmunication listeners
 addon.port.on("setStyle", setStyle);
 addon.port.on("setExtras", setExtrasVisibility);
@@ -384,14 +410,12 @@ addon.port.on("setOffline", makeChannelOffline);
 addon.port.on("resize", resize);
 addon.port.on("livestreamerExists", toggleLivestreamerItems);
 
-addon.port.on("addExploreProviders", (providers) => {
-    var providerDropdown = document.getElementById("exploreprovider");
-    for(var provider of providers) {
-        if(!hasOption(provider.type)) {
-            providerDropdown.add(new Option(provider.name, provider.type));
-        }
-    }
-    displayLoading();
+addon.port.on("setProviders", (prvdrs) => {
+    providers = prvdrs;
+    addExploreProviders(
+        Object.keys(providers)
+        .filter((p) => providers[p].supports.featured)
+    );
 });
 
 addon.port.on("setFeatured", (channels, type, q) => {
