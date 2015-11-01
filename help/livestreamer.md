@@ -13,7 +13,7 @@ Livestreamer was found in a default installation location on your computer.
 Else you will not see any signs of Livestreamer except for the extension
 settings.
 
-# Livestreamer is installed and but the extension hasn't detected it
+# Livestreamer is installed however the extension hasn't detected it
 Either you installed Livestreamer while your browser was open - in which case
 the add-on doesn't know about it yet, or it can't find Livestreamer.
 
