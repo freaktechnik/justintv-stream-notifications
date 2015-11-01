@@ -13,7 +13,7 @@ Livestreamer was found in a default installation location on your computer.
 Else you will not see any signs of Livestreamer except for the extension
 settings.
 
-# Livestreamer is installed the extension doesn't realize that
+# Livestreamer is installed and but the extension hasn't detected it
 Either you installed Livestreamer while your browser was open - in which case
 the add-on doesn't know about it yet, or it can't find Livestreamer.
 
@@ -25,8 +25,7 @@ you will have to manually specify the full path to the Livestreamer executable
 
 # <samp>Open with Livestreamer</samp> is not working
 This means either Livestreamer can't find VLC or the player you specified in the
-extension settings or the quality defined in the settings is not available for
-that stream.
+extension settings.
 
 The player path should be an absolute path to the executable of the player.
 Livestreamer will then try to open the stream with that player.
@@ -65,20 +64,13 @@ argument each (see [Passing arbitrary arguments](#passing-arbitrary-arguments))
 
 ## Normal without player set
 
-```sh
-{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality}
-```
+    {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality}
 
 ## Normal with player set
 
-```sh
-{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player}
-```
+    {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player}
 
 ## With extra arguments and player set
 
-```sh
-{livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player} {livestreamer_extraArguments}
-```
-
+    {livestreamer_path} --default-stream={livestreamer_fallbackQuality} [url] {livestreamer_quality} --player={livestreamer_player} {livestreamer_extraArguments}
 
