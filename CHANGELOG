@@ -129,3 +129,5 @@ changelog
     - Add a provider-wide search in the "Explore" tab
     - Add Livestreamer (the program) support
     - Add Streamup support
+    - Add provider name to extra info
+    - Delete all channels a user follows by holding shift when removing it

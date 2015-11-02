@@ -21,20 +21,7 @@ List of supported providers with some explanation on what they are can be found 
 https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
 
 ## Contribute
-### Translations
-You can help to translate the extension on [BabelZilla](http://beta.babelzilla.org/projects/p/jtvn/)
-
-### Providers
-If you are versed in JavaScript, especially in writing CommonJS modules, you can try to write a module for a provider. If you don't have an idea for a provider to add, check [all issues with the provider tag](https://github.com/freaktechnik/justintv-stream-notifications/labels/provider).
-
-All code relevant to writing a provider module should be pretty well documented in JSDoc syntax, except for the existing provider implementations.
-The new provider module will be in the [providers](lib/providers/) folder. The [generic-provider](lib/providers/generic-provider.js) in that folder implements a base class off of which I'd suggest to base your provider on. It documents the full interface your provider should implement. It's recommended to use the [Class](https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/core_heritage#Class) object from the SDK for heritage management. You can also see this in action in the other providers. Please note that "private" properties of the Class are prefixed with an `_` if they need access to `this`, else they are defined outside the Class.
-
-Further helpers include the [queueservice](/lib/queueservice.js), which is already included with the GenericProvider by default, and the [pagination-helper](/lib/pagination-helper.js). The returned Channel and User objects are from [channeluser](/lib/channeluser.js).
-
-To include your provider with the actual extension, export it in the [providers](/lib/providers.js) module. The property you export it on should match the type string you put on the returned Channel and User objects.
-
-After the provider works, you'll have to add a string for the provider name in the [locales file](/locale/en.properties#L29) and add styling for the panel in the [list.css](/data/list.css#L147). You have to define two rules, as done for all the existing providers. The classname for your provider is the type string you specified.
+For contribution instructions, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Build it yourslef
 
