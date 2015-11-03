@@ -4,6 +4,13 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         firefoxBinary: process.env.JPM_FIREFOX_BINARY || 'firefox-trunk',
+        banner:
+            '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+            '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name || pkg.author %>;\n' +
+            ' * This Source Code Form is subject to the terms of the Mozilla Public License,\n' +
+            ' * v. 2.0. If a copy of the MPL was not distributed with this file, You can\n' +
+            ' * obtain one at https://mozilla.org/MPL/2.0/.\n */\n',
         shell: {
             jpmTest: {
                 command: 'jpm test --tbpl -b <%= firefoxBinary %>'
@@ -158,11 +165,26 @@ module.exports = function(grunt) {
                 },
                 src: [ 'build/lib/**/*.js' ]
             }
+        },
+        header: {
+            build: {
+                options: {
+                    text: '<%= banner %>'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/lib',
+                        src: ['**/*.js*'],
+                        dest: 'build/lib'
+                    }
+                ]
+            }
         }
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['copy:build', 'comments', 'transifex', 'package:build', 'jpm:xpi']);
+    grunt.registerTask('build', ['copy:build', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
     grunt.registerTask('dev', [ 'githash', 'copy', 'copy:dev', 'package:dev', 'jpm:xpi']);
 
     grunt.registerTask('default', ['test']);
