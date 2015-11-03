@@ -285,7 +285,7 @@ function getBestImageForSize(user, size) {
 }
 
 function getChannelUname(channel) {
-    //TODO improve this like in the twitch provider
+    /** @todo improve this like in the twitch provider */
     if(channel.type == "twitch")
         channel.uname = channel.uname.split(" ")[0];
     return channel.uname;

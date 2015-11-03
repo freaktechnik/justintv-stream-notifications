@@ -20,11 +20,12 @@ exports['test channellist'] = function*(assert) {
     // Test addUser
     console.info("channelList.addUser");
 
-    let user = yield list.addUser(getUser());
+    const referenceUser = getUser();
+    let user = yield list.addUser(referenceUser);
 
     assert.ok(user instanceof User, "User is a user");
     assert.ok(user.id, "The user has an ID");
-    assert.equal(user.uname, "lorem ipsum");
+    assert.equal(user.uname, referenceUser.uname);
 
     // Test getUser
     console.info("channelList.getUser");
@@ -32,9 +33,9 @@ exports['test channellist'] = function*(assert) {
     user = yield list.getUser('test', 'test');
     assert.ok(user instanceof User, "The user is a user");
     assert.ok(user.id, "User has an ID");
-    assert.equal(user.login, 'test');
-    assert.equal(user.type, 'test');
-    assert.equal(user.uname, 'lorem ipsum');
+    assert.equal(user.login, referenceUser.login);
+    assert.equal(user.type, referenceUser.type);
+    assert.equal(user.uname, referenceUser.uname);
 
     let sameUser = yield list.getUser(user.id);
     assert.ok(sameUser instanceof User, "The same user is a user");
@@ -119,7 +120,7 @@ exports['test channellist'] = function*(assert) {
     assert.equal(channel.uname, "lorem ipsum");
 
     // Test addChannels with a single channel
-    console.info("channelList.getChannels with a single channel");
+    console.info("channelList.addChannels with a single channel");
 
     chan = getChannel();
     let channels = yield list.addChannels(chan);
@@ -130,8 +131,8 @@ exports['test channellist'] = function*(assert) {
     assert.equal(channels[0].uname, "lorem ipsum");
     yield list.removeChannel(channels[0].id);
 
-    //TODO test addChannels
-    console.info("channelList.getChannels");
+    /** @todo test addChannels with mutliple channels */
+    console.info("channelList.addChannels with multiple channels");
 
     // Test getChannel
     console.info("channelList.getChannel");
@@ -232,7 +233,6 @@ exports['test channellist'] = function*(assert) {
     channels = yield list.getChannelsByType(null);
     assert.equal(channels.length, 2);
     channels.forEach(function(channel) {
-        console.log(channel.login);
         assert.ok(channel instanceof Channel);
     });
 

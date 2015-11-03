@@ -3,8 +3,6 @@
  * Licensed under MPL 2.0
  */
 
-//TODO reactivate once e10s is reliable
-
 const tabs = require("sdk/tabs");
 let   channelUtils = require('../lib/channel-utils');
 var { setTimeout } = require("sdk/timers");

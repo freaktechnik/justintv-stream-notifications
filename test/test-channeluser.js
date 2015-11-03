@@ -1,6 +1,7 @@
-/*
- * Created by Martin Giger
- * Licensed under MPL 2.0
+/**
+ * @author Martin Giger
+ * @license MPL-2.0
+ * @todo Test serialize
  */
 var { Channel, User } = require('../lib/channeluser');
 var { getUser, getChannel } = require("./channeluser/utils");
@@ -31,10 +32,8 @@ exports['test user image getter method'] = function(assert) {
 };
 
 exports['test channel legacy'] = function(assert) {
-    assert.ok(new Channel() instanceof User, "Channel doesn't inerhit from user");
     assert.ok(new Channel() instanceof Channel);
 };
-
 
 require("sdk/test").run(exports);
 
