@@ -246,7 +246,8 @@
     "grunt-shell": "^1.1.2",
     "grunt-transifex": "^0.1.1",
     "jpm": "*",
-    "load-grunt-tasks": "^3.2.0"
+    "load-grunt-tasks": "^3.2.0",
+    "grunt-stripcomments": "~0.4.0"
   },
   "scripts": {
     "test": "grunt test"

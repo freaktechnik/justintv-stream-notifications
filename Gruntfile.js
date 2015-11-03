@@ -149,11 +149,20 @@ module.exports = function(grunt) {
             main: {
                 options: {}
             }
+        },
+        comments: {
+            build: {
+                options: {
+                    singleline: false,
+                    multiline: true
+                },
+                src: [ 'build/lib/**/*.js' ]
+            }
         }
     });
 
     grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('build', ['copy:build', 'transifex', 'package:build', 'jpm:xpi']);
+    grunt.registerTask('build', ['copy:build', 'comments', 'transifex', 'package:build', 'jpm:xpi']);
     grunt.registerTask('dev', [ 'githash', 'copy', 'copy:dev', 'package:dev', 'jpm:xpi']);
 
     grunt.registerTask('default', ['test']);
