@@ -9,13 +9,21 @@ var { setTimeout } = require("sdk/timers");
 const { wait } = require("./event/helpers");
 var { getChannel } = require("./channeluser/utils");
 
-exports['test open or focus tab'] = function*(assert) {
+exports['test open archive'] = function*(assert) {
     var channel = getChannel();
 
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
 
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened woth archive url for offline channel");
+    tabs.activeTab.close();
+};
+
+exports['test focus archive'] = function*(assert) {
+    let channel = getChannel();
+    channelUtils.selectOrOpenTab(channel);
+    yield wait(tabs, "ready");
+
     tabs.open({url: "http://example.com"});
 
     let tabToClose = yield wait(tabs, "ready");
@@ -25,10 +33,15 @@ exports['test open or focus tab'] = function*(assert) {
 
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was correctly activated");
     tabToClose.close();
+    tabs.activeTab.close();
+};
+
+exports['test open live channel when archive is already opened'] = function*(assert) {
+    let channel = getChannel();
+    channelUtils.selectOrOpenTab(channel);
+    let tabToClose = yield wait(tabs, "ready");
 
     channel.live = true;
-
-    tabToClose = tabs.activeTab;
 
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
@@ -37,7 +50,11 @@ exports['test open or focus tab'] = function*(assert) {
 
     tabToClose.close();
     tabs.activeTab.close();
+};
 
+exports['test open live channel'] = function*(assert) {
+    let channel = getChannel();
+    channel.live = true;
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
 
