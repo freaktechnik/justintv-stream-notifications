@@ -5,7 +5,8 @@
  */
 "use strict";
 
-const livestreamer = require("../lib/livestreamer");
+const requireHelper = require("./require_helper");
+const livestreamer = requireHelper("../lib/livestreamer");
 const { prefs } = require("sdk/simple-prefs");
 const { when } = require("sdk/event/utils");
 

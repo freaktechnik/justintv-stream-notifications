@@ -1,9 +1,12 @@
-/*
- * Created by Martin Giger
- * Licensed under MPL 2.0
+/**
+ * @author Martin Giger
+ * @license MPL-2.0
+ * @todo use channeluser/utils
  */
-const { Notifier } = require('../lib/notifier'),
-      { Channel } = require('../lib/channeluser');
+
+const requireHelper = require("./require_helper");
+const { Notifier } = requireHelper('../lib/notifier'),
+      { Channel } = requireHelper('../lib/channeluser');
 
 
 function getChannel() {

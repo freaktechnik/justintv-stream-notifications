@@ -2,7 +2,9 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-const { PaginationHelper, promisedPaginationHelper } = require("../lib/pagination-helper");
+
+const requireHelper = require("./require_helper");
+const { PaginationHelper, promisedPaginationHelper } = requireHelper("../lib/pagination-helper");
 const { resolve } = require("sdk/core/promise");
 
 exports.testPaginationHelper = function(assert, done) {

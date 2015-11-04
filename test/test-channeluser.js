@@ -3,7 +3,9 @@
  * @license MPL-2.0
  * @todo Test serialize
  */
-var { Channel, User } = require('../lib/channeluser');
+
+const requireHelper = require("./require_helper");
+var { Channel, User } = requireHelper('../lib/channeluser');
 var { getUser, getChannel } = require("./channeluser/utils");
 
 exports['test user base construction stuff'] = function(assert) {

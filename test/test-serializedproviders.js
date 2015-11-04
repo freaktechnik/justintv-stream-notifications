@@ -5,8 +5,9 @@
  */
 "use strict";
 
-const serializedProviders = require("../lib/providers/serialized");
-const providers = require("../lib/providers");
+const requireHelper = require("./require_helper");
+const serializedProviders = requireHelper("../lib/providers/serialized");
+const providers = requireHelper("../lib/providers");
 
 exports.testSerialization = function(assert) {
     const serialized = JSON.parse(JSON.stringify(serializedProviders));

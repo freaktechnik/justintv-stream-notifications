@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
+    var istanbulJpm = require("istanbul-jpm");
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
@@ -22,7 +23,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*', '!build/**/*']
+                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*', '!build/**/*', '!coverage/**/*']
                 }
             }
         },
@@ -66,11 +67,21 @@ module.exports = function(grunt) {
                 files: {
                     src: ['**/*~']
                 }
+            },
+            transpile: {
+                files: {
+                    src: ['transpiled']
+                }
+            },
+            coverage: {
+                files: {
+                    src: ['coverage']
+                }
             }
         },
         jsdoc: {
             dist: {
-                src: ['lib/**/*.js', 'README.md', 'package.json'],
+                src: ['transpiled/lib/**/*.js', 'README.md', 'package.json'],
                 options: {
                     destination: 'doc'
                 }
@@ -88,7 +99,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'lib',
-                        src: ['**/*.js*', '!**/*~'],
+                        src: ['**/*.js*', '!**/*~', '!.jshintrc'],
                         dest: 'build/lib'
                     },
                     {
@@ -116,7 +127,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'test',
-                        src: ['**/*', '!**/*~'],
+                        src: ['**/*', '!**/*~', '!.jshintrc'],
                         dest: 'build/test'
                     },
                     {
@@ -180,12 +191,74 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+        babel: {
+            options: {
+                presets: ['babel-preset-es2015']
+            },
+            transpile: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'lib',
+                        src: ['**/*.js', "!**/*~"],
+                        dest: 'transpiled/lib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'test',
+                        src: ['**/*.js'],
+                        dest: 'transpiled/test'
+                    }
+                ]
+            }
+        },
+        instrument: {
+            files: 'lib/**/*.js',
+            options: {
+                lazy: true,
+                basePath: 'coverage/instrument/',
+                instrumenter: istanbulJpm.Instrumenter
+            }
+        },
+        storeCoverage: {
+            options: {
+                dir: 'coverage/reports'
+            }
+        },
+        makeReport: {
+            src: 'coverage/reports/**/*.json',
+            options: {
+                type: 'lcov',
+                dir: 'coverage/reports',
+                print: 'detail'
+            }
+        },
+        env: {
+            coverage: {
+                JPM_MEASURING_COVERAGE: true
+            }
+        },
+        coveralls: {
+            options: {
+                src: 'coverage/reports/lcov.info',
+                force: true
+            }
         }
     });
 
-    grunt.registerTask('test', ['jshint', 'shell:jpmTest']);
+    grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
+        global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
+        grunt.log.ok("Read __coverage__ global stored in /tmp/istanbul-jpm-coverage.json");
+    });
+
+    grunt.registerTask('quicktest', ['jshint', 'shell:jpmTest']);
+    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
+    grunt.registerTask('test', ['jshint', 'coverage']);
     grunt.registerTask('build', ['copy:build', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
     grunt.registerTask('dev', [ 'githash', 'copy', 'copy:dev', 'package:dev', 'jpm:xpi']);
+    // Need to transpile until jsdoc 3.3.0
+    grunt.registerTask('doc', ['babel', 'jsdoc', 'clean:transpile']);
 
     grunt.registerTask('default', ['test']);
 };

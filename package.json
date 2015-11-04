@@ -235,20 +235,26 @@
     "jetpack-homepanel": "^1.0.1"
   },
   "devDependencies": {
+    "babel-preset-es2015": "~6.0.15",
     "grunt": "^0.4.5",
+    "grunt-babel": "~6.0.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-jshint": "^0.11.2",
+    "grunt-coveralls": "^1.0.0",
+    "grunt-env": "^0.4.4",
     "grunt-githash": "^0.1.1",
+    "grunt-header": "~1.0.0",
+    "grunt-istanbul": "~0.6.1",
     "grunt-jpm": "^0.1.0",
     "grunt-jsdoc": "^1.0.0",
     "grunt-package": "^0.1.3",
     "grunt-shell": "^1.1.2",
-    "grunt-transifex": "^0.1.1",
-    "jpm": "*",
-    "load-grunt-tasks": "^3.2.0",
     "grunt-stripcomments": "~0.4.0",
-    "grunt-header": "~1.0.0"
+    "grunt-transifex": "^0.1.1",
+    "istanbul-jpm": "0.0.1",
+    "jpm": "*",
+    "load-grunt-tasks": "^3.2.0"
   },
   "scripts": {
     "test": "grunt test"

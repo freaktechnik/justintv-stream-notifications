@@ -2,7 +2,9 @@
  * Created by Martin Giger
  * Licensed under LGPLv3
  */
-const providers = require("../lib/providers"),
+
+const requireHelper = require("./require_helper");
+const providers = requireHelper("../lib/providers"),
        { isValidURI } = require("sdk/url");
 
 exports.testProviders = function(assert) {

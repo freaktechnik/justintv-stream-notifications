@@ -13,6 +13,8 @@ Gruntfile.js
 node_modules/jpm/
 node_modules/grunt*
 node_modules/load-grunt-tasks/
+node_modules/babel*
+node_modules/*/node_modules/istanbul/
 
 *CHANGELOG*
 

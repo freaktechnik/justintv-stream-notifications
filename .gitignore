@@ -183,3 +183,5 @@ npm-debug.log
 
 doc/
 build/
+coverage/
+transpiled/

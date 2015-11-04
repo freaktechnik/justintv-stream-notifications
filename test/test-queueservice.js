@@ -2,7 +2,9 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-const QueueService = require("../lib/queueservice");
+
+const requireHelper = require("./require_helper");
+const QueueService = requireHelper("../lib/queueservice");
 
 exports.testGetService = function(assert) {
     let service = QueueService.getServiceForProvider("test");

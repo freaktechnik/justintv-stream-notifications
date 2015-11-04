@@ -5,8 +5,9 @@
 
 "use strict";
 
-var { ChannelList } = require('../lib/channellist'),
-    { User } = require('../lib/channeluser');
+const requireHelper = require("./require_helper");
+var { ChannelList } = requireHelper('../lib/channellist'),
+    { User } = requireHelper('../lib/channeluser');
 
 let { Channel, getUser, getChannel } = require("./channeluser/utils");
 let { wait, expectReject } = require("./event/helpers");

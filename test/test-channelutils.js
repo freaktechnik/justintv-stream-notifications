@@ -3,8 +3,9 @@
  * Licensed under MPL 2.0
  */
 
+const requireHelper = require("./require_helper");
 const tabs = require("sdk/tabs");
-let   channelUtils = require('../lib/channel-utils');
+let   channelUtils = requireHelper('../lib/channel-utils');
 var { setTimeout } = require("sdk/timers");
 const { wait } = require("./event/helpers");
 var { getChannel } = require("./channeluser/utils");
