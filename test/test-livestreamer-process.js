@@ -14,7 +14,13 @@ exports['test launching inexistant file'] = (assert) => {
 };
 
 exports['test launching existing file'] = function*(assert) {
-    yield process.startProcess("/usr/bin/git", ["--help"]);
+    let code = yield process.startProcess("/usr/bin/git", ["--help"]);
+    assert.equal(code, 0);
+};
+
+exports['test failure exit code'] = function*(assert) {
+    let code = yield process.startProcess("/usr/bin/git").catch((c) => c);
+    assert.equal(code, 1);
 };
 
 require("sdk/test").run(exports);
