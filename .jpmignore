@@ -10,11 +10,10 @@
 # Ignore grunt and other npm stuff
 Gruntfile.js
 *.jshintrc
-node_modules/jpm/
-node_modules/grunt*
-node_modules/load-grunt-tasks/
-node_modules/babel*
-node_modules/*/node_modules/istanbul/
+node_modules/
+!node_modules/jetpack-homepanel/
+!node_modules/istanbul-jpm/
+node_modules/istanbul-jpm/node_modules/
 
 *CHANGELOG*
 
@@ -28,3 +27,6 @@ python-lib/
 # Scratch
 *~
 
+build/
+coverage/reports/
+transpiled/

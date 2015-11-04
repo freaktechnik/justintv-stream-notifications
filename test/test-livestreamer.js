@@ -43,4 +43,20 @@ exports["test event object interface"] = (assert) => {
     assert.equal(typeof livestreamer.events.on, "function");
 };
 
+exports["test launch livestreamer"] = function*(assert) {
+    let code = yield livestreamer.launch("http://example.com");
+    assert.equal(code, 1);
+};
+
+exports["test launch livestreamer with extra arguments"] = function*(assert) {
+    prefs.livestreamer_player = "vlc";
+    prefs.livestreamer_extraArguments = "--help";
+    
+    let code = yield livestreamer.launch("http://example.com");
+    assert.equal(code, 1);
+    
+    prefs.livestreamer_extraArguments = "";
+    prefs.livestreamer_placer = "";
+};
+
 require("sdk/test").run(exports);

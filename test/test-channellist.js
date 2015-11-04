@@ -42,6 +42,10 @@ exports['test channellist'] = function*(assert) {
     assert.ok(sameUser instanceof User, "The same user is a user");
     assert.equal(user.id, sameUser.id, "The same user has the same ID");
 
+    yield expectReject(list.getUser());
+
+    yield expectReject(list.getUser(-1));
+
     // Test get nonexistent User
     console.info("get nonexistent User");
 
@@ -148,6 +152,10 @@ exports['test channellist'] = function*(assert) {
     let sameChannel = yield list.getChannel(channel.id);
     assert.ok(sameChannel instanceof Channel);
     assert.equal(channel.id, sameChannel.id);
+
+    yield expectReject(list.getChannel());
+
+    yield expectReject(list.getChannel(-1));
 
     // Test get inexistent channel
     console.info("get inexistent channel");
