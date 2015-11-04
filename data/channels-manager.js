@@ -261,29 +261,6 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     }
 });
 
-function getBestImageForSize(user, size) {
-    size = Math.round(parseInt(size, 10) * window.devicePixelRatio);
-    // shortcut if there's an image with the size demanded
-    if(user.image.hasOwnProperty(size.toString())) {
-        return user.image[size];
-    }
-
-    // search next biggest image
-    var index = Number.MAX_VALUE, biggest = 0;
-    Object.keys(user.image).forEach(function(s) {
-        s = parseInt(s, 10);
-        if(s > size && s < index)
-            index = s;
-        if(s > biggest)
-            biggest = s;
-    });
-
-    if(index > biggest)
-        index = biggest;
-
-    return user.image[index];
-}
-
 function getChannelUname(channel) {
     /** @todo improve this like in the twitch provider */
     if(channel.type == "twitch")
@@ -295,7 +272,7 @@ function addChannel(channel) {
     /*
         DOM structure:
         <option id="channelId">
-            <img src="">
+            <img srcset="" sizes="50w">
             <span>
                 Username
             </span>
@@ -311,7 +288,9 @@ function addChannel(channel) {
             span        = document.createElement("span"),
             title       = document.createTextNode(getChannelUname(channel)),
             type        = document.createTextNode(providers[channel.type].name);
-        image.src       = getBestImageForSize(channel, 50);
+        image.sizes = "50w";
+        image.srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
         channelNode.id  = "channel"+channel.id;
         small.appendChild(type);
         span.appendChild(title);
@@ -332,7 +311,9 @@ function addUser(user) {
             span     = document.createElement("span"),
             title    = document.createTextNode(user.uname),
             type     = document.createTextNode(providers[user.type].name);
-        image.src    = getBestImageForSize(user, 50);
+        image.sizes = "50w";
+        image.srcset = Object.keys(user.image)
+            .map((s) => user.image[s] + " " + s + "w").join(",");
         userNode.id  = "user"+user.id;
         small.appendChild(type);
         span.appendChild(title);
@@ -349,7 +330,8 @@ function updateChannel(channel) {
     if(hasChannel(channel.id)) {
         var channelNode = channels.querySelector("#channel"+channel.id),
             span        = channelNode.querySelector("span");
-        channelNode.querySelector("img").src = getBestImageForSize(channel, 50);
+        channelNode.querySelector("img").srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
         span.replaceChild(document.createTextNode(getChannelUname(channel)), span.firstChild);
     }
 }
@@ -358,7 +340,8 @@ function updateUser(user) {
     if(hasUser(user.id)) {
         var userNode = users.querySelector("#user"+user.id),
             span     = userNode.querySelector("span");
-        userNode.querySelector("img").src = getBestImageForSize(user, 50);
+        userNode.querySelector("img").srcset = Object.keys(user.image)
+            .map((s) => user.image[s] + " " + s + "w").join(",");
         span.replaceChild(document.createTextNode(user.uname), span.firstChild);
     }
 }

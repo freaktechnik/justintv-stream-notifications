@@ -131,29 +131,6 @@ var insertChannel = (channel, node) => {
     resize();
 };
 
-var getBestImageForSize = (user, size) => {
-    size = Math.round(parseInt(size, 10) * window.devicePixelRatio);
-    // shortcut if there's an image with the size demanded
-    if(user.image.hasOwnProperty(size.toString())) {
-        return user.image[size];
-    }
-
-    // search next biggest image
-    var index = Number.MAX_VALUE, biggest = 0;
-    Object.keys(user.image).forEach((s) => {
-        s = parseInt(s, 10);
-        if(s > size && s < index)
-            index = s;
-        if(s > biggest)
-            biggest = s;
-    });
-
-    if(index > biggest)
-        index = biggest;
-
-    return user.image[index];
-};
-
 var toggleLivestreamerItems = (exists) => {
     toggle(document.getElementById("contextLivestreamer"), exists);
     toggle(document.getElementById("contextExploreLivestreamer"), exists);
@@ -172,7 +149,7 @@ var buildChannel = (channel, unspecific = false) => {
             <a href="" contextmenu="context">
                 <img src="thumbnail">
                 <div>
-                    <img src="avatar">
+                    <img srcset="avatar" sizes="30w">
                     <span class="name">ChannelName</span><br>
                     <span class="title">ChannelTitle</span>
                     <aside>
@@ -210,7 +187,9 @@ var buildChannel = (channel, unspecific = false) => {
             providerWrapper = document.createElement("span"),
             providerIcon = document.createElement("span"),
             provider = document.createElement("span");
-        avatar.src        = getBestImageForSize(channel, 30);
+        avatar.sizes = "30w";
+        avatar.srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
         thumbnail.src     = channel.thumbnail;
         spanName.appendChild(name);
         spanName.classList.add("name");
@@ -329,7 +308,8 @@ var updateNodeContent = (channel) => {
     // only update images if the user is online to avoid broken images
     if(navigator.onLine) {
         channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
-        channelNode.querySelector("a div img").setAttribute("src", getBestImageForSize(channel, 30));
+        channelNode.querySelector("a div img").srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
     }
 };
 
