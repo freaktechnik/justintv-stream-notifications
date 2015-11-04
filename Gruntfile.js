@@ -15,7 +15,9 @@ module.exports = function(grunt) {
         shell: {
             jpmTest: {
                 command: 'jpm test --tbpl -b <%= firefoxBinary %>',
-                failOnError: false
+                options: {
+                    failOnError: false
+                }
             }
         },
         jshint: {
