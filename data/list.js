@@ -249,7 +249,7 @@ var buildChannel = (channel, unspecific = false) => {
             channelNode.id = EXPLORE_ID_PREFIX+channel.login;
             channelNode.dataset.url = channel.url[0];
             link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
-            link.addEventListener("click", openUrl.bind(null, channel.url[0], false));
+            link.addEventListener("click", openUrl.bind(null, channel.live? channel.url[0] : channel.archiveUrl, false));
         }
         channelNode.addEventListener("contextmenu", contextMenuListener);
 
