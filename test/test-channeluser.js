@@ -10,6 +10,8 @@ var { getUser, getChannel } = require("./channeluser/utils");
 
 exports['test user base construction stuff'] = function(assert) {
     assert.ok(new User() instanceof User, "New user object isn't instance of User");
+    let userWithId = new User(1);
+    assert.equal(userWithId.id, 1);
 };
 
 exports['test user toString'] = function(assert) {
@@ -35,6 +37,8 @@ exports['test user image getter method'] = function(assert) {
 
 exports['test channel legacy'] = function(assert) {
     assert.ok(new Channel() instanceof Channel);
+    let channelWithId = new Channel(1);
+    assert.equal(channelWithId.id, 1);
 };
 
 require("sdk/test").run(exports);
