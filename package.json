@@ -236,12 +236,12 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "~6.0.15",
+    "codecov": "^1.0.1",
     "grunt": "^0.4.5",
     "grunt-babel": "~6.0.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-jshint": "^0.11.2",
-    "grunt-coveralls": "^1.0.0",
     "grunt-env": "^0.4.4",
     "grunt-githash": "^0.1.1",
     "grunt-header": "~1.0.0",

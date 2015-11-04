@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+node: 0.12.0
 addons:
   firefox: latest-beta
 env:
@@ -13,7 +14,7 @@ before_install:
 before_script:
 - npm install -g grunt-cli
 after_success:
-- grunt coveralls
+- ./node_modules/.bin/codecov
 branches:
   except:
   - gh-pages
