@@ -249,7 +249,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
         global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
-        grunt.log.ok("Read __coverage__ global stored in /tmp/istanbul-jpm-coverage.json");
+        grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
     grunt.registerTask('quicktest', ['jshint', 'shell:jpmTest']);
