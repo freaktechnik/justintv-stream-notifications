@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: pkg,
-        firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox',
+        firefoxBinary: process.env.JPM_FIREFOX_BINARY || 'firefox-trunk',
         banner:
             '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +

@@ -5,11 +5,40 @@
 
 const requireHelper = require("./require_helper");
 const QueueService = requireHelper("../lib/queueservice");
+const { setTimeout } = require("sdk/timers");
 
 exports.testGetService = function(assert) {
     let service = QueueService.getServiceForProvider("test");
     assert.equal(service, QueueService.getServiceForProvider("test"));
     assert.notEqual(service, QueueService.getServiceForProvider("equal"));
+};
+
+exports.testIntervalPauseResume = function(assert, done) {
+    let service = QueueService.getServiceForProvider("test");
+    let count = 0, paused = false, date = Date.now();
+    service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
+        if(count === 0) {
+            ++count;
+            QueueService.pause();
+            paused = true;
+            setTimeout(() => {
+                paused = false;
+                QueueService.resume();
+            }, 500);
+        }
+        else {
+            assert.equal(count, 1);
+            assert.ok(!paused);
+            QueueService.updateQueueOptions(0);
+            service.unqueueUpdateRequest(service.HIGH_PRIORITY);
+            done();
+        }
+    });
+    QueueService.setQueueOptions({
+        interval: 700,
+        amount: 1,
+        maxSize: 1
+    });
 };
 
 // QueueService Object Tests
