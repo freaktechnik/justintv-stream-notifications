@@ -13,6 +13,7 @@ Gruntfile.js
 node_modules/
 !node_modules/jetpack-homepanel/
 !node_modules/istanbul-jpm/
+!node_modules/notification-box/
 node_modules/istanbul-jpm/node_modules/
 
 *CHANGELOG*

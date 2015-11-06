@@ -1,9 +1,13 @@
 module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
     var istanbulJpm = require("istanbul-jpm");
+    var pkg = grunt.file.readJSON("package.json");
+    var dependencies = Object.keys(pkg.dependencies).map(function(d) {
+        return d + "/**/*";
+    });
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON("package.json"),
+        pkg: pkg,
         firefoxBinary: process.env.JPM_FIREFOX_BINARY || 'firefox-trunk',
         banner:
             '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -105,7 +109,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'node_modules',
-                        src: ['jetpack-homepanel/**/*'],
+                        src: dependencies,
                         dest: 'build/node_modules'
                     },
                     {
