@@ -26,6 +26,7 @@ exports.getChannel = (login = 'test', type = 'test') => {
     channel.uname = 'lorem ipsum';
     channel.login = login;
     channel.logo = {'20':'http://foo.bar/0.jpg','40':'http://foo.bar/1.jpg'};
+    channel.title="Lorem Ipsum, dolor sit amet";
     return channel;
 };
 

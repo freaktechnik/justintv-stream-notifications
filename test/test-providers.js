@@ -6,6 +6,9 @@
 const requireHelper = require("./require_helper");
 const providers = requireHelper("../lib/providers"),
        { isValidURI } = require("sdk/url");
+const { prefs } = require("sdk/simple-prefs");
+const { GenericProvider } = requireHelper("../lib/providers/generic-provider");
+const { expectReject } = require("./event/helpers");
 
 exports.testProviders = function(assert) {
     let provider;
@@ -18,6 +21,7 @@ exports.testProviders = function(assert) {
         assert.ok("supports" in provider, "Provider has a supports property");
         assert.equal(typeof(provider.supports.favorites), "boolean", "Provider says whether or not it supports adding favs");
         assert.equal(typeof(provider.supports.credentials), "boolean", "Provider states whether or not it supports adding favs from credentials");
+        assert.equal(typeof(provider.supports.featured), "boolean", "Provider states whether or not it suports getting featured content");
         assert.ok((!provider.supports.favorites && !provider.supports.credentials) || provider.supports.favorites, "Supports config is valid");
         assert.equal(typeof(provider.getUserFavorites), "function", "getUserFavorites is implemented");
         assert.equal(typeof(provider.getChannelDetails), "function", "getChannelDetails is implemented");
@@ -30,6 +34,29 @@ exports.testProviders = function(assert) {
         assert.equal(typeof(provider.getFeaturedChannels), "function", "getFeaturedChannels is implemented");
         assert.equal(typeof(provider.search), "function", "search is implemented");
     }
+};
+
+exports.testGenericProvider = function*(assert) {
+    let genericProvider = new GenericProvider("test");
+    assert.equal(genericProvider._type, "test");
+    assert.equal(genericProvider._mature, prefs.find_mature);
+    assert.equal(genericProvider.name, "provider_test");
+    assert.equal(genericProvider.toString(), genericProvider.name);
+    assert.ok("supports" in genericProvider);
+    assert.equal(genericProvider._supportsFavorites, genericProvider.supports.favorites);
+    assert.equal(genericProvider._supportsCredentials, genericProvider.supports.credentials);
+    assert.equal(genericProvider._supportsFeatured, genericProvider.supports.featured);
+    assert.ok(Array.isArray(genericProvider.authURL));
+    assert.equal(genericProvider.authURL.length, 0);
+    yield expectReject(genericProvider.getUserFavorites());
+    yield expectReject(genericProvider.getChannelDetails());
+    assert.throws(() => genericProvider.updateFavsRequest());
+    assert.throws(() => genericProvider.updateRequest());
+    //TODO test forwards
+    yield expectReject(genericProvider.updateChannel());
+    yield expectReject(genericProvider.updateChannels(["asdf"]));
+    yield expectReject(genericProvider.getFeaturedChannels());
+    yield expectReject(genericProvider.search());
 };
 
 require("sdk/test").run(exports);

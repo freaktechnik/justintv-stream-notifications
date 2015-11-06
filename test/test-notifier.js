@@ -7,32 +7,33 @@
 const requireHelper = require("./require_helper");
 const { Notifier } = requireHelper('../lib/notifier'),
       { Channel } = requireHelper('../lib/channeluser');
+const { getChannel } = require("./channeluser/utils");
+const { prefs} = require("sdk/simple-prefs");
 
+exports.testNotifierPrefs = function(assert) {
+    let notifier = new Notifier();
+    assert.equal(notifier.onlineNotifications, prefs.onlineNotification);
+    assert.equal(notifier.titleNotifications, prefs.titleChangeNotification);
+    assert.equal(notifier.offlineNotifications, prefs.offlineNotification);
+};
 
-function getChannel() {
-    var channel = new Channel();
-    channel.type = "test";
-    channel.url.push('http://foo.bar/lorem');
-    channel.archiveUrl = 'http://foo.bar/lorem/archive';
-    channel.uname='lorem ipsum';
-    channel.login='test';
-    channel.logo={'20':'http://foo.bar/0.jpg','40':'http://foo.bar/1.jpg'};
-    channel.title="Lorem Ipsum, dolor sit amet";
-    return channel;
-}
-
+//TODO check if notifications are sent (observer?)
 exports.testNotifier = function(assert) {
-    let notifier = new Notifier({ onlineNotifications: false,
-                                  titleNotifications: false,
-                                  offlineNotifications: false
-                                });
+    let oldVal = prefs.offlineNotification;
+    prefs.offlineNotification = true;
+
+    let notifier = new Notifier();
     var channel = getChannel();
     channel.live = true;
     channel.id = 1;
+
     assert.ok(!notifier.channelTitles.has(channel.id));
+
     notifier.sendNotification(channel);
     assert.ok(notifier.channelTitles.has(channel.id));
     assert.equal(notifier.channelTitles.get(channel.id), channel.title);
+    notifier.sendNotification(channel);
+
     channel.title = "Something else";
     notifier.sendNotification(channel);
     assert.equal(notifier.channelTitles.get(channel.id), channel.title);
@@ -44,6 +45,12 @@ exports.testNotifier = function(assert) {
     channel.live = false;
     notifier.sendNotification(channel);
     assert.ok(!notifier.channelTitles.has(channel.id));
+
+    let mapLength = notifier.channelTitles.length;
+    notifier.onChannelRemoved(-1);
+    assert.equal(notifier.channelTitles.length, mapLength);
+
+    prefs.offlineNotification = oldVal;
 };
 
 require("sdk/test").run(exports);
