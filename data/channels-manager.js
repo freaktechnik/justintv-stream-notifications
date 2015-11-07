@@ -15,6 +15,8 @@ var { hide, show } = unsafeWindow;
 
 var providers;
 
+self.port.emit("ready");
+
 self.port.on("add", function(channel) {
     addChannel(channel);
 });
@@ -42,13 +44,6 @@ self.port.on("initdata", function(options){
             providerDropdown.add(new Option(providers[provider].name, provider));
         }
     }
-
-    options.channels.forEach(function(channel) {
-        addChannel(channel);
-    });
-    options.users.forEach(function(user) {
-        addUser(user);
-    });
 });
 
 self.port.on("isloading", function() {
@@ -261,8 +256,8 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     }
 });
 
+/** @todo improve this like in the twitch provider */
 function getChannelUname(channel) {
-    /** @todo improve this like in the twitch provider */
     if(channel.type == "twitch")
         channel.uname = channel.uname.split(" ")[0];
     return channel.uname;
@@ -365,4 +360,3 @@ function hasChannel(channelId) {
 function hasUser(userId) {
     return !!users.querySelector("#user"+userId);
 }
-
