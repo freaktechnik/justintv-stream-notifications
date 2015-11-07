@@ -6,7 +6,7 @@
 
 const requireHelper = require("./require_helper");
 const { Notifier } = requireHelper('../lib/notifier'),
-      { Channel } = requireHelper('../lib/channeluser');
+      { Channel } = requireHelper('../lib/channel/core');
 const { getChannel } = require("./channeluser/utils");
 const { prefs} = require("sdk/simple-prefs");
 

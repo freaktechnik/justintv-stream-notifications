@@ -7,8 +7,8 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-var { ChannelList } = requireHelper('../lib/channellist'),
-    { User } = requireHelper('../lib/channeluser');
+var { ChannelList } = requireHelper('../lib/channel/list'),
+    { User } = requireHelper('../lib/channel/core');
 const { before, after } = require("sdk/test/utils");
 const { prefs} = require("sdk/simple-prefs");
 

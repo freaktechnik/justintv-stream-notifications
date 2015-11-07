@@ -6,10 +6,10 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { ChannelsManager } = requireHelper("../lib/channels-manager");
+const { ChannelsManager } = requireHelper("../lib/channel/manager");
 const tabs = require("sdk/tabs");
 const { when } = require("sdk/event/utils");
-const { Channel, User } = requireHelper("../lib/channeluser");
+const { Channel, User } = requireHelper("../lib/channel/core");
 const { defer } = require("sdk/core/promise");
 
 const getFakeWorker = (portCallback) => {

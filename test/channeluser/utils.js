@@ -6,7 +6,7 @@
 "use strict";
 
 const requireHelper = require("../require_helper");
-let { Channel, User } = requireHelper('../lib/channeluser');
+let { Channel, User } = requireHelper('../lib/channel/core');
 
 exports.getUser = (login = 'test', type = 'test') => {
     var user = new User();

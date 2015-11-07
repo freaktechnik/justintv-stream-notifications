@@ -5,7 +5,7 @@
  */
 
 const requireHelper = require("./require_helper");
-var { Channel, User } = requireHelper('../lib/channeluser');
+var { Channel, User } = requireHelper('../lib/channel/core');
 var { getUser, getChannel } = require("./channeluser/utils");
 
 exports['test user base construction stuff'] = function(assert) {

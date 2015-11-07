@@ -5,7 +5,7 @@
 
 const requireHelper = require("./require_helper");
 const tabs = require("sdk/tabs");
-let   channelUtils = requireHelper('../lib/channel-utils');
+let   channelUtils = requireHelper('../lib/channel/utils');
 var { setTimeout } = require("sdk/timers");
 const { wait } = require("./event/helpers");
 var { getChannel } = require("./channeluser/utils");
@@ -106,7 +106,7 @@ exports['test open offline channel with livestreamer'] = function*(assert) {
     let channel = getChannel();
     channelUtils.selectOrOpenTab(channel, "livestreamer");
     yield wait(tabs, "ready");
-    
+
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened with the stream archive");
     let p = wait(tabs, "close");
     tabs.activeTab.close();
@@ -116,11 +116,11 @@ exports['test open offline channel with livestreamer'] = function*(assert) {
 exports['test open with livestreamer by default'] = function*(assert) {
     let channel = getChannel();
     channel.live = true;
-    
+
     prefs.livestreamer_enabled = true;
     yield channelUtils.selectOrOpenTab(channel);
     assert.notEqual(tabs.activeTab.url, channel.url[0], "No tab opened with livestreamer as default");
-    
+
     prefs.livestreamer_enabled = false;
 };
 
