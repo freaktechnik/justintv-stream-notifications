@@ -18,7 +18,7 @@ exports.testNotifierPrefs = function(assert) {
     assert.equal(notifier.offlineNotifications, prefs.offlineNotification);
 };
 
-exports.testNotifier = function(assert) {
+exports.testNotifier = function(assert, done) {
     let oldVal = prefs.offlineNotification;
     prefs.offlineNotification = true;
 
@@ -54,7 +54,7 @@ exports.testNotifier = function(assert) {
     prefs.offlineNotification = oldVal;
 
     // close all notifications that are still open (on systems without native notifications)
-    cleanUI();
+    cleanUI().then(done);
 };
 
 require("sdk/test").run(exports);
