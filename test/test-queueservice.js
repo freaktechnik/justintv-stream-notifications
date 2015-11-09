@@ -6,6 +6,7 @@
 const requireHelper = require("./require_helper");
 const QueueService = requireHelper("../lib/queueservice");
 const { setTimeout } = require("sdk/timers");
+const { prefs } = require("sdk/simple-prefs");
 
 exports.testGetService = function(assert) {
     let service = QueueService.getServiceForProvider("test");
@@ -15,7 +16,9 @@ exports.testGetService = function(assert) {
 
 exports.testIntervalPauseResume = function(assert, done) {
     let service = QueueService.getServiceForProvider("test");
-    let count = 0, paused = false, date = Date.now();
+    let count = 0, paused = false;
+    QueueService.resume();
+
     service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
         if(count === 0) {
             ++count;
@@ -42,6 +45,41 @@ exports.testIntervalPauseResume = function(assert, done) {
 };
 
 // QueueService Object Tests
+
+exports.testUpdateRequestRequeue = function(assert, done) {
+    let service = QueueService.getServiceForProvider("test");
+    let count = 0;
+
+    service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
+        assert.equal(count, 2);
+        service.unqueueUpdateRequest();
+        QueueService.updateQueueOptions(0);
+        done();
+    }, {}, () => ++count < 2);
+    QueueService.setQueueOptions({
+        interval: 700,
+        amount: 1,
+        maxSize: 1
+    });
+};
+
+exports.testRequeue = function(assert, done) {
+    let service = QueueService.getServiceForProvider("test");
+    let count = 0;
+
+    service.queueRequest("https://example.com", {}, () => ++count <= prefs.queueservice_maxRetries + 1)
+        .then((d) => assert.fail(d))
+        .catch(() => {
+            assert.equal(count, prefs.queueservice_maxRetries + 1);
+            QueueService.updateQueueOptions(0);
+            done();
+        });
+    QueueService.setQueueOptions({
+        interval: 70,
+        amount: 1,
+        maxSize: 1
+    });
+};
 
 exports.testQueueService = function(assert) {
     let service = QueueService.getServiceForProvider("test");
