@@ -507,5 +507,118 @@
                 "viewers": 0
             }
         }
+    },
+    "youtube": {
+        "https://www.googleapis.com/youtube/v3/channels?forUsername=test": {
+            "items": [
+                {
+                    "id": "0",
+                    "snippet": {
+                        "title": "test",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/channels?forUsername=live": {
+            "items": [
+                {
+                    "id": "1",
+                    "snippet": {
+                        "title": "live",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/channels?id=0": {
+            "items": [
+                {
+                    "snippet": {
+                        "title": "test",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/channels?id=1": {
+            "items": [
+                {
+                    "snippet": {
+                        "title": "live",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/search?channelId=0&maxResults=1&eventType=live&type=video": {
+            "items": []
+        },
+        "https://www.googleapis.com/youtube/v3/search?channelId=1&maxResults=1&eventType=live&type=video": {
+            "items": [
+                {
+                    "id": {
+                        "videoId": "a"
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/videos?id=a&hl=en_US": {
+            "items": [
+                {
+                    "id": "a",
+                    "snippet": {
+                        "channelId": "1",
+                        "title": "",
+                        "thumbnails": {
+                            "medium": {
+                                "url": ""
+                            }
+                        },
+                        "categoryId": "0"
+                    },
+                    "liveStreamingDetails": {
+                        "concurrentViewers": 0
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/videoCategories?id=0&hl=en_US": {
+            "items": [
+                {
+                    "snippet": {
+                        "title": ""
+                    }
+                }
+            ]
+        }
     }
 }

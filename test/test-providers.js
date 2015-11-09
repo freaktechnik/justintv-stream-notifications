@@ -14,13 +14,25 @@ const { getChannel, getUser } = require("./channeluser/utils");
 const mockAPIEnpoints = require("./providers/mockAPI.json");
 const { Channel, User } = requireHelper("../lib/channel/core");
 const { when } = require("sdk/event/utils");
+const qs = require("sdk/querystring");
 
 // These are either defunct providers, or providers that don't use polling
 // (or beam, which I should switch to sockets)
 const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
 
 const getRequest = (type, url)  => {
-    //TODO make it possible to also test yotube URLs by ignore the API key, I guess?
+    if(type === "youtube") {
+        let u = url.split("?");
+        u[1] = qs.parse(u[1]);
+        delete u[1].part;
+        if("fields" in u[1])
+            delete u[1].fields;
+        delete u[1].key;
+        
+        u[1] = qs.stringify(u[1]);
+        
+        url = u.join("?");
+    }
     console.log("Getting", url);
     if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
         return {
