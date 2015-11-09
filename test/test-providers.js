@@ -27,10 +27,14 @@ const getRequest = (type, url)  => {
         delete u[1].part;
         if("fields" in u[1])
             delete u[1].fields;
+        if("hl" in u[1])
+            delete u[1].hl;
+        if("relevanceLanguage" in u[1])
+            delete u[1].relevanceLanguage;
         delete u[1].key;
-        
+
         u[1] = qs.stringify(u[1]);
-        
+
         url = u.join("?");
     }
     console.log("Getting", url);
@@ -276,11 +280,29 @@ exports.testMockAPIRequests = function*(assert) {
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
                 assert.equal(ret.live, ret.uname === "live");
             }
+
+            if(provider.supports.featured) {
+                ret = yield provider.getFeaturedChannels();
+                assert.ok(Array.isArray(ret));
+                assert.ok(ret.length > 0);
+                ret.forEach((chan) => {
+                    assert.ok(chan instanceof Channel);
+                    assert.equal(chan.type, p);
+                });
+                assert.equal(ret[0].uname, "featured");
+
+                ret = yield provider.search("test");
+                assert.ok(Array.isArray(ret));
+                assert.ok(ret.length > 0);
+                ret.forEach((chan) => {
+                    assert.ok(chan instanceof Channel);
+                    assert.equal(chan.type, p);
+                });
+                assert.equal(ret[0].uname, "test");
+            }
         }
     }
-    //TODO test live channel
     //TODO test favorites
-    //TODO test featured
 };
 
 exports.testGenericProvider = function*(assert) {

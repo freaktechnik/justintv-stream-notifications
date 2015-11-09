@@ -67,6 +67,42 @@
                     }
                 }
             ]
+        },
+        "https://api.azubu.tv/public/channel/live/list?limit=60": {
+            "data": [
+                {
+                    "user": {
+                        "username": "featured",
+                        "profile": {
+                            "photo_url_large": "",
+                            "photo_url_small": ""
+                        }
+                    },
+                    "is_live": true,
+                    "view_count": 0,
+                    "category": {
+                        "title": ""
+                    }
+                }
+            ]
+        },
+        "https://api.azubu.tv/public/modules/search/channel?orderBy=%7B%22channel.updatedAt%22%3A%22desc%22%7D&access_token=&_format=json&q=test": {
+            "data": [
+                {
+                    "user": {
+                        "username": "test",
+                        "profile": {
+                            "photo_url_large": "",
+                            "photo_url_small": ""
+                        }
+                    },
+                    "is_live": false,
+                    "view_count": 0,
+                    "category": {
+                        "title": ""
+                    }
+                }
+            ]
         }
     },
     "hitbox": {
@@ -103,6 +139,42 @@
                     "media_views": 0,
                     "media_thumbnail": "",
                     "media_is_live": 1
+                }
+            ]
+        },
+        "http://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=": {
+            "livestream": [
+                {
+                    "channel": {
+                        "user_name": "featured",
+                        "channel_link": "http://hitbox.tv/featured",
+                        "user_logo": "",
+                        "user_logo_small": ""
+                    },
+                    "media_display_name": "featured",
+                    "media_status": "",
+                    "category_name": "",
+                    "media_views": 0,
+                    "media_thumbnail": "",
+                    "media_is_live": 1
+                }
+            ]
+        },
+        "http://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
+            "livestream": [
+                {
+                    "channel": {
+                        "user_name": "test",
+                        "channel_link": "http://hitbox.tv/test",
+                        "user_logo": "",
+                        "user_logo_small": ""
+                    },
+                    "media_display_name": "test",
+                    "media_status": "",
+                    "category_name": "",
+                    "media_views": 0,
+                    "media_thumbnail": "",
+                    "media_is_live": 0
                 }
             ]
         }
@@ -358,6 +430,46 @@
         },
         "http://tmi.twitch.tv/hosts?include_logins=1&host=0": {
             "hosts": []
+        },
+        "https://api.twitch.tv/kraken/streams/featured": {
+            "featured": [
+                {
+                    "stream": {
+                        "viewers": 0,
+                        "preview": {
+                            "medium": ""
+                        },
+                        "channel": {
+                             "display_name": "featured",
+                             "game": "",
+                             "_id": 1,
+                             "name": "live",
+                             "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                             "url": "http://www.twitch.tv/featured",
+                             "mature": false
+                        }
+                    }
+                }
+            ]
+        },
+        "https://api.twitch.tv/kraken/search/streams?q=test": {
+            "streams": [
+                {
+                    "viewers": 0,
+                    "preview": {
+                        "medium": ""
+                    },
+                    "channel": {
+                         "display_name": "test",
+                         "game": "",
+                         "_id": 1,
+                         "name": "live",
+                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                         "url": "http://www.twitch.tv/test",
+                         "mature": false
+                    }
+                }
+            ]
         }
     },
     "beam": {
@@ -398,7 +510,33 @@
         "https://beam.pro/api/v1/users/0": {
             "username": "test",
             "avatars": []
-        }
+        },
+        "https://beam.pro/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0": [
+            {
+                "token": "featured",
+                "online": true,
+                "name": "",
+                "viewersCurrent": 0,
+                "type": null,
+                "id": 1,
+                "user": {
+                    "id": 1
+                }
+            }
+        ],
+        "https://beam.pro/api/v1/channels?where=token.eq.test": [
+            {
+                "token": "test",
+                "online": false,
+                "name": "",
+                "viewersCurrent": 0,
+                "type": null,
+                "id": 0,
+                "user": {
+                    "id": 0
+                }
+            }
+        ]
     },
     "ustream": {
         "http://ustream.tv/test": "<meta name=\"ustream:channel_id\" content=\"0\">",
@@ -579,6 +717,23 @@
                 }
             ]
         },
+        "https://www.googleapis.com/youtube/v3/channels?id=2": {
+            "items": [
+                {
+                    "snippet": {
+                        "title": "featured",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
         "https://www.googleapis.com/youtube/v3/search?channelId=0&maxResults=1&eventType=live&type=video": {
             "items": []
         },
@@ -591,7 +746,7 @@
                 }
             ]
         },
-        "https://www.googleapis.com/youtube/v3/videos?id=a&hl=en_US": {
+        "https://www.googleapis.com/youtube/v3/videos?id=a": {
             "items": [
                 {
                     "id": "a",
@@ -611,11 +766,69 @@
                 }
             ]
         },
-        "https://www.googleapis.com/youtube/v3/videoCategories?id=0&hl=en_US": {
+        "https://www.googleapis.com/youtube/v3/videos?id=b": {
+            "items": [
+                {
+                    "id": "b",
+                    "snippet": {
+                        "channelId": "2",
+                        "title": "",
+                        "thumbnails": {
+                            "medium": {
+                                "url": ""
+                            }
+                        },
+                        "categoryId": "0"
+                    },
+                    "liveStreamingDetails": {
+                        "concurrentViewers": 0
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/videos?id=c": {
+            "items": [
+                {
+                    "id": "c",
+                    "snippet": {
+                        "channelId": "0",
+                        "title": "",
+                        "thumbnails": {
+                            "medium": {
+                                "url": ""
+                            }
+                        },
+                        "categoryId": "0"
+                    },
+                    "liveStreamingDetails": {
+                        "concurrentViewers": 0
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/videoCategories?id=0": {
             "items": [
                 {
                     "snippet": {
                         "title": ""
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/search?eventType=live&type=video&order=relevance&safeSearch=moderate&q=": {
+            "items": [
+                {
+                    "id": {
+                        "videoId": "b"
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/search?eventType=live&type=video&order=relevance&safeSearch=moderate&q=test": {
+            "items": [
+                {
+                    "id": {
+                        "videoId": "c"
                     }
                 }
             ]
