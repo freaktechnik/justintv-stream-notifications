@@ -11,10 +11,47 @@ const { GenericProvider } = requireHelper("../lib/providers/generic-provider");
 const { expectReject } = require("./event/helpers");
 const { defer } = require("sdk/core/promise");
 const { getChannel, getUser } = require("./channeluser/utils");
+const mockAPIEnpoints = require("./providers/mockAPI.json");
+const { Channel, User } = requireHelper("../lib/channel/core");
+const { when } = require("sdk/event/utils");
 
 // These are either defunct providers, or providers that don't use polling
 // (or beam, which I should switch to sockets)
 const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
+
+const getRequest = (type, url)  => {
+    console.log("Getting", url);
+    if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
+        return {
+            status: 200,
+            json: mockAPIEnpoints[type][url],
+            text: typeof mockAPIEnpoints[type][url] === "string" ?
+                mockAPIEnpoints[type][url] :
+                JSON.stringify(mockAPIEnpoints[type][url])
+        };
+    }
+    else {
+        return {
+            status: 404
+        };
+    }
+};
+
+const getMockAPIQS = (originalQS, type) => {
+    return {
+        queueRequest(url) {
+            return Promise.resolve(getRequest(type, url));
+        },
+        unqueueUpdateRequest(priority) {},
+        queueUpdateRequest(urls, priority, callback) {
+            urls.forEach((url) => {
+                callback(getRequest(type, url), url);
+            });
+        },
+        HIGH_PRIORITY: originalQS.HIGH_PRIORITY,
+        LOW_PRIORITY: originalQS.LOW_PRIORITY
+    };
+};
 
 const getMockQS = (originalQS, ignoreQR = false) => {
     let { promise, resolve, reject } = defer();
@@ -106,6 +143,19 @@ exports.testRequests = function*(assert) {
         prom = yield provider._qs.promise;
         assert.equal(typeof prom, "string");
 
+        console.log(p, ".updateChannel(test)");
+        provider._setQs(getMockQS(originalQS));
+        yield expectReject(provider.updateChannel("test"));
+        prom = yield provider._qs.promise;
+        assert.equal(typeof prom, "string");
+
+        console.log(p, ".updateChannels(channels)");
+        provider._setQs(getMockQS(originalQS));
+        // Why not expectReject? Because pagination helpered implementations won't fail.
+        yield provider.updateChannels(channels).then(() => {}, () => true);
+        prom = yield provider._qs.promise;
+        assert.equal(typeof prom, "string");
+
         if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
             console.log(p, ".updateRequest(channels)");
             provider._setQs(getMockQS(originalQS, true));
@@ -160,6 +210,49 @@ exports.testRequests = function*(assert) {
     }
 };
 
+exports.testMockAPIRequests = function*(assert) {
+    let provider, ret, originalQS, prom;
+    for(let p in providers) {
+        if(p in mockAPIEnpoints) {
+            provider = providers[p];
+            originalQS = provider._qs;
+
+            provider._setQs(getMockAPIQS(originalQS, p));
+            ret = yield provider.getChannelDetails("test");
+            assert.ok(ret instanceof Channel, "getChannelDetails resolves to a channel for "+p);
+            assert.equal(ret.uname, "test");
+            assert.equal(ret.type, p, "getChannelDetails resolves to a channel with correct type for "+p);
+
+            ret = yield provider.updateChannel(ret.login);
+            assert.ok(ret instanceof Channel, "updateChannel resolves to a channel for "+p);
+            assert.equal(ret.uname, "test");
+            assert.equal(ret.type, p, "updateChannel resolves to a channel with correct type for "+p);
+
+            ret = yield provider.updateChannels([ret]);
+            assert.equal(ret.length, 1);
+            assert.ok(ret[0] instanceof Channel, "updateChannels resolves to a channel for "+p);
+            assert.equal(ret[0].uname, "test");
+            assert.equal(ret[0].type, p, "updateChannels resolves to a channel with correct type for "+p);
+
+            if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
+                prom = when(provider, "updatedchannels");
+                provider.updateRequest(ret);
+                ret = yield prom;
+                if(Array.isArray(ret)) {
+                    assert.equal(ret.length, 1);
+                    ret = ret[0];
+                }
+                assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
+                assert.equal(ret.uname, "test");
+                assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
+            }
+        }
+    }
+    //TODO test live channel
+    //TODO test favorites
+    //TODO test featured
+};
+
 exports.testGenericProvider = function*(assert) {
     let genericProvider = new GenericProvider("test");
     assert.equal(genericProvider._type, "test");
@@ -176,9 +269,22 @@ exports.testGenericProvider = function*(assert) {
     yield expectReject(genericProvider.getChannelDetails());
     assert.throws(() => genericProvider.updateFavsRequest());
     assert.throws(() => genericProvider.updateRequest());
-    //TODO test forwards
     yield expectReject(genericProvider.updateChannel());
     yield expectReject(genericProvider.updateChannels(["asdf"]));
+
+    // Test forwards
+    let p = defer();
+    genericProvider.getChannelDetails = p.resolve;
+    genericProvider.updateChannel("test");
+    let name = yield p.promise;
+    assert.equal(name, "test", "updateChannel gets forwarded to getChannelDetails");
+
+    p = defer();
+    genericProvider.updateChannel = p.resolve;
+    genericProvider.updateChannels([{login: "test"}]);
+    name = yield p.promise;
+    assert.equal(name, "test", "updateChannels forwards to updateChannel");
+
     yield expectReject(genericProvider.getFeaturedChannels());
     yield expectReject(genericProvider.search());
 };

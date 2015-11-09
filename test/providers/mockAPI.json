@@ -1,0 +1,253 @@
+{
+    "azubu": {
+        "https://api.azubu.tv/public/channel/test": {
+            "data": [
+                {
+                    "user": {
+                        "username": "test",
+                        "profile": {
+                            "photo_url_large": "",
+                            "photo_url_small": ""
+                        }
+                    },
+                    "is_live": false,
+                    "view_count": 0,
+                    "category": {
+                        "title": ""
+                    }
+                }
+            ]
+        },
+        "https://api.azubu.tv/public/channel/list?channels=test&limit=100&offset=0": {
+            "data": [
+                {
+                    "user": {
+                        "username": "test",
+                        "profile": {
+                            "photo_url_large": "",
+                            "photo_url_small": ""
+                        }
+                    },
+                    "is_live": false,
+                    "view_count": 0,
+                    "category": {
+                        "title": ""
+                    }
+                }
+            ]
+        }
+    },
+    "hitbox": {
+        "http://api.hitbox.tv/media/live/test": {
+            "livestream": [
+                {
+                    "channel": {
+                        "user_name": "test",
+                        "channel_link": "http://hitbox.tv/test",
+                        "user_logo": "",
+                        "user_logo_small": ""
+                    },
+                    "media_display_name": "test",
+                    "media_status": "",
+                    "category_name": "",
+                    "media_views": 0,
+                    "media_thumbnail": "",
+                    "media_is_live": 0
+                }
+            ]
+        }
+    },
+    "newlivestream": {
+        "http://livestream.com/api/accounts/test": {
+            "id": 0,
+            "short_name": "test",
+            "full_name": "test",
+            "picture": {
+                "url": "",
+                "width": "300",
+                "small_url": "",
+                "thumb_url": ""
+            },
+            "category_name": "",
+            "upcoming_events": null
+        }
+    },
+    "livestream": {
+        "http://xtestx.api.channel.livestream.com/2.0/info.json": {
+            "channel": {
+                "title": "test",
+                "link": "",
+                "image": {
+                    "url": ""
+                },
+                "category": "",
+                "isLive": false,
+                "currentViewerCount": 0
+            }
+        },
+        "http://xtestx.api.channel.livestream.com/2.0/latestclips.json?maxresults=1": {
+            "channel": {
+                "item": []
+            }
+        },
+        "http://xtestx.api.channel.livestream.com/2.0/livestatus.json": {
+            "channel": {
+                "isLive": false,
+                "currentViewerCount": 0
+            }
+        }
+    },
+    "streamup": {
+        "https://api.streamup.com/v1/channels/test": {
+            "channel": {
+                "user": {
+                    "username": "test",
+                    "name": "test",
+                    "avatar": {
+                        "small": "",
+                        "medium": "",
+                        "large": ""
+                    }
+                },
+                "snapshot": {
+                    "medium": ""
+                },
+                "live": false,
+                "live_viewers_count": 0,
+                "stream_title": ""
+            }
+        }
+    },
+    "twitch": {
+        "https://api.twitch.tv/kraken/channels/test": {
+            "mature": false,
+            "status": "Offline.",
+            "broadcaster_language": "en",
+            "display_name": "test",
+            "game": "",
+            "language": "en",
+            "_id": 0,
+            "name": "test",
+            "created_at": "2011-08-21T18:32:25Z",
+            "updated_at": "2015-10-31T19:53:15Z",
+            "delay": null,
+            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+            "banner": null,
+            "video_banner": "",
+            "background": null,
+            "profile_banner": "",
+            "profile_banner_background_color": null,
+            "partner": false,
+            "url": "http://www.twitch.tv/test",
+            "views": 0,
+            "followers": 0,
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/channels/test",
+                "follows": "https://api.twitch.tv/kraken/channels/test/follows",
+                "commercial": "https://api.twitch.tv/kraken/channels/test/commercial",
+                "stream_key": "https://api.twitch.tv/kraken/channels/test/stream_key",
+                "chat": "https://api.twitch.tv/kraken/chat/test",
+                "features": "https://api.twitch.tv/kraken/channels/test/features",
+                "subscriptions": "https://api.twitch.tv/kraken/channels/test/subscriptions",
+                "editors": "https://api.twitch.tv/kraken/channels/test/editors",
+                "teams": "https://api.twitch.tv/kraken/channels/test/teams",
+                "videos": "https://api.twitch.tv/kraken/channels/test/videos"
+            }
+        },
+        "https://api.twitch.tv/kraken/streams?channel=test&limit=100&offset=0": {
+            "streams": []
+        },
+        "https://api.twitch.tv/kraken/streams/test": {
+            "stream": null
+        },
+        "http://tmi.twitch.tv/hosts?include_logins=1&host=0": {
+            "hosts": []
+        }
+    },
+    "beam": {
+        "https://beam.pro/api/v1/users/search?query=test": [
+            {
+                "username": "test",
+                "id": 0
+            }
+        ],
+        "https://beam.pro/api/v1/channels/test": {
+            "token": "test",
+            "online": false,
+            "name": "",
+            "viewersCurrent": 0,
+            "type": null,
+            "id": 0,
+            "user": {
+                "id": 0
+            }
+        },
+        "https://beam.pro/api/v1/users/0": {
+            "username": "test",
+            "avatars": []
+        }
+    },
+    "ustream": {
+        "http://ustream.tv/test": "<meta name=\"ustream:channel_id\" content=\"0\">",
+        "https://api.ustream.tv/channels/0.json": {
+            "channel": {
+                "id": 0,
+                "title": "test",
+                "tinyurl": "",
+                "owner": {
+                    "picture": ""
+                },
+                "tags": [],
+                "status": "offline",
+                "thumbnail": {
+                    "live": ""
+                },
+                "stats": {
+                    "viewer": 0,
+                    "viewer_total": 0
+                }
+            }
+        }
+    },
+    "mlg": {
+        "http://www.majorleaguegaming.com/api/channels/all.js?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id": {
+            "status_code": 200,
+            "data": {
+                "items": [
+                    {
+                        "slug": "test",
+                        "stream_name": "test",
+                        "name": "test",
+                        "url": "",
+                        "id": 0,
+                        "image_1_1": "",
+                        "image_16_9_medium": "",
+                        "subtitle": "",
+                        "game_id": 0
+                    }
+                ]
+            }
+        },
+        "http://streamapi.majorleaguegaming.com/service/streams/all": {
+            "status_code": 200,
+            "data": {
+                "items": [
+                    {
+                        "stream_name": "test",
+                        "channel_id": 0,
+                        "status": -1
+                    }
+                ]
+            }
+        },
+        "http://streamapi.majorleaguegaming.com/service/streams/status/test": {
+            "status_code": 200,
+            "data": {
+                "channel_id": 0,
+                "stream_name": "test",
+                "status": -1,
+                "viewers": 0
+            }
+        }
+    }
+}
