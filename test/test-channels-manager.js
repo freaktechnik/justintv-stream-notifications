@@ -40,17 +40,35 @@ exports.testTab = function*(assert) {
 
     tab.close();
     cm.managerTab.close();
+    cm.destroy();
 };
 
 exports.testAlreadyOpenTab = function*(assert) {
     tabs.open({url: self.data.url("./channels-manager.html")});
     yield when(tabs, "ready");
     let tab = tabs.activeTab;
-    
+
     let cm = new ChannelsManager();
     assert.equal(cm.managerTab, tab);
-    
+
     tab.close();
+    cm.destroy();
+};
+
+exports.testTabWithHash = function*(assert) {
+    let existingCm = new ChannelsManager();
+
+    tabs.open({url: self.data.url("./channels-manager.html") + "#popup"});
+    yield when(tabs, "ready");
+    let tab = tabs.activeTab;
+
+    let cm = new ChannelsManager();
+    assert.equal(cm.managerTab, tab);
+    assert.equal(existingCm.managerTab, tab);
+
+    tab.close();
+    cm.destroy();
+    existingCm.destroy();
 };
 
 exports.testLoading = function(assert) {
@@ -60,6 +78,8 @@ exports.testLoading = function(assert) {
     assert.ok(!cm.loading);
     cm.loading = true;
     assert.ok(cm.loading);
+
+    cm.destroy();
 };
 
 exports.testLoadingWithWorker = function*(assert) {
@@ -77,6 +97,8 @@ exports.testLoadingWithWorker = function*(assert) {
     cm.loading = true;
     event = yield p.promise;
     assert.equal(event, "isloading");
+
+    cm.destroy();
 };
 
 exports.testCallbacksLoading = function(assert) {
@@ -96,6 +118,8 @@ exports.testCallbacksLoading = function(assert) {
     cm.loading = true;
     cm.onUserUpdated();
     assert.ok(!cm.loading);
+
+    cm.destroy();
 };
 exports.testCallbacks = function*(assert) {
     let cm = new ChannelsManager();
@@ -146,6 +170,8 @@ exports.testCallbacks = function*(assert) {
     cm.onUserRemoved();
     event = yield p.promise;
     assert.equal(event, "removeuser");
+
+    cm.destroy();
 };
 
 require("sdk/test").run(exports);
