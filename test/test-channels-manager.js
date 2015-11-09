@@ -11,6 +11,7 @@ const tabs = require("sdk/tabs");
 const { when } = require("sdk/event/utils");
 const { Channel, User } = requireHelper("../lib/channel/core");
 const { defer } = require("sdk/core/promise");
+const self = require("sdk/self");
 
 const getFakeWorker = (portCallback) => {
     return {
@@ -39,6 +40,17 @@ exports.testTab = function*(assert) {
 
     tab.close();
     cm.managerTab.close();
+};
+
+exports.testAlreadyOpenTab = function*(assert) {
+    tabs.open({url: self.data.url("./channels-manager.html")});
+    yield when(tabs, "ready");
+    let tab = tabs.activeTab;
+    
+    let cm = new ChannelsManager();
+    assert.equal(cm.managerTab, tab);
+    
+    tab.close();
 };
 
 exports.testLoading = function(assert) {
@@ -134,74 +146,6 @@ exports.testCallbacks = function*(assert) {
     cm.onUserRemoved();
     event = yield p.promise;
     assert.equal(event, "removeuser");
-};
-
-exports.testAddChannel = function*(assert) {
-    let cm = new ChannelsManager();
-    cm.addChannel("freaktechnik", "twitch");
-    let channel = yield when(cm, "addchannel");
-    assert.ok(channel instanceof Channel);
-    assert.equal(channel.login, "freaktechnik");
-    assert.equal(channel.type, "twitch");
-
-    //TODO test ignore null
-};
-
-exports.testRemoveChannel = function*(assert) {
-    let cm = new ChannelsManager();
-    let p = when(cm, "removechannel");
-
-    cm.removeChannel(1);
-    let id = yield p;
-    assert.equal(id, 1);
-};
-
-exports.testAddUserFavorites = function*(assert) {
-    let cm = new ChannelsManager();
-
-    let p = when(cm, "adduser");
-
-    cm.addUserFavorites("freaktechnik", "twitch");
-
-    let user = yield p;
-    assert.ok(user instanceof User);
-    assert.equal(user.login, "freaktechnik");
-    assert.equal(user.type, "twitch");
-};
-
-exports.testRemoveUser = function*(assert) {
-    let cm = new ChannelsManager();
-
-    let p = when(cm, "removeuser");
-    cm.removeUser(1);
-    let id = yield p;
-    assert.equal(id, 1);
-};
-
-exports.testUpdateFavorites = function*(assert) {
-    let cm = new ChannelsManager();
-
-    let p = when(cm, "updatefavorites");
-    cm.updateFavorites();
-    let what = yield p;
-    assert.ok(!what);
-};
-exports.testRefreshChannel = function*(assert) {
-    let cm = new ChannelsManager();
-
-    let p = when(cm, "updatechannel");
-    cm.refreshChannel(1);
-    let id = yield p;
-    assert.equal(id, 1);
-};
-
-exports.testRefreshUserFavorites = function*(assert) {
-    let cm = new ChannelsManager();
-
-    let p = when(cm, "updatefavorites");
-    cm.refreshUserFavorites(1);
-    let id = yield p;
-    assert.equal(id, 1);
 };
 
 require("sdk/test").run(exports);
