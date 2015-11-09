@@ -20,6 +20,7 @@ const { when } = require("sdk/event/utils");
 const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
 
 const getRequest = (type, url)  => {
+    //TODO make it possible to also test yotube URLs by ignore the API key, I guess?
     console.log("Getting", url);
     if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
         return {
@@ -211,40 +212,57 @@ exports.testRequests = function*(assert) {
 };
 
 exports.testMockAPIRequests = function*(assert) {
-    let provider, ret, originalQS, prom;
+    let provider, ret, live, originalQS, prom;
     for(let p in providers) {
         if(p in mockAPIEnpoints) {
             provider = providers[p];
             originalQS = provider._qs;
 
             provider._setQs(getMockAPIQS(originalQS, p));
+
             ret = yield provider.getChannelDetails("test");
             assert.ok(ret instanceof Channel, "getChannelDetails resolves to a channel for "+p);
             assert.equal(ret.uname, "test");
             assert.equal(ret.type, p, "getChannelDetails resolves to a channel with correct type for "+p);
+            assert.ok(!ret.live);
+
+            live = yield provider.getChannelDetails("live");
+            assert.ok(live instanceof Channel, "getChannelDetails for a live channel resolves to a channel for " + p);
+            assert.equal(live.uname, "live");
+            assert.equal(live.type, p);
+            // live status knowledge is no requirement for getChannelDetails.
 
             ret = yield provider.updateChannel(ret.login);
             assert.ok(ret instanceof Channel, "updateChannel resolves to a channel for "+p);
             assert.equal(ret.uname, "test");
             assert.equal(ret.type, p, "updateChannel resolves to a channel with correct type for "+p);
+            assert.ok(!ret.live);
 
-            ret = yield provider.updateChannels([ret]);
-            assert.equal(ret.length, 1);
-            assert.ok(ret[0] instanceof Channel, "updateChannels resolves to a channel for "+p);
-            assert.equal(ret[0].uname, "test");
-            assert.equal(ret[0].type, p, "updateChannels resolves to a channel with correct type for "+p);
+            live = yield provider.updateChannel(live.login);
+            assert.ok(live instanceof Channel);
+            assert.equal(live.uname, "live");
+            assert.equal(live.type, p);
+            assert.ok(live.live, "Live channel is live after update with " + p);
+
+            ret = yield provider.updateChannels([ret, live]);
+            assert.equal(ret.length, 2);
+            ret.forEach((chan) => {
+                assert.ok(chan instanceof Channel, "updateChannels resolves to a channel for "+p);
+                assert.equal(chan.type, p, "updateChannels resolves to a channel with correct type for "+p);
+                assert.equal(chan.live, chan.uname === "live");
+            });
 
             if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
                 prom = when(provider, "updatedchannels");
                 provider.updateRequest(ret);
                 ret = yield prom;
                 if(Array.isArray(ret)) {
-                    assert.equal(ret.length, 1);
+                    assert.ok(ret.length > 0);
                     ret = ret[0];
                 }
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
-                assert.equal(ret.uname, "test");
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
+                assert.equal(ret.live, ret.uname === "live");
             }
         }
     }
