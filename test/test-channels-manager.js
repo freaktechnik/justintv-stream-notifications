@@ -66,7 +66,6 @@ exports.testTabWithHash = function*(assert) {
     assert.equal(cm.managerTab, tab);
     assert.equal(existingCm.managerTab, tab);
 
-    tab.close();
     cm.destroy();
     existingCm.destroy();
 };
@@ -170,6 +169,35 @@ exports.testCallbacks = function*(assert) {
     cm.onUserRemoved();
     event = yield p.promise;
     assert.equal(event, "removeuser");
+
+    cm.destroy();
+};
+
+exports.testMakeSureNoThrows = function(assert) {
+    let cm = new ChannelsManager();
+    
+    try {
+        cm.addProviders("test");
+        cm.onChannelAdded(FAKE_ITEM);
+        cm.onChannelUpdated(FAKE_ITEM);
+        cm.onChannelRemoved();
+        cm.onUserAdded(FAKE_ITEM);
+        cm.onUserUpdated(FAKE_ITEM);
+        cm.onUserRemoved();
+    } catch(e) {
+        assert.fail(e);
+    }
+};
+
+exports.testAddProviders = function*(assert) {
+    let cm = new ChannelsManager();
+
+    let p = defer();
+    cm.worker = getFakeWorker(p.resolve);
+
+    cm.addProviders("test");
+    let event = yield p.promise;
+    assert.equal(event, "addproviders");
 
     cm.destroy();
 };
