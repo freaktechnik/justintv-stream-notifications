@@ -59,7 +59,7 @@ module.exports = function(grunt) {
         clean: {
             docs: {
                 files: {
-                    src: ['doc']
+                    src: ['doc/**', '!*.jpg']
                 }
             },
             build: {
