@@ -35,7 +35,8 @@ self.port.on("removeuser", function(userId) {
 self.port.on("updateuser", function(user) {
     updateUser(user);
 });
-self.port.on("addproviders", (providers) => {
+self.port.on("addproviders", (p) => {
+    providers = p;
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var provider in providers) {
         if(!hasOption(provider)) {
