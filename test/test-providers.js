@@ -15,6 +15,7 @@ const mockAPIEnpoints = require("./providers/mockAPI.json");
 const { Channel, User } = requireHelper("../lib/channel/core");
 const { when } = require("sdk/event/utils");
 const qs = require("sdk/querystring");
+const ParentalControls = requireHelper("../lib/parental-controls");
 
 // These are either defunct providers, or providers that don't use polling
 // (or beam, which I should switch to sockets)
@@ -308,7 +309,7 @@ exports.testMockAPIRequests = function*(assert) {
 exports.testGenericProvider = function*(assert) {
     let genericProvider = new GenericProvider("test");
     assert.equal(genericProvider._type, "test");
-    assert.equal(genericProvider._mature, prefs.find_mature);
+    assert.equal(genericProvider._mature, prefs.find_mature && !ParentalControls.enabled);
     assert.equal(genericProvider.name, "provider_test");
     assert.equal(genericProvider.toString(), genericProvider.name);
     assert.ok("supports" in genericProvider);
