@@ -78,6 +78,7 @@ main {
     border-right: 1px solid #282ebe;
     flex-grow: 1;
     height: 1.2em;
+    box-sizing: content-box;
 }
 
 .toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
