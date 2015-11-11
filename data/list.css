@@ -137,12 +137,12 @@ nav {
 }
 
 .compact .tabcontent li a>img, .default .tabcontent li a>img, .tabcontent:not(.live) li a>img , .compact .tabcontent li .title,
-.tabcontent:not(.live) .title, [hidden], aside {
+.tabcontent:not(.live) .hide-offline, [hidden], aside {
     display: none;
     visibility: hidden;
 }
 
-.extras .live aside {
+.extras aside {
     display: block;
     visibility: visible;
     opacity: 0.7;

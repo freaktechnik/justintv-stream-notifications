@@ -151,13 +151,13 @@ var buildChannel = (channel, unspecific = false) => {
                 <div>
                     <img srcset="avatar" sizes="30w">
                     <span class="name">ChannelName</span><br>
-                    <span class="title">ChannelTitle</span>
+                    <span class="title hide-offline">ChannelTitle</span>
                     <aside>
-                        <span class="viewersWrapper">
-                            <span class="icon">v</span>&nbsp;<span class="viewers">0</span>
-                        </span>&nbsp;
-                        <span class="categoryWrapper">
-                            <span class="icon">c</span>&nbsp;<span class="category">Category</span>
+                        <span class="viewersWrapper hide-offline">
+                            <span class="icon">v</span>&nbsp;<span class="viewers">0</span>&sp;
+                        </span>
+                        <span class="categoryWrapper hide-offline">
+                            <span class="icon">c</span>&nbsp;<span class="category">Category</span>&sp;
                         </span>
                         <span class="providerWrapper">
                             <span class="icon">p</span>&nbsp;<span class="provider">Provider</span>
@@ -195,12 +195,14 @@ var buildChannel = (channel, unspecific = false) => {
         spanName.classList.add("name");
         titleSpan.appendChild(title);
         titleSpan.classList.add("title");
+        titleSpan.classList.add("hide-offline");
         wrapper.appendChild(avatar);
         wrapper.appendChild(spanName);
         wrapper.appendChild(br);
         wrapper.appendChild(titleSpan);
 
         viewersWrapper.classList.add("viewersWrapper");
+        viewersWrapper.classList.add("hide-offline");
         if(!("viewers" in channel) || channel.viewers < 0)
             hide(viewersWrapper);
         viewersIcon.appendChild(document.createTextNode("v"));
@@ -210,9 +212,10 @@ var buildChannel = (channel, unspecific = false) => {
         viewers.classList.add("viewers");
         viewers.appendChild(document.createTextNode(channel.viewers));
         viewersWrapper.appendChild(viewers);
+        viewersWrapper.appendChild(document.createTextNode(" "));
         extra.appendChild(viewersWrapper);
-        extra.appendChild(document.createTextNode(" "));
         categoryWrapper.classList.add("categoryWrapper");
+        categoryWrapper.classList.add("hide-offline");
         if(!channel.category)
             hide(categoryWrapper);
         categoryIcon.appendChild(document.createTextNode("c"));
@@ -222,8 +225,8 @@ var buildChannel = (channel, unspecific = false) => {
         category.classList.add("category");
         category.appendChild(document.createTextNode(channel.category));
         categoryWrapper.appendChild(category);
+        categoryWrapper.appendChild(document.createTextNode(" "));
         extra.appendChild(categoryWrapper);
-        extra.appendChild(document.createTextNode(" "));
         providerWrapper.classList.add("providerWrapper");
         providerIcon.appendChild(document.createTextNode("p"));
         providerIcon.classList.add("icon");
