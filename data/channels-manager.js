@@ -56,6 +56,10 @@ self.port.on("doneloading", function() {
     channels.classList.remove("loading");
 });
 
+self.port.on("error", function(errorMsg) {
+    showError(errorMsg);
+});
+
 // Methods modifying the DOM
 
 var channels = document.querySelector("#channels"),
@@ -196,6 +200,7 @@ document.querySelector("#removeItem").addEventListener("click", (e) => removeSel
 function showDialog() {
     popup.querySelector("dialog").setAttribute("open", true);
     show(popup);
+    hideError();
     document.querySelector("main").setAttribute("aria-hidden", true);
     popup.querySelector("dialog").focus();
 }
@@ -208,6 +213,7 @@ function hideDialog() {
 
 function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
+    hideError();
 }
 
 function showOptions() {
@@ -228,6 +234,7 @@ function hideOptions() {
 }
 
 function updateSelect() {
+    hideError();
     if(popup.querySelector("#channelRadio").checked)
         showOptions();
     else
@@ -242,18 +249,26 @@ popup.querySelector("button[type='button']").addEventListener("click", function(
     resetDialogForms();
 });
 
+popup.querySelector("#channelNameField").addEventListener("input", hideError, false);
+popup.querySelector("#providerDropdown").addEventListener("change", hideError, false);
+
 popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
-    if(popup.querySelector("#channelNameField").value.length > 0) {
-        popup.querySelector("dialog").removeAttribute("open");
-        hideDialog();
+    let field = popup.querySelector("#channelNameField");
+    hideError();
+    if(field.value.length > 0) {
         if(popup.querySelector("#channelRadio").checked)
-            self.port.emit("addchannel", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
+            self.port.emit("addchannel", field.value, popup.querySelector("#providerDropdown").value);
         else
-            self.port.emit("adduser", popup.querySelector("#channelNameField").value, popup.querySelector("#providerDropdown").value);
-        resetDialogForms();
+            self.port.emit("adduser", field.value, popup.querySelector("#providerDropdown").value);
     }
-});
+}, false);
+
+function onDialogDone() {
+    popup.querySelector("dialog").removeAttribute("open");
+    hideDialog();
+    resetDialogForms();
+}
 
 /** @todo improve this like in the twitch provider */
 function getChannelUname(channel) {
@@ -263,6 +278,7 @@ function getChannelUname(channel) {
 }
 
 function addChannel(channel) {
+    onDialogDone();
     /*
         DOM structure:
         <option id="channelId">
@@ -298,6 +314,7 @@ function addChannel(channel) {
 }
 
 function addUser(user) {
+    onDialogDone();
     if(!hasUser(user.id)) {
         let userNode = document.createElement("option"),
             image    = new Image(),
@@ -358,4 +375,13 @@ function hasChannel(channelId) {
 
 function hasUser(userId) {
     return !!users.querySelector("#user"+userId);
+}
+
+function showError(msg) {
+    document.getElementById("channelNameField").setCustomValidity(msg);
+    popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
+}
+
+function hideError() {
+    document.getElementById("channelNameField").setCustomValidity("");
 }

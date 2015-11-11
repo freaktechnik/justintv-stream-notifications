@@ -118,6 +118,10 @@ exports.testCallbacksLoading = function(assert) {
     cm.onUserUpdated();
     assert.ok(!cm.loading);
 
+    cm.loading = true;
+    cm.onError();
+    assert.ok(!cm.loading);
+
     cm.destroy();
 };
 exports.testCallbacks = function*(assert) {
@@ -170,12 +174,19 @@ exports.testCallbacks = function*(assert) {
     event = yield p.promise;
     assert.equal(event, "removeuser");
 
+    p = defer();
+    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
+
+    cm.onError();
+    event = yield p.promise;
+    assert.equal(event, "error");
+
     cm.destroy();
 };
 
 exports.testMakeSureNoThrows = function(assert) {
     let cm = new ChannelsManager();
-    
+
     try {
         cm.addProviders("test");
         cm.onChannelAdded(FAKE_ITEM);
@@ -184,6 +195,7 @@ exports.testMakeSureNoThrows = function(assert) {
         cm.onUserAdded(FAKE_ITEM);
         cm.onUserUpdated(FAKE_ITEM);
         cm.onUserRemoved();
+        cm.onError();
     } catch(e) {
         assert.fail(e);
     }
