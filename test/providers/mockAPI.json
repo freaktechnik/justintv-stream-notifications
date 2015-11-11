@@ -511,7 +511,7 @@
             "username": "test",
             "avatars": []
         },
-        "https://beam.pro/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0": [
+        "https://beam.pro/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1": [
             {
                 "token": "featured",
                 "online": true,
@@ -519,12 +519,13 @@
                 "viewersCurrent": 0,
                 "type": null,
                 "id": 1,
+                "audience": "teen",
                 "user": {
                     "id": 1
                 }
             }
         ],
-        "https://beam.pro/api/v1/channels?where=token.eq.test": [
+        "https://beam.pro/api/v1/channels?where=online.eq.1%2Ctoken.eq.test": [
             {
                 "token": "test",
                 "online": false,
@@ -532,6 +533,7 @@
                 "viewersCurrent": 0,
                 "type": null,
                 "id": 0,
+                "audience": "teen",
                 "user": {
                     "id": 0
                 }
