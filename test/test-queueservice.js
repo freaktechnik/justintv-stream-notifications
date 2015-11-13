@@ -145,6 +145,8 @@ exports.testQueueEvents = function(assert, done) {
 
                 assert.pass("Listener number "+count+" called");
             }
+            // for requeue.
+            return false;
         };
     QueueService.addQueueListeners(listener, listener);
     service.queueRequest("http://example.com", {}, listener).then(listener);

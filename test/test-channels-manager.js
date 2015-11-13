@@ -8,7 +8,7 @@
 const requireHelper = require("./require_helper");
 const { ChannelsManager } = requireHelper("../lib/channel/manager");
 const tabs = require("sdk/tabs");
-const { when } = require("sdk/event/utils");
+const { wait } = require("./event/helpers");
 const { Channel, User } = requireHelper("../lib/channel/core");
 const { defer } = require("sdk/core/promise");
 const self = require("sdk/self");
@@ -27,15 +27,15 @@ const FAKE_ITEM = {
 exports.testTab = function*(assert) {
     let cm = new ChannelsManager();
     cm.open();
-    yield when(tabs, "ready");
+    yield wait(tabs, "ready");
     assert.equal(cm.managerTab, tabs.activeTab);
 
     tabs.open({url: "https://example.com" });
-    yield when(tabs, "ready");
+    yield wait(tabs, "ready");
     let tab = tabs.activeTab;
 
     cm.open();
-    yield when(tabs, "activate");
+    yield wait(tabs, "activate");
     assert.equal(cm.managerTab, tabs.activeTab);
 
     tab.close();
@@ -45,7 +45,7 @@ exports.testTab = function*(assert) {
 
 exports.testAlreadyOpenTab = function*(assert) {
     tabs.open({url: self.data.url("./channels-manager.html")});
-    yield when(tabs, "ready");
+    yield wait(tabs, "ready");
     let tab = tabs.activeTab;
 
     let cm = new ChannelsManager();
@@ -59,7 +59,7 @@ exports.testTabWithHash = function*(assert) {
     let existingCm = new ChannelsManager();
 
     tabs.open({url: self.data.url("./channels-manager.html") + "#popup"});
-    yield when(tabs, "ready");
+    yield wait(tabs, "ready");
     let tab = tabs.activeTab;
 
     let cm = new ChannelsManager();
@@ -178,6 +178,10 @@ exports.testCallbacks = function*(assert) {
     cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
 
     cm.onError();
+    event = yield p.promise;
+    assert.equal(event, "error");
+
+    cm.onError("test");
     event = yield p.promise;
     assert.equal(event, "error");
 

@@ -31,6 +31,8 @@ exports['test channellist add-remove user'] = function*(assert) {
     assert.ok(user.id, "The user has an ID");
     assert.equal(user.uname, referenceUser.uname);
 
+    yield expectReject(SHARED.list.addUser(referenceUser));
+
     user = getUser();
     user.uname = 'foo bar';
     user.favorites.push("test_chan");
@@ -310,6 +312,19 @@ exports['test channel exists'] = function*(assert) {
 
     let doesntexist = yield SHARED.list.channelExists('doesnot', 'exist');
     assert.ok(!doesntexist, "The doesnot channel doesn't exist");
+};
+
+exports['test user exists'] = function*(assert) {
+    let referenceUser = yield SHARED.list.addUser(getUser());
+
+    let exists = yield SHARED.list.userExists(referenceUser.login, referenceUser.type);
+    assert.ok(exists, "The test user exists");
+
+    exists = yield SHARED.list.userExists(referenceUser.id);
+    assert.ok(exists, "The reference user also exists when checked by id");
+
+    let doesntexist = yield SHARED.list.userExists('doesnot', 'exist');
+    assert.ok(!doesntexist, "The doesnot user doesn't exist");
 };
 
 exports['test live status offline'] = function*(assert) {
