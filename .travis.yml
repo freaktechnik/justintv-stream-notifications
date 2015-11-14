@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 addons:
-  firefox: 43.0b3
+  firefox: "43.0b3"
 env:
   global:
   - DISPLAY=:99.0
