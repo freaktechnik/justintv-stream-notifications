@@ -40,7 +40,9 @@ self.port.on("addproviders", (p) => {
     var providerDropdown = document.querySelector("#providerDropdown");
     for(var provider in providers) {
         if(!hasOption(provider)) {
-            providerDropdown.add(new Option(providers[provider].name, provider));
+            let opt = new Option(providers[provider].name, provider);
+            opt.disabled = !providers[provider].enabled;
+            providerDropdown.add(opt);
         }
     }
 });
@@ -219,7 +221,7 @@ function resetDialogForms() {
 function showOptions() {
     var options = document.querySelector("#providerDropdown").options;
     for(var i = 0; i < options.length; ++i) {
-        options[i].disabled = false;
+        options[i].disabled = !providers[options[i].value].enabled;
     }
 }
 

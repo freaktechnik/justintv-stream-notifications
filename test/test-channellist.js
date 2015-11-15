@@ -70,8 +70,7 @@ exports['test get user by id'] = function*(assert) {
 };
 
 exports['test set new user'] = function*(assert) {
-    var newUser = getUser();
-    newUser.login = 'test2';
+    var newUser = getUser('test2');
     newUser.id = 2;
 
     let user = yield SHARED.list.setUser(newUser);
@@ -91,8 +90,7 @@ exports['test get user id'] = function*(assert) {
 exports['test get users by type'] = function*(assert) {
     let user1 = yield SHARED.list.addUser(getUser());
 
-    let user2 = getUser();
-    user2.login = "test2";
+    let user2 = getUser('test2');
     user2 = yield SHARED.list.addUser(user2);
 
     let users = yield SHARED.list.getUsersByType(user1.type);
@@ -116,7 +114,7 @@ exports['test get all users'] = function*(assert) {
 };
 
 exports['test get users by favorite'] = function*(assert) {
-    let chan = getChannel("test_chan", "test");
+    let chan = getChannel("test_chan");
 
     let user = getUser();
     user.favorites = [ chan.login ];
@@ -455,7 +453,7 @@ before(exports, (name, assert, done) => {
     SHARED.extraUsers = users.length;
 });
 after(exports, (name, assert, done) => {
-    SHARED.list.clear().then(done, (e) => {
+    SHARED.list.clear().then(() => SHARED.list.close()).then(done, (e) => {
         assert.fail(e);
         done();
     });

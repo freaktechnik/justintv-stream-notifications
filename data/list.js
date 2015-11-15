@@ -141,6 +141,8 @@ var contextMenuListener = (e) => {
     var isOffline = e.currentTarget.parentNode.id == "offline";
     document.getElementById("contextOpen").disabled = isOffline;
     document.getElementById("contextLivestreamer").disabled = isOffline;
+    document.getElementById("contextRefresh").disabled = !providers[e.currentTarget.className].enabled;
+    document.getElementById("contextAdd").disabled = !providers[e.currentTarget.className].enabled;
 };
 
 var buildChannel = (channel, unspecific = false) => {

@@ -5,13 +5,21 @@
  */
 
 const requireHelper = require("./require_helper");
-var { Channel, User } = requireHelper('../lib/channel/core');
+var { Channel, User, deserialize } = requireHelper('../lib/channel/core');
 var { getUser, getChannel } = require("./channeluser/utils");
 
 exports['test user base construction stuff'] = function(assert) {
-    assert.ok(new User() instanceof User, "New user object isn't instance of User");
-    let userWithId = new User(1);
+    assert.ok(new User("test", "test") instanceof User, "New user object isn't instance of User");
+    let userWithId = new User("test", "test", 1);
     assert.equal(userWithId.id, 1);
+};
+
+exports['test uname inheritance'] = function(assert) {
+    let user = new User("test", "test");
+    assert.equal(user.login, user.uname);
+
+    let channel = new Channel("test", "test");
+    assert.equal(channel.login, channel.uname);
 };
 
 exports['test user toString'] = function(assert) {
@@ -36,9 +44,55 @@ exports['test user image getter method'] = function(assert) {
 };
 
 exports['test channel legacy'] = function(assert) {
-    assert.ok(new Channel() instanceof Channel);
-    let channelWithId = new Channel(1);
+    assert.ok(new Channel("test", "test") instanceof Channel);
+    let channelWithId = new Channel("test", "test", 1);
     assert.equal(channelWithId.id, 1);
+};
+
+exports['test deserialize'] = function(assert) {
+    let userProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        favorites: [ "test_chan" ]
+    };
+
+    let user = deserialize(userProps);
+
+    Object.keys(userProps).forEach((key) => {
+        if(Array.isArray(userProps[key])) {
+            assert.equal(userProps[key].length, user[key].length);
+        }
+        else {
+            assert.equal(userProps[key], user[key]);
+        }
+    });
+
+    let channelProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        image: {
+            20: "./asdf.png"
+        },
+        url: [ "https://example.com" ]
+    };
+
+    let channel = deserialize(channelProps);
+
+    Object.keys(channelProps).forEach((key) => {
+        if(Array.isArray(channelProps[key])) {
+            assert.equal(channelProps[key].length, channel[key].length);
+        }
+        else if(typeof channelProps[key] === "object") {
+            assert.ok(Object.keys(channelProps[key]).every((k) => channelProps[key][k] == channel[key][k]));
+        }
+        else {
+            assert.equal(channelProps[key], channel[key]);
+        }
+    });
 };
 
 require("sdk/test").run(exports);

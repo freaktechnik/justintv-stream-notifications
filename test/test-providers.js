@@ -174,7 +174,7 @@ exports.testRequests = function*(assert) {
         prom = yield provider._qs.promise;
         assert.equal(typeof prom, "string");
 
-        if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
+        if(provider.enabled && IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
             console.log(p, ".updateRequest(channels)");
             provider._setQs(getMockQS(originalQS, true));
             provider.updateRequest(channels);
@@ -312,10 +312,15 @@ exports.testGenericProvider = function*(assert) {
     assert.equal(genericProvider._mature, prefs.find_mature && !ParentalControls.enabled);
     assert.equal(genericProvider.name, "provider_test");
     assert.equal(genericProvider.toString(), genericProvider.name);
+    assert.equal(genericProvider.enabled, genericProvider._enabled);
     assert.ok("supports" in genericProvider);
     assert.equal(genericProvider._supportsFavorites, genericProvider.supports.favorites);
     assert.equal(genericProvider._supportsCredentials, genericProvider.supports.credentials);
     assert.equal(genericProvider._supportsFeatured, genericProvider.supports.featured);
+    genericProvider._enabled = false;
+    assert.equal(genericProvider.supports.favorites, genericProvider.enabled);
+    assert.equal(genericProvider.supports.credentials, genericProvider.enabled);
+    assert.equal(genericProvider.supports.featured, genericProvider.enabled);
     assert.ok(Array.isArray(genericProvider.authURL));
     assert.equal(genericProvider.authURL.length, 0);
     yield expectReject(genericProvider.getUserFavorites());
