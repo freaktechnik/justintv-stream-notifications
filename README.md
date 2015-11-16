@@ -14,11 +14,11 @@ You can manage the followed channels with a powerful channels manager, which let
 Sometimes you miss notifications, but thanks to the handy panel, accessed by a button, which has a red dot if any channel is live, you always have access to all the channels the extension is monitoring. You can open their archive page or refresh them. The panel has three different styles, a compact one, if you follow a lot of people, a more spaceous one and a layout with thumbnails of the live streams. Each channel has a context menu, which lets you refresh the channel's status, go directly to its chat or go to its VOD archive, if it's live. The panel has a filter function, so you can quickly find a channel. You can add the category name and viewer count, if it's supported by the network.
 
 ### Providers
-List of supported providers with some explanation on what they are can be found on http://jtvn.humanoids.be/providers/.
+List of supported providers with some explanation on what they are can be found on [jtvn.humanoids.be/providers](http://jtvn.humanoids.be/providers/).
 
 ## Official Download
 
-https://addons.mozilla.org/de/firefox/addon/justintv-stream-notificatio/
+[addons.mozilla.org/](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/)
 
 ## Contribute
 For contribution instructions, check out [CONTRIBUTING.md](CONTRIBUTING.md).
