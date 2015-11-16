@@ -4,7 +4,37 @@
  */
 
 const requireHelper = require("./require_helper");
-var { RequestQueue, UpdateQueue } = requireHelper('../lib/queue');
+var { RequestQueue } = requireHelper('../lib/queue');
+const { PauseableQueue } = requireHelper('../lib/queue/pauseable');
+const { UpdateQueue } = requireHelper('../lib/queue/update');
+const { setTimeout } = require("sdk/timers");
+
+exports.testIntervalPauseResume = function(assert, done) {
+    let queue = new UpdateQueue();
+    let count = 0, paused = false;
+
+    queue.addRequest({
+        url: "https://example.com",
+        onComplete: () => {
+            if(count === 0) {
+                ++count;
+                queue.pause();
+                paused = true;
+                setTimeout(() => {
+                    paused = false;
+                    queue.resume();
+                }, 500);
+            }
+            else {
+                assert.equal(count, 1);
+                assert.ok(!paused);
+                queue.clear();
+                done();
+            }
+        }
+    }, true);
+    queue.autoFetch(700, 1, 1);
+};
 
 exports['test adding new request to queue'] = function(assert) {
     var q = new RequestQueue();
@@ -70,7 +100,7 @@ exports['test not working on queue'] = function(assert) {
 exports['test changing interval when not working on q'] = function(assert) {
     let q = new RequestQueue();
     assert.ok(!q.workingOnQueue());
-    q.changeInterval(100000, 0.5, 10);
+    q.autoFetch(100000, 0.5, 10);
     assert.ok(q.workingOnQueue());
     q.clear();
 };
@@ -80,7 +110,7 @@ exports['test interval changing'] = function(assert ) {
     q.addRequest({});
     q.autoFetch(1000000,0.5,10);
     var oldId = q._intervalID;
-    q.changeInterval(1000,0.5,10);
+    q.autoFetch(1000,0.5,10);
     assert.notEqual(q._intervalID,oldId);
     q.clear();
 };

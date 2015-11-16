@@ -4,7 +4,7 @@
  */
 
 const requireHelper = require("./require_helper");
-const QueueService = requireHelper("../lib/queueservice");
+const QueueService = requireHelper("../lib/queue/service");
 const { setTimeout } = require("sdk/timers");
 const { prefs } = require("sdk/simple-prefs");
 
@@ -17,7 +17,6 @@ exports.testGetService = function(assert) {
 exports.testIntervalPauseResume = function(assert, done) {
     let service = QueueService.getServiceForProvider("test");
     let count = 0, paused = false;
-    QueueService.resume();
 
     service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
         if(count === 0) {
