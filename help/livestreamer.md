@@ -38,6 +38,9 @@ The default behaviour of the quality selection is to first try with the user-set
 quality in the add-on preferences and then fall back to a fail-safe quality.
 The fail-save quality is always passed as `--default-stream` argument.
 
+You can pass multiple qualties for Livestreamer to try in the format of
+`480p,medium` and if none are available, the extension will retry with `best`.
+
 You can exploit this to for example use `--stream-sorting-exlude` as your
 default quality to watch lower quality streams if available, but the argument
 gets dismissed if there's no stream of the given filter available.
