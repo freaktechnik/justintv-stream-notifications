@@ -247,6 +247,11 @@ document.querySelector("#channelRadio").addEventListener("change", updateSelect)
 document.querySelector("#userRadio").addEventListener("change", updateSelect);
 
 popup.querySelector("button[type='button']").addEventListener("click", function(evt) {
+    self.port.emit("cancel",
+                   popup.querySelector("#channelRadio").checked ? "channel": "user",
+                   popup.querySelector("#providerDropdown").value,
+                   popup.querySelector("#channelNameField").value
+                  );
     hideDialog();
     resetDialogForms();
 });
