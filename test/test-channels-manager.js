@@ -122,6 +122,10 @@ exports.testCallbacksLoading = function(assert) {
     cm.onError();
     assert.ok(!cm.loading);
 
+    cm.loading = true;
+    cm.onCancel();
+    assert.ok(!cm.loading);
+
     cm.destroy();
 };
 exports.testCallbacks = function*(assert) {
