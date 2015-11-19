@@ -18,7 +18,7 @@ module.exports = function(grunt) {
             ' * obtain one at https://mozilla.org/MPL/2.0/.\n */\n',
         shell: {
             jpmTest: {
-                command: 'jpm test --tbpl -b <%= firefoxBinary %>'
+                command: 'jpm test -b <%= firefoxBinary %>'
             }
         },
         jshint: {
