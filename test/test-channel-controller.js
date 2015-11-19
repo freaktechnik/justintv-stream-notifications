@@ -74,7 +74,7 @@ exports.testAddUser = function*(assert) {
     let cc = new ChannelController();
 
     yield expectReject(cc.addUser("test", "test"));
-    
+
     cc.destroy();
 };
 
@@ -87,6 +87,8 @@ exports.testUserMethods = function*(assert) {
     assert.equal(user.login, TESTUSER.name, "Added user has correct login");
     assert.equal(user.type, TESTUSER.type, "Added user has correct type");
     assert.ok("id" in user, "Added user has an ID");
+
+    yield expectReject(cc.addUser(TESTUSER.name, TESTUSER.type, () => true));
 
     let users = yield cc.getUsersByType(TESTUSER.type);
     assert.equal(users.length, 1, "Get users by type for the user's type holds one result");

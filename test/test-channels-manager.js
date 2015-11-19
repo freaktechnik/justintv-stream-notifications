@@ -103,7 +103,7 @@ exports.testLoadingWithWorker = function*(assert) {
 exports.testCallbacksLoading = function(assert) {
     let cm = new ChannelsManager();
 
-    cm.onChannelAdded();
+    cm.onChannelAdded(FAKE_ITEM);
     assert.ok(!cm.loading);
 
     cm.loading = true;
@@ -111,7 +111,7 @@ exports.testCallbacksLoading = function(assert) {
     assert.ok(!cm.loading);
 
     cm.loading = true;
-    cm.onUserAdded();
+    cm.onUserAdded(FAKE_ITEM);
     assert.ok(!cm.loading);
 
     cm.loading = true;
