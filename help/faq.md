@@ -33,3 +33,6 @@ Why isn't the extension in the language my browser is in?
 ---------------------------------------------------------
 That's most likely because it hasn't been translated into it yet. You can help translating it on [Babelzilla](http://beta.babelzilla.org/projects/p/jtvn/).
 
+I want to hear a sound whenever I get a notification
+----------------------------------------------------
+Because there seems to be demand for this I've decided to create an extension that plays a sound whenever a notification is shown. You can get it [here](https://addons.mozilla.org/firefox/addon/notification-sound/).
