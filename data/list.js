@@ -147,111 +147,55 @@ var contextMenuListener = (e) => {
 };
 
 var buildChannel = (channel, unspecific = false) => {
-        /*
-        <li class="type" id="channel1">
-            <a href="" contextmenu="context">
-                <img src="thumbnail">
-                <div>
-                    <img srcset="avatar" sizes="30w">
-                    <span class="name">ChannelName</span><br>
-                    <span class="title hide-offline">ChannelTitle</span>
-                    <aside>
-                        <span class="viewersWrapper hide-offline">
-                             <svg class="icon" viewBox="0 0 8 8">
-                                 <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
-                             </svg>&nbsp;<span class="viewers">0</span>&sp;
-                        </span>
-                        <span class="categoryWrapper hide-offline">
-                             <svg class="icon" viewBox="0 0 8 8">
-                                 <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
-                             </svg>&nbsp;<span class="category">Category</span>&sp;
-                        </span>
-                        <span class="providerWrapper">
-                             <svg class="icon" viewBox="0 0 8 8">
-                                 <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
-                             </svg>&nbsp;<span class="provider">Provider</span>
-                        </span>
-                    </aside>
-                </div>
-            </a>
-        </li>
-         */
-        var channelNode   = document.createElement("li"),
-            link          = document.createElement("a"),
-            name          = document.createTextNode(channel.uname),
-            spanName      = document.createElement("span"),
-            br            = document.createElement("br"),
-            title         = document.createTextNode(channel.title),
-            titleSpan     = document.createElement("span"),
-            avatar        = new Image(),
-            thumbnail     = new Image(),
-            wrapper       = document.createElement("div"),
-            extra         = document.createElement("aside"),
-            viewersWrapper = document.createElement("span"),
-            categoryWrapper = document.createElement("span"),
-            providerWrapper = document.createElement("span");
-        avatar.sizes = "30w";
-        avatar.srcset = Object.keys(channel.image)
-            .map((s) => channel.image[s] + " " + s + "w").join(",");
-        thumbnail.src     = channel.thumbnail;
-        spanName.appendChild(name);
-        spanName.classList.add("name");
-        titleSpan.appendChild(title);
-        titleSpan.classList.add("title");
-        titleSpan.classList.add("hide-offline");
-        wrapper.appendChild(avatar);
-        wrapper.appendChild(spanName);
-        wrapper.appendChild(br);
-        wrapper.appendChild(titleSpan);
+    var channelNode   = document.createElement("li");
+    channelNode.insertAdjacentHTML("beforeend",
+`<a href="javascript:void" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
+    <img src="${channel.thumbnail}">
+    <div>
+        <img srcset="${Object.keys(channel.image).map((s) => channel.image[s] + " " + s + "w").join(",")}" sizes="30w">
+        <span class="name"></span><br>
+        <span class="title hide-offline"></span>
+        <aside>
+            <span class="viewersWrapper hide-offline">
+                <svg class="icon" viewBox="0 0 8 8">
+                    <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
+                </svg>&nbsp;<span class="viewers">0</span>&#x20;
+            </span>
+            <span class="categoryWrapper hide-offline">
+                <svg class="icon" viewBox="0 0 8 8">
+                    <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
+                </svg>&nbsp;<span class="category"></span>&#x20;
+            </span>
+            <span class="providerWrapper">
+                <svg class="icon" viewBox="0 0 8 8">
+                    <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
+                </svg>&nbsp;<span class="provider"></span>
+            </span>
+        </aside>
+    </div>
+</a>`);
+    channelNode.querySelector(".name").textContent = channel.uname;
+    channelNode.querySelector(".title").textContent = channel.title;
+    if(!("viewers" in channel) || channel.viewers < 0)
+        hide(channelNode.querySelector(".viewersWrapper"));
+    channelNode.querySelector(".viewers").textContent = channel.viewers;
+    if(!channel.category)
+        hide(channelNode.querySelector(".categoryWrapper"));
+    channelNode.querySelector(".category").textContent = channel.category;
+    channelNode.querySelector(".provider").textContent = providers[channel.type].name;
+    channelNode.classList.add(channel.type);
+    if(!unspecific) {
+        channelNode.id = CHANNEL_ID_PREFIX+channel.id;
+        channelNode.querySelector("a").addEventListener("click", openChannel.bind(null, channel.id));
+    }
+    else {
+        channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+        channelNode.dataset.url = channel.url[0];
+        channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channel.live? channel.url[0] : channel.archiveUrl, false));
+    }
+    channelNode.addEventListener("contextmenu", contextMenuListener);
 
-        viewersWrapper.classList.add("viewersWrapper");
-        viewersWrapper.classList.add("hide-offline");
-        if(!("viewers" in channel) || channel.viewers < 0)
-            hide(viewersWrapper);
-        viewersWrapper.insertAdjacentHTML("afterbegin",
-`<svg class="icon" viewBox="0 0 8 8">
-   <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
-</svg>&nbsp;<span class="viewers">Category</span> `);
-        viewersWrapper.querySelector(".viewers").textContent = channel.viewers;
-        extra.appendChild(viewersWrapper);
-        categoryWrapper.classList.add("categoryWrapper");
-        categoryWrapper.classList.add("hide-offline");
-        if(!channel.category)
-            hide(categoryWrapper);
-        categoryWrapper.insertAdjacentHTML("afterbegin",
-`<svg class="icon" viewBox="0 0 8 8">
-    <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
-</svg>&nbsp;<span class="category">0</span> `);
-        categoryWrapper.querySelector(".category").textContent = channel.category;
-        extra.appendChild(categoryWrapper);
-        providerWrapper.classList.add("providerWrapper");
-        providerWrapper.insertAdjacentHTML("afterbegin",
-`<svg class="icon" viewBox="0 0 8 8">
-    <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
-</svg>&nbsp;<span class="provider">Provider</span> `);
-        providerWrapper.querySelector(".provider").textContent = providers[channel.type].name;
-        extra.appendChild(providerWrapper);
-
-        wrapper.appendChild(extra);
-
-        link.appendChild(thumbnail);
-        link.appendChild(wrapper);
-        channelNode.classList.add(channel.type);
-        channelNode.appendChild(link);
-        if(!unspecific) {
-            channelNode.id = CHANNEL_ID_PREFIX+channel.id;
-            link.setAttribute("contextmenu", CONTEXTMENU_ID);
-            link.addEventListener("click", openChannel.bind(null, channel.id));
-        }
-        else {
-            channelNode.id = EXPLORE_ID_PREFIX+channel.login;
-            channelNode.dataset.url = channel.url[0];
-            link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
-            link.addEventListener("click", openUrl.bind(null, channel.live? channel.url[0] : channel.archiveUrl, false));
-        }
-        channelNode.addEventListener("contextmenu", contextMenuListener);
-
-        return channelNode;
+    return channelNode;
 };
 
 var addChannel = (channel) => {
