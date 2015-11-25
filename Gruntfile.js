@@ -270,7 +270,7 @@ module.exports = function(grunt) {
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
     grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
     grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev' ]);
-    grunt.registerTask('dev' ['prepare-dev', 'jpm:xpi']);
+    grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     // Need to transpile until jsdoc 3.3.0
     grunt.registerTask('doc', ['babel', 'jsdoc', 'clean:transpile']);
