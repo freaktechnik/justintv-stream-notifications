@@ -69,10 +69,6 @@ nav {
     right: 0;
 }
 
-.toolbar .icon {
-    vertical-align: center;
-}
-
 #searchField, #exploreprovider {
     width: 100%;
 }
@@ -154,9 +150,10 @@ nav {
 
 .icon {
     display: inline-block;
-    height: 1em;
-    width: 1em;
+    height: .9em;
+    width: .9em;
     fill: currentColor;
+    vertical-align: center;
 }
 
 /* Type specific styles */
