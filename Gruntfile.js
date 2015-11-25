@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: pkg,
-        firefoxBinary: process.env.JPM_FIREFOX_BINARY || 'firefox-trunk',
+        firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox-trunk',
         banner:
             '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
@@ -241,12 +241,20 @@ module.exports = function(grunt) {
         env: {
             coverage: {
                 JPM_MEASURING_COVERAGE: true
+            },
+            run: {
+                FIREFOX_BIN: '<%= firefoxBinary %>'
             }
         },
         coveralls: {
             options: {
                 src: 'coverage/reports/lcov.info',
                 force: true
+            }
+        },
+        bower: {
+            build: {
+                dest: 'build/data'
             }
         }
     });
@@ -259,8 +267,11 @@ module.exports = function(grunt) {
     grunt.registerTask('quicktest', ['jshint', 'shell:jpmTest']);
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
     grunt.registerTask('test', ['jshint', 'coverage']);
-    grunt.registerTask('build', ['copy:build', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
-    grunt.registerTask('dev', [ 'githash', 'copy', 'copy:dev', 'package:dev', 'jpm:xpi']);
+    grunt.registerTask('prepare-common', ['copy:build', 'bower']);
+    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
+    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev' ]);
+    grunt.registerTask('dev' ['prepare-dev', 'jpm:xpi']);
+    grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     // Need to transpile until jsdoc 3.3.0
     grunt.registerTask('doc', ['babel', 'jsdoc', 'clean:transpile']);
 

@@ -185,3 +185,4 @@ doc/
 build/
 coverage/
 transpiled/
+bower_components/
