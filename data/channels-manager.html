@@ -3,44 +3,74 @@
     <head>
         <meta charset="utf-8">
         <title data-l10n-id="cm_title">Channels Manager</title>
-        <link rel="help" href="http://jtvn.humanoids.be/channels-manager-help/" hreflang="en" type="text/html">
+        <link rel="help" href="http://jtvn.humanoids.be/help/channels-manager/" hreflang="en" type="text/html">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
         <link rel="icon" sizes="32x32" href="icon32.png">
+        <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="tabbed.js"></script>
+        <script type="text/javascript" src="filter.js"></script>
+        <script type="text/javascript">
+            var filters = [
+                {
+                    subtarget: "span"
+                },
+                {
+                    subtarget: "small"
+                }
+            ],
+            listener = function() {
+                filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not([hidden])"), filters);
+            };
+            window.addEventListener("load", function() {
+
+                document.getElementById("searchField").addEventListener("keyup", listener);
+                document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
+                document.getElementById("channels").addEventListener("itemadded", function() {
+                    if(!document.getElementById("channels").hasAttribute("hidden"))
+                        listener();
+                });
+                document.getElementById("users").addEventListener("itemadded", function() {
+                    if(!document.getElementById("users").hasAttribute("hidden"))
+                        listener();
+                });
+            });
+        </script>
     </head>
     <body>
-        <main class="tabbed">
+        <main class="tabbed loading">
             <ul class="tabstrip" role="tablist">
                 <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1" data-l10n-id="cm_tab_channels">Channels</a></li>
                 <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2" data-l10n-id="cm_tab_users">Users</a></li>
             </ul>
             <ul role="toolbar" class="toolbar" aria-controls="channels">
-                <li><a id="showDialog" href="#popup" data-l10n-id="cm_add">Add...</a></li>
+                <li><a id="showDialog" href="#popup" data-l10n-id="cm_add">Add…</a></li>
                 <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</a></li>
                 <li><a id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</a></li>
-                <li><a id="autoAdd" class="hidden" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" aria-hidden="true" data-l10n-id="cm_autoAdd">Auto add</a></li>
-                <li class="right"><a href="http://jtvn.humanoids.be/help/channels-manager/" target="_blank" hreflang="en" rel="help" data-l10n-id="cm_help">Help</a></li>
+                <li hidden><a id="autoAdd" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" data-l10n-id="cm_autoAdd">Auto add</a></li>
+                <li class="flex"><input type="search" id="searchField" placeholder="Filter…" data-l10n-id="cm_filter"></li>
+                <li><a href="http://jtvn.humanoids.be/help/channels-manager/" target="blank" hreflang="en" rel="help" data-l10n-id="cm_help">Help</a></li>
             </ul>
-            <select multiple id="channels" class="selectableItemsList tabcontent" role="tabpanel" data-tab="1">
+            <select multiple id="channels" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="1">
             </select>
-            <select multiple id="users" class="selectableItemsList tabcontent" role="tabpanel" data-tab="2">
+            <select multiple id="users" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="2">
             </select>
         </main>
-        <div id="popup" class="hidden" aria-hidden="true">
+        <div id="popup" hidden>
             <dialog>
                 <form method="dialog">
-                    <h1 data-l10n-id="cm_dialog_title">Add new...</h1>
+                    <h1 data-l10n-id="cm_dialog_title">Add new…</h1>
                     <input type="radio" label="channel" id="channelRadio" name="accountType"><label for="channelRadio" data-l10n-id="cm_dialog_channel">Channel</label>
                     <input type="radio" label="user" id="userRadio" name="accountType"><label for="userRadio" data-l10n-id="cm_dialog_user">User</label><br>
                     <label for="providerDropdown" data-l10n-id="cm_dialog_providers">Provider:</label>
                     <select id="providerDropdown"></select><br>
                     <label for="channelNameField" data-l10n-id="cm_dialog_username">Username:</label>
                     <input type="text" id="channelNameField"><br>
-                    <input type="button" value="Cancel" data-l10n-id="cm_dialog_cancel"><input type="submit" value="Ok" data-l10n-id="cm_dialog_submit">
+                    <button type="button" data-l10n-id="cm_dialog_cancel">Cancel</button><button type="submit" data-l10n-id="cm_dialog_submit">Ok</button>
                 </form>
             </dialog>
         </div>
     </body>
 </html>
-

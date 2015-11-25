@@ -1,0 +1,7 @@
+[main]
+host = http://beta.babelzilla.org
+
+[jtvn.enproperties]
+source_file = locale/en-US.properties
+source_lang = en-US
+file_filter = locale/<lang>.properties

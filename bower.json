@@ -1,0 +1,25 @@
+{
+  "name": "justintv-stream-notifications",
+  "description": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
+  "main": "lib/main.js",
+  "authors": [
+    "freaktechnik (http://humanoids.be)"
+  ],
+  "license": "MPL-2.0",
+  "keywords": [
+    "jetpack"
+  ],
+  "homepage": "https://github.com/freaktechnik/justintv-stream-notifications",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "open-iconic": "~1.1.1"
+  }
+}

@@ -176,3 +176,13 @@ npm-debug.log
 # jpm
 *.xpi
 
+# scss/sass
+.sass-cache
+
+.transifexrc
+
+doc/
+build/
+coverage/
+transpiled/
+bower_components/

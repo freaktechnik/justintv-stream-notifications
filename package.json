@@ -1,55 +1,264 @@
 {
-    "preferences": [
-        {"type": "control", "name": "manageChannels",             "title": "Manage Channels", "label": "Open Channels Manager"},
-	    {"type": "integer", "name": "updateInterval",             "title": "Update Interval", "description":"Interval of the addon checking wether a stream is live in seconds. When 0, the states aren't automatically updated.", "value": 20},
-        {"type": "bool",    "name": "onlineNotification",         "title": "Show a notification when a stream goes online", "value": true},
-        {"type": "bool",    "name": "titleChangeNotification",    "title": "Show a notification when a stream changes the title", "value": true},
-        {"type": "bool",    "name": "offlineNotification",        "title": "Show a notification when a stream goes offline", "value": false},
-        {"type": "radio",   "name": "panel_style",                "title": "Panel item display style", "value":1, "options": [{"value":"0", "label":"Minimal"}, {"value":"1", "label":"Normal"}, {"value":"2", "label":"Big Thumbnail"}]},
-        {"type": "bool",    "name": "panel_extras",               "title": "Extra info in panel","description":"Displays the viewer count and the category name of a channel in the panel when availble.", "value": false},
-        {"type": "bool",    "name": "updateTab",                  "title": "Open a tab with update info after an update", "description":"A tab with informations about new features is opened when the extension is updated.", "value": true},
-
-        {"type": "integer", "name": "queue_ratio",                "title": "Queue Request Treshhold", "value": 2, "hidden": true},
-        {"type": "integer", "name": "queue_maxRequestBatchSize",  "title": "Max Requests per Batch",  "value": 8, "hidden": true},
-
-        {"type": "integer", "name": "panel_minWidth",             "title": "Minimum Panel width",  "value": 320,  "hidden": true},
-        {"type": "integer", "name": "panel_maxHeight",            "title": "Maximum Panel height", "value": 400,  "hidden": true},
-
-        {"type": "string",  "name": "twitch_clientId",            "title": "Twitch Client ID", "value": "1owsrolvxz8khldqe6puadzd8bldq34", "hidden": true},
-        {"type": "string",  "name": "youtube_apiKey",             "title": "YouTube API Key",  "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM", "hidden": true},
-        
-        {"type": "string",  "name": "twitchchannelList",          "title": "Twitch Channels",      "hidden": true},
-        {"type": "string",  "name": "twitchusernameList",         "title": "Twitch Users",         "hidden": true},
-        {"type": "bool",    "name": "autoUsername",               "title": "Auto detect username", "hidden": true}
-    ],
-    "icon64": "data/icon64.png",
-    "homepage": "http://jtvn.humanoids.be/",
-    "description": "This displays a notification when a channel on twitch goes live. The currently live channels can also be checked in a panel. Which channels are checked for being live is fully customizable.",
-    "author": "freaktechnik",
-    "translators": [
-        "manueljrs",
-        "alan2loin"
-    ],
-    "name": "justintv-stream-notifications",
-    "version": "3.0.0",
-    "lib": "lib",
-    "title": "Live Stream Notifier",
-    "main": "lib/main",
-    "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-    "icon": "data/icon.png",
-    "engines": {
-        "firefox": ">=33.0a1"
+  "preferences": [
+    {
+      "type": "control",
+      "name": "manageChannels",
+      "title": "Manage Channels",
+      "label": "Open Channels Manager"
     },
-    "license": "MPL 2.0",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/freaktechnik/justintv-stream-notifications.git"
+    {
+      "type": "integer",
+      "name": "updateInterval",
+      "title": "Update Interval",
+      "description": "Interval of the addon checking wether a stream is live in seconds. When 0, the states aren't automatically updated.",
+      "value": 30
     },
-    "devDependencies": {
-        "jpm": "*"
+    {
+      "type": "bool",
+      "name": "onlineNotification",
+      "title": "Show a notification when a stream goes online",
+      "value": true
     },
-    "scripts": {
-        "test": "jpm test -v",
-        "preinstall": "jpm xpi"
+    {
+      "type": "bool",
+      "name": "titleChangeNotification",
+      "title": "Show a notification when a stream changes the title",
+      "value": true
+    },
+    {
+      "type": "bool",
+      "name": "offlineNotification",
+      "title": "Show a notification when a stream goes offline",
+      "value": false
+    },
+    {
+      "type": "radio",
+      "name": "panel_style",
+      "title": "Panel item display style",
+      "value": 1,
+      "options": [
+        {
+          "value": "0",
+          "label": "Minimal"
+        },
+        {
+          "value": "1",
+          "label": "Normal"
+        },
+        {
+          "value": "2",
+          "label": "Big Thumbnail"
+        }
+      ]
+    },
+    {
+      "type": "bool",
+      "name": "panel_extras",
+      "title": "Extra info in panel",
+      "description": "Displays the viewer count and the category name of a channel in the panel when availble.",
+      "value": false
+    },
+    {
+      "type": "bool",
+      "name": "panel_badge",
+      "title": "Display counter badge",
+      "description": "Displays the number of live channels on the button if any.",
+      "value": false
+    },
+    {
+      "type": "bool",
+      "name": "updateTab",
+      "title": "Open a tab with update info after an update",
+      "description": "A tab with informations about new features is opened when the extension is updated.",
+      "value": true
+    },
+    {
+      "type": "integer",
+      "name": "queue_ratio",
+      "title": "Queue Request Treshhold",
+      "value": 2,
+      "hidden": true
+    },
+    {
+      "type": "integer",
+      "name": "queue_maxRequestBatchSize",
+      "title": "Max Requests per Batch",
+      "value": 8,
+      "hidden": true
+    },
+    {
+      "type": "integer",
+      "name": "panel_minWidth",
+      "title": "Minimum Panel width",
+      "value": 320,
+      "hidden": true
+    },
+    {
+      "type": "integer",
+      "name": "panel_maxHeight",
+      "title": "Maximum Panel height",
+      "value": 400,
+      "hidden": true
+    },
+    {
+      "type": "string",
+      "name": "twitch_clientId",
+      "title": "Twitch Client ID",
+      "value": "1owsrolvxz8khldqe6puadzd8bldq34",
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "twitch_showHosting",
+      "title": "Check if a Twitch Channel is hosting",
+      "value": true,
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "twitch_showPlaylist",
+      "title": "Show channels replaying recordings from a playlist as live",
+      "value": false,
+      "hidden": true
+    },
+    {
+      "type": "string",
+      "name": "youtube_apiKey",
+      "title": "YouTube API Key",
+      "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM",
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "mlg_showRebroadcasts",
+      "title": "Show rebroadcasts as live",
+      "value": true,
+      "hidden": true
+    },
+    {
+      "type": "integer",
+      "name": "channellist_cacheTime",
+      "title": "Time to cache channel states while Firefox is closed",
+      "value": 600000,
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "android_intents",
+      "title": "Try to send an intent to open streams on Android",
+      "value": true,
+      "hidden": true
+    },
+    {
+      "type": "integer",
+      "name": "queueservice_maxRetries",
+      "title": "Maximum number of attempts before a request is discarded",
+      "value": 5,
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "find_mature",
+      "title": "Find mature content in the explore tab",
+      "value": true,
+      "hidden": true
+    },
+    {
+      "type": "bool",
+      "name": "livestreamer_enabled",
+      "title": "Always use Livestreamer",
+      "description": "Opens streams with Livestreamer by default.",
+      "value": false
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_path",
+      "title": "Path to Livestreamer binary",
+      "description": "Absolute path to the Livestreamer binary. Is set by the extension if Livestreamer could be found in a known location.",
+      "value": ""
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_player",
+      "title": "Livestreamer Player",
+      "description": "Command to execute the player Livestreamer should use. Defaults to VLC.",
+      "value": ""
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_quality",
+      "title": "Livestreamer Quality Preset",
+      "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst).",
+      "value": "best"
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_fallbackQuality",
+      "title": "Quality Preset used when all else fails",
+      "value": "best",
+      "hidden": true
+    },
+    {
+      "type": "string",
+      "name": "livestreamer_extraArguments",
+      "title": "Comma separated extra arguments for livestreamer",
+      "value": "",
+      "hidden": true
     }
+  ],
+  "homepage": "http://jtvn.humanoids.be/",
+  "description": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
+  "author": "freaktechnik (http://humanoids.be)",
+  "translators": [
+    "manueljrs",
+    "alan2loin"
+  ],
+  "name": "justintv-stream-notifications",
+  "version": "3.2.0",
+  "lib": "lib",
+  "title": "Live Stream Notifier",
+  "main": "lib/main.js",
+  "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
+  "engines": {
+    "firefox": ">=42.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freaktechnik/justintv-stream-notifications.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
+  },
+  "dependencies": {
+    "jetpack-homepanel": "^1.0.1",
+    "notification-box": "^0.1.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "~6.0.15",
+    "codecov": "^1.0.1",
+    "grunt": "^0.4.5",
+    "grunt-babel": "~6.0.0",
+    "grunt-bower": "^0.20.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-env": "^0.4.4",
+    "grunt-githash": "^0.1.1",
+    "grunt-header": "~1.0.0",
+    "grunt-istanbul": "~0.6.1",
+    "grunt-jpm": "^0.1.0",
+    "grunt-jsdoc": "^1.0.0",
+    "grunt-package": "^0.1.3",
+    "grunt-shell": "^1.1.2",
+    "grunt-stripcomments": "~0.4.0",
+    "grunt-transifex": "^0.1.1",
+    "istanbul-jpm": "0.0.1",
+    "jpm": "*",
+    "load-grunt-tasks": "^3.2.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
 }

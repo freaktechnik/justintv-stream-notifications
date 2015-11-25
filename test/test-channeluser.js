@@ -1,20 +1,25 @@
-/*
- * Created by Martin Giger
- * Licensed under MPL 2.0
+/**
+ * @author Martin Giger
+ * @license MPL-2.0
+ * @todo Test serialize
  */
-var { Channel, User } = require('../lib/channeluser');
 
-function getUser() {
-    var user = new User();
-    user.type = "test";
-    user.uname='lorem ipsum';
-    user.login='test';
-    user.image={'20':'http://foo.bar/0.jpg','40':'http://foo.bar/1.jpg'};
-    return user;
-}
+const requireHelper = require("./require_helper");
+var { Channel, User, deserialize } = requireHelper('../lib/channel/core');
+var { getUser, getChannel } = require("./channeluser/utils");
 
 exports['test user base construction stuff'] = function(assert) {
-    assert.ok(new User() instanceof User, "New user object isn't instance of User");
+    assert.ok(new User("test", "test") instanceof User, "New user object isn't instance of User");
+    let userWithId = new User("test", "test", 1);
+    assert.equal(userWithId.id, 1);
+};
+
+exports['test uname inheritance'] = function(assert) {
+    let user = new User("test", "test");
+    assert.equal(user.login, user.uname);
+
+    let channel = new Channel("test", "test");
+    assert.equal(channel.login, channel.uname);
 };
 
 exports['test user toString'] = function(assert) {
@@ -38,31 +43,56 @@ exports['test user image getter method'] = function(assert) {
     assert.equal(user.getBestImageForSize(999), 'http://foo.bar/1.jpg', "999");
 };
 
-function getChannel() {
-    var channel = new Channel();
-    channel.type = "test";
-    channel.url.push('http://foo.bar/lorem');
-    channel.archiveUrl = 'http://foo.bar/lorem/archive';
-    channel.uname='lorem ipsum';
-    channel.login='test';
-    channel.logo={'20':'http://foo.bar/0.jpg','40':'http://foo.bar/1.jpg'};
-    return channel;
-}
-
 exports['test channel legacy'] = function(assert) {
-    assert.ok(new Channel() instanceof User, "Channel doesn't inerhit from user");
-    assert.ok(new Channel() instanceof Channel);
+    assert.ok(new Channel("test", "test") instanceof Channel);
+    let channelWithId = new Channel("test", "test", 1);
+    assert.equal(channelWithId.id, 1);
 };
 
-exports['test channel url comparison'] = function(assert) {
-    var channel = getChannel();
-    assert.ok(channel.compareUrl('http://foo.bar/lorem'));
-    assert.ok(channel.compareUrl('http://foo.bar/lorem/archive'));
-    assert.ok(channel.compareUrl('https://foo.bar/lorem'));
-    assert.ok(channel.compareUrl('https://foo.bar/lorem/archive'));
-    assert.ok(!channel.compareUrl('http://example.com'));
-    assert.ok(!channel.compareUrl('http://999.44'));
-    assert.ok(!channel.compareUrl('ressource://justalocal/thing'));
+exports['test deserialize'] = function(assert) {
+    let userProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        favorites: [ "test_chan" ]
+    };
+
+    let user = deserialize(userProps);
+
+    Object.keys(userProps).forEach((key) => {
+        if(Array.isArray(userProps[key])) {
+            assert.equal(userProps[key].length, user[key].length);
+        }
+        else {
+            assert.equal(userProps[key], user[key]);
+        }
+    });
+
+    let channelProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        image: {
+            20: "./asdf.png"
+        },
+        url: [ "https://example.com" ]
+    };
+
+    let channel = deserialize(channelProps);
+
+    Object.keys(channelProps).forEach((key) => {
+        if(Array.isArray(channelProps[key])) {
+            assert.equal(channelProps[key].length, channel[key].length);
+        }
+        else if(typeof channelProps[key] === "object") {
+            assert.ok(Object.keys(channelProps[key]).every((k) => channelProps[key][k] == channel[key][k]));
+        }
+        else {
+            assert.equal(channelProps[key], channel[key]);
+        }
+    });
 };
 
 require("sdk/test").run(exports);

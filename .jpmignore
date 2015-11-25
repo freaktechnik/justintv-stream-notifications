@@ -1,7 +1,22 @@
 *.xpi
 .*
 
+*dummyprovider.js
+
+# Ignore documentation
+*.md
+*doc*
+
+# Ignore grunt and other npm stuff
+Gruntfile.js
+*.jshintrc
 node_modules/
+!node_modules/jetpack-homepanel/
+!node_modules/istanbul-jpm/
+!node_modules/notification-box/
+node_modules/istanbul-jpm/node_modules/
+
+*CHANGELOG*
 
 # Python
 python-lib/
@@ -13,3 +28,7 @@ python-lib/
 # Scratch
 *~
 
+build/
+coverage/reports/
+transpiled/
+bower_components/

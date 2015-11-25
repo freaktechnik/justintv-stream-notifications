@@ -85,9 +85,18 @@ changelog
 2.8.2
     - Update button for australis
     - Fix a bug where channels were not removed when all the sources for them were removed
-3.0.0
+2.9
+    - Panel with streampreviews
+    - Removed Justin.tv
+    - Migrated Justin.tv channels to twitch
+2.9.1
+    - Fixed migrating the panel width
+2.9.2
+    - Fixed favorites pagination
+3.0.0, 3.0.1
     - Add new channels manager, which is the last piece to allow more channel providers
     - Three new styles for the panel
+    - An optional extra row of info for live channels in the panel showing the number of views and the category of a stream
     - Offline channels are in a separate tab instead of below the live channels in the panel
     - Context menu for channels in the panel, allowing to refresh their individual state, open their archive page if they're live or open the channel's chat only
     - Channels and users are now saved in a database instead of a plaintext file
@@ -95,4 +104,30 @@ changelog
     - A completely new website
     - Added support for Hitbox, Ustream, Livestream, MLG.tv, Azubu and YouTube
     - Show a twitch channel as live when hosting, with title and thumbnail of the hosted channel
-
+    - Filter channels in the panel (and the channels manager)
+3.1.0, 3.1.1
+    - Fix channels not getting marked as offline if Firefox has been closed for more than ten minutes
+    - Don't try to update the channel statuses when in offline mode
+    - Get game name for MLG.tv channels
+    - Add beam.pro provider
+    - Add picarto.tv provider
+    - Show notification if a newly added channel is live
+    - Making less requests when possible
+    - Fix updating a specific channel from the panel context menu
+    - Better handling of Twitch channels with spaces in the display name
+    - Fix keyboard shortcuts in channels manager
+    - Make MLG.tv rebroadcasts optional
+    - Make hosted Twitch channels optional
+    - Update translations
+    - Fix some oddities with behaviour when clicking to go to a channel
+3.2.0
+    - Add user favorites support to hitbox
+    - Add support for new livestream
+    - Update Picarto.TV for the new site
+    - Improve azubu user favorites import
+    - Add "Explore" tab to panel with featured streams
+    - Add a provider-wide search in the "Explore" tab
+    - Add Livestreamer (the program) support
+    - Add Streamup support
+    - Add provider name to extra info
+    - Delete all channels a user follows by holding shift when removing it

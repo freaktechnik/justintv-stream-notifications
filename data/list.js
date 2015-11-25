@@ -3,79 +3,94 @@
  * Licensed under MPL 2.0
  */
 
-var live, offline, currentMenuTarget, currentStyle;
+/* global addon */
+/* global filter */
+/* global matches */
+/* global show */
+/* global hide */
+const { show, hide, matches, filter } = unsafeWindow;
+
+var live, offline, explore, currentMenuTarget, currentStyle, providers;
 const CHANNEL_ID_PREFIX = "channel";
+const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
+const EXPLORE_CONTEXTMENU_ID = "explore-context";
+const filters = [
+    {
+        subtarget: ".provider"
+    },
+    {
+        subtarget: ".name"
+    },
+    {
+        subtarget: ".title"
+    },
+    {
+        subtarget: ".viewers"
+    },
+    {
+        subtarget: ".category"
+    }
+];
+const SVG_NS = "http://www.w3.org/2000/svg";
+const XLINK_NS = "http://www.w3.org/1999/xlink";
 
-//window.addEventListener("load", function() {
-    live    = document.getElementById("live");
-    offline = document.getElementById("offline");
-    setStyle(self.options.style);
-    setExtrasVisibility(self.options.extras);
-    resize();
-    document.getElementById("configure").addEventListener("click", function(e) {
-        e.preventDefault();
-        self.port.emit("configure");
-    });
-    document.getElementById("refreshButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        self.port.emit("refresh");
-    });
-    document.getElementById("contextRefresh").addEventListener("click", function() {
-        self.port.emit("refresh", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextOpen").addEventListener("click", function() {
-        self.port.emit("openArchive", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
-        currentMenuTarget = null;
-    });
-    document.getElementById("contextChat").addEventListener("click", function() {
-        self.port.emit("openChat", parseInt(currentMenuTarget.id.substring(CHANNEL_ID_PREFIX.length), 10));
-    });
-    document.querySelector(".tabbed").addEventListener("tabchanged", function() {
-        resize();
-    });
-//});
+var toggle = (node, condition) => {
+    if(condition)
+        show(node);
+    else
+        hide(node);
+};
 
-// Set up port commmunication listeners
-self.port.on("setStyle", function(style) {
-    setStyle(style);
-});
+var getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10);
 
-self.port.on("setExtras", function(visible) {
-    setExtrasVisibility(visible);
-});
+var contextMenuCommand = function(event) {
+    self.port.emit(event, getChannelIdFromId(currentMenuTarget.id));
+    currentMenuTarget = null;
+};
 
-self.port.on("addChannels", function(channels) {
-    channels.forEach(function(channel) {
-        addChannel(channel);
-    });
-});
-
-self.port.on("removeChannel", function(channelId) {
-    removeChannel(channelId);
-});
-
-self.port.on("setOnline", function(channel) {
-    makeChannelLive(channel);
-});
-
-self.port.on("setOffline", function(channel) {
-    makeChannelOffline(channel);
-});
- 
-self.port.on("resize", resize);
-
-function resize() {
-    var h = document.querySelector(".tabbed").scrollHeight < self.options.maxHeight ? document.querySelector(".tabbed").scrollHeight : self.options.maxHeight;
+var resize = () => {
+    var scrollHeight = document.querySelector(".tabbed").scrollHeight;
+    var h = Math.ceil(Math.min(scrollHeight, self.options.maxHeight));
     self.port.emit("resize", [self.options.panelWidth, h]);
-}
+};
 
-function open(channelId) {
+var openChannel = (channelId) => {
     self.port.emit("open", channelId);
-}
+};
 
-function setStyle(style) {
+var openUrl = (url, livestreamer) => {
+    self.port.emit("openUrl", url, livestreamer);
+};
+
+var displayNoOnline = () => {
+    show(document.getElementById("noonline"));
+};
+
+var hideNoOnline = () => {
+    hide(document.getElementById("noonline"));
+};
+
+var hideNoChannels = () => {
+    hide(document.getElementById("nochannels"));
+};
+
+var displayNoChannels = () => {
+    displayNoOnline();
+    show(document.getElementById("nochannels"));
+};
+
+var displayLoading = () => {
+    show(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.add("loading");
+};
+
+var hideLoading = () => {
+    hide(document.getElementById("loadingexplore"));
+    explore.parentNode.classList.remove("loading");
+};
+
+var setStyle = (style) => {
     var newClass;
     switch(style) {
         case 2:
@@ -84,228 +99,414 @@ function setStyle(style) {
         case 0:
             newClass = "compact";
             break;
-        case 1:
         default:
             newClass = "default";
     }
     if(newClass != currentStyle) {
-        live.classList.add(newClass);
-        live.classList.remove(currentStyle);
-        offline.classList.add(newClass);
-        offline.classList.remove(currentStyle);
+        var main = document.querySelector(".tabbed");
+        main.classList.add(newClass);
+        main.classList.remove(currentStyle);
         currentStyle = newClass;
     }
     resize();
-}
+};
 
-function setExtrasVisibility(visible) {
-    if(visible)
-        live.classList.add("extras");
-    else
-        live.classList.remove("extras");
-}
+var setExtrasVisibility = (visible) => {
+    document.querySelector(".tabbed").classList.toggle("extras", visible);
+};
 
 // Find the node to inser before in order to keep the list sorted
-function findInsertionNodeIn(list, name) {
+var findInsertionNodeIn = (list, name) => {
     var node = list.firstElementChild;
 
     while(node && name.localeCompare(node.querySelector(".name").textContent) >= 0) {
         node = node.nextSibling;
     }
     return node;
-}
+};
 
-function insertChannel(channel, node) {
+var insertChannel = (channel, node) => {
     if(channel.live)
         live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
     else
         offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
-    
+
     resize();
-}
+};
 
-function getBestImageForSize(user, size) {
-    // shortcut if there's an image with the size demanded
-    if(user.image.hasOwnProperty(size.toString())) {
-        return user.image[size];
-    }
-    
-    // search next biggest image
-    var index = Number.MAX_VALUE;
-    Object.keys(user.image).forEach(function(s) {
-        s = parseInt(s, 10);
-        if(s > size && s < index) {
-            index = s;
+var toggleLivestreamerItems = (exists) => {
+    toggle(document.getElementById("contextLivestreamer"), exists);
+    toggle(document.getElementById("contextExploreLivestreamer"), exists);
+};
+
+var contextMenuListener = (e) => {
+    currentMenuTarget = e.currentTarget;
+    var isOffline = e.currentTarget.parentNode.id == "offline";
+    document.getElementById("contextOpen").disabled = isOffline;
+    document.getElementById("contextLivestreamer").disabled = isOffline;
+    document.getElementById("contextRefresh").disabled = !providers[e.currentTarget.className].enabled;
+    document.getElementById("contextAdd").disabled = !providers[e.currentTarget.className].enabled;
+};
+
+var buildChannel = (channel, unspecific = false) => {
+        /*
+        <li class="type" id="channel1">
+            <a href="" contextmenu="context">
+                <img src="thumbnail">
+                <div>
+                    <img srcset="avatar" sizes="30w">
+                    <span class="name">ChannelName</span><br>
+                    <span class="title hide-offline">ChannelTitle</span>
+                    <aside>
+                        <span class="viewersWrapper hide-offline">
+                             <svg class="icon">
+                                 <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
+                             </svg>&nbsp;<span class="viewers">0</span>&sp;
+                        </span>
+                        <span class="categoryWrapper hide-offline">
+                             <svg class="icon">
+                                 <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
+                             </svg>&nbsp;<span class="category">Category</span>&sp;
+                        </span>
+                        <span class="providerWrapper">
+                             <svg class="icon">
+                                 <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
+                             </svg>&nbsp;<span class="provider">Provider</span>
+                        </span>
+                    </aside>
+                </div>
+            </a>
+        </li>
+         */
+        var channelNode   = document.createElement("li"),
+            link          = document.createElement("a"),
+            name          = document.createTextNode(channel.uname),
+            spanName      = document.createElement("span"),
+            br            = document.createElement("br"),
+            title         = document.createTextNode(channel.title),
+            titleSpan     = document.createElement("span"),
+            avatar        = new Image(),
+            thumbnail     = new Image(),
+            wrapper       = document.createElement("div"),
+            extra         = document.createElement("aside"),
+            viewersWrapper = document.createElement("span"),
+            viewersIcon = document.createElement("svg"),
+            viewersUse = document.createElementNS(SVG_NS, "use"),
+            viewers       = document.createElement("span"),
+            categoryWrapper = document.createElement("span"),
+            categoryIcon = document.createElement("svg"),
+            categoryUse = document.createElementNS(SVG_NS, "use"),
+            category      = document.createElement("span"),
+            providerWrapper = document.createElement("span"),
+            providerIcon = document.createElement("svg"),
+            providerUse = document.createElementNS(SVG_NS, "use"),
+            provider = document.createElement("span");
+        avatar.sizes = "30w";
+        avatar.srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
+        thumbnail.src     = channel.thumbnail;
+        spanName.appendChild(name);
+        spanName.classList.add("name");
+        titleSpan.appendChild(title);
+        titleSpan.classList.add("title");
+        titleSpan.classList.add("hide-offline");
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(spanName);
+        wrapper.appendChild(br);
+        wrapper.appendChild(titleSpan);
+
+        viewersWrapper.classList.add("viewersWrapper");
+        viewersWrapper.classList.add("hide-offline");
+        if(!("viewers" in channel) || channel.viewers < 0)
+            hide(viewersWrapper);
+        viewersUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#eye");
+        viewersIcon.appendChild(viewersUse);
+        viewersIcon.setAttribute("viewBox", "0 0 8 8");
+        viewersIcon.classList.add("icon");
+        viewersWrapper.appendChild(viewersIcon);
+        viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
+        viewers.classList.add("viewers");
+        viewers.appendChild(document.createTextNode(channel.viewers));
+        viewersWrapper.appendChild(viewers);
+        viewersWrapper.appendChild(document.createTextNode(" "));
+        extra.appendChild(viewersWrapper);
+        categoryWrapper.classList.add("categoryWrapper");
+        categoryWrapper.classList.add("hide-offline");
+        if(!channel.category)
+            hide(categoryWrapper);
+        categoryUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#tag");
+        categoryIcon.appendChild(categoryUse);
+        categoryIcon.setAttribute("viewBox", "0 0 8 8");
+        categoryIcon.classList.add("icon");
+        categoryWrapper.appendChild(categoryIcon);
+        categoryWrapper.appendChild(document.createTextNode("\u00a0"));
+        category.classList.add("category");
+        category.appendChild(document.createTextNode(channel.category));
+        categoryWrapper.appendChild(category);
+        categoryWrapper.appendChild(document.createTextNode(" "));
+        extra.appendChild(categoryWrapper);
+        providerWrapper.classList.add("providerWrapper");
+        providerUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#hard-drive");
+        providerIcon.appendChild(categoryUse);
+        providerIcon.setAttribute("viewBox", "0 0 8 8");
+        providerIcon.classList.add("icon");
+        providerWrapper.appendChild(providerIcon);
+        providerWrapper.appendChild(document.createTextNode("\u00a0"));
+        provider.classList.add("provider");
+        provider.appendChild(document.createTextNode(providers[channel.type].name));
+        providerWrapper.appendChild(provider);
+        extra.appendChild(providerWrapper);
+
+        wrapper.appendChild(extra);
+
+        link.appendChild(thumbnail);
+        link.appendChild(wrapper);
+        channelNode.classList.add(channel.type);
+        channelNode.appendChild(link);
+        if(!unspecific) {
+            channelNode.id = CHANNEL_ID_PREFIX+channel.id;
+            link.setAttribute("contextmenu", CONTEXTMENU_ID);
+            link.addEventListener("click", openChannel.bind(null, channel.id));
         }
-    });
-    return user.image[index];
-}
+        else {
+            channelNode.id = EXPLORE_ID_PREFIX+channel.login;
+            channelNode.dataset.url = channel.url[0];
+            link.setAttribute("contextmenu", EXPLORE_CONTEXTMENU_ID);
+            link.addEventListener("click", openUrl.bind(null, channel.live? channel.url[0] : channel.archiveUrl, false));
+        }
+        channelNode.addEventListener("contextmenu", contextMenuListener);
 
-function addChannel(channel) {
-    /*
-     <li class="type" id="channel1">
-        <a href="" contextmenu="context">
-            <img src="thumbnail">
-            <div>
-                <img src="avatar">
-                <span class="name">ChannelName</span><br>
-                <span class="title">ChannelTitle</span>
-                <aside>
-                    <span class="viewersWrapper">
-                        <span class="icon">v</span>&nbsp;<span class="viewers">0</span>
-                    </span>&nbsp;
-                    <span class="categoryWrapper">
-                        <span class="icon">c</span>&nbsp;<span class="category">Category</span>
-                    </span>
-                </aside>
-            </div>
-        </a>
-    </li>
-     */
-    var channelNode   = document.createElement("li"),
-        link          = document.createElement("a"),
-        name          = document.createTextNode(channel.uname),
-        spanName      = document.createElement("span"),
-        br            = document.createElement("br"),
-        title         = document.createTextNode(channel.title),
-        titleSpan     = document.createElement("span"),
-        avatar        = new Image(),
-        thumbnail     = new Image(),
-        wrapper       = document.createElement("div"),
-        extra         = document.createElement("aside"),
-        viewersWrapper = document.createElement("span"),
-        viewersIcon   = document.createElement("span"),
-        viewers       = document.createElement("span"),
-        categoryWrapper = document.createElement("span"),
-        categoryIcon  = document.createElement("span"),
-        category      = document.createElement("span");
-    avatar.src        = getBestImageForSize(channel, 30);
-    thumbnail.src     = channel.thumbnail;
-    spanName.appendChild(name);
-    spanName.classList.add("name");
-    titleSpan.appendChild(title);
-    titleSpan.classList.add("title");
-    wrapper.appendChild(avatar);
-    wrapper.appendChild(spanName);
-    wrapper.appendChild(br);
-    wrapper.appendChild(titleSpan);
+        return channelNode;
+};
 
-    viewersWrapper.classList.add("viewersWrapper");
-    if(!channel.viewers && channel.viewers != 0)
-        viewersWrapper.classList.add("hidden");
-    viewersIcon.appendChild(document.createTextNode("v"));
-    viewersIcon.classList.add("icon");
-    viewersWrapper.appendChild(viewersIcon);
-    viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
-    viewers.classList.add("viewers");
-    viewers.appendChild(document.createTextNode(channel.viewers));
-    viewersWrapper.appendChild(viewers);
-    extra.appendChild(viewersWrapper);
-    extra.appendChild(document.createTextNode(" "));
-    categoryWrapper.classList.add("categoryWrapper");
-    if(!channel.category)
-        categoryWrapper.classList.add("hidden");
-    categoryIcon.appendChild(document.createTextNode("c"));
-    categoryIcon.classList.add("icon");
-    categoryWrapper.appendChild(categoryIcon);
-    categoryWrapper.appendChild(document.createTextNode("\u00a0"));
-    category.classList.add("category");
-    category.appendChild(document.createTextNode(channel.category));
-    categoryWrapper.appendChild(category);
-    extra.appendChild(categoryWrapper);
+var addChannel = (channel) => {
+    var channelNode = buildChannel(channel);
+    // hide the channel by if it's filtered out atm
+    if(!matches(channelNode, document.querySelector("#searchField").value, filters))
+        hide(channelNode);
 
-    wrapper.appendChild(extra);
-
-    link.appendChild(thumbnail);
-    link.appendChild(wrapper);
-    link.setAttribute("contextmenu", CONTEXTMENU_ID);
-    link.addEventListener("click", open.bind(null, channel.id));
-    channelNode.addEventListener("contextmenu", function(e) {
-        currentMenuTarget = e.currentTarget;
-        document.getElementById("contextOpen").disabled = e.currentTarget.parentNode.id == "offline";
-    });
-    channelNode.classList.add(channel.type);
-    channelNode.appendChild(link);
-    channelNode.id = CHANNEL_ID_PREFIX+channel.id;
     insertChannel(channel, channelNode);
     hideNoChannels();
     if(channel.live)
         hideNoOnline();
-}
+};
 
-function removeChannel(channelId) {
+var removeChannel = (channelId) => {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channelId);
-    if(channelNode.parentNode.id = "live" && live.childElementCount < 2) {
-        displayNoOnline();
-        self.port.emit("offline");
+    if("live" == channelNode.parentNode.id) {
+        self.port.emit("removedLive", channelId);
+        // Smaller two, since we remove the channel node after this, as we still
+        // needed its parent's id before.
+        if(live.childElementCount < 2) {
+            displayNoOnline();
+        }
     }
-    channelNode.remove();
-    if(live.childElementCount == 0 && offline.childElementCount == 0) {
-        displayNoChannels();
-    }
-    resize();
-}
 
-function updateNodeContent(channel) {
+    channelNode.remove();
+
+    if(live.childElementCount === 0 && offline.childElementCount === 0)
+        displayNoChannels();
+
+    resize();
+};
+
+var updateNodeContent = (channel) => {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
+        nameNode = channelNode.querySelector(".name"),
+        nameText = document.createTextNode(channel.uname),
         titleNode = channelNode.querySelector(".title"),
         titleText = document.createTextNode(channel.title),
         viewers = channelNode.querySelector(".viewers"),
         category = channelNode.querySelector(".category");
+
     titleNode.replaceChild(titleText, titleNode.firstChild);
-    
+    nameNode.replaceChild(nameText, nameNode.firstChild);
+
     viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
-    if(!channel.viewers && channel.viewers != 0)
-        channelNode.querySelector(".viewersWrapper").classList.add("hidden");
-    else
-        channelNode.querySelector(".viewersWrapper").classList.remove("hidden");
+    toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
+
     category.replaceChild(document.createTextNode(channel.category), category.firstChild);
-    if(!channel.category)
-        channelNode.querySelector(".categoryWrapper").classList.add("hidden");
-    else
-        channelNode.querySelector(".categoryWrapper").classList.remove("hidden");
+    toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
-    channelNode.querySelector("a>img").src = channel.thumbnail;
-    channelNode.querySelector("a div img").src = getBestImageForSize(channel, 30);
-}
+    // only update images if the user is online to avoid broken images
+    if(navigator.onLine) {
+        channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
+        channelNode.querySelector("a div img").srcset = Object.keys(channel.image)
+            .map((s) => channel.image[s] + " " + s + "w").join(",");
+    }
+};
 
-function makeChannelLive(channel) {
+var makeChannelLive = (channel) => {
     hideNoOnline();
     updateNodeContent(channel);
     if(!live.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
         insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
-}
+};
 
-function makeChannelOffline(channel) {
-    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
-    if(live.childElementCount == 0) {
-        self.port.emit("offline");
+var makeChannelOffline = (channel) => {
+    if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
+        insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    updateNodeContent(channel);
+    if(live.childElementCount === 0)
         displayNoOnline();
+};
+
+var getFeaturedChannels = (type) => {
+    displayLoading();
+    self.port.emit("explore", type);
+};
+
+var providerSearch = (type, query) => {
+    displayLoading();
+    self.port.emit("search", type, query);
+};
+
+var externalContextMenuAdd = (e) => {
+    self.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
+    currentMenuTarget = null;
+};
+
+var externalContextMenuLivestreamer = (e) => {
+    openUrl(currentMenuTarget.dataset.url, true);
+    currentMenuTarget = null;
+};
+
+var forwardEvent = (name, event) => {
+    event.preventDefault();
+    self.port.emit(name);
+};
+
+var applySearchToExplore = (exploreSelect, field) => {
+    if(field.hasAttribute("hidden") || field.value === "")
+        getFeaturedChannels(exploreSelect.value);
+    else
+        providerSearch(exploreSelect.value, field.value);
+};
+
+var hasOption = (provider) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    for(var o of providerDropdown.options) {
+        if(o.value == provider) {
+            return true;
+        }
     }
-}
+    return false;
+};
 
-function displayNoOnline() {
-    show(document.getElementById("noonline"));
-}
+var addExploreProviders = (exploreProviders) => {
+    var providerDropdown = document.getElementById("exploreprovider");
+    exploreProviders.forEach((p) => {
+        if(!hasOption(p)) {
+            providerDropdown.add(new Option(providers[p].name, p));
+        }
+    });
+    displayLoading();
+};
 
-function hideNoOnline() {
-    hide(document.getElementById("noonline"));
-}
+// Set up port commmunication listeners
+self.port.on("setStyle", setStyle);
+self.port.on("setExtras", setExtrasVisibility);
+self.port.on("addChannels", (channels) => channels.forEach(addChannel));
+self.port.on("removeChannel", removeChannel);
+self.port.on("setOnline", makeChannelLive);
+self.port.on("setOffline", makeChannelOffline);
+self.port.on("resize", resize);
+self.port.on("livestreamerExists", toggleLivestreamerItems);
 
-function hideNoChannels() {
-    hide(document.getElementById("nochannels"));
-}
+self.port.on("setProviders", (prvdrs) => {
+    providers = prvdrs;
+    addExploreProviders(
+        Object.keys(providers)
+        .filter((p) => providers[p].supports.featured)
+    );
+});
 
-function displayNoChannels() {
-    displayNoOnline();
-    show(document.getElementById("nochannels"));
-}
+self.port.on("setFeatured", (channels, type, q) => {
+    if(type !== document.getElementById("exploreprovider").value ||
+       (q !== null &&
+        document.getElementById("searchField").value != q)
+    )
+        return;
 
-function hide(el) {
-    el.classList.add("hidden");
-}
+    while(explore.hasChildNodes())
+        explore.firstChild.remove();
 
-function show(el) {
-    el.classList.remove("hidden");
-}
+    if(channels.length === 0) {
+        show(document.getElementById("noresults"));
+    }
+    else {
+        hide(document.getElementById("noresults"));
+        channels.forEach((channel) => {
+            explore.appendChild(buildChannel(channel, true));
+        });
+    }
 
+    hideLoading();
+    resize();
+});
+
+// Set up DOM listeners and all that.
+//window.addEventListener("load", function() {
+    live = document.getElementById("live");
+    offline = document.getElementById("offline");
+    explore = document.getElementById("featured");
+    var exploreSelect = document.getElementById("exploreprovider");
+    var field = document.querySelector("#searchField");
+
+    setStyle(self.options.style);
+    setExtrasVisibility(self.options.extras);
+    toggleLivestreamerItems(self.options.livestreamer);
+    resize();
+
+    document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
+    document.getElementById("refreshButton").addEventListener("click", function(e) {
+        forwardEvent("refresh", e);
+        if(!explore.parentNode.hasAttribute("hidden"))
+            getFeaturedChannels(exploreSelect.value);
+    });
+    document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
+    document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
+    document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
+    document.getElementById("contextLivestreamer").addEventListener("click", contextMenuCommand.bind(null, "openLivestreamer"));
+    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
+    document.getElementById("contextExploreLivestreamer").addEventListener("click", externalContextMenuLivestreamer);
+    document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
+        if(e.detail === 3)
+            applySearchToExplore(exploreSelect, field);
+
+        resize();
+    });
+    exploreSelect.addEventListener("change", () => {
+        applySearchToExplore(exploreSelect, field);
+    });
+    document.querySelector("#searchButton").addEventListener("click", (e) => {
+        e.preventDefault();
+        if(field.hasAttribute("hidden")) {
+            show(field);
+            field.focus();
+            e.target.setAttribute("aria-pressed", "true");
+        }
+        else {
+            hide(field);
+            field.value = "";
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
+            e.target.setAttribute("aria-pressed", "false");
+            field.blur();
+
+            if(!explore.parentNode.hasAttribute("hidden"))
+                applySearchToExplore(exploreSelect, field);
+        }
+        resize();
+    });
+    field.addEventListener("keyup", (e) => {
+        filter(field.value, live, filters);
+        filter(field.value, offline, filters);
+        if(!explore.parentNode.hasAttribute("hidden"))
+            applySearchToExplore(exploreSelect, field);
+        else
+            resize();
+    });
+
+    self.port.emit("ready");
+//});
