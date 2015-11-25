@@ -32,8 +32,6 @@ const filters = [
         subtarget: ".category"
     }
 ];
-const SVG_NS = "http://www.w3.org/2000/svg";
-const XLINK_NS = "http://www.w3.org/1999/xlink";
 
 var toggle = (node, condition) => {
     if(condition)
@@ -159,17 +157,17 @@ var buildChannel = (channel, unspecific = false) => {
                     <span class="title hide-offline">ChannelTitle</span>
                     <aside>
                         <span class="viewersWrapper hide-offline">
-                             <svg class="icon">
+                             <svg class="icon" viewBox="0 0 8 8">
                                  <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
                              </svg>&nbsp;<span class="viewers">0</span>&sp;
                         </span>
                         <span class="categoryWrapper hide-offline">
-                             <svg class="icon">
+                             <svg class="icon" viewBox="0 0 8 8">
                                  <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
                              </svg>&nbsp;<span class="category">Category</span>&sp;
                         </span>
                         <span class="providerWrapper">
-                             <svg class="icon">
+                             <svg class="icon" viewBox="0 0 8 8">
                                  <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
                              </svg>&nbsp;<span class="provider">Provider</span>
                         </span>
@@ -190,17 +188,8 @@ var buildChannel = (channel, unspecific = false) => {
             wrapper       = document.createElement("div"),
             extra         = document.createElement("aside"),
             viewersWrapper = document.createElement("span"),
-            viewersIcon = document.createElement("svg"),
-            viewersUse = document.createElementNS(SVG_NS, "use"),
-            viewers       = document.createElement("span"),
             categoryWrapper = document.createElement("span"),
-            categoryIcon = document.createElement("svg"),
-            categoryUse = document.createElementNS(SVG_NS, "use"),
-            category      = document.createElement("span"),
-            providerWrapper = document.createElement("span"),
-            providerIcon = document.createElement("svg"),
-            providerUse = document.createElementNS(SVG_NS, "use"),
-            provider = document.createElement("span");
+            providerWrapper = document.createElement("span");
         avatar.sizes = "30w";
         avatar.srcset = Object.keys(channel.image)
             .map((s) => channel.image[s] + " " + s + "w").join(",");
@@ -219,42 +208,28 @@ var buildChannel = (channel, unspecific = false) => {
         viewersWrapper.classList.add("hide-offline");
         if(!("viewers" in channel) || channel.viewers < 0)
             hide(viewersWrapper);
-        viewersUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#eye");
-        viewersIcon.appendChild(viewersUse);
-        viewersIcon.setAttribute("viewBox", "0 0 8 8");
-        viewersIcon.classList.add("icon");
-        viewersWrapper.appendChild(viewersIcon);
-        viewersWrapper.appendChild(document.createTextNode("\u00a0")); // &nbsp;
-        viewers.classList.add("viewers");
-        viewers.appendChild(document.createTextNode(channel.viewers));
-        viewersWrapper.appendChild(viewers);
-        viewersWrapper.appendChild(document.createTextNode(" "));
+        viewersWrapper.insertAdjacentHTML("afterbegin",
+`<svg class="icon" viewBox="0 0 8 8">
+   <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
+</svg>&nbsp;<span class="viewers">Category</span> `);
+        viewersWrapper.querySelector(".viewers").textContent = channel.viewers;
         extra.appendChild(viewersWrapper);
         categoryWrapper.classList.add("categoryWrapper");
         categoryWrapper.classList.add("hide-offline");
         if(!channel.category)
             hide(categoryWrapper);
-        categoryUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#tag");
-        categoryIcon.appendChild(categoryUse);
-        categoryIcon.setAttribute("viewBox", "0 0 8 8");
-        categoryIcon.classList.add("icon");
-        categoryWrapper.appendChild(categoryIcon);
-        categoryWrapper.appendChild(document.createTextNode("\u00a0"));
-        category.classList.add("category");
-        category.appendChild(document.createTextNode(channel.category));
-        categoryWrapper.appendChild(category);
-        categoryWrapper.appendChild(document.createTextNode(" "));
+        categoryWrapper.insertAdjacentHTML("afterbegin",
+`<svg class="icon" viewBox="0 0 8 8">
+    <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
+</svg>&nbsp;<span class="category">0</span> `);
+        categoryWrapper.querySelector(".category").textContent = channel.category;
         extra.appendChild(categoryWrapper);
         providerWrapper.classList.add("providerWrapper");
-        providerUse.setAttributeNS(XLINK_NS, "href", "sprite/open-iconic.min.svg#hard-drive");
-        providerIcon.appendChild(categoryUse);
-        providerIcon.setAttribute("viewBox", "0 0 8 8");
-        providerIcon.classList.add("icon");
-        providerWrapper.appendChild(providerIcon);
-        providerWrapper.appendChild(document.createTextNode("\u00a0"));
-        provider.classList.add("provider");
-        provider.appendChild(document.createTextNode(providers[channel.type].name));
-        providerWrapper.appendChild(provider);
+        providerWrapper.insertAdjacentHTML("afterbegin",
+`<svg class="icon" viewBox="0 0 8 8">
+    <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
+</svg>&nbsp;<span class="provider">Provider</span> `);
+        providerWrapper.querySelector(".provider").textContent = providers[channel.type].name;
         extra.appendChild(providerWrapper);
 
         wrapper.appendChild(extra);
