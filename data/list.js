@@ -231,19 +231,17 @@ var removeChannel = (channelId) => {
 var updateNodeContent = (channel) => {
     var channelNode = document.getElementById(CHANNEL_ID_PREFIX+channel.id),
         nameNode = channelNode.querySelector(".name"),
-        nameText = document.createTextNode(channel.uname),
         titleNode = channelNode.querySelector(".title"),
-        titleText = document.createTextNode(channel.title),
         viewers = channelNode.querySelector(".viewers"),
         category = channelNode.querySelector(".category");
 
-    titleNode.replaceChild(titleText, titleNode.firstChild);
-    nameNode.replaceChild(nameText, nameNode.firstChild);
+    titleNode.textContent = channel.title;
+    nameNode.textContent = channel.uname;
 
-    viewers.replaceChild(document.createTextNode(channel.viewers), viewers.firstChild);
+    viewers.textContent = channel.viewers;
     toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
 
-    category.replaceChild(document.createTextNode(channel.category), category.firstChild);
+    category.textContent = channel.category;
     toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
     // only update images if the user is online to avoid broken images
