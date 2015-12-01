@@ -8,6 +8,7 @@ var { RequestQueue } = requireHelper('../lib/queue');
 const { PauseableQueue } = requireHelper('../lib/queue/pauseable');
 const { UpdateQueue } = requireHelper('../lib/queue/update');
 const { setTimeout } = require("sdk/timers");
+const { when } = require("sdk/event/utils");
 
 exports.testIntervalPauseResume = function(assert, done) {
     let queue = new UpdateQueue();
@@ -190,6 +191,18 @@ exports['test adding new request to queue'] = function(assert) {
     var i = q.addRequest({});
     assert.equal(i,q.queue[0].id);
     assert.equal(typeof(q.queue[0]),'object');
+};
+
+exports['test pauseable queue events'] = function*(assert) {
+    let q = new PauseableQueue();
+    q.autoFetch(25, 0.5, 2);
+    let p = when(q, "pause");
+    q.pause();
+    yield p;
+    
+    p = when(q, "resume");
+    q.resume();
+    yield p;
 };
 
 require("sdk/test").run(exports);

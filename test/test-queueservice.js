@@ -137,18 +137,50 @@ exports.testQueueEvents = function(assert, done) {
         listener = function() {
             if(++count == 4) {
                 assert.pass("All "+count+" listeners called");
-                QueueService.removeQueueListeners(listener, listener);
+                QueueService.removeQueueListeners({
+                    containsPriorized: listener,
+                    priorizedLoaded: listener
+                });
                 done();
             }
             else {
-
                 assert.pass("Listener number "+count+" called");
             }
             // for requeue.
             return false;
         };
-    QueueService.addQueueListeners(listener, listener);
+    QueueService.addQueueListeners({
+        containsPriorized: listener,
+        priorizedLoaded: listener
+    });
     service.queueRequest("http://example.com", {}, listener).then(listener);
+};
+
+exports.testQueuePauseResume = function(assert, done) {
+    let count = 0,
+        listener1 = () => {
+        if(++count == 2) {
+            QueueService.removeQueueListeners({
+                paused: listener1,
+                resumed: listener1
+            });
+            QueueService.pause();
+            done();
+        }
+        else if(count == 1) {
+            QueueService.resume();
+        }
+        else {
+            assert.fail("Should not have been called after listener is removed");
+        }
+    };
+    QueueService.setQueueOptions({
+        interval: 25,
+        amount: 0.5,
+        maxSize: 2
+    });
+    QueueService.addQueueListeners({ paused: listener1, resumed: listener1 });
+    QueueService.pause();
 };
 
 require("sdk/test").run(exports);

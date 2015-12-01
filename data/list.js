@@ -319,6 +319,11 @@ var addExploreProviders = (exploreProviders) => {
     displayLoading();
 };
 
+var toggleQueueContextItems = (queuePaused) => {
+    toggle(document.getElementById("pauseAutorefresh"), !queuePaused);
+    toggle(document.getElementById("resumeAutorefresh"), queuePaused);
+};
+
 // Set up port commmunication listeners
 addon.port.on("setStyle", setStyle);
 addon.port.on("setExtras", setExtrasVisibility);
@@ -328,6 +333,21 @@ addon.port.on("setOnline", makeChannelLive);
 addon.port.on("setOffline", makeChannelOffline);
 addon.port.on("resize", resize);
 addon.port.on("livestreamerExists", toggleLivestreamerItems);
+addon.port.on("queuePaused", (paused) => {
+    toggleQueueContextItems(paused);
+    document.getElementById("refreshButton").classList.toggle("running", !paused);
+});
+
+// Queue autorefresh is enabled/disabled in the settings
+addon.port.on("queueStatus", (enabled) => {
+    var button = document.getElementById("refreshButton");
+    if(enabled)
+        button.setAttribute("contextmenu", "queue-context");
+    else
+        button.removeAttribute("contextmenu");
+
+    button.classList.toggle("running", enabled);
+});
 
 addon.port.on("setProviders", (prvdrs) => {
     providers = prvdrs;
@@ -380,21 +400,23 @@ window.addEventListener("load", function() {
         if(!explore.parentNode.hasAttribute("hidden"))
             getFeaturedChannels(exploreSelect.value);
     });
-    document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"));
-    document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"));
-    document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"));
-    document.getElementById("contextLivestreamer").addEventListener("click", contextMenuCommand.bind(null, "openLivestreamer"));
-    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd);
-    document.getElementById("contextExploreLivestreamer").addEventListener("click", externalContextMenuLivestreamer);
+    document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"), false);
+    document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"), false);
+    document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"), false);
+    document.getElementById("contextLivestreamer").addEventListener("click", contextMenuCommand.bind(null, "openLivestreamer"), false);
+    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd, false);
+    document.getElementById("contextExploreLivestreamer").addEventListener("click", externalContextMenuLivestreamer, false);
+    document.getElementById("pauseAutorefresh").addEventListener("click", () => addon.port.emit("pause"), false);
+    document.getElementById("resumeAutorefresh").addEventListener("click", () => addon.port.emit("resume"), false);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
         if(e.detail === 3)
             applySearchToExplore(exploreSelect, field);
 
         resize();
-    });
+    }, false);
     exploreSelect.addEventListener("change", () => {
         applySearchToExplore(exploreSelect, field);
-    });
+    }, false);
     document.querySelector("#searchButton").addEventListener("click", (e) => {
         e.preventDefault();
         if(field.hasAttribute("hidden")) {
@@ -414,7 +436,7 @@ window.addEventListener("load", function() {
                 applySearchToExplore(exploreSelect, field);
         }
         resize();
-    });
+    }, false);
     field.addEventListener("keyup", (e) => {
         filter(field.value, live, filters);
         filter(field.value, offline, filters);
@@ -422,7 +444,7 @@ window.addEventListener("load", function() {
             applySearchToExplore(exploreSelect, field);
         else
             resize();
-    });
+    }, false);
 
     addon.port.emit("ready");
 });
