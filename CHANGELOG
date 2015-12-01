@@ -131,3 +131,10 @@ changelog
     - Add Streamup support
     - Add provider name to extra info
     - Delete all channels a user follows by holding shift when removing it
+    - Improve UStream provider
+    - Now tries to recover from a corrupt database and informs the user about steps to take
+    - Fix channels manager sometimes not working after refreshing
+    - Respects parental control settings
+    - Adding dialog in the channels manager now stays open until the requested user or channel has been added. Canceling cancels the action.
+    - Switched from an icon font to SVGs
+    - Refresh button now indicates if the background update queue is running and you can temporarily pause it
