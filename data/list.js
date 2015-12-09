@@ -149,9 +149,9 @@ var buildChannel = (channel, unspecific = false) => {
     var channelNode   = document.createElement("li");
     channelNode.insertAdjacentHTML("beforeend",
 `<a href="javascript:void" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
-    <img src="${channel.thumbnail}">
+    <img src="">
     <div>
-        <img srcset="${Object.keys(channel.image).map((s) => channel.image[s] + " " + s + "w").join(",")}" sizes="30w">
+        <img srcset="" sizes="30w">
         <span class="name"></span><br>
         <span class="title hide-offline"></span>
         <aside>
@@ -173,6 +173,8 @@ var buildChannel = (channel, unspecific = false) => {
         </aside>
     </div>
 </a>`);
+    channelNode.querySelector("div img").setAttribute("srcset", Object.keys(channel.image).map((s) => channel.image[s] + " " + s + "w").join(","));
+    channelNode.querySelector("a > img").setAttribute("src", channel.thumbnail);
     channelNode.querySelector(".name").textContent = channel.uname;
     channelNode.querySelector(".title").textContent = channel.title;
     if(!("viewers" in channel) || channel.viewers < 0)
