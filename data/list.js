@@ -424,14 +424,14 @@ window.addEventListener("load", function() {
         if(field.hasAttribute("hidden")) {
             show(field);
             field.focus();
-            e.target.setAttribute("aria-pressed", "true");
+            e.currentTarget.setAttribute("aria-pressed", "true");
         }
         else {
             hide(field);
             field.value = "";
             filter(field.value, live, filters);
             filter(field.value, offline, filters);
-            e.target.setAttribute("aria-pressed", "false");
+            e.currentTarget.setAttribute("aria-pressed", "false");
             field.blur();
 
             if(!explore.parentNode.hasAttribute("hidden"))
