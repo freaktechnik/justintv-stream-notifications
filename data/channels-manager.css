@@ -156,6 +156,10 @@ main {
     margin: .2em;
 }
 
+#popup #loadingWrapper {
+    text-align: center;
+}
+
 #popup button[type="button"] {
     font-size: initial;
     border: none;

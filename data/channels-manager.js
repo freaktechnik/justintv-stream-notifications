@@ -215,6 +215,7 @@ function hideDialog() {
 
 function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
+    hide(popup.querySelector("#loadingWrapper"));
     hideError();
 }
 
@@ -263,6 +264,7 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
     let field = popup.querySelector("#channelNameField");
     hideError();
+    show(popup.querySelector("#loadingWrapper"));
     if(field.value.length > 0) {
         if(popup.querySelector("#channelRadio").checked)
             self.port.emit("addchannel", field.value, popup.querySelector("#providerDropdown").value);
