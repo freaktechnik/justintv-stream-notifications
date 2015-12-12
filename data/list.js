@@ -312,13 +312,16 @@ var hasOption = (provider) => {
 };
 
 var addExploreProviders = (exploreProviders) => {
-    var providerDropdown = document.getElementById("exploreprovider");
-    exploreProviders.forEach((p) => {
-        if(!hasOption(p)) {
-            providerDropdown.add(new Option(providers[p].name, p));
-        }
-    });
-    displayLoading();
+    if(exploreProviders.length > 0) {
+        show(document.getElementById("exploreTab"));
+        var providerDropdown = document.getElementById("exploreprovider");
+        exploreProviders.forEach((p) => {
+            if(!hasOption(p)) {
+                providerDropdown.add(new Option(providers[p].name, p));
+            }
+        });
+        displayLoading();
+    }
 };
 
 var toggleQueueContextItems = (queuePaused) => {
