@@ -31,12 +31,12 @@ exports.testIntervalPauseResume = function(assert, done) {
         else {
             assert.equal(count, 1);
             assert.ok(!paused);
-            QueueService.updateQueueOptions(0);
+            QueueService.updateOptions(0);
             service.unqueueUpdateRequest(service.HIGH_PRIORITY);
             done();
         }
     });
-    QueueService.setQueueOptions({
+    QueueService.setOptions({
         interval: 700,
         amount: 1,
         maxSize: 1
@@ -52,10 +52,10 @@ exports.testUpdateRequestRequeue = function(assert, done) {
     service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
         assert.equal(count, 2);
         service.unqueueUpdateRequest();
-        QueueService.updateQueueOptions(0);
+        QueueService.updateOptions(0);
         done();
     }, {}, () => ++count < 2);
-    QueueService.setQueueOptions({
+    QueueService.setOptions({
         interval: 700,
         amount: 1,
         maxSize: 1
@@ -70,10 +70,10 @@ exports.testRequeue = function(assert, done) {
         .then((d) => assert.fail(d))
         .catch(() => {
             assert.equal(count, prefs.queueservice_maxRetries + 1);
-            QueueService.updateQueueOptions(0);
+            QueueService.updateOptions(0);
             done();
         });
-    QueueService.setQueueOptions({
+    QueueService.setOptions({
         interval: 70,
         amount: 1,
         maxSize: 1
@@ -137,7 +137,7 @@ exports.testQueueEvents = function(assert, done) {
         listener = function() {
             if(++count == 4) {
                 assert.pass("All "+count+" listeners called");
-                QueueService.removeQueueListeners({
+                QueueService.removeListeners({
                     containsPriorized: listener,
                     priorizedLoaded: listener
                 });
@@ -149,7 +149,7 @@ exports.testQueueEvents = function(assert, done) {
             // for requeue.
             return false;
         };
-    QueueService.addQueueListeners({
+    QueueService.addListeners({
         containsPriorized: listener,
         priorizedLoaded: listener
     });
@@ -160,7 +160,7 @@ exports.testQueuePauseResume = function(assert, done) {
     let count = 0,
         listener1 = () => {
         if(++count == 2) {
-            QueueService.removeQueueListeners({
+            QueueService.removeListeners({
                 paused: listener1,
                 resumed: listener1
             });
@@ -174,12 +174,12 @@ exports.testQueuePauseResume = function(assert, done) {
             assert.fail("Should not have been called after listener is removed");
         }
     };
-    QueueService.setQueueOptions({
+    QueueService.setOptions({
         interval: 25,
         amount: 0.5,
         maxSize: 2
     });
-    QueueService.addQueueListeners({ paused: listener1, resumed: listener1 });
+    QueueService.addListeners({ paused: listener1, resumed: listener1 });
     QueueService.pause();
 };
 
