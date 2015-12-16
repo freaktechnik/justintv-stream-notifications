@@ -2,7 +2,7 @@ sudo: false
 language: node_js
 node_js: stable
 addons:
-  firefox: latest-beta
+  firefox: latest
 env:
   global:
   - DISPLAY=:99.0
