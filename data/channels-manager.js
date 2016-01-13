@@ -5,6 +5,7 @@
  *
  * Channels Manager content script
  */
+//TODO clicking ok twice shows error panel -> ok sent while loading?
 
 /* global self */
 /* global unsafeWindow */
@@ -262,6 +263,8 @@ popup.querySelector("#providerDropdown").addEventListener("change", hideError, f
 
 popup.querySelector("form").addEventListener("submit", function(evt) {
     evt.preventDefault();
+    if(!popup.querySelector("#loadingWrapper").hidden)
+        return;
     let field = popup.querySelector("#channelNameField");
     hideError();
     show(popup.querySelector("#loadingWrapper"));

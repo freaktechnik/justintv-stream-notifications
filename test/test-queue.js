@@ -193,6 +193,21 @@ exports['test adding new request to queue'] = function(assert) {
     assert.equal(typeof(q.queue[0]),'object');
 };
 
+exports['test pauseable queue paused porperty'] = function(assert) {
+    var q = new PauseableQueue();
+    assert.ok(q.paused);
+    
+    q.autoFetch(25, 0.5, 2);
+    
+    assert.ok(!q.paused);
+    
+    q.pause();
+    assert.ok(q.paused);
+    
+    q.resume();
+    assert.ok(!q.paused);
+};
+
 exports['test pauseable queue events'] = function*(assert) {
     let q = new PauseableQueue();
     q.autoFetch(25, 0.5, 2);
