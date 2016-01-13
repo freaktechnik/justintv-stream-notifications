@@ -105,6 +105,36 @@
             ]
         }
     },
+    "douyutv": {
+        "http://www.douyutv.com/api/client/room/test": {
+            "error": 0,
+            "data": {
+                "room_id": "test",
+                "room_src": "",
+                "room_name": "test",
+                "show_status": "2",
+                "subject": "",
+                "game_name": "",
+                "online": 0,
+                "owner_avatar": "",
+                "url": "/test"
+            }
+        },
+        "http://www.douyutv.com/api/client/room/live": {
+            "error": 0,
+            "data": {
+                "room_id": "live",
+                "room_src": "",
+                "room_name": "live",
+                "show_status": "1",
+                "subject": "",
+                "game_name": "",
+                "online": 0,
+                "owner_avatar": "",
+                "url": "/live"
+            }
+        }
+    },
     "hitbox": {
         "http://api.hitbox.tv/media/live/test": {
             "livestream": [
