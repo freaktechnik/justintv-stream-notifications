@@ -390,6 +390,7 @@ function hasUser(userId) {
 }
 
 function showError(msg) {
+    hide(popup.querySelector("#loadingWrapper"));
     document.getElementById("channelNameField").setCustomValidity(msg);
     popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
 }
