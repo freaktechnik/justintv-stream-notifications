@@ -58,7 +58,7 @@ strings, [like in the channels manager](/help/channels-manager#find-a-certain-it
 just that it searches in all potentially displayed information - even in the
 extras when they're hidden.
 
-## The explore tab
+## The <samp>Explore</samp> tab
 The panel's third tab is a special tab with content that is not controlled by
 the user, but the selected provider. There is a drop-down to switch between
 provider.
