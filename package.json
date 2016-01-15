@@ -206,9 +206,9 @@
       "hidden": true
     }
   ],
-  "homepage": "http://jtvn.humanoids.be/",
+  "homepage": "http://streamnotifier.ch/",
   "description": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
-  "author": "freaktechnik (http://humanoids.be)",
+  "author": "freaktechnik (https://humanoids.be)",
   "translators": [
     "manueljrs",
     "alan2loin"
