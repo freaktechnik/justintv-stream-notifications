@@ -13,7 +13,7 @@ const { when } = require("sdk/event/utils");
 exports["test existance event"] = function*(assert) {
     let p = when(livestreamer.events, "existance");
     prefs.livestreamer_enabled = true;
-    yield p;
+    assert.equal((yield p), false);
     p = when(livestreamer.events, "existance");
     prefs.livestreamer_enabled = false;
     yield p;
@@ -24,10 +24,11 @@ exports["test existance event"] = function*(assert) {
 };
 
 exports["test show property"] = (assert) => {
+    const initialShow = livestreamer.show;
     prefs.livestreamer_enabled = true;
     assert.ok(!livestreamer.show);
     prefs.livestreamer_enabled = false;
-    // Can't test for this, since we don't require a livestreamer for unit tests.
+    assert.equal(initialShow, livestreamer.show);
 };
 
 exports["test default property"] = (assert) => {
@@ -43,18 +44,58 @@ exports["test event object interface"] = (assert) => {
     assert.equal(typeof livestreamer.events.on, "function");
 };
 
-exports["test launch livestreamer"] = function*(assert) {
-    let code = yield livestreamer.launch("http://example.com");
+exports["test launch livestreamer that doesn't exist"] = function*(assert) {
+    const initialPath = prefs.livestreamer_path;
+
+    const p = when(livestreamer.events, "existance");
+    prefs.livestreamer_path = "/does/not/exist";
+    const code = yield livestreamer.launch("http://example.com");
     assert.equal(code, 1);
+
+    prefs.livestreamer_path = initialPath;
+};
+
+exports["test launch livestreamer"] = function*(assert) {
+    const initialQuality = prefs.livestreamer_quality;
+    const initialFallbackQuality = prefs.livestreamer_fallbackQuality;
+
+    prefs.livestreamer_quality = "worst";
+    prefs.livestreamer_fallbackQuality = "best";
+
+    let counter = 0;
+    const listener = () => ++counter;
+    livestreamer.events.on("launch", listener);
+    const code = yield livestreamer.launch("http://example.com");
+    assert.equal(code, 1, "Launch failed");
+    assert.equal(counter, 2, "Launched exactly twice");
+
+    prefs.livestreamer_quality = initialQuality;
+    prefs.livestreamer_fallbackQuality = initialFallbackQuality;
+    livestreamer.events.off("launch", listener);
+};
+
+exports["test launch livestreamer with two equal presets"] = function*(assert) {
+    const initialQuality = prefs.livestreamer_quality;
+    prefs.livestreamer_quality = prefs.livestreamer_fallbackQuality;
+
+    let counter = 0;
+    const listener = () => ++counter;
+    livestreamer.events.on("launch", listener);
+    const code = yield livestreamer.launch("http://example.com");
+    assert.equal(code, 1, "Exit code holds failed");
+    assert.equal(counter, 1, "Only launched once");
+
+    prefs.livestreamer_quality = initialQuality;
+    livestreamer.events.off("launch", listener);
 };
 
 exports["test launch livestreamer with extra arguments"] = function*(assert) {
     prefs.livestreamer_player = "vlc";
     prefs.livestreamer_extraArguments = "--help";
-    
-    let code = yield livestreamer.launch("http://example.com");
+
+    const code = yield livestreamer.launch("http://example.com");
     assert.equal(code, 1);
-    
+
     prefs.livestreamer_extraArguments = "";
     prefs.livestreamer_placer = "";
 };
