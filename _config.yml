@@ -6,7 +6,7 @@ description: > # this means to ignore newlines until "baseurl:"
   followed Streamer goes live. It features advanced control over the channels
   it monitors and a panel for quick access to those channels.
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://jtvn.humanoids.be" # the base hostname & protocol for your site
+url: "http://streamnotifier.ch" # the base hostname & protocol for your site
 twitter_username: freaktechnik
 github_username:  freaktechnik/justintv-stream-notifications
 amo_slug: justintv-stream-notificatio
