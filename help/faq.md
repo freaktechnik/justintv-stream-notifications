@@ -23,7 +23,7 @@ See the [about:config setting](/aboutconfig/) `twitch_showHosting`. The page als
 
 When I add a channel, it doesn't add the channel but a lot of other channels
 ----------------------------------------------------------------------------
-See [Adding a singe channel](channels-manager/#adding-a-singe-channel).
+See [Adding a singe channel](/help/channels-manager/#adding-a-singe-channel).
 
 I can't find a setting for something important
 -----------------------------------------
