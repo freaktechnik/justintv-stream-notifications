@@ -432,14 +432,22 @@ exports['test channel offline setting'] = function(assert, done) {
     };
 };
 
+exports['test set channel with new login'] = function*(assert) {
+    const channel = yield SHARED.list.addChannel(getChannel());
+    const sameChannel = getChannel("newlogin", channel.type, channel.id);
+    const newChannel = yield SHARED.list.setChannel(channel);
+    assert.equal(newChannel.id, channel.id);
+    assert.equal(newChannel.login, channel.login);
+};
+
 before(exports, (name, assert, done) => {
-    let channels = [
+    const channels = [
         getChannel('foo', 'extra'),
         getChannel('bar', 'extra'),
         getChannel('lorem', 'extra'),
         getChannel('ipsum', 'extra')
     ];
-    let users = [
+    const users = [
         getUser('foo', 'extra'),
         getUser('bar', 'extra')
     ];

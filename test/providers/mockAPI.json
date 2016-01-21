@@ -571,6 +571,169 @@
                     }
                 }
             ]
+        },
+        "https://api.twitch.tv/kraken/streams/mlg_live": {
+            "stream": null
+        },
+        "https://api.twitch.tv/kraken/channels/mlg_live": {
+            "mature":false,
+            "status":"CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
+            "broadcaster_language":"en",
+            "display_name":"MLG",
+            "game":"Counter-Strike: Global Offensive",
+            "language":"en",
+            "_id":22212874,
+            "name":"mlg",
+            "created_at":"2011-05-05T02:47:23Z",
+            "updated_at":"2016-01-21T13:17:16Z",
+            "delay":null,
+            "logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
+            "banner":null,
+            "video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
+            "background":null,
+            "profile_banner":null,
+            "profile_banner_background_color":null,
+            "partner":true,
+            "url":"http://www.twitch.tv/mlg",
+            "views":5729858,
+            "followers":58522,
+            "_links": {
+                "self":"https://api.twitch.tv/kraken/channels/mlg",
+                "follows":"https://api.twitch.tv/kraken/channels/mlg/follows",
+                "commercial":"https://api.twitch.tv/kraken/channels/mlg/commercial",
+                "stream_key":"https://api.twitch.tv/kraken/channels/mlg/stream_key",
+                "chat":"https://api.twitch.tv/kraken/chat/mlg",
+                "features":"https://api.twitch.tv/kraken/channels/mlg/features",
+                "subscriptions":"https://api.twitch.tv/kraken/channels/mlg/subscriptions",
+                "editors":"https://api.twitch.tv/kraken/channels/mlg/editors",
+                "teams":"https://api.twitch.tv/kraken/channels/mlg/teams",
+                "videos":"https://api.twitch.tv/kraken/channels/mlg/videos"
+            }
+        },
+        "http://tmi.twitch.tv/hosts?include_logins=1&host=22212874": {
+            "hosts": [
+                {
+                    "host_id": 22212874,
+                    "host_login": "mlg"
+                }
+            ]
+        },
+        "https://api.twitch.tv/kraken/channels/mlg": {
+            "mature":false,
+            "status":"CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
+            "broadcaster_language":"en",
+            "display_name":"MLG",
+            "game":"Counter-Strike: Global Offensive",
+            "language":"en",
+            "_id":22212874,
+            "name":"mlg",
+            "created_at":"2011-05-05T02:47:23Z",
+            "updated_at":"2016-01-21T13:17:16Z",
+            "delay":null,
+            "logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
+            "banner":null,
+            "video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
+            "background":null,
+            "profile_banner":null,
+            "profile_banner_background_color":null,
+            "partner":true,
+            "url":"http://www.twitch.tv/mlg",
+            "views":5729858,
+            "followers":58522,
+            "_links": {
+                "self":"https://api.twitch.tv/kraken/channels/mlg",
+                "follows":"https://api.twitch.tv/kraken/channels/mlg/follows",
+                "commercial":"https://api.twitch.tv/kraken/channels/mlg/commercial",
+                "stream_key":"https://api.twitch.tv/kraken/channels/mlg/stream_key",
+                "chat":"https://api.twitch.tv/kraken/chat/mlg",
+                "features":"https://api.twitch.tv/kraken/channels/mlg/features",
+                "subscriptions":"https://api.twitch.tv/kraken/channels/mlg/subscriptions",
+                "editors":"https://api.twitch.tv/kraken/channels/mlg/editors",
+                "teams":"https://api.twitch.tv/kraken/channels/mlg/teams",
+                "videos":"https://api.twitch.tv/kraken/channels/mlg/videos"
+            }
+        },
+        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=live&limit=100&offset=0": {
+            "streams": [
+                {
+                    "channel": {
+                        "mature": false,
+                        "status": "CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
+                        "broadcaster_language": "en",
+                        "display_name": "MLG",
+                        "game": "Counter-Strike: Global Offensive",
+                        "language": "en",
+                        "_id": 22212874,
+                        "name": "mlg",
+                        "created_at": "2011-05-05T02:47:23Z",
+                        "updated_at": "2016-01-21T13:17:16Z",
+                        "delay": null,
+                        "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
+                        "banner": null,
+                        "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
+                        "background": null,
+                        "profile_banner": null,
+                        "profile_banner_background_color": null,
+                        "partner": true,
+                        "url": "http://www.twitch.tv/mlg",
+                        "views": 5729858,
+                        "followers": 58522
+                    },
+                    "viewers": 5006,
+                    "preview": {
+                        "medium": "https://example.com/"
+                    }
+                }
+            ],
+            "_total":1,
+            "_links": {
+                "self":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=0",
+                "next":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=25",
+                "featured":"https://api.twitch.tv/kraken/streams/featured",
+                "summary":"https://api.twitch.tv/kraken/streams/summary",
+                "followed":"https://api.twitch.tv/kraken/streams/followed"
+            }
+        },
+        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=all&limit=100&offset=0": {
+            "streams": [
+                {
+                    "channel": {
+                        "mature": false,
+                        "status": "CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
+                        "broadcaster_language": "en",
+                        "display_name": "MLG",
+                        "game": "Counter-Strike: Global Offensive",
+                        "language": "en",
+                        "_id": 22212874,
+                        "name": "mlg",
+                        "created_at": "2011-05-05T02:47:23Z",
+                        "updated_at": "2016-01-21T13:17:16Z",
+                        "delay": null,
+                        "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
+                        "banner": null,
+                        "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
+                        "background": null,
+                        "profile_banner": null,
+                        "profile_banner_background_color": null,
+                        "partner": true,
+                        "url": "http://www.twitch.tv/mlg",
+                        "views": 5729858,
+                        "followers": 58522
+                    },
+                    "viewers": 5006,
+                    "preview": {
+                        "medium": "https://example.com/"
+                    }
+                }
+            ],
+            "_total":1,
+            "_links": {
+                "self":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=0",
+                "next":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=25",
+                "featured":"https://api.twitch.tv/kraken/streams/featured",
+                "summary":"https://api.twitch.tv/kraken/streams/summary",
+                "followed":"https://api.twitch.tv/kraken/streams/followed"
+            }
         }
     },
     "beam": {

@@ -261,6 +261,9 @@ exports.testMockAPIRequests = function*(assert) {
             assert.equal(live.type, p);
             assert.ok(live.live, "Live channel is live after update with " + p);
 
+            ret.id = 1;
+            live.id = 2;
+
             ret = yield provider.updateChannels([ret, live]);
             assert.equal(ret.length, 2);
             ret.forEach((chan) => {
@@ -304,6 +307,60 @@ exports.testMockAPIRequests = function*(assert) {
         }
     }
     //TODO test favorites
+};
+
+exports.testTwitchHostingRedirects = function*(assert) {
+    const provider = providers.twitch;
+    const originalQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+    const ret = yield provider.updateChannel('mlg_live');
+    assert.equal(ret.login, 'mlg');
+    assert.ok(!ret.live);
+};
+
+exports.testTwitchLiveRedirects = function*(assert) {
+    const provider = providers.twitch;
+    const originalQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+    const ret = yield provider.updateChannels([
+        {
+            login: 'mlg_live',
+            uname: 'MLG',
+            id: 15
+        }
+    ]);
+    assert.equal(ret.length, 1);
+    assert.equal(ret[0].login, 'mlg');
+    assert.ok(ret[0].live);
+    assert.equal(ret[0].id, 15);
+};
+
+exports.testTwitchUpdateRedirects = function*(assert) {
+    const provider = providers.twitch;
+    const originalQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+    
+    yield provider._getChannelId({
+        login:'mlg_live'
+    });
+
+    const prom = when(provider, "updatedchannels");
+    provider.updateRequest([
+        {
+            login: 'mlg_live',
+            uname: 'MLG',
+            id: 15
+        }
+    ]);
+    const ret = yield prom;
+    
+    assert.equal(ret.length, 1, "Update returns the channel");
+    assert.equal(ret[0].login, 'mlg', "Returned channel has the updated login");
+    assert.ok(ret[0].live, "Returned channel is live");
+    assert.equal(ret[0].id, 15, "Returned channel still has its ID");
 };
 
 exports.testGenericProvider = function*(assert) {

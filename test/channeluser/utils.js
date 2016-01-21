@@ -17,8 +17,8 @@ exports.getUser = (login = 'test', type = TYPE) => {
     return user;
 };
 
-exports.getChannel = (login = 'test', type = TYPE) => {
-    var channel = new Channel(login, type);
+exports.getChannel = (login = 'test', type = TYPE, id = null) => {
+    var channel = new Channel(login, type, id);
     channel.url.push('http://www.foo.bar/lorem');
     channel.archiveUrl = 'http://www.foo.bar/lorem/archive';
     channel.chatUrl = 'http://www.foo.bar/lorem/chat';
