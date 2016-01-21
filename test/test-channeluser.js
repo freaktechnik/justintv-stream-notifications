@@ -35,12 +35,12 @@ exports['test user toString'] = function(assert) {
 
 exports['test user image getter method'] = function(assert) {
     var user = getUser();
-    assert.equal(user.getBestImageForSize(1), 'http://foo.bar/0.jpg');
-    assert.equal(user.getBestImageForSize("20"), 'http://foo.bar/0.jpg');
-    assert.equal(user.getBestImageForSize(20), 'http://foo.bar/0.jpg');
-    assert.equal(user.getBestImageForSize(21), 'http://foo.bar/1.jpg', "21");
-    assert.equal(user.getBestImageForSize(40), 'http://foo.bar/1.jpg', "40");
-    assert.equal(user.getBestImageForSize(999), 'http://foo.bar/1.jpg', "999");
+    assert.equal(user.getBestImageForSize(1), user.image['18']);
+    assert.equal(user.getBestImageForSize("18"), user.image['18']);
+    assert.equal(user.getBestImageForSize(18), user.image['18']);
+    assert.equal(user.getBestImageForSize(19), user.image['64'], "19");
+    assert.equal(user.getBestImageForSize(40), user.image['64'], "40");
+    assert.equal(user.getBestImageForSize(999), user.image['64'], "999");
 };
 
 exports['test channel legacy'] = function(assert) {
