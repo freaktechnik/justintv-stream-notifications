@@ -15,7 +15,7 @@ exports.testIntervalPauseResume = function(assert, done) {
     let count = 0, paused = false;
 
     queue.addRequest({
-        url: "https://example.com",
+        url: "https://localhost",
         onComplete: () => {
             if(count === 0) {
                 ++count;
@@ -68,7 +68,7 @@ exports['test removing requests'] = function(assert) {
 exports['test removing nonexisting request'] = function(assert) {
     let q = new RequestQueue();
     q.addRequest({});
-    assert.ok(!q.removeRequest("http://example.com"), "no request to remove");
+    assert.ok(!q.removeRequest("http://localhost"), "no request to remove");
     q.clear();
 };
 
@@ -134,7 +134,7 @@ exports['test queue clearing 2'] = function(assert) {
 
 exports['test get request'] = function(assert, done) {
     let q = new RequestQueue();
-    q.addRequest({ url: "http://example.com", onComplete: done });
+    q.addRequest({ url: "http://localhost", onComplete: done });
     assert.equal(q.queue.length, 1);
     q.getRequest(0);
     assert.equal(q.queue.length, 0);
@@ -142,9 +142,9 @@ exports['test get request'] = function(assert, done) {
 
 exports['test get request batch without args'] = function(assert) {
     let q = new RequestQueue();
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
     assert.equal(q.queue.length, 3);
     q.getRequestBatch();
     assert.equal(q.queue.length, 0);
@@ -152,9 +152,9 @@ exports['test get request batch without args'] = function(assert) {
 
 exports['test get request batch bigger than queue'] = function(assert) {
     let q = new RequestQueue();
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
     assert.equal(q.queue.length, 3);
     q.getRequestBatch(4);
     assert.equal(q.queue.length, 0);
@@ -162,9 +162,9 @@ exports['test get request batch bigger than queue'] = function(assert) {
 
 exports['test get request batch'] = function(assert) {
     let q = new RequestQueue();
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
-    q.addRequest({ url: "http://example.com" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
+    q.addRequest({ url: "http://localhost" });
     assert.equal(q.queue.length, 3);
     q.getRequestBatch(2);
     assert.equal(q.queue.length, 1);
@@ -173,9 +173,9 @@ exports['test get request batch'] = function(assert) {
 
 exports['test get request by url'] = function(assert) {
     let q = new RequestQueue();
-    let i = q.addRequest({ url: "http://example.com" });
+    let i = q.addRequest({ url: "http://localhost" });
 
-    assert.equal(q.getRequestIndex("http://example.com"), i);
+    assert.equal(q.getRequestIndex("http://localhost"), i);
     q.clear();
 };
 
