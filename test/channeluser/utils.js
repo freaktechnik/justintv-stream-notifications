@@ -20,9 +20,9 @@ exports.getUser = (login = 'test', type = TYPE) => {
 
 exports.getChannel = (login = 'test', type = TYPE, id = null) => {
     var channel = new Channel(login, type, id);
-    channel.url.push(self.data.url('panel.html'));
-    channel.archiveUrl = self.data.url('panel.html#archive');
-    channel.chatUrl = self.data.url('panel.html#chat');
+    channel.url.push(self.data.url('list.html'));
+    channel.archiveUrl = self.data.url('list.html#archive');
+    channel.chatUrl = self.data.url('list.html#chat');
     channel.uname = 'lorem ipsum';
     channel.image = {'18': self.data.url('icon18.png'), 64: self.data.url('icon64.png')};
     channel.title="Lorem Ipsum, dolor sit amet";

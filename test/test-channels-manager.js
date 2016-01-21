@@ -30,7 +30,7 @@ exports.testTab = function*(assert) {
     yield wait(tabs, "ready");
     assert.equal(cm.managerTab, tabs.activeTab);
 
-    tabs.open({url: self.data.url("panel.html") });
+    tabs.open({url: self.data.url("list.html") });
     yield wait(tabs, "ready");
     let tab = tabs.activeTab;
 

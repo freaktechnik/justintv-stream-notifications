@@ -13,11 +13,16 @@ const { defer } = require("sdk/core/promise");
 const tabs = require("sdk/tabs");
 const { when } = require("sdk/event/utils");
 const { expectReject } = require("./event/helpers");
+const { before, after } = require("sdk/test/utils");
+const self = require("sdk/self");
+const { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs");
 
 const TESTUSER = {
     name: "freaktechnik",
     type: "twitch"
 };
+
+var SHARED = {};
 
 exports.testCredentials = function*(assert) {
     let { promise, resolve, reject } = defer();
@@ -32,32 +37,43 @@ exports.testCredentials = function*(assert) {
 
     yield promise;
 
-    let cc = new ChannelController();
+    const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
     let res;
-
     for(let p in providers) {
+        console.log(p);
         if(p == TESTUSER.type) {
             res = yield cc.autoAddUsers(p);
             console.log(res[0]);
             assert.ok(res.length > 0, "Found credential for "+p);
         }
         else if(providers[p].supports.credentials) {
-            res = yield cc.autoAddUsers(p);
-            assert.equal(res.length, 0, "found no credentials for "+p);
+            if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+                res = yield cc.autoAddUsers(p);
+                assert.equal(res.length, 0, "found no credentials for "+p);
+            }
         }
         else {
             yield expectReject(cc.autoAddUsers(p));
         }
     }
 
-    yield cc._list.clear();
+    console.log("clear");
+    yield when(cc, "channelupdated");
+    console.log("updt");
+    let users = yield cc.getUsersByType();
+    console.log("gotusrs");
+    for(let u of users)
+        yield cc.removeUser(u.id, true);
 
     res = yield cc.autoAddUsers();
     assert.ok(res.some((r) => r.length > 0), "All credentials finds some");
 
-    yield cc._list.clear();
+    users = yield cc.getUsersByType();
+    for(let u of users)
+        yield cc.removeUser(u.id, true);
+
     cc.destroy();
     /*let p = defer();
     passwords.remove({
@@ -71,7 +87,7 @@ exports.testCredentials = function*(assert) {
 };
 
 exports.testAddUser = function*(assert) {
-    let cc = new ChannelController();
+    const cc = new ChannelController();
 
     yield expectReject(cc.addUser("test", "test"));
 
@@ -79,14 +95,17 @@ exports.testAddUser = function*(assert) {
 };
 
 exports.testUserMethods = function*(assert) {
-    let cc = new ChannelController();
+    const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
-    let user = yield cc.addUser(TESTUSER.name, TESTUSER.type);
+    const user = yield cc.addUser(TESTUSER.name, TESTUSER.type);
 
     assert.equal(user.login, TESTUSER.name, "Added user has correct login");
     assert.equal(user.type, TESTUSER.type, "Added user has correct type");
     assert.ok("id" in user, "Added user has an ID");
+
+    let channels = yield cc.getChannelsByType();
+    assert.equal(channels.length, 1, "All followed channels were added");
 
     yield expectReject(cc.addUser(TESTUSER.name, TESTUSER.type, () => true));
 
@@ -118,15 +137,14 @@ exports.testUserMethods = function*(assert) {
 
     users = yield cc.getUsersByType();
     assert.equal(users.length, 0, "All users were removed");
-    let channels = yield cc.getChannelsByType();
+    channels = yield cc.getChannelsByType();
     assert.equal(channels.length, 0, "All channels were removed");
 
-    yield cc._list.clear();
     cc.destroy();
 };
 
 exports.testQueue = function*(assert) {
-    let cc = new ChannelController();
+    const cc = new ChannelController();
     cc._list.off();
 
     // Reset queue stuff
@@ -144,7 +162,7 @@ exports.testQueue = function*(assert) {
 };
 
 exports.testOpenManager = function*(assert) {
-    let cc = new ChannelController();
+    const cc = new ChannelController();
 
     cc.showManager();
 
@@ -152,9 +170,9 @@ exports.testOpenManager = function*(assert) {
 
     assert.equal(tabs.activeTab, cc._manager.managerTab, "Manager tab was opened.");
 
-    tabs.open({url: "https://example.com" });
+    tabs.open({url: self.data.url("list.html") });
     yield when(tabs, "ready");
-    let tab = tabs.activeTab;
+    const tab = tabs.activeTab;
 
     cc.showManager();
     yield when(tabs, "activate");
@@ -165,5 +183,16 @@ exports.testOpenManager = function*(assert) {
 
     cc.destroy();
 };
+
+before(exports, () => {
+    const provider = providers[TESTUSER.type];
+    SHARED.oldQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(SHARED.oldQS, TESTUSER.type));
+});
+
+after(exports, () => {
+    providers[TESTUSER.type]._setQs(SHARED.oldQS);
+});
 
 require("sdk/test").run(exports);
