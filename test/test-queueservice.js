@@ -18,7 +18,7 @@ exports.testIntervalPauseResume = function(assert, done) {
     let service = QueueService.getServiceForProvider("test");
     let count = 0, paused = false;
 
-    service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
+    service.queueUpdateRequest(["http://localhost"], service.HIGH_PRIORITY, () => {
         if(count === 0) {
             ++count;
             QueueService.pause();
@@ -49,7 +49,7 @@ exports.testUpdateRequestRequeue = function(assert, done) {
     let service = QueueService.getServiceForProvider("test");
     let count = 0;
 
-    service.queueUpdateRequest(["https://example.com"], service.HIGH_PRIORITY, () => {
+    service.queueUpdateRequest(["http://localhost"], service.HIGH_PRIORITY, () => {
         assert.equal(count, 2);
         service.unqueueUpdateRequest();
         QueueService.updateOptions(0);
@@ -66,7 +66,7 @@ exports.testRequeue = function(assert, done) {
     let service = QueueService.getServiceForProvider("test");
     let count = 0;
 
-    service.queueRequest("https://example.com", {}, () => ++count <= prefs.queueservice_maxRetries + 1)
+    service.queueRequest("http://localhost", {}, () => ++count <= prefs.queueservice_maxRetries + 1)
         .then((d) => assert.fail(d))
         .catch(() => {
             assert.equal(count, prefs.queueservice_maxRetries + 1);
@@ -92,7 +92,7 @@ exports.testQueueService = function(assert) {
 
 exports.testQueueRequest = function*(assert) {
     let service = QueueService.getServiceForProvider("test");
-    yield service.queueRequest("http://example.com", {}, (data) => {
+    yield service.queueRequest("http://locahost", {}, (data) => {
         assert.pass("Requeueing function called");
         return false;
     });
@@ -100,7 +100,7 @@ exports.testQueueRequest = function*(assert) {
 
 exports.testUpdateRequest = function(assert) {
     let service = QueueService.getServiceForProvider("test");
-    service.queueUpdateRequest(["http://example.com"],
+    service.queueUpdateRequest(["http://localhost"],
         service.HIGH_PRIORITY,
         () => { console.log("done"); },
         {},
@@ -111,7 +111,7 @@ exports.testUpdateRequest = function(assert) {
     assert.equal(service.getRequestProperty(service.LOW_PRIORITY).length, 0);
     var id = service.highPriorityRequestIds[0];
     // Replace them
-    service.queueUpdateRequest(["http://example.com", "http:/example.com"],
+    service.queueUpdateRequest(["http://localhost", "https://localhost"],
         service.HIGH_PRIORITY,
         () => { console.log("done"); },
         {},
@@ -153,7 +153,7 @@ exports.testQueueEvents = function(assert, done) {
         containsPriorized: listener,
         priorizedLoaded: listener
     });
-    service.queueRequest("http://example.com", {}, listener).then(listener);
+    service.queueRequest("http://locahost", {}, listener).then(listener);
 };
 
 exports.testQueuePauseResume = function(assert, done) {

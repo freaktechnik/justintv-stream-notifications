@@ -5,11 +5,12 @@
 
 const requireHelper = require("./require_helper");
 const tabs = require("sdk/tabs");
-let   channelUtils = requireHelper('../lib/channel/utils');
-var { setTimeout } = require("sdk/timers");
+const channelUtils = requireHelper('../lib/channel/utils');
+const { setTimeout } = require("sdk/timers");
 const { wait } = require("./event/helpers");
-var { getChannel } = require("./channeluser/utils");
+const { getChannel } = require("./channeluser/utils");
 const { prefs } = require("sdk/simple-prefs");
+const self = require("sdk/self");
 
 exports['test open archive'] = function*(assert) {
     var channel = getChannel();
@@ -18,7 +19,7 @@ exports['test open archive'] = function*(assert) {
     yield wait(tabs, "ready");
 
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened woth archive url for offline channel");
-    let p = wait(tabs, "close");
+    const p = wait(tabs, "close");
     tabs.activeTab.close();
     yield p;
 };
@@ -28,7 +29,7 @@ exports['test focus archive'] = function*(assert) {
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
 
-    tabs.open({url: "http://example.com"});
+    tabs.open({url: self.data.url("channels-manager.html")});
 
     let tabToClose = yield wait(tabs, "ready");
 
@@ -37,7 +38,7 @@ exports['test focus archive'] = function*(assert) {
 
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was correctly activated");
     tabToClose.close();
-    let p = wait(tabs, "close");
+    const p = wait(tabs, "close");
     tabs.activeTab.close();
     yield p;
 };
