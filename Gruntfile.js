@@ -149,7 +149,7 @@ module.exports = function(grunt) {
                 srcDir: ".",
                 destDir: "build/",
                 add: {
-                    "version": "<%= pkg.version %>-pre7"
+                    "version": "<%= pkg.version %>-pre9"
                 }
             },
             build: {
