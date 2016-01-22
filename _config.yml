@@ -2,9 +2,9 @@
 title: Live Stream Notifier for Firefox
 email: martin@humanoids.be
 description: > # this means to ignore newlines until "baseurl:"
-  Live Stream Notifier is a Firefox extension, which notifies you, whenever a
-  followed Streamer goes live. It features advanced control over the channels
-  it monitors and a panel for quick access to those channels.
+  Live Stream Notifier is a Firefox add-on, notifying you whenever certain
+  streamers go live. It features advanced control over the channels it monitors
+  and a panel for quick access to those channels.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://streamnotifier.ch" # the base hostname & protocol for your site
 twitter_username: freaktechnik
