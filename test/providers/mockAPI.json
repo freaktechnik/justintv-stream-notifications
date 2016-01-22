@@ -1,40 +1,36 @@
 {
     "azubu": {
         "https://api.azubu.tv/public/channel/test": {
-            "data": [
-                {
-                    "user": {
-                        "username": "test",
-                        "profile": {
-                            "photo_url_large": "",
-                            "photo_url_small": ""
-                        }
-                    },
-                    "is_live": false,
-                    "view_count": 0,
-                    "category": {
-                        "title": ""
+            "data": {
+                "user": {
+                    "username": "test",
+                    "profile": {
+                        "photo_url_large": "",
+                        "photo_url_small": ""
                     }
+                },
+                "is_live": false,
+                "view_count": 0,
+                "category": {
+                    "title": ""
                 }
-            ]
+            }
         },
         "https://api.azubu.tv/public/channel/live": {
-            "data": [
-                {
-                    "user": {
-                        "username": "live",
-                        "profile": {
-                            "photo_url_large": "",
-                            "photo_url_small": ""
-                        }
-                    },
-                    "is_live": true,
-                    "view_count": 0,
-                    "category": {
-                        "title": ""
+            "data": {
+                "user": {
+                    "username": "live",
+                    "profile": {
+                        "photo_url_large": "",
+                        "photo_url_small": ""
                     }
+                },
+                "is_live": true,
+                "view_count": 0,
+                "category": {
+                    "title": ""
                 }
-            ]
+            }
         },
         "https://api.azubu.tv/public/channel/list?channels=test,live&limit=100&offset=0": {
             "data": [
