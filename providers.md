@@ -95,7 +95,7 @@ Sadly the current implementation of this provider is broken.
 ### Features
 
  - Stream page
- - ~~Monitoring the status of channels~~
+ - <del>Monitoring the status of channels</del>
 
 ![Streamup icon](/img/streamup.png)
 ------
