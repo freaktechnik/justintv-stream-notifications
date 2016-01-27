@@ -17,6 +17,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Adding a user's favorites (followees)
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
+ - Exploring featured channels and global search
 
 ![Beam.pro icon](/img/beampro.png)
 ------
@@ -26,6 +27,17 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
  - Stream page
  - Separate chat page
+ - Monitoring the status of channels
+ - Adding a user's favorites (followees)
+ - Automatically adding the browser user's favorites
+ - Exploring featured channels and global search
+
+![DouyuTV icon](/img/douyutv.png)
+------
+[DouyuTV](http://douyutv.com) is a chinese game streaming platform.
+
+### Features
+ - Stream page
  - Monitoring the status of channels
 
 ![Hitbox icon](/img/hitbox-icon.png) Hitbox
@@ -39,16 +51,29 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Stream page
  - Separate chat page
  - Monitoring the status of channels
+ - Adding a user's favorites (followees)
+ - Automatically adding the browser user's favorites
+ - Exploring featured channels and global search
 
 ![Livestream icon](/img/livestream-logo.png)
 ----------
-[Livestream](http://livestream.com) is one of the oldest platforms and doesn't have a specific focus.
+### Old Livestream
+[Old Livestream](http://original.livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
-### Features
+#### Features
 
  - Stream page
  - Separate chat page
  - Monitoring the status of channels
+
+### New Livestream
+[Livestream](http://livestream.com) is an event based live streaming platform.
+
+#### Features
+
+ - Stream page
+ - Monitoring the status of channels
+ - Adding a user's favorites (followees)
 
 ![Majorleaguegaming icon](/img/mlg-logo.png)
 ------
@@ -69,11 +94,22 @@ Sadly the current implementation of this provider is broken.
 ### Features
 
  - Stream page
+ - ~~Monitoring the status of channels~~
+
+[Streamup icon](/img/streamup.png)
+------
+[Streamup](https://streamup.com) is an entertainment streaming platform open for all.
+
+### Features
+ - VOD Archive page
+ - Stream page
+ - Separate chat page
+ - Adding a user's favorites (followees)
  - Monitoring the status of channels
 
 ![Twitch textmark](/img/twitch-icon.png)
 ------
-[Twitch](http://twitch.tv) is the initial provider of the extension and focusses on games.
+[Twitch](https://twitch.tv) is the initial provider of the extension and focusses on games.
 
 ### Features
 
@@ -83,6 +119,7 @@ Sadly the current implementation of this provider is broken.
  - Adding a user's favorites (followees)
  - Automatically adding the browser user's favorites
  - Monitoring the status of channels
+ - Exploring featured channels and global search
 
 ![Ustream logo](/img/ustream.png)
 -------
@@ -104,4 +141,5 @@ Sadly the current implementation of this provider is broken.
  - Stream page
  - Adding a user's favorites (subscribed channels)
  - Monitoring the status of channels
+ - Exploring featured channels and global search
 

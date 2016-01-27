@@ -35,17 +35,26 @@ The username, however it is case sensitive.
 ### Beam.pro
 The username of the channel.
 
+### DouyuTV
+The number in the URL of the channel.
+
 ### Hitbox
 The channel username, it's in the URL and below the stream.
 
-### Livestream
+### Old Livestream
 The channel username on the classic livestream service, visible in the channel's URL.
+
+### New Livestream
+The channel username on the new livestream service (the normal one).
 
 ### MLG.tv
 The channel page URL without the `http://tv.majorleaguegaming.com/channel/` part.
 
 ### Picarto
 The username in the URL of the channel.
+
+### Streamup
+The username of the channel.
 
 ### Twitch
 The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
