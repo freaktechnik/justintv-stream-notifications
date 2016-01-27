@@ -97,7 +97,7 @@ Sadly the current implementation of this provider is broken.
  - Stream page
  - ~~Monitoring the status of channels~~
 
-[Streamup icon](/img/streamup.png)
+![Streamup icon](/img/streamup.png)
 ------
 [Streamup](https://streamup.com) is an entertainment streaming platform open for all.
 
