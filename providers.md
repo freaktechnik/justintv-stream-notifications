@@ -57,6 +57,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 ![Livestream icon](/img/livestream-logo.png)
 ----------
+
 ### Old Livestream
 [Old Livestream](http://original.livestream.com) is one of the oldest platforms and doesn't have a specific focus.
 
