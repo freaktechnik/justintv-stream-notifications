@@ -161,7 +161,15 @@ nav {
 
 /* Type specific styles */
 
-.thumbnail .live .twitch  a div {
+.thumbnail .live a div {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+li a:hover, .thumbnail li a:hover div {
+    background: white;
+}
+
+.thumbnail .live .twitch a div {
     background: rgba(117, 80, 186, 0.7);
     color: white;
 }
@@ -182,7 +190,6 @@ nav {
 }
 
 .thumbnail .live .ustream a div {
-    background: rgba(255, 255, 255, 0.7);
     color: #303030;
 }
 
@@ -258,7 +265,6 @@ nav {
 }
 
 .thumbnail .live .newlivestream a div {
-    background: rgba(255, 255, 255, 0.7);
     color: #CF202E;
 }
 
@@ -268,7 +274,6 @@ nav {
 }
 
 .thumbnail .live .streamup a div {
-    background: rgba(255, 255, 255, 0.7);
     color: rgb(85, 98, 255);
 }
 
@@ -278,11 +283,11 @@ nav {
 }
 
 .thumbnail .live .douyutv a div {
-    background: rgba(255, 255, 255, 0.7);
-    color: rgb(255, 119, 0);
+    background-color: rgba(255, 119, 0, 0.7);
+    color: white;
 }
 
 .douyutv a:hover, .thumbnail .douyutv a:hover div {
-    background: white !important;
-    color: rgb(255, 119, 0) !important;
+    background: rgb(255, 119, 0) !important;
+    color: white !important;
 }
