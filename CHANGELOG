@@ -120,7 +120,7 @@ changelog
     - Make hosted Twitch channels optional
     - Update translations
     - Fix some oddities with behaviour when clicking to go to a channel
-3.2.0
+3.2.1
     - Add user favorites support to hitbox
     - Add support for new livestream
     - Update Picarto.TV for the new site
@@ -136,5 +136,10 @@ changelog
     - Fix channels manager sometimes not working after refreshing
     - Respects parental control settings
     - Adding dialog in the channels manager now stays open until the requested user or channel has been added. Canceling cancels the action.
-    - Switched from an icon font to SVGs
+    - Switch from an icon font to SVGs
     - Refresh button now indicates if the background update queue is running and you can temporarily pause it
+    - Add DouyuTV support
+    - Switch website to http://livestreamer.ch
+    - Fix renamed Twitch channels breaking the extension
+3.2.2
+    - Add missing styles for DouyuTV
