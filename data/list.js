@@ -3,15 +3,23 @@
  * Licensed under MPL 2.0
  */
 
-/* global addon: true */
+/* global addon */
 /* global filter */
 /* global matches */
 /* global show */
 /* global hide */
 
 // This is just to avoid errors when loading the list in a tab in tests.
-if(!addon)
-    addon = {};
+if(!("addon" in window)) {
+    window.addon = {
+        port: {
+            emit: () => {},
+            on: () => {},
+            once: () => {}
+        },
+        options: {}
+    };
+}
 
 var live, offline, explore, currentMenuTarget, currentStyle, providers;
 const CHANNEL_ID_PREFIX = "channel";

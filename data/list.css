@@ -165,7 +165,7 @@ nav {
     background: rgba(255, 255, 255, 0.7);
 }
 
-li a:hover, .thumbnail li a:hover div {
+.tabcontent a:hover, .thumbnail li a:hover div {
     background: white;
 }
 
