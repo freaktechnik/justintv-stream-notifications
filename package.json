@@ -254,6 +254,7 @@
     "grunt-shell": "^1.1.2",
     "grunt-stripcomments": "~0.4.0",
     "grunt-transifex": "^0.1.1",
+    "husky": "^0.10.2",
     "istanbul-jpm": "0.0.1",
     "jpm": "*",
     "load-grunt-tasks": "^3.2.0"
