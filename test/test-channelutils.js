@@ -33,8 +33,7 @@ exports['test focus archive'] = function*(assert) {
 
     let tabToClose = yield wait(tabs, "ready");
 
-    channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "activate");
+    yield channelUtils.selectOrOpenTab(channel);
 
     assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was correctly activated");
     tabToClose.close();

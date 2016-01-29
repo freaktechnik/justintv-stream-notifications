@@ -10,22 +10,24 @@ const { Notifier } = requireHelper('../lib/notifier'),
 const { getChannel } = require("./channeluser/utils");
 const { prefs} = require("sdk/simple-prefs");
 const { cleanUI } = require("sdk/test/utils");
+const channelUtils = requireHelper('../lib/channel/utils');
+
+//TODO temporarily replace notification service with one that sends events and maybe simulates clicks.
 
 exports.testNotifierPrefs = function(assert) {
-    let notifier = new Notifier({ onClick: function() {} });
+    const notifier = new Notifier({ onClick: function() {} });
     assert.equal(notifier.onlineNotifications, prefs.onlineNotification);
     assert.equal(notifier.titleNotifications, prefs.titleChangeNotification);
     assert.equal(notifier.offlineNotifications, prefs.offlineNotification);
 };
 
-exports.testNotifier = function(assert, done) {
-    let oldVal = prefs.offlineNotification;
+exports.testNotifier = function*(assert) {
+    const oldVal = prefs.offlineNotification;
     prefs.offlineNotification = true;
 
-    let notifier = new Notifier({ onClick: function() {} });
-    var channel = getChannel();
+    const notifier = new Notifier({ onClick: function() {} });
+    const channel = getChannel('test', 'test', 1);
     channel.live = true;
-    channel.id = 1;
 
     assert.ok(!notifier.channelTitles.has(channel.id));
 
@@ -47,14 +49,27 @@ exports.testNotifier = function(assert, done) {
     notifier.sendNotification(channel);
     assert.ok(!notifier.channelTitles.has(channel.id));
 
-    let mapLength = notifier.channelTitles.length;
+    const mapLength = notifier.channelTitles.length;
     notifier.onChannelRemoved(-1);
     assert.equal(notifier.channelTitles.length, mapLength);
 
     prefs.offlineNotification = oldVal;
 
     // close all notifications that are still open (on systems without native notifications)
-    cleanUI().then(done);
+    yield cleanUI();
+};
+
+exports.testMuteNotification = function*(assert) {
+    const notifier = new Notifier({ onClick: () => {}});
+    const channel = getChannel('test', 'test', 1);
+    channel.live = true;
+
+    yield channelUtils.selectOrOpenTab(channel);
+    notifier.sendNotification(channel);
+
+    assert.ok(notifier.channelTitles.has(channel.id));
+
+    yield cleanUI();
 };
 
 require("sdk/test").run(exports);

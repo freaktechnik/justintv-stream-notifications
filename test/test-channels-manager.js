@@ -222,4 +222,22 @@ exports.testAddProviders = function*(assert) {
     cm.destroy();
 };
 
+exports.testDetachingWorkerWithoutClosingTab = function*(assert) {
+    const cm = new ChannelsManager();
+
+    cm.open();
+    yield wait(cm, "getdata");
+
+    assert.notStrictEqual(cm.managerTab, null, "Manager tab open");
+    const tabToClose = cm.managerTab;
+
+    cm.worker.detach();
+    assert.strictEqual(cm.managerTab, null, "No manager tab known to be open");
+
+    cm.destroy();
+    const p = wait(tabToClose, "close");
+    tabToClose.close();
+    yield p;
+};
+
 require("sdk/test").run(exports);
