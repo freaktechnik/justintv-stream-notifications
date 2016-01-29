@@ -45,7 +45,7 @@ The channel username, it's in the URL and below the stream.
 The channel username on the classic livestream service, visible in the channel's URL.
 
 ### New Livestream
-The channel username on the new livestream service (the normal one).
+The ID of a channel on the new livestream service (the normal one). The ID is the first number part in the URL to the profile: `http://livestream.com/accounts/0000000`. In this case it would be "0000000".
 
 ### MLG.tv
 The channel page URL without the `http://tv.majorleaguegaming.com/channel/` part.
