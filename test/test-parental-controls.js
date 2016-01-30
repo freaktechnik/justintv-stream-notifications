@@ -9,6 +9,8 @@ const ParentalControls = requireHelper("../lib/parental-controls");
 const { CC } = require("chrome");
 const NativeParentalControls = CC("@mozilla.org/parental-controls-service;1", "nsIParentalControlsService");
 
+//TODO use wrapper to do fun things
+
 exports.testPCEnabled = function(assert) {
     assert.equal(ParentalControls.enabled, NativeParentalControls.parentalControlsEnabled, "Parental controls state is correct");
 };
