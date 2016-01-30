@@ -4,76 +4,55 @@
  */
 
 const requireHelper = require("./require_helper");
-var { RequestQueue } = requireHelper('../lib/queue');
+const { RequestQueue } = requireHelper('../lib/queue');
 const { PauseableQueue } = requireHelper('../lib/queue/pauseable');
-const { UpdateQueue } = requireHelper('../lib/queue/update');
-const { setTimeout } = require("sdk/timers");
 const { when } = require("sdk/event/utils");
 
-exports.testIntervalPauseResume = function(assert, done) {
-    let queue = new UpdateQueue();
-    let count = 0, paused = false;
-
-    queue.addRequest({
-        url: "https://localhost",
-        onComplete: () => {
-            if(count === 0) {
-                ++count;
-                queue.pause();
-                paused = true;
-                setTimeout(() => {
-                    paused = false;
-                    queue.resume();
-                }, 500);
-            }
-            else {
-                assert.equal(count, 1);
-                assert.ok(!paused);
-                queue.clear();
-                done();
-            }
-        }
-    }, true);
-    queue.autoFetch(700, 1, 1);
-};
-
 exports['test adding new request to queue'] = function(assert) {
-    var q = new RequestQueue();
-    var i = q.addRequest({});
+    const q = new RequestQueue();
+    const i = q.addRequest({});
     assert.equal(i,q.queue[0].id);
     assert.equal(typeof(q.queue[0]),'object');
+
+    q.clear();
 };
 
 exports['test get request index'] = function(assert) {
-    var q = new RequestQueue();
-    var i = q.addRequest({});
+    const q = new RequestQueue();
+    const i = q.addRequest({});
     assert.equal(q.getRequestIndex(i),0);
     assert.equal(q.getRequestIndex(-1),-1);
+
+    q.clear();
 };
 
 exports['test request queued'] = function(assert) {
-    var q = new RequestQueue();
-    var i = q.addRequest({});
+    const q = new RequestQueue();
+    const i = q.addRequest({});
     assert.ok(q.requestQueued(i));
     assert.ok(!q.requestQueued(i + 7));
+
+    q.clear();
 };
 
 exports['test removing requests'] = function(assert) {
-    var q = new RequestQueue();
-    var i = q.addRequest({});
+    const q = new RequestQueue();
+    const i = q.addRequest({});
     assert.ok(q.removeRequest(i), "Request removed");
     assert.ok(!q.requestQueued(i));
+
+    q.clear();
 };
 
 exports['test removing nonexisting request'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     assert.ok(!q.removeRequest("http://localhost"), "no request to remove");
     q.clear();
 };
 
 exports['test autofetch'] = function(assert) {
-    var q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     q.autoFetch(1000000,0.5,10);
     assert.ok(!!q._intervalID);
@@ -81,7 +60,7 @@ exports['test autofetch'] = function(assert) {
 };
 
 exports['test working on queue'] = function(assert) {
-    var q = new RequestQueue();
+    const q = new RequestQueue();
     assert.ok(!q.workingOnQueue());
     q.addRequest({});
     assert.ok(!q.workingOnQueue());
@@ -91,7 +70,7 @@ exports['test working on queue'] = function(assert) {
 };
 
 exports['test not working on queue'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     q.autoFetch(0, 0.5, 10);
     assert.ok(!q.workingOnQueue());
@@ -99,7 +78,7 @@ exports['test not working on queue'] = function(assert) {
 };
 
 exports['test changing interval when not working on q'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     assert.ok(!q.workingOnQueue());
     q.autoFetch(100000, 0.5, 10);
     assert.ok(q.workingOnQueue());
@@ -107,17 +86,17 @@ exports['test changing interval when not working on q'] = function(assert) {
 };
 
 exports['test interval changing'] = function(assert ) {
-    var q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     q.autoFetch(1000000,0.5,10);
-    var oldId = q._intervalID;
+    const oldId = q._intervalID;
     q.autoFetch(1000,0.5,10);
     assert.notEqual(q._intervalID,oldId);
     q.clear();
 };
 
 exports['test queue clearing'] = function(assert) {
-    var q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     q.autoFetch(100000,0.1,500);
     q.clear();
@@ -126,14 +105,14 @@ exports['test queue clearing'] = function(assert) {
 };
 
 exports['test queue clearing 2'] = function(assert) {
-    var q = new RequestQueue();
+    const q = new RequestQueue();
     q.autoFetch(10000000, 0.1, 500);
     q.clear();
     assert.ok(!q.workingOnQueue());
 };
 
 exports['test get request'] = function(assert, done) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({ url: "http://localhost", onComplete: done });
     assert.equal(q.queue.length, 1);
     q.getRequest(0);
@@ -141,27 +120,31 @@ exports['test get request'] = function(assert, done) {
 };
 
 exports['test get request batch without args'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
     assert.equal(q.queue.length, 3);
     q.getRequestBatch();
     assert.equal(q.queue.length, 0);
+
+    q.clear();
 };
 
 exports['test get request batch bigger than queue'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
     assert.equal(q.queue.length, 3);
     q.getRequestBatch(4);
     assert.equal(q.queue.length, 0);
+
+    q.clear();
 };
 
 exports['test get request batch'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
     q.addRequest({ url: "http://localhost" });
@@ -172,52 +155,18 @@ exports['test get request batch'] = function(assert) {
 };
 
 exports['test get request by url'] = function(assert) {
-    let q = new RequestQueue();
-    let i = q.addRequest({ url: "http://localhost" });
+    const q = new RequestQueue();
+    const i = q.addRequest({ url: "http://localhost" });
 
     assert.equal(q.getRequestIndex("http://localhost"), i);
     q.clear();
 };
 
 exports['test getting a request with an unknown arg'] = function(assert) {
-    let q = new RequestQueue();
+    const q = new RequestQueue();
     q.addRequest({});
     assert.equal(q.getRequestIndex([]), -1);
     q.clear();
-};
-
-exports['test adding new request to queue'] = function(assert) {
-    var q = new UpdateQueue();
-    var i = q.addRequest({});
-    assert.equal(i,q.queue[0].id);
-    assert.equal(typeof(q.queue[0]),'object');
-};
-
-exports['test pauseable queue paused porperty'] = function(assert) {
-    var q = new PauseableQueue();
-    assert.ok(q.paused);
-    
-    q.autoFetch(25, 0.5, 2);
-    
-    assert.ok(!q.paused);
-    
-    q.pause();
-    assert.ok(q.paused);
-    
-    q.resume();
-    assert.ok(!q.paused);
-};
-
-exports['test pauseable queue events'] = function*(assert) {
-    let q = new PauseableQueue();
-    q.autoFetch(25, 0.5, 2);
-    let p = when(q, "pause");
-    q.pause();
-    yield p;
-    
-    p = when(q, "resume");
-    q.resume();
-    yield p;
 };
 
 require("sdk/test").run(exports);
