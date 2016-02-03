@@ -2,6 +2,13 @@
 This is a document guiding you on how to contribute to Live Stream Notifier. It
 is separated by conribution nature and not limited to code contributions.
 
+## Reporting Issues
+Reporting issues directly on GitHub is more than welcome. Please include
+debugging data that is obtained by <kbd>Shift</kbd> and clicking on the <samp>Help</samp>
+button in the Channels Manager. It should not include any directly personal data,
+however it will contain all channels and users and their current state as well
+as things like your operating system and extension version.
+
 ## Translations
 You can help to translate the extension on [BabelZilla](http://beta.babelzilla.org/projects/p/jtvn/).
 If your language doesn't exist yet, just request a new team for it and I'll
