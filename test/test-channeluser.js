@@ -68,6 +68,7 @@ exports['test deserialize'] = function(assert) {
             assert.equal(userProps[key], user[key]);
         }
     });
+    assert.ok(user instanceof User);
 
     let channelProps = {
         id: 2,
@@ -93,6 +94,35 @@ exports['test deserialize'] = function(assert) {
             assert.equal(channelProps[key], channel[key]);
         }
     });
+    assert.ok(channel instanceof Channel);
+};
+
+exports['test legacy deserialize'] = function(assert) {
+    let channelProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        image: {
+            20: "./asdf.png"
+        },
+        url: [ "https://example.com" ],
+        favorites: []
+    };
+
+    let channel = deserialize(channelProps, true);
+    assert.ok(channel instanceof Channel);
+
+    let userProps = {
+        id: 2,
+        login: "test",
+        type: "test",
+        uname: "lorem",
+        favorites: [ "test_chan" ]
+    };
+
+    let user = deserialize(userProps);
+    assert.ok(user instanceof User);
 };
 
 require("sdk/test").run(exports);
