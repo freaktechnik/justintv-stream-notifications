@@ -203,6 +203,13 @@ document.querySelector("#removeItem").addEventListener("click", (e) => {
     removeSelectedItems(e.shiftKey);
 });
 
+document.querySelector("a[rel='help']").addEventListener("click", (e) => {
+    if(e.shiftKey) {
+        e.preventDefault();
+        self.port.emit("debugdump");
+    }
+});
+
 function showDialog() {
     popup.querySelector("dialog").setAttribute("open", true);
     show(popup);
