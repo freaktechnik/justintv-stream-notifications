@@ -143,3 +143,9 @@ changelog
     - Fix renamed Twitch channels breaking the extension
 3.2.2
     - Add missing styles for DouyuTV
+    - Fix channels going offline being broken after upgrade to 3.2.1
+    - Fix potential errors when checking hosted channels for Twitch
+    - Parental Controls: check if user is allowed to navigate to a stream before opening it with livestreamer
+    - Simple export of debug relevant data
+3.2.3
+    - Add host application version to debug dump
