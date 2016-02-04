@@ -20,6 +20,7 @@ exports.testProviders = function(assert) {
     let provider;
     for(let p in providers) {
         provider = providers[p];
+        assert.ok(Object.isFrozen(provider), "Provider is frozen");
         assert.equal(typeof(provider.name), "string", "Name is a string");
         assert.equal(provider.name, provider.toString(), "toString and name return the same");
         assert.ok(Array.isArray(provider.authURL), "Auth URL is an Array");
