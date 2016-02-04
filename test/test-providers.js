@@ -25,6 +25,7 @@ exports.testProviders = function(assert) {
         assert.ok(Array.isArray(provider.authURL), "Auth URL is an Array");
         assert.ok(provider.authURL.every(url => isValidURI(url)), "Auth URLs are valid");
         assert.ok("supports" in provider, "Provider has a supports property");
+        assert.ok(Object.isFrozen(provider.supports), "Supports object is frozen");
         assert.equal(typeof(provider.supports.favorites), "boolean", "Provider says whether or not it supports adding favs");
         assert.equal(typeof(provider.supports.credentials), "boolean", "Provider states whether or not it supports adding favs from credentials");
         assert.equal(typeof(provider.supports.featured), "boolean", "Provider states whether or not it suports getting featured content");

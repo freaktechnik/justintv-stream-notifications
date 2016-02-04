@@ -21,8 +21,10 @@ exports.testSerialization = function(assert) {
 };
 
 exports.testContent = function(assert) {
+    assert.ok(Object.isFrozen(serializedProviders), "Serialized providers are frozen");
     for(let p in providers) {
         assert.ok(p in serializedProviders, p+" is in the serialized version");
+        assert.ok(Object.isFrozen(serializedProviders[p]), p+" is a frozen serialized object");
         assert.equal(providers[p].name, serializedProviders[p].name, "Name matches for "+p);
         assert.equal(providers[p].supports.favorites, serializedProviders[p].supports.favorites, "Favorites is the same");
         assert.equal(providers[p].supports.credentials, serializedProviders[p].supports.credentials, "Credentials is the same");
