@@ -81,6 +81,11 @@ module.exports = function(grunt) {
                 files: {
                     src: ['coverage']
                 }
+            },
+            jpmGarbage: {
+                files: {
+                    src: ['bootstrap.js', 'install.rdf']
+                }
             }
         },
         jsdoc: {

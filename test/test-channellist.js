@@ -15,6 +15,9 @@ const { prefs} = require("sdk/simple-prefs");
 let { Channel, getUser, getChannel } = require("./channeluser/utils");
 let { wait, expectReject } = require("./event/helpers");
 
+const providers = requireHelper('../lib/providers');
+const { getMockAPIQS } = require("./providers/mock-qs");
+
 let SHARED = {};
 
 exports['test channellist get invalid users'] = function*(assert) {
@@ -463,6 +466,112 @@ exports['test set channel with new login'] = function*(assert) {
     const newChannel = yield SHARED.list.setChannel(channel);
     assert.equal(newChannel.id, channel.id);
     assert.equal(newChannel.login, channel.login);
+};
+
+exports['test get legacy channel'] = function*(assert) {
+    const legacyChannel = {
+        login: "test",
+        type: "twitch",
+        serialize() {
+            return {
+                login: this.login,
+                type: this.type,
+                favorites: [],
+                url: ["http://localhost"],
+                archiveUrl: "http://localhost",
+                chatUrl: "http://localhost",
+                image: {},
+                live: false,
+                title: "",
+                viewers: 14,
+                lastModified: Date.now(),
+                category: "",
+                intent: ""
+            };
+        }
+    };
+    const originalQs = providers[legacyChannel.type]._qs;
+    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
+    
+    const retCh = yield SHARED.list.addChannel(legacyChannel);
+    
+    const channel = yield SHARED.list.getChannel(retCh.id);
+    
+    assert.ok(channel instanceof Channel, "Channel is a channel");
+    
+    providers[legacyChannel.type]._setQs(originalQs);
+};
+
+exports['test get all channels with a legacy channel'] = function*(assert) {
+    const legacyChannel = {
+        login: "test",
+        type: "twitch",
+        serialize() {
+            return {
+                login: this.login,
+                type: this.type,
+                favorites: [],
+                url: [], // simulate damaged entry
+                archiveUrl: "http://localhost",
+                chatUrl: "http://localhost",
+                image: {},
+                live: false,
+                title: "",
+                viewers: 14,
+                lastModified: Date.now(),
+                category: "",
+                intent: ""
+            };
+        }
+    };
+    const originalQs = providers[legacyChannel.type]._qs;
+    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
+    
+    yield SHARED.list.addChannel(legacyChannel);
+    
+    const channels = yield SHARED.list.getChannelsByType();
+    
+    for(let channel of channels) {
+        assert.ok(channel instanceof Channel, "Channel is a channel");
+    }
+    
+    providers[legacyChannel.type]._setQs(originalQs);
+};
+
+exports['test get channels by type with a legacy channel'] = function*(assert) {
+    const legacyChannel = {
+        login: "test",
+        type: "twitch",
+        serialize() {
+            return {
+                login: this.login,
+                type: this.type,
+                favorites: [],
+                url: [], // simulate damaged entry
+                archiveUrl: "http://localhost",
+                chatUrl: "http://localhost",
+                image: {},
+                live: false,
+                title: "",
+                viewers: 14,
+                lastModified: Date.now(),
+                category: "",
+                intent: ""
+            };
+        }
+    };
+    const originalQs = providers[legacyChannel.type]._qs;
+    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
+    
+    yield SHARED.list.addChannel(legacyChannel);
+    
+    const channels = yield SHARED.list.getChannelsByType(legacyChannel.type);
+    
+    for(let channel of channels) {
+        assert.ok(channel instanceof Channel, "Channel is a channel");
+    }
+    
+    providers[legacyChannel.type]._setQs(originalQs);
 };
 
 before(exports, (name, assert, done) => {
