@@ -149,3 +149,4 @@ changelog
     - Simple export of debug relevant data
 3.2.3
     - Add host application version to debug dump
+    - Fix variable name clashes on Firefox < 44
