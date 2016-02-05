@@ -5,7 +5,6 @@
 
 const requireHelper = require("./require_helper");
 const { PaginationHelper, promisedPaginationHelper } = requireHelper("../lib/pagination-helper");
-const { resolve } = require("sdk/core/promise");
 
 exports.testPaginationHelper = function(assert, done) {
     const URL = "http://example.com/?offset=";
@@ -18,7 +17,7 @@ exports.testPaginationHelper = function(assert, done) {
                 if(initial)
                     callback(count);
                 else
-                    return resolve(count);
+                    return Promise.resolve(count);
             },
             fetchNextPage: function(data) {
                 assert.equal(data, count, "fetchNextPage got the correct data");
