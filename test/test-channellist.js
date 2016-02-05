@@ -162,15 +162,18 @@ exports['test remove channel by login and type'] = function*(assert) {
 };
 
 exports['test clear channellist'] = function*(assert) {
-    let channel = yield SHARED.list.addChannel(getChannel());
-    let user = yield SHARED.list.addUser(getUser());
+    const channel = yield SHARED.list.addChannel(getChannel());
+    const user = yield SHARED.list.addUser(getUser());
 
-    yield SHARED.list.clear();
+    const result = yield SHARED.list.clear();
 
-    let chans = yield SHARED.list.getChannelsByType();
+    assert.equal(typeof result, "boolean", "Result is a boolean");
+    assert.ok(!result, "No hard clear was needed");
+
+    const chans = yield SHARED.list.getChannelsByType();
     assert.equal(chans.length, 0);
 
-    let users = yield SHARED.list.getUsersByType();
+    const users = yield SHARED.list.getUsersByType();
     assert.equal(users.length, 0);
 };
 
@@ -179,14 +182,36 @@ exports['test clear without db'] = function*(assert) {
     SHARED.list.db.close();
     delete SHARED.list.db;
 
-    yield SHARED.list.clear();
-    assert.notEqual(SHARED.list.db, null);
+    const result = yield SHARED.list.clear();
 
-    let chans = yield SHARED.list.getChannelsByType();
+    assert.equal(typeof result, "boolean", "Result is a boolean");
+    assert.ok(result, "DB had to be cleared the hard way");
+    assert.notEqual(SHARED.list.db, null, "DB was opened again");
+
+    const chans = yield SHARED.list.getChannelsByType();
     assert.equal(chans.length, 0);
 
-    let users = yield SHARED.list.getUsersByType();
+    const users = yield SHARED.list.getUsersByType();
     assert.equal(users.length, 0);
+};
+
+exports['test clear event'] = function*(assert) {
+    let p = wait(SHARED.list, "clear");
+    SHARED.list.clear();
+
+    let result = yield p;
+    assert.equal(typeof result, "boolean", "Result is a boolean");
+    assert.ok(!result, "DB was soft cleared");
+
+    SHARED.list.db.close();
+    delete SHARED.list.db;
+
+    p = wait(SHARED.list, "clear");
+    SHARED.list.clear();
+
+    result = yield p;
+    assert.equal(typeof result, "boolean", "Result is a boolean");
+    assert.ok(result, "DB was hard cleared");
 };
 
 exports['test add one channel with addchannels'] = function*(assert) {
