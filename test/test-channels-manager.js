@@ -240,4 +240,20 @@ exports.testDetachingWorkerWithoutClosingTab = function*(assert) {
     yield p;
 };
 
+exports.testAdditionalManagerGetsClosed = function*(assert) {
+    const cm = new ChannelsManager();
+
+    cm.open();
+    yield wait(cm, "getdata");
+
+    let p = wait(tabs, "open");
+    tabs.open({ url: cm.managerTab.url });
+    yield p;
+    yield wait(tabs, "close");
+    
+    p = wait(tabs, "close");
+    cm.destroy();
+    yield p;
+};
+
 require("sdk/test").run(exports);
