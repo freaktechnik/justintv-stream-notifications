@@ -14,6 +14,7 @@ exports.testProviderStyles = function*(assert) {
     const xhr = new XMLHttpRequest();
     const p = wait(xhr, "load");
     xhr.open("GET", self.data.url("list.css"));
+    xhr.overrideMimeType("text/css");
     xhr.send();
     yield p;
 

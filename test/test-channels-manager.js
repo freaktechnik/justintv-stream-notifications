@@ -26,16 +26,14 @@ const FAKE_ITEM = {
 
 exports.testTab = function*(assert) {
     let cm = new ChannelsManager();
-    cm.open();
-    yield wait(tabs, "ready");
+    yield cm.open();
     assert.equal(cm.managerTab, tabs.activeTab);
 
     tabs.open({url: self.data.url("list.html") });
     yield wait(tabs, "ready");
     let tab = tabs.activeTab;
 
-    cm.open();
-    yield wait(tabs, "activate");
+    yield cm.open();
     assert.equal(cm.managerTab, tabs.activeTab);
 
     tab.close();
@@ -107,7 +105,7 @@ exports.testCallbacksLoading = function(assert) {
     assert.ok(!cm.loading);
 
     cm.loading = true;
-    cm.onChannelUpdated();
+    cm.onChannelUpdated(FAKE_ITEM);
     assert.ok(!cm.loading);
 
     cm.loading = true;
@@ -115,7 +113,7 @@ exports.testCallbacksLoading = function(assert) {
     assert.ok(!cm.loading);
 
     cm.loading = true;
-    cm.onUserUpdated();
+    cm.onUserUpdated(FAKE_ITEM);
     assert.ok(!cm.loading);
 
     cm.loading = true;
@@ -207,6 +205,8 @@ exports.testMakeSureNoThrows = function(assert) {
     } catch(e) {
         assert.fail(e);
     }
+    
+    cm.destroy();
 };
 
 exports.testAddProviders = function*(assert) {
@@ -246,12 +246,37 @@ exports.testAdditionalManagerGetsClosed = function*(assert) {
     cm.open();
     yield wait(cm, "getdata");
 
-    let p = wait(tabs, "open");
-    tabs.open({ url: cm.managerTab.url });
-    yield p;
+    yield tabs.open({ url: cm.managerTab.url });
     yield wait(tabs, "close");
+
+    const p = wait(tabs, "close");
+    cm.destroy();
+    yield p;
+};
+
+
+exports.testWorkerDoesntGetReplaced = function*(assert) {
+    const cm = new ChannelsManager();
+
+    yield cm.open();
+    yield wait(cm, "getdata");
+
+    assert.notStrictEqual(cm.worker, null, "We've got a worker");
+
+    cm.managerTab.close();
+    yield wait(cm.worker, "detach");
     
-    p = wait(tabs, "close");
+    assert.strictEqual(cm.worker, null, "Worker's gone");
+
+    cm.worker = "My worker";
+
+    yield cm.open();
+    // spin event loop
+    yield wait(500);
+
+    assert.equal(cm.worker, "My worker", "Worker wasn't replaced");
+
+    const p = wait(cm.managerTab, "close");
     cm.destroy();
     yield p;
 };
