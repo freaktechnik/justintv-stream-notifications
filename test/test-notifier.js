@@ -12,7 +12,7 @@ const { when } = require("sdk/event/utils");
 const { defer } = require("sdk/core/promise");
 const { cleanUI } = require("sdk/test/utils");
 const channelUtils = requireHelper('../lib/channel/utils');
-const mockAlertsService = require("./notifier/mock-alerts-service");
+const mockAlertsService = require("./xpcom-mocks/alerts-service");
 
 exports.testNotifierPrefs = function(assert) {
     const { Notifier } = requireHelper('../lib/notifier');
@@ -25,7 +25,7 @@ exports.testNotifierPrefs = function(assert) {
 exports.testNotifier = function*(assert) {
     const oldVal = prefs.offlineNotification;
 
-    const factory = mockAlertsService.registerService();
+    mockAlertsService.registerService();
     const { Notifier } = requireHelper('../lib/notifier');
 
     prefs.offlineNotification = true;
@@ -69,17 +69,17 @@ exports.testNotifier = function*(assert) {
 
     prefs.offlineNotification = oldVal;
 
-    mockAlertsService.unregisterService(factory);
+    mockAlertsService.unregisterService();
 };
 
 exports.testMuteNotification = function*(assert) {
-    const factory = mockAlertsService.registerService();
+    mockAlertsService.registerService();
     let counter = 0;
     const { Notifier } = requireHelper('../lib/notifier');
     const notifier = new Notifier({ onClick() {}});
     const channel = getChannel('test', 'test', 1);
     channel.live = true;
-    
+
     mockAlertsService.getEventTarget().on("shownotification", () => ++counter);
 
     yield channelUtils.selectOrOpenTab(channel);
@@ -88,13 +88,13 @@ exports.testMuteNotification = function*(assert) {
     assert.ok(notifier.channelTitles.has(channel.id));
     assert.strictEqual(counter, 0, "No notifications were shown");
 
-    mockAlertsService.unregisterService(factory);
+    mockAlertsService.unregisterService();
     yield cleanUI();
 };
 
 exports.testClickListener = function*(assert) {
     let clickPromise = defer();
-    const factory = mockAlertsService.registerService();
+    mockAlertsService.registerService();
     const { Notifier } = requireHelper('../lib/notifier');
     const notifier = new Notifier({ onClick(chan) { clickPromise.resolve(chan); }});
     const channel = getChannel('test', 'test', 1);
@@ -108,7 +108,7 @@ exports.testClickListener = function*(assert) {
     const lastChannel = yield clickPromise.promise;
     assert.deepEqual(lastChannel, channel, "The channel in the click callback is the same as in the notification");
 
-    mockAlertsService.unregisterService(factory);
+    mockAlertsService.unregisterService();
 };
 
 require("sdk/test").run(exports);

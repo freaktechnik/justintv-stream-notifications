@@ -589,7 +589,7 @@ before(exports, (name, assert, done) => {
     SHARED.list.once("ready", () => {
         SHARED.list.addChannels(channels).then(() => {
             return Promise.all(users.map((u) => SHARED.list.addUser(u)));
-        }).then(done);
+        }).then(done, done);
     });
     SHARED.extraChannels = channels.length;
     SHARED.extraUsers = users.length;
