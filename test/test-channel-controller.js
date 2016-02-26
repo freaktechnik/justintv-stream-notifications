@@ -2,6 +2,8 @@
  * Test channel controller.
  * @author Martin Giger
  * @license MPL-2.0
+ * @todo test parental controls
+ * @todo test cancelling
  */
 "use strict";
 
@@ -142,6 +144,75 @@ exports.testUserMethods = function*(assert) {
 
     cc.destroy();
 };
+
+exports.testAddChannel = function*(assert) {
+    const cc = new ChannelController();
+
+    yield expectReject(cc.addChannel("test", "test"));
+
+    cc.destroy();
+};
+
+
+exports.testChannelMethods = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    let channel = yield cc.addChannel(TESTUSER.name, TESTUSER.type);
+
+    assert.equal(channel.login, TESTUSER.name, "Added channel has correct login");
+    assert.equal(channel.type, TESTUSER.type, "Added channel has correct type");
+    assert.ok("id" in channel, "Added channel has an ID");
+    
+    const secondChannel = yield cc.getChannel(channel.id);
+    assert.equal(secondChannel.login, channel.login, "Getting the channel returns one with the same login");
+    assert.equal(secondChannel.type, channel.type, "Getting the channel returns one with the same type");
+    assert.equal(secondChannel.id, channel.id, "Getting the channel returns one with the same id even");
+
+    let channels = yield cc.getChannelsByType();
+    assert.equal(channels.length, 1, "Getting all channels returns exactly one");
+    assert.equal(channels[0].login, TESTUSER.name, "Found channel has correct login");
+    assert.equal(channels[0].type, TESTUSER.type, "Found channel has correct type");
+    assert.equal(channels[0].id, channel.id, "FOund channel has correct id");
+
+    yield expectReject(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
+
+    channels = yield cc.getChannelsByType(TESTUSER.type);
+    assert.equal(channels.length, 1, "Getting channels by type holds one result.");
+    assert.equal(channels[0].login, TESTUSER.name, "Found channel has correct login");
+    assert.equal(channels[0].type, TESTUSER.type, "Found channel has correct type");
+    assert.equal(channels[0].id, channel.id, "Found channel has correct ID");
+
+    channels = yield cc.updateChannels(TESTUSER.type);
+    assert.equal(channels.length, 1, "One channel was updated when updating just the channels of the type");
+    assert.equal(channels[0].login, TESTUSER.name, "Updated channel has the correct login");
+    assert.equal(channels[0].type, TESTUSER.type, "Updated channel has correct type");
+    assert.equal(channels[0].id, channel.id, "Updated channel has correct ID");
+
+    channels = yield cc.updateChannels();
+    assert.equal(channels.length, Object.keys(providers).filter((p) => providers[p].enabled).length, "There is an item per provider");
+    channels.forEach((chans) => assert.ok(Array.isArray(chans), "Each of the items is an array"));
+
+    // Flatten the arrays, so we have all the channels in one array.
+    channels = [].concat(...channels);
+    assert.equal(channels.length, 1, "Updating all channels updated one channel");
+    assert.equal(channels[0].login, TESTUSER.name, "Updated channel has the correct login");
+    assert.equal(channels[0].type, TESTUSER.type, "Updated channel has the correct type");
+    assert.equal(channels[0].id, channel.id, "Updated channel has correct ID");
+
+    channel = yield cc.updateChannel(channel.id);
+    assert.equal(channel.login, TESTUSER.name, "Updated channel has the correct login");
+    assert.equal(channel.type, TESTUSER.type, "Updated channel has the correct type");
+    assert.equal(channel.id, secondChannel.id, "Updated channel has the same ID");
+
+    yield cc.removeChannel(channel.id, true);
+
+    channels = yield cc.getChannelsByType();
+    assert.equal(channels.length, 0, "All channels were removed");
+
+    cc.destroy();
+};
+
 
 exports.testQueue = function*(assert) {
     const cc = new ChannelController();

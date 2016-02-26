@@ -796,6 +796,48 @@
                 "self":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
                 "next":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
             }
+        },
+        "https://api.twitch.tv/kraken/channels/freaktechnik": {
+            "mature": false,
+            "status": "Offline.",
+            "broadcaster_language": "en",
+            "display_name": "freaktechnik",
+            "game": "nano",
+            "language": "en",
+            "_id": 16,
+            "name": "freaktechnik",
+            "created_at": "2011-08-21T18:32:25Z",
+            "updated_at": "2015-10-31T19:53:15Z",
+            "delay": null,
+            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+            "banner": null,
+            "video_banner": "",
+            "background": null,
+            "profile_banner": "",
+            "profile_banner_background_color": null,
+            "partner": false,
+            "url": "http://www.twitch.tv/freaktechnik",
+            "views": 15,
+            "followers": 5
+        },
+        "https://api.twitch.tv/kraken/streams/freaktechnik": {
+            "stream": null
+        },
+        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100&offset=0": {
+            "streams": [],
+            "total": 0
+        },
+        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=all&limit=100&offset=0": {
+            "streams": [],
+            "total": 0
+        },
+        "http://tmi.twitch.tv/hosts?include_logins=1&host=16": {
+            "hosts": [
+                {
+                    "host_id": 16,
+                    "host_login": "freaktechnik"
+                }
+            ]
         }
     },
     "beam": {
