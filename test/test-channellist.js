@@ -450,9 +450,8 @@ exports['test channel offline setting'] = function(assert, done) {
         req         = store.add(channel);
 
     req.onsuccess = () => {
-        SHARED.list.db.close();
-
-        SHARED.list.openDB("channellist").then(() => {
+        SHARED.list.close().then(() => SHARED.list.openDB("channellist"))
+        .then(() => {
             return SHARED.list.getChannel(channel.login, channel.type);
         }).then((channel) => {
             assert.ok(!channel.live);

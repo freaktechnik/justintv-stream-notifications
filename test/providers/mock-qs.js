@@ -43,16 +43,18 @@ const getRequest = (type, url)  => {
     }
 };
 
-const getMockAPIQS = (originalQS, type) => {
+const getMockAPIQS = (originalQS, type, active = true) => {
     return {
         queueRequest(url) {
             return Promise.resolve(getRequest(type, url));
         },
         unqueueUpdateRequest(priority) {},
         queueUpdateRequest(urls, priority, callback) {
-            urls.forEach((url) => {
-                callback(getRequest(type, url), url);
-            });
+            if(active) {
+                urls.forEach((url) => {
+                    callback(getRequest(type, url), url);
+                });
+            }
         },
         HIGH_PRIORITY: originalQS.HIGH_PRIORITY,
         LOW_PRIORITY: originalQS.LOW_PRIORITY

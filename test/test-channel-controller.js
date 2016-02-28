@@ -3,7 +3,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @todo test parental controls
- * @todo test cancelling
+ * @todo properly test events and stuff.
  */
 "use strict";
 
@@ -44,10 +44,8 @@ exports.testCredentials = function*(assert) {
 
     let res;
     for(let p in providers) {
-        console.log(p);
         if(p == TESTUSER.type) {
             res = yield cc.autoAddUsers(p);
-            console.log(res[0]);
             assert.ok(res.length > 0, "Found credential for "+p);
         }
         else if(providers[p].supports.credentials) {
@@ -62,8 +60,6 @@ exports.testCredentials = function*(assert) {
     }
 
     console.log("clear");
-    yield when(cc, "channelupdated");
-    console.log("updt");
     let users = yield cc.getUsersByType();
     console.log("gotusrs");
     for(let u of users)
@@ -90,6 +86,7 @@ exports.testCredentials = function*(assert) {
 
 exports.testAddUser = function*(assert) {
     const cc = new ChannelController();
+    yield cc._ensureQueueReady();
 
     yield expectReject(cc.addUser("test", "test"));
 
@@ -145,10 +142,43 @@ exports.testUserMethods = function*(assert) {
     cc.destroy();
 };
 
+exports.testRemoveUser = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    const user = yield cc.addUser(TESTUSER.name, TESTUSER.type);
+
+    yield cc.removeUser(user.id);
+
+    const users = yield cc.getUsersByType();
+    assert.equal(users.length, 0, "User has been removed");
+
+    yield cc.getChannelsByType().then((channels) => Promise.all(channels.map((c) => cc.removeChannel(c.id))));
+
+    cc.destroy();
+};
+
 exports.testAddChannel = function*(assert) {
     const cc = new ChannelController();
+    yield cc._ensureQueueReady();
 
     yield expectReject(cc.addChannel("test", "test"));
+
+    cc.destroy();
+};
+
+exports.testCancelAddChannel = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    yield expectReject(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
+
+    const channel = yield cc.addChannel(TESTUSER.name, TESTUSER.type, () => false);
+    assert.equal(channel.login, TESTUSER.name);
+    assert.equal(channel.type, TESTUSER.type);
+    assert.ok("id" in channel);
+
+    yield cc.removeChannel(channel.id);
 
     cc.destroy();
 };
@@ -163,7 +193,7 @@ exports.testChannelMethods = function*(assert) {
     assert.equal(channel.login, TESTUSER.name, "Added channel has correct login");
     assert.equal(channel.type, TESTUSER.type, "Added channel has correct type");
     assert.ok("id" in channel, "Added channel has an ID");
-    
+
     const secondChannel = yield cc.getChannel(channel.id);
     assert.equal(secondChannel.login, channel.login, "Getting the channel returns one with the same login");
     assert.equal(secondChannel.type, channel.type, "Getting the channel returns one with the same type");
@@ -174,8 +204,6 @@ exports.testChannelMethods = function*(assert) {
     assert.equal(channels[0].login, TESTUSER.name, "Found channel has correct login");
     assert.equal(channels[0].type, TESTUSER.type, "Found channel has correct type");
     assert.equal(channels[0].id, channel.id, "FOund channel has correct id");
-
-    yield expectReject(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
 
     channels = yield cc.getChannelsByType(TESTUSER.type);
     assert.equal(channels.length, 1, "Getting channels by type holds one result.");
@@ -205,7 +233,7 @@ exports.testChannelMethods = function*(assert) {
     assert.equal(channel.type, TESTUSER.type, "Updated channel has the correct type");
     assert.equal(channel.id, secondChannel.id, "Updated channel has the same ID");
 
-    yield cc.removeChannel(channel.id, true);
+    yield cc.removeChannel(channel.id);
 
     channels = yield cc.getChannelsByType();
     assert.equal(channels.length, 0, "All channels were removed");
@@ -255,11 +283,42 @@ exports.testOpenManager = function*(assert) {
     cc.destroy();
 };
 
+exports.testDisabledProvider = function*(assert) {
+    let p = Object.keys(providers).find((pr) => !providers[pr].enabled);
+
+    if(p) {
+        const cc = new ChannelController();
+        yield cc._ensureQueueReady();
+
+        yield expectReject(cc.addChannel(TESTUSER.name, p));
+
+        //TODO place a channel in the channel list so we can test this
+        //const r = yield cc.updateChannel(channel.id);
+        //assert.strictEqual(r, null);
+
+        const channels = yield cc.updateChannels(p);
+        assert.equal(channels.length, 0, "No channels were updated");
+
+        //TODO make sure removeChannel doesn't throw
+        //yield cc.removeChannel(channel.id);
+
+        yield expectReject(cc.addUser(TESTUSER.name, p));
+
+        //TODO also test user functions.
+
+        cc.destroy();
+    }
+    else {
+        assert.pass("No disabled provider found");
+        //TODO have a plan b here.
+    }
+};
+
 before(exports, () => {
     const provider = providers[TESTUSER.type];
     SHARED.oldQS = provider._qs;
 
-    provider._setQs(getMockAPIQS(SHARED.oldQS, TESTUSER.type));
+    provider._setQs(getMockAPIQS(SHARED.oldQS, TESTUSER.type, false));
 });
 
 after(exports, () => {
