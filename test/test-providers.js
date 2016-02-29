@@ -26,6 +26,7 @@ exports.testProviders = function(assert) {
         assert.ok(Array.isArray(provider.authURL), "Auth URL is an Array");
         assert.ok(provider.authURL.every(url => isValidURI(url)), "Auth URLs are valid");
         assert.ok("supports" in provider, "Provider has a supports property");
+        assert.equal(typeof provider.enabled, "boolean", "enabled is a boolean");
         assert.ok(Object.isFrozen(provider.supports), "Supports object is frozen");
         assert.equal(typeof(provider.supports.favorites), "boolean", "Provider says whether or not it supports adding favs");
         assert.equal(typeof(provider.supports.credentials), "boolean", "Provider states whether or not it supports adding favs from credentials");
@@ -41,6 +42,12 @@ exports.testProviders = function(assert) {
         assert.equal(typeof(provider.updateChannels), "function", "updateChannels is implemented");
         assert.equal(typeof(provider.getFeaturedChannels), "function", "getFeaturedChannels is implemented");
         assert.equal(typeof(provider.search), "function", "search is implemented");
+        
+        if(!provider.enabled) {
+            assert.ok(!provider.supports.favorites, "Doesn't support favorites when disabled");
+            assert.ok(!provider.supports.credentials, "Doesn't support credentials when disabled");
+            assert.ok(!provider.supports.featured, "Doesn't support featured when disabled");
+        }
     }
 };
 
@@ -54,7 +61,7 @@ exports.testSupports = function*(assert) {
             yield expectReject(provider.getUserFavorites());
             assert.throws(() => provider.updateFavsRequest(), p + " doesn't implement updateFavsRequest");
         }
-        // Can't test else unless APIs get emulated
+        // Can't test else unless APIs get emulated (see testRequests)
 
         if(provider.supports.credentials) {
             assert.ok(provider.authURL.length > 0, p + " has at least one auth URL");
@@ -65,7 +72,7 @@ exports.testSupports = function*(assert) {
             yield expectReject(provider.getFeaturedChannels());
             yield expectReject(provider.search());
         }
-        // can't test else unless APIs get emulated
+        // can't test else unless APIs get emulated (see testRequests)
     }
 };
 
@@ -134,6 +141,7 @@ exports.testRequests = function*(assert) {
                 assert.equal(prom, originalQS.LOW_PRIORITY);
             }
         }
+        // else is tested in testSupports
 
         if(provider.supports.featured) {
             console.log(p, ".getFeaturedChannels()");
@@ -148,6 +156,7 @@ exports.testRequests = function*(assert) {
             prom = yield provider._qs.promise;
             assert.equal(typeof prom, "string");
         }
+        // else is tested in testSupports
 
         provider._setQs(originalQS);
     }
