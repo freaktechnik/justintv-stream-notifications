@@ -563,6 +563,7 @@ exports['test get channels by type with a legacy channel'] = function*(assert) {
     providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
     
     yield SHARED.list.addChannel(legacyChannel);
+    yield SHARED.list.addChannel(getChannel("test2", legacyChannel.type));
     
     const channels = yield SHARED.list.getChannelsByType(legacyChannel.type);
     
@@ -571,6 +572,14 @@ exports['test get channels by type with a legacy channel'] = function*(assert) {
     }
     
     providers[legacyChannel.type]._setQs(originalQs);
+};
+
+exports['test opening open list'] = function*(assert) {
+    assert.notEqual(SHARED.list.db, null);
+    
+    yield SHARED.list.openDB("channellist");
+    
+    assert.notEqual(SHARED.list.db, null);
 };
 
 before(exports, (name, assert, done) => {
