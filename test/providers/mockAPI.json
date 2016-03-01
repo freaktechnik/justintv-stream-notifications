@@ -1052,6 +1052,27 @@
                 }
             ]
         },
+        "https://www.googleapis.com/youtube/v3/channels?forUsername=UCCbfB3cQtkEAiKfdRQnfQvw": {
+            "items": []
+        },
+        "https://www.googleapis.com/youtube/v3/channels?id=UCCbfB3cQtkEAiKfdRQnfQvw": {
+            "items": [
+                {
+                    "id": "UCCbfB3cQtkEAiKfdRQnfQvw",
+                    "snippet": {
+                        "title": "Jesse Cox",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
+                    }
+                }
+            ]
+        },
         "https://www.googleapis.com/youtube/v3/channels?id=0": {
             "items": [
                 {
