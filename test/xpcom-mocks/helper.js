@@ -11,9 +11,52 @@ const { Ci, Cm } = require("chrome");
 
 const registrar = Cm.QueryInterface(Ci.nsIComponentRegistrar);
 
+/**
+ * @typedef {string} ComponentType
+ * @see {@link TYPE_SERVICE}, {@link TYPE_FACTORY}
+ */
+
+/**
+ * The component is a service.
+ * @type {ComponentType}
+ * @default "service"
+ * @const
+ * @exported
+ */
 const TYPE_SERVICE = "service";
+/**
+ * The component is a normal factory.
+ * @type {ComponentType
+ * @default "factory"
+ * @const
+ * @exported
+ */
 const TYPE_FACTORY = "factory";
 
+/**
+ * Register the replacement component.
+ * @callback registerFactory
+ */
+/**
+ * Unregister the replacement component and restore the original.
+ * @callback unregisterFactory
+ */
+
+/**
+ * Generates an XPCOM component that replaces an existing one.
+ * @param {string} contractID - ContractID of the component to replace
+ * @param {Array.<string>} IIDs - Interface names the component should
+ *                                implement. The first item is assumed to be the
+ *                                base interface. nsISupports can be omitted.
+ * @param {Object} implementation - Holds the actual implementation of the
+ *                                  component.
+ * @param {ComponentType} [type = TYPE_FACTORY] - Type of the component that
+ *                                                should be replaced. Defaults
+ *                                                to a regular XPCOM component.
+ * @return {Array.<registerFactory, unregisterFactory>} Methods to register and
+ *                                                      unregister the
+ *                                                      replacement component. 
+ */
 exports.createMock = (contractID, IIDs, implementation, type = TYPE_FACTORY) => {
     if(!IIDs.length)
         throw "Must pass at least one interface ID";
