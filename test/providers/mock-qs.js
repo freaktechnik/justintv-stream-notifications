@@ -9,6 +9,12 @@ const { defer } = require("sdk/core/promise");
 const qs = require("sdk/querystring");
 const mockAPIEnpoints = require("./mockAPI.json");
 
+/**
+ * Get an API response from the mock APIs.
+ * @param {string} type - Provider type
+ * @param {string} url - API endpoint URL
+ * @return {external:Response} Response to the request on the API.
+ */
 const getRequest = (type, url)  => {
     if(type === "youtube") {
         const u = url.split("?");
@@ -43,6 +49,14 @@ const getRequest = (type, url)  => {
     }
 };
 
+/**
+ * Get a QS that returns API responses from the mock endpoints.
+ * @param {module:queue/service.QueueService} originalQS
+ * @param {string} type - Provider type
+ * @param {boolean} [active=true] - If queued requests should resolve.
+ * @return {module:queue/service.QueueService} A QS that resolves to mock
+ *                                             endpoints.
+ */
 const getMockAPIQS = (originalQS, type, active = true) => {
     return {
         queueRequest(url) {
@@ -62,6 +76,20 @@ const getMockAPIQS = (originalQS, type, active = true) => {
 };
 exports.getMockAPIQS = getMockAPIQS;
 
+/**
+ * @typedef {module:queue/service.QueueService} MockQS
+ * @property {Promise} promise - Promise that resolves whenever a request gets
+ *                               resolved.
+ */
+
+/**
+ * Get a QS that resolves every request and at the same time resolves a promise.
+ * @param {module:queue/service.QueueService} originalQS
+ * @param {boolean} [ignoreQR=false] - If calls to queueRequest should not
+ *                                     affect the promise.
+ * @return {MockQS} A QS with an extra property holding a promise that resolves
+ *                  whenever a request gets resolved.
+ */
 const getMockQS = (originalQS, ignoreQR = false) => {
     let { promise, resolve, reject } = defer();
     return {
@@ -93,7 +121,7 @@ exports.apiEndpoints = endpoints;
 /**
  * These are either defunct providers, or providers that don't use polling
  * (or beam, which I should switch to sockets)
- * @type array
+ * @type {Array.<string>}
  */
 const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
 exports.IGNORE_QSUPDATE_PROVIDERS = IGNORE_QSUPDATE_PROVIDERS;
