@@ -1,6 +1,6 @@
-/*
- * Created by Martin Giger
- * Licensed under MPL 2.0
+/**
+ * @author Martin Giger
+ * @license MPL-2.0
  */
 
 "use strict";
@@ -11,6 +11,12 @@ const self = require("sdk/self");
 
 const TYPE = "test";
 
+/**
+ * Get a test user with username and image set.
+ * @param {string} [login='test']
+ * @param {string} [type='test']
+ * @return {module:channel/core.User}
+ */
 exports.getUser = (login = 'test', type = TYPE) => {
     var user = new User(login, type);
     user.uname = 'lorem ipsum';
@@ -18,6 +24,13 @@ exports.getUser = (login = 'test', type = TYPE) => {
     return user;
 };
 
+/**
+ * Get a test user with valid URL properties, username, image and title.
+ * @oaram {string} [login='test']
+ * @param {string} [type='test']
+ * @param {number?} [id=null]
+ * @return {module:channel/core.Channel}
+ */
 exports.getChannel = (login = 'test', type = TYPE, id = null) => {
     var channel = new Channel(login, type, id);
     channel.url.push(self.data.url('list.html'));
@@ -29,4 +42,7 @@ exports.getChannel = (login = 'test', type = TYPE, id = null) => {
     return channel;
 };
 
+/**
+ * @type {module:channel/core.Channel}
+ */
 exports.Channel = Channel;
