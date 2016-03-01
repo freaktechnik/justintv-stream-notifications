@@ -8,7 +8,7 @@ const requireHelper = require("./require_helper");
 const { registerService, unregisterService, getLogs, setEnabled } = require("./xpcom-mocks/parental-controls");
 const { before, after } = require("sdk/test/utils");
 
-var ParentalControls;
+const ParentalControls = requireHelper('../lib/parental-controls');
 
 exports.testPCEnabled = (assert) => {
     setEnabled(true);
@@ -41,12 +41,10 @@ exports.testLog = (assert) => {
 
 before(exports, () => {
     registerService();
-    ParentalControls = requireHelper("../lib/parental-controls");
 });
 
 after(exports, () => {
     unregisterService();
-    ParentalControls = null;
 });
 
 require("sdk/test").run(exports);

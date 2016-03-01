@@ -7,7 +7,7 @@
 
 const requireHelper = require("./require_helper");
 const providers = requireHelper("../lib/providers");
-const { getMockAPIQS } = require("./providers/mock-qs");
+const { getMockAPIQS, getMockQS } = require("./providers/mock-qs");
 
 const youtube = providers.youtube;
 
@@ -21,6 +21,16 @@ exports.testGetChannelIDFallback = function*(assert) {
     assert.equal(channel.type, "youtube");
     assert.equal(channel.uname, "Jesse Cox");
 
+    youtube._setQs(oldQS);
+};
+
+exports.testGetNoCategory = function*(assert) {
+    const oldQS = youtube._qs;
+    youtube._setQs(getMockQS(oldQS));
+    
+    const categoryName = yield youtube._getCategory('test');
+    assert.equal(categoryName, "");
+    
     youtube._setQs(oldQS);
 };
 
