@@ -52,6 +52,31 @@
       ]
     },
     {
+      "type": "radio",
+      "name": "panel_nonlive",
+      "title": "Treat non-live streams as",
+      "description": "Non-live streams are things like hosted channels or rebroadcasts.",
+      "value": 0,
+      "options": [
+        {
+          "value": "0",
+          "label": "live"
+        },
+        {
+          "value": "1",
+          "label": "live but sort to the bottom"
+        },
+        {
+          "value": "2",
+          "label": "distinct state (adds a tab)"
+        },
+        {
+          "value": "3",
+          "label": "offline"
+        }
+      ]
+    },
+    {
       "type": "bool",
       "name": "panel_extras",
       "title": "Extra info in panel",
