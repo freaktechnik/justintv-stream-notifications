@@ -55,24 +55,24 @@
       "type": "radio",
       "name": "panel_nonlive",
       "title": "Treat non-live streams as",
-      "description": "Non-live streams are things like hosted channels or rebroadcasts.",
-      "value": 0,
+      "description": "Non-live streams include things like hosted channels or rebroadcasts.",
+      "value": 1,
       "options": [
         {
           "value": "0",
-          "label": "live"
+          "label": "Live"
         },
         {
           "value": "1",
-          "label": "live but sort to the bottom"
+          "label": "Live but sort to the bottom"
         },
         {
           "value": "2",
-          "label": "distinct state (adds a tab)"
+          "label": "Distinct state (adds a tab)"
         },
         {
           "value": "3",
-          "label": "offline"
+          "label": "Offline"
         }
       ]
     },
@@ -143,7 +143,7 @@
       "type": "bool",
       "name": "twitch_showPlaylist",
       "title": "Show channels replaying recordings from a playlist as live",
-      "value": false,
+      "value": true,
       "hidden": true
     },
     {
@@ -239,7 +239,7 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.2.4",
+  "version": "3.3.0",
   "lib": "lib",
   "title": "Live Stream Notifier",
   "main": "lib/main.js",

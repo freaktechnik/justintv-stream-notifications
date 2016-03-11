@@ -142,7 +142,7 @@ nav {
 
 .compact .tabcontent li a>img, .default .tabcontent li a>img, .tabcontent:not(.live) li a>img , .compact .tabcontent li .title,
 .tabcontent:not(.live) .hide-offline, [hidden], aside {
-    display: none;
+    display: none !important;
     visibility: hidden;
 }
 
@@ -157,6 +157,20 @@ nav {
     height: .9em;
     width: .9em;
     fill: currentColor;
+}
+
+.nonlivename {
+    display: none;
+    visibility: hidden;
+}
+
+.nonlive .nonlivename {
+    display: inline;
+    visibility: visible;
+}
+
+.live:not([data-tab="4"]) .nonlive div > img {
+    filter: grayscale(100%);
 }
 
 /* Type specific styles */

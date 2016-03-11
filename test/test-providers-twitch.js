@@ -2,6 +2,7 @@
  * Test twitch provider specific stuff
  * @author Martin Giger
  * @license MPL-2.0
+ * @todo test livestate for playlist and hosed
  */
 "use strict";
 
@@ -9,6 +10,7 @@ const requireHelper = require("./require_helper");
 const providers = requireHelper("../lib/providers");
 const { getMockAPIQS } = require("./providers/mock-qs");
 const { when } = require("sdk/event/utils");
+const { getChannel } = require("./channeluser/utils");
 
 const provider = providers.twitch;
 
@@ -25,12 +27,10 @@ exports.testTwitchLiveRedirects = function*(assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+    const channel = getChannel('mlg_live', 'twitch', 15);
+    channel.uname = "MLG";
     const ret = yield provider.updateChannels([
-        {
-            login: 'mlg_live',
-            uname: 'MLG',
-            id: 15
-        }
+        channel
     ]);
     assert.equal(ret.length, 1);
     assert.equal(ret[0].login, 'mlg');
@@ -48,12 +48,10 @@ exports.testTwitchUpdateRedirects = function*(assert) {
     });
 
     const prom = when(provider, "updatedchannels");
+    const channel = getChannel('mlg_live', 'twitch', 15);
+    channel.uname = "MLG";
     provider.updateRequest([
-        {
-            login: 'mlg_live',
-            uname: 'MLG',
-            id: 15
-        }
+        channel
     ]);
     const ret = yield prom;
 

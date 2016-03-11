@@ -21,7 +21,7 @@ if(!("addon" in window)) {
     };
 }
 
-var live, offline, explore, currentMenuTarget, currentStyle, providers;
+var live, secondaryLive, offline, distinct, explore, currentMenuTarget, currentStyle, providers, nonLiveDisplay;
 const CHANNEL_ID_PREFIX = "channel";
 const EXPLORE_ID_PREFIX = "explorechan";
 const CONTEXTMENU_ID    = "context";
@@ -134,11 +134,20 @@ var findInsertionNodeIn = (list, name) => {
     return node;
 };
 
+const insertBefore = (parent, node, uname) => {
+    if(!parent.querySelector("#"+node.id))
+        parent.insertBefore(node, findInsertionNodeIn(parent, uname));
+};
+
 var insertChannel = (channel, node) => {
-    if(channel.live)
-        live.insertBefore(node, findInsertionNodeIn(live, channel.uname));
+    if((channel.live && !channel.state.enabled) || (channel.state.enabled && nonLiveDisplay === 0))
+        insertBefore(live, node, channel.uname);
+    else if(channel.state.enabled && nonLiveDisplay == 1)
+        insertBefore(secondaryLive, node, channel.uname);
+    else if(channel.state.enabled && nonLiveDisplay == 2)
+        insertBefore(distinct, node, channel.uname);
     else
-        offline.insertBefore(node, findInsertionNodeIn(offline, channel.uname));
+        insertBefore(offline, node, channel.uname);
 
     resize();
 };
@@ -158,13 +167,16 @@ var contextMenuListener = (e) => {
 };
 
 var buildChannel = (channel, unspecific = false) => {
+    //TODO some visual indicator for rebroadcasts
     var channelNode   = document.createElement("li");
     channelNode.insertAdjacentHTML("beforeend",
 `<a href="javascript:void" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
     <img src="">
     <div>
         <img srcset="" sizes="30w">
-        <span class="name"></span><br>
+        <span class="rebroadcast hide-offline" hidden><svg class="icon" viewBox="0 0 8 8">
+            <use xlink:href="sprite/open-iconic.min.svg#loop"></use>
+        </svg> </span><span class="name"></span><span class="nonlivename hide-offline" hidden> → <span class="alternate-name"></span></span><br>
         <span class="title hide-offline"></span>
         <aside>
             <span class="viewersWrapper hide-offline">
@@ -189,6 +201,9 @@ var buildChannel = (channel, unspecific = false) => {
     channelNode.querySelector("a > img").setAttribute("src", channel.thumbnail);
     channelNode.querySelector(".name").textContent = channel.uname;
     channelNode.querySelector(".title").textContent = channel.title;
+    channelNode.querySelector(".alternate-name").textContent = channel.state.alternateUsername;
+    toggle(channelNode.querySelector(".nonlivename"), channel.state.alternateUsername !== "");
+    toggle(channelNode.querySelector(".rebroadcast"), channel.state.state == 2);
     if(!("viewers" in channel) || channel.viewers < 0)
         hide(channelNode.querySelector(".viewersWrapper"));
     channelNode.querySelector(".viewers").textContent = channel.viewers;
@@ -208,8 +223,13 @@ var buildChannel = (channel, unspecific = false) => {
     }
     channelNode.addEventListener("contextmenu", contextMenuListener);
 
+    if(channel.state.enabled)
+        channelNode.classList.add("nonlive");
+
     return channelNode;
 };
+
+const countLiveChannels = () => live.childElementCount + secondaryLive.childElementCount;
 
 var addChannel = (channel) => {
     var channelNode = buildChannel(channel);
@@ -229,14 +249,14 @@ var removeChannel = (channelId) => {
         addon.port.emit("removedLive", channelId);
         // Smaller two, since we remove the channel node after this, as we still
         // needed its parent's id before.
-        if(live.childElementCount < 2) {
+        if(countLiveChannels() < 2) {
             displayNoOnline();
         }
     }
 
     channelNode.remove();
 
-    if(live.childElementCount === 0 && offline.childElementCount === 0)
+    if(countLiveChannels === 0 && offline.childElementCount === 0 && distinct.childElementCount === 0)
         displayNoChannels();
 
     resize();
@@ -251,12 +271,17 @@ var updateNodeContent = (channel) => {
 
     titleNode.textContent = channel.title;
     nameNode.textContent = channel.uname;
+    channelNode.querySelector(".alternate-name").textContent = channel.state.alternateUsername;
+    toggle(channelNode.querySelector(".nonlivename"), channel.state.alternateUsername !== "");
+    toggle(channelNode.querySelector(".rebroadcast"), channel.state.state == 2);
 
     viewers.textContent = channel.viewers;
     toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
 
     category.textContent = channel.category;
     toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
+
+    channelNode.classList.toggle("nonlive", channel.state.enabled);
 
     // only update images if the user is online to avoid broken images
     if(navigator.onLine) {
@@ -266,18 +291,25 @@ var updateNodeContent = (channel) => {
     }
 };
 
+//TODO placing stuff (live channel goes hosted -> might need reordering)
+
 var makeChannelLive = (channel) => {
     hideNoOnline();
     updateNodeContent(channel);
-    if(!live.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
-        insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
 };
 
 var makeChannelOffline = (channel) => {
-    if(!offline.querySelector("#"+CHANNEL_ID_PREFIX+channel.id))
-        insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
     updateNodeContent(channel);
-    if(live.childElementCount === 0)
+    if(countLiveChannels() === 0)
+        displayNoOnline();
+};
+
+const makeChannelDistinct = (channel) => {
+    insertChannel(channel, document.getElementById(CHANNEL_ID_PREFIX+channel.id));
+    updateNodeContent(channel);
+    if(countLiveChannels() === 0)
         displayNoOnline();
 };
 
@@ -341,6 +373,32 @@ var toggleQueueContextItems = (queuePaused) => {
     toggle(document.getElementById("resumeAutorefresh"), queuePaused);
 };
 
+const setNonLiveDisplay = (display) => {
+    const nonLiveTab = document.getElementById("nonliveTab");
+    toggle(nonLiveTab, display == 2);
+    toggle(secondaryLive, display == 1);
+
+    const tabbed = document.querySelector(".tabbed");
+    if(nonLiveDisplay == 2 && display != 2 && tabbed._tabbed.current == 4)
+        tabbed._tabbed.select(1);
+
+    nonLiveDisplay = display;
+
+    // Reposition all existing non-live channels
+    const channelsToMove = Array.from(document.querySelectorAll(".nonlive"));
+    var parent = live;
+    if(display == 1)
+        parent = secondaryLive;
+    else if(display == 2)
+        parent = distinct;
+    else if(display == 3)
+        parent = offline;
+
+    for(let node of channelsToMove) {
+        insertBefore(parent, node, node.querySelector(".name").textContent);
+    }
+};
+
 // Set up port commmunication listeners
 addon.port.on("setStyle", setStyle);
 addon.port.on("setExtras", setExtrasVisibility);
@@ -350,6 +408,7 @@ addon.port.on("setOnline", makeChannelLive);
 addon.port.on("setOffline", makeChannelOffline);
 addon.port.on("resize", resize);
 addon.port.on("livestreamerExists", toggleLivestreamerItems);
+addon.port.on("setNonLiveDisplay", setNonLiveDisplay);
 addon.port.on("queuePaused", (paused) => {
     toggleQueueContextItems(paused);
     document.getElementById("refreshButton").classList.toggle("running", !paused);
@@ -402,13 +461,16 @@ addon.port.on("setFeatured", (channels, type, q) => {
 window.addEventListener("load", function() {
     live = document.getElementById("live");
     offline = document.getElementById("offline");
+    distinct = document.getElementById("nonlive");
     explore = document.getElementById("featured");
+    secondaryLive = document.getElementById("secondarylive");
     var exploreSelect = document.getElementById("exploreprovider");
     var field = document.querySelector("#searchField");
 
     setStyle(addon.options.style);
     setExtrasVisibility(addon.options.extras);
     toggleLivestreamerItems(addon.options.livestreamer);
+    setNonLiveDisplay(addon.options.nonLiveDisplay);
     resize();
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));

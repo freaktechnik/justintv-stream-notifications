@@ -11,7 +11,7 @@ var SELECTED_CLASS = "current";
 window.onload = function() {
     var roots = document.querySelectorAll(".tabbed");
     for(var i = 0; i < roots.length; ++i) {
-        new Tabbed(roots[i]);
+        roots[i]._tabbed = new Tabbed(roots[i]);
     }
 };
 
