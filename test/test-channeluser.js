@@ -5,8 +5,9 @@
  */
 
 const requireHelper = require("./require_helper");
-var { Channel, User, deserialize } = requireHelper('../lib/channel/core');
+var { Channel, User } = requireHelper('../lib/channel/core');
 var { getUser, getChannel } = require("./channeluser/utils");
+const { LiveState } = requireHelper('../lib/channel/live-state');
 
 exports['test user base construction stuff'] = function(assert) {
     assert.ok(new User("test", "test") instanceof User, "New user object isn't instance of User");
@@ -49,6 +50,16 @@ exports['test channel legacy'] = function(assert) {
     assert.equal(channelWithId.id, 1);
 };
 
+exports['test channel state serialization'] = (assert) => {
+    const channel = getChannel();
+    assert.ok(channel.state instanceof LiveState);
+
+    const serialized = channel.serialize();
+
+    assert.equal(typeof serialized.state, "object");
+    assert.ok(!(serialized.state instanceof LiveState));
+};
+
 exports['test deserialize'] = function(assert) {
     let userProps = {
         id: 2,
@@ -58,7 +69,7 @@ exports['test deserialize'] = function(assert) {
         favorites: [ "test_chan" ]
     };
 
-    let user = deserialize(userProps);
+    let user = User.deserialize(userProps);
 
     Object.keys(userProps).forEach((key) => {
         if(Array.isArray(userProps[key])) {
@@ -78,14 +89,23 @@ exports['test deserialize'] = function(assert) {
         image: {
             20: "./asdf.png"
         },
-        url: [ "https://example.com" ]
+        url: [ "https://example.com" ],
+        state: {
+            state: 0,
+            alternateUsername: "",
+            alternateURL: ""
+        }
     };
 
-    let channel = deserialize(channelProps);
+    let channel = Channel.deserialize(channelProps);
 
     Object.keys(channelProps).forEach((key) => {
         if(Array.isArray(channelProps[key])) {
             assert.equal(channelProps[key].length, channel[key].length);
+        }
+        else if(key == "state") {
+            assert.ok(channel[key] instanceof LiveState);
+            assert.equal(channelProps[key].state, channel[key].state);
         }
         else if(typeof channelProps[key] === "object") {
             assert.ok(Object.keys(channelProps[key]).every((k) => channelProps[key][k] == channel[key][k]));
@@ -110,7 +130,7 @@ exports['test legacy deserialize'] = function(assert) {
         favorites: []
     };
 
-    let channel = deserialize(channelProps, true);
+    let channel = Channel.deserialize(channelProps);
     assert.ok(channel instanceof Channel);
 
     let userProps = {
@@ -121,7 +141,7 @@ exports['test legacy deserialize'] = function(assert) {
         favorites: [ "test_chan" ]
     };
 
-    let user = deserialize(userProps);
+    let user = User.deserialize(userProps);
     assert.ok(user instanceof User);
 };
 
