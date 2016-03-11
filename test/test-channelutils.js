@@ -105,7 +105,8 @@ exports['test open live channel with livestreamer'] = function*(assert) {
 
 exports['test open hosted live channel with livestreamer'] = function*(assert) {
     const channel = getChannel();
-    channel.state = new LiveState(LiveState.REDIRECT);x
+    channel.state = new LiveState(LiveState.REDIRECT);
+    channel.state.alternateURL = "http://example.com/alternate";
     yield channelUtils.selectOrOpenTab(channel, "livestreamer");
     assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
 };
