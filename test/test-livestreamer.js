@@ -10,6 +10,13 @@ const livestreamer = requireHelper("../lib/livestreamer");
 const { prefs } = require("sdk/simple-prefs");
 const { when } = require("sdk/event/utils");
 
+/**
+ * An URL that doesn't get rejected by livestreamer as not supported but still
+ * not an actually working URL that could ever be streamed from.
+ * @const
+ */
+const LAUNCHABLE_EXAMPLE_URL = "https://twitch.tv/cant-launch-this.html";
+
 exports["test existance event"] = function*(assert) {
     let p = when(livestreamer.events, "existance");
     prefs.livestreamer_enabled = true;
@@ -55,6 +62,17 @@ exports["test launch livestreamer that doesn't exist"] = function*(assert) {
     prefs.livestreamer_path = initialPath;
 };
 
+exports["test launch unsupported stream"] = function*(assert) {
+    let counter = 0;
+    const listener = () => ++counter;
+    livestreamer.events.on("launch", listener);
+    const code = yield livestreamer.launch("http://example.com");
+    assert.equal(code, 1, "Couldn't launch");
+    assert.equal(counter, 0, "Didn't even try to launch");
+
+    livestreamer.events.off("launch", listener);
+};
+
 exports["test launch livestreamer"] = function*(assert) {
     const initialQuality = prefs.livestreamer_quality;
     const initialFallbackQuality = prefs.livestreamer_fallbackQuality;
@@ -65,7 +83,7 @@ exports["test launch livestreamer"] = function*(assert) {
     let counter = 0;
     const listener = () => ++counter;
     livestreamer.events.on("launch", listener);
-    const code = yield livestreamer.launch("http://example.com");
+    const code = yield livestreamer.launch(LAUNCHABLE_EXAMPLE_URL);
     assert.equal(code, 1, "Launch failed");
     assert.equal(counter, 2, "Launched exactly twice");
 
@@ -81,7 +99,7 @@ exports["test launch livestreamer with two equal presets"] = function*(assert) {
     let counter = 0;
     const listener = () => ++counter;
     livestreamer.events.on("launch", listener);
-    const code = yield livestreamer.launch("http://example.com");
+    const code = yield livestreamer.launch(LAUNCHABLE_EXAMPLE_URL);
     assert.ok(code == 1 || code === undefined, "Exit code holds failed");
     assert.equal(counter, 1, "Only launched once");
 
@@ -93,7 +111,7 @@ exports["test launch livestreamer with extra arguments"] = function*(assert) {
     prefs.livestreamer_player = "vlc";
     prefs.livestreamer_extraArguments = "--help";
 
-    const code = yield livestreamer.launch("http://example.com");
+    const code = yield livestreamer.launch(LAUNCHABLE_EXAMPLE_URL);
     assert.equal(code, 1);
 
     prefs.livestreamer_extraArguments = "";
