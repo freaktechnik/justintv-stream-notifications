@@ -11,6 +11,7 @@ const { wait } = require("./event/helpers");
 const { getChannel } = require("./channeluser/utils");
 const { prefs } = require("sdk/simple-prefs");
 const self = require("sdk/self");
+const { LiveState } = requireHelper("../lib/channel/live-state");
 
 exports['test open archive'] = function*(assert) {
     var channel = getChannel();
@@ -98,6 +99,13 @@ exports['test open chat'] = function*(assert) {
 exports['test open live channel with livestreamer'] = function*(assert) {
     let channel = getChannel();
     channel.live = true;
+    yield channelUtils.selectOrOpenTab(channel, "livestreamer");
+    assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
+};
+
+exports['test open hosted live channel with livestreamer'] = function*(assert) {
+    const channel = getChannel();
+    channel.state = new LiveState(LiveState.REDIRECT);x
     yield channelUtils.selectOrOpenTab(channel, "livestreamer");
     assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
 };
