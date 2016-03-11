@@ -64,11 +64,23 @@ exports['test open live channel when archive is already opened'] = function*(ass
 exports['test open live channel'] = function*(assert) {
     let channel = getChannel();
     channel.live = true;
-    channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "ready");
+    yield channelUtils.selectOrOpenTab(channel);
 
     assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
     let p = wait(tabs, "close");
+    tabs.activeTab.close();
+    yield p;
+};
+
+exports['test open hosted live channel'] = function*(assert) {
+    const channel = getChannel();
+    channel.live = true;
+    channel.state = new LiveState(LiveState.REDIRECT);
+    channel.state.alternateURL = "http://example.com/alternate";
+    yield channelUtils.selectOrOpenTab(channel);
+    
+    assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
+    const p = wait(tabs, "close");
     tabs.activeTab.close();
     yield p;
 };
@@ -105,6 +117,7 @@ exports['test open live channel with livestreamer'] = function*(assert) {
 
 exports['test open hosted live channel with livestreamer'] = function*(assert) {
     const channel = getChannel();
+    channel.live = true;
     channel.state = new LiveState(LiveState.REDIRECT);
     channel.state.alternateURL = "http://example.com/alternate";
     yield channelUtils.selectOrOpenTab(channel, "livestreamer");
