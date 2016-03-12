@@ -423,21 +423,6 @@
                          "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                          "url": "http://www.twitch.tv/live"
                     }
-                },
-                {
-                    "viewers": 1,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": true,
-                    "channel": {
-                        "display_name": "playlist",
-                        "game": "",
-                        "_id": 9,
-                        "name": "playlist",
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "https://twitch.tv/playlist"
-                    }
                 }
             ]
         },
@@ -456,21 +441,6 @@
                          "name": "live",
                          "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                          "url": "http://www.twitch.tv/live"
-                    }
-                },
-                {
-                    "viewers": 1,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": true,
-                    "channel": {
-                        "display_name": "playlist",
-                        "game": "",
-                        "_id": 9,
-                        "name": "playlist",
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "https://twitch.tv/playlist"
                     }
                 }
             ]

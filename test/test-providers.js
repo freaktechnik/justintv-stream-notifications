@@ -216,7 +216,7 @@ exports.testMockAPIRequests = function*(assert) {
                 }
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
-                assert.equal(ret.live, ret.uname === "live", "Update request correctly set live states for "+p);
+                assert.equal(ret.live, ret.uname === "live", "Update request correctly set live state of "+ret.uname+" for "+p);
             }
 
             if(provider.supports.featured) {
