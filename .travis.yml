@@ -13,6 +13,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 before_script:
 - npm install -g grunt-cli
+- pip install livestreamer
 after_success:
 - ./node_modules/.bin/codecov
 branches:
