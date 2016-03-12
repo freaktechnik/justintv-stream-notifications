@@ -151,11 +151,11 @@ changelog
     - Add host application version to debug dump
     - Fix variable name clashes on Firefox < 44
 3.3.0
-    - Fix livestreamer can't open hosted streams
+    - Fix Livestreamer can't open hosted streams
     - Add unified options for treatment of hosting and rebroadcasts
-    - Added an optional new tab to the panel for hosting and rebroadcasts
+    - Add an optional new tab to the panel for hosting and rebroadcasts
     - Optionally display hosting and rebroadcasts at the bottom of the live tab
-    - Titch playlists treated like hosting by default
-    - Tweaked styles for hosting and rebroadcasts displayed as live channels
-    - Made hosting and rebroadcasts easier to recognize by default
+    - Twitch playlists treated like a broadcast by default
+    - Tweak to the styles for hosting and rebroadcasts displayed as live channels
+    - Hosting and rebroadcasts are easier to recognize by default
     - Support adding YouTube channels by their ID

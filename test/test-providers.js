@@ -173,26 +173,26 @@ exports.testMockAPIRequests = function*(assert) {
 
             ret = yield provider.getChannelDetails("test");
             assert.ok(ret instanceof Channel, "getChannelDetails resolves to a channel for "+p);
-            assert.equal(ret.uname, "test");
+            assert.equal(ret.uname, "test", "test channel channel detail gets the username test for "+p);
             assert.equal(ret.type, p, "getChannelDetails resolves to a channel with correct type for "+p);
-            assert.ok(!ret.live);
+            assert.ok(!ret.live, "Test channel is not live for "+p);
 
             live = yield provider.getChannelDetails("live");
             assert.ok(live instanceof Channel, "getChannelDetails for a live channel resolves to a channel for " + p);
-            assert.equal(live.uname, "live");
-            assert.equal(live.type, p);
+            assert.equal(live.uname, "live", "Channel details username for live is correct for "+p);
+            assert.equal(live.type, p, "live channel has the correct type for "+p);
             // live status knowledge is no requirement for getChannelDetails.
 
             ret = yield provider.updateChannel(ret.login);
             assert.ok(ret instanceof Channel, "updateChannel resolves to a channel for "+p);
-            assert.equal(ret.uname, "test");
+            assert.equal(ret.uname, "test", "Username of test is correct for updateChannel with "+p);
             assert.equal(ret.type, p, "updateChannel resolves to a channel with correct type for "+p);
-            assert.ok(!ret.live);
+            assert.ok(!ret.live, "Updated test channel still isn't live for "+p);
 
             live = yield provider.updateChannel(live.login);
-            assert.ok(live instanceof Channel);
-            assert.equal(live.uname, "live");
-            assert.equal(live.type, p);
+            assert.ok(live instanceof Channel, "updateChannel resolves to a channel with the live channel for "+p);
+            assert.equal(live.uname, "live", "Username still is live after update for "+p);
+            assert.equal(live.type, p, "Type of channel is still "+p+" after update of a live channel");
             assert.ok(live.live, "Live channel is live after update with " + p);
 
             ret.id = 1;
@@ -203,7 +203,7 @@ exports.testMockAPIRequests = function*(assert) {
             ret.forEach((chan) => {
                 assert.ok(chan instanceof Channel, "updateChannels resolves to a channel for "+p);
                 assert.equal(chan.type, p, "updateChannels resolves to a channel with correct type for "+p);
-                assert.equal(chan.live, chan.uname === "live");
+                assert.equal(chan.live, chan.uname === "live", "Channel is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
             });
 
             if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
@@ -216,27 +216,27 @@ exports.testMockAPIRequests = function*(assert) {
                 }
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
-                assert.equal(ret.live, ret.uname === "live");
+                assert.equal(ret.live, ret.uname === "live", "Update request correctly set live states for "+p);
             }
 
             if(provider.supports.featured) {
                 ret = yield provider.getFeaturedChannels();
-                assert.ok(Array.isArray(ret));
-                assert.ok(ret.length > 0);
+                assert.ok(Array.isArray(ret), "Featured channels returns an array for "+p);
+                assert.ok(ret.length > 0, "There are featured channels for "+p);
                 ret.forEach((chan) => {
-                    assert.ok(chan instanceof Channel);
-                    assert.equal(chan.type, p);
+                    assert.ok(chan instanceof Channel, "One of the featured channels is indeed a channel for "+p);
+                    assert.equal(chan.type, p, "It also has the type of "+p);
                 });
-                assert.equal(ret[0].uname, "featured");
+                assert.equal(ret[0].uname, "featured", "And the first one's username is featured for "+p);
 
                 ret = yield provider.search("test");
-                assert.ok(Array.isArray(ret));
-                assert.ok(ret.length > 0);
+                assert.ok(Array.isArray(ret), "Search returns an array for "+p);
+                assert.ok(ret.length > 0, "There is more than one search result for "+p);
                 ret.forEach((chan) => {
-                    assert.ok(chan instanceof Channel);
-                    assert.equal(chan.type, p);
+                    assert.ok(chan instanceof Channel, "One of the search results is a channel for "+p);
+                    assert.equal(chan.type, p, "It also has the type of "+p);
                 });
-                assert.equal(ret[0].uname, "test");
+                assert.equal(ret[0].uname, "test", "The first found item has the username test for "+p);
             }
             provider._setQs(originalQS);
         }
