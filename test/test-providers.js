@@ -199,11 +199,11 @@ exports.testMockAPIRequests = function*(assert) {
             live.id = 2;
 
             ret = yield provider.updateChannels([ret, live]);
-            assert.equal(ret.length, 2);
+            assert.equal(ret.length, 2, "Both channels were updated");
             ret.forEach((chan) => {
                 assert.ok(chan instanceof Channel, "updateChannels resolves to a channel for "+p);
                 assert.equal(chan.type, p, "updateChannels resolves to a channel with correct type for "+p);
-                assert.equal(chan.live, chan.uname === "live", "Channel is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
+                assert.equal(chan.live, chan.uname === "live", "Channel "+chan.uname+" is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
             });
 
             if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
@@ -211,7 +211,7 @@ exports.testMockAPIRequests = function*(assert) {
                 provider.updateRequest(ret);
                 ret = yield prom;
                 if(Array.isArray(ret)) {
-                    assert.ok(ret.length > 0);
+                    assert.ok(ret.length > 0, "There is mor than one item in the updated channels");
                     ret = ret[0];
                 }
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
