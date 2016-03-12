@@ -74,6 +74,8 @@ exports["test launch unsupported stream"] = function*(assert) {
 };
 
 exports["test launch livestreamer"] = function*(assert) {
+    if(!livestreamer.show)
+        return;
     const initialQuality = prefs.livestreamer_quality;
     const initialFallbackQuality = prefs.livestreamer_fallbackQuality;
 
@@ -93,6 +95,8 @@ exports["test launch livestreamer"] = function*(assert) {
 };
 
 exports["test launch livestreamer with two equal presets"] = function*(assert) {
+    if(!livestreamer.show)
+        return;
     const initialQuality = prefs.livestreamer_quality;
     prefs.livestreamer_quality = prefs.livestreamer_fallbackQuality;
 
