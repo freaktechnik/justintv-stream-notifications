@@ -55,7 +55,7 @@ const TYPE_FACTORY = "factory";
  *                                                to a regular XPCOM component.
  * @return {Array.<registerFactory, unregisterFactory>} Methods to register and
  *                                                      unregister the
- *                                                      replacement component. 
+ *                                                      replacement component.
  */
 exports.createMock = (contractID, IIDs, implementation, type = TYPE_FACTORY) => {
     if(!IIDs.length)
@@ -97,18 +97,20 @@ exports.createMock = (contractID, IIDs, implementation, type = TYPE_FACTORY) => 
                 }
             }
         },
-        () => {
+        (dontReregister = false) => {
+            console.log("Restoring original factory of ", contractID);
             if(wrapperFactory !== null) {
-                console.log("Restoring original factory of ", contractID);
                 xpcom.unregister(wrapperFactory);
+            }
+            if(!dontReregister) {
                 registrar.registerFactory(
                     factoryCID,
                     "Parental Controls Service",
                     contractID,
                     originalFactory
                 );
-                wrapperFactory = null;
             }
+            wrapperFactory = null;
         }
     ];
 };

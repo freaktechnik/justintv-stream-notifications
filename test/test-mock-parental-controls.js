@@ -39,6 +39,12 @@ exports.testLog = (assert) => {
     assert.equal(getLogs().length, 1, "Logged url");
 };
 
+exports.testGracefulFailureWithoutComponent = (assert) => {
+    unregisterService(true);
+
+    assert.ok(!ParentalControls.enabled, "Even without registered component it returns false");
+};
+
 before(exports, () => {
     registerService();
 });
