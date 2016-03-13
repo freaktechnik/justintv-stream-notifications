@@ -40,6 +40,11 @@ const TYPE_FACTORY = "factory";
 /**
  * Unregister the replacement component and restore the original.
  * @callback unregisterFactory
+ * @param {boolean} [dontReregister=false] - Doesn't reregister the origianl
+ *                                           factory. Make sure to call this
+ *                                           function again without this
+ *                                           parameter before registering the
+ *                                           mock again.
  */
 
 /**
