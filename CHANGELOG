@@ -159,3 +159,4 @@ changelog
     - Tweak to the styles for hosting and rebroadcasts displayed as live channels
     - Hosting and rebroadcasts are easier to recognize by default
     - Support adding YouTube channels by their ID
+    - Add button to Channel Manager to open extension options
