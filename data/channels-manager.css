@@ -38,7 +38,18 @@ main {
 .tabstrip {
     padding: 0;
     margin: 0;
+    display: inline-block;
+}
+
+#topbar {
     background: #2c24c5;
+    display: flex;
+}
+
+.tabstrip.right {
+    text-align: right;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 .tabstrip a:link, .tabstrip a:hover, .tabstrip a:active, .tabstrip a:visited {
@@ -48,7 +59,7 @@ main {
     padding: 1em;
 }
 
-.tabstrip a.current {
+.tabstrip a.current, .tabstrip.right a:hover {
     background: #497dfe;
 }
 

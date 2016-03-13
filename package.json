@@ -258,7 +258,8 @@
   },
   "dependencies": {
     "jetpack-homepanel": "^1.0.1",
-    "notification-box": "^0.1.1"
+    "notification-box": "^0.1.1",
+    "preferences-utils": "0.0.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "~6.0.15",

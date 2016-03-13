@@ -286,16 +286,18 @@ popup.querySelector("form").addEventListener("submit", function(evt) {
     }
 }, false);
 
+document.getElementById("options").addEventListener("click", (e) => {
+    e.preventDefault();
+    self.port.emit("showoptions");
+}, false);
+
 function onDialogDone() {
     popup.querySelector("dialog").removeAttribute("open");
     hideDialog();
     resetDialogForms();
 }
 
-/** @todo improve this like in the twitch provider */
 function getChannelUname(channel) {
-    if(channel.type == "twitch")
-        channel.uname = channel.uname.split(" ")[0];
     return channel.uname;
 }
 
