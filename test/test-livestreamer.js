@@ -10,6 +10,11 @@ const requireHelper = require("./require_helper");
 const livestreamer = requireHelper("../lib/livestreamer");
 const { prefs } = require("sdk/simple-prefs");
 const { when } = require("sdk/event/utils");
+const system = require("sdk/system");
+
+const getStubLivestreamer = () => {
+    return "/usr/bin/nodejs "+system.env.PWD+"/test/livestreamer/livestreamer-stub.js";
+};
 
 /**
  * An URL that doesn't get rejected by livestreamer as not supported but still
@@ -75,13 +80,13 @@ exports["test launch unsupported stream"] = function*(assert) {
 };
 
 exports["test launch livestreamer"] = function*(assert) {
-    if(!livestreamer.show)
-        return;
+    const initialLivestreamer = prefs.livestreamer_path;
     const initialQuality = prefs.livestreamer_quality;
     const initialFallbackQuality = prefs.livestreamer_fallbackQuality;
 
     prefs.livestreamer_quality = "worst";
     prefs.livestreamer_fallbackQuality = "best";
+    prefs.livestreamer_path = getStubLivestreamer();
 
     let counter = 0;
     const listener = () => ++counter;
@@ -93,13 +98,15 @@ exports["test launch livestreamer"] = function*(assert) {
     prefs.livestreamer_quality = initialQuality;
     prefs.livestreamer_fallbackQuality = initialFallbackQuality;
     livestreamer.events.off("launch", listener);
+    prefs.livestreamer_path = initialLivestreamer;
 };
 
 exports["test launch livestreamer with two equal presets"] = function*(assert) {
-    if(!livestreamer.show)
-        return;
+    const initialLivestreamer = prefs.livestreamer_path;
     const initialQuality = prefs.livestreamer_quality;
     prefs.livestreamer_quality = prefs.livestreamer_fallbackQuality;
+
+    prefs.livestreamer_path = getStubLivestreamer();
 
     let counter = 0;
     const listener = () => ++counter;
@@ -110,6 +117,7 @@ exports["test launch livestreamer with two equal presets"] = function*(assert) {
 
     prefs.livestreamer_quality = initialQuality;
     livestreamer.events.off("launch", listener);
+    prefs.livestreamer_path = initialLivestreamer;
 };
 
 exports["test launch livestreamer with extra arguments"] = function*(assert) {

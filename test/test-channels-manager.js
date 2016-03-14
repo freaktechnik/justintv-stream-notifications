@@ -82,6 +82,7 @@ exports.testLoading = function(assert) {
 exports.testLoadingWithWorker = function*(assert) {
     let cm = new ChannelsManager();
     let p = defer();
+    cm.mod.destroy();
     cm.worker = getFakeWorker(p.resolve);
 
     cm.loading = false;
@@ -135,6 +136,7 @@ exports.testCallbacks = function*(assert) {
         };
     };
     let p = defer();
+    cm.mod.destroy();
     cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
 
     cm.onChannelAdded(FAKE_ITEM);
@@ -205,7 +207,7 @@ exports.testMakeSureNoThrows = function(assert) {
     } catch(e) {
         assert.fail(e);
     }
-    
+
     cm.destroy();
 };
 
@@ -213,6 +215,7 @@ exports.testAddProviders = function*(assert) {
     let cm = new ChannelsManager();
 
     let p = defer();
+    cm.mod.destroy();
     cm.worker = getFakeWorker(p.resolve);
 
     cm.addProviders("test");
@@ -265,7 +268,7 @@ exports.testWorkerDoesntGetReplaced = function*(assert) {
 
     cm.managerTab.close();
     yield wait(cm.worker, "detach");
-    
+
     assert.strictEqual(cm.worker, null, "Worker's gone");
 
     cm.worker = "My worker";
