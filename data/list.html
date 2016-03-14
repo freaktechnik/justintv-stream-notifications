@@ -33,29 +33,31 @@
 
         <main class="tabbed">
             <nav>
-                <ul class="tabstrip" role="tablist">
-                    <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" data-l10n-id="panel_tab_live">Live</a></li>
-                    <li role="presentation" id="nonliveTab" hidden><a href="#nonlive" role="tab" aria-controls="nonlive" data-tab="4" data-l10n-id="data_tab_nonlive">Non-live</a></li>
-                    <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
-                    <li role="presentation" id="exploreTab" hidden><a href="#featured" role="tab" aria-controls="featured" data-tab="3" data-l10n-id="panel_tab_explore">Explore</a></li>
-                </ul>
-                <ul class="toolbar" role="toolbar">
-                    <li>
-                        <a id="searchButton" href="#searchField" title="Filter channels by a string" data-l10n-id="panel_search" aria-pressed="false" aria-controls="searchField">
-                            <svg class="icon" viewBox="0 0 8 8">
-                                <use xlink:href="sprite/open-iconic.min.svg#magnifying-glass"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="refreshButton" href="#" title="Refresh the live statuses of all channels" data-l10n-id="panel_refresh">
-                            <svg class="icon" viewBox="0 0 8 8">
-                                <use xlink:href="sprite/open-iconic.min.svg#reload"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li><a id="configure" href="#" title="Opens the channel management tab" data-l10n-id="panel_manage">Manage</a></li>
-                </ul>
+                <div class="topbar">
+                    <ul class="tabstrip" role="tablist">
+                        <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" data-l10n-id="panel_tab_live">Live</a></li>
+                        <li role="presentation" id="nonliveTab" hidden><a href="#nonlive" role="tab" aria-controls="nonlive" data-tab="4" data-l10n-id="data_tab_nonlive">Non-live</a></li>
+                        <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
+                        <li role="presentation" id="exploreTab" hidden><a href="#featured" role="tab" aria-controls="featured" data-tab="3" data-l10n-id="panel_tab_explore">Explore</a></li>
+                    </ul>
+                    <ul class="toolbar" role="toolbar">
+                        <li>
+                            <a id="searchButton" href="#searchField" title="Filter channels by a string" data-l10n-id="panel_search" aria-pressed="false" aria-controls="searchField">
+                                <svg class="icon" viewBox="0 0 8 8">
+                                    <use xlink:href="sprite/open-iconic.min.svg#magnifying-glass"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a id="refreshButton" href="#" title="Refresh the live statuses of all channels" data-l10n-id="panel_refresh">
+                                <svg class="icon" viewBox="0 0 8 8">
+                                    <use xlink:href="sprite/open-iconic.min.svg#reload"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li><a id="configure" href="#" title="Opens the channel management tab" data-l10n-id="panel_manage">Manage</a></li>
+                    </ul>
+                </div>
                 <input type="search" id="searchField" placeholder="Filter…" data-l10n-id="cm_filter" hidden>
             </nav>
             <section class="tabcontent live" role="tabpanel" data-tab="1">

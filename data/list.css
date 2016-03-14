@@ -41,15 +41,21 @@ nav {
     list-style-type: none;
 }
 
+.topbar {
+    display: flex;
+    background: #2c24c5;
+}
+
+.topbar > ul {
+    display: inline-block;
+}
 
 .tabstrip {
     padding: 0;
     margin: 0;
-    background: #2c24c5;
 }
 
-.tabstrip a:link, .tabstrip a:hover, .tabstrip a:active, .tabstrip a:visited,
-.toolbar a:link, .toolbar a:hover, .toolbar a:active, .toolbar a:visited {
+.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited {
     color: white;
     text-decoration: none;
     display: inline-block;
@@ -61,12 +67,12 @@ nav {
 }
 
 .toolbar {
-    position: absolute;
     margin: 0;
     padding: 0;
 
-    top: 0;
-    right: 0;
+    text-align: right;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 #searchField, #exploreprovider {

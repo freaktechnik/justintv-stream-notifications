@@ -2,7 +2,6 @@
  * Livestreamer module tests
  * @author Martin Giger
  * @license MPL-2.0
- * @todo use a stub livestreamer executable?
  */
 "use strict";
 
