@@ -311,3 +311,13 @@ nav {
     background: rgb(255, 119, 0) !important;
     color: white !important;
 }
+
+.thumbnail .live .dailymotion a div {
+    background-color: rgba(0, 102, 220, 0.7);
+    color: white;
+}
+
+.dailymotion a:hover, .thumbnail .dailymotion a:hover div {
+    background: rgb(0, 102, 220) !important;
+    color: white !important;
+}
