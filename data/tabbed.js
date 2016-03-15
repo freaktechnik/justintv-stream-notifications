@@ -1,6 +1,6 @@
-/*
- *  Created by Martin Giger
- *  Licensed under MPL 2.0
+/**
+ * @author Martin Giger
+ * @license MPL-2.0
  */
 
 /* global show */
