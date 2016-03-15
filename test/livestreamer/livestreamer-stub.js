@@ -5,7 +5,9 @@
  */
 "use strict";
 
-if(process.argv[2].includes("--can-handle-url"))
+console.log("Simulating Livestreamer...");
+
+if(process.argv[2].indexOf("--can-handle-url") != -1)
     process.exit(0);
 
 process.exit(1);

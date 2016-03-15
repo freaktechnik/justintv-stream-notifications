@@ -12,7 +12,7 @@ const { when } = require("sdk/event/utils");
 const system = require("sdk/system");
 
 const getStubLivestreamer = () => {
-    return "/usr/bin/node "+system.env.PWD+"/test/livestreamer/livestreamer-stub.js";
+    return system.env.PWD+"/test/livestreamer/livestreamer-stub.sh";
 };
 
 /**
