@@ -99,6 +99,38 @@
                     }
                 }
             ]
+        },
+        "https://api.azubu.tv/public/user/test/profile": {
+            "data": {
+                "user": {
+                    "username": "test",
+                    "roles": [
+                        {
+                            "name": "User",
+                            "role": "ROLE_USER"
+                        }
+                    ]
+                },
+                "in_game_name": "test",
+                "first_name": null,
+                "last_name": null,
+                "biography": null,
+                "url_photo_small": "http://img.azubu.tv/images/default/profile-photo-small.jpg",
+                "url_photo_large": "http://img.azubu.tv/images/default/profile-photo-large.jpg"
+            }
+        },
+        "https://api.azubu.tv/public/user/test/followings/list?limit=100&offset=0": {
+            "total": 1,
+            "limit": 100,
+            "offset": 0,
+            "data": [
+                {
+                    "follow": {
+                        "username": "live"
+                    },
+                    "created_at": "2015-06-25 09:30:05"
+                }
+            ]
         }
     },
     "dailymotion": {
@@ -216,6 +248,58 @@
                 }
             ]
         },
+        "https://api.dailymotion.com/users?ids=test_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/users?ids=live_id%2Ctest_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                },
+                {
+                    "screenname": "live",
+                    "url": "",
+                    "id": "live_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
         "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url&sort=live-audience&live_onair=1": {
             "has_more": false,
             "list": [
@@ -261,6 +345,25 @@
                     "owner.avatar_360_url": "",
                     "owner.avatar_480_url": "",
                     "owner.avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/user/test_id/following?fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "live",
+                    "url": "",
+                    "id": "live_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
                 }
             ]
         }
@@ -367,10 +470,64 @@
                     "media_is_live": 0
                 }
             ]
+        },
+        "http://api.hitbox.tv/user/test": {
+            "user_name": "test",
+            "user_cover": null,
+            "user_status": "1",
+            "user_logo": "/static/img/channel/masta_52274f9e8159b_large.jpg",
+            "user_logo_small": "/static/img/channel/masta_52274f9e8159b_small.jpg",
+            "user_is_broadcaster": false,
+            "followers": null,
+            "user_partner": null,
+            "user_id": "33418",
+            "is_live": null,
+            "live_since": null,
+            "twitter_account": null,
+            "twitter_enabled": null,
+            "user_beta_profile": "0"
+        },
+        "http://api.hitbox.tv/following/user?user_name=test&limit=100&offset=0": {
+            "request": {
+                "this":"/following/user"
+            },
+            "following": [
+                {
+                    "user_name": "live",
+                    "user_logo": "/static/img/channel/masta_52274f9e8159b_large.jpg",
+                    "user_logo_small": "/static/img/channel/masta_52274f9e8159b_small.jpg",
+                    "followers": 1,
+                    "user_partner": null,
+                    "user_id": "1",
+                    "follow_id": "3",
+                    "follower_user_id": "33418",
+                    "follower_notify": "1",
+                    "date_added": "2015-09-16 16:33:00"
+                }
+            ],
+            "max_results": "0"
         }
     },
     "newlivestream": {
         "http://livestream.com/api/accounts/test": {
+            "id": 0,
+            "short_name": "test",
+            "full_name": "test",
+            "picture": {
+                "url": "",
+                "width": "300",
+                "small_url": "",
+                "thumb_url": ""
+            },
+            "category_name": "",
+            "upcoming_events": {
+                "data": null
+            },
+            "past_events": {
+                "data": null
+            }
+        },
+        "http://livestream.com/api/accounts/0": {
             "id": 0,
             "short_name": "test",
             "full_name": "test",
@@ -416,6 +573,36 @@
         "http://livestream.com/api/accounts/1/events/0/stream_info": {
             "is_live": true,
             "thumbnail_url": ""
+        },
+        "http://livestream.com/api/accounts/0/following?maxITems=50&page=0": {
+            "total": 1,
+            "data": [
+                {
+                    "id": 1,
+                    "short_name": "live",
+                    "full_name": "live",
+                    "picture": {
+                        "url": "",
+                        "width": "300",
+                        "small_url": "",
+                        "thumb_url": ""
+                    },
+                    "category_name": "",
+                    "upcoming_events": {
+                        "data": [
+                            {
+                                "broadcast_id": 0,
+                                "full_name": "live",
+                                "viewer_count": 0,
+                                "id": 0
+                            }
+                        ]
+                    },
+                    "past_events": {
+                        "data": []
+                    }
+                }
+            ]
         }
     },
     "livestream": {
@@ -478,6 +665,7 @@
                 "user": {
                     "username": "test",
                     "name": "test",
+                    "slug": "live",
                     "avatar": {
                         "small": "",
                         "medium": "",
@@ -497,6 +685,7 @@
                 "user": {
                     "username": "live",
                     "name": "live",
+                    "slug": "live",
                     "avatar": {
                         "small": "",
                         "medium": "",
@@ -510,6 +699,32 @@
                 "live_viewers_count": 0,
                 "stream_title": ""
             }
+        },
+        "https://api.streamup.com/v1/users/test": {
+            "user": {
+                "username": "test",
+                "name": "test",
+                "avatar": {
+                    "small": "",
+                    "medium": "",
+                    "large": ""
+                }
+            }
+        },
+        "https://api.streamup.com/v1/users/test/following?page=1": {
+            "next_page": null,
+            "users": [
+                {
+                    "username": "live",
+                    "name": "live",
+                    "slug": "live",
+                    "avatar": {
+                        "small": "",
+                        "medium": "",
+                        "large": ""
+                    }
+                }
+            ]
         }
     },
     "twitch": {
@@ -925,7 +1140,7 @@
                     }
                 }
             ],
-            "_total": 0,
+            "_total": 1,
             "_links": {
                 "self":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
                 "next":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
@@ -972,6 +1187,53 @@
                     "host_login": "freaktechnik"
                 }
             ]
+        },
+        "https://api.twitch.tv/kraken/users/test": {
+            "display_name": "test",
+            "_id": 999,
+            "name": "test",
+            "type": "user",
+            "bio": "",
+            "created_at": "2011-08-21T18:32:25Z",
+            "updated_at": "2016-01-10T19:52:42Z",
+            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/users/test"
+            }
+        },
+        "https://api.twitch.tv/kraken/users/test/follows/channels?limit=100&offset=0": {
+            "follows": [
+                {
+                    "channel": {
+                        "mature": false,
+                        "status": "",
+                        "broadcaster_language": "en",
+                        "display_name": "live",
+                        "game": "",
+                        "language": "en",
+                        "_id": 1,
+                        "name": "live",
+                        "created_at": "2011-08-21T18:32:25Z",
+                        "updated_at": "2015-10-31T19:53:15Z",
+                        "delay": null,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "banner": null,
+                        "video_banner": "",
+                        "background": null,
+                        "profile_banner": "",
+                        "profile_banner_background_color": null,
+                        "partner": false,
+                        "url": "http://www.twitch.tv/live",
+                        "views": 0,
+                        "followers": 0
+                    }
+                }
+            ],
+            "_total": 0,
+            "_links": {
+                "self":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
+                "next":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
+            }
         }
     },
     "beam": {
@@ -1210,6 +1472,7 @@
         "https://www.googleapis.com/youtube/v3/channels?id=0": {
             "items": [
                 {
+                    "id": "0",
                     "snippet": {
                         "title": "test",
                         "thumbnails": {
@@ -1227,6 +1490,7 @@
         "https://www.googleapis.com/youtube/v3/channels?id=1": {
             "items": [
                 {
+                    "id": "1",
                     "snippet": {
                         "title": "live",
                         "thumbnails": {
@@ -1353,6 +1617,30 @@
                 {
                     "id": {
                         "videoId": "c"
+                    }
+                }
+            ]
+        },
+        "https://www.googleapis.com/youtube/v3/subscriptions?channelId=0&maxResults=50": {
+            "pageInfo": {
+                "resultsPerPage": 50,
+                "totalResults": 1
+            },
+            "items": [
+                {
+                    "snippet": {
+                        "resourceId": {
+                            "channelId": "1"
+                        },
+                        "title": "live",
+                        "thumbnails": {
+                            "default": {
+                                "url": ""
+                            },
+                            "high": {
+                                "url": ""
+                            }
+                        }
                     }
                 }
             ]

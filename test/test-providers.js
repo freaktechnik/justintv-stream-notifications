@@ -42,7 +42,7 @@ exports.testProviders = function(assert) {
         assert.equal(typeof(provider.updateChannels), "function", "updateChannels is implemented");
         assert.equal(typeof(provider.getFeaturedChannels), "function", "getFeaturedChannels is implemented");
         assert.equal(typeof(provider.search), "function", "search is implemented");
-        
+
         if(!provider.enabled) {
             assert.ok(!provider.supports.favorites, "Doesn't support favorites when disabled");
             assert.ok(!provider.supports.credentials, "Doesn't support credentials when disabled");
@@ -206,7 +206,7 @@ exports.testMockAPIRequests = function*(assert) {
                 assert.equal(chan.live, chan.uname === "live", "Channel "+chan.uname+" is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
             });
 
-            if(IGNORE_QSUPDATE_PROVIDERS.indexOf(p) === -1) {
+            if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
                 prom = when(provider, "updatedchannels");
                 provider.updateRequest(ret);
                 ret = yield prom;
@@ -217,6 +217,32 @@ exports.testMockAPIRequests = function*(assert) {
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
                 assert.equal(ret.live, ret.uname === "live", "Update request correctly set live state of "+ret.uname+" for "+p);
+                
+                provider.removeRequest();
+            }
+
+            if(provider.supports.favorites) {
+                ret = yield provider.getUserFavorites("test");
+                assert.ok(Array.isArray(ret), "getUserFavorites returned an array for "+p);
+                assert.equal(ret.length, 2, "The returned array has exactly two elements for "+p);
+                assert.ok(ret[0] instanceof User, "First element is the user for "+p);
+                assert.ok(Array.isArray(ret[1]), "Second element is an array for "+p);
+                assert.equal(ret[0].uname, "test", "User's name is test for "+p);
+                assert.equal(ret[0].type, p, "returned user has the correct type of "+p);
+                ret[1].forEach((ch) => assert.equal(ch.type, p, "Each returned channel has the correct type for "+p));
+
+                if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+                    prom = when(provider, "updateduser");
+                    provider.updateFavsRequest([ret[0]]);
+                    ret = yield prom;
+                    assert.ok(ret instanceof User, "updateduser is a user for "+p);
+                    assert.equal(ret.type, p, "updateduser has the correct type for "+p);
+                    assert.equal(ret.uname, "test", "updateduser is called test for "+p);
+
+                    //TODO test newchannels event?
+                    
+                    provider.removeFavsRequest();
+                }
             }
 
             if(provider.supports.featured) {
@@ -241,7 +267,6 @@ exports.testMockAPIRequests = function*(assert) {
             provider._setQs(originalQS);
         }
     }
-    //TODO test favorites
 };
 
 exports.testGenericProvider = function*(assert) {
