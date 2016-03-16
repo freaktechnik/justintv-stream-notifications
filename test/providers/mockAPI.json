@@ -101,6 +101,170 @@
             ]
         }
     },
+    "dailymotion": {
+        "https://api.dailymotion.com/users?usernames=test&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url": {
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/users?usernames=live&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url": {
+            "list": [
+                {
+                    "screenname": "live",
+                    "url": "",
+                    "id": "live_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/user/test_id?fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url": {
+            "screenname": "test",
+            "url": "",
+            "id": "test_id",
+            "avatar_25_url": "",
+            "avatar_60_url": "",
+            "avatar_80_url": "",
+            "avatar_120_url": "",
+            "avatar_190_url": "",
+            "avatar_240_url": "",
+            "avatar_360_url": "",
+            "avatar_480_url": "",
+            "avatar_720_url": ""
+        },
+        "https://api.dailymotion.com/user/live_id?fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url": {
+            "screenname": "live",
+            "url": "",
+            "id": "live_id",
+            "avatar_25_url": "",
+            "avatar_60_url": "",
+            "avatar_80_url": "",
+            "avatar_120_url": "",
+            "avatar_190_url": "",
+            "avatar_240_url": "",
+            "avatar_360_url": "",
+            "avatar_480_url": "",
+            "avatar_720_url": ""
+        },
+        "https://api.dailymotion.com/user/test_id/videos?id=test_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url&sort=live-audience&limit=1": {
+            "has_more": false,
+            "list": []
+        },
+        "https://api.dailymotion.com/user/live_id/videos?id=live_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url&sort=live-audience&limit=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "chat_embed_url": "",
+                    "title": "",
+                    "url": "",
+                    "channel.name": "",
+                    "onair": true,
+                    "thumbnail_240_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/users?ids=test_id%2Clive_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                },
+                {
+                    "screenname": "live",
+                    "url": "",
+                    "id": "live_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url&sort=live-audience&live_onair=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "owner.id": "featured_id",
+                    "owner.screenname": "featured",
+                    "owner.url": "",
+                    "chat_embed_url": "",
+                    "title": "",
+                    "url": "",
+                    "channel.name": "",
+                    "thumbnail_240_url": "",
+                    "owner.avatar_25_url": "",
+                    "owner.avatar_60_url": "",
+                    "owner.avatar_80_url": "",
+                    "owner.avatar_120_url": "",
+                    "owner.avatar_190_url": "",
+                    "owner.avatar_240_url": "",
+                    "owner.avatar_360_url": "",
+                    "owner.avatar_480_url": "",
+                    "owner.avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url&sort=live-audience&live_onair=1&search=test": {
+            "has_more": false,
+            "list": [
+                {
+                    "owner.id": "test_id",
+                    "owner.screenname": "test",
+                    "owner.url": "",
+                    "chat_embed_url": "",
+                    "title": "",
+                    "url": "",
+                    "channel.name": "",
+                    "thumbnail_240_url": "",
+                    "owner.avatar_25_url": "",
+                    "owner.avatar_60_url": "",
+                    "owner.avatar_80_url": "",
+                    "owner.avatar_120_url": "",
+                    "owner.avatar_190_url": "",
+                    "owner.avatar_240_url": "",
+                    "owner.avatar_360_url": "",
+                    "owner.avatar_480_url": "",
+                    "owner.avatar_720_url": ""
+                }
+            ]
+        }
+    },
     "douyutv": {
         "http://www.douyutv.com/api/client/room/test": {
             "error": 0,
