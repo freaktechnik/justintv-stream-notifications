@@ -24,6 +24,8 @@ exports.testCanBrowseUrl = (assert) => {
 
     setEnabled(true);
     assert.ok(!ParentalControls.canBrowse("http://example.com"), "If service is enabled pages are denied");
+    
+    assert.ok(ParentalControls.canBrowse("http://humanoids.be"), "Humanoids.be throws in the mock, but we only get a true, like the service was disabled");
 };
 
 exports.testLog = (assert) => {

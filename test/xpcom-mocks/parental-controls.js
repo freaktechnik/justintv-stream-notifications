@@ -16,7 +16,7 @@ const [ registerService, unregisterService ] = helper.createMock("@mozilla.org/p
         return enabled;
     },
     isAllowed(action, uri) {
-        if(!enabled)
+        if(!enabled || uri.host == "humanoids.be")
             throw "Checking if something is allowed when disabled";
 
         return false;
