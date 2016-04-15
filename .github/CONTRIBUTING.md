@@ -10,7 +10,7 @@ however it will contain all channels and users and their current state as well
 as things like your operating system and extension version.
 
 ## Translations
-You can help to translate the extension on [BabelZilla](http://beta.babelzilla.org/projects/p/jtvn/).
+You can help to translate the extension on [BabelZilla](https://www.transifex.com/freaktechnik/live-stream-notifier).
 If your language doesn't exist yet, just request a new team for it and I'll
 approve it as soon as possible.
 
