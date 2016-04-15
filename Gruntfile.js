@@ -83,7 +83,7 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    src: ['*.xpi', 'build']
+                    src: ['*.xpi', 'build', 'locales/*.json', '!locales/<%= defaultLang %>.json']
                 }
             },
             scratch: {
