@@ -17,7 +17,7 @@
       "type": "bool",
       "name": "onlineNotification",
       "title": "Show a notification when a stream goes online",
-      "value": truef
+      "value": true
     },
     {
       "type": "bool",
