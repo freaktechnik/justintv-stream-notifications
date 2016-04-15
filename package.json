@@ -17,7 +17,7 @@
       "type": "bool",
       "name": "onlineNotification",
       "title": "Show a notification when a stream goes online",
-      "value": true
+      "value": truef
     },
     {
       "type": "bool",
@@ -288,5 +288,8 @@
   "scripts": {
     "test": "grunt test",
     "prepush": "grunt jshint"
+  },
+  "permissions": {
+    "multiprocess": true
   }
 }
