@@ -32,6 +32,13 @@
       "value": false
     },
     {
+      "type": "bool",
+      "name": "nonliveNotification",
+      "title": "Show a notification when a stream enters a non-live state",
+      "description": "This option is only relevant, when non-live streams aren't considered as live or offline.",
+      "value": true
+    },
+    {
       "type": "radio",
       "name": "panel_style",
       "title": "Panel item display style",
@@ -232,7 +239,6 @@
     }
   ],
   "homepage": "http://streamnotifier.ch/",
-  "description": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
   "author": "freaktechnik (https://humanoids.be)",
   "translators": [
     "manueljrs",
@@ -241,7 +247,6 @@
   "name": "justintv-stream-notifications",
   "version": "3.3.0",
   "lib": "lib",
-  "title": "Live Stream Notifier",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {

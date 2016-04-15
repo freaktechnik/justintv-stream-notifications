@@ -1,7 +1,14 @@
 [main]
-host = http://beta.babelzilla.org
+host = https://www.transifex.com
 
-[jtvn.enproperties]
+[live-stream-notifier.mainproperties]
 source_file = locale/en-US.properties
-source_lang = en-US
+source_lang = en_US
 file_filter = locale/<lang>.properties
+type = MOZILAPROPERTIES
+
+[live-stream-notifier.packagejson]
+source_file = locale/en-US.json
+source_lang = en_US
+file_filter = locale/<lang>.json
+type = KEYVALUEJSON

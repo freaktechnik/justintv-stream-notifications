@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
     var istanbulJpm = require("istanbul-jpm");
+
+    // Load package.json
     var pkg = grunt.file.readJSON("package.json");
     var dependencies = Object.keys(pkg.dependencies).map(function(d) {
         return d + "/**/*";
@@ -16,6 +18,15 @@ module.exports = function(grunt) {
             ' * This Source Code Form is subject to the terms of the Mozilla Public License,\n' +
             ' * v. 2.0. If a copy of the MPL was not distributed with this file, You can\n' +
             ' * obtain one at https://mozilla.org/MPL/2.0/.\n */\n',
+        defaultLang: "en-US",
+        locales: function() {
+            var locales = {};
+            grunt.file.expand({ cwd: "locale" }, "*.json").forEach(function(file) {
+                var lang = file.split(".")[0];
+                locales[lang] = grunt.file.readJSON("locale/" + file);
+            });
+            return locales;
+        },
         shell: {
             jpmTest: {
                 command: 'jpm test -b <%= firefoxBinary %>'
@@ -42,9 +53,8 @@ module.exports = function(grunt) {
             mainProperties: {
                 options: {
                     targetDir: 'build/locale',
-                    project: 'jtvn',
-                    endpoint: 'http://beta.babelzilla.org/api/2/',
-                    resources: ['enproperties'],
+                    project: 'live-stream-notifier',
+                    resources: ['mainproperties'],
                     filename: '_lang_.properties',
                     templateFn: function(strings) {
                         return strings.sort(function(a, b) {
@@ -53,6 +63,15 @@ module.exports = function(grunt) {
                             return p + string.key + "=" + string.translation + "\n";
                         }, "");
                     }
+                }
+            },
+            packageJson: {
+                options: {
+                    targetDir: 'locale',
+                    project: 'live-stream-notifier',
+                    resources: ['packagejson'],
+                    filename: '_lang_.json',
+                    mode: 'file'
                 }
             }
         },
@@ -149,6 +168,16 @@ module.exports = function(grunt) {
             }
         },
         "package": {
+            translate: {
+                pretty: 2,
+                srcDir: "build/",
+                destDir: "build/",
+                add: {
+                    "title": "<%= locales()[defaultLang].title %>",
+                    "description": "<%= locales()[defaultLang].description %>",
+                    "locales": "<%= locales() %>"
+                }
+            },
             dev: {
                 pretty: 2,
                 srcDir: ".",
@@ -273,8 +302,8 @@ module.exports = function(grunt) {
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
     grunt.registerTask('test', ['jshint', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
-    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'package:build', 'jpm:xpi']);
-    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev' ]);
+    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'package:build', 'package:translate', 'jpm:xpi']);
+    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'package:translate' ]);
     grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     // Need to transpile until jsdoc 3.3.0
