@@ -21,7 +21,7 @@ List of supported providers with some explanation on what they are can be found 
 [addons.mozilla.org/](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/)
 
 ## Contribute
-For contribution instructions, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ## Build it yourslef
 
