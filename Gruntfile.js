@@ -24,7 +24,10 @@ module.exports = function(grunt) {
             grunt.file.expand({ cwd: "locale" }, "*.json").forEach(function(file) {
                 var lang = file.split(".")[0];
                 locales[lang] = grunt.file.readJSON("locale/" + file);
+                if(!("title" in locales[lang]))
+                    delete locales[lang];
             });
+            grunt.config.set('package.translate.add.locales', locales);
             return locales;
         },
         shell: {
@@ -56,6 +59,7 @@ module.exports = function(grunt) {
                     project: 'live-stream-notifier',
                     resources: ['mainproperties'],
                     filename: '_lang_.properties',
+                    skipLanguages: [ 'en_US' ],
                     templateFn: function(strings) {
                         return strings.sort(function(a, b) {
                             return a.key.localeCompare(b.key);
@@ -71,7 +75,15 @@ module.exports = function(grunt) {
                     project: 'live-stream-notifier',
                     resources: ['packagejson'],
                     filename: '_lang_.json',
-                    mode: 'file'
+                    skipLanguages: [ 'en_US' ],
+                    templateFn: function(strings) {
+                        return JSON.stringify(strings.sort(function(a, b) {
+                            return a.key.localeCompare(b.key);
+                        }).reduce(function(p, string) {
+                            p[string.key] = string.translation;
+                            return p;
+                        }, {}));
+                    }
                 }
             }
         },
@@ -105,6 +117,11 @@ module.exports = function(grunt) {
                 files: {
                     src: ['bootstrap.js', 'install.rdf']
                 }
+            },
+            translate: {
+                files: {
+                    src: [ '**/locale/*_*.*' ]
+                }
             }
         },
         jsdoc: {
@@ -116,6 +133,14 @@ module.exports = function(grunt) {
             }
         },
         copy: {
+            translate: {
+                expand: true,
+                src: [ 'build/locale/*_*.properties', 'locale/*_*.json' ],
+                dest: '',
+                rename: function(dest, src) {
+                    return dest + src.replace("_", "-");
+                }
+            },
             build: {
                 files: [
                     {
@@ -174,8 +199,7 @@ module.exports = function(grunt) {
                 destDir: "build/",
                 add: {
                     "title": "<%= locales()[defaultLang].title %>",
-                    "description": "<%= locales()[defaultLang].description %>",
-                    "locales": "<%= locales() %>"
+                    "description": "<%= locales()[defaultLang].description %>"
                 }
             },
             dev: {
@@ -298,12 +322,13 @@ module.exports = function(grunt) {
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
+    grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     grunt.registerTask('quicktest', ['jshint', 'shell:jpmTest']);
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
     grunt.registerTask('test', ['jshint', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
-    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'package:build', 'package:translate', 'jpm:xpi']);
-    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'package:translate' ]);
+    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
+    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
     grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     // Need to transpile until jsdoc 3.3.0
