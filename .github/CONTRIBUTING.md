@@ -14,6 +14,12 @@ You can help to translate the extension on [BabelZilla](https://www.transifex.co
 If your language doesn't exist yet, just request a new team for it and I'll
 approve it as soon as possible.
 
+There is [a toutorial](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/l10n) how translations work and how you can live-test them.
+
+I try to give as much contextual information as possible on Transifex. The glossary contains some common words, sometimes there are specific translation instructions or screenshots (in the string comments). If you're unsure where the string would be used, check the name of the string key, it generally contains whatever part it belongs to and if it's a label or whatever.
+
+All strings for settings are tagged as "settings" and everything in the Channels Manager is tagged as "cm".
+
 ## Providers
 If you are versed in JavaScript, especially in writing CommonJS modules, you can try to write a module for a provider. If you don't have an idea for a provider to add, check [all issues with the provider tag](https://github.com/freaktechnik/justintv-stream-notifications/labels/provider).
 
