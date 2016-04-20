@@ -284,4 +284,36 @@ exports.testWorkerDoesntGetReplaced = function*(assert) {
     yield p;
 };
 
+exports.testNavigateAway = function*(assert) {
+    const cm = new ChannelsManager();
+
+    yield cm.open();
+    cm.managerTab.url = self.data.url("list.html");
+    yield wait(tabs.activeTab, "ready");
+
+    assert.strictEqual(null, cm.managerTab, "Manager tab gets cleared when navigating away");
+
+    const p = wait(tabs.activeTab, "close");
+    tabs.activeTab.close();
+    cm.destroy();
+    yield p;
+};
+
+exports.testNavigateBack = function*(assert) {
+    const cm = new ChannelsManager();
+
+    yield cm.open();
+    cm.managerTab.url = self.data.url("list.html");
+    yield wait(tabs.activeTab, "ready");
+
+    tabs.activeTab.url = self.data.url("channels-manager.html");
+    yield wait(tabs.activeTab, "ready");
+
+    assert.equal(tabs.activeTab, cm.managerTab);
+
+    const p = wait(tabs.activeTab, "close");
+    cm.destroy();
+    yield p;
+};
+
 require("sdk/test").run(exports);

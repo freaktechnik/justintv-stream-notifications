@@ -63,6 +63,10 @@ self.port.on("error", function(errorMsg) {
     showError(errorMsg);
 });
 
+window.addEventListener("beforeunload", () => {
+    self.port.emit("unload");
+});
+
 // Methods modifying the DOM
 
 var channels = document.querySelector("#channels"),
