@@ -2,8 +2,8 @@
  * Test twitch provider specific stuff
  * @author Martin Giger
  * @license MPL-2.0
- * @todo test livestate for playlist and hosed
- * @todo test playlist tile
+ * @todo test playlist and hosting for all three methods
+ * @todo test hosting preferred over playlist
  */
 "use strict";
 
@@ -16,6 +16,19 @@ const { LiveState } = requireHelper("../lib/channel/live-state");
 
 const provider = providers.twitch;
 
+exports.testHosting = function*(assert) {
+    const originalQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+
+    const ret = yield provider.updateChannel('pyrionflax');
+    assert.ok(ret.state.enabled)
+    assert.equal(ret.state.state, LiveState.REDIRECT);
+    assert.equal(ret.state.alternateUsername, "NVIDIA");
+
+    provider._setQs(originalQS);
+};
+
 exports.testPlaylist = function*(assert) {
     const originalQS = provider._qs;
 
@@ -26,6 +39,8 @@ exports.testPlaylist = function*(assert) {
     assert.ok(ret.state.enabled);
     assert.equal(ret.state.state, LiveState.REBROADCAST);
     assert.equal(ret.category, "Gremlins, Inc.");
+
+    provider._setQs(originalQS);
 };
 
 exports.testTwitchHostingRedirects = function*(assert) {
@@ -35,6 +50,8 @@ exports.testTwitchHostingRedirects = function*(assert) {
     const ret = yield provider.updateChannel('mlg_live');
     assert.equal(ret.login, 'mlg');
     assert.ok(!ret.live);
+
+    provider._setQs(originalQS);
 };
 
 exports.testTwitchLiveRedirects = function*(assert) {
@@ -50,6 +67,8 @@ exports.testTwitchLiveRedirects = function*(assert) {
     assert.equal(ret[0].login, 'mlg');
     assert.ok(ret[0].live);
     assert.equal(ret[0].id, 15);
+
+    provider._setQs(originalQS);
 };
 
 exports.testTwitchUpdateRedirects = function*(assert) {
@@ -73,6 +92,8 @@ exports.testTwitchUpdateRedirects = function*(assert) {
     assert.equal(ret[0].login, 'mlg', "Returned channel has the updated login");
     assert.ok(ret[0].live, "Returned channel is live");
     assert.equal(ret[0].id, 15, "Returned channel still has its ID");
+
+    provider._setQs(originalQS);
 };
 
 require("sdk/test").run(exports);

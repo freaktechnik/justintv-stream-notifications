@@ -893,7 +893,7 @@
                 "is_playlist": false
             }
         },
-        "http://tmi.twitch.tv/hosts?include_logins=1&host=0": {
+        "https://tmi.twitch.tv/hosts?include_logins=1&host=0": {
             "hosts": []
         },
         "https://api.twitch.tv/kraken/streams/featured": {
@@ -974,7 +974,7 @@
                 "videos":"https://api.twitch.tv/kraken/channels/mlg/videos"
             }
         },
-        "http://tmi.twitch.tv/hosts?include_logins=1&host=22212874": {
+        "https://tmi.twitch.tv/hosts?include_logins=1&host=22212874": {
             "hosts": [
                 {
                     "host_id": 22212874,
@@ -1180,7 +1180,7 @@
             "streams": [],
             "total": 0
         },
-        "http://tmi.twitch.tv/hosts?include_logins=1&host=16": {
+        "https://tmi.twitch.tv/hosts?include_logins=1&host=16": {
             "hosts": [
                 {
                     "host_id": 16,
@@ -1439,6 +1439,146 @@
             "channel": {
                 "name": "totalbiscuit",
                 "display_name": "Totalbiscuit"
+            }
+        },
+        "https://api.twitch.tv/kraken/channels/pyrionflax": {
+            "mature": true,
+            "status": "Stream Title",
+            "broadcaster_language": "en",
+            "display_name": "PyrionFlax",
+            "game": "Dota 2",
+            "language": "en",
+            "_id": 19309473,
+            "name": "pyrionflax",
+            "created_at": "2010-05-14T16:54:15Z",
+            "updated_at": "2016-04-21T21:46:21Z",
+            "delay": null,
+            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_image-502dcf27f785c632-300x300.png",
+            "banner": null,
+            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-channel_offline_image-3c127ba9b0ae7fec-1920x1080.png",
+            "background": null,
+            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_banner-1bd08282a8f11f71-480.png",
+            "profile_banner_background_color": null,
+            "partner": true,
+            "url": "https://www.twitch.tv/pyrionflax",
+            "views": 45961644,
+            "followers": 435612,
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/channels/pyrionflax",
+                "follows": "https://api.twitch.tv/kraken/channels/pyrionflax/follows",
+                "commercial": "https://api.twitch.tv/kraken/channels/pyrionflax/commercial",
+                "stream_key": "https://api.twitch.tv/kraken/channels/pyrionflax/stream_key",
+                "chat": "https://api.twitch.tv/kraken/chat/pyrionflax",
+                "features": "https://api.twitch.tv/kraken/channels/pyrionflax/features",
+                "subscriptions": "https://api.twitch.tv/kraken/channels/pyrionflax/subscriptions",
+                "editors": "https://api.twitch.tv/kraken/channels/pyrionflax/editors",
+                "teams": "https://api.twitch.tv/kraken/channels/pyrionflax/teams",
+                "videos": "https://api.twitch.tv/kraken/channels/pyrionflax/videos"
+            }
+        },
+        "https://tmi.twitch.tv/hosts?include_logins=1&host=19309473": {
+            "hosts": [
+                {
+                    "host_id": 19309473,
+                    "host_login": "pyrionflax",
+                    "target_id": "38970168",
+                    "target_login": "nvidia"
+                }
+            ]
+        },
+        "https://api.twitch.tv/kraken/streams/nvidia": {
+            "stream": {
+                "_id": 20929063952,
+                "game": "Rust",
+                "viewers": 1329,
+                "created_at": "2016-04-21T22:00:46Z",
+                "video_height": 1080,
+                "average_fps": 60.0100857287,
+                "delay": 0,
+                "is_playlist": false,
+                "_links": {
+                    "self": "https://api.twitch.tv/kraken/streams/nvidia"
+                },
+                "preview": {
+                    "small": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-80x45.jpg",
+                    "medium": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-320x180.jpg",
+                    "large": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-640x360.jpg",
+                    "template": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-{width}x{height}.jpg"
+                },
+                "channel": {
+                    "mature": true,
+                    "status": "Pyrionflax | 12PM - 3PM PT | Team NVIDIA",
+                    "broadcaster_language": "en",
+                    "display_name": "NVIDIA",
+                    "game": "Rust",
+                    "language": "en",
+                    "_id": 38970168,
+                    "name": "nvidia",
+                    "created_at": "2013-01-02T16:19:37Z",
+                    "updated_at": "2016-04-21T22:46:17Z",
+                    "delay": null,
+                    "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_image-cdaec58ce0a142e2-300x300.jpeg",
+                    "banner": null,
+                    "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-channel_offline_image-91c1829e3b07b747-1920x1080.jpeg",
+                    "background": null,
+                    "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_banner-e6254d63954e7d02-480.jpeg",
+                    "profile_banner_background_color": "#000000",
+                    "partner": true,
+                    "url": "https://www.twitch.tv/nvidia",
+                    "views": 6979602,
+                    "followers": 183565,
+                    "_links": {
+                        "self": "http://api.twitch.tv/kraken/channels/nvidia",
+                        "follows": "http://api.twitch.tv/kraken/channels/nvidia/follows",
+                        "commercial": "http://api.twitch.tv/kraken/channels/nvidia/commercial",
+                        "stream_key": "http://api.twitch.tv/kraken/channels/nvidia/stream_key",
+                        "chat": "http://api.twitch.tv/kraken/chat/nvidia",
+                        "features": "http://api.twitch.tv/kraken/channels/nvidia/features",
+                        "subscriptions": "http://api.twitch.tv/kraken/channels/nvidia/subscriptions",
+                        "editors": "http://api.twitch.tv/kraken/channels/nvidia/editors",
+                        "teams": "http://api.twitch.tv/kraken/channels/nvidia/teams",
+                        "videos": "http://api.twitch.tv/kraken/channels/nvidia/videos"
+                    }
+                }
+            },
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/streams/nvidia",
+                "channel": "https://api.twitch.tv/kraken/channels/nvidia"
+            }
+        },
+        "https://api.twitch.tv/kraken/channels/nvidia": {
+            "mature": true,
+            "status": "Pyrionflax | 12PM - 3PM PT | Team NVIDIA",
+            "broadcaster_language": "en",
+            "display_name": "NVIDIA",
+            "game": "Rust",
+            "language": "en",
+            "_id": 38970168,
+            "name": "nvidia",
+            "created_at": "2013-01-02T16:19:37Z",
+            "updated_at": "2016-04-21T22:46:17Z",
+            "delay": null,
+            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_image-cdaec58ce0a142e2-300x300.jpeg",
+            "banner": null,
+            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-channel_offline_image-91c1829e3b07b747-1920x1080.jpeg",
+            "background": null,
+            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_banner-e6254d63954e7d02-480.jpeg",
+            "profile_banner_background_color": "#000000",
+            "partner": true,
+            "url": "https://www.twitch.tv/nvidia",
+            "views": 6979602,
+            "followers": 183565,
+            "_links": {
+                "self": "http://api.twitch.tv/kraken/channels/nvidia",
+                "follows": "http://api.twitch.tv/kraken/channels/nvidia/follows",
+                "commercial": "http://api.twitch.tv/kraken/channels/nvidia/commercial",
+                "stream_key": "http://api.twitch.tv/kraken/channels/nvidia/stream_key",
+                "chat": "http://api.twitch.tv/kraken/chat/nvidia",
+                "features": "http://api.twitch.tv/kraken/channels/nvidia/features",
+                "subscriptions": "http://api.twitch.tv/kraken/channels/nvidia/subscriptions",
+                "editors": "http://api.twitch.tv/kraken/channels/nvidia/editors",
+                "teams": "http://api.twitch.tv/kraken/channels/nvidia/teams",
+                "videos": "http://api.twitch.tv/kraken/channels/nvidia/videos"
             }
         }
     },
