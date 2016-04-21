@@ -1234,6 +1234,212 @@
                 "self":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
                 "next":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
             }
+        },
+        "https://api.twitch.tv/kraken/channels/totalbiscuit": {
+            "mature": true,
+            "status": "Strema Title",
+            "broadcaster_language": "en",
+            "display_name": "Totalbiscuit",
+            "game": "Gaming Talk Shows",
+            "language": "en",
+            "_id": 12616386,
+            "name": "totalbiscuit",
+            "created_at": "2010-05-14T16:54:15Z",
+            "updated_at": "2016-04-21T21:46:21Z",
+            "delay": null,
+            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_image-502dcf27f785c632-300x300.png",
+            "banner": null,
+            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-channel_offline_image-3c127ba9b0ae7fec-1920x1080.png",
+            "background": null,
+            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_banner-1bd08282a8f11f71-480.png",
+            "profile_banner_background_color": null,
+            "partner": true,
+            "url": "https://www.twitch.tv/totalbiscuit",
+            "views": 45961644,
+            "followers": 435612,
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/channels/totalbiscuit",
+                "follows": "https://api.twitch.tv/kraken/channels/totalbiscuit/follows",
+                "commercial": "https://api.twitch.tv/kraken/channels/totalbiscuit/commercial",
+                "stream_key": "https://api.twitch.tv/kraken/channels/totalbiscuit/stream_key",
+                "chat": "https://api.twitch.tv/kraken/chat/totalbiscuit",
+                "features": "https://api.twitch.tv/kraken/channels/totalbiscuit/features",
+                "subscriptions": "https://api.twitch.tv/kraken/channels/totalbiscuit/subscriptions",
+                "editors": "https://api.twitch.tv/kraken/channels/totalbiscuit/editors",
+                "teams": "https://api.twitch.tv/kraken/channels/totalbiscuit/teams",
+                "videos": "https://api.twitch.tv/kraken/channels/totalbiscuit/videos"
+            }
+        },
+        "https://api.twitch.tv/kraken/streams/totalbiscuit": {
+            "stream": {
+                "game": "Super Smash Bros. Melee",
+                "viewers": 16667,
+                "video_height": 720,
+                "average_fps": 60.8108108108,
+                "delay": 0,
+                "is_playlist": true,
+                "_links": {
+                    "self": "https://api.twitch.tv/kraken/streams/totalbiscuit"
+                },
+                "preview": {
+                    "small": "https://static-cdn.jtvnw.net/previews-ttv/live_user_totalbiscuit-80x45.jpg",
+                    "medium": "https://static-cdn.jtvnw.net/previews-ttv/live_user_totalbiscuit-320x180.jpg",
+                    "large": "https://static-cdn.jtvnw.net/previews-ttv/live_user_totalbiscuit-640x360.jpg",
+                    "template": "https://static-cdn.jtvnw.net/previews-ttv/live_user_totalbiscuit-{width}x{height}.jpg"
+                },
+                "channel": {
+                    "mature": true,
+                    "status": "Strema Title",
+                    "broadcaster_language": "en",
+                    "display_name": "Totalbiscuit",
+                    "game": "Gaming Talk Shows",
+                    "language": "en",
+                    "_id": 12616386,
+                    "name": "totalbiscuit",
+                    "created_at": "2010-05-14T16:54:15Z",
+                    "updated_at": "2016-04-21T21:46:21Z",
+                    "delay": null,
+                    "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_image-502dcf27f785c632-300x300.png",
+                    "banner": null,
+                    "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-channel_offline_image-3c127ba9b0ae7fec-1920x1080.png",
+                    "background": null,
+                    "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_banner-1bd08282a8f11f71-480.png",
+                    "profile_banner_background_color": null,
+                    "partner": true,
+                    "url": "https://www.twitch.tv/totalbiscuit",
+                    "views": 45961644,
+                    "followers": 435612,
+                    "_links": {
+                        "self": "https://api.twitch.tv/kraken/channels/totalbiscuit",
+                        "follows": "https://api.twitch.tv/kraken/channels/totalbiscuit/follows",
+                        "commercial": "https://api.twitch.tv/kraken/channels/totalbiscuit/commercial",
+                        "stream_key": "https://api.twitch.tv/kraken/channels/totalbiscuit/stream_key",
+                        "chat": "https://api.twitch.tv/kraken/chat/totalbiscuit",
+                        "features": "https://api.twitch.tv/kraken/channels/totalbiscuit/features",
+                        "subscriptions": "https://api.twitch.tv/kraken/channels/totalbiscuit/subscriptions",
+                        "editors": "https://api.twitch.tv/kraken/channels/totalbiscuit/editors",
+                        "teams": "https://api.twitch.tv/kraken/channels/totalbiscuit/teams",
+                        "videos": "https://api.twitch.tv/kraken/channels/totalbiscuit/videos"
+                    }
+                }
+            },
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/streams/totalbiscuit",
+                "channel":"https://api.twitch.tv/kraken/channels/totalbiscuit"
+            }
+        },
+        "https://api.twitch.tv/api/playlists/channels/12616386": {
+            "id": 12616386,
+            "enabled": true,
+            "active_playlist_id": 1137,
+            "active": true,
+            "playlists": [
+                {
+                    "id": 1137,
+                    "channel_id": 12616386,
+                    "playlist": {
+                        "vod_ids": [
+                            60180196,
+                            59808116
+                        ]
+                    },
+                    "version": 1
+                }
+            ],
+            "playhead": {
+                "active_vod_index": 1,
+                "playlist_id": 1137,
+                "remaining_seconds_in_active_vod": 3319.823999998,
+                "vods": [
+                    {
+                        "duration": 11771.956,
+                        "id": 60180196,
+                        "transition_segment": {
+                            "remaining_seconds": 28.867,
+                            "uris": {
+                                "audio_only": "index-0000002939-5HJw.ts",
+                                "chunked": "index-0000002939-tE1P.ts",
+                                "high": "index-0000002939-ynCc.ts",
+                                "low": "index-0000002939-1VWf.ts",
+                                "medium": "index-0000002939-0ojO.ts",
+                                "mobile": "index-0000002939-HCfO.ts"
+                            }
+                        }
+                    },
+                    {
+                        "duration": 8658.359,
+                        "id": 59808116,
+                        "transition_segment": {
+                            "remaining_seconds": 22.701,
+                            "uris": {
+                                "audio_only": "index-0000002159-9GvM.ts",
+                                "chunked": "index-0000002159-W7gZ.ts",
+                                "high": "index-0000002159-EVQT.ts",
+                                "low": "index-0000002159-herU.ts",
+                                "medium": "index-0000002159-kwPu.ts",
+                                "mobile": "index-0000002159-y05g.ts"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "https://api.twitch.tv/kraken/videos/v59808116": {
+            "title": "VOD title",
+            "description": null,
+            "broadcast_id": 20742781360,
+            "broadcast_type": "archive",
+            "status": "recorded",
+            "tag_list": "",
+            "views": 1226,
+            "created_at": "2016-04-10T20:02:38Z",
+            "_id": "v59808116",
+            "recorded_at": "2016-04-10T20:02:16Z",
+            "game": "Gremlins, Inc.",
+            "length": 8658,
+            "preview": "https://static-cdn.jtvnw.net/v1/AUTH_system/vods_3c2b/totalbiscuit_20742781360_434064734/thumb/thumb0-320x240.jpg",
+            "thumbnails": [
+                {
+                    "url": "https://static-cdn.jtvnw.net/v1/AUTH_system/vods_3c2b/totalbiscuit_20742781360_434064734/thumb/thumb0-320x240.jpg",
+                    "type": "generated"
+                },
+                {
+                    "url": "https://static-cdn.jtvnw.net/v1/AUTH_system/vods_3c2b/totalbiscuit_20742781360_434064734/thumb/thumb1-320x240.jpg",
+                    "type": "generated"
+                },
+                {
+                    "url": "https://static-cdn.jtvnw.net/v1/AUTH_system/vods_3c2b/totalbiscuit_20742781360_434064734/thumb/thumb2-320x240.jpg",
+                    "type": "generated"
+                },
+                {
+                    "url": "https://static-cdn.jtvnw.net/v1/AUTH_system/vods_3c2b/totalbiscuit_20742781360_434064734/thumb/thumb3-320x240.jpg",
+                    "type": "generated"
+                }
+            ],
+            "url": "https://www.twitch.tv/totalbiscuit/v/59808116",
+            "fps": {
+                "audio_only": 0.0,
+                "medium": 29.2303657078668,
+                "mobile": 29.2303657078668,
+                "high": 29.2303657078668,
+                "low": 29.2303657078668,
+                "chunked": 30.0000265639251
+            },
+            "resolutions": {
+                "medium": "852x480",
+                "mobile": "400x226",
+                "high": "1280x720",
+                "low": "640x360",
+                "chunked": "1920x1080"
+            },
+            "_links": {
+                "self": "https://api.twitch.tv/kraken/videos/v59808116",
+                "channel": "https://api.twitch.tv/kraken/channels/totalbiscuit"
+            },
+            "channel": {
+                "name": "totalbiscuit",
+                "display_name": "Totalbiscuit"
+            }
         }
     },
     "beam": {

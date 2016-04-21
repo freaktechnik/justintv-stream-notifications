@@ -12,8 +12,21 @@ const providers = requireHelper("../lib/providers");
 const { getMockAPIQS } = require("./providers/mock-qs");
 const { when } = require("sdk/event/utils");
 const { getChannel } = require("./channeluser/utils");
+const { LiveState } = requireHelper("../lib/channel/live-state");
 
 const provider = providers.twitch;
+
+exports.testPlaylist = function*(assert) {
+    const originalQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+
+    const ret = yield provider.updateChannel('totalbiscuit');
+    assert.equal(ret.title, "VOD title");
+    assert.ok(ret.state.enabled);
+    assert.equal(ret.state.state, LiveState.REBROADCAST);
+    assert.equal(ret.category, "Gremlins, Inc.");
+};
 
 exports.testTwitchHostingRedirects = function*(assert) {
     const originalQS = provider._qs;
