@@ -18,6 +18,18 @@ var providers;
 
 self.port.emit("ready");
 
+self.port.once("secondary", () => {
+    show(document.querySelector("#secondary-manager"));
+    document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
+        e.preventDefault();
+        self.port.emit("focus");
+    });
+});
+
+self.port.once("reload", () => {
+    location.reload();
+});
+
 self.port.on("add", function(channel) {
     addChannel(channel);
 });

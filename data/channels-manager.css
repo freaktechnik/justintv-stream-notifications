@@ -144,7 +144,7 @@ main {
     color: initial;
 }
 
-#popup {
+.popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -154,24 +154,25 @@ main {
     text-align: center;
 }
 
-#popup dialog {
+.popup dialog {
     display: inline-block;
     background: white;
     padding: 1em;
     margin: 8em auto;
     text-align: initial;
+    max-width: 30em;
 }
 
-#popup dialog h1 {
+.popup dialog h1 {
     font-size: 1.2em;
     margin: .2em;
 }
 
-#popup #loadingWrapper progress {
+#loadingWrapper progress {
     width: 100%;
 }
 
-#popup button[type="button"] {
+.popup button[type="button"] {
     font-size: initial;
     border: none;
     border-top: 1px solid #282ebe;
@@ -184,7 +185,7 @@ main {
 }
 
 
-#popup button[type="submit"] {
+.popup button[type="submit"] {
     font-size: initial;
     border: none;
     float: right;
@@ -195,5 +196,11 @@ main {
     padding: 1em;
     background: initial;
     color: initial;
+}
+
+.popup button.fullwidth-button {
+    border-right: none;
+    border-left: none;
+    width: calc(100% + 2em);
 }
 

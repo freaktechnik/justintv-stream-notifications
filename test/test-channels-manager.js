@@ -243,16 +243,50 @@ exports.testDetachingWorkerWithoutClosingTab = function*(assert) {
     yield p;
 };
 
-exports.testAdditionalManagerGetsClosed = function*(assert) {
+exports.testAdditionalManager = function*(assert) {
+    const cm = new ChannelsManager();
+
+    cm.open();
+    yield wait(cm, "getdata");
+    assert.notDeepEqual(cm.managerTab, null, "Manager tab was assigned");
+
+    yield tabs.open({ url: cm.managerTab.url });
+    yield wait(tabs, "ready");
+    const openedTab = tabs.activeTab;
+
+    assert.notEqual(cm.managerTab, openedTab, "Second tab didn't overwrite primary tab");
+
+    let p = wait(openedTab, "close");
+    openedTab.close();
+    yield p;
+    p = wait(cm.managerTab, "close");
+    cm.destroy();
+    yield p;
+};
+
+exports.testAdditionalManagerToPrimary = function*(assert) {
     const cm = new ChannelsManager();
 
     cm.open();
     yield wait(cm, "getdata");
 
     yield tabs.open({ url: cm.managerTab.url });
-    yield wait(tabs, "close");
+    yield wait(tabs, "ready");
+    const openedTab = tabs.activeTab;
 
-    const p = wait(tabs, "close");
+    assert.notEqual(cm.managerTab.id, openedTab.id, "second tab didn't replace primary tab");
+
+    let p = wait(cm.managerTab, "close");
+    cm.managerTab.close();
+    yield p;
+
+    p = wait(openedTab, "ready");
+    openedTab.reload();
+    yield p;
+
+    assert.equal(cm.managerTab, openedTab, "Reloading makes secondary primary tab");
+
+    p = wait(cm.managerTab, "close");
     cm.destroy();
     yield p;
 };

@@ -66,7 +66,7 @@
             <select multiple id="users" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="2">
             </select>
         </main>
-        <div id="popup" hidden>
+        <div id="popup" class="popup" hidden>
             <dialog>
                 <form method="dialog">
                     <h1 data-l10n-id="cm_dialog_title">Add new…</h1>
@@ -81,6 +81,12 @@
                     </div>
                     <button type="button" data-l10n-id="cm_dialog_cancel">Cancel</button><button type="submit" data-l10n-id="cm_dialog_submit">Ok</button>
                 </form>
+            </dialog>
+        </div>
+        <div id="secondary-manager" class="popup" hidden>
+            <dialog>
+                <p data-l10n-id="cm_secondary_label">There already is a Channels Manager open. You can only use one at a time. If this is the only open tab with it, try reloading this page.</p>
+                <button type="button" data-l10n-id="cm_secondary_button" class="fullwidth-button">Go to primary Channels Manager</button>
             </dialog>
         </div>
     </body>
