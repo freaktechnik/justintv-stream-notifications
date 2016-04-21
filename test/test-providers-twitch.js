@@ -3,6 +3,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @todo test livestate for playlist and hosed
+ * @todo test playlist tile
  */
 "use strict";
 
