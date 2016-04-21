@@ -186,5 +186,5 @@ build/
 coverage/
 transpiled/
 bower_components/
-locales/*.json
+locale/*.json
 !locales/en-US.json
