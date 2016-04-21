@@ -22,7 +22,7 @@ exports.testHosting = function*(assert) {
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
 
     const ret = yield provider.updateChannel('pyrionflax');
-    assert.ok(ret.state.enabled)
+    assert.ok(ret.state.enabled);
     assert.equal(ret.state.state, LiveState.REDIRECT);
     assert.equal(ret.state.alternateUsername, "NVIDIA");
 
