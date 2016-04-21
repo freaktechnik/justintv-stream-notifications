@@ -284,8 +284,10 @@ var updateNodeContent = (channel) => {
     channelNode.classList.toggle("nonlive", channel.state.enabled);
 
     // only update images if the user is online to avoid broken images
-    if(navigator.onLine && (channel.live || channel.state.enabled)) {
-        channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
+    if(navigator.onLine) {
+        if(channel.live || channel.state.enabled)
+            channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
+
         channelNode.querySelector("a div img").srcset = Object.keys(channel.image)
             .map((s) => channel.image[s] + " " + s + "w").join(",");
     }
