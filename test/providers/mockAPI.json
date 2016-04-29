@@ -369,7 +369,7 @@
         }
     },
     "douyutv": {
-        "http://www.douyutv.com/api/client/room/test": {
+        "http://www.douyutv.com/api/v1/room/test": {
             "error": 0,
             "data": {
                 "room_id": "test",
@@ -383,7 +383,7 @@
                 "url": "/test"
             }
         },
-        "http://www.douyutv.com/api/client/room/live": {
+        "http://www.douyutv.com/api/v1/room/live": {
             "error": 0,
             "data": {
                 "room_id": "live",

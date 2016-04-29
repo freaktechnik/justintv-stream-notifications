@@ -32,6 +32,10 @@ const getRequest = (type, url)  => {
 
         url = u.join("?");
     }
+    else if(type == "douyutv") {
+        url = url.split("?")[0];
+    }
+
     console.log("Getting", url);
     if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
         return {

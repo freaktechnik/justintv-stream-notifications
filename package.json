@@ -263,6 +263,7 @@
   },
   "dependencies": {
     "jetpack-homepanel": "^1.0.1",
+    "md5": "^2.1.0",
     "notification-box": "^0.1.1",
     "preferences-utils": "0.0.1"
   },

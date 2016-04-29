@@ -4,6 +4,7 @@
  * @license MPL-2.0
  * @todo test playlist and hosting for all three methods
  * @todo test hosting preferred over playlist
+ * @todo test hosting & playlist testchannels with the things disabled
  */
 "use strict";
 

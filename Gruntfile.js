@@ -7,6 +7,9 @@ module.exports = function(grunt) {
     var dependencies = Object.keys(pkg.dependencies).map(function(d) {
         return d + "/**/*";
     });
+    dependencies.push("is-buffer/**/*");
+    dependencies.push("charenc/**/*");
+    dependencies.push("crypt/**/*");
 
     grunt.initConfig({
         pkg: pkg,

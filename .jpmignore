@@ -15,6 +15,10 @@ node_modules/
 !node_modules/istanbul-jpm/
 !node_modules/notification-box/
 !node_modules/preferences-utils/
+!node_modules/md5/
+!node_modules/crypt/
+!node_modules/charenc/
+!node_modules/is-buffer/
 node_modules/istanbul-jpm/node_modules/
 
 *CHANGELOG*
@@ -32,4 +36,4 @@ python-lib/
 build/
 coverage/reports/
 transpiled/
-bower_components/
+bower_components/r
