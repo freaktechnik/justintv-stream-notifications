@@ -12,6 +12,7 @@ const { defer } = require("sdk/core/promise");
 const { cleanUI } = require("sdk/test/utils");
 const channelUtils = requireHelper('../lib/channel/utils');
 const mockAlertsService = require("./xpcom-mocks/alerts-service");
+const { LiveState } = requireHelper('../lib/channel/live-state');
 
 exports.testNotifierPrefs = function(assert) {
     const { Notifier } = requireHelper('../lib/notifier');
@@ -59,6 +60,33 @@ exports.testShowNotifications = function(assert) {
     prefs.titleChangeNotification = prevPrefs.title;
     prefs.offlineNotification = prevPrefs.offline;
     prefs.nonliveNotification = prevPrefs.nonlive;
+};
+
+exports.testNonLiveNotifications = function*(assert) {
+    const oldVal = prefs.nonliveNotification;
+    prefs.nonliveNotification = true;
+
+    mockAlertsService.registerService();
+    const { Notifier } = requireHelper('../lib/notifier');
+
+    const notifier = new Notifier({ onClick() {} });
+    const channel = getChannel('test', 'test', 1);
+    channel.live = new LiveState(LiveState.REDIRECT);
+    
+    let p = when(mockAlertsService.getEventTarget(), "shownotification");
+    notifier.sendNotification(channel);
+    yield p;
+    
+    channel.live = new LiveState(LiveState.REBROADCAST);
+    
+    p = when(mockAlertsService.getEventTarget(), "shownotification");
+    notifier.sendNotification(channel);
+    yield p;
+    
+    notifier.onChannelRemoved(channel.id);
+
+    prefs.nonliveNotification = oldVal;
+    mockAlertsService.unregisterService();
 };
 
 exports.testNotifier = function*(assert) {
