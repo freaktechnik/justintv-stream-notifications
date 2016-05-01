@@ -1,12 +1,10 @@
 /**
  * @author Martin Giger
  * @license MPL-2.0
- * @todo use channeluser/utils
  * @todo test non-live stuff
  */
 
 const requireHelper = require("./require_helper");
-const { Channel } = requireHelper('../lib/channel/core');
 const { getChannel } = require("./channeluser/utils");
 const { prefs } = require("sdk/simple-prefs");
 const { when } = require("sdk/event/utils");
@@ -18,9 +16,49 @@ const mockAlertsService = require("./xpcom-mocks/alerts-service");
 exports.testNotifierPrefs = function(assert) {
     const { Notifier } = requireHelper('../lib/notifier');
     const notifier = new Notifier({ onClick() {} });
-    assert.equal(notifier.onlineNotifications, prefs.onlineNotification);
-    assert.equal(notifier.titleNotifications, prefs.titleChangeNotification);
-    assert.equal(notifier.offlineNotifications, prefs.offlineNotification);
+    assert.equal(notifier.onlineNotifications, prefs.onlineNotification, "Value for online matches the pref");
+    assert.equal(notifier.titleNotifications, prefs.titleChangeNotification, "Value for title changes matches the pref");
+    assert.equal(notifier.offlineNotifications, prefs.offlineNotification, "Value for offline matches the pref");
+    assert.equal(notifier.nonliveNotifications, prefs.nonliveNotification, "Nonlive notifications vlaue matches the pref");
+};
+
+exports.testShowNotifications = function(assert) {
+    const { Notifier } = requireHelper('../lib/notifier');
+    const notifier = new Notifier({ onClick() {} });
+
+    const prevPrefs = {
+        online: prefs.onlineNotification,
+        title: prefs.titleChangeNotification,
+        offline: prefs.offlineNotification,
+        nonlive: prefs.nonliveNotification
+    };
+
+    prefs.onlineNotification = false;
+    prefs.titleChangeNotification = false;
+    prefs.offlineNotification = false;
+    prefs.nonliveNotification = false;
+
+    assert.ok(!notifier.showNotifications, "No notifications should be shown if all of them are disabled");
+
+    prefs.onlineNotification = true;
+    assert.ok(notifier.showNotifications, "If online is true, notifications are shown");
+
+    prefs.onlineNotification = false;
+    prefs.titleChangeNotification = true;
+    assert.ok(notifier.showNotifications, "If title change is enabled, notifications are shown");
+
+    prefs.titleChangeNotification = false;
+    prefs.offlineNotification = true;
+    assert.ok(notifier.showNotifications, "If offline is enabled, notifications are shown");
+
+    prefs.offlineNotification = false;
+    prefs.nonliveNotification = true;
+    assert.ok(notifier.showNotifications, "If nonlive is enabled, notifications are shown");
+
+    prefs.onlineNotifications = prevPrefs.online;
+    prefs.titleChangeNotification = prevPrefs.title;
+    prefs.offlineNotification = prevPrefs.offline;
+    prefs.nonliveNotification = prevPrefs.nonlive;
 };
 
 exports.testNotifier = function*(assert) {
@@ -43,6 +81,7 @@ exports.testNotifier = function*(assert) {
 
     assert.ok(notifier.channelTitles.has(channel.id), "Channel is added to the titles after notification");
     assert.equal(notifier.channelTitles.get(channel.id), channel.title, "Title matches");
+    assert.ok(notifier.channelStates.has(channel.id), "Channel state is recorded after notification");
 
     notifier.sendNotification(channel);
 
@@ -53,16 +92,19 @@ exports.testNotifier = function*(assert) {
     assert.equal(notifier.channelTitles.get(channel.id), channel.title, "title was updated");
     notifier.onChannelRemoved(channel.id);
     assert.ok(!notifier.channelTitles.has(channel.id), "Title was removed");
+    assert.ok(!notifier.channelStates.has(channel.id), "State was removed");
 
     p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);
     yield p;
     assert.ok(notifier.channelTitles.has(channel.id), "channel was added back");
+    assert.ok(notifier.channelStates.has(channel.id), "channel state was added back");
     channel.live.setLive(false);
     p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);
     yield p;
     assert.ok(!notifier.channelTitles.has(channel.id), "channel is gone when it goes offline");
+    assert.ok(notifier.channelStates.has(channel.id), "Channel state still exists after going offline");
 
     const mapLength = notifier.channelTitles.length;
     notifier.onChannelRemoved(-1);

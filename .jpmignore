@@ -36,4 +36,4 @@ python-lib/
 build/
 coverage/reports/
 transpiled/
-bower_components/r
+bower_components/
