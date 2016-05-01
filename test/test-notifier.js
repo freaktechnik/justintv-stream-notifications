@@ -2,6 +2,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @todo use channeluser/utils
+ * @todo test non-live stuff
  */
 
 const requireHelper = require("./require_helper");
@@ -32,7 +33,7 @@ exports.testNotifier = function*(assert) {
 
     const notifier = new Notifier({ onClick: function() {} });
     const channel = getChannel('test', 'test', 1);
-    channel.live = true;
+    channel.live.setLive(true);
 
     assert.ok(!notifier.channelTitles.has(channel.id), "Channel is not in the title initially");
 
@@ -57,7 +58,7 @@ exports.testNotifier = function*(assert) {
     notifier.sendNotification(channel);
     yield p;
     assert.ok(notifier.channelTitles.has(channel.id), "channel was added back");
-    channel.live = false;
+    channel.live.setLive(false);
     p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);
     yield p;
@@ -78,7 +79,7 @@ exports.testMuteNotification = function*(assert) {
     const { Notifier } = requireHelper('../lib/notifier');
     const notifier = new Notifier({ onClick() {}});
     const channel = getChannel('test', 'test', 1);
-    channel.live = true;
+    channel.live.setLive(true);
 
     mockAlertsService.getEventTarget().on("shownotification", () => ++counter);
 
@@ -98,7 +99,7 @@ exports.testClickListener = function*(assert) {
     const { Notifier } = requireHelper('../lib/notifier');
     const notifier = new Notifier({ onClick(chan) { clickPromise.resolve(chan); }});
     const channel = getChannel('test', 'test', 1);
-    channel.live = true;
+    channel.live.setLive(true);
 
     const p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);

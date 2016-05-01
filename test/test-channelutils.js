@@ -48,7 +48,7 @@ exports['test open live channel when archive is already opened'] = function*(ass
     channelUtils.selectOrOpenTab(channel);
     let tabToClose = yield wait(tabs, "ready");
 
-    channel.live = true;
+    channel.live.setLive(true);
 
     channelUtils.selectOrOpenTab(channel);
     yield wait(tabs, "ready");
@@ -63,7 +63,7 @@ exports['test open live channel when archive is already opened'] = function*(ass
 
 exports['test open live channel'] = function*(assert) {
     let channel = getChannel();
-    channel.live = true;
+    channel.live.setLive(true);
     yield channelUtils.selectOrOpenTab(channel);
 
     assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
@@ -74,11 +74,10 @@ exports['test open live channel'] = function*(assert) {
 
 exports['test open hosted live channel'] = function*(assert) {
     const channel = getChannel();
-    channel.live = true;
-    channel.state = new LiveState(LiveState.REDIRECT);
-    channel.state.alternateURL = "http://example.com/alternate";
+    channel.live = new LiveState(LiveState.REDIRECT);
+    channel.live.alternateURL = "http://example.com/alternate";
     yield channelUtils.selectOrOpenTab(channel);
-    
+
     assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
     const p = wait(tabs, "close");
     tabs.activeTab.close();
@@ -87,7 +86,7 @@ exports['test open hosted live channel'] = function*(assert) {
 
 exports['test force open archive'] = function*(assert) {
     let channel = getChannel();
-    channel.live = true;
+    channel.live.setLive(true);
     channelUtils.selectOrOpenTab(channel, "archive");
     yield wait(tabs, "ready");
 
@@ -110,16 +109,15 @@ exports['test open chat'] = function*(assert) {
 
 exports['test open live channel with livestreamer'] = function*(assert) {
     let channel = getChannel();
-    channel.live = true;
+    channel.live.setLive(true);
     yield channelUtils.selectOrOpenTab(channel, "livestreamer");
     assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
 };
 
 exports['test open hosted live channel with livestreamer'] = function*(assert) {
     const channel = getChannel();
-    channel.live = true;
-    channel.state = new LiveState(LiveState.REDIRECT);
-    channel.state.alternateURL = "http://example.com/alternate";
+    channel.live = new LiveState(LiveState.REDIRECT);
+    channel.live.alternateURL = "http://example.com/alternate";
     yield channelUtils.selectOrOpenTab(channel, "livestreamer");
     assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
 };
@@ -137,7 +135,7 @@ exports['test open offline channel with livestreamer'] = function*(assert) {
 
 exports['test open with livestreamer by default'] = function*(assert) {
     let channel = getChannel();
-    channel.live = true;
+    channel.live.setLive(true);
 
     prefs.livestreamer_enabled = true;
     yield channelUtils.selectOrOpenTab(channel);

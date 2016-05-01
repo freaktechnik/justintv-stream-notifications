@@ -52,12 +52,12 @@ exports['test channel legacy'] = function(assert) {
 
 exports['test channel state serialization'] = (assert) => {
     const channel = getChannel();
-    assert.ok(channel.state instanceof LiveState);
+    assert.ok(channel.live instanceof LiveState);
 
     const serialized = channel.serialize();
 
-    assert.equal(typeof serialized.state, "object");
-    assert.ok(!(serialized.state instanceof LiveState));
+    assert.equal(typeof serialized.live, "object");
+    assert.ok(!(serialized.live instanceof LiveState));
 };
 
 exports['test deserialize'] = function(assert) {
@@ -90,7 +90,7 @@ exports['test deserialize'] = function(assert) {
             20: "./asdf.png"
         },
         url: [ "https://example.com" ],
-        state: {
+        live: {
             state: 0,
             alternateUsername: "",
             alternateURL: ""
@@ -103,7 +103,7 @@ exports['test deserialize'] = function(assert) {
         if(Array.isArray(channelProps[key])) {
             assert.equal(channelProps[key].length, channel[key].length);
         }
-        else if(key == "state") {
+        else if(key == "live") {
             assert.ok(channel[key] instanceof LiveState);
             assert.equal(channelProps[key].state, channel[key].state);
         }

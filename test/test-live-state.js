@@ -11,17 +11,23 @@ const { LiveState } = requireHelper("../lib/channel/live-state");
 exports.testExports = (assert) => {
     assert.ok("deserialize" in LiveState, "deserialize is in LiveState");
     assert.equal(typeof LiveState.deserialize, "function", "The exported deserialize property is a function");
-    assert.ok("DISABLED" in LiveState, "LiveState has the DISABLED constant");
+    assert.ok("OFFLINE" in LiveState, "LiveState has the OFFLINE constant");
+    assert.ok("LIVE" in LiveState, "LiveState has the LIVE constant");
     assert.ok("REDIRECT" in LiveState, "LiveState has the REDIRECT constant");
     assert.ok("REBROADCAST" in LiveState, "LiveState has the REBROADCAST constant");
+    assert.ok("TOWARD_LIVE" in LiveState, "LiveState has the TOWARD_LIVE constant");
+    assert.ok("TOWARD_OFFLINE" in LiveState, "LiveState has the TOWARD_OFFLINE constant");
 };
 
 exports.testConstruction = (assert) => {
     let state = new LiveState();
-    assert.equal(state.state, LiveState.DISABLED, "Default value for the construction sets the state to disabled");
+    assert.equal(state.state, LiveState.OFFLINE, "Default value for the construction sets the state to offline");
 
-    state = new LiveState(LiveState.DISABLED);
-    assert.equal(state.state, LiveState.DISABLED, "Constructing with disabled sets the state to disabled");
+    state = new LiveState(LiveState.OFFLINE);
+    assert.equal(state.state, LiveState.OFFLINE, "Constructing with live sets the state to offline");
+
+    state = new LiveState(LiveState.LIVE);
+    assert.equal(state.state, LiveState.LIVE, "Constructing with live sets the state to live");
 
     state = new LiveState(LiveState.REDIRECT);
     assert.equal(state.state, LiveState.REDIRECT, "Constructing with redirect sets the state to redirect");
@@ -30,39 +36,12 @@ exports.testConstruction = (assert) => {
     assert.equal(state.state, LiveState.REBROADCAST, "Constructing with rebroadcast sets the state to rebroadcast");
 };
 
-exports.testEnabled = (assert) => {
-    let state = new LiveState(LiveState.DISABLED);
-    assert.ok(!state.enabled, "Disabled means it is disabled");
-
-    state = new LiveState(LiveState.REDIRECT);
-    assert.ok(state.enabled, "Redirect means it is enabled");
-
-    state = new LiveState(LiveState.REBROADCAST);
-    assert.ok(state.enabled, "Rebroadcast means it is enabled");
-};
-
-exports.testDisable = (assert)  => {
-    let state = new LiveState(LiveState.REDIRECT);
-    state.disable();
-    assert.ok(!state.enabled, "Disabling redirect makes it not enabled");
-    assert.equal(state.state, LiveState.DISABLED, "Disabling redirect changes the state to disabled");
-
-    state = new LiveState(LiveState.REBROADCAST);
-    state.disable();
-    assert.ok(!state.enabled, "Disabling rebroadcast makes it not enabled");
-    assert.equal(state.state, LiveState.DISABLED, "Disabling rebroadcast changes the state to disabled");
-
-    state.disable();
-    assert.ok(!state.enabled, "Disabling again leaves it disabled");
-    assert.equal(state.state, LiveState.DISABLED, "Disabling again leaves the state as disabled");
-};
-
 exports.testSerialize = (assert) => {
     const expectedResult = {
-        state: LiveState.DISABLED,
-        enabled: false,
+        state: LiveState.OFFLINE,
         alternateUsername: "",
-        alternateURL: ""
+        alternateURL: "",
+        isLive: false
     };
 
     const state = new LiveState();
@@ -75,9 +54,9 @@ exports.testSerialize = (assert) => {
 exports.testDeserialize = (assert) => {
     const serialized = {
         state: LiveState.REDIRECT,
-        enabled: true,
         alternateUsername: "test",
-        alternateURL: "https://example.com/test"
+        alternateURL: "https://example.com/test",
+        isLive: true
     };
 
     const state = LiveState.deserialize(serialized);
@@ -86,6 +65,52 @@ exports.testDeserialize = (assert) => {
     assert.equal(state.alternateUsername, serialized.alternateUsername, "alternate username was correctly deserialized");
     assert.equal(state.alternateURL, serialized.alternateURL, "alternate URL was correctly deserialized");
     assert.deepEqual(state.serialize(), serialized, "Serializing the deserialized object holds the same result");
+};
+
+exports.testIsLive = (assert) => {
+    const statesToTest = [
+        {
+            name: "offline",
+            value: LiveState.OFFLINE,
+            [LiveState.TOWARD_LIVE]: false,
+            [LiveState.TOWARD_OFFLINE]: false
+        },
+        {
+            name: "live",
+            value: LiveState.LIVE,
+            [LiveState.TOWARD_LIVE]: true,
+            [LiveState.TOWARD_OFFLINE]: true
+        },
+        {
+            name: "redirect",
+            value: LiveState.REDIRECT,
+            [LiveState.TOWARD_LIVE]: true,
+            [LiveState.TOWARD_OFFLINE]: false
+        },
+        {
+            name: "rebroadcast",
+            value: LiveState.REBROADCAST,
+            [LiveState.TOWARD_LIVE]: true,
+            [LiveState.TOWARD_OFFLINE]: false
+        }
+    ];
+
+    for(let testState of statesToTest) {
+        let state = new LiveState(testState.value);
+
+        assert.equal(state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], testState.name+" is treated correctly TOWARD_LIVE");
+        assert.equal(state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], testState.name+" is treated correctly TOWARD_OFFLINE");
+    }
+};
+
+exports.testSetLive = (assert) => {
+    let state = new LiveState();
+
+    state.setLive(true);
+    assert.equal(state.state, LiveState.LIVE, "Setting an offline state live makes it live");
+
+    state.setLive(false);
+    assert.equal(state.state, LiveState.OFFLINE, "Setting a live state offline makes it offline");
 };
 
 require("sdk/test").run(exports);

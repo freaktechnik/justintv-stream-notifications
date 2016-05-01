@@ -140,11 +140,11 @@ const insertBefore = (parent, node, uname) => {
 };
 
 var insertChannel = (channel, node) => {
-    if((channel.live && !channel.state.enabled) || (channel.state.enabled && nonLiveDisplay === 0))
+    if(channel.live.isLive && (channel.live.state <= 0 || nonLiveDisplay === 0))
         insertBefore(live, node, channel.uname);
-    else if(channel.state.enabled && nonLiveDisplay == 1)
+    else if(channel.live.isLive && nonLiveDisplay == 1)
         insertBefore(secondaryLive, node, channel.uname);
-    else if(channel.state.enabled && nonLiveDisplay == 2)
+    else if(channel.live.isLive && nonLiveDisplay == 2)
         insertBefore(distinct, node, channel.uname);
     else
         insertBefore(offline, node, channel.uname);
@@ -201,9 +201,9 @@ var buildChannel = (channel, unspecific = false) => {
     channelNode.querySelector("a > img").setAttribute("src", channel.thumbnail);
     channelNode.querySelector(".name").textContent = channel.uname;
     channelNode.querySelector(".title").textContent = channel.title;
-    channelNode.querySelector(".alternate-name").textContent = channel.state.alternateUsername;
-    toggle(channelNode.querySelector(".nonlivename"), channel.state.alternateUsername !== "");
-    toggle(channelNode.querySelector(".rebroadcast"), channel.state.state == 2);
+    channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
+    toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
+    toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == 2);
     if(!("viewers" in channel) || channel.viewers < 0)
         hide(channelNode.querySelector(".viewersWrapper"));
     channelNode.querySelector(".viewers").textContent = channel.viewers;
@@ -219,11 +219,11 @@ var buildChannel = (channel, unspecific = false) => {
     else {
         channelNode.id = EXPLORE_ID_PREFIX+channel.login;
         channelNode.dataset.url = channel.url[0];
-        channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channel.live? channel.url[0] : channel.archiveUrl, false));
+        channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channel.live.isLive ? channel.url[0] : channel.archiveUrl, false));
     }
     channelNode.addEventListener("contextmenu", contextMenuListener);
 
-    if(channel.state.enabled)
+    if(channel.live.state > 0)
         channelNode.classList.add("nonlive");
 
     return channelNode;
@@ -239,7 +239,7 @@ var addChannel = (channel) => {
 
     insertChannel(channel, channelNode);
     hideNoChannels();
-    if(channel.live)
+    if(channel.live.isLive)
         hideNoOnline();
 };
 
@@ -271,9 +271,9 @@ var updateNodeContent = (channel) => {
 
     titleNode.textContent = channel.title;
     nameNode.textContent = channel.uname;
-    channelNode.querySelector(".alternate-name").textContent = channel.state.alternateUsername;
-    toggle(channelNode.querySelector(".nonlivename"), channel.state.alternateUsername !== "");
-    toggle(channelNode.querySelector(".rebroadcast"), channel.state.state == 2);
+    channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
+    toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
+    toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == 2);
 
     viewers.textContent = channel.viewers;
     toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
@@ -281,11 +281,11 @@ var updateNodeContent = (channel) => {
     category.textContent = channel.category;
     toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
-    channelNode.classList.toggle("nonlive", channel.state.enabled);
+    channelNode.classList.toggle("nonlive", channel.live.state > 0);
 
     // only update images if the user is online to avoid broken images
     if(navigator.onLine) {
-        if(channel.live || channel.state.enabled)
+        if(channel.live.isLive)
             channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail+"?timestamp="+Date.now());
 
         channelNode.querySelector("a div img").srcset = Object.keys(channel.image)

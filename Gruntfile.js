@@ -12,6 +12,7 @@ module.exports = function(grunt) {
     dependencies.push("crypt/**/*");
 
     grunt.initConfig({
+        preVersion: 2,
         pkg: pkg,
         firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox-trunk',
         banner:
@@ -210,7 +211,7 @@ module.exports = function(grunt) {
                 srcDir: ".",
                 destDir: "build/",
                 add: {
-                    "version": "<%= pkg.version %>-pre1"
+                    "version": "<%= pkg.version %>-pre<%= preVersion %>"
                 }
             },
             build: {

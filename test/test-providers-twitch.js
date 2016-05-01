@@ -23,9 +23,9 @@ exports.testHosting = function*(assert) {
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
 
     const ret = yield provider.updateChannel('pyrionflax');
-    assert.ok(ret.state.enabled);
-    assert.equal(ret.state.state, LiveState.REDIRECT);
-    assert.equal(ret.state.alternateUsername, "NVIDIA");
+    assert.ok(ret.live.state > LiveState.LIVE);
+    assert.equal(ret.live.state, LiveState.REDIRECT);
+    assert.equal(ret.live.alternateUsername, "NVIDIA");
 
     provider._setQs(originalQS);
 };
@@ -37,8 +37,8 @@ exports.testPlaylist = function*(assert) {
 
     const ret = yield provider.updateChannel('totalbiscuit');
     assert.equal(ret.title, "VOD title");
-    assert.ok(ret.state.enabled);
-    assert.equal(ret.state.state, LiveState.REBROADCAST);
+    assert.ok(ret.live.state > LiveState.LIVE);
+    assert.equal(ret.live.state, LiveState.REBROADCAST);
     assert.equal(ret.category, "Gremlins, Inc.");
 
     provider._setQs(originalQS);
@@ -50,7 +50,7 @@ exports.testTwitchHostingRedirects = function*(assert) {
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
     const ret = yield provider.updateChannel('mlg_live');
     assert.equal(ret.login, 'mlg');
-    assert.ok(!ret.live);
+    assert.ok(!ret.live.isLive());
 
     provider._setQs(originalQS);
 };
@@ -66,7 +66,7 @@ exports.testTwitchLiveRedirects = function*(assert) {
     ]);
     assert.equal(ret.length, 1);
     assert.equal(ret[0].login, 'mlg');
-    assert.ok(ret[0].live);
+    assert.ok(ret[0].live.isLive());
     assert.equal(ret[0].id, 15);
 
     provider._setQs(originalQS);
@@ -91,7 +91,7 @@ exports.testTwitchUpdateRedirects = function*(assert) {
 
     assert.equal(ret.length, 1, "Update returns the channel");
     assert.equal(ret[0].login, 'mlg', "Returned channel has the updated login");
-    assert.ok(ret[0].live, "Returned channel is live");
+    assert.ok(ret[0].live.isLive(), "Returned channel is live");
     assert.equal(ret[0].id, 15, "Returned channel still has its ID");
 
     provider._setQs(originalQS);

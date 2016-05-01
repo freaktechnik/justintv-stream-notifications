@@ -175,7 +175,7 @@ exports.testMockAPIRequests = function*(assert) {
             assert.ok(ret instanceof Channel, "getChannelDetails resolves to a channel for "+p);
             assert.equal(ret.uname, "test", "test channel channel detail gets the username test for "+p);
             assert.equal(ret.type, p, "getChannelDetails resolves to a channel with correct type for "+p);
-            assert.ok(!ret.live, "Test channel is not live for "+p);
+            assert.ok(!ret.live.isLive(), "Test channel is not live for "+p);
 
             live = yield provider.getChannelDetails("live");
             assert.ok(live instanceof Channel, "getChannelDetails for a live channel resolves to a channel for " + p);
@@ -187,13 +187,13 @@ exports.testMockAPIRequests = function*(assert) {
             assert.ok(ret instanceof Channel, "updateChannel resolves to a channel for "+p);
             assert.equal(ret.uname, "test", "Username of test is correct for updateChannel with "+p);
             assert.equal(ret.type, p, "updateChannel resolves to a channel with correct type for "+p);
-            assert.ok(!ret.live, "Updated test channel still isn't live for "+p);
+            assert.ok(!ret.live.isLive(), "Updated test channel still isn't live for "+p);
 
             live = yield provider.updateChannel(live.login);
             assert.ok(live instanceof Channel, "updateChannel resolves to a channel with the live channel for "+p);
             assert.equal(live.uname, "live", "Username still is live after update for "+p);
             assert.equal(live.type, p, "Type of channel is still "+p+" after update of a live channel");
-            assert.ok(live.live, "Live channel is live after update with " + p);
+            assert.ok(live.live.isLive(), "Live channel is live after update with " + p);
 
             ret.id = 1;
             live.id = 2;
@@ -203,7 +203,7 @@ exports.testMockAPIRequests = function*(assert) {
             ret.forEach((chan) => {
                 assert.ok(chan instanceof Channel, "updateChannels resolves to a channel for "+p);
                 assert.equal(chan.type, p, "updateChannels resolves to a channel with correct type for "+p);
-                assert.equal(chan.live, chan.uname === "live", "Channel "+chan.uname+" is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
+                assert.equal(chan.live.isLive(), chan.uname === "live", "Channel "+chan.uname+" is live if it's the live channel, else it's offline for "+p+" after an update of multiple channels together");
             });
 
             if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
@@ -216,8 +216,8 @@ exports.testMockAPIRequests = function*(assert) {
                 }
                 assert.ok(ret instanceof Channel, "updateRequest event holds a channel for "+p);
                 assert.equal(ret.type, p, "updateRequest event holds a channel with corect type for "+p);
-                assert.equal(ret.live, ret.uname === "live", "Update request correctly set live state of "+ret.uname+" for "+p);
-                
+                assert.equal(ret.live.isLive(), ret.uname === "live", "Update request correctly set live state of "+ret.uname+" for "+p);
+
                 provider.removeRequest();
             }
 
@@ -240,7 +240,7 @@ exports.testMockAPIRequests = function*(assert) {
                     assert.equal(ret.uname, "test", "updateduser is called test for "+p);
 
                     //TODO test newchannels event?
-                    
+
                     provider.removeFavsRequest();
                 }
             }

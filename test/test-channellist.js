@@ -368,7 +368,7 @@ exports['test live status offline'] = function*(assert) {
 
 exports['test live status live'] = function*(assert) {
     let channel = getChannel();
-    channel.live = true;
+    channel.live.setLive(true);
     yield SHARED.list.addChannel(channel);
 
     let liveStatus = yield SHARED.list.liveStatus(null);
@@ -442,8 +442,9 @@ exports['test remove channels by user favorites'] = function*(assert) {
 };
 
 exports['test channel offline setting'] = function(assert, done) {
-    let channel = getChannel().serialize();
-    channel.live = true;
+    let rawChannel = getChannel();
+    rawChannel.live.setLive(true);
+    let channel = rawChannel.serialize();
     channel.lastModified = Date.now() - 2 * prefs.channellist_cacheTime;
     let transaction = SHARED.list.db.transaction("channels", "readwrite"),
         store       = transaction.objectStore("channels"),
@@ -454,7 +455,7 @@ exports['test channel offline setting'] = function(assert, done) {
         .then(() => {
             return SHARED.list.getChannel(channel.login, channel.type);
         }).then((channel) => {
-            assert.ok(!channel.live);
+            assert.ok(!channel.live.isLive());
         }).then(done);
     };
 };
@@ -491,13 +492,13 @@ exports['test get legacy channel'] = function*(assert) {
     };
     const originalQs = providers[legacyChannel.type]._qs;
     providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-    
+
     const retCh = yield SHARED.list.addChannel(legacyChannel);
-    
+
     const channel = yield SHARED.list.getChannel(retCh.id);
-    
+
     assert.ok(channel instanceof Channel, "Channel is a channel");
-    
+
     providers[legacyChannel.type]._setQs(originalQs);
 };
 
@@ -525,15 +526,15 @@ exports['test get all channels with a legacy channel'] = function*(assert) {
     };
     const originalQs = providers[legacyChannel.type]._qs;
     providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-    
+
     yield SHARED.list.addChannel(legacyChannel);
-    
+
     const channels = yield SHARED.list.getChannelsByType();
-    
+
     for(let channel of channels) {
         assert.ok(channel instanceof Channel, "Channel is a channel");
     }
-    
+
     providers[legacyChannel.type]._setQs(originalQs);
 };
 
@@ -561,24 +562,24 @@ exports['test get channels by type with a legacy channel'] = function*(assert) {
     };
     const originalQs = providers[legacyChannel.type]._qs;
     providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-    
+
     yield SHARED.list.addChannel(legacyChannel);
     yield SHARED.list.addChannel(getChannel("test2", legacyChannel.type));
-    
+
     const channels = yield SHARED.list.getChannelsByType(legacyChannel.type);
-    
+
     for(let channel of channels) {
         assert.ok(channel instanceof Channel, "Channel is a channel");
     }
-    
+
     providers[legacyChannel.type]._setQs(originalQs);
 };
 
 exports['test opening open list'] = function*(assert) {
     assert.notEqual(SHARED.list.db, null);
-    
+
     yield SHARED.list.openDB("channellist");
-    
+
     assert.notEqual(SHARED.list.db, null);
 };
 
