@@ -23,6 +23,8 @@ node_modules/istanbul-jpm/node_modules/
 
 *CHANGELOG*
 
+*.yml
+
 # Python
 python-lib/
 *.pyc
