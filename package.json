@@ -36,7 +36,7 @@
       "name": "nonliveNotification",
       "title": "Show a notification when a stream enters a non-live state",
       "description": "This option is only relevant, when non-live streams aren't considered as live or offline.",
-      "value": true
+      "value": false
     },
     {
       "type": "radio",
