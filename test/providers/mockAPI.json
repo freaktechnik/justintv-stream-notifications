@@ -1580,6 +1580,19 @@
                 "teams": "http://api.twitch.tv/kraken/channels/nvidia/teams",
                 "videos": "http://api.twitch.tv/kraken/channels/nvidia/videos"
             }
+        },
+        "https://api.twitch.tv/kraken/channels/host-test": {
+            "_id": 17
+        },
+        "https://tmi.twitch.tv/hosts?include_logins=1&host=17": {
+            "hosts": [
+                {
+                    "target_id": 19309473,
+                    "target_login": "pyrionflax",
+                    "host_id": 17,
+                    "host_login": "host-test"
+                }
+            ]
         }
     },
     "beam": {

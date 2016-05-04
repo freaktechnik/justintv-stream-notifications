@@ -17,6 +17,49 @@ const { LiveState } = requireHelper("../lib/channel/live-state");
 
 const provider = providers.twitch;
 
+exports.testHostingToOffline1 = function*(assert) {
+    // hosting endpoint is empty
+    const originalQS = provider._qs;
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+
+    const hostingChannel = getChannel("test", "twitch");
+    hostingChannel.live = new LiveState(LiveState.REDIRECT);
+
+    const channel = yield provider._getHostedChannel(hostingChannel);
+    assert.ok(!channel.live.isLive(LiveState.TOWARD_LIVE), "Channel is now marked as offline because there is no info on this channel");
+
+    provider._setQs(originalQS);
+};
+
+exports.testHostingToOffline2 = function*(assert) {
+    // hosting endpoint doesn't return a hosting target (not hosting)
+    const originalQS = provider._qs;
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+
+    const hostingChannel = yield provider.updateChannel("freaktechnik");
+    hostingChannel.live = new LiveState(LiveState.REDIRECT);
+
+    const channel = yield provider._getHostedChannel(hostingChannel);
+    assert.ok(!channel.live.isLive(LiveState.TOWARD_LIVE), "Channel is now marked as offline because it's not hosting anyone");
+
+    provider._setQs(originalQS);
+};
+
+exports.testHostingToOffline3 = function*(assert) {
+    // hosting but host target is offline
+    const originalQS = provider._qs;
+    provider._setQs(getMockAPIQS(originalQS, 'twitch'));
+
+    const hostingChannel = getChannel('host-test', 'twitch');
+    hostingChannel.live = new LiveState(LiveState.REDIRECT);
+    hostingChannel.live.alternateUsername = "pyrionflax";
+
+    const channel = yield provider._getHostedChannel(hostingChannel);
+    assert.ok(!channel.live.isLive(LiveState.TOWARD_LIVE), "Channel is now marked as offline because the hosted channel is offline");
+
+    provider._setQs(originalQS);
+};
+
 exports.testHosting = function*(assert) {
     const originalQS = provider._qs;
 
