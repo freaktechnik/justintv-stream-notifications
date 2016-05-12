@@ -287,7 +287,7 @@
     "grunt-stripcomments": "~0.4.0",
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
     "husky": "^0.10.2",
-    "istanbul-jpm": "0.0.1",
+    "istanbul-jpm": "*",
     "jpm": "*",
     "load-grunt-tasks": "^3.2.0"
   },
