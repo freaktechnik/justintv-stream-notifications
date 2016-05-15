@@ -64,11 +64,15 @@ var resize = () => {
     addon.port.emit("resize", [addon.options.panelWidth, h]);
 };
 
-var openChannel = (channelId) => {
+var openChannel = (channelId, e) => {
+    if(e)
+        e.preventDefault();
     addon.port.emit("open", channelId);
 };
 
-var openUrl = (url, livestreamer) => {
+var openUrl = (url, livestreamer, e) => {
+    if(e)
+        e.preventDefault();
     addon.port.emit("openUrl", url, livestreamer);
 };
 
@@ -170,7 +174,7 @@ var buildChannel = (channel, unspecific = false) => {
     //TODO some visual indicator for rebroadcasts
     var channelNode   = document.createElement("li");
     channelNode.insertAdjacentHTML("beforeend",
-`<a href="javascript:void" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
+`<a href="" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
     <img src="">
     <div>
         <img srcset="" sizes="30w">
