@@ -34,6 +34,9 @@ const filters = [
         subtarget: ".name"
     },
     {
+        subtarget: ".alternate-name"
+    },
+    {
         subtarget: ".title"
     },
     {
@@ -514,6 +517,7 @@ window.addEventListener("load", function() {
             field.value = "";
             filter(field.value, live, filters);
             filter(field.value, offline, filters);
+            filter(field.value, secondaryLive, filters);
             e.currentTarget.setAttribute("aria-pressed", "false");
             field.blur();
 
@@ -525,6 +529,7 @@ window.addEventListener("load", function() {
     field.addEventListener("keyup", (e) => {
         filter(field.value, live, filters);
         filter(field.value, offline, filters);
+        filter(field.value, secondaryLive, filters);
         if(!explore.parentNode.hasAttribute("hidden"))
             applySearchToExplore(exploreSelect, field);
         else
