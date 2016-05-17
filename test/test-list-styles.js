@@ -19,8 +19,7 @@ exports.testProviderStyles = function*(assert) {
     yield p;
 
     for(let provider in providers) {
-        assert.ok(xhr.responseText.includes(".thumbnail .live ."+provider+" a div"), "List with thumbnails style for "+provider+" exists");
-        assert.ok(xhr.responseText.includes("."+provider+" a:hover, .thumbnail ."+provider+" a:hover div"), "Hover style for "+provider+" exists");
+        assert.ok(xhr.responseText.includes("."+provider+" a"), "Color definitions for "+provider+" exist");
     }
 };
 

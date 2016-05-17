@@ -181,143 +181,119 @@ nav {
 
 /* Type specific styles */
 
+.tabcontent a {
+    --channel-text-color: black;
+    --channel-bg-color-r: 255;
+    --channel-bg-color-g: 255;
+    --channel-bg-color-b: 255;
+}
+
 .thumbnail .live a div {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b), 0.7);
+    color: var(--channel-text-color);
 }
 
 .tabcontent a:hover, .thumbnail li a:hover div {
-    background: white;
+    background: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
+    color: var(--channel-text-color) !important;
 }
 
-.thumbnail .live .twitch a div {
-    background: rgba(117, 80, 186, 0.7);
-    color: white;
+.twitch a {
+    --channel-bg-color-r: 117;
+    --channel-bg-color-g: 80;
+    --channel-bg-color-b: 186;
+    --channel-text-color: white;
 }
 
-.twitch a:hover, .thumbnail .twitch a:hover div {
-    background: #7550BA !important;
-    color: white !important;
+.hitbox a {
+    --channel-bg-color-r: 20;
+    --channel-bg-color-g: 20;
+    --channel-bg-color-b: 20;
+    --channel-text-color: #ACE600;
 }
 
-.thumbnail .live .hitbox a div {
-    background: rgba(20, 20, 20, 0.7);
-    color: #ACE600;
-}
-
-.hitbox a:hover, .thumbnail .hitbox a:hover div {
-    background: #141414 !important;
-    color: #ACE600 !important;
-}
-
-.thumbnail .live .ustream a div {
-    color: #303030;
+.ustream a {
+    --channel-text-color: #303030;
 }
 
 .ustream a:hover, .thumbnail .ustream a:hover div {
     background: -moz-linear-gradient(center top , white 80%, #FAFAFA 100%) !important;
-    color: #303030 !important;
 }
 
-.thumbnail .live .youtube a div {
-    background: rgba(204, 24, 30, 0.7);
-    color: #FFF;
+.youtube a {
+    --channel-bg-color-r: 204;
+    --channel-bg-color-g: 24;
+    --channel-bg-color-b: 30;
+    --channel-text-color: #FFF;
 }
 
 .youtube a:hover, .thumbnail .youtube a:hover div {
-    background: #CC181E !important;
-    color: #FFF !important;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.livestream a {
+    --channel-text-color: #fff;
 }
 
 .thumbnail .live .livestream a div {
     background: -moz-linear-gradient(center top, rgba(59, 59, 59, 0.7) 0%,
         rgba(56, 56, 56, 0.7) 16%, rgba(30, 30, 30, 0.7) 80%,
         rgba(25, 25, 25, 0.7) 98%, rgba(0, 0, 0, 0.7) 100%);
-    color: #FFF;
 }
 
 .livestream a:hover, .thumbnail .livestream a:hover div {
     background: -moz-linear-gradient(center top, rgb(59, 59, 59) 0%,
         rgb(56, 56, 56) 16%, rgb(30, 30, 30) 80%,
         rgb(25, 25, 25) 98%, rgb(0, 0, 0) 100%) !important;
-    color: #FFF !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
-.thumbnail .live .mlg a div {
-    background: rgba(60, 125, 230, 0.7);
-    color: #FFF;
+.mlg a {
+    --channel-bg-color-r: 60;
+    --channel-bg-color-g: 125;
+    --channel-bg-color-b: 230;
+    --channel-text-color: #FFF;
 }
 
-.mlg a:hover, .thumbnail .mlg a:hover div {
-    background: #3C9BE6 !important;
-    color: #FFF !important;
+.azubu a {
+    --channel-bg-color-r: 0;
+    --channel-bg-color-g: 0;
+    --channel-bg-color-b: 0;
+    --channel-text-color: #3693E0;
 }
 
-.thumbnail .live .azubu a div {
-    background: rgba(0, 0, 0, 0.7);
-    color: #3693E0;
+.beam a {
+    --channel-bg-color-r: 17;
+    --channel-bg-color-g: 19;
+    --channel-bg-color-b: 27;
+    --channel-text-color: white;
 }
 
-.azubu a:hover, .thumbnail .azubu a:hover div {
-    background: #000 !important;
-    color: #3693E0 !important;
+.picarto a {
+    --channel-bg-color-r: 37;
+    --channel-bg-color-g: 49;
+    --channel-bg-color-b: 63;
+    --channel-text-color: white;
 }
 
-.thumbnail .live .beam a div {
-    background: rgba(17, 19, 27, 0.7);
-    color: white;
+.newlivestream a {
+    --channel-text-color: #CF202E;
 }
 
-.beam a:hover, .thumbnail .beam a:hover div {
-    background: #11131B !important;
-    color: white !important;
+.streamup a {
+    --channel-text-color: rgb(85, 98, 255);
 }
 
-.thumbnail .live .picarto a div {
-    background: rgba(37, 49, 63, 0.7);
-    color: white;
+.douyutv a {
+    --channel-bg-color-r: 255;
+    --channel-bg-color-g: 119;
+    --channel-bg-color-b: 0;
+    --channel-text-color: white;
 }
 
-.picarto a:hover, .thumbnail .picarto a:hover div {
-    background: rgb(37, 49, 63) !important;
-    color: white !important;
-}
-
-.thumbnail .live .newlivestream a div {
-    color: #CF202E;
-}
-
-.newlivestream a:hover, .thumbnail .newlivestream a:hover div {
-    background: white !important;
-    color: #CF202E !important;
-}
-
-.thumbnail .live .streamup a div {
-    color: rgb(85, 98, 255);
-}
-
-.streamup a:hover, .thumbnail .streamup a:hover div {
-    background: white !important;
-    color: rgb(85, 98, 255) !important;
-}
-
-.thumbnail .live .douyutv a div {
-    background-color: rgba(255, 119, 0, 0.7);
-    color: white;
-}
-
-.douyutv a:hover, .thumbnail .douyutv a:hover div {
-    background: rgb(255, 119, 0) !important;
-    color: white !important;
-}
-
-.thumbnail .live .dailymotion a div {
-    background-color: rgba(0, 102, 220, 0.7);
-    color: white;
-}
-
-.dailymotion a:hover, .thumbnail .dailymotion a:hover div {
-    background: rgb(0, 102, 220) !important;
-    color: white !important;
+.dailymotion a {
+    --channel-bg-color-r: 0;
+    --channel-bg-color-g: 102;
+    --channel-bg-color-b: 220;
+    --channel-text-color: white;
 }
