@@ -13,6 +13,7 @@
         <script type="text/javascript" src="tabbed.js"></script>
         <script type="text/javascript" src="filter.js"></script>
         <script type="text/javascript" src="list.js"></script>
+        <link rel="stylesheet" type="text/css" href="shared.css">
         <link rel="stylesheet" type="text/css" href="list.css">
     </head>
     <body>
@@ -34,13 +35,13 @@
         <main class="tabbed">
             <nav>
                 <div class="topbar">
-                    <ul class="tabstrip" role="tablist">
+                    <ul class="tabstrip inline-list" role="tablist">
                         <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" data-l10n-id="panel_tab_live">Live</a></li>
                         <li role="presentation" id="nonliveTab" hidden><a href="#nonlive" role="tab" aria-controls="nonlive" data-tab="4" data-l10n-id="panel_tab_nonlive">Non-live</a></li>
                         <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" data-l10n-id="panel_tab_offline">Offline</a></li>
                         <li role="presentation" id="exploreTab" hidden><a href="#featured" role="tab" aria-controls="featured" data-tab="3" data-l10n-id="panel_tab_explore">Explore</a></li>
                     </ul>
-                    <ul class="toolbar" role="toolbar">
+                    <ul class="toolbar inline-list right" role="toolbar">
                         <li>
                             <a id="searchButton" href="#searchField" title="Filter channels by a string" data-l10n-id="panel_search" aria-pressed="false" aria-controls="searchField">
                                 <svg class="icon" viewBox="0 0 8 8">

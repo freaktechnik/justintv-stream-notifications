@@ -3,104 +3,56 @@
  *  Licensed under MPL 2.0
  */
 
-html, body {
-    height: 100%;
-}
-
-body {
-    padding: 0;
-    margin: 0;
-    font-family: sans-serif;
-    line-height: 1.2em;
-
-    -moz-user-select: none;
-}
-
-
-.toolbar li, .tabstrip li {
-    display: inline;
-    list-style-type: none;
-}
-
 main {
     width: 100%;
 }
 
-.loading {
-    cursor: progress !important;
-}
-
-[hidden] {
-    display: none !important;
-    visibility: hidden;
-}
-
-.tabstrip {
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-}
-
-#topbar {
-    background: #2c24c5;
-    display: flex;
-}
-
-.tabstrip.right {
-    text-align: right;
-    flex-grow: 1;
-    flex-shrink: 0;
-}
-
-.tabstrip a:link, .tabstrip a:hover, .tabstrip a:active, .tabstrip a:visited {
-    color: white;
-    text-decoration: none;
-    display: inline-block;
+.topbar a {
     padding: 1em;
 }
 
-.tabstrip a.current, .tabstrip.right a:hover {
-    background: #497dfe;
-}
-
-.toolbar {
-    margin: 0;
-    padding: 0;
-
+.actionbar {
     display: flex;
     flex-direction: row;
     width: 100%;
-
-    border-bottom: 1px solid #282ebe;
 }
 
-.toolbar .flex {
+.actionbar {
+    border-bottom: 1px solid var(--inverted-separator);
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.actionbar .flex {
     flex-grow: 1;
     flex-shrink: 0;
     display: inline-flex;
 }
 
-.toolbar .flex input {
+.actionbar .flex input {
     -moz-appearance: none;
     border: none;
     color: initial;
     font-size: initial;
     padding: 1em;
-    border-right: 1px solid #282ebe;
+    border-right: 1px solid var(--inverted-separator);
     flex-grow: 1;
     height: 1.2em;
     box-sizing: content-box;
+    
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
 }
 
-.toolbar a:link, .tooblar a:hover, .toolbar a:active, .toolbar a:visited {
-    color: initial;
+.actionbar a:link, .actionbar a:hover, .actionbar a:active, .actionbar a:visited {
+    color: var(--inverted-text);
     text-decoration: none;
     display: inline-block;
     padding: 1em;
-    border-right: 1px solid #282ebe;
+    border-right: 1px solid var(--inverted-separator);
 }
 
-.toolbar li:last-child a {
+.actionbar li:last-child a {
     border-right: none;
 }
 
@@ -110,6 +62,8 @@ main {
     width: 100%;
     height: calc(100vh - 6.4rem - 1px);
     border: none;
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
 }
 
 .selectableItemsList>option {
@@ -119,13 +73,24 @@ main {
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
     font-size: initial;
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.selectableItemsList > options:checked {
+    background-color: var(--accent-light-bg);
+    color: var(--accent-light-text);
+}
+
+.selectableItemsList > option:checked small {
+    color: var(--accent-light-text);
 }
 
 .selectableItemsList>option:hover:not(:last-child) {
-    border-bottom: 1px solid #282ebe;
+    border-bottom: 1px solid var(--inverted-separator);
 }
 .selectableItemsList>option:hover:not(:first-child) {
-    border-top: 1px solid #282ebe;
+    border-top: 1px solid var(--inverted-separator);
 }
 
 .selectableItemsList>option img {
@@ -140,10 +105,6 @@ main {
     color: grey;
 }
 
-.selectableItemsList>option:checked small {
-    color: initial;
-}
-
 .popup {
     position: fixed;
     top: 0;
@@ -156,7 +117,8 @@ main {
 
 .popup dialog {
     display: inline-block;
-    background: white;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
     padding: 1em;
     margin: 8em auto;
     text-align: initial;
@@ -172,30 +134,26 @@ main {
     width: 100%;
 }
 
-.popup button[type="button"] {
+.popup button {
     font-size: initial;
     border: none;
-    border-top: 1px solid #282ebe;
-    border-right: 1px solid #282ebe;
-    margin-left: -1em;
+    border-top: 1px solid var(--inverted-separator);
     margin-bottom: -1em;
     padding: 1em;
-    background: initial;
-    color: initial;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.popup button[type="button"] {
+    border-right: 1px solid var(--inverted-separator);
+    margin-left: -1em;
 }
 
 
 .popup button[type="submit"] {
-    font-size: initial;
-    border: none;
     float: right;
-    border-top: 1px solid #282ebe;
-    border-left: 1px solid #282ebe;
-    margin-bottom: -1em;
+    border-left: 1px solid var(--inverted-separator);
     margin-right: -1em;
-    padding: 1em;
-    background: initial;
-    color: initial;
 }
 
 .popup button.fullwidth-button {

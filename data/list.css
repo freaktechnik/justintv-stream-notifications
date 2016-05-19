@@ -2,19 +2,9 @@
  *  Created by Martin Giger
  *  Licensed under the MPL 2.0
  */
-
-html, body {
-    height: 100%;
-}
-
 body {
-    padding: 0;
-    margin: 0;
-    font-family: sans-serif;
-    line-height: 1.2em;
-
-    -moz-user-select: none;
     overflow-x: hidden;
+    background-color: var(--inverted-bg);
 }
 
 ul {
@@ -32,47 +22,8 @@ nav {
     z-index: 10;
 }
 
-.loading {
-    cursor: progress !important;
-}
-
-.toolbar li, .tabstrip li {
-    display: inline;
-    list-style-type: none;
-}
-
-.topbar {
-    display: flex;
-    background: #2c24c5;
-}
-
-.topbar > ul {
-    display: inline-block;
-}
-
-.tabstrip {
-    padding: 0;
-    margin: 0;
-}
-
-.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited {
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    padding:.5em;
-}
-
-.tabstrip a.current, .toolbar a:hover, .toolbar a:active, .toolbar a[aria-pressed="true"] {
-    background: #497dfe;
-}
-
-.toolbar {
-    margin: 0;
-    padding: 0;
-
-    text-align: right;
-    flex-grow: 1;
-    flex-shrink: 0;
+.topbar a {
+    padding: .5em;
 }
 
 #searchField, #exploreprovider {
@@ -86,6 +37,8 @@ nav {
 .tabcontent {
     padding: 0;
     margin: 0;
+    background-color: var(--inverted-bg);
+    color: var(--inverted-color);
 }
 
 .tabcontent li {
@@ -147,7 +100,7 @@ nav {
 }
 
 .compact .tabcontent li a>img, .default .tabcontent li a>img, .tabcontent:not(.live) li a>img , .compact .tabcontent li .title,
-.tabcontent:not(.live) .hide-offline, [hidden], aside {
+.tabcontent:not(.live) .hide-offline, aside {
     display: none !important;
     visibility: hidden;
 }
@@ -182,7 +135,7 @@ nav {
 /* Type specific styles */
 
 .tabcontent a {
-    --channel-text-color: black;
+    --channel-text-color: var(--inverted-text);
     --channel-bg-color-r: 255;
     --channel-bg-color-g: 255;
     --channel-bg-color-b: 255;
@@ -214,6 +167,9 @@ nav {
 
 .ustream a {
     --channel-text-color: #303030;
+    --channel-bg-color-r: 250;
+    --channel-bg-color-g: 250;
+    --channel-bg-color-b: 250;
 }
 
 .ustream a:hover, .thumbnail .ustream a:hover div {
@@ -233,6 +189,9 @@ nav {
 
 .livestream a {
     --channel-text-color: #fff;
+    --channel-bg-color-r: 59;
+    --channel-bg-color-g: 59;
+    --channel-bg-color-b: 59;
 }
 
 .thumbnail .live .livestream a div {

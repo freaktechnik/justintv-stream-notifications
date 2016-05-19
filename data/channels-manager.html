@@ -8,6 +8,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" type="text/css" href="shared.css">
         <link rel="stylesheet" type="text/css" href="channels-manager.css">
         <link rel="icon" sizes="32x32" href="icon32.png">
         <script type="text/javascript" src="utils.js"></script>
@@ -42,18 +43,18 @@
     </head>
     <body>
         <main class="tabbed loading">
-            <div id="topbar">
-                <ul class="tabstrip" role="tablist">
+            <nav class="topbar">
+                <ul class="tabstrip inline-list" role="tablist">
                     <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1" data-l10n-id="cm_tab_channels">Channels</a></li>
                     <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2" data-l10n-id="cm_tab_users">Users</a></li>
                 </ul>
-                <ul role="toolbar" class="tabstrip right">
+                <ul role="toolbar" class="right inline-list toolbar">
                     <li>
                         <a id="options" href="#" data-l10n-id="cm_options">Open Add-on Options</a>
                     </li>
                 </ul>
-            </div>
-            <ul role="toolbar" class="toolbar" aria-controls="channels">
+            </nav>
+            <ul role="toolbar" class="toolbar inline-list actionbar" aria-controls="channels">
                 <li><a id="showDialog" href="#popup" data-l10n-id="cm_add">Add…</a></li>
                 <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</a></li>
                 <li><a id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</a></li>
