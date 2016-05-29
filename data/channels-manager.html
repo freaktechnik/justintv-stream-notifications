@@ -55,12 +55,12 @@
                 </ul>
             </nav>
             <ul role="toolbar" class="toolbar inline-list actionbar" aria-controls="channels">
-                <li><a id="showDialog" href="#popup" data-l10n-id="cm_add">Add…</a></li>
-                <li><a id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</a></li>
-                <li><a id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</a></li>
-                <li hidden><a id="autoAdd" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" data-l10n-id="cm_autoAdd">Auto add</a></li>
+                <li><button id="showDialog" aria-controls="popup" data-l10n-id="cm_add">Add…</button></li>
+                <li><button id="updateItem" href="#" title="Update the metadata of the selected item(s)." data-l10n-id="cm_update">Update</button></li>
+                <li><button id="removeItem" href="#" title="Remove the selected item(s)." data-l10n-id="cm_remove">Remove</button></li>
+                <li hidden><button id="autoAdd" href="#" title="Add favorites of users for which the browser has credentials stored." aria-controls="users" data-l10n-id="cm_autoAdd">Auto add</button></li>
                 <li class="flex"><input type="search" id="searchField" placeholder="Filter…" data-l10n-id="cm_filter"></li>
-                <li><a href="http://streamnotifier.ch/help/channels-manager/" target="blank" hreflang="en" rel="help" data-l10n-id="cm_help">Help</a></li>
+                <li><a class="button" href="http://streamnotifier.ch/help/channels-manager/" target="blank" hreflang="en" rel="help" data-l10n-id="cm_help">Help</a></li>
             </ul>
             <select multiple id="channels" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="1">
             </select>

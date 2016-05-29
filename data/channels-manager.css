@@ -44,15 +44,20 @@ main {
     color: var(--inverted-text);
 }
 
-.actionbar a:link, .actionbar a:hover, .actionbar a:active, .actionbar a:visited {
+.actionbar a.button:link, .actionbar a.button:hover, .actionbar a.button:active, .actionbar a.button:visited, .actionbar button {
     color: var(--inverted-text);
+    background-color: var(--inverted-bg);
     text-decoration: none;
     display: inline-block;
     padding: 1em;
+    border: none;
     border-right: 1px solid var(--inverted-separator);
+    font-size: inherit;
+    box-sizing: border-box;
+    height: 3.2em;
 }
 
-.actionbar li:last-child a {
+.actionbar li:last-child a.button, .actionbar li:last-child button {
     border-right: none;
 }
 
