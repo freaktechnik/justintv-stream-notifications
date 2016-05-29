@@ -70,13 +70,21 @@ body {
     background: var(--accent-dark-bg);
 }
 
-.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited {
+.topbar button {
+    -moz-appearance: none;
+}
+
+.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited, .topbar button {
     color: var(--accent-dark-text);
     text-decoration: none;
     display: inline-block;
+    background-color: var(--accent-dark-bg);
+    font-size: inherit;
+    border: none;
+    box-sizing: border-box;
 }
 
-.topbar .tabstrip a.current, .topbar .toolbar a:hover, .topbar a:active, .topbar a[aria-pressed="true"] {
+.topbar .tabstrip a.current, .topbar .toolbar a:hover, .topbar a:active, .topbar a[aria-pressed="true"], .topbar button:hover, .topbar button:active {
     background: var(--accent-light-bg);
     color: var(--accent-light-text);
 }

@@ -22,8 +22,9 @@ nav {
     z-index: 10;
 }
 
-.topbar a {
+.topbar a, .topbar button {
     padding: .5em;
+    height: 2.2em;
 }
 
 #searchField, #exploreprovider {
