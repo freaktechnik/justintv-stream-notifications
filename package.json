@@ -294,7 +294,7 @@
   "scripts": {
     "grunt": "grunt",
     "test": "grunt test",
-    "prepush": "grunt jshint",
+    "prepush": "grunt jshint"
   },
   "permissions": {
     "multiprocess": true
