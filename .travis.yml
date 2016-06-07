@@ -10,8 +10,6 @@ env:
 before_install:
 - openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv -in .transifexrc.enc -out .transifexrc -d
 - sh -e /etc/init.d/xvfb start
-before_script:
-- npm install -g grunt-cli
 after_success:
 - ./node_modules/.bin/codecov
 branches:
