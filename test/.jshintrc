@@ -1,5 +1,5 @@
 {
-  "predef": [ "console" ],,
+  "predef": [ "console" ],
   "moz": true,
   "undef": true,
   "unused": false,
