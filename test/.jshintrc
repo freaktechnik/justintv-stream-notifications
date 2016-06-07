@@ -5,5 +5,5 @@
   "unused": false,
   "node": true,
   "esversion": 6,
-  "loopfunc": false
+  "loopfunc": true
 }
