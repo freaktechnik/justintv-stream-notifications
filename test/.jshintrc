@@ -1,8 +1,9 @@
 {
-  "predef": [ "console" ],
-  "esnext": true,
+  "predef": [ "console" ],,
   "moz": true,
   "undef": true,
   "unused": false,
-  "node": true
+  "node": true,
+  "esversion": 6,
+  "loopfunc": false
 }
