@@ -4,7 +4,7 @@
  */
 
 const requireHelper = require("./require_helper");
-const { RequestQueue } = requireHelper('../lib/queue');
+const RequestQueue = requireHelper('../lib/queue').default;
 const { when } = require("sdk/event/utils");
 
 exports['test adding new request to queue'] = function(assert) {

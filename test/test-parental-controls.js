@@ -8,7 +8,7 @@ const requireHelper = require("./require_helper");
 const { Ci } = require("chrome");
 const { factoryByContract } = require("sdk/platform/xpcom");
 const NativeParentalControls = factoryByContract("@mozilla.org/parental-controls-service;1").createInstance(Ci.nsIParentalControlsService);
-const ParentalControls = requireHelper("../lib/parental-controls");
+const ParentalControls = requireHelper("../lib/parental-controls").default;
 
 exports.testPCEnabled = function(assert) {
     assert.equal(ParentalControls.enabled, NativeParentalControls.parentalControlsEnabled, "Parental controls state is correct");

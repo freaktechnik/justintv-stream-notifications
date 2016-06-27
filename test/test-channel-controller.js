@@ -8,9 +8,9 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { ChannelController } = requireHelper("../lib/channel/controller");
+const ChannelController = requireHelper("../lib/channel/controller").default;
 const passwords = require("sdk/passwords");
-const providers = requireHelper("../lib/providers");
+const providers = requireHelper("../lib/providers").default;
 const { defer } = require("sdk/core/promise");
 const tabs = require("sdk/tabs");
 const { when } = require("sdk/event/utils");

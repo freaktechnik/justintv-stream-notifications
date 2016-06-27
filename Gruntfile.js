@@ -34,18 +34,13 @@ module.exports = function(grunt) {
             grunt.config.set('package.translate.add.locales', locales);
             return locales;
         },
-        shell: {
-            jpmTest: {
-                command: 'jpm test -b <%= firefoxBinary %>'
-            }
-        },
         jshint: {
             options: {
                 jshintrc: true
             },
             test: {
                 files: {
-                    src: ['transpiled/**/*.js', 'Gruntfile.js', 'data/**/*.js']
+                    src: ['build/**/*.js', 'Gruntfile.js', '!build/coverage/**/*', '!build/node_modules/**/*']
                 }
             }
         },
@@ -107,14 +102,9 @@ module.exports = function(grunt) {
                     src: ['**/*~']
                 }
             },
-            transpile: {
-                files: {
-                    src: ['transpiled']
-                }
-            },
             coverage: {
                 files: {
-                    src: ['coverage']
+                    src: ['coverage', 'build/coverage', 'build/node_modules/istanbul-jpm']
                 }
             },
             jpmGarbage: {
@@ -125,6 +115,11 @@ module.exports = function(grunt) {
             translate: {
                 files: {
                     src: [ '**/locale/*_*.*' ]
+                }
+            },
+            dev: {
+                files: {
+                    src: ['build/test', 'build/**/.jshintrc']
                 }
             }
         },
@@ -186,15 +181,21 @@ module.exports = function(grunt) {
                         cwd: 'locale',
                         src: ['*.properties'],
                         dest: 'build/locale'
+                    },
+                    {
+                        expand: true,
+                        src: ['**/.jshintrc', '!node_modules/**/*'],
+                        dest: 'build'
                     }
                 ]
             },
-            transpile: {
+            coverage: {
                 files: [
                     {
                         expand: true,
-                        src: ['**/.jshintrc'],
-                        dest: 'transpiled'
+                        cwd: 'node_modules',
+                        src: ['istanbul-jpm/**/*'],
+                        dest: 'build/node_modules'
                     }
                 ]
             }
@@ -269,7 +270,7 @@ module.exports = function(grunt) {
                         {
                             // this will mostly work.
                             module: "../utils",
-                            method: "async"
+                            method: "cc"
                         }
                     ],
                     [
@@ -279,22 +280,6 @@ module.exports = function(grunt) {
                             noMangle: true
                         }
                     ]
-                ]
-            },
-            transpile: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'lib',
-                        src: ['**/*.js', "!**/*~"],
-                        dest: 'transpiled/lib'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'test',
-                        src: ['**/*.js'],
-                        dest: 'transpiled/test'
-                    }
                 ]
             },
             defuture: {
@@ -309,10 +294,10 @@ module.exports = function(grunt) {
             }
         },
         instrument: {
-            files: 'transpiled/lib/**/*.js',
+            files: 'build/lib/**/*.js',
             options: {
                 lazy: true,
-                basePath: 'coverage/instrument/',
+                basePath: 'build/coverage/instrument/',
                 instrumenter: istanbulJpm.Instrumenter
             }
         },
@@ -350,21 +335,32 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('jpmtest', 'Runs tests with jpm', function() {
+        var done = this.async();
+        require("jpm/lib/test")(grunt.config('pkg'), {
+            binary: grunt.config('firefoxBinary'),
+            addonDir: require("path").resolve("build/")
+        }).then(done, function(e) {
+            done(e);
+        });
+    });
+
     grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
         global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
+    grunt.registerTask('prepare-test', [ 'prepare-common', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     // babel-jshint
-    grunt.registerTask('lint', ['babel:transpile', 'copy:transpile', 'jshint', 'clean:transpile']);
-    grunt.registerTask('quicktest', ['lint', 'shell:jpmTest']);
-    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'babel:transpile', 'instrument', 'clean:transpile', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
-    grunt.registerTask('test', ['lint', 'coverage']);
+    grunt.registerTask('lint', ['prepare-test', 'jshint']);
+    grunt.registerTask('quicktest', ['prepare-test', 'jshint', 'jpmtest', 'clean:dev']);
+    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'clean:dev', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
+    grunt.registerTask('test', ['prepare-test', 'jshint', 'coverage']);
     grunt.registerTask('prepare-common', ['babel:defuture', 'copy:build', 'bower']);
-    grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
+    grunt.registerTask('build', ['clean', 'prepare-common', 'comments', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
     grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
-    grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi']);
+    grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi', 'clean:dev']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     grunt.registerTask('doc', ['jsdoc']);
 

@@ -7,15 +7,15 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-var { ChannelList } = requireHelper('../lib/channel/list'),
+var ChannelList = requireHelper('../lib/channel/list').default,
     { User } = requireHelper('../lib/channel/core');
 const { before, after } = require("sdk/test/utils");
-const { prefs} = require("sdk/simple-prefs");
+const { prefs } = require("sdk/simple-prefs");
 
 let { Channel, getUser, getChannel } = require("./channeluser/utils");
 let { wait, expectReject } = require("./event/helpers");
 
-const providers = requireHelper('../lib/providers');
+const providers = requireHelper('../lib/providers').default;
 const { getMockAPIQS } = require("./providers/mock-qs");
 
 let SHARED = {};

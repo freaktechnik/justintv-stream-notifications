@@ -8,7 +8,7 @@ const requireHelper = require("./require_helper");
 const { registerService, unregisterService, getLogs, setEnabled } = require("./xpcom-mocks/parental-controls");
 const { before, after } = require("sdk/test/utils");
 
-const ParentalControls = requireHelper('../lib/parental-controls');
+const ParentalControls = requireHelper('../lib/parental-controls').default;
 
 exports.testPCEnabled = (assert) => {
     setEnabled(true);
@@ -24,7 +24,7 @@ exports.testCanBrowseUrl = (assert) => {
 
     setEnabled(true);
     assert.ok(!ParentalControls.canBrowse("http://example.com"), "If service is enabled pages are denied");
-    
+
     assert.ok(ParentalControls.canBrowse("http://humanoids.be"), "Humanoids.be throws in the mock, but we only get a true, like the service was disabled");
 };
 

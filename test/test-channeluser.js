@@ -7,7 +7,7 @@
 const requireHelper = require("./require_helper");
 var { Channel, User } = requireHelper('../lib/channel/core');
 var { getUser, getChannel } = require("./channeluser/utils");
-const { LiveState } = requireHelper('../lib/channel/live-state');
+const LiveState = requireHelper('../lib/channel/live-state').default;
 
 exports['test user base construction stuff'] = function(assert) {
     assert.ok(new User("test", "test") instanceof User, "New user object isn't instance of User");

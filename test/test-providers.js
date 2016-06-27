@@ -4,16 +4,16 @@
  */
 
 const requireHelper = require("./require_helper");
-const providers = requireHelper("../lib/providers"),
+const providers = requireHelper("../lib/providers").default,
        { isValidURI } = require("sdk/url");
 const { prefs } = require("sdk/simple-prefs");
-const { GenericProvider } = requireHelper("../lib/providers/generic-provider");
+const GenericProvider = requireHelper("../lib/providers/generic-provider").default;
 const { expectReject } = require("./event/helpers");
 const { defer } = require("sdk/core/promise");
 const { getChannel, getUser } = require("./channeluser/utils");
 const { Channel, User } = requireHelper("../lib/channel/core");
 const { when } = require("sdk/event/utils");
-const ParentalControls = requireHelper("../lib/parental-controls");
+const ParentalControls = requireHelper("../lib/parental-controls").default;
 const { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs");
 
 exports.testProviders = function(assert) {

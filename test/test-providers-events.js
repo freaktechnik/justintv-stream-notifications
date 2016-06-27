@@ -6,9 +6,9 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { EventSink } = requireHelper("../lib/providers/events");
+const EventSink = requireHelper("../lib/providers/events").default;
 const { when } = require("sdk/event/utils");
-const providers = requireHelper("../lib/providers");
+const providers = requireHelper("../lib/providers").default;
 const { emit } = require("sdk/event/core");
 const { getUser, getChannel } = require("./channeluser/utils");
 

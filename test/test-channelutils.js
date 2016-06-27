@@ -11,7 +11,7 @@ const { wait } = require("./event/helpers");
 const { getChannel } = require("./channeluser/utils");
 const { prefs } = require("sdk/simple-prefs");
 const self = require("sdk/self");
-const { LiveState } = requireHelper("../lib/channel/live-state");
+const LiveState = requireHelper("../lib/channel/live-state").default;
 
 exports['test open archive'] = function*(assert) {
     var channel = getChannel();

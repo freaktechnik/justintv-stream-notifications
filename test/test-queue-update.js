@@ -5,8 +5,8 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { UpdateQueue } = requireHelper('../lib/queue/update');
-const { PauseableQueue } = requireHelper('../lib/queue/pauseable');
+const UpdateQueue = requireHelper('../lib/queue/update').default;
+const PauseableQueue = requireHelper('../lib/queue/pauseable').default;
 const { setTimeout } = require("sdk/timers");
 const { when } = require("sdk/event/utils");
 const { defer } = require("sdk/core/promise");

@@ -9,13 +9,11 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const providers = requireHelper("../lib/providers");
+const { twitch: provider} = requireHelper("../lib/providers").default;
 const { getMockAPIQS } = require("./providers/mock-qs");
 const { when } = require("sdk/event/utils");
 const { getChannel } = require("./channeluser/utils");
-const { LiveState } = requireHelper("../lib/channel/live-state");
-
-const provider = providers.twitch;
+const LiveState = requireHelper("../lib/channel/live-state").default;
 
 exports.testHostingToOffline1 = function*(assert) {
     // hosting endpoint is empty

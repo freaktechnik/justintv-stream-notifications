@@ -5,8 +5,8 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { PauseableQueue } = requireHelper("../lib/queue/pauseable");
-const { RequestQueue } = requireHelper("../lib/queue");
+const PauseableQueue = requireHelper("../lib/queue/pauseable").default;
+const RequestQueue = requireHelper("../lib/queue").default;
 const { when } = require("sdk/event/utils");
 const { NetUtil: { ioService }} = require("resource://gre/modules/NetUtil.jsm");
 
@@ -67,16 +67,16 @@ exports['test autoFetch in offline mode'] = function*(assert) {
     const previousMode = ioService.offline;
     const q = new PauseableQueue();
     q.autoFetch(25, 0.5, 2);
-    
+
     let p = when(q, "pause");
     ioService.offline = true;
     yield p;
-    
+
     assert.strictEqual(q.interval, 0);
-    
+
     q.autoFetch(25, 0.5, 2);
     assert.strictEqual(q.interval, 0);
-    
+
     q.clear();
     ioService.offline = previousMode;
 };

@@ -12,10 +12,10 @@ const { defer } = require("sdk/core/promise");
 const { cleanUI } = require("sdk/test/utils");
 const channelUtils = requireHelper('../lib/channel/utils');
 const mockAlertsService = require("./xpcom-mocks/alerts-service");
-const { LiveState } = requireHelper('../lib/channel/live-state');
+const LiveState = requireHelper('../lib/channel/live-state').default;
 
 exports.testNotifierPrefs = function(assert) {
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
     const notifier = new Notifier({ onClick() {} });
     assert.equal(notifier.onlineNotifications, prefs.onlineNotification, "Value for online matches the pref");
     assert.equal(notifier.titleNotifications, prefs.titleChangeNotification, "Value for title changes matches the pref");
@@ -24,7 +24,7 @@ exports.testNotifierPrefs = function(assert) {
 };
 
 exports.testShowNotifications = function(assert) {
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
     const notifier = new Notifier({ onClick() {} });
 
     const prevPrefs = {
@@ -67,22 +67,22 @@ exports.testNonLiveNotifications = function*(assert) {
     prefs.nonliveNotification = true;
 
     mockAlertsService.registerService();
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
 
     const notifier = new Notifier({ onClick() {} });
     const channel = getChannel('test', 'test', 1);
     channel.live = new LiveState(LiveState.REDIRECT);
-    
+
     let p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);
     yield p;
-    
+
     channel.live = new LiveState(LiveState.REBROADCAST);
-    
+
     p = when(mockAlertsService.getEventTarget(), "shownotification");
     notifier.sendNotification(channel);
     yield p;
-    
+
     notifier.onChannelRemoved(channel.id);
 
     prefs.nonliveNotification = oldVal;
@@ -93,7 +93,7 @@ exports.testNotifier = function*(assert) {
     const oldVal = prefs.offlineNotification;
 
     mockAlertsService.registerService();
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
 
     prefs.offlineNotification = true;
 
@@ -146,7 +146,7 @@ exports.testNotifier = function*(assert) {
 exports.testMuteNotification = function*(assert) {
     mockAlertsService.registerService();
     let counter = 0;
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
     const notifier = new Notifier({ onClick() {}});
     const channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
@@ -166,7 +166,7 @@ exports.testMuteNotification = function*(assert) {
 exports.testClickListener = function*(assert) {
     let clickPromise = defer();
     mockAlertsService.registerService();
-    const { Notifier } = requireHelper('../lib/notifier');
+    const Notifier = requireHelper('../lib/notifier').default;
     const notifier = new Notifier({ onClick(chan) { clickPromise.resolve(chan); }});
     const channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);

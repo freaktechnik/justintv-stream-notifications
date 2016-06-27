@@ -268,7 +268,6 @@
   "devDependencies": {
     "babel-plugin-transform-async-to-module-method": "^6.8.0",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
-    "babel-preset-es2015": "~6.0.15",
     "codecov": "^1.0.1",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
@@ -283,7 +282,6 @@
     "grunt-jpm": ">=0.1.0",
     "grunt-jsdoc": "^2.1.0",
     "grunt-package": ">=0.1.3",
-    "grunt-shell": ">=1.1.2",
     "grunt-stripcomments": ">=0.4.0",
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
     "husky": "^0.10.2",

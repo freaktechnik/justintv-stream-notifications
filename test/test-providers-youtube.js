@@ -6,10 +6,8 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const providers = requireHelper("../lib/providers");
+const { youtube } = requireHelper("../lib/providers").default;
 const { getMockAPIQS, getMockQS } = require("./providers/mock-qs");
-
-const youtube = providers.youtube;
 
 exports.testGetChannelIDFallback = function*(assert) {
     const oldQS = youtube._qs;
@@ -27,10 +25,10 @@ exports.testGetChannelIDFallback = function*(assert) {
 exports.testGetNoCategory = function*(assert) {
     const oldQS = youtube._qs;
     youtube._setQs(getMockQS(oldQS));
-    
+
     const categoryName = yield youtube._getCategory('test');
     assert.equal(categoryName, "");
-    
+
     youtube._setQs(oldQS);
 };
 

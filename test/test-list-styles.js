@@ -5,7 +5,7 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const providers = requireHelper("../lib/providers");
+const providers = requireHelper("../lib/providers").default;
 const { XMLHttpRequest } = require("sdk/net/xhr");
 const self = require("sdk/self");
 const { wait } = require("./event/helpers");

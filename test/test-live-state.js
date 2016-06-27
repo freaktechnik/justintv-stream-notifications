@@ -6,7 +6,7 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { LiveState } = requireHelper("../lib/channel/live-state");
+const LiveState = requireHelper("../lib/channel/live-state").default;
 
 exports.testExports = (assert) => {
     assert.ok("deserialize" in LiveState, "deserialize is in LiveState");

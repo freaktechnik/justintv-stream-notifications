@@ -6,7 +6,7 @@
 "use strict";
 
 const requireHelper = require("./require_helper");
-const { ChannelsManager } = requireHelper("../lib/channel/manager");
+const ChannelsManager = requireHelper("../lib/channel/manager").default;
 const tabs = require("sdk/tabs");
 const { wait } = require("./event/helpers");
 const { Channel, User } = requireHelper("../lib/channel/core");

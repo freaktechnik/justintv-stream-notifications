@@ -12,7 +12,7 @@ const system = require("sdk/system");
  */
 module.exports = function (path) {
     if(system.env.JPM_MEASURING_COVERAGE)
-        return require('../coverage/instrument/test/' + path);
+        return require('../coverage/instrument/build/test/' + path);
     else
         return require(path);
 };
