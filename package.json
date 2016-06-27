@@ -250,8 +250,7 @@
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
-    "firefox": ">=42.0a1",
-    "fennec": ">=38.0a1"
+    "firefox": ">=45.0a1"
   },
   "license": "MPL-2.0",
   "repository": {
@@ -262,7 +261,6 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "dependencies": {
-    "jetpack-homepanel": "^1.0.1",
     "md5": "^2.1.0",
     "notification-box": "^0.1.1",
     "preferences-utils": "0.0.1"
