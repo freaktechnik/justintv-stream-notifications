@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                    src: ['**/*.js', '!node_modules/**/*', '!doc/**/*', '!build/**/*', '!coverage/**/*']
+                    src: ['transpiled/**/*.js', 'Gruntfile.js', 'data/**/*.js']
                 }
             }
         },
@@ -130,7 +130,7 @@ module.exports = function(grunt) {
         },
         jsdoc: {
             dist: {
-                src: ['transpiled/lib/**/*.js', 'README.md', 'package.json'],
+                src: ['lib/**/*.js', 'README.md', 'package.json'],
                 options: {
                     destination: 'doc'
                 }
@@ -152,12 +152,6 @@ module.exports = function(grunt) {
                         cwd: 'data',
                         src: ['**/*', '!**/*~'],
                         dest: 'build/data'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'lib',
-                        src: ['**/*.js*', '!**/*~', '!.jshintrc'],
-                        dest: 'build/lib'
                     },
                     {
                         expand: true,
@@ -192,6 +186,15 @@ module.exports = function(grunt) {
                         cwd: 'locale',
                         src: ['*.properties'],
                         dest: 'build/locale'
+                    }
+                ]
+            },
+            transpile: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['**/.jshintrc'],
+                        dest: 'transpiled'
                     }
                 ]
             }
@@ -260,7 +263,23 @@ module.exports = function(grunt) {
         },
         babel: {
             options: {
-                presets: ['babel-preset-es2015']
+                plugins: [
+                    [
+                        "transform-async-to-module-method",
+                        {
+                            // this will mostly work.
+                            module: "../utils",
+                            method: "async"
+                        }
+                    ],
+                    [
+                        "transform-es2015-modules-commonjs-simple",
+                        {
+                            loose: false,
+                            noMangle: true
+                        }
+                    ]
+                ]
             },
             transpile: {
                 files: [
@@ -277,10 +296,20 @@ module.exports = function(grunt) {
                         dest: 'transpiled/test'
                     }
                 ]
+            },
+            defuture: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'lib',
+                        src: ['**/*.js', "!**/*~", "!**/.jshintrc"],
+                        dest: 'build/lib'
+                    },
+                ]
             }
         },
         instrument: {
-            files: 'lib/**/*.js',
+            files: 'transpiled/lib/**/*.js',
             options: {
                 lazy: true,
                 basePath: 'coverage/instrument/',
@@ -327,16 +356,17 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
-    grunt.registerTask('quicktest', ['jshint', 'shell:jpmTest']);
-    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
-    grunt.registerTask('test', ['jshint', 'coverage']);
-    grunt.registerTask('prepare-common', ['copy:build', 'bower']);
+    // babel-jshint
+    grunt.registerTask('lint', ['babel:transpile', 'copy:transpile', 'jshint', 'clean:transpile']);
+    grunt.registerTask('quicktest', ['lint', 'shell:jpmTest']);
+    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'babel:transpile', 'instrument', 'clean:transpile', 'shell:jpmTest', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
+    grunt.registerTask('test', ['lint', 'coverage']);
+    grunt.registerTask('prepare-common', ['babel:defuture', 'copy:build', 'bower']);
     grunt.registerTask('build', ['prepare-common', 'comments', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
     grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
     grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
-    // Need to transpile until jsdoc 3.3.0
-    grunt.registerTask('doc', ['babel', 'jsdoc', 'clean:transpile']);
+    grunt.registerTask('doc', ['jsdoc']);
 
     grunt.registerTask('default', ['test']);
 };

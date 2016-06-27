@@ -31,7 +31,7 @@ exports.testDumpCreation = function(assert) {
 
     assert.equal(dumpData.users.length, 1);
     assert.deepEqual(dumpData.users[0], USERS_FIXTURE[0].serialize(), "Users were serialized correctly");
-    
+
     for(let branch in dumpData.prefs) {
         for(let name in dumpData.prefs[branch]) {
             assert.equal(prefs[dump.PREFS_MAPPING[branch][name]], dumpData.prefs[branch][name], "Value for "+branch+"."+name+" exported correctly");
@@ -56,7 +56,7 @@ exports.testDumpFrozen = function(assert) {
     ];
 
     const dumpData = dump.create(CHANNELS_FIXTURE, USERS_FIXTURE);
-    
+
     checkObject(dumpData, assert.ok.bind(assert));
 };
 
@@ -84,7 +84,7 @@ exports.testCopying = function(assert) {
 
     assert.equal(dumpData.users.length, 1);
     assert.deepEqual(dumpData.users[0], USERS_FIXTURE[0].serialize(), "Users survived dumping to clipboard");
-    
+
     for(let branch in dumpData.prefs) {
         for(let name in dumpData.prefs[branch]) {
             assert.equal(prefs[dump.PREFS_MAPPING[branch][name]], dumpData.prefs[branch][name], "Value for "+branch+"."+name+" exported to clipboard correctly");
@@ -101,9 +101,9 @@ exports.testPrefsImport = function(assert) {
     ];
 
     const dumpData = dump.create(CHANNELS_FIXTURE, USERS_FIXTURE);
-    
-    dump.import(dumpData);
-    
+
+    dump.load(dumpData);
+
     for(let branch in dump.PREFS_MAPPING) {
         for(let name in dump.PREFS_MAPPING[branch]) {
             assert.equal(prefs[dump.PREFS_MAPPING[branch][name]], dumpData.prefs[branch][name], "Value for "+branch+"."+name+" imported correctly");
