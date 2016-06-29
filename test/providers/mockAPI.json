@@ -2004,5 +2004,29 @@
                 }
             ]
         }
+    },
+    "picarto": {
+        "https://ptvappapi.picarto.tv/channel/test?key=03e26294-b793-11e5-9a41-005056984bd4": {
+            "channel": "test",
+            "channel_title": "",
+            "avatar_url": "",
+            "thumbnail_url": "",
+            "is_online": false,
+            "is_multistream": false,
+            "current_viewers": 0,
+            "is_nsfw": false,
+            "content_type": ""
+        },
+        "https://ptvappapi.picarto.tv/channel/live?key=03e26294-b793-11e5-9a41-005056984bd4": {
+            "channel": "live",
+            "channel_title": "",
+            "avatar_url": "",
+            "thumbnail_url": "",
+            "is_online": true,
+            "is_multistream": false,
+            "current_viewers": 0,
+            "is_nsfw": false,
+            "content_type": ""
+        }
     }
 }
