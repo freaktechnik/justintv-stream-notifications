@@ -194,48 +194,6 @@
       "title": "Find mature content in the explore tab",
       "value": true,
       "hidden": true
-    },
-    {
-      "type": "bool",
-      "name": "livestreamer_enabled",
-      "title": "Always use Livestreamer",
-      "description": "Opens streams with Livestreamer by default.",
-      "value": false
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_path",
-      "title": "Path to Livestreamer binary",
-      "description": "Absolute path to the Livestreamer binary. Is set by the extension if Livestreamer could be found in a known location.",
-      "value": ""
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_player",
-      "title": "Livestreamer Player",
-      "description": "Command to execute the player Livestreamer should use. Defaults to VLC.",
-      "value": ""
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_quality",
-      "title": "Livestreamer Quality Preset",
-      "description": "Quality preset Livestreamer should choose when playing a stream (safe bets are best and worst).",
-      "value": "best"
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_fallbackQuality",
-      "title": "Quality Preset used when all else fails",
-      "value": "best",
-      "hidden": true
-    },
-    {
-      "type": "string",
-      "name": "livestreamer_extraArguments",
-      "title": "Comma separated extra arguments for livestreamer",
-      "value": "",
-      "hidden": true
     }
   ],
   "homepage": "http://streamnotifier.ch/",

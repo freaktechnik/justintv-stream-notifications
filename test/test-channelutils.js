@@ -107,42 +107,5 @@ exports['test open chat'] = function*(assert) {
     yield p;
 };
 
-exports['test open live channel with livestreamer'] = function*(assert) {
-    let channel = getChannel();
-    channel.live.setLive(true);
-    yield channelUtils.selectOrOpenTab(channel, "livestreamer");
-    assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
-};
-
-exports['test open hosted live channel with livestreamer'] = function*(assert) {
-    const channel = getChannel();
-    channel.live = new LiveState(LiveState.REDIRECT);
-    channel.live.alternateURL = "http://example.com/alternate";
-    yield channelUtils.selectOrOpenTab(channel, "livestreamer");
-    assert.notEqual(tabs.activeTab.url, channel.archiveUrl, "No tab opened when starting livestreamer");
-};
-
-exports['test open offline channel with livestreamer'] = function*(assert) {
-    let channel = getChannel();
-    channelUtils.selectOrOpenTab(channel, "livestreamer");
-    yield wait(tabs, "ready");
-
-    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened with the stream archive");
-    let p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
-
-exports['test open with livestreamer by default'] = function*(assert) {
-    let channel = getChannel();
-    channel.live.setLive(true);
-
-    prefs.livestreamer_enabled = true;
-    yield channelUtils.selectOrOpenTab(channel);
-    assert.notEqual(tabs.activeTab.url, channel.url[0], "No tab opened with livestreamer as default");
-
-    prefs.livestreamer_enabled = false;
-};
-
 require("sdk/test").run(exports);
 
