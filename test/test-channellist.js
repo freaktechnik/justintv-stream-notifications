@@ -485,8 +485,7 @@ exports['test get legacy channel'] = function*(assert) {
                 title: "",
                 viewers: 14,
                 lastModified: Date.now(),
-                category: "",
-                intent: ""
+                category: ""
             };
         }
     };
@@ -519,8 +518,7 @@ exports['test get all channels with a legacy channel'] = function*(assert) {
                 title: "",
                 viewers: 14,
                 lastModified: Date.now(),
-                category: "",
-                intent: ""
+                category: ""
             };
         }
     };
@@ -555,8 +553,7 @@ exports['test get channels by type with a legacy channel'] = function*(assert) {
                 title: "",
                 viewers: 14,
                 lastModified: Date.now(),
-                category: "",
-                intent: ""
+                category: ""
             };
         }
     };
