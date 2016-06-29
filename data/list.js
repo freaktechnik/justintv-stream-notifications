@@ -397,6 +397,10 @@ const setNonLiveDisplay = (display) => {
     }
 };
 
+const setTheme = (theme) => {
+    document.body.classList.toggle("dark", theme === 1);
+};
+
 // Set up port commmunication listeners
 addon.port.on("setStyle", setStyle);
 addon.port.on("setExtras", setExtrasVisibility);
@@ -454,6 +458,8 @@ addon.port.on("setFeatured", (channels, type, q) => {
     resize();
 });
 
+addon.port.on("theme", setTheme);
+
 // Set up DOM listeners and all that.
 window.addEventListener("load", function() {
     live = document.getElementById("live");
@@ -467,6 +473,7 @@ window.addEventListener("load", function() {
     setStyle(addon.options.style);
     setExtrasVisibility(addon.options.extras);
     setNonLiveDisplay(addon.options.nonLiveDisplay);
+    setTheme(addon.options.theme);
     resize();
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));

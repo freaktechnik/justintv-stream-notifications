@@ -50,9 +50,12 @@ nav {
 
 .tabcontent li a, .tabcontent li a:link, .tabcontent li a:hover, .tabcontent li a:active, .tabcontent li a:visited {
     text-decoration: none;
-    color: initial;
     cursor: context-menu;
     display: block;
+}
+
+.tabcontent li a, .tabcontent li a:link, .tabcontent li a:visited {
+    color: var(--inverted-text);
 }
 
 .compact .tabcontent li a, .default .tabcontent li a, .thumbnail .tabcontent:not(.live) li a, .thumbnail .live li div, .tabcontent > span {

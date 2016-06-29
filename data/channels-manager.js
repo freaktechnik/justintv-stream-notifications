@@ -75,6 +75,10 @@ self.port.on("error", function(errorMsg) {
     showError(errorMsg);
 });
 
+self.port.on("theme", (theme) => {
+    document.body.classList.toggle("dark", theme === 1);
+});
+
 window.addEventListener("beforeunload", () => {
     self.port.emit("unload");
 });
