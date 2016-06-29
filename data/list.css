@@ -39,7 +39,7 @@ nav {
     padding: 0;
     margin: 0;
     background-color: var(--inverted-bg);
-    color: var(--inverted-color);
+    color: var(--inverted-text);
 }
 
 .tabcontent li {

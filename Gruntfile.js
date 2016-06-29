@@ -339,8 +339,10 @@ module.exports = function(grunt) {
         var done = this.async();
         require("jpm/lib/test")(grunt.config('pkg'), {
             binary: grunt.config('firefoxBinary'),
-            addonDir: require("path").resolve("build/")
-        }).then(done, function(e) {
+            addonDir: require("path").resolve("build/"),
+            stopOnError: true,
+            verbose: true
+        }).then(function(r) { done(r.code === 0); }, function(e) {
             done(e);
         });
     });
