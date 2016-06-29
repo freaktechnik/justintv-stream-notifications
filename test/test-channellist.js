@@ -536,42 +536,6 @@ exports['test get all channels with a legacy channel'] = function*(assert) {
     providers[legacyChannel.type]._setQs(originalQs);
 };
 
-exports['test get channels by type with a legacy channel'] = function*(assert) {
-    const legacyChannel = {
-        login: "test",
-        type: "twitch",
-        serialize() {
-            return {
-                login: this.login,
-                type: this.type,
-                favorites: [],
-                url: [], // simulate damaged entry
-                archiveUrl: "http://localhost",
-                chatUrl: "http://localhost",
-                image: {},
-                live: false,
-                title: "",
-                viewers: 14,
-                lastModified: Date.now(),
-                category: ""
-            };
-        }
-    };
-    const originalQs = providers[legacyChannel.type]._qs;
-    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-
-    yield SHARED.list.addChannel(legacyChannel);
-    yield SHARED.list.addChannel(getChannel("test2", legacyChannel.type));
-
-    const channels = yield SHARED.list.getChannelsByType(legacyChannel.type);
-
-    for(let channel of channels) {
-        assert.ok(channel instanceof Channel, "Channel is a channel");
-    }
-
-    providers[legacyChannel.type]._setQs(originalQs);
-};
-
 exports['test opening open list'] = function*(assert) {
     assert.notEqual(SHARED.list.db, null);
 
