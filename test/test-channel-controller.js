@@ -341,7 +341,9 @@ exports.testCopyLocalChannelToClipboard = function*(assert) {
 
     //TODO test alternativeURL
 
-    clipboard.set(prevClipboard);
+    if(prevClipboard)
+        clipboard.set(prevClipboard);
+
     cc.destroy();
 };
 
@@ -357,7 +359,8 @@ exports.testCopyExternalChannelToClipboard = function*(assert) {
     assert.equal(channel.login, TESTUSER.name, "Channel login matches the given login");
     assert.equal(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
 
-    clipboard.set(prevClipboard);
+    if(prevClipboard)
+        clipboard.set(prevClipboard);
 
     cc.destroy();
 };
