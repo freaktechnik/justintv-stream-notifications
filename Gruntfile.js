@@ -119,7 +119,7 @@ module.exports = function(grunt) {
             },
             dev: {
                 files: {
-                    src: ['build/test', 'build/**/.jshintrc']
+                    src: ['build/test', 'build/**/.jshintrc', 'build/**/*.js.map']
                 }
             }
         },
@@ -380,7 +380,7 @@ module.exports = function(grunt) {
     // babel-jshint
     grunt.registerTask('lint', ['prepare-test', 'jshint']);
     grunt.registerTask('quicktest', ['prepare-test', 'jshint', 'jpmtest', 'clean:dev']);
-    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'clean:dev', 'readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'makeReport']);
+    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'jshint', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
     grunt.registerTask('build', ['clean', 'prepare-common', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
