@@ -326,8 +326,8 @@ var providerSearch = (type, query) => {
     addon.port.emit("search", type, query);
 };
 
-var externalContextMenuAdd = (e) => {
-    addon.port.emit("add", currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
+var externalContextMenuCommand = (command) => {
+    addon.port.emit(command, currentMenuTarget.className, currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length));
     currentMenuTarget = null;
 };
 
@@ -485,7 +485,9 @@ window.addEventListener("load", function() {
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"), false);
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"), false);
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"), false);
-    document.getElementById("contextAdd").addEventListener("click", externalContextMenuAdd, false);
+    document.getElementById("contextCopy").addEventListener("click", contextMenuCommand.bind(null, "copy"), false);
+    document.getElementById("contextAdd").addEventListener("click", externalContextMenuCommand.bind(null, "add"), false);
+    document.getElementById("contextExploreCopy").addEventListener("click", externalContextMenuCommand.bind(null, "copyexternal"), false);
     document.getElementById("pauseAutorefresh").addEventListener("click", () => addon.port.emit("pause"), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => addon.port.emit("resume"), false);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {

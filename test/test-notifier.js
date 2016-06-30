@@ -140,6 +140,10 @@ exports.testNotifier = function*(assert) {
 
     prefs.offlineNotification = oldVal;
 
+    p = when(mockAlertsService.getEventTarget(), "shownotification");
+    notifier.notifyCopied("test");
+    yield p;
+
     mockAlertsService.unregisterService();
 };
 

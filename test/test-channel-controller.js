@@ -18,6 +18,8 @@ const { expectReject } = require("./event/helpers");
 const { before, after } = require("sdk/test/utils");
 const self = require("sdk/self");
 const { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs");
+const clipboard = require("sdk/clipboard");
+const { prefs } = require("sdk/simple-prefs");
 
 const TESTUSER = {
     name: "freaktechnik",
@@ -312,6 +314,61 @@ exports.testDisabledProvider = function*(assert) {
         assert.pass("No disabled provider found");
         //TODO have a plan b here.
     }
+};
+
+exports.testCopyLocalChannelToClipboard = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    const referenceChannel = yield cc.addChannel(TESTUSER.name, TESTUSER.type);
+
+    const prevClipboard = clipboard.get();
+
+    clipboard.set("foobar", "text");
+
+    const channel = yield cc.copyChannelURL(referenceChannel.id);
+    assert.equal(channel.id, referenceChannel.id, "Channel returned is the same as the one we requested to copy the URL for");
+    assert.equal(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
+
+    clipboard.set("foobar", "text");
+
+    const prevPattern = prefs.copy_pattern;
+    prefs.copy_pattern = "Test {URL} foo bar";
+    const expectedString = prefs.copy_pattern.replace("{URL}", channel.url[0]);
+    yield cc.copyChannelURL(channel.id);
+    assert.equal(expectedString, clipboard.get(), "Copied string matches waht we'd expect based on the pref");
+    prefs.copy_pattern = prevPattern;
+
+    //TODO test alternativeURL
+
+    clipboard.set(prevClipboard);
+    cc.destroy();
+};
+
+exports.testCopyExternalChannelToClipboard = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    const prevClipboard = clipboard.get();
+    clipboard.set("foobar", "text");
+
+    const channel = yield cc.copyChannelURL(TESTUSER.name, TESTUSER.type);
+    assert.equal(channel.type, TESTUSER.type, "Channel type matches the type we gave");
+    assert.equal(channel.login, TESTUSER.name, "Channel login matches the given login");
+    assert.equal(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
+
+    clipboard.set(prevClipboard);
+
+    cc.destroy();
+};
+
+exports.testCopyInvalidChannelToClipboard = function*(assert) {
+    const cc = new ChannelController();
+    yield cc._ensureQueueReady();
+
+    yield expectReject(cc.copyChannelURL(TESTUSER.name, "foobar"));
+
+    cc.destroy();
 };
 
 before(exports, () => {
