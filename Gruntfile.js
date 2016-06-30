@@ -16,12 +16,12 @@ module.exports = function(grunt) {
         pkg: pkg,
         firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox-trunk',
         banner:
-            '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-            '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name || pkg.author %>;\n' +
-            ' * This Source Code Form is subject to the terms of the Mozilla Public License,\n' +
-            ' * v. 2.0. If a copy of the MPL was not distributed with this file, You can\n' +
-            ' * obtain one at https://mozilla.org/MPL/2.0/.\n */\n',
+            "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today(\"yyyy-mm-dd\") %>\n" +
+            "<%= pkg.homepage ? \" * \" + pkg.homepage + \"\\n\" : \"\" %>" +
+            " * Copyright (c) <%= grunt.template.today(\"yyyy\") %> <%= pkg.author.name || pkg.author %>;\n" +
+            " * This Source Code Form is subject to the terms of the Mozilla Public License,\n" +
+            " * v. 2.0. If a copy of the MPL was not distributed with this file, You can\n" +
+            " * obtain one at https://mozilla.org/MPL/2.0/.\n */\n",
         defaultLang: "en-US",
         locales: function() {
             var locales = {};
@@ -238,15 +238,6 @@ module.exports = function(grunt) {
                 options: {}
             }
         },
-        comments: {
-            build: {
-                options: {
-                    singleline: false,
-                    multiline: true
-                },
-                src: [ 'build/lib/**/*.js' ]
-            }
-        },
         header: {
             build: {
                 options: {
@@ -256,7 +247,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'build/lib',
-                        src: ['**/*.js*'],
+                        src: ['**/*.js'],
                         dest: 'build/lib'
                     }
                 ]
@@ -282,7 +273,22 @@ module.exports = function(grunt) {
                     ]
                 ]
             },
-            defuture: {
+            build: {
+                options: {
+                    shouldPrintComment: function(comment) {
+                        return comment.indexOf("@") == -1;
+                    }
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'lib',
+                        src: ['**/*.js', "!**/*~", "!**/.jshintrc"],
+                        dest: 'build/lib'
+                    },
+                ]
+            },
+            dev: {
                 files: [
                     {
                         expand: true,
@@ -350,16 +356,16 @@ module.exports = function(grunt) {
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
-    grunt.registerTask('prepare-test', [ 'prepare-common', 'copy:dev', 'package:dev' ]);
+    grunt.registerTask('prepare-test', [ 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     // babel-jshint
     grunt.registerTask('lint', ['prepare-test', 'jshint']);
     grunt.registerTask('quicktest', ['prepare-test', 'jshint', 'jpmtest', 'clean:dev']);
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'clean:dev', 'readcoverageglobal', 'storeCoverage', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'jshint', 'coverage']);
-    grunt.registerTask('prepare-common', ['babel:defuture', 'copy:build', 'bower']);
-    grunt.registerTask('build', ['clean', 'prepare-common', 'comments', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
-    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
+    grunt.registerTask('prepare-common', ['copy:build', 'bower']);
+    grunt.registerTask('build', ['clean', 'prepare-common', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
+    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
     grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi', 'clean:dev']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     grunt.registerTask('doc', ['jsdoc']);
