@@ -260,7 +260,8 @@
     "husky": "^0.10.2",
     "istanbul-jpm": "*",
     "jpm": "*",
-    "load-grunt-tasks": "^3.2.0"
+    "load-grunt-tasks": "^3.2.0",
+    "remap-istanbul": "^0.6.4"
   },
   "scripts": {
     "grunt": "grunt",

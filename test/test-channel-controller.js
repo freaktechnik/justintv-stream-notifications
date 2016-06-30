@@ -343,6 +343,7 @@ exports.testCopyLocalChannelToClipboard = function*(assert) {
 
     if(prevClipboard)
         clipboard.set(prevClipboard);
+    yield cc.removeChannel(channel.id);
 
     cc.destroy();
 };

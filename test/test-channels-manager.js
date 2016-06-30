@@ -10,7 +10,6 @@ const ChannelsManager = requireHelper("../lib/channel/manager").default;
 const tabs = require("sdk/tabs");
 const { wait } = require("./event/helpers");
 const { Channel, User } = requireHelper("../lib/channel/core");
-const { defer } = require("sdk/core/promise");
 const self = require("sdk/self");
 
 const getFakeWorker = (portCallback) => {
@@ -80,20 +79,17 @@ exports.testLoading = function(assert) {
 };
 
 exports.testLoadingWithWorker = function*(assert) {
-    let cm = new ChannelsManager();
-    let p = defer();
+    const cm = new ChannelsManager();
     cm.mod.destroy();
-    cm.worker = getFakeWorker(p.resolve);
 
+    let p = new Promise((resolve) =>cm.worker = getFakeWorker(resolve));
     cm.loading = false;
-    let event = yield p.promise;
+    let event = yield p;
     assert.equal(event, "doneloading");
 
-    p = defer();
-    cm.worker = getFakeWorker(p.resolve);
-
+    p = new Promise((resolve) =>cm.worker = getFakeWorker(resolve));
     cm.loading = true;
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "isloading");
 
     cm.destroy();
@@ -128,66 +124,59 @@ exports.testCallbacksLoading = function(assert) {
     cm.destroy();
 };
 exports.testCallbacks = function*(assert) {
-    let cm = new ChannelsManager();
-    let ignoreLoadingWrapper = (res) => {
+    const cm = new ChannelsManager();
+    const ignoreLoadingWrapper = (res) => {
         return (event) => {
             if(event !== "doneloading" && event !== "isloading")
                 res(event);
         };
     };
-    let p = defer();
     cm.mod.destroy();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
 
+    let p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onChannelAdded(FAKE_ITEM);
-    let event = yield p.promise;
+    let event = yield p;
     assert.equal(event, "add");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onChannelUpdated(FAKE_ITEM);
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "update");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onChannelRemoved();
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "remove");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onUserAdded(FAKE_ITEM);
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "adduser");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onUserUpdated(FAKE_ITEM);
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "updateuser");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onUserRemoved();
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "removeuser");
 
-    p = defer();
-    cm.worker = getFakeWorker(ignoreLoadingWrapper(p.resolve));
-
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onError();
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "error");
 
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
     cm.onError("test");
-    event = yield p.promise;
+    event = yield p;
     assert.equal(event, "error");
+
+    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    cm.setTheme(0);
+    event = yield p;
+    assert.equal(event, "theme");
 
     cm.destroy();
 };
@@ -204,6 +193,7 @@ exports.testMakeSureNoThrows = function(assert) {
         cm.onUserUpdated(FAKE_ITEM);
         cm.onUserRemoved();
         cm.onError();
+        cm.setTheme();
     } catch(e) {
         assert.fail(e);
     }
@@ -212,14 +202,13 @@ exports.testMakeSureNoThrows = function(assert) {
 };
 
 exports.testAddProviders = function*(assert) {
-    let cm = new ChannelsManager();
+    const cm = new ChannelsManager();
 
-    let p = defer();
     cm.mod.destroy();
-    cm.worker = getFakeWorker(p.resolve);
+    let p = new Promise((resolve) => cm.worker = getFakeWorker(resolve));
 
     cm.addProviders("test");
-    let event = yield p.promise;
+    let event = yield p;
     assert.equal(event, "addproviders");
 
     cm.destroy();
