@@ -257,7 +257,7 @@ var removeChannel = (channelId) => {
 
     channelNode.remove();
 
-    if(countLiveChannels === 0 && offline.childElementCount === 0 && distinct.childElementCount === 0)
+    if(countLiveChannels() === 0 && offline.childElementCount === 0 && distinct.childElementCount === 0)
         displayNoChannels();
 
     resize();
