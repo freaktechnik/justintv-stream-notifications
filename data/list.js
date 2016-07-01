@@ -408,6 +408,7 @@ addon.port.on("addChannels", (channels) => channels.forEach(addChannel));
 addon.port.on("removeChannel", removeChannel);
 addon.port.on("setOnline", makeChannelLive);
 addon.port.on("setOffline", makeChannelOffline);
+addon.port.on("setDistinct", makeChannelDistinct);
 addon.port.on("resize", resize);
 addon.port.on("setNonLiveDisplay", setNonLiveDisplay);
 addon.port.on("queuePaused", (paused) => {
