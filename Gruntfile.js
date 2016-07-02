@@ -40,7 +40,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: {
-                    src: ['build/**/*.js', 'Gruntfile.js', '!build/coverage/**/*', '!build/node_modules/**/*']
+                    src: ['build/**/*.js', 'Gruntfile.js', '!build/instrument/**/*', '!build/node_modules/**/*']
                 }
             }
         },
@@ -104,7 +104,7 @@ module.exports = function(grunt) {
             },
             coverage: {
                 files: {
-                    src: ['coverage', 'build/coverage', 'build/node_modules/istanbul-jpm']
+                    src: ['coverage', 'build/instrument', 'build/node_modules/istanbul-jpm']
                 }
             },
             jpmGarbage: {
@@ -292,12 +292,13 @@ module.exports = function(grunt) {
                 options: {
                     sourceMaps: true,
                     // workaround remap-istanbul not handling relative paths properly
-                    sourceRoot: 'build/lib/coverage'
+                    //TODO currently maps lib/ to build/lib/
+                    sourceRoot: 'build/instrument/build'
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: 'lib',
+                        cwd: 'lib/',
                         src: ['**/*.js', "!**/*~", "!**/.jshintrc"],
                         dest: 'build/lib'
                     },
@@ -308,7 +309,7 @@ module.exports = function(grunt) {
             files: 'build/lib/**/*.js',
             options: {
                 lazy: true,
-                basePath: 'build/coverage/instrument/',
+                basePath: 'build/instrument/',
                 instrumenter: istanbulJpm.Instrumenter
             }
         },
@@ -351,7 +352,7 @@ module.exports = function(grunt) {
                         src: 'coverage/reports/coverage.json',
                         dest: 'coverage/reports/coverage.json',
                         type: 'json',
-                        basePath: 'build/lib'
+                        basePath: 'build/instrument/build/lib'
                     }
                 ]
             }
