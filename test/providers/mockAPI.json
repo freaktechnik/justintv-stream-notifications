@@ -881,10 +881,10 @@
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams/test": {
+        "https://api.twitch.tv/kraken/streams/test?stream_type=all": {
             "stream": null
         },
-        "https://api.twitch.tv/kraken/streams/live": {
+        "https://api.twitch.tv/kraken/streams/live?stream_type=all": {
             "stream": {
                 "viewers": 0,
                 "preview": {
@@ -936,7 +936,7 @@
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams/mlg_live": {
+        "https://api.twitch.tv/kraken/streams/mlg_live?stream_type=all": {
             "stream": null
         },
         "https://api.twitch.tv/kraken/channels/mlg_live": {
@@ -1169,7 +1169,7 @@
             "views": 15,
             "followers": 5
         },
-        "https://api.twitch.tv/kraken/streams/freaktechnik": {
+        "https://api.twitch.tv/kraken/streams/freaktechnik?stream_type=all": {
             "stream": null
         },
         "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100&offset=0": {
@@ -1270,7 +1270,7 @@
                 "videos": "https://api.twitch.tv/kraken/channels/totalbiscuit/videos"
             }
         },
-        "https://api.twitch.tv/kraken/streams/totalbiscuit": {
+        "https://api.twitch.tv/kraken/streams/totalbiscuit?stream_type=all": {
             "stream": {
                 "game": "Super Smash Bros. Melee",
                 "viewers": 16667,
@@ -1486,7 +1486,7 @@
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams/nvidia": {
+        "https://api.twitch.tv/kraken/streams/nvidia?stream_type=all": {
             "stream": {
                 "_id": 20929063952,
                 "game": "Rust",
