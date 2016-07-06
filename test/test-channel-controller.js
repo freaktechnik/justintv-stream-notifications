@@ -11,7 +11,6 @@ const requireHelper = require("./require_helper");
 const ChannelController = requireHelper("../lib/channel/controller").default;
 const passwords = require("sdk/passwords");
 const providers = requireHelper("../lib/providers").default;
-const { defer } = require("sdk/core/promise");
 const tabs = require("sdk/tabs");
 const { when } = require("sdk/event/utils");
 const { expectReject } = require("./event/helpers");
@@ -20,6 +19,10 @@ const self = require("sdk/self");
 const { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs");
 const clipboard = require("sdk/clipboard");
 const { prefs } = require("sdk/simple-prefs");
+const { Cc, Ci, CC } = require("chrome");
+
+const LoginInfo = CC("@mozilla.org/login-manager/loginInfo;1", "nsILoginInfo", "init");
+const loginManager = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
 const TESTUSER = {
     name: "freaktechnik",
@@ -28,18 +31,13 @@ const TESTUSER = {
 
 var SHARED = {};
 
-exports.testCredentials = function*(assert) {
-    let { promise, resolve, reject } = defer();
-    passwords.store({
-        url: providers[TESTUSER.type].authURL[0],
-        formSubmitURL: providers[TESTUSER.type].authURL[0] + "/submit",
-        username: TESTUSER.name,
-        password: "test",
-        onComplete: resolve,
-        onError: reject
-    });
+const storeCredential = (url, username, password) => {
+    return loginManager.addLogin(new LoginInfo(url, url + "/submit", null, username, password, 'username', 'password'));
+};
 
-    yield promise;
+exports.testCredentials = function*(assert) {
+    yield storeCredential(providers[TESTUSER.type].authURL[0], TESTUSER.name, "test");
+    yield storeCredential(providers[TESTUSER.type].authURL[0], "", "test");
 
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
@@ -75,15 +73,15 @@ exports.testCredentials = function*(assert) {
         yield cc.removeUser(u.id, true);
 
     cc.destroy();
-    /*let p = defer();
-    passwords.remove({
-        formSubmitURL: providers[TESTUSER.type].authURL[0] + "/submit",
-        username: TESTUSER.name,
-        password: "test",
-        onComplete: p.resolve,
-        onError: p.reject
-    });
-    yield p.promise;*/
+    /*yield new Promise((resolve, reject) => {
+            passwords.remove({
+            formSubmitURL: providers[TESTUSER.type].authURL[0] + "/submit",
+            username: TESTUSER.name,
+            password: "test",
+            onComplete: p.resolve,
+            onError: p.reject
+        });
+    });*/
 };
 
 exports.testAddUser = function*(assert) {
