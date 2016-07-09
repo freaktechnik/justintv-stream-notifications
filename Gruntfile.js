@@ -361,11 +361,14 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('remap-istanbul');
 
-    grunt.registerTask('jpmtest', 'Runs tests with jpm', function() {
+    grunt.registerTask('jpmtest', 'Runs tests with jpm', function(verbose) {
         var done = this.async();
+        var isVerbose = verbose !== "undefined";
         require("jpm/lib/test")(grunt.config('pkg'), {
             binary: grunt.config('firefoxBinary'),
-            addonDir: require("path").resolve("build/")
+            addonDir: require("path").resolve("build/"),
+            verbose: isVerbose,
+            stopOnError: isVerbose
         }).then(function(r) { done(r.code === 0); }, function(e) {
             done(e);
         });
@@ -380,7 +383,12 @@ module.exports = function(grunt) {
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     // babel-jshint
     grunt.registerTask('lint', ['prepare-test', 'jshint']);
-    grunt.registerTask('quicktest', ['prepare-test', 'jshint', 'jpmtest', 'clean:dev']);
+    grunt.registerTask('quicktest', 'Shortest path to run tests', function(verbose) {
+		grunt.task.run('prepare-test');
+		grunt.task.run('jshint');
+		grunt.task.run('jpmtest'+":"+verbose);
+		grunt.task.run('clean:dev');
+	});
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'jshint', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);

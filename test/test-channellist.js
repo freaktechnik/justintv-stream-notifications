@@ -11,12 +11,11 @@ var ChannelList = requireHelper('../lib/channel/list').default,
     { User } = requireHelper('../lib/channel/core');
 const { before, after } = require("sdk/test/utils");
 const { prefs } = require("sdk/simple-prefs");
+const LiveState = requireHelper("../lib/channel/live-state").default;
 
 let { Channel, getUser, getChannel } = require("./channeluser/utils");
 let { wait, expectReject } = require("./event/helpers");
-
-const providers = requireHelper('../lib/providers').default;
-const { getMockAPIQS } = require("./providers/mock-qs");
+const { indexedDB } = require("sdk/indexed-db");
 
 let SHARED = {};
 
@@ -468,80 +467,85 @@ exports['test set channel with new login'] = function*(assert) {
     assert.equal(newChannel.login, channel.login);
 };
 
-exports['test get legacy channel'] = function*(assert) {
-    const legacyChannel = {
-        login: "test",
-        type: "twitch",
-        serialize() {
-            return {
-                login: this.login,
-                type: this.type,
-                favorites: [],
-                url: ["http://localhost"],
-                archiveUrl: "http://localhost",
-                chatUrl: "http://localhost",
-                image: {},
-                live: false,
-                title: "",
-                viewers: 14,
-                lastModified: Date.now(),
-                category: ""
-            };
-        }
-    };
-    const originalQs = providers[legacyChannel.type]._qs;
-    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-
-    const retCh = yield SHARED.list.addChannel(legacyChannel);
-
-    const channel = yield SHARED.list.getChannel(retCh.id);
-
-    assert.ok(channel instanceof Channel, "Channel is a channel");
-
-    providers[legacyChannel.type]._setQs(originalQs);
-};
-
-exports['test get all channels with a legacy channel'] = function*(assert) {
-    const legacyChannel = {
-        login: "test",
-        type: "twitch",
-        serialize() {
-            return {
-                login: this.login,
-                type: this.type,
-                favorites: [],
-                url: [], // simulate damaged entry
-                archiveUrl: "http://localhost",
-                chatUrl: "http://localhost",
-                image: {},
-                live: false,
-                title: "",
-                viewers: 14,
-                lastModified: Date.now(),
-                category: ""
-            };
-        }
-    };
-    const originalQs = providers[legacyChannel.type]._qs;
-    providers[legacyChannel.type]._setQs(getMockAPIQS(originalQs, legacyChannel.type));
-
-    yield SHARED.list.addChannel(legacyChannel);
-
-    const channels = yield SHARED.list.getChannelsByType();
-
-    for(let channel of channels) {
-        assert.ok(channel instanceof Channel, "Channel is a channel");
-    }
-
-    providers[legacyChannel.type]._setQs(originalQs);
-};
-
 exports['test opening open list'] = function*(assert) {
     assert.notEqual(SHARED.list.db, null);
 
     yield SHARED.list.openDB("channellist");
 
     assert.notEqual(SHARED.list.db, null);
+};
+
+exports['test list upgrade from v1 to v2'] = function*(assert) {
+	yield SHARED.list.close();
+	yield new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase("channellist");
+
+        request.onerror = reject;
+        request.onsuccess = () => resolve();
+        request.onblocked = () => console.log("Deleting database was blocked");
+    });
+
+	let request = indexedDB.open("channellist", 1);
+	request.onupgradeneeded = (e) => {
+		const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+        users.createIndex("typename", ["type","login"], { unique: true });
+        users.createIndex("type", "type", { unique: false });
+        const channels = e.target.result.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
+        channels.createIndex("typename", ["type","login"], { unique: true });
+        channels.createIndex("type", "type", { unique: false });
+	};
+	const { target: { result: db } } = yield new Promise((resolve, reject) => {
+		request.onsuccess = resolve;
+		request.onerror = reject;
+	});
+
+	const channelID = yield new Promise((resolve, reject) => {
+        const transaction = db.transaction("channels", "readwrite"),
+              store = transaction.objectStore("channels"),
+              req = store.add({
+				login: "test",
+				type: "twitch",
+				favorites: [],
+				url: [ "https://localhost" ],
+				archiveUrl: "https://localhost",
+				chatUrl: "https://localhost",
+				image: {},
+				live: true,
+				title: "",
+				viewers: 14,
+				lastModified: Date.now(),
+				category: ""
+              });
+
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+    });
+    db.close();
+
+	yield SHARED.list.openDB("channellist");
+	yield SHARED.list.close();
+
+	request = indexedDB.open("channellist", 2);
+	const { target: { result: newDB } } = yield new Promise((resolve, reject) => {
+		request.onsuccess = resolve;
+		request.onerror = reject;
+	});
+
+	const channel = yield new Promise((resolve, reject) => {
+		const transaction = newDB.transaction("channels", "readwrite"),
+			store = transaction.objectStore("channels"),
+			req = store.get(channelID);
+		req.onsuccess = () => resolve(req.result);
+		req.onerror = reject;
+	});
+	newDB.close();
+
+	assert.ok(!("favorites" in channel), "Favorites was deleted from the channel");
+	assert.equal(typeof channel.live, "object", "The live property was convertied");
+	assert.equal(channel.live.state, LiveState.OFFLINE, "State was reset");
+	assert.equal(channel.live.isLive, false, "It's properly serialized");
+
+	yield SHARED.list.openDB("channellist");
 };
 
 before(exports, (name, assert, done) => {
