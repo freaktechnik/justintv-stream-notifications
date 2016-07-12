@@ -187,4 +187,4 @@ coverage/
 transpiled/
 bower_components/
 locale/*.json
-!locales/en-US.json
+!locale/en-US.json
