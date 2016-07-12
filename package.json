@@ -54,7 +54,7 @@
         },
         {
           "value": "2",
-          "label": "Big Thumbnail"
+          "label": "Thumbnail"
         }
       ]
     },
@@ -71,11 +71,11 @@
         },
         {
           "value": "1",
-          "label": "Live but sort to the bottom"
+          "label": "Livebottom"
         },
         {
           "value": "2",
-          "label": "Distinct state (adds a tab)"
+          "label": "Distinct"
         },
         {
           "value": "3",
