@@ -392,8 +392,16 @@ const setNonLiveDisplay = (display) => {
     else if(display == 3)
         parent = offline;
 
+    if(channelsToMove.length && display <= 1) {
+        hideNoOnline();
+    }
+
     for(let node of channelsToMove) {
         insertBefore(parent, node, node.querySelector(".name").textContent);
+    }
+    
+    if(countLiveChannels() === 0 && display >= 2) {
+        displayNoOnline();
     }
 };
 
