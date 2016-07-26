@@ -18,7 +18,7 @@ List of supported providers with some explanation on what they are can be found 
 
 ## Official Download
 
-[addons.mozilla.org/](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/)
+![[addons.mozilla.org/](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/)](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png)
 
 ## Contribute
 For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
