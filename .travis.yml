@@ -1,15 +1,17 @@
 sudo: false
 language: node_js
 node_js: stable
-addons:
-  firefox: latest
 env:
   global:
   - DISPLAY=:99.0
-  - JPM_FIREFOX_BINARY=/usr/local/bin/firefox
+  - JPM_FIREFOX_BINARY=$TRAVIS_BUILD_DIR/../firefox/firefox
 before_install:
 - openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv -in .transifexrc.enc -out .transifexrc -d
 - sh -e /etc/init.d/xvfb start
+- npm i -g get-firefox
+- cd ..
+- get-firefox -vcep linux
+- cd $TRAVIS_BUILD_DIR
 after_success:
 - ./node_modules/.bin/codecov
 branches:
