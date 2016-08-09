@@ -13,6 +13,479 @@ const { cleanUI } = require("sdk/test/utils");
 const channelUtils = requireHelper('../lib/channel/utils');
 const mockAlertsService = require("./xpcom-mocks/alerts-service");
 const LiveState = requireHelper('../lib/channel/live-state').default;
+const { setTimeout } = require("sdk/timers");
+
+const savePrefs = () => {
+    return {
+        live: prefs.onlineNotification,
+        title: prefs.titleChangeNotification,
+        offline: prefs.offlineNotification,
+        nonlive: prefs.nonliveNotification
+    };
+};
+
+const applyPrefs = (p) => {
+    prefs.onlineNotification = p.live;
+    prefs.titleChangeNotification = p.title;
+    prefs.offlineNotification = p.offline;
+    prefs.nonliveNotification = p.nonlive;
+};
+
+const getChannelFromFixture = (p) => {
+    const chan = getChannel(p.username);
+    chan.title = p.title;
+    chan.live = LiveState.deserialize(p.live);
+    return chan;
+};
+
+const wait = (timeout) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+    });
+};
+
+exports.testNotifierNotifications = function*(assert) {
+    const fixture = [
+        {
+            prefs: {
+                live: true,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "live"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: true,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "live"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: true
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "title"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: true,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            expected: "offline"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: true,
+                title: false
+            },
+            initial: [],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: true,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "nonlive"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: false,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "none"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: true,
+                offline: false,
+                title: false
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.OFFLINE
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "nonlive"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: true,
+                offline: false,
+                title: true
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "title"
+        },
+        {
+            prefs: {
+                live: false,
+                nonlive: true,
+                offline: false,
+                title: true
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "foo"
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "bar",
+                    live: {
+                        state: LiveState.REDIRECT,
+                        alternateUsername: "bar"
+                    }
+                }
+            ],
+            expected: "nonlive"
+        },
+        {
+            prefs: {
+                live: true,
+                nonlive: false,
+                offline: false,
+                title: true
+            },
+            initial: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.REBROADCAST
+                    }
+                }
+            ],
+            updated: [
+                {
+                    title: "foo",
+                    live: {
+                        state: LiveState.LIVE
+                    }
+                }
+            ],
+            expected: "live"
+        }
+    ];
+    const prevPrefs = savePrefs();
+    mockAlertsService.registerService();
+    const Notifier = requireHelper('../lib/notifier').default;
+    const opt = { onClick() {} };
+    let p;
+
+    for(let f of fixture) {
+        const n = new Notifier(opt);
+        applyPrefs(f.prefs);
+        f.initial.forEach((c) => n.sendNotification(getChannelFromFixture(c)));
+
+        for(let c of f.updated) {
+            if(f.expected != "none") {
+                p = when(mockAlertsService.getEventTarget(), "shownotification");
+            }
+            else {
+                p = Promise.race([
+                    wait(400),
+                    when(mockAlertsService.getEventTarget(), "shownotification")
+                        .then(() => {
+                            throw "Notification shown";
+                        }, () => {
+                            return;
+                        })
+                ]);
+            }
+            n.sendNotification(getChannelFromFixture(c));
+            yield p;
+        }
+    }
+
+    applyPrefs(prevPrefs);
+    mockAlertsService.unregisterService();
+};
 
 exports.testNotifierPrefs = function(assert) {
     const Notifier = requireHelper('../lib/notifier').default;
@@ -27,12 +500,7 @@ exports.testShowNotifications = function(assert) {
     const Notifier = requireHelper('../lib/notifier').default;
     const notifier = new Notifier({ onClick() {} });
 
-    const prevPrefs = {
-        online: prefs.onlineNotification,
-        title: prefs.titleChangeNotification,
-        offline: prefs.offlineNotification,
-        nonlive: prefs.nonliveNotification
-    };
+    const prevPrefs = savePrefs();
 
     prefs.onlineNotification = false;
     prefs.titleChangeNotification = false;
@@ -56,10 +524,7 @@ exports.testShowNotifications = function(assert) {
     prefs.nonliveNotification = true;
     assert.ok(notifier.showNotifications, "If nonlive is enabled, notifications are shown");
 
-    prefs.onlineNotifications = prevPrefs.online;
-    prefs.titleChangeNotification = prevPrefs.title;
-    prefs.offlineNotification = prevPrefs.offline;
-    prefs.nonliveNotification = prevPrefs.nonlive;
+    applyPrefs(prevPrefs);
 };
 
 exports.testNonLiveNotifications = function*(assert) {
