@@ -10,7 +10,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
 - cd ..
-- get-firefox -cep linux-add-on-devel
+- get-firefox -ceb unbranded-release
 - cd $TRAVIS_BUILD_DIR
 after_success:
 - ./node_modules/.bin/codecov
