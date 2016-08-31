@@ -235,7 +235,7 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "dependencies": {
-    "md5": "^2.2.0",
+    "md5": "^2.2.1",
     "notification-box": "^0.1.1",
     "preferences-utils": "0.0.1"
   },
