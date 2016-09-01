@@ -4,11 +4,10 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const { registerService, unregisterService, getLogs, setEnabled } = require("./xpcom-mocks/parental-controls");
-const { before, after } = require("sdk/test/utils");
-
-const ParentalControls = requireHelper('../lib/parental-controls').default;
+const requireHelper = require("./require_helper"),
+    { registerService, unregisterService, getLogs, setEnabled } = require("./xpcom-mocks/parental-controls"),
+    { before, after } = require("sdk/test/utils"),
+    ParentalControls = requireHelper('../lib/parental-controls').default;
 
 exports.testPCEnabled = (assert) => {
     setEnabled(true);

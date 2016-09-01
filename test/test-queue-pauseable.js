@@ -4,11 +4,11 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const PauseableQueue = requireHelper("../lib/queue/pauseable").default;
-const RequestQueue = requireHelper("../lib/queue").default;
-const { when } = require("sdk/event/utils");
-const { NetUtil: { ioService }} = require("resource://gre/modules/NetUtil.jsm");
+const requireHelper = require("./require_helper"),
+    PauseableQueue = requireHelper("../lib/queue/pauseable").default,
+    RequestQueue = requireHelper("../lib/queue").default,
+    { when } = require("sdk/event/utils"),
+    { NetUtil: { ioService } } = require("resource://gre/modules/NetUtil.jsm");
 
 exports['test construction'] = function(assert) {
     const q = new PauseableQueue();
@@ -34,7 +34,7 @@ exports['test pauseable queue paused porperty'] = function(assert) {
     q.clear();
 };
 
-exports['test pauseable queue events'] = function*(assert) {
+exports['test pauseable queue events'] = function* () {
     const q = new PauseableQueue();
     q.autoFetch(25, 0.5, 2);
     let p = when(q, "pause");
@@ -48,7 +48,7 @@ exports['test pauseable queue events'] = function*(assert) {
     q.clear();
 };
 
-exports['test network observers'] = function*(assert) {
+exports['test network observers'] = function* () {
     const q = new PauseableQueue();
     q.autoFetch(25, 0.5, 2);
 
@@ -63,12 +63,12 @@ exports['test network observers'] = function*(assert) {
     q.clear();
 };
 
-exports['test autoFetch in offline mode'] = function*(assert) {
-    const previousMode = ioService.offline;
-    const q = new PauseableQueue();
+exports['test autoFetch in offline mode'] = function* (assert) {
+    const previousMode = ioService.offline,
+        q = new PauseableQueue(),
+        p = when(q, "pause");
     q.autoFetch(25, 0.5, 2);
 
-    let p = when(q, "pause");
     ioService.offline = true;
     yield p;
 

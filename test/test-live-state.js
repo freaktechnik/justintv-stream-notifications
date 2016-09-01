@@ -5,8 +5,8 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const LiveState = requireHelper("../lib/channel/live-state").default;
+const requireHelper = require("./require_helper"),
+    LiveState = requireHelper("../lib/channel/live-state").default;
 
 exports.testExports = (assert) => {
     assert.ok("deserialize" in LiveState, "deserialize is in LiveState");
@@ -38,14 +38,13 @@ exports.testConstruction = (assert) => {
 
 exports.testSerialize = (assert) => {
     const expectedResult = {
-        state: LiveState.OFFLINE,
-        alternateUsername: "",
-        alternateURL: "",
-        isLive: false
-    };
-
-    const state = new LiveState();
-    const serialized = state.serialize();
+            state: LiveState.OFFLINE,
+            alternateUsername: "",
+            alternateURL: "",
+            isLive: false
+        },
+        state = new LiveState(),
+        serialized = state.serialize();
 
     assert.deepEqual(serialized, expectedResult, "The serialized object matches the expected structure");
     assert.equal(JSON.stringify(serialized), JSON.stringify(expectedResult), "Stringified objects are equal");
@@ -53,13 +52,12 @@ exports.testSerialize = (assert) => {
 
 exports.testDeserialize = (assert) => {
     const serialized = {
-        state: LiveState.REDIRECT,
-        alternateUsername: "test",
-        alternateURL: "https://example.com/test",
-        isLive: true
-    };
-
-    const state = LiveState.deserialize(serialized);
+            state: LiveState.REDIRECT,
+            alternateUsername: "test",
+            alternateURL: "https://example.com/test",
+            isLive: true
+        },
+        state = LiveState.deserialize(serialized);
 
     assert.equal(state.state, serialized.state, "State was correctly deserialized");
     assert.equal(state.alternateUsername, serialized.alternateUsername, "alternate username was correctly deserialized");
@@ -96,15 +94,15 @@ exports.testIsLive = (assert) => {
     ];
 
     for(let testState of statesToTest) {
-        let state = new LiveState(testState.value);
+        const state = new LiveState(testState.value);
 
-        assert.equal(state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], testState.name+" is treated correctly TOWARD_LIVE");
-        assert.equal(state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], testState.name+" is treated correctly TOWARD_OFFLINE");
+        assert.equal(state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], testState.name + " is treated correctly TOWARD_LIVE");
+        assert.equal(state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], testState.name + " is treated correctly TOWARD_OFFLINE");
     }
 };
 
 exports.testSetLive = (assert) => {
-    let state = new LiveState();
+    const state = new LiveState();
 
     state.setLive(true);
     assert.equal(state.state, LiveState.LIVE, "Setting an offline state live makes it live");

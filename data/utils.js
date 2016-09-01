@@ -6,17 +6,20 @@
 
 /**
  * Hide an element. Unselects the element if it was previously selected.
- * @argument {DOMNode} el
+ *
+ * @param {DOMNode} el - Node to hide.
  */
 function hide(el) {
     el.setAttribute("hidden", true);
-    if(el.selected)
+    if(el.selected) {
         el.selected = false;
+    }
 }
 
 /**
  * Shows an element.
- * @argument {DOMNode} el
+ *
+ * @param {DOMNode} el - Node to show.
  */
 function show(el) {
     el.removeAttribute("hidden");

@@ -5,16 +5,17 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const EventSink = requireHelper("../lib/providers/events").default;
-const { when } = require("sdk/event/utils");
-const providers = requireHelper("../lib/providers").default;
-const { emit } = require("sdk/event/core");
-const { getUser, getChannel } = require("./channeluser/utils");
+const requireHelper = require("./require_helper"),
+    EventSink = requireHelper("../lib/providers/events").default,
+    { when } = require("sdk/event/utils"),
+    providers = requireHelper("../lib/providers").default,
+    { emit } = require("sdk/event/core"),
+    { getUser, getChannel } = require("./channeluser/utils");
 
-exports.testUpdateUser = function*(assert) {
+exports.testUpdateUser = function* (assert) {
     const sink = new EventSink();
-    let user, promise;
+    let user,
+        promise;
 
     for(let p in providers) {
         promise = when(sink, "updateuser");
@@ -26,9 +27,10 @@ exports.testUpdateUser = function*(assert) {
     }
 };
 
-exports.testUpdateChannels = function*(assert) {
+exports.testUpdateChannels = function* (assert) {
     const sink = new EventSink();
-    let channels, promise;
+    let channels,
+        promise;
 
     for(let p in providers) {
         promise = when(sink, "updatedchannels");
@@ -41,9 +43,10 @@ exports.testUpdateChannels = function*(assert) {
     }
 };
 
-exports.testNewChannels = function*(assert) {
+exports.testNewChannels = function* (assert) {
     const sink = new EventSink();
-    let channels, promise;
+    let channels,
+        promise;
 
     for(let p in providers) {
         promise = when(sink, "newchannels");

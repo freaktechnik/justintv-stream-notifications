@@ -7,97 +7,39 @@
  */
 //TODO clicking ok twice shows error panel -> ok sent while loading?
 
-/* global self */
 /* global unsafeWindow */
 
-// Add-on communication backend
+const { hide, show } = unsafeWindow;
 
-var { hide, show } = unsafeWindow;
-
-var providers;
-
-self.port.emit("ready");
-
-self.port.once("secondary", () => {
-    show(document.querySelector("#secondary-manager"));
-    document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
-        e.preventDefault();
-        self.port.emit("focus");
-    });
-});
-
-self.port.once("reload", () => {
-    location.reload();
-});
-
-self.port.on("add", function(channel) {
-    addChannel(channel);
-});
-self.port.on("remove", function(channelId) {
-    removeChannel(channelId);
-});
-self.port.on("update", function(channel) {
-    updateChannel(channel);
-});
-self.port.on("adduser", function(user) {
-    addUser(user);
-});
-self.port.on("removeuser", function(userId) {
-    removeUser(userId);
-});
-self.port.on("updateuser", function(user) {
-    updateUser(user);
-});
-self.port.on("addproviders", (p) => {
-    providers = p;
-    var providerDropdown = document.querySelector("#providerDropdown");
-    for(var provider in providers) {
-        if(!hasOption(provider)) {
-            let opt = new Option(providers[provider].name, provider);
-            opt.disabled = !providers[provider].enabled;
-            providerDropdown.add(opt);
-        }
-    }
-});
-
-self.port.on("isloading", function() {
-    document.querySelector("main").classList.add("loading");
-    users.classList.add("loading");
-    channels.classList.add("loading");
-});
-self.port.on("doneloading", function() {
-    document.querySelector("main").classList.remove("loading");
-    users.classList.remove("loading");
-    channels.classList.remove("loading");
-});
-
-self.port.on("error", function(errorMsg) {
-    showError(errorMsg);
-});
-
-self.port.on("theme", (theme) => {
-    document.body.classList.toggle("dark", theme === 1);
-});
-
-window.addEventListener("beforeunload", () => {
-    self.port.emit("unload");
-});
+let providers;
 
 // Methods modifying the DOM
 
-var channels = document.querySelector("#channels"),
-    users    = document.querySelector("#users"),
-    popup    = document.querySelector("#popup");
+const channels = document.querySelector("#channels"),
+    users = document.querySelector("#users"),
+    popup = document.querySelector("#popup");
 
-var hasOption = (provider) => {
-    var providerDropdown = document.querySelector("#providerDropdown");
-    for(var o of providerDropdown.options) {
+const hasOption = (provider) => {
+    const providerDropdown = document.querySelector("#providerDropdown");
+    for(let o of providerDropdown.options) {
         if(o.value == provider) {
             return true;
         }
     }
     return false;
 };
+
+function hideError() {
+    document.getElementById("channelNameField").setCustomValidity("");
+}
+
+function hasChannel(channelId) {
+    return !!channels.querySelector("#channel" + channelId);
+}
+
+function hasUser(userId) {
+    return !!users.querySelector("#user" + userId);
+}
 
 function checkChannel() {
     popup.querySelector("#channelRadio").checked = true;
@@ -109,74 +51,8 @@ function checkUser() {
     popup.querySelector("#userRadio").checked = true;
 }
 
-if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbed a.current").dataset.tab == 1) {
-    hide(document.querySelector("#autoAdd").parentNode);
-    checkChannel();
-}
-else
-    checkUser();
-updateSelect();
-
-document.addEventListener("keypress", function(evt) {
-    if(!popup.querySelector("dialog").hasAttribute("open")) {
-        if(evt.key == "a" && evt.ctrlKey) {
-            evt.preventDefault();
-            var list;
-            if(users.hasAttribute("hidden"))
-                list = channels;
-            else
-                list = users;
-
-            var items = list.querySelectorAll("option:not([hidden])");
-            for(var i = 0; i < items.length; ++i) {
-                items[i].selected = true;
-            }
-        }
-        else if(evt.key == "Delete") {
-            removeSelectedItems(evt.shiftKey);
-        }
-        else if(evt.key == "f" && evt.ctrlKey) {
-            document.querySelector("#searchField").select();
-            evt.preventDefault();
-        }
-        else if(evt.key == "Help") {
-            window.open(document.querySelector("[rel='help']").href);
-        }
-    }
-    else {
-        if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
-            hideDialog();
-            resetDialogForms();
-            evt.preventDefault();
-        }
-        else if(evt.key == "f" && evt.ctrlKey) {
-            evt.preventDefault();
-        }
-    }
-}, true);
-
-document.querySelector("main.tabbed").addEventListener("tabchanged", function(evt) {
-    if(evt.detail == 1) {
-        hide(document.querySelector("#autoAdd").parentNode);
-        document.querySelector(".toolbar").setAttribute("aria-controls", "channels");
-        checkChannel();
-    }
-    else if(evt.detail == 2) {
-        show(document.querySelector("#autoAdd").parentNode);
-        document.querySelector(".toolbar").setAttribute("aria-controls", "users");
-        checkUser();
-    }
-    updateSelect();
-}, false);
-
-document.querySelector("#autoAdd").addEventListener("click", function(evt) {
-    self.port.emit("autoadd");
-}, false);
-
-document.querySelector("#showDialog").addEventListener("click", showDialog, false);
-
 function getSelectedItemIds() {
-    let items = [];
+    const items = [];
     if(users.hasAttribute("hidden")) {
         for(let i = 0; i < channels.selectedOptions.length; ++i) {
             items.push(parseInt(channels.selectedOptions[i].id.substring(7), 10));
@@ -190,45 +66,19 @@ function getSelectedItemIds() {
     return items;
 }
 
-document.querySelector("#updateItem").addEventListener("click", function(evt) {
-    var selected = getSelectedItemIds();
-    if(users.hasAttribute("hidden")) {
-        selected.forEach(function(channelId) {
-            self.port.emit("refreshchannel", channelId);
-        });
-    }
-    else {
-        selected.forEach(function(userId) {
-            self.port.emit("refreshuser", userId);
-        });
-    }
-});
-
 function removeSelectedItems(removeFollows) {
-    var selected = getSelectedItemIds();
+    const selected = getSelectedItemIds();
     if(users.hasAttribute("hidden")) {
-        selected.forEach(function(channelId) {
+        selected.forEach((channelId) => {
             self.port.emit("removechannel", channelId);
         });
     }
     else {
-        selected.forEach(function(userId) {
+        selected.forEach((userId) => {
             self.port.emit("removeuser", userId, removeFollows);
         });
     }
 }
-
-document.querySelector("#removeItem").addEventListener("click", (e) => {
-    e.preventDefault();
-    removeSelectedItems(e.shiftKey);
-});
-
-document.querySelector("a[rel='help']").addEventListener("click", (e) => {
-    if(e.shiftKey) {
-        e.preventDefault();
-        self.port.emit("debugdump");
-    }
-});
 
 function showDialog() {
     popup.querySelector("dialog").setAttribute("open", true);
@@ -251,15 +101,15 @@ function resetDialogForms() {
 }
 
 function showOptions() {
-    var options = document.querySelector("#providerDropdown").options;
-    for(var i = 0; i < options.length; ++i) {
+    const options = document.querySelector("#providerDropdown").options;
+    for(let i = 0; i < options.length; ++i) {
         options[i].disabled = !providers[options[i].value].enabled;
     }
 }
 
 function hideOptions() {
-    var options = document.querySelector("#providerDropdown").options;
-    for(var i = 0; i < options.length; ++i) {
+    const options = document.querySelector("#providerDropdown").options;
+    for(let i = 0; i < options.length; ++i) {
         if(!providers[options[i].value].supports.favorites) {
             options[i].disabled = true;
             options[i].selected = false;
@@ -269,47 +119,13 @@ function hideOptions() {
 
 function updateSelect() {
     hideError();
-    if(popup.querySelector("#channelRadio").checked)
+    if(popup.querySelector("#channelRadio").checked) {
         showOptions();
-    else
-        hideOptions();
-}
-
-document.querySelector("#channelRadio").addEventListener("change", updateSelect);
-document.querySelector("#userRadio").addEventListener("change", updateSelect);
-
-popup.querySelector("button[type='button']").addEventListener("click", function(evt) {
-    self.port.emit("cancel",
-                   popup.querySelector("#channelRadio").checked ? "channel": "user",
-                   popup.querySelector("#providerDropdown").value,
-                   popup.querySelector("#channelNameField").value
-                  );
-    hideDialog();
-    resetDialogForms();
-});
-
-popup.querySelector("#channelNameField").addEventListener("input", hideError, false);
-popup.querySelector("#providerDropdown").addEventListener("change", hideError, false);
-
-popup.querySelector("form").addEventListener("submit", function(evt) {
-    evt.preventDefault();
-    if(!popup.querySelector("#loadingWrapper").hidden)
-        return;
-    let field = popup.querySelector("#channelNameField");
-    hideError();
-    show(popup.querySelector("#loadingWrapper"));
-    if(field.value.length > 0) {
-        if(popup.querySelector("#channelRadio").checked)
-            self.port.emit("addchannel", field.value, popup.querySelector("#providerDropdown").value);
-        else
-            self.port.emit("adduser", field.value, popup.querySelector("#providerDropdown").value);
     }
-}, false);
-
-document.getElementById("options").addEventListener("click", (e) => {
-    e.preventDefault();
-    self.port.emit("showoptions");
-}, false);
+    else {
+        hideOptions();
+    }
+}
 
 function onDialogDone() {
     popup.querySelector("dialog").removeAttribute("open");
@@ -336,23 +152,23 @@ function addChannel(channel) {
         </option>
     */
     if(!hasChannel(channel.id)) {
-        var channelNode = document.createElement("option"),
-            image       = new Image(),
-            small       = document.createElement("small"),
-            span        = document.createElement("span"),
-            title       = document.createTextNode(getChannelUname(channel)),
-            type        = document.createTextNode(providers[channel.type].name);
+        const channelNode = document.createElement("option"),
+            image = new Image(),
+            small = document.createElement("small"),
+            span = document.createElement("span"),
+            title = document.createTextNode(getChannelUname(channel)),
+            type = document.createTextNode(providers[channel.type].name),
+            evObj = new CustomEvent("itemadded", { detail: channelNode });
         image.sizes = "50w";
         image.srcset = Object.keys(channel.image)
             .map((s) => channel.image[s] + " " + s + "w").join(",");
-        channelNode.id  = "channel"+channel.id;
+        channelNode.id = "channel" + channel.id;
         small.appendChild(type);
         span.appendChild(title);
         channelNode.appendChild(image);
         channelNode.appendChild(span);
         channelNode.appendChild(small);
         channels.appendChild(channelNode);
-        var evObj = new CustomEvent("itemadded", { detail: channelNode });
         channels.dispatchEvent(evObj);
     }
 }
@@ -360,31 +176,31 @@ function addChannel(channel) {
 function addUser(user) {
     onDialogDone();
     if(!hasUser(user.id)) {
-        let userNode = document.createElement("option"),
-            image    = new Image(),
-            small    = document.createElement("small"),
-            span     = document.createElement("span"),
-            title    = document.createTextNode(user.uname),
-            type     = document.createTextNode(providers[user.type].name);
+        const userNode = document.createElement("option"),
+            image = new Image(),
+            small = document.createElement("small"),
+            span = document.createElement("span"),
+            title = document.createTextNode(user.uname),
+            type = document.createTextNode(providers[user.type].name),
+            evObj = new CustomEvent("itemadded", { detail: userNode });
         image.sizes = "50w";
         image.srcset = Object.keys(user.image)
             .map((s) => user.image[s] + " " + s + "w").join(",");
-        userNode.id  = "user"+user.id;
+        userNode.id = "user" + user.id;
         small.appendChild(type);
         span.appendChild(title);
         userNode.appendChild(image);
         userNode.appendChild(span);
         userNode.appendChild(small);
         users.appendChild(userNode);
-        var evObj = new CustomEvent("itemadded", { detail: userNode });
         users.dispatchEvent(evObj);
     }
 }
 
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
-        var channelNode = channels.querySelector("#channel"+channel.id),
-            span        = channelNode.querySelector("span");
+        const channelNode = channels.querySelector("#channel" + channel.id),
+            span = channelNode.querySelector("span");
         channelNode.querySelector("img").srcset = Object.keys(channel.image)
             .map((s) => channel.image[s] + " " + s + "w").join(",");
         span.replaceChild(document.createTextNode(getChannelUname(channel)), span.firstChild);
@@ -393,8 +209,8 @@ function updateChannel(channel) {
 
 function updateUser(user) {
     if(hasUser(user.id)) {
-        var userNode = users.querySelector("#user"+user.id),
-            span     = userNode.querySelector("span");
+        const userNode = users.querySelector("#user" + user.id),
+            span = userNode.querySelector("span");
         userNode.querySelector("img").srcset = Object.keys(user.image)
             .map((s) => user.image[s] + " " + s + "w").join(",");
         span.replaceChild(document.createTextNode(user.uname), span.firstChild);
@@ -403,22 +219,14 @@ function updateUser(user) {
 
 function removeChannel(channelId) {
     if(hasChannel(channelId)) {
-        document.getElementById("channel"+channelId).remove();
+        document.getElementById("channel" + channelId).remove();
     }
 }
 
 function removeUser(userId) {
     if(hasUser(userId)) {
-        document.getElementById("user"+userId).remove();
+        document.getElementById("user" + userId).remove();
     }
-}
-
-function hasChannel(channelId) {
-    return !!channels.querySelector("#channel"+channelId);
-}
-
-function hasUser(userId) {
-    return !!users.querySelector("#user"+userId);
 }
 
 function showError(msg) {
@@ -427,6 +235,205 @@ function showError(msg) {
     popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
 }
 
-function hideError() {
-    document.getElementById("channelNameField").setCustomValidity("");
+if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbed a.current").dataset.tab == 1) {
+    hide(document.querySelector("#autoAdd").parentNode);
+    checkChannel();
 }
+else {
+    checkUser();
+}
+updateSelect();
+
+document.addEventListener("keypress", (evt) => {
+    if(!popup.querySelector("dialog").hasAttribute("open")) {
+        if(evt.key == "a" && evt.ctrlKey) {
+            evt.preventDefault();
+            let list;
+            if(users.hasAttribute("hidden")) {
+                list = channels;
+            }
+            else {
+                list = users;
+            }
+
+            const items = list.querySelectorAll("option:not([hidden])");
+            for(let i = 0; i < items.length; ++i) {
+                items[i].selected = true;
+            }
+        }
+        else if(evt.key == "Delete") {
+            removeSelectedItems(evt.shiftKey);
+        }
+        else if(evt.key == "f" && evt.ctrlKey) {
+            document.querySelector("#searchField").select();
+            evt.preventDefault();
+        }
+        else if(evt.key == "Help") {
+            window.open(document.querySelector("[rel='help']").href);
+        }
+    }
+    else {
+        if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
+            hideDialog();
+            resetDialogForms();
+            evt.preventDefault();
+        }
+        else if(evt.key == "f" && evt.ctrlKey) {
+            evt.preventDefault();
+        }
+    }
+}, true);
+
+document.querySelector("main.tabbed").addEventListener("tabchanged", (evt) => {
+    if(evt.detail == 1) {
+        hide(document.querySelector("#autoAdd").parentNode);
+        document.querySelector(".toolbar").setAttribute("aria-controls", "channels");
+        checkChannel();
+    }
+    else if(evt.detail == 2) {
+        show(document.querySelector("#autoAdd").parentNode);
+        document.querySelector(".toolbar").setAttribute("aria-controls", "users");
+        checkUser();
+    }
+    updateSelect();
+}, false);
+
+document.querySelector("#autoAdd").addEventListener("click", () => {
+    self.port.emit("autoadd");
+}, false);
+
+document.querySelector("#showDialog").addEventListener("click", showDialog, false);
+
+document.querySelector("#removeItem").addEventListener("click", (e) => {
+    e.preventDefault();
+    removeSelectedItems(e.shiftKey);
+});
+
+document.querySelector("a[rel='help']").addEventListener("click", (e) => {
+    if(e.shiftKey) {
+        e.preventDefault();
+        self.port.emit("debugdump");
+    }
+});
+
+document.querySelector("#updateItem").addEventListener("click", () => {
+    const selected = getSelectedItemIds();
+    if(users.hasAttribute("hidden")) {
+        selected.forEach((channelId) => {
+            self.port.emit("refreshchannel", channelId);
+        });
+    }
+    else {
+        selected.forEach((userId) => {
+            self.port.emit("refreshuser", userId);
+        });
+    }
+});
+
+document.querySelector("#channelRadio").addEventListener("change", updateSelect);
+document.querySelector("#userRadio").addEventListener("change", updateSelect);
+
+popup.querySelector("button[type='button']").addEventListener("click", () => {
+    self.port.emit("cancel",
+                   popup.querySelector("#channelRadio").checked ? "channel" : "user",
+                   popup.querySelector("#providerDropdown").value,
+                   popup.querySelector("#channelNameField").value
+                  );
+    hideDialog();
+    resetDialogForms();
+});
+
+popup.querySelector("#channelNameField").addEventListener("input", hideError, false);
+popup.querySelector("#providerDropdown").addEventListener("change", hideError, false);
+
+popup.querySelector("form").addEventListener("submit", (evt) => {
+    evt.preventDefault();
+    if(!popup.querySelector("#loadingWrapper").hidden) {
+        return;
+    }
+    const field = popup.querySelector("#channelNameField");
+    hideError();
+    show(popup.querySelector("#loadingWrapper"));
+    if(field.value.length > 0) {
+        if(popup.querySelector("#channelRadio").checked) {
+            self.port.emit("addchannel", field.value, popup.querySelector("#providerDropdown").value);
+        }
+        else {
+            self.port.emit("adduser", field.value, popup.querySelector("#providerDropdown").value);
+        }
+    }
+}, false);
+
+document.getElementById("options").addEventListener("click", (e) => {
+    e.preventDefault();
+    self.port.emit("showoptions");
+}, false);
+
+// Add-on communication backend
+
+self.port.emit("ready");
+
+self.port.once("secondary", () => {
+    show(document.querySelector("#secondary-manager"));
+    document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
+        e.preventDefault();
+        self.port.emit("focus");
+    });
+});
+
+self.port.once("reload", () => {
+    location.reload();
+});
+
+self.port.on("add", (channel) => {
+    addChannel(channel);
+});
+self.port.on("remove", (channelId) => {
+    removeChannel(channelId);
+});
+self.port.on("update", (channel) => {
+    updateChannel(channel);
+});
+self.port.on("adduser", (user) => {
+    addUser(user);
+});
+self.port.on("removeuser", (userId) => {
+    removeUser(userId);
+});
+self.port.on("updateuser", (user) => {
+    updateUser(user);
+});
+self.port.on("addproviders", (p) => {
+    providers = p;
+    const providerDropdown = document.querySelector("#providerDropdown");
+    for(let provider in providers) {
+        if(!hasOption(provider)) {
+            const opt = new Option(providers[provider].name, provider);
+            opt.disabled = !providers[provider].enabled;
+            providerDropdown.add(opt);
+        }
+    }
+});
+
+self.port.on("isloading", () => {
+    document.querySelector("main").classList.add("loading");
+    users.classList.add("loading");
+    channels.classList.add("loading");
+});
+self.port.on("doneloading", () => {
+    document.querySelector("main").classList.remove("loading");
+    users.classList.remove("loading");
+    channels.classList.remove("loading");
+});
+
+self.port.on("error", (errorMsg) => {
+    showError(errorMsg);
+});
+
+self.port.on("theme", (theme) => {
+    document.body.classList.toggle("dark", theme === 1);
+});
+
+window.addEventListener("beforeunload", () => {
+    self.port.emit("unload");
+});

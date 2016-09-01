@@ -1,0 +1,7 @@
+{    
+    "globals": {
+        "addon": true,
+        "self": true
+    },
+    "extends": "plugin:freaktechnik/browser"
+}

@@ -3,48 +3,46 @@
  * @license MPL-2.0
  * @todo test non-live stuff
  */
+"use strict";
 
-const requireHelper = require("./require_helper");
-const { getChannel } = require("./channeluser/utils");
-const { prefs } = require("sdk/simple-prefs");
-const { when } = require("sdk/event/utils");
-const { defer } = require("sdk/core/promise");
-const { cleanUI } = require("sdk/test/utils");
-const channelUtils = requireHelper('../lib/channel/utils');
-const mockAlertsService = require("./xpcom-mocks/alerts-service");
-const LiveState = requireHelper('../lib/channel/live-state').default;
-const { setTimeout } = require("sdk/timers");
-
-const savePrefs = () => {
-    return {
-        live: prefs.onlineNotification,
-        title: prefs.titleChangeNotification,
-        offline: prefs.offlineNotification,
-        nonlive: prefs.nonliveNotification
+const requireHelper = require("./require_helper"),
+    { getChannel } = require("./channeluser/utils"),
+    { prefs } = require("sdk/simple-prefs"),
+    { when } = require("sdk/event/utils"),
+    { defer } = require("sdk/core/promise"),
+    { cleanUI } = require("sdk/test/utils"),
+    channelUtils = requireHelper('../lib/channel/utils'),
+    mockAlertsService = require("./xpcom-mocks/alerts-service"),
+    LiveState = requireHelper('../lib/channel/live-state').default,
+    { setTimeout } = require("sdk/timers"),
+    savePrefs = () => {
+        return {
+            live: prefs.onlineNotification,
+            title: prefs.titleChangeNotification,
+            offline: prefs.offlineNotification,
+            nonlive: prefs.nonliveNotification
+        };
+    },
+    applyPrefs = (p) => {
+        prefs.onlineNotification = p.live;
+        prefs.titleChangeNotification = p.title;
+        prefs.offlineNotification = p.offline;
+        prefs.nonliveNotification = p.nonlive;
+    },
+    getChannelFromFixture = (p) => {
+        const chan = getChannel(p.username);
+        chan.title = p.title;
+        chan.live = LiveState.deserialize(p.live);
+        return chan;
+    },
+    wait = (timeout) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, timeout);
+        });
     };
-};
 
-const applyPrefs = (p) => {
-    prefs.onlineNotification = p.live;
-    prefs.titleChangeNotification = p.title;
-    prefs.offlineNotification = p.offline;
-    prefs.nonliveNotification = p.nonlive;
-};
-
-const getChannelFromFixture = (p) => {
-    const chan = getChannel(p.username);
-    chan.title = p.title;
-    chan.live = LiveState.deserialize(p.live);
-    return chan;
-};
-
-const wait = (timeout) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, timeout);
-    });
-};
-
-exports.testNotifierNotifications = function*(assert) {
+exports.testNotifierNotifications = function* () {
+    mockAlertsService.registerService();
     const fixture = [
         {
             prefs: {
@@ -450,12 +448,14 @@ exports.testNotifierNotifications = function*(assert) {
                 }
             ],
             expected: "live"
-        }
-    ];
-    const prevPrefs = savePrefs();
-    mockAlertsService.registerService();
-    const Notifier = requireHelper('../lib/notifier').default;
-    const opt = { onClick() {} };
+        } ],
+        prevPrefs = savePrefs(),
+        Notifier = requireHelper('../lib/notifier').default,
+        opt = {
+            onClick() {
+                // empty
+            }
+        };
     let p;
 
     for(let f of fixture) {
@@ -488,8 +488,12 @@ exports.testNotifierNotifications = function*(assert) {
 };
 
 exports.testNotifierPrefs = function(assert) {
-    const Notifier = requireHelper('../lib/notifier').default;
-    const notifier = new Notifier({ onClick() {} });
+    const Notifier = requireHelper('../lib/notifier').default,
+        notifier = new Notifier({
+            onClick() {
+                // empty
+            }
+        });
     assert.equal(notifier.onlineNotifications, prefs.onlineNotification, "Value for online matches the pref");
     assert.equal(notifier.titleNotifications, prefs.titleChangeNotification, "Value for title changes matches the pref");
     assert.equal(notifier.offlineNotifications, prefs.offlineNotification, "Value for offline matches the pref");
@@ -497,10 +501,13 @@ exports.testNotifierPrefs = function(assert) {
 };
 
 exports.testShowNotifications = function(assert) {
-    const Notifier = requireHelper('../lib/notifier').default;
-    const notifier = new Notifier({ onClick() {} });
-
-    const prevPrefs = savePrefs();
+    const Notifier = requireHelper('../lib/notifier').default,
+        notifier = new Notifier({
+            onClick() {
+                // empty
+            }
+        }),
+        prevPrefs = savePrefs();
 
     prefs.onlineNotification = false;
     prefs.titleChangeNotification = false;
@@ -527,15 +534,18 @@ exports.testShowNotifications = function(assert) {
     applyPrefs(prevPrefs);
 };
 
-exports.testNonLiveNotifications = function*(assert) {
+exports.testNonLiveNotifications = function* () {
     const oldVal = prefs.nonliveNotification;
     prefs.nonliveNotification = true;
 
     mockAlertsService.registerService();
-    const Notifier = requireHelper('../lib/notifier').default;
-
-    const notifier = new Notifier({ onClick() {} });
-    const channel = getChannel('test', 'test', 1);
+    const Notifier = requireHelper('../lib/notifier').default,
+        notifier = new Notifier({
+            onClick() {
+                // empty
+            }
+        }),
+        channel = getChannel('test', 'test', 1);
     channel.live = new LiveState(LiveState.REDIRECT);
 
     let p = when(mockAlertsService.getEventTarget(), "shownotification");
@@ -554,7 +564,7 @@ exports.testNonLiveNotifications = function*(assert) {
     mockAlertsService.unregisterService();
 };
 
-exports.testNotifier = function*(assert) {
+exports.testNotifier = function* (assert) {
     const oldVal = prefs.offlineNotification;
 
     mockAlertsService.registerService();
@@ -562,8 +572,12 @@ exports.testNotifier = function*(assert) {
 
     prefs.offlineNotification = true;
 
-    const notifier = new Notifier({ onClick: function() {} });
-    const channel = getChannel('test', 'test', 1);
+    const notifier = new Notifier({
+            onClick() {
+                // empty
+            }
+        }),
+        channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
 
     assert.ok(!notifier.channelTitles.has(channel.id), "Channel is not in the title initially");
@@ -612,12 +626,16 @@ exports.testNotifier = function*(assert) {
     mockAlertsService.unregisterService();
 };
 
-exports.testMuteNotification = function*(assert) {
+exports.testMuteNotification = function* (assert) {
     mockAlertsService.registerService();
     let counter = 0;
-    const Notifier = requireHelper('../lib/notifier').default;
-    const notifier = new Notifier({ onClick() {}});
-    const channel = getChannel('test', 'test', 1);
+    const Notifier = requireHelper('../lib/notifier').default,
+        notifier = new Notifier({
+            onClick() {
+                // empty
+            }
+        }),
+        channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
 
     mockAlertsService.getEventTarget().on("shownotification", () => ++counter);
@@ -632,12 +650,16 @@ exports.testMuteNotification = function*(assert) {
     yield cleanUI();
 };
 
-exports.testClickListener = function*(assert) {
-    let clickPromise = defer();
+exports.testClickListener = function* (assert) {
+    const clickPromise = defer();
     mockAlertsService.registerService();
-    const Notifier = requireHelper('../lib/notifier').default;
-    const notifier = new Notifier({ onClick(chan) { clickPromise.resolve(chan); }});
-    const channel = getChannel('test', 'test', 1);
+    const Notifier = requireHelper('../lib/notifier').default,
+        notifier = new Notifier({
+            onClick(chan) {
+                clickPromise.resolve(chan);
+            }
+        }),
+        channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
 
     const p = when(mockAlertsService.getEventTarget(), "shownotification");
@@ -652,4 +674,3 @@ exports.testClickListener = function*(assert) {
 };
 
 require("sdk/test").run(exports);
-

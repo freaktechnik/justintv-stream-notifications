@@ -34,16 +34,6 @@ module.exports = function(grunt) {
             grunt.config.set('package.translate.add.locales', locales);
             return locales;
         },
-        jshint: {
-            options: {
-                jshintrc: true
-            },
-            test: {
-                files: {
-                    src: ['build/**/*.js', 'Gruntfile.js', '!build/instrument/**/*', '!build/node_modules/**/*']
-                }
-            }
-        },
         jpm: {
             options: {
                 src: 'build/',
@@ -119,7 +109,7 @@ module.exports = function(grunt) {
             },
             dev: {
                 files: {
-                    src: ['build/test', 'build/**/.jshintrc', 'build/**/*.js.map']
+                    src: ['build/test', 'build/**/.eslintrc.json', 'build/**/*.js.map']
                 }
             }
         },
@@ -173,7 +163,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'test',
-                        src: ['**/*', '!**/*~', '!.jshintrc'],
+                        src: ['**/*', '!**/*~', '!.eslintrc.json'],
                         dest: 'build/test'
                     },
                     {
@@ -184,7 +174,7 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/.jshintrc', '!node_modules/**/*'],
+                        src: ['**/.eslintrc.json', '!node_modules/**/*'],
                         dest: 'build'
                     }
                 ]
@@ -270,7 +260,8 @@ module.exports = function(grunt) {
                             loose: false,
                             noMangle: true
                         }
-                    ]
+                    ],
+                    "transform-class-properties"
                 ]
             },
             build: {
@@ -283,7 +274,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'lib',
-                        src: ['**/*.js', "!**/*~", "!**/.jshintrc"],
+                        src: ['**/*.js', "!**/*~", "!**/.eslintrc.json"],
                         dest: 'build/lib'
                     },
                 ]
@@ -299,7 +290,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'lib/',
-                        src: ['**/*.js', "!**/*~", "!**/.jshintrc"],
+                        src: ['**/*.js', "!**/*~", "!**/.eslintrc.json"],
                         dest: 'build/lib'
                     },
                 ]
@@ -381,16 +372,13 @@ module.exports = function(grunt) {
 
     grunt.registerTask('prepare-test', [ 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
-    // babel-jshint
-    grunt.registerTask('lint', ['prepare-test', 'jshint']);
     grunt.registerTask('quicktest', 'Shortest path to run tests', function(verbose) {
 		grunt.task.run('prepare-test');
-		grunt.task.run('jshint');
 		grunt.task.run('jpmtest'+":"+verbose);
 		grunt.task.run('clean:dev');
 	});
     grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
-    grunt.registerTask('test', ['prepare-test', 'jshint', 'coverage']);
+    grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
     grunt.registerTask('build', ['clean', 'prepare-common', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
     grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);

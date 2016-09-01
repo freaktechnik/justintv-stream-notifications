@@ -2,23 +2,25 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
+"use strict";
 
-const requireHelper = require("./require_helper");
-const QueueService = requireHelper("../lib/queue/service");
-const { setTimeout } = require("sdk/timers");
-const { prefs } = require("sdk/simple-prefs");
+const requireHelper = require("./require_helper"),
+    QueueService = requireHelper("../lib/queue/service"),
+    { setTimeout } = require("sdk/timers"),
+    { prefs } = require("sdk/simple-prefs");
 
 exports.testGetService = function(assert) {
-    let service = QueueService.getServiceForProvider("test");
+    const service = QueueService.getServiceForProvider("test");
     assert.equal(service, QueueService.getServiceForProvider("test"));
     assert.notEqual(service, QueueService.getServiceForProvider("equal"));
 };
 
 exports.testIntervalPauseResume = function(assert, done) {
-    let service = QueueService.getServiceForProvider("test");
-    let count = 0, paused = false;
+    const service = QueueService.getServiceForProvider("test");
+    let count = 0,
+        paused = false;
 
-    service.queueUpdateRequest(["http://localhost"], service.HIGH_PRIORITY, () => {
+    service.queueUpdateRequest([ "http://localhost" ], service.HIGH_PRIORITY, () => {
         if(count === 0) {
             ++count;
             QueueService.pause();
@@ -46,10 +48,10 @@ exports.testIntervalPauseResume = function(assert, done) {
 // QueueService Object Tests
 
 exports.testUpdateRequestRequeue = function(assert, done) {
-    let service = QueueService.getServiceForProvider("test");
+    const service = QueueService.getServiceForProvider("test");
     let count = 0;
 
-    service.queueUpdateRequest(["http://localhost"], service.HIGH_PRIORITY, () => {
+    service.queueUpdateRequest([ "http://localhost" ], service.HIGH_PRIORITY, () => {
         assert.equal(count, 2);
         service.unqueueUpdateRequest();
         QueueService.updateOptions(0);
@@ -63,7 +65,7 @@ exports.testUpdateRequestRequeue = function(assert, done) {
 };
 
 exports.testRequeue = function(assert, done) {
-    let service = QueueService.getServiceForProvider("test");
+    const service = QueueService.getServiceForProvider("test");
     let count = 0;
 
     service.queueRequest("http://localhost", {}, () => ++count <= prefs.queueservice_maxRetries + 1)
@@ -81,7 +83,7 @@ exports.testRequeue = function(assert, done) {
 };
 
 exports.testQueueService = function(assert) {
-    let service = QueueService.getServiceForProvider("test");
+    const service = QueueService.getServiceForProvider("test");
     assert.ok(Array.isArray(service.highPriorityRequestIds));
     assert.ok(Array.isArray(service.lowPriorityRequestIds));
     assert.equal(service.highPriorityRequestIds.length, 0);
@@ -90,33 +92,42 @@ exports.testQueueService = function(assert) {
     assert.ok(service.LOW_PRIORITY, "QueueService isntance exposes LOW_PRIORITY constant");
 };
 
-exports.testQueueRequest = function*(assert) {
-    let service = QueueService.getServiceForProvider("test");
-    yield service.queueRequest("http://locahost", {}, (data) => {
+exports.testQueueRequest = function* (assert) {
+    const service = QueueService.getServiceForProvider("test");
+    yield service.queueRequest("http://locahost", {}, () => {
         assert.pass("Requeueing function called");
         return false;
     });
 };
 
 exports.testUpdateRequest = function(assert) {
-    let service = QueueService.getServiceForProvider("test");
-    service.queueUpdateRequest(["http://localhost"],
+    const service = QueueService.getServiceForProvider("test");
+    service.queueUpdateRequest([ "http://localhost" ],
         service.HIGH_PRIORITY,
-        () => { console.log("done"); },
+        () => {
+            console.log("done");
+        },
         {},
-        () => { console.log("requeue?"); return false; }
+        () => {
+            console.log("requeue?");
+            return false;
+        }
     );
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 1);
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY), service.highPriorityRequestIds);
     assert.equal(service.getRequestProperty(service.LOW_PRIORITY).length, 0);
-    var id = service.highPriorityRequestIds[0];
+    const id = service.highPriorityRequestIds[0];
     // Replace them
-    service.queueUpdateRequest(["http://localhost", "https://localhost"],
+    service.queueUpdateRequest([ "http://localhost", "https://localhost" ],
         service.HIGH_PRIORITY,
-        () => { console.log("done"); },
+        () => {
+            console.log("done");
+        },
         {},
-        () => { console.log("requeue?"); return false; }
-
+        () => {
+            console.log("requeue?");
+            return false;
+        }
     );
     assert.equal(service.getRequestProperty(service.HIGH_PRIORITY).length, 2);
     assert.ok(service.getRequestProperty(service.HIGH_PRIORITY).every((i) => i != id));
@@ -133,10 +144,11 @@ exports.testUpdateRequest = function(assert) {
 // QueueService Events test
 
 exports.testQueueEvents = function(assert, done) {
-    let service = QueueService.getServiceForProvider("test"), count = 0,
+    let count = 0;
+    const service = QueueService.getServiceForProvider("test"),
         listener = function() {
             if(++count == 4) {
-                assert.pass("All "+count+" listeners called");
+                assert.pass("All " + count + " listeners called");
                 QueueService.removeListeners({
                     containsPriorized: listener,
                     priorizedLoaded: listener
@@ -144,7 +156,7 @@ exports.testQueueEvents = function(assert, done) {
                 done();
             }
             else {
-                assert.pass("Listener number "+count+" called");
+                assert.pass("Listener number " + count + " called");
             }
             // for requeue.
             return false;
@@ -157,8 +169,8 @@ exports.testQueueEvents = function(assert, done) {
 };
 
 exports.testQueuePauseResume = function(assert, done) {
-    let count = 0,
-        listener1 = () => {
+    let count = 0;
+    const listener1 = () => {
         if(++count == 2) {
             QueueService.removeListeners({
                 paused: listener1,
@@ -179,9 +191,11 @@ exports.testQueuePauseResume = function(assert, done) {
         amount: 0.5,
         maxSize: 2
     });
-    QueueService.addListeners({ paused: listener1, resumed: listener1 });
+    QueueService.addListeners({
+        paused: listener1,
+        resumed: listener1
+    });
     QueueService.pause();
 };
 
 require("sdk/test").run(exports);
-

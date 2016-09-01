@@ -1,5 +1,6 @@
 /**
- * Test twitch provider specific stuff
+ * Test twitch provider specific stuff.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @todo test playlist and hosting for all three methods
@@ -8,14 +9,14 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const { twitch: provider} = requireHelper("../lib/providers").default;
-const { getMockAPIQS } = require("./providers/mock-qs");
-const { when } = require("sdk/event/utils");
-const { getChannel } = require("./channeluser/utils");
-const LiveState = requireHelper("../lib/channel/live-state").default;
+const requireHelper = require("./require_helper"),
+    { twitch: provider } = requireHelper("../lib/providers").default,
+    { getMockAPIQS } = require("./providers/mock-qs"),
+    { when } = require("sdk/event/utils"),
+    { getChannel } = require("./channeluser/utils"),
+    LiveState = requireHelper("../lib/channel/live-state").default;
 
-exports.testHostingToOffline1 = function*(assert) {
+exports.testHostingToOffline1 = function* (assert) {
     // hosting endpoint is empty
     const originalQS = provider._qs;
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -29,7 +30,7 @@ exports.testHostingToOffline1 = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testHostingToOffline2 = function*(assert) {
+exports.testHostingToOffline2 = function* (assert) {
     // hosting endpoint doesn't return a hosting target (not hosting)
     const originalQS = provider._qs;
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -43,7 +44,7 @@ exports.testHostingToOffline2 = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testHostingToOffline3 = function*(assert) {
+exports.testHostingToOffline3 = function* (assert) {
     // hosting but host target is offline
     const originalQS = provider._qs;
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -58,7 +59,7 @@ exports.testHostingToOffline3 = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testHosting = function*(assert) {
+exports.testHosting = function* (assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -71,7 +72,7 @@ exports.testHosting = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testPlaylist = function*(assert) {
+exports.testPlaylist = function* (assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -85,7 +86,7 @@ exports.testPlaylist = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testTwitchHostingRedirects = function*(assert) {
+exports.testTwitchHostingRedirects = function* (assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -96,7 +97,7 @@ exports.testTwitchHostingRedirects = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testTwitchLiveRedirects = function*(assert) {
+exports.testTwitchLiveRedirects = function* (assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
@@ -113,13 +114,13 @@ exports.testTwitchLiveRedirects = function*(assert) {
     provider._setQs(originalQS);
 };
 
-exports.testTwitchUpdateRedirects = function*(assert) {
+exports.testTwitchUpdateRedirects = function* (assert) {
     const originalQS = provider._qs;
 
     provider._setQs(getMockAPIQS(originalQS, 'twitch'));
 
     yield provider._getChannelId({
-        login:'mlg_live'
+        login: 'mlg_live'
     });
 
     const prom = when(provider, "updatedchannels");

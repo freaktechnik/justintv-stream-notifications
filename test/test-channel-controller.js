@@ -1,3 +1,4 @@
+/* eslint-disable new-cap, camelcase */
 /**
  * Test channel controller.
  * @author Martin Giger
@@ -7,35 +8,30 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const ChannelController = requireHelper("../lib/channel/controller").default;
-const passwords = require("sdk/passwords");
-const providers = requireHelper("../lib/providers").default;
-const tabs = require("sdk/tabs");
-const { when } = require("sdk/event/utils");
-const { expectReject } = require("./event/helpers");
-const { before, after } = require("sdk/test/utils");
-const self = require("sdk/self");
-const { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs");
-const clipboard = require("sdk/clipboard");
-const { prefs } = require("sdk/simple-prefs");
-const { Cc, Ci, CC } = require("chrome");
+const requireHelper = require("./require_helper"),
+    ChannelController = requireHelper("../lib/channel/controller").default,
+    providers = requireHelper("../lib/providers").default,
+    tabs = require("sdk/tabs"),
+    { when } = require("sdk/event/utils"),
+    { expectReject } = require("./event/helpers"),
+    { before, after } = require("sdk/test/utils"),
+    self = require("sdk/self"),
+    { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } = require("./providers/mock-qs"),
+    clipboard = require("sdk/clipboard"),
+    { prefs } = require("sdk/simple-prefs"),
+    { Cc, Ci, CC } = require("chrome"),
+    LoginInfo = CC("@mozilla.org/login-manager/loginInfo;1", "nsILoginInfo", "init"),
+    loginManager = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager),
+    TESTUSER = {
+        name: "freaktechnik",
+        type: "twitch"
+    },
+    SHARED = {},
+    storeCredential = (url, username, password) => {
+        return loginManager.addLogin(new LoginInfo(url, url + "/submit", null, username, password, 'username', 'password'));
+    };
 
-const LoginInfo = CC("@mozilla.org/login-manager/loginInfo;1", "nsILoginInfo", "init");
-const loginManager = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
-
-const TESTUSER = {
-    name: "freaktechnik",
-    type: "twitch"
-};
-
-var SHARED = {};
-
-const storeCredential = (url, username, password) => {
-    return loginManager.addLogin(new LoginInfo(url, url + "/submit", null, username, password, 'username', 'password'));
-};
-
-exports.testCredentials = function*(assert) {
+exports.testCredentials = function* (assert) {
     yield storeCredential(providers[TESTUSER.type].authURL[0], TESTUSER.name, "test");
     yield storeCredential(providers[TESTUSER.type].authURL[0], "", "test");
 
@@ -46,12 +42,12 @@ exports.testCredentials = function*(assert) {
     for(let p in providers) {
         if(p == TESTUSER.type) {
             res = yield cc.autoAddUsers(p);
-            assert.ok(res.length > 0, "Found credential for "+p);
+            assert.ok(res.length > 0, "Found credential for " + p);
         }
         else if(providers[p].supports.credentials) {
             if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
                 res = yield cc.autoAddUsers(p);
-                assert.equal(res.length, 0, "found no credentials for "+p);
+                assert.equal(res.length, 0, "found no credentials for " + p);
             }
         }
         else {
@@ -62,15 +58,17 @@ exports.testCredentials = function*(assert) {
     console.log("clear");
     let users = yield cc.getUsersByType();
     console.log("gotusrs");
-    for(let u of users)
+    for(let u of users) {
         yield cc.removeUser(u.id, true);
+    }
 
     res = yield cc.autoAddUsers();
     assert.ok(res.some((r) => r.length > 0), "All credentials finds some");
 
     users = yield cc.getUsersByType();
-    for(let u of users)
+    for(let u of users) {
         yield cc.removeUser(u.id, true);
+    }
 
     cc.destroy();
     /*yield new Promise((resolve, reject) => {
@@ -84,7 +82,7 @@ exports.testCredentials = function*(assert) {
     });*/
 };
 
-exports.testAddUser = function*(assert) {
+exports.testAddUser = function* () {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -93,7 +91,7 @@ exports.testAddUser = function*(assert) {
     cc.destroy();
 };
 
-exports.testUserMethods = function*(assert) {
+exports.testUserMethods = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -142,7 +140,7 @@ exports.testUserMethods = function*(assert) {
     cc.destroy();
 };
 
-exports.testRemoveUser = function*(assert) {
+exports.testRemoveUser = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -158,7 +156,7 @@ exports.testRemoveUser = function*(assert) {
     cc.destroy();
 };
 
-exports.testAddChannel = function*(assert) {
+exports.testAddChannel = function* () {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -167,7 +165,7 @@ exports.testAddChannel = function*(assert) {
     cc.destroy();
 };
 
-exports.testCancelAddChannel = function*(assert) {
+exports.testCancelAddChannel = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -184,7 +182,7 @@ exports.testCancelAddChannel = function*(assert) {
 };
 
 
-exports.testChannelMethods = function*(assert) {
+exports.testChannelMethods = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -242,7 +240,7 @@ exports.testChannelMethods = function*(assert) {
 };
 
 
-exports.testQueue = function*(assert) {
+exports.testQueue = function* (assert) {
     const cc = new ChannelController();
     cc._list.off();
 
@@ -260,7 +258,7 @@ exports.testQueue = function*(assert) {
     cc.destroy();
 };
 
-exports.testOpenManager = function*(assert) {
+exports.testOpenManager = function* (assert) {
     const cc = new ChannelController();
 
     cc.showManager();
@@ -269,7 +267,7 @@ exports.testOpenManager = function*(assert) {
 
     assert.equal(tabs.activeTab, cc._manager.managerTab, "Manager tab was opened.");
 
-    tabs.open({url: self.data.url("list.html") });
+    tabs.open({ url: self.data.url("list.html") });
     yield when(tabs, "ready");
     const tab = tabs.activeTab;
 
@@ -283,8 +281,8 @@ exports.testOpenManager = function*(assert) {
     cc.destroy();
 };
 
-exports.testDisabledProvider = function*(assert) {
-    let p = Object.keys(providers).find((pr) => !providers[pr].enabled);
+exports.testDisabledProvider = function* (assert) {
+    const p = Object.keys(providers).find((pr) => !providers[pr].enabled);
 
     if(p) {
         const cc = new ChannelController();
@@ -314,7 +312,7 @@ exports.testDisabledProvider = function*(assert) {
     }
 };
 
-exports.testCopyLocalChannelToClipboard = function*(assert) {
+exports.testCopyLocalChannelToClipboard = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -339,14 +337,15 @@ exports.testCopyLocalChannelToClipboard = function*(assert) {
 
     //TODO test alternativeURL
 
-    if(prevClipboard)
+    if(prevClipboard) {
         clipboard.set(prevClipboard);
+    }
     yield cc.removeChannel(channel.id);
 
     cc.destroy();
 };
 
-exports.testCopyExternalChannelToClipboard = function*(assert) {
+exports.testCopyExternalChannelToClipboard = function* (assert) {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 
@@ -358,13 +357,14 @@ exports.testCopyExternalChannelToClipboard = function*(assert) {
     assert.equal(channel.login, TESTUSER.name, "Channel login matches the given login");
     assert.equal(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
 
-    if(prevClipboard)
+    if(prevClipboard) {
         clipboard.set(prevClipboard);
+    }
 
     cc.destroy();
 };
 
-exports.testCopyInvalidChannelToClipboard = function*(assert) {
+exports.testCopyInvalidChannelToClipboard = function* () {
     const cc = new ChannelController();
     yield cc._ensureQueueReady();
 

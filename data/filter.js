@@ -6,6 +6,7 @@
 
 /* global show */
 /* global hide */
+/* eslint-disable no-unused-vars */
 
 /**
  * @typedef {Object} Rule
@@ -22,74 +23,83 @@
 /**
  * An array of rules, of which at least one has to match in order for the whole
  * target to be matching the query.
+ *
  * @typedef {Array.<Rule>} RuleSet
  */
 
 /**
- * Filter nodes inside a root by a query based on rules of which content strings
- * to check (textContent, classes, id etc.)
- * @argument {string} query
- * @argument {DOMNode} root
- * @argument {RuleSet} rules
+ * Check the classes of a node for the query. Ignores the "hidden" class.
+ *
+ * @param {DOMNode} node - Node to check the classes on.
+ * @param {string} query - The string to look for.
+ * @returns {boolean} Indicates if the class has been found.
  */
-function filter(query, root, rules) {
-    var nodes = root.children;
-
-    for(var i = 0; i < nodes.length; ++i) {
-        if(query) {
-            if(matches(nodes[i], query, rules))
-                show(nodes[i]);
-            else
-                hide(nodes[i]);
-        }
-        else {
-            show(nodes[i]);
-        }
+function checkClasses(node, query) {
+    let classes = node.className.toLowerCase();
+    // remove hidden from the list of classes
+    if(node.classList.contains("hidden")) {
+        classes = classes.replace("hidden", "").trim();
     }
+
+    return classes.includes(query);
 }
 
 /**
  * Check if a node matches the given query based on the rules. Matches are
  * case insensitive.
- * @argument {DOMNode} node
- * @argument {string} query - Can be mutliple queries that all must match,
- *                            separated by a space.
- * @argument {RuleSet} rules
- * @return {boolean} Indicates if the node matches the query or not.
+ *
+ * @param {DOMNode} node - Node to search.
+ * @param {string} query - Can be mutliple queries that all must match,
+ *                         separated by a space.
+ * @param {RuleSet} rules - Rules to apply the query to.
+ * @returns {boolean} Indicates if the node matches the query or not.
  */
 function matches(node, query, rules) {
     query = query.toLowerCase();
-    var target = node,
-        queries = query.split(" ");
-    return queries.every(function(q) {
-        return rules.some(function(rule) {
+    let target = node;
+    const queries = query.split(" ");
+    return queries.every((q) => {
+        return rules.some((rule) => {
             rule.attribute = rule.attribute || "textContent";
-            if(rule.subtarget)
+            if(rule.subtarget) {
                 target = node.querySelector(rule.subtarget);
-            else
+            }
+            else {
                 target = node;
+            }
 
             if(rule.attribute == "class") {
                 return checkClasses(target, q);
             }
             else {
-                return target[rule.attribute].toLowerCase().indexOf(q) != -1;
+                return target[rule.attribute].toLowerCase().includes(q);
             }
         });
     });
 }
 
 /**
- * Check the classes of a node for the query.
- * @argument {DOMNode} node
- * @arguemnt {string} query
+ * Filter nodes inside a root by a query based on rules of which content strings
+ * to check (textContent, classes, id etc.).
+ *
+ * @param {string} query - String to look for.
+ * @param {DOMNode} root - Node to start search on.
+ * @param {RuleSet} rules - Rules to apply to the query.
  */
-function checkClasses(node, query) {
-    var classes = node.className.toLowerCase();
-    // remove hidden from the list of classes
-    if(node.classList.contains("hidden"))
-        classes = classes.replace("hidden", "").trim();
+function filter(query, root, rules) {
+    const nodes = root.children;
 
-    return classes.indexOf(query) != -1;
+    for(let i = 0; i < nodes.length; ++i) {
+        if(query) {
+            if(matches(nodes[i], query, rules)) {
+                show(nodes[i]);
+            }
+            else {
+                hide(nodes[i]);
+            }
+        }
+        else {
+            show(nodes[i]);
+        }
+    }
 }
-

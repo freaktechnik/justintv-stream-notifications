@@ -1,17 +1,19 @@
+/* eslint-disable new-cap */
 /**
- * A nsIAlertsService that fires SDK events
+ * A nsIAlertsService that fires SDK events.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  */
 "use strict";
 
-const helper = require("./helper");
-const { EventTarget } = require("sdk/event/target");
-const { emit } = require("sdk/event/core");
-const { Ci } = require("chrome");
+const helper = require("./helper"),
+    { EventTarget } = require("sdk/event/target"),
+    { emit } = require("sdk/event/core"),
+    { Ci } = require("chrome"),
+    eventTarget = new EventTarget();
 
-var lastListener;
-const eventTarget = new EventTarget();
+let lastListener;
 
 const [ registerService, unregisterService ] = helper.createMock("@mozilla.org/alerts-service;1", [ "nsIAlertsService", "nsIAlertsProgressListener", "nsIAlertsDoNotDisturb" ], (oldService) => ({
     onProgress(...args) {
@@ -27,18 +29,21 @@ const [ registerService, unregisterService ] = helper.createMock("@mozilla.org/a
         oldService.QueryInterface(Ci.nsIAlertsDoNotDisturb).manualDoNotDisturb = val;
     },
     showAlertNotification(...args) {
-        if(args.length > 5)
+        if(args.length > 5) {
             lastListener = args[5];
+        }
 
         emit(eventTarget, "shownotification");
     },
     showAlert(...args) {
-        if(args.length > 1)
+        if(args.length > 1) {
             lastListener = args[1];
+        }
 
         emit(eventTarget, "shownotification");
     },
-    closeAlert(...args) {
+    closeAlert() {
+        throw "Shouldn't call closeAlert()";
     }
 }), helper.TYPE_SERVICE);
 

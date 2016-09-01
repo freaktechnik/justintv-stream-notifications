@@ -241,8 +241,11 @@
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-module-method": "^6.8.0",
+    "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "codecov": "^1.0.1",
+    "eslint": "^3.4.0",
+    "eslint-plugin-freaktechnik": "^1.4.0",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
     "grunt-bower": ">=0.20.0",
@@ -265,8 +268,9 @@
   },
   "scripts": {
     "grunt": "grunt",
-    "test": "grunt test",
-    "prepush": "grunt lint"
+    "test": "npm run lint && grunt test",
+    "prepush": "npm run lint",
+    "lint": "eslint data/ lib/ test/"
   },
   "permissions": {
     "multiprocess": true

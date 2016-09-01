@@ -5,23 +5,23 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const { invokeOnce } = requireHelper("../lib/utils");
+const requireHelper = require("./require_helper"),
+    { invokeOnce } = requireHelper("../lib/utils");
 
 exports.testInvokeOnce = function(assert, done) {
-    let counter = 0;
-    let id = 0;
-    let cbk = () => {
-        assert.equal(++counter, 1);
-        assert.equal(id, 2);
-        done();
-    };
+    let counter = 0,
+        id = 0;
+    const cbk = () => {
+            assert.equal(++counter, 1);
+            assert.equal(id, 2);
+            done();
+        },
+        firstCbk = invokeOnce(id++, cbk),
+        secondCbk = invokeOnce(id++, cbk),
+        thirdCbk = invokeOnce(id, cbk);
 
-    let firstCbk = invokeOnce(id++, cbk);
     assert.equal(typeof firstCbk, "function");
-    let secondCbk = invokeOnce(id++, cbk);
     assert.equal(typeof secondCbk, "function");
-    let thirdCbk = invokeOnce(id, cbk);
     assert.equal(typeof thirdCbk, "function");
 
     firstCbk();

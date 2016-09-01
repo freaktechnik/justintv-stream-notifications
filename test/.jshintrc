@@ -1,9 +1,0 @@
-{
-  "predef": [ "console" ],
-  "moz": true,
-  "undef": true,
-  "unused": false,
-  "node": true,
-  "esversion": 6,
-  "loopfunc": true
-}

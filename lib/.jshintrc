@@ -1,8 +1,0 @@
-{
-  "predef": [ "console", "dump" ],
-  "undef": true,
-  "unused": false,
-  "node": true,
-  "eqnull": true,
-  "esversion": 6
-}

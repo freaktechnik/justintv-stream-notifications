@@ -4,12 +4,12 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const UpdateQueue = requireHelper('../lib/queue/update').default;
-const PauseableQueue = requireHelper('../lib/queue/pauseable').default;
-const { setTimeout } = require("sdk/timers");
-const { when } = require("sdk/event/utils");
-const { defer } = require("sdk/core/promise");
+const requireHelper = require("./require_helper"),
+    UpdateQueue = requireHelper('../lib/queue/update').default,
+    PauseableQueue = requireHelper('../lib/queue/pauseable').default,
+    { setTimeout } = require("sdk/timers"),
+    { when } = require("sdk/event/utils"),
+    { defer } = require("sdk/core/promise");
 
 exports['test construction'] = function(assert) {
     const q = new UpdateQueue();
@@ -19,8 +19,9 @@ exports['test construction'] = function(assert) {
 };
 
 exports.testIntervalPauseResume = function(assert, done) {
-    let queue = new UpdateQueue();
-    let count = 0, paused = false;
+    const queue = new UpdateQueue();
+    let count = 0,
+        paused = false;
 
     queue.addRequest({
         url: "https://localhost",
@@ -46,10 +47,10 @@ exports.testIntervalPauseResume = function(assert, done) {
 };
 
 exports['test adding new request to queue'] = function(assert) {
-    const q = new UpdateQueue();
-    const i = q.addRequest({});
-    assert.equal(i,q.queue[0].id);
-    assert.equal(typeof(q.queue[0]),'object');
+    const q = new UpdateQueue(),
+        i = q.addRequest({});
+    assert.equal(i, q.queue[0].id);
+    assert.equal(typeof (q.queue[0]), 'object');
     assert.ok(!q.queue[0].priorize);
     assert.ok(!q.queue[0].persist);
     assert.equal(q.queue[0].skip, 0);
@@ -57,10 +58,10 @@ exports['test adding new request to queue'] = function(assert) {
     q.clear();
 };
 
-exports['test adding new priorized persisting request to queue'] = function*(assert) {
-    const q = new UpdateQueue();
-    const p = when(q, "queuepriorized");
-    const i = q.addRequest({}, true, true, 1);
+exports['test adding new priorized persisting request to queue'] = function* (assert) {
+    const q = new UpdateQueue(),
+        p = when(q, "queuepriorized"),
+        i = q.addRequest({}, true, true, 1);
 
     assert.equal(i, q.queue[0].id);
     assert.ok(q.queue[0].priorize);
@@ -71,12 +72,12 @@ exports['test adding new priorized persisting request to queue'] = function*(ass
     q.clear();
 };
 
-exports['test adding new priorized request to queue'] = function*(assert) {
-    const q = new UpdateQueue();
-    const p = when(q, "queuepriorized");
-    const i = q.addRequest({}, false, true);
+exports['test adding new priorized request to queue'] = function* (assert) {
+    const q = new UpdateQueue(),
+        p = when(q, "queuepriorized"),
+        i = q.addRequest({}, false, true);
 
-    yield q;
+    yield p;
     assert.equal(i, q.queue[0].id);
     assert.ok(q.queue[0].priorize);
     assert.ok(!q.queue[0].persist);
@@ -111,7 +112,7 @@ exports['test get just a request'] = function(assert) {
     q.clear();
 };
 
-exports['test get multiple priorized requests'] = function*(assert) {
+exports['test get multiple priorized requests'] = function* (assert) {
     const q = new UpdateQueue();
 
     q.addRequest({
@@ -134,9 +135,9 @@ exports['test get multiple priorized requests'] = function*(assert) {
 };
 
 exports['test persistent request by index'] = function(assert, done) {
-    const q = new UpdateQueue();
     let counter = 0;
-    let i = q.addRequest({
+    const q = new UpdateQueue();
+    q.addRequest({
         url: "https://localhost",
         onComplete: () => {
             assert.equal(counter, 1);
@@ -154,10 +155,10 @@ exports['test persistent request by index'] = function(assert, done) {
     q.getRequestByIndex(0);
 };
 
-exports['test persistent priorized request by index'] = function*(assert) {
-    const q = new UpdateQueue();
+exports['test persistent priorized request by index'] = function* (assert) {
     let p = defer();
-    let i = q.addRequest({
+    const q = new UpdateQueue();
+    q.addRequest({
         url: "https://localhost",
         onComplete: () => p.resolve()
     }, true, true, 1);
@@ -179,7 +180,7 @@ exports['test persistent priorized request by index'] = function*(assert) {
     q.clear();
 };
 
-exports['test get all priorized'] = function*(assert) {
+exports['test get all priorized'] = function* (assert) {
     const q = new UpdateQueue();
 
     q.addRequest({
@@ -203,7 +204,7 @@ exports['test get all priorized'] = function*(assert) {
     q.clear();
 };
 
-exports['test resume with priorized queued'] = function*(assert) {
+exports['test resume with priorized queued'] = function* () {
     const q = new UpdateQueue();
     q.pause();
 

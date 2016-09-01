@@ -5,32 +5,32 @@
  */
 "use strict";
 
-const requireHelper = require("./require_helper");
-const ChannelsManager = requireHelper("../lib/channel/manager").default;
-const tabs = require("sdk/tabs");
-const { wait } = require("./event/helpers");
-const { Channel, User } = requireHelper("../lib/channel/core");
-const self = require("sdk/self");
-
-const getFakeWorker = (portCallback) => {
-    return {
-        port: {
-            emit: portCallback
+const requireHelper = require("./require_helper"),
+    ChannelsManager = requireHelper("../lib/channel/manager").default,
+    tabs = require("sdk/tabs"),
+    { wait } = require("./event/helpers"),
+    self = require("sdk/self"),
+    getFakeWorker = (portCallback) => {
+        return {
+            port: {
+                emit: portCallback
+            }
+        };
+    },
+    FAKE_ITEM = {
+        serialize: () => {
+            // nuthin
         }
     };
-};
-const FAKE_ITEM = {
-    serialize: () => {}
-};
 
-exports.testTab = function*(assert) {
-    let cm = new ChannelsManager();
+exports.testTab = function* (assert) {
+    const cm = new ChannelsManager();
     yield cm.open();
     assert.equal(cm.managerTab, tabs.activeTab);
 
-    tabs.open({url: self.data.url("list.html") });
+    tabs.open({ url: self.data.url("list.html") });
     yield wait(tabs, "ready");
-    let tab = tabs.activeTab;
+    const tab = tabs.activeTab;
 
     yield cm.open();
     assert.equal(cm.managerTab, tabs.activeTab);
@@ -40,26 +40,24 @@ exports.testTab = function*(assert) {
     cm.destroy();
 };
 
-exports.testAlreadyOpenTab = function*(assert) {
-    tabs.open({url: self.data.url("./channels-manager.html")});
+exports.testAlreadyOpenTab = function* (assert) {
+    tabs.open({ url: self.data.url("./channels-manager.html") });
     yield wait(tabs, "ready");
-    let tab = tabs.activeTab;
-
-    let cm = new ChannelsManager();
+    const tab = tabs.activeTab,
+        cm = new ChannelsManager();
     assert.equal(cm.managerTab, tab);
 
     tab.close();
     cm.destroy();
 };
 
-exports.testTabWithHash = function*(assert) {
-    let existingCm = new ChannelsManager();
+exports.testTabWithHash = function* (assert) {
+    const existingCm = new ChannelsManager();
 
-    tabs.open({url: self.data.url("./channels-manager.html") + "#popup"});
+    tabs.open({ url: self.data.url("./channels-manager.html") + "#popup" });
     yield wait(tabs, "ready");
-    let tab = tabs.activeTab;
-
-    let cm = new ChannelsManager();
+    const tab = tabs.activeTab,
+        cm = new ChannelsManager();
     assert.equal(cm.managerTab, tab);
     assert.equal(existingCm.managerTab, tab);
 
@@ -68,7 +66,7 @@ exports.testTabWithHash = function*(assert) {
 };
 
 exports.testLoading = function(assert) {
-    let cm = new ChannelsManager();
+    const cm = new ChannelsManager();
     assert.ok(cm.loading);
     cm.loading = false;
     assert.ok(!cm.loading);
@@ -78,16 +76,20 @@ exports.testLoading = function(assert) {
     cm.destroy();
 };
 
-exports.testLoadingWithWorker = function*(assert) {
+exports.testLoadingWithWorker = function* (assert) {
     const cm = new ChannelsManager();
     cm.mod.destroy();
 
-    let p = new Promise((resolve) =>cm.worker = getFakeWorker(resolve));
+    let p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(resolve);
+    });
     cm.loading = false;
     let event = yield p;
     assert.equal(event, "doneloading");
 
-    p = new Promise((resolve) =>cm.worker = getFakeWorker(resolve));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(resolve);
+    });
     cm.loading = true;
     event = yield p;
     assert.equal(event, "isloading");
@@ -96,7 +98,7 @@ exports.testLoadingWithWorker = function*(assert) {
 };
 
 exports.testCallbacksLoading = function(assert) {
-    let cm = new ChannelsManager();
+    const cm = new ChannelsManager();
 
     cm.onChannelAdded(FAKE_ITEM);
     assert.ok(!cm.loading);
@@ -123,57 +125,76 @@ exports.testCallbacksLoading = function(assert) {
 
     cm.destroy();
 };
-exports.testCallbacks = function*(assert) {
-    const cm = new ChannelsManager();
-    const ignoreLoadingWrapper = (res) => {
-        return (event) => {
-            if(event !== "doneloading" && event !== "isloading")
-                res(event);
+exports.testCallbacks = function* (assert) {
+    const cm = new ChannelsManager(),
+        ignoreLoadingWrapper = (res) => {
+            return (event) => {
+                if(event !== "doneloading" && event !== "isloading") {
+                    res(event);
+                }
+            };
         };
-    };
     cm.mod.destroy();
 
-    let p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    let p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onChannelAdded(FAKE_ITEM);
     let event = yield p;
     assert.equal(event, "add");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onChannelUpdated(FAKE_ITEM);
     event = yield p;
     assert.equal(event, "update");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onChannelRemoved();
     event = yield p;
     assert.equal(event, "remove");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onUserAdded(FAKE_ITEM);
     event = yield p;
     assert.equal(event, "adduser");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onUserUpdated(FAKE_ITEM);
     event = yield p;
     assert.equal(event, "updateuser");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onUserRemoved();
     event = yield p;
     assert.equal(event, "removeuser");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onError();
     event = yield p;
     assert.equal(event, "error");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.onError("test");
     event = yield p;
     assert.equal(event, "error");
 
-    p = new Promise((resolve) => cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve)));
+    p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(ignoreLoadingWrapper(resolve));
+    });
     cm.setTheme(0);
     event = yield p;
     assert.equal(event, "theme");
@@ -182,7 +203,7 @@ exports.testCallbacks = function*(assert) {
 };
 
 exports.testMakeSureNoThrows = function(assert) {
-    let cm = new ChannelsManager();
+    const cm = new ChannelsManager();
 
     try {
         cm.addProviders("test");
@@ -194,27 +215,30 @@ exports.testMakeSureNoThrows = function(assert) {
         cm.onUserRemoved();
         cm.onError();
         cm.setTheme();
-    } catch(e) {
+    }
+    catch(e) {
         assert.fail(e);
     }
 
     cm.destroy();
 };
 
-exports.testAddProviders = function*(assert) {
+exports.testAddProviders = function* (assert) {
     const cm = new ChannelsManager();
 
     cm.mod.destroy();
-    let p = new Promise((resolve) => cm.worker = getFakeWorker(resolve));
+    const p = new Promise((resolve) => {
+        cm.worker = getFakeWorker(resolve);
+    });
 
     cm.addProviders("test");
-    let event = yield p;
+    const event = yield p;
     assert.equal(event, "addproviders");
 
     cm.destroy();
 };
 
-exports.testDetachingWorkerWithoutClosingTab = function*(assert) {
+exports.testDetachingWorkerWithoutClosingTab = function* (assert) {
     const cm = new ChannelsManager();
 
     cm.open();
@@ -232,7 +256,7 @@ exports.testDetachingWorkerWithoutClosingTab = function*(assert) {
     yield p;
 };
 
-exports.testAdditionalManager = function*(assert) {
+exports.testAdditionalManager = function* (assert) {
     const cm = new ChannelsManager();
 
     cm.open();
@@ -253,7 +277,7 @@ exports.testAdditionalManager = function*(assert) {
     yield p;
 };
 
-exports.testAdditionalManagerToPrimary = function*(assert) {
+exports.testAdditionalManagerToPrimary = function* (assert) {
     const cm = new ChannelsManager();
 
     cm.open();
@@ -281,7 +305,7 @@ exports.testAdditionalManagerToPrimary = function*(assert) {
 };
 
 
-exports.testWorkerDoesntGetReplaced = function*(assert) {
+exports.testWorkerDoesntGetReplaced = function* (assert) {
     const cm = new ChannelsManager();
 
     yield cm.open();
@@ -307,7 +331,7 @@ exports.testWorkerDoesntGetReplaced = function*(assert) {
     yield p;
 };
 
-exports.testNavigateAway = function*(assert) {
+exports.testNavigateAway = function* (assert) {
     const cm = new ChannelsManager();
 
     yield cm.open();
@@ -322,7 +346,7 @@ exports.testNavigateAway = function*(assert) {
     yield p;
 };
 
-exports.testNavigateBack = function*(assert) {
+exports.testNavigateBack = function* (assert) {
     const cm = new ChannelsManager();
 
     yield cm.open();

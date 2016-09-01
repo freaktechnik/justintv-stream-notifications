@@ -1,7 +1,0 @@
-{
-  "predef": [ "console" ],
-  "undef": true,
-  "unused": false,
-  "browser": true,
-  "esversion": 6
-}
