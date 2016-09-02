@@ -268,7 +268,7 @@
   "scripts": {
     "grunt": "grunt",
     "test": "npm run lint && grunt test",
-    "prepush": "npm run lint",
+    "prepush": "npm run lint -- --cache",
     "lint": "eslint data/ lib/ test/"
   },
   "permissions": {

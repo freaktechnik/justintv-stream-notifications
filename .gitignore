@@ -188,3 +188,4 @@ transpiled/
 bower_components/
 locale/*.json
 !locale/en-US.json
+.eslintcache
