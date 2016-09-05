@@ -252,7 +252,6 @@
     "grunt-contrib-clean": ">=0.6.0",
     "grunt-contrib-copy": ">=0.8.2",
     "grunt-env": ">=0.4.4",
-    "grunt-githash": ">=0.1.1",
     "grunt-header": "^1.1.0",
     "grunt-istanbul": ">=0.6.1",
     "grunt-jpm": ">=0.1.0",

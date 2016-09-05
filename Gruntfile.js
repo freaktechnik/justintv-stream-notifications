@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     dependencies.push("crypt/**/*");
 
     grunt.initConfig({
-        preVersion: 10,
+        preVersion: 11,
         pkg: pkg,
         firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox-trunk',
         banner:
@@ -223,11 +223,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        githash: {
-            main: {
-                options: {}
-            }
-        },
         header: {
             build: {
                 options: {
@@ -381,7 +376,7 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('prepare-common', ['copy:build', 'bower']);
     grunt.registerTask('build', ['clean', 'prepare-common', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
-    grunt.registerTask('prepare-dev', ['githash', 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
+    grunt.registerTask('prepare-dev', ['prepare-common', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
     grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi', 'clean:dev']);
     grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
     grunt.registerTask('doc', ['jsdoc']);
