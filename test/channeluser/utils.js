@@ -13,9 +13,10 @@ const requireHelper = require("../require_helper"),
 /**
  * Get a test user with username and image set.
  *
- * @param {string} [login='test']
- * @param {string} [type='test']
- * @returns {module:channel/core.User}
+ * @param {string} [login='test'] - Login of the user.
+ * @param {string} [type='test'] - Provider name for the user.
+ * @returns {module:channel/core.User} A user with the given attributes plus a
+ *          generic polyfill dataset.
  */
 exports.getUser = (login = 'test', type = TYPE) => {
     const user = new User(login, type);
@@ -27,10 +28,11 @@ exports.getUser = (login = 'test', type = TYPE) => {
 /**
  * Get a test user with valid URL properties, username, image and title.
  *
- * @param {string} [login='test']
- * @param {string} [type='test']
- * @param {number?} [id=null]
- * @returns {module:channel/core.Channel}
+ * @param {string} [login='test'] - Username for the channel.
+ * @param {string} [type='test'] - Provider name for the channel.
+ * @param {number?} [id=null] - ID for the channel if it is known.
+ * @returns {module:channel/core.Channel} A channel with the given attributes
+ *          plus generic polyfills for the other attributes.
  */
 exports.getChannel = (login = 'test', type = TYPE, id = null) => {
     const channel = new Channel(login, type, id);

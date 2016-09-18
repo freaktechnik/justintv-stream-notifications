@@ -62,7 +62,8 @@ const getRequest = (type, url) => {
 /**
  * Get a QS that returns API responses from the mock endpoints.
  *
- * @param {module:queue/service.QueueService} originalQS
+ * @param {module:queue/service.QueueService} originalQS - Real QS for the
+ *                                                         provider.
  * @param {string} type - Provider type.
  * @param {boolean} [active=true] - If queued requests should resolve.
  * @returns {module:queue/service.QueueService} A QS that resolves to mock
@@ -98,7 +99,8 @@ exports.getMockAPIQS = getMockAPIQS;
 /**
  * Get a QS that resolves every request and at the same time resolves a promise.
  *
- * @param {module:queue/service.QueueService} originalQS
+ * @param {module:queue/service.QueueService} originalQS - Original QS of the
+ *                                                         provider.
  * @param {boolean} [ignoreQR=false] - If calls to queueRequest should not
  *                                     affect the promise.
  * @returns {MockQS} A QS with an extra property holding a promise that resolves
