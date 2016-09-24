@@ -125,8 +125,12 @@ const CHANNEL_ID_PREFIX = "channel",
         }
         if(newClass != currentStyle) {
             const main = document.querySelector(".tabbed");
-            main.classList.add(newClass);
-            main.classList.remove(currentStyle);
+            if(currentStyle) {
+                main.classList.replace(currentStyle, newClass);
+            }
+            else {
+                main.classList.add(newClass);
+            }
             currentStyle = newClass;
         }
         resize();
