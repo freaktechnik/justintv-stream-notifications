@@ -6,6 +6,7 @@
  * @todo test playlist and hosting for all three methods
  * @todo test hosting preferred over playlist
  * @todo test hosting & playlist testchannels with the things disabled
+ * @todo test for Client-ID
  */
 "use strict";
 
