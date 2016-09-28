@@ -90,12 +90,11 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 ![Picarto.TV icon](/img/picarto.png)
 ------
 [Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
-Sadly the current implementation of this provider is broken.
 
 ### Features
 
  - Stream page
- - <del>Monitoring the status of channels</del>
+ - Monitoring the status of channels
 
 ![Streamup icon](/img/streamup.png)
 ------

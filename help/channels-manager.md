@@ -63,7 +63,7 @@ The channel username, it's in the URL and as link-text to the profile above the 
 The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
 
 ### YouTube
-The channel username, which is normally the URL for the channel without the `http://youtube.com/user/` part. The extension currently can't handle adding IDs directly.
+The channel username, which is normally the URL for the channel without the `https://youtube.com/user/` part or the ID of a channel, which is usually after `/c/` or `/channel/` in the URL. Aliases, which are redirects from `https://youtube.com/` are not supported.
 
 ## Automatically add channels I follow
  - Switch to the <samp>Users</samp> tab at the top

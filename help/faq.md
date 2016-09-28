@@ -9,6 +9,10 @@ I've just encountered a bug!
  1. Go to the [GitHub Issues page](http://github.com/freaktechnik/justintv-stream-notifications/issues) and report the issue.
  2. Disable and reenable the Add-on. This should fix it in most cases.
 
+What's the difference between "non-live" and offline?
+-----------------------------------------------------
+Non-live are channels either re-streaming a previous broadcast or redirecting to another stream.
+
 It doesn't display my favorite channels when they are online!
 -------------------------------------------------------------
 You probably haven't added any channels to the channels manager yet. To open it, click <samp>Manage</samp> in the panel or open it via the extension's settings.
