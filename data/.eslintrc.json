@@ -1,7 +1,10 @@
-{    
+{
     "globals": {
         "addon": true,
         "self": true
+    },
+    "rules": {
+        "strict": [1, "global"]
     },
     "extends": "plugin:freaktechnik/browser"
 }

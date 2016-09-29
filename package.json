@@ -240,12 +240,14 @@
     "preferences-utils": "0.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^7.0.0",
     "babel-plugin-transform-async-to-module-method": "^6.8.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "codecov": "^1.0.1",
-    "eslint": "^3.4.0",
-    "eslint-plugin-freaktechnik": "^1.4.0",
+    "eslint": "^3.6.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-freaktechnik": "^2.0.0",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
     "grunt-bower": ">=0.20.0",
@@ -260,7 +262,7 @@
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
     "husky": "^0.11.7",
     "istanbul-jpm": "*",
-    "jpm": "1.1.4",
+    "jpm": "^1.1.4",
     "load-grunt-tasks": "^3.5.2",
     "remap-istanbul": "^0.6.4"
   },
