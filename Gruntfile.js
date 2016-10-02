@@ -48,7 +48,6 @@ module.exports = function(grunt) {
                     project: 'live-stream-notifier',
                     resources: ['mainproperties'],
                     filename: '_lang_.properties',
-                    skipLanguages: [ 'en_US' ],
                     templateFn: function(strings) {
                         return strings.sort(function(a, b) {
                             return a.key.localeCompare(b.key);
