@@ -12,3 +12,10 @@ source_file = locale/en-US.json
 source_lang = en_US
 file_filter = locale/<lang>.json
 type = KEYVALUEJSON
+
+[live-stream-notifier.messages]
+source_file = webextension/_locales/en/messages.json
+source_lang = en
+file_filter = webextension/_locales/<lang>/messages.json
+type = CHROME
+lang_map = en_US:en

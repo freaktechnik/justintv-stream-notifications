@@ -1,0 +1,63 @@
+<% var requireString = require("../content/insert-string.js"),
+            translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title <%= translateElement("cm_title") %></title>
+        <link rel="help" href="http://streamnotifier.ch/help/channels-manager/" hreflang="en" type="text/html">
+        <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <main class="tabbed loading">
+            <nav class="topbar">
+                <ul class="tabstrip inline-list" role="tablist">
+                    <li role="presentation"><a href="#channels" role="tab" aria-controls="channels" data-tab="1" <%= translateElement("cm_tab_channels") %></a></li>
+                    <li role="presentation"><a href="#users" role="tab" aria-controls="users" data-tab="2" <%= translateElement("cm_tab_users") %></a></li>
+                </ul>
+                <ul role="toolbar" class="right inline-list toolbar">
+                    <li>
+                        <a id="options" href="#" <%= translateElement("cm_options") %></a>
+                    </li>
+                </ul>
+            </nav>
+            <ul role="toolbar" class="toolbar inline-list actionbar" aria-controls="channels">
+                <li><button id="showDialog" aria-controls="popup" <%= translateElement("cm_add") %></button></li>
+                <li><button id="updateItem" title="<%= translateElement("cm_update", "title", true) %>" <%= translateElement("cm_update") %></button></li>
+                <li><button id="removeItem" title="<%= translateElement("cm_remove", "title", true) %>" <%= translateElement("cm_remove") %></button></li>
+                <li hidden><button id="autoAdd" title="<%= translateElement("cm_autoAdd", "title", true) %>" aria-controls="users" <%= translateElement("cm_autoAdd") %></button></li>
+                <li class="flex"><input type="search" id="searchField" <%= translateElement("cm_filter", "placeholder") %></li>
+                <li><a class="button" href="http://streamnotifier.ch/help/channels-manager/" target="blank" hreflang="en" rel="help" <%= translateElement("cm_help") %></a></li>
+            </ul>
+            <select multiple id="channels" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="1">
+            </select>
+            <select multiple id="users" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="2">
+            </select>
+        </main>
+        <div id="popup" class="popup" hidden>
+            <dialog>
+                <form method="dialog">
+                    <h1 <%= translateElement("cm_dialog_title") %></h1>
+                    <input type="radio" label="channel" id="channelRadio" name="accountType"><label for="channelRadio" <%= translateElement("cm_dialog_channel") %></label>
+                    <input type="radio" label="user" id="userRadio" name="accountType"><label for="userRadio" <%= translateElement("cm_dialog_user") %></label><br>
+                    <label for="providerDropdown" <%= translateElement("cm_dialog_providers") %></label>
+                    <select id="providerDropdown"></select><br>
+                    <label for="channelNameField" <%= translateElement("cm_dialog_username") %></label>
+                    <input type="text" id="channelNameField"><br>
+                    <div id="loadingWrapper" hidden>
+                        <progress <%= translateElement("cm_dialog_loading") %></progress><br>
+                    </div>
+                    <button type="button" <%= translateElement("cm_dialog_cancel") %></button><button type="submit" <%= translateElement("cm_dialog_submit") %></button>
+                </form>
+            </dialog>
+        </div>
+        <div id="secondary-manager" class="popup" hidden>
+            <dialog>
+                <p <%= translateElement("cm_secondary_label") %></p>
+                <button type="button" class="fullwidth-button" <%= translateElement("cm_secondary_button") %></button>
+            </dialog>
+        </div>
+    </body>
+</html>

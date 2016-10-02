@@ -7,11 +7,9 @@
  * @requires module:channel/core
  */
 // setup event handling
-import { emit } from "sdk/event/core";
-import EventTarget from "../event-target";
-import { indexedDB, IDBKeyRange } from "sdk/indexed-db";
-import { prefs } from "sdk/simple-prefs";
-import { Channel, User } from "./core";//TODO need to re-add this
+import { emit } from "../../utils";
+import prefs from "../preferences";
+import { Channel, User } from "./core";
 import LiveState from "./live-state";
 
 /**
@@ -93,7 +91,7 @@ const VERSION = 2,
 
 /**
  * @class module:channel/list.ChannelList
- * @extends module:event-target.EventTarget
+ * @extends external:EventTarget
  */
 export default class ChannelList extends EventTarget {
     /**
@@ -110,11 +108,10 @@ export default class ChannelList extends EventTarget {
     _openingDB = null;
     /**
      * @constructs
-     * @param {Object} options - Event listener object.
      * @fires module:channel/list.ChannelList#ready
      */
-    constructor(options) {
-        super(options);
+    constructor() {
+        super();
 
         this.openDB(NAME);
     }
@@ -143,67 +140,47 @@ export default class ChannelList extends EventTarget {
 
         this._openingDB = new Promise((resolve, reject) => {
             // Try to open the DB
-            const request = indexedDB.open(name, VERSION);
+            const request = window.indexedDB.open(name, VERSION);
             request.onupgradeneeded = (e) => {
                 this.db = e.target.result;
-                if(e.oldVersion == 1) {
-                    const channels = e.target.transaction.objectStore("channels"),
-                        request = channels.openCursor();
-                    request.onsuccess = (event) => {
-                        const cursor = event.target.result;
-                        if(cursor) {
-                            const channel = cursor.value;
-                            channel.live = (new LiveState()).serialize();
 
-                            // Try to fix old-style channels.
-                            if("favorites" in channel) {
-                                delete channel.favorites;
-                            }
-
-                            const r = cursor.update(channel);
-                            r.onerror = reject;
-                            cursor.continue();
-                        }
-                    };
-                    request.onerror = reject;
-                }
-                else {
-                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-                    users.createIndex("typename", [ "type", "login" ], { unique: true });
-                    users.createIndex("type", "type", { unique: false });
-                    //users.createIndex("id", "id", { unique: true });
-                    const channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-                    channels.createIndex("typename", [ "type", "login" ], { unique: true });
-                    channels.createIndex("type", "type", { unique: false });
-                    //channels.createIndex("id", "id", { unique: true });
-                }
+                const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+                users.createIndex("typename", [ "type", "login" ], { unique: true });
+                users.createIndex("type", "type", { unique: false });
+                //users.createIndex("id", "id", { unique: true });
+                const channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
+                channels.createIndex("typename", [ "type", "login" ], { unique: true });
+                channels.createIndex("type", "type", { unique: false });
+                //channels.createIndex("id", "id", { unique: true });
             };
 
             // DB is ready
             request.onsuccess = (e) => {
                 this.db = e.target.result;
 
-                // Set all channels to offline, that haven't been updated in a certain time.
-                const transaction = this.db.transaction("channels", "readwrite"),
-                    store = transaction.objectStore("channels"),
-                    minDate = Date.now() - prefs.channellist_cacheTime, //now - 10 min
-                    req = store.index("typename").openCursor();
+                prefs.get("channellist_cacheTime").then((cacheTime) => {
+                    // Set all channels to offline, that haven't been updated in a certain time.
+                    const transaction = this.db.transaction("channels", "readwrite"),
+                        store = transaction.objectStore("channels"),
+                        minDate = Date.now() - cacheTime, //now - 10 min
+                        req = store.index("typename").openCursor();
 
-                req.onsuccess = (event) => {
-                    const cursor = event.target.result;
+                    req.onsuccess = (event) => {
+                        const cursor = event.target.result;
 
-                    if(cursor) {
-                        if(cursor.value.lastModified < minDate) {
-                            cursor.value.live.state = LiveState.OFFLINE;
-                            cursor.update(cursor.value);
+                        if(cursor) {
+                            if(cursor.value.lastModified < minDate) {
+                                cursor.value.live.state = LiveState.OFFLINE;
+                                cursor.update(cursor.value);
+                            }
+                            cursor.continue();
                         }
-                        cursor.continue();
-                    }
-                    else {
-                        resolve();
-                        emit(this, "ready");
-                    }
-                };
+                        else {
+                            resolve();
+                            emit(this, "ready");
+                        }
+                    };
+                });
             };
 
             /* istanbul ignore next */
