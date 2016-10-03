@@ -11,9 +11,9 @@
 function translateElementAttributes(element) {
     const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder' ];
     const ariaAttrMap = {
-        ariaLabel: 'aria-label',
-        ariaValueText: 'aria-valuetext',
-        ariaMozHint: 'aria-moz-hint'
+        "ariaLabel": 'aria-label',
+        "ariaValueText": 'aria-valuetext',
+        "ariaMozHint": 'aria-moz-hint'
     };
     const attrSeparator = '.';
 

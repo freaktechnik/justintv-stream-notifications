@@ -61,7 +61,7 @@
                 <input type="search" id="searchField" hidden <%= translateElement("cm_filter", "placeholder") %>
             </nav>
             <section class="tabcontent live" role="tabpanel" data-tab="1">
-                <span id="noonline" <%= translateElement("panel_nothing_live") %></span>
+                <div id="noonline" <%= translateElement("panel_nothing_live") %></div>
                 <ul id="live">
                 </ul>
                 <ul id="secondarylive" hidden>
@@ -72,15 +72,15 @@
                 </ul>
             </section>
             <section class="tabcontent" role="tabpanel" data-tab="2">
-                <span id="nochannels" <%= translateElement("panel_nothing") %></span>
+                <div id="nochannels" <%= translateElement("panel_nothing") %></div>
                 <ul id="offline">
                 </ul>
             </section>
             <section class="tabcontent live" role="tabpanel" data-tab="3">
                 <select id="exploreprovider">
                 </select>
-                <span id="loadingexplore" <%= translateElement("panel_loading") %></span>
-                <span id="noresults" hidden <%= translateElement("panel_no_results") %></span>
+                <div id="loadingexplore" <%= translateElement("panel_loading") %></div>
+                <div id="noresults" hidden <%= translateElement("panel_no_results") %></div>
                 <ul id="featured">
                 </ul>
             </section>

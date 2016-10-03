@@ -5,9 +5,12 @@
 body {
     overflow-x: hidden;
     background-color: var(--inverted-bg);
-    font-size: 11px;
+    font-size: 12px;
     min-width: 300px;
-    line-height: 1.2em;
+}
+
+section > div {
+    padding: .2em 0;
 }
 
 ul {

@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const manifest = require("webextension/manifest.json");
+const manifest = require("./webextension/manifest.json");
 
 const langs = [
         "en",
@@ -9,7 +9,7 @@ const langs = [
         "hr",
         "uk_UA"
     ],
-    defaultLanguage = manifest.default_language;
+    defaultLanguage = manifest.default_locale;
 
 module.exports = {
     entry: {

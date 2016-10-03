@@ -143,11 +143,13 @@ class ListView extends EventTarget {
      */
     constructor() {
         super();
+        console.error("Constructing list");
         this._liveState = false;
         this.live = new Set();
         this.nonlive = new Set();
 
         browser.runtime.onConnect.addListener((port) => {
+            console.error(port);
             if(port.name == "list") {
                 this._setupPort(port);
             }
@@ -161,13 +163,10 @@ class ListView extends EventTarget {
     }
 
     _setupPort(port) {
+        console.error("Connecting to panel...");
         this.port = port;
 
-        this.setStyle();
-        this.setExtrasVisibility();
         this.setNonLiveDisplay();
-        this.setTheme();
-        //TODO closing panel?
         this.port.onMessage.addListener((event) => {
             if(event.target == "openUrl") {
                 emit(this, "open", event.channelId);
@@ -216,6 +215,11 @@ class ListView extends EventTarget {
             else if(event.target == "removedLive") {
                 this._unregisterChannel(event.channelId);
             }
+        });
+
+        this.port.onDisconnect.addListener(() => {
+            console.error("Disconnecting from panel..");
+            this.port = null;
         });
     }
 
