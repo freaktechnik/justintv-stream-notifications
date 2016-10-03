@@ -1,8 +1,9 @@
 /**
  * @author Martin Giger
  * @license MPL-2.0
+ * @todo Ctrl+F should toggle filter
  */
-import { hide, show } from '../content/utils';
+import { hide, show, toggle } from '../content/utils';
 import { filter, matches } from '../content/filter';
 import '../content/tabbed';
 import '../content/l10n';
@@ -45,20 +46,15 @@ const CHANNEL_ID_PREFIX = "channel",
             subtarget: ".category"
         }
     ],
-    toggle = (node, condition) => {
-        if(condition) {
-            show(node);
-        }
-        else {
-            hide(node);
-        }
-    },
     getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10),
     contextMenuCommand = (event) => {
         port.postMessage({
             target: event,
             channelId: getChannelIdFromId(currentMenuTarget.id)
         });
+        if(event == "openArchive" || event == "openChat") {
+            window.close();
+        }
         currentMenuTarget = null;
     },
     openChannel = (channelId, e) => {
@@ -69,6 +65,7 @@ const CHANNEL_ID_PREFIX = "channel",
             target: "open",
             channelId
         });
+        window.close();
     },
     openUrl = (url, e) => {
         if(e) {
@@ -78,6 +75,7 @@ const CHANNEL_ID_PREFIX = "channel",
             target: "openUrl",
             url
         });
+        window.close();
     },
     displayNoOnline = () => {
         show(document.getElementById("noonline"));
@@ -162,7 +160,6 @@ const CHANNEL_ID_PREFIX = "channel",
         document.getElementById("contextAdd").disabled = !providers[e.currentTarget.className].enabled;
     },
     buildChannel = (channel, unspecific = false) => {
-        //TODO some visual indicator for rebroadcasts
         const channelNode = document.createElement("li");
         channelNode.insertAdjacentHTML("beforeend",
 `<a href="" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
@@ -170,23 +167,23 @@ const CHANNEL_ID_PREFIX = "channel",
     <div>
         <img srcset="" sizes="30w">
         <span class="rebroadcast hide-offline" hidden><svg class="icon" viewBox="0 0 8 8">
-            <use xlink:href="sprite/open-iconic.min.svg#loop"></use>
+            <use xlink:href="../assets/images/open-iconic.min.svg#loop"></use>
         </svg> </span><span class="name"></span><span class="nonlivename hide-offline" hidden> → <span class="alternate-name"></span></span><br>
         <span class="title hide-offline"></span>
         <aside>
             <span class="viewersWrapper hide-offline">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="sprite/open-iconic.min.svg#eye"></use>
+                    <use xlink:href="../assets/images/open-iconic.min.svg#eye"></use>
                 </svg>&nbsp;<span class="viewers">0</span>&#x20;
             </span>
             <span class="categoryWrapper hide-offline">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="sprite/open-iconic.min.svg#tag"></use>
+                    <use xlink:href="../assets/images/open-iconic.min.svg#tag"></use>
                 </svg>&nbsp;<span class="category"></span>&#x20;
             </span>
             <span class="providerWrapper">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="sprite/open-iconic.min.svg#hard-drive"></use>
+                    <use xlink:href="../assets/images/open-iconic.min.svg#hard-drive"></use>
                 </svg>&nbsp;<span class="provider"></span>
             </span>
         </aside>
@@ -335,10 +332,15 @@ const CHANNEL_ID_PREFIX = "channel",
         currentMenuTarget = null;
     },
     forwardEvent = (name, event) => {
-        event.preventDefault();
+        if(event) {
+            event.preventDefault();
+        }
         port.postMessage({
             target: name
         });
+        if(name == "configure") {
+            window.close();
+        }
     },
     applySearchToExplore = (exploreSelect, field) => {
         if(field.hasAttribute("hidden") || field.value === "") {
@@ -517,8 +519,8 @@ window.addEventListener("load", () => {
     document.getElementById("contextCopy").addEventListener("click", contextMenuCommand.bind(null, "copy"), false);
     document.getElementById("contextAdd").addEventListener("click", externalContextMenuCommand.bind(null, "add"), false);
     document.getElementById("contextExploreCopy").addEventListener("click", externalContextMenuCommand.bind(null, "copyexternal"), false);
-    document.getElementById("pauseAutorefresh").addEventListener("click", () => port.postMessage({ target: "pause" }), false);
-    document.getElementById("resumeAutorefresh").addEventListener("click", () => port.postMessage({ target: "resume" }), false);
+    document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "pause", null), false);
+    document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "resume", null), false);
     document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
         if(e.detail === 3) {
             applySearchToExplore(exploreSelect, field);
@@ -557,7 +559,5 @@ window.addEventListener("load", () => {
         }
     }, false);
 
-    port.postMessage({
-        target: "ready"
-    });
+    forwardEvent("ready");
 });
