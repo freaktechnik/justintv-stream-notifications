@@ -278,11 +278,12 @@
     "grunt": "grunt",
     "test": "npm run lint && webpack && grunt test && jpm test --addon-dir build/ && grunt after-coverage",
     "lint": "eslint lib/ test/ src/",
+    "lint-cache": "npm run lint -- --cache",
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",
     "run": "webpack && grunt dev && jpm run --addon-dir build/"
   },
   "pre-push": [
-    "npm run lint -- --cache"
+    "lint-cache"
   ],
   "permissions": {
     "multiprocess": true
