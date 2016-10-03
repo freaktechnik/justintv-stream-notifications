@@ -8,7 +8,8 @@ import ListView from './list';
 import serializedProviders from "./providers/serialized";
 import * as qs from './queue/service';
 
-const PASSIVE_LISTENER = { passive: true };
+const PASSIVE_LISTENER = { passive: true },
+    S_TO_MS_FACTOR = 1000;
 
 // Init things
 
@@ -18,7 +19,7 @@ const notifier = new Notifier(),
 
 list.addEventListener("ready", () => {
     controller.getChannelsByType()
-        .then((channels) => view.addChannels(channels));
+        .then((channels) => list.addChannels(channels));
 
     list.setProviders(serializedProviders);
 
@@ -47,7 +48,7 @@ list.addEventListener("refresh", ({ detail: channelId }) => {
         controller.updateChannels();
     }
 }, PASSIVE_LISTENER);
-list.addEventListener("open", ({ detail: [ channelId, what ]}) => {
+list.addEventListener("open", ({ detail: [ channelId, what ] }) => {
     let p;
     if(typeof channelId === "string") {
         p = Promise.resolve({
@@ -63,7 +64,7 @@ list.addEventListener("open", ({ detail: [ channelId, what ]}) => {
 }, PASSIVE_LISTENER);
 list.addEventListener("pause", () => qs.pause(), PASSIVE_LISTENER);
 list.addEventListener("resume", () => qs.resume(), PASSIVE_LISTENER);
-list.addEventListener("copy", ({ detail: [ channel, type ]}) => {
+list.addEventListener("copy", ({ detail: [ channel, type ] }) => {
     controller.copyChannelURL(channel, type).then((channel) => {
         notifier.notifyCopied(channel.uname);
     });
@@ -122,7 +123,7 @@ qs.addListeners({
     resumed: () => list.setQueuePaused(false)
 });
 
-prefs.addEventListener("change", ({ detail: { pref, value }}) => {
+prefs.addEventListener("change", ({ detail: { pref, value } }) => {
     if(pref == "manageChannels") {
         controller.showManager();
     }
@@ -150,7 +151,7 @@ prefs.addEventListener("change", ({ detail: { pref, value }}) => {
 // Do migration of channel data if necessary
 browser.storage.local.get("migrated").then((value) => {
     if(!value.migrated) {
-        sdk.doAction("migrate-channels").then(([channels, users]) => {
+        SDK.doAction("migrate-channels").then(([ channels, users ]) => {
             return Promise.all(users.map((user) => controller.addUser(user.login, user.type)))
                 .then(() => Promise.all(channels.map((channel) => controller.addChannel(channel.login, channel.type))));
         }).then(() => {

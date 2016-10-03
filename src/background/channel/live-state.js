@@ -35,8 +35,8 @@ const IGNORED_PROPERTIES = [ "state", "isLive" ],
     getDefaultInterpretation = () => {
         return prefs.get("panel_nonlive").then((value) => {
             return parseInt(value, 10) < 3 ? TOWARD_LIVE : TOWARD_OFFLINE;
-        })
-    }
+        });
+    };
 
 /**
  * Used to describe the exact state of a stream. Sometimes streams are marked

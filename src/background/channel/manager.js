@@ -5,7 +5,7 @@
  * @license MPL-2.0
  * @module channel/manager
  */
-import { when, emit } from "../../utils";
+import { emit } from "../../utils";
 
 const MANAGER_URL = browser.runtime.getURL("manager/index.html");
 
@@ -83,9 +83,9 @@ const MANAGER_URL = browser.runtime.getURL("manager/index.html");
 
 /**
  * @class
- * @extends external:EventEmitter
+ * @extends external:EventTarget
  */
-export default class ChannelsManager extends EventEmitter {
+export default class ChannelsManager extends EventTarget {
     _loading = true;
     port = null;
     tabID = null;
@@ -122,7 +122,7 @@ export default class ChannelsManager extends EventEmitter {
             }
         });
 
-        browser.tabs.onUpdated.addListener((tabID, changeInfo, tag) => {
+        browser.tabs.onUpdated.addListener((tabID, changeInfo) => {
             if(tabID === this.tabID && "url" in changeInfo && !changeInfo.url.startsWith(MANAGER_URL)) {
                 this.tabID = null;
                 this.port = null;
@@ -148,17 +148,15 @@ export default class ChannelsManager extends EventEmitter {
     set loading(val) {
         if(this._loading != val) {
             this._loading = val;
-            if(this.worker) {
-                if(val) {
-                    this.worker.port.emit("isloading");
-                }
-                else {
-                    this.worker.port.emit("doneloading");
-                }
+            if(val) {
+                this._emitToWorker("isloading");
+            }
+            else {
+                this._emitToWorker("doneloading");
             }
         }
     }
-    _setupPort() {
+    _setupPort(port) {
         console.log("[Manager]> Attached");
         const isSecondary = this.port !== null;
 
@@ -190,7 +188,7 @@ export default class ChannelsManager extends EventEmitter {
                     this.loading = true;
                     this.cancelingValues.set("user" + message.type + message.username, false);
                     emit(this, "adduser", message.username, message.type,
-                         () => this.cancelingValues.get("user" + message.type + messsage.username));
+                         () => this.cancelingValues.get("user" + message.type + message.username));
                 }
             }
             else if(message.target == "autoadd") {
@@ -264,7 +262,7 @@ export default class ChannelsManager extends EventEmitter {
                 url: "./channels-manager.html"
             }).then((tab) => {
                 this.tabID = tab.id;
-                return tab
+                return tab;
             });
         }
         else {

@@ -22,15 +22,13 @@ const NOTIFICATION_ICON_SIZE = 100;
 
 /**
  * @class module:notifier.Notifier
- * @extends EventEmitter
+ * @extends external:EventTarget
  */
-export default class Notifier extends EventEmitter {
+export default class Notifier extends EventTarget {
     /**
      * @constructs
-     * @param {Object} options - Event listeners, namely onClick listener as
-     *                           property of the object.
      */
-    constructor(options) {
+    constructor() {
         super();
         /**
          * The last title of each channel by id the notifier last saw.
@@ -144,7 +142,7 @@ export default class Notifier extends EventEmitter {
      */
     async sendNotification(channel) {
         // Mute notifications for the current tab
-        const [tab, showNotifications] = await Promise.all([
+        const [ tab, showNotifications ] = await Promise.all([
             browser.tabs.query({
                 active: true,
                 currentWindow: true

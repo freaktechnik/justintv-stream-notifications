@@ -101,4 +101,4 @@ export function filter(query, root, rules) {
             show(nodes[i]);
         }
     }
-};
+}

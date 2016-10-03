@@ -28,24 +28,33 @@ import * as logins from "../logins";
  * @type {module:channel/core.Channel}
  */
 
-const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-reset-add-ons-and-settings",
+//const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-reset-add-ons-and-settings",
+
 /**
  * Filters mature channels if parental controls are activated.
  *
- * @param {Array.<module:channel/core.Channel>} channels
+ * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
  * @returns {Array.<module:channel/core.Channel>} Filtered of channels marked as
- *         mature if parental controls are activated.
+ *          mature if parental controls are activated.
  */
-    filterInapropriateChannels = (channels) => {
-        if(ParentalControls.enabled) {
-            return channels.filter((c) => !c.mature);
-        }
-        else {
-            return channels;
-        }
-    },
-    searchCredentials = (url) => logins.search({ url }),
-    filterExistingFavs = (user, channels) => channels.filter((ch) => !user.favorites.includes(ch.login));
+const filterInapropriateChannels = (channels) => {
+    if(ParentalControls.enabled) {
+        return channels.filter((c) => !c.mature);
+    }
+    else {
+        return channels;
+    }
+};
+/**
+ * Filter channels to exclude existing favorites.
+ *
+ * @param {module:channel/core.User} user - User whose favs should be excluded.
+ * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
+ * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
+ */
+const filterExistingFavs = (user, channels) => {
+    return channels.filter((ch) => !user.favorites.includes(ch.login));
+};
 
 /**
  * Controller for all the channel stuff. Handles getting info from providers
@@ -91,13 +100,13 @@ export default class ChannelController extends EventTarget {
          * @private
          */
         this._manager = new ChannelsManager();
-        this._manager.addEventListener("addchannel", ({ detail: [name, type, canceled] }) => this.addChannel(name, type, canceled)
+        this._manager.addEventListener("addchannel", ({ detail: [ name, type, canceled ] }) => this.addChannel(name, type, canceled)
                             .then(() => this._manager._deleteCancelingValue("channel", type, name),
                                   () => managerError(name, type, "channel", canceled)));
         this._manager.addEventListener("removechannel", ({ detail }) => this.removeChannel(detail));
         this._manager.addEventListener("updatechannel", ({ detail }) => this.updateChannel(detail)
                             .catch(managerDoneLoading));
-        this._manager.addEventListener("adduser", ({ detail: [username, type, canceled] }) => this.addUser(username, type, canceled)
+        this._manager.addEventListener("adduser", ({ detail: [ username, type, canceled ] }) => this.addUser(username, type, canceled)
                             .then(() => this._manager._deleteCancelingValue("user", type, username),
                                   () => managerError(username, type, "user", canceled)));
         this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(detail));
@@ -179,7 +188,7 @@ export default class ChannelController extends EventTarget {
             this._manager.onUserAdded(user);
         });
         this._list.addEventListener("beforechanneldeleted", ({ detail }) => {
-                emit(this, "beforechanneldeleted", detail);
+            emit(this, "beforechanneldeleted", detail);
         });
         this._list.addEventListener("channeldeleted", ({ detail: channel }) => {
             /*
@@ -239,7 +248,7 @@ export default class ChannelController extends EventTarget {
         this._list.addEventListener("userupdated", ({ detail }) => {
             this._manager.onUserUpdated(detail);
         });
-        this._list.addEventListener("clear", ({ detail: hard }) => {
+        /*this._list.addEventListener("clear", ({ detail: hard }) => {
             if(hard) {
                 //TODO swap out the panel and warning state on the button
                 showNotificationBox({
@@ -272,7 +281,7 @@ export default class ChannelController extends EventTarget {
                     }
                 ]
             });
-        });
+        });*/
         // Provider update events
 
         /**
@@ -566,7 +575,7 @@ export default class ChannelController extends EventTarget {
      * @returns {Array.<module:channel/core.User>}
      */
     _findUsersByURL(provider, url) {
-        return searchCredentials(url)
+        return logins.search({ url })
             .then(this._addFoundCredentials.bind(this, provider));
     }
     /**
@@ -633,7 +642,10 @@ export default class ChannelController extends EventTarget {
 
         const p = when(document, "copy");
         document.execCommand("copy", false, null);
-        const [e, pattern] = await Promise.all([p, prefs.get("copy_pattern")]);
+        const [ e, pattern ] = await Promise.all([
+            p,
+            prefs.get("copy_pattern")
+        ]);
 
         e.clipboardData.setData("text/plain", pattern.replace("{URL}", url));
         e.preventDefault();

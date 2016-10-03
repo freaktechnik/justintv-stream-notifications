@@ -15,7 +15,7 @@ class Preferences extends EventTarget {
 
     get(pref) {
         if(Array.isArray(pref)) {
-            return Promise.all(pref.map((p) => this.get(p)))
+            return Promise.all(pref.map((p) => this.get(p)));
         }
         else {
             return SDK.doAction({
@@ -36,6 +36,6 @@ class Preferences extends EventTarget {
     open() {
         SDK.postMessage("pref-open");
     }
-};
+}
 
 export default new Preferences();

@@ -278,7 +278,7 @@
     "grunt": "grunt",
     "test": "npm run lint && webpack && grunt test && jpm test --addon-dir build/ && grunt after-coverage",
     "prepush": "npm run lint -- --cache",
-    "lint": "eslint data/ lib/ test/",
+    "lint": "eslint lib/ test/ src/",
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",
     "run": "webpack && grunt dev && jpm run --addon-dir build/"
   },

@@ -32,7 +32,9 @@ const type = "twitch",
         });
         return ret;
     };
-prefs.get('twitch_clientId').then((id) => headers['Client-ID'] = id);
+prefs.get('twitch_clientId').then((id) => {
+    headers['Client-ID'] = id;
+});
 
 function getChannelFromJSON(jsonChannel) {
     const ret = new Channel(jsonChannel.name, type);
@@ -213,7 +215,7 @@ class Twitch extends GenericProvider {
                 }
                 if(liveChans.length != channels.length) {
                     let offlineChans = channels.filter((channel) => !data.some((cho) => cho.id == channel.id));
-                    const playlistChans = await asyncFilter(data, (cho) => not(cho.live.isLive(LiveState.TOWARD_OFFLINE)));
+                    const playlistChans = await filterAsync(data, (cho) => not(cho.live.isLive(LiveState.TOWARD_OFFLINE)));
                     offlineChans = offlineChans.concat(playlistChans);
                     let chans = await this._getHostedChannels(offlineChans, liveChans);
                     chans = await Promise.all(chans.map((chan) => {

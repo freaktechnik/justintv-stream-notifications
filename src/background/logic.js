@@ -21,8 +21,8 @@ const identity = (i) => i;
  * @returns {boolean} Result of the and operation on all returned values.
  */
 export function and(...args) {
-    return Promise.all(args).then((p) => p.every(i));
-};
+    return Promise.all(args).then((p) => p.every(identity));
+}
 
 /**
  * An asynchronous version of the boolean or operation.
@@ -32,8 +32,8 @@ export function and(...args) {
  * @returns {boolean} Result of the or operation on all returned values.
  */
 export function or(...args) {
-    return Promise.all(args).then((p) => p.some(i));
-};
+    return Promise.all(args).then((p) => p.some(identity));
+}
 
 /*
  * Invert the value a promise resolves to.
@@ -44,4 +44,4 @@ export function or(...args) {
  */
 export function not(promise) {
     return promise.then((p) => !p);
-};
+}

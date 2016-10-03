@@ -9,7 +9,7 @@ import prefs from "../preferences";
 import querystring from "../querystring";
 import { memoize } from "underscore";
 import { Channel, User } from '../channel/core';
-import { PaginationHelper, promisedPaginationHelper } from '../pagination-helper';
+import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 
 const type = "youtube",

@@ -60,7 +60,7 @@ export const create = async (channels, users) => {
         }
     }
 
-    await Promsie.all(promises);
+    await Promise.all(promises);
 
     for(let branch in p) {
         Object.freeze(p[branch]);

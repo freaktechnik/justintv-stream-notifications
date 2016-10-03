@@ -12,6 +12,7 @@
 import { emit } from "../utils";
 import prefs from "./preferences";
 import LiveState from "./channel/live-state";
+import providers from './providers';
 
 /**
  * Should open the ChannelsManager.
@@ -168,10 +169,7 @@ class ListView extends EventTarget {
         this.setTheme();
         //TODO closing panel?
         this.port.onMessage.addListener((event) => {
-            if(event.target == "offline") {//TODO
-                this.liveState = false;
-            }
-            else if(event.target == "openUrl") {
+            if(event.target == "openUrl") {
                 emit(this, "open", event.channelId);
             }
             else if(event.target == "openChat") {
@@ -190,7 +188,7 @@ class ListView extends EventTarget {
                 emit(this, "addchannel", event.type, event.login);
             }
             else if(event.target == "pause") {
-                emit(thise, "pause");
+                emit(this, "pause");
             }
             else if(event.target == "resume") {
                 emit(this, "resume");

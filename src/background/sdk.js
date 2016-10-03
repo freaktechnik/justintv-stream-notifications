@@ -29,7 +29,7 @@ class SDKCommunication extends EventTarget {
                         resolve(detail.payload);
                     }
                     else {
-                        resolve(detail.error);
+                        reject(detail.error);
                     }
                 }
             };

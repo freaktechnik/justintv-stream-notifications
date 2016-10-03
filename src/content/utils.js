@@ -14,7 +14,7 @@ export function hide(el) {
     if(el.selected) {
         el.selected = false;
     }
-};
+}
 
 /**
  * Shows an element.
@@ -23,7 +23,7 @@ export function hide(el) {
  */
 export function show(el) {
     el.removeAttribute("hidden");
-};
+}
 
 /**
  * Shows or hides an element, dependent on the condition. If the condition is

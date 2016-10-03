@@ -7,7 +7,7 @@
 
 export const when = (target, event) => {
     if(target instanceof EventTarget) {
-        return new Promsie((resolve, reject) => {
+        return new Promise((resolve) => {
             target.addEventListener(event, resolve, {
                 once: true,
                 capture: false
@@ -15,7 +15,7 @@ export const when = (target, event) => {
         });
     }
     else if("on" + event[0].toUpperCase() + event.substr(1) in target) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const property = "on" + event[0].toUpperCase() + event.substr(1),
                 listener = (e) => {
                     target[property].removeListener(listener);
@@ -61,11 +61,11 @@ export const invokeOnce = (newId, fn) => {
 };
 
 /**
- * Filter an array based on a condition that is returned as promise. Like
- * Array.prototype.filter, just that it takes a promise from the callback
- * isntead of a boolean.
+ * Filter an array based on a condition that is returned as promise.
+ * Like Array.prototype.filter, just that it takes a promise from the callback
+ * instead of a boolean.
  *
- * @param {Array} array - Array to filter
+ * @param {Array} array - Array to filter.
  * @param {Function} callback - Callback to filter on. Should return a promise.
  * @returns {Array} Array filtered based on the result of the callback.
  */

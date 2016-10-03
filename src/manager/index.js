@@ -13,14 +13,14 @@ import './channels-manager.css';
 import '../content/shared.css';
 
 const filters = [
-        {
-            subtarget: "span"
-        },
-        {
-            subtarget: "small"
-        }
+    {
+        subtarget: "span"
+    },
+    {
+        subtarget: "small"
+    }
     ],
-    listener = function() {
+    listener = () => {
         filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not([hidden])"), filters);
     };
 window.addEventListener("load", () => {
@@ -32,8 +32,9 @@ window.addEventListener("load", () => {
         }
     });
     document.getElementById("users").addEventListener("itemadded", () => {
-        if(!document.getElementById("users").hidden)
+        if(!document.getElementById("users").hidden) {
             listener();
+        }
     });
 });
 
@@ -474,7 +475,7 @@ port.onMessage.addListener((message) => {
         users.classList.remove("loading");
         channels.classList.remove("loading");
     }
-    else if(messsage.target == "error") {
+    else if(message.target == "error") {
         let msg;
         if(message.data) {
             msg = browser.i18n.getMessage("channelManagerLoadError", message.data);

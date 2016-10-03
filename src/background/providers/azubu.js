@@ -43,7 +43,7 @@ class Azubu extends GenericProvider {
     _supportsFeatured = true;
 
     async getUserFavorites(username) {
-        const [ follows, userData ] = await Promise.all([
+        const [ follows, userdata ] = await Promise.all([
             promisedPaginationHelper({
                 url: baseURL + "user/" + username + "/followings/list?limit=" + pageSize + "&offset=",
                 pageSize,

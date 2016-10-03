@@ -8,7 +8,9 @@ import SDK from './sdk';
 
 let enabled = false;
 
-const getEnabled = () => SDK.doAction("pc-enabled").then((e) => enabled = e);
+const getEnabled = () => SDK.doAction("pc-enabled").then((e) => {
+    enabled = e;
+});
 
 export default {
     get enabled() {
