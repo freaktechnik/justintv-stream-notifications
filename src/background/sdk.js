@@ -5,10 +5,12 @@
  * @license MPL-2.0
  */
 import { emit } from "../utils";
+import EventTarget from '../event-target';
 
 class SDKCommunication extends EventTarget {
     constructor() {
         super();
+
         this.port = browser.runtime.connect({ name: "sdk-connection" });
         this.port.onMessage.addListener((message) => {
             emit(this, "message", message);
@@ -16,6 +18,9 @@ class SDKCommunication extends EventTarget {
     }
 
     postMessage(message) {
+        if(typeof message != "object" || !("target" in message)) {
+            throw new Error("Must at least give a target action for the message");
+        }
         this.port.postMessage(message);
     }
 
@@ -39,4 +44,6 @@ class SDKCommunication extends EventTarget {
     }
 }
 
-export default new SDKCommunication();
+const SDK = new SDKCommunication();
+
+export default SDK;

@@ -89,7 +89,7 @@ class QueueService {
         return new Promise((resolve, reject) => {
             const id = queue.addRequest({
                 url,
-                headers,
+                headers: new Headers(headers),
                 onComplete: (data) => {
                     if(requeue(data)) {
                         prefs.get("queueservice_maxRetries").then((maxRetries) => {
@@ -102,9 +102,11 @@ class QueueService {
                         });
                     }
                     else {
+                        console.log("passing on to the provider");
                         resolve(data);
                     }
-                }
+                },
+                onError: reject
             }, false, true);
 
             if(attempt === 0 && navigator.onLine) {
@@ -150,11 +152,12 @@ class QueueService {
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determinines if a request should be re-run.
      */
-    queueUpdateRequest(urls, priority, callback, headers = {}, requeue = defaultRequeue) {
+    queueUpdateRequest(urls, priority, callback, rawHeaders = {}, requeue = defaultRequeue) {
         console.log("Requeueing " + priority + " priority update request");
         this.unqueueUpdateRequest(priority);
         const requests = this.getRequestProperty(priority),
-            skips = priority == QueueService.LOW_PRIORITY ? 4 : 0;
+            skips = priority == QueueService.LOW_PRIORITY ? 4 : 0,
+            headers = new Headers(rawHeaders);
 
         requests.push(...urls.map((url) => queue.addRequest(
             {

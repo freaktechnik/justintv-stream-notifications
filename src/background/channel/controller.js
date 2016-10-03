@@ -14,6 +14,7 @@ import { flatten, partial, debounce } from "underscore";
 import * as debugDump from "./dump";
 import prefs from "../preferences";
 import * as logins from "../logins";
+import EventTarget from '../../event-target';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded

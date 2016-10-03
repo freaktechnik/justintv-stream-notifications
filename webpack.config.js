@@ -2,14 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const manifest = require("./webextension/manifest.json");
 
-const langs = [
-        "en",
-        "de",
-        "es_MX",
-        "hr",
-        "uk_UA"
-    ],
-    defaultLanguage = manifest.default_locale;
+const defaultLanguage = manifest.default_locale;
 
 module.exports = {
     entry: {
@@ -51,18 +44,14 @@ module.exports = {
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',
 		    chunks: [ 'manager' ],
-		    inject: 'head',
 		    favicon: 'webextension/assets/images/icon32.png',
-		    defaultLanguage,
-		    langs
+		    defaultLanguage
 	    }),
 	    new HtmlWebpackPlugin({
 	        template: 'src/list/index.html',
 	        filename: 'list/index.html',
 	        chunks: [ 'list' ],
-	        inject: 'head',
-	        defaultLanguage,
-	        langs
+	        defaultLanguage
         })
     ]
 };

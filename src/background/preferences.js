@@ -1,5 +1,6 @@
 import SDK from './sdk';
 import { emit } from "../utils";
+import EventTarget from '../event-target';
 
 //TODO move to storage.local & options_ui
 
@@ -19,7 +20,7 @@ class Preferences extends EventTarget {
         }
         else {
             return SDK.doAction({
-                target: "get-pref",
+                target: "get-pref-"+pref,
                 pref
             });
         }
@@ -27,14 +28,16 @@ class Preferences extends EventTarget {
 
     set(pref, value) {
         return SDK.doAction({
-            target: "set-pref",
+            target: "set-pref-"+pref,
             pref,
             value
         });
     }
 
     open() {
-        SDK.postMessage("pref-open");
+        SDK.postMessage({
+            target: "pref-open"
+        });
     }
 }
 

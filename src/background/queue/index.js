@@ -4,6 +4,7 @@
  * @license MPL-2.0
  * @module queue
  */
+import EventTarget from '../../event-target';
 
 /**
  * @typedef {Object} external:sdk/request.RequestOptions
@@ -82,13 +83,24 @@ export default class RequestQueue extends EventTarget {
      */
     getRequest(index) {
         const spec = this.queue[index];
-        fetch(spec.url, spec).then((response) => {
+        fetch(spec.url, {
+            headers: spec.headers
+        }).then((response) => {
+            console.log(response);
             return response.json().then((json) => {
+                console.log(json);
                 response.parsedJSON = json;
                 spec.onComplete(response);
             }, () => {
                 spec.onComplete(response);
             });
+        }, (error) => {
+            if(spec.onError) {
+                spec.onError(error);
+            }
+            else {
+                throw error;
+            }
         });
         return spec;
     }

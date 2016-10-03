@@ -13,6 +13,7 @@ import { emit } from "../utils";
 import prefs from "./preferences";
 import LiveState from "./channel/live-state";
 import providers from './providers';
+import EventTarget from '../event-target';
 
 /**
  * Should open the ChannelsManager.
@@ -143,7 +144,7 @@ class ListView extends EventTarget {
      */
     constructor() {
         super();
-        console.error("Constructing list");
+
         this._liveState = false;
         this.live = new Set();
         this.nonlive = new Set();
@@ -163,7 +164,7 @@ class ListView extends EventTarget {
     }
 
     _setupPort(port) {
-        console.error("Connecting to panel...");
+        console.log("Connecting to panel...");
         this.port = port;
 
         this.setNonLiveDisplay();
@@ -218,7 +219,7 @@ class ListView extends EventTarget {
         });
 
         this.port.onDisconnect.addListener(() => {
-            console.error("Disconnecting from panel..");
+            console.log("Disconnecting from panel..");
             this.port = null;
         });
     }
@@ -246,7 +247,7 @@ class ListView extends EventTarget {
             }
             else {
                 browser.browserAction.setBadgeText({
-                    text: null
+                    text: ""
                 });
             }
 
@@ -259,7 +260,7 @@ class ListView extends EventTarget {
         }
         else {
             browser.browserAction.setBadgeText({
-                text: null
+                text: ""
             });
             browser.browserAction.setIcon({
                 imageData: OFFLINE_ICONS
@@ -447,7 +448,8 @@ class ListView extends EventTarget {
      *
      * @param {number} theme - Theme type.
      */
-    setTheme(theme = this._theme) {
+    setTheme(theme) {
+        console.log("Setting theme to", theme, typeof theme);
         this._emitToList("theme", theme);
     }
 

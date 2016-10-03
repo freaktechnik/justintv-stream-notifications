@@ -82,20 +82,20 @@ class Twitch extends GenericProvider {
                         return this._qs.queueRequest(url, headers);
                     },
                     fetchNextPage(data) {
-                        return data.parseJSON && "follows" in data.parseJSON && data.parseJSON.follows.length == itemsPerPage;
+                        return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
                     },
                     getItems(data) {
-                        if(data.parseJSON && "follows" in data.parseJSON) {
-                            return data.parseJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                        if(data.parsedJSON && "follows" in data.parsedJSON) {
+                            return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
                         }
                         else {
                             return [];
                         }
                     }
                 }),
-                user = new User(data.parseJSON.name, this._type);
-            user.uname = data.parseJSON.display_name;
-            user.image = getImageObj(data.parseJSON.logo ? data.parseJSON.logo : defaultAvatar);
+                user = new User(data.parsedJSON.name, this._type);
+            user.uname = data.parsedJSON.display_name;
+            user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
             user.favorites = channels.map((channel) => channel.login);
 
             return [ user, channels ];
@@ -107,12 +107,12 @@ class Twitch extends GenericProvider {
     getChannelDetails(channelname) {
         console.info("twitch.getChannelDetails");
         return this._qs.queueRequest(baseURL + '/channels/' + channelname, headers).then((data) => {
-            if(data.parseJSON && !data.parseJSON.error) {
-                idOfChannel.set(data.parseJSON.name, data.parseJSON._id);
-                return getChannelFromJSON(data.parseJSON);
+            if(data.parsedJSON && !data.parsedJSON.error) {
+                idOfChannel.set(data.parsedJSON.name, data.parsedJSON._id);
+                return getChannelFromJSON(data.parsedJSON);
             }
             else {
-                throw data.parseJSON ? data.parseJSON.error : "Could not fetch details for " + this.name + " channel " + channelname;
+                throw data.parsedJSON ? data.parsedJSON.error : "Could not fetch details for " + this.name + " channel " + channelname;
             }
         });
     }
@@ -120,10 +120,10 @@ class Twitch extends GenericProvider {
         const urls = users.map((user) => baseURL + '/users/' + user.login);
 
         this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (data) => {
-            if(data.parseJSON && !data.parseJSON.error) {
-                const user = users.find((user) => user.login == data.parseJSON.name);
-                user.uname = data.parseJSON.display_name;
-                user.image = getImageObj(data.parseJSON.logo ? data.parseJSON.logo : defaultAvatar);
+            if(data.parsedJSON && !data.parsedJSON.error) {
+                const user = users.find((user) => user.login == data.parsedJSON.name);
+                user.uname = data.parsedJSON.display_name;
+                user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
 
                 new PaginationHelper({
                     url: baseURL + '/users/' + user.login + '/follows/channels?limit=' + itemsPerPage + '&offset=',
@@ -132,11 +132,11 @@ class Twitch extends GenericProvider {
                         return this._qs.queueRequest(url, headers);
                     },
                     fetchNextPage(data) {
-                        return data.parseJSON && "follows" in data.parseJSON && data.parseJSON.follows.length == itemsPerPage;
+                        return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
                     },
                     getItems(data) {
-                        if(data.parseJSON && "follows" in data.parseJSON) {
-                            return data.parseJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                        if(data.parsedJSON && "follows" in data.parsedJSON) {
+                            return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
                         }
                         else {
                             return [];
@@ -166,11 +166,11 @@ class Twitch extends GenericProvider {
                 }
             },
             fetchNextPage(data, pageSize) {
-                return data.parseJSON && "streams" in data.parseJSON && data.parseJSON.streams.length == pageSize;
+                return data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize;
             },
             getItems: (data) => {
-                if(data.parseJSON && "streams" in data.parseJSON) {
-                    let streams = data.parseJSON.streams;
+                if(data.parsedJSON && "streams" in data.parsedJSON) {
+                    let streams = data.parsedJSON.streams;
                     if(!prefs.twitch_showPlaylist) {
                         streams = streams.filter((s) => !s.is_playlist);
                     }
@@ -243,11 +243,11 @@ class Twitch extends GenericProvider {
             this.getChannelDetails(channelname)
         ]);
 
-        if(data.parseJSON && data.parseJSON.stream !== null &&
-           (!ignoreHosted || !data.parseJSON.stream.is_playlist)) {
-            channel.viewers = data.parseJSON.stream.viewers;
-            channel.thumbnail = data.parseJSON.stream.preview.medium;
-            if(data.parseJSON.stream.is_playlist) {
+        if(data.parsedJSON && data.parsedJSON.stream !== null &&
+           (!ignoreHosted || !data.parsedJSON.stream.is_playlist)) {
+            channel.viewers = data.parsedJSON.stream.viewers;
+            channel.thumbnail = data.parsedJSON.stream.preview.medium;
+            if(data.parsedJSON.stream.is_playlist) {
                 channel.live = new LiveState(LiveState.REBROADCAST);
                 try {
                     const meta = await this._getActivePlaylistInfo(channel);
@@ -287,11 +287,11 @@ class Twitch extends GenericProvider {
                     return this._qs.queueRequest(url, headers);
                 },
                 fetchNextPage(data) {
-                    return data.parseJSON && !data.parseJSON.error && data.parseJSON.streams.length == itemsPerPage;
+                    return data.parsedJSON && !data.parsedJSON.error && data.parsedJSON.streams.length == itemsPerPage;
                 },
                 getItems(data) {
-                    if(data.parseJSON && !data.parseJSON.error) {
-                        return data.parseJSON.streams;
+                    if(data.parsedJSON && !data.parsedJSON.error) {
+                        return data.parsedJSON.streams;
                     }
                     else {
                         return [];
@@ -354,8 +354,8 @@ class Twitch extends GenericProvider {
     }
     async getFeaturedChannels() {
         const data = await this._qs.queueRequest(baseURL + "/streams/featured", headers);
-        if(data.parseJSON && "featured" in data.parseJSON && data.parseJSON.featured.length) {
-            let chans = data.parseJSON.featured;
+        if(data.parsedJSON && "featured" in data.parsedJSON && data.parsedJSON.featured.length) {
+            let chans = data.parsedJSON.featured;
             if(await not(this._mature)) {
                 chans = chans.filter((chan) => !chan.stream.channel.mature);
             }
@@ -374,8 +374,8 @@ class Twitch extends GenericProvider {
     }
     async search(query) {
         const data = await this._qs.queueRequest(baseURL + "/search/streams?" + querystring.stringify({ q: query }), headers);
-        if(data.parseJSON && "streams" in data.parseJSON && data.parseJSON.streams.length) {
-            let chans = data.parseJSON.streams;
+        if(data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length) {
+            let chans = data.parsedJSON.streams;
             if(await not(this._mature)) {
                 chans = chans.filter((chan) => !chan.channel.mature);
             }
@@ -399,12 +399,12 @@ class Twitch extends GenericProvider {
         }
         else {
             return this._qs.queueRequest(baseURL + "/channels/" + channel.login, headers).then((resp) => {
-                if(resp.parseJSON && "_id" in resp.parseJSON) {
-                    idOfChannel.set(channel.login, resp.parseJSON._id);
-                    if(channel.login != resp.parseJSON.name) {
-                        idOfChannel.set(resp.parseJSON.name, resp.parseJSON._id);
+                if(resp.parsedJSON && "_id" in resp.parsedJSON) {
+                    idOfChannel.set(channel.login, resp.parsedJSON._id);
+                    if(channel.login != resp.parsedJSON.name) {
+                        idOfChannel.set(resp.parsedJSON.name, resp.parsedJSON._id);
                     }
-                    return resp.parseJSON._id;
+                    return resp.parsedJSON._id;
                 }
                 else {
                     return null;
@@ -423,9 +423,9 @@ class Twitch extends GenericProvider {
                     host: channelIds.join(",")
                 }));
 
-            if(data.parseJSON && "hosts" in data.parseJSON && data.parseJSON.hosts.length) {
+            if(data.parsedJSON && "hosts" in data.parsedJSON && data.parsedJSON.hosts.length) {
                 // Check each hosted channel for his status
-                return Promise.all(data.parseJSON.hosts.map(async (hosting) => {
+                return Promise.all(data.parsedJSON.hosts.map(async (hosting) => {
                     let chan = channels.find((ch) => ch.login === hosting.host_login);
                     if(chan === undefined) {
                         chan = await this.updateChannel(hosting.host_login, true);
@@ -494,14 +494,14 @@ class Twitch extends GenericProvider {
         const id = await this._getChannelId(channel),
             playlist = await this._qs.queueRequest("https://api.twitch.tv/api/playlists/channels/" + id, headers);
 
-        if(playlist.parseJSON && playlist.parseJSON.enabled && playlist.parseJSON.active && playlist.parseJSON.playhead) {
-            const playhead = playlist.parseJSON.playhead,
+        if(playlist.parsedJSON && playlist.parsedJSON.enabled && playlist.parsedJSON.active && playlist.parsedJSON.playhead) {
+            const playhead = playlist.parsedJSON.playhead,
                 vod = await this._qs.queueRequest(baseURL + "/videos/v" + playhead.vods[playhead.active_vod_index].id, headers);
-            if(vod.parseJSON) {
+            if(vod.parsedJSON) {
                 return {
-                    title: vod.parseJSON.title,
-                    game: vod.parseJSON.game,
-                    thumbnail: vod.parseJSON.preview
+                    title: vod.parsedJSON.title,
+                    game: vod.parsedJSON.game,
+                    thumbnail: vod.parsedJSON.preview
                 };
             }
             else {

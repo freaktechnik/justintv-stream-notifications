@@ -9,6 +9,7 @@
 import { prefs } from "../preferences";
 import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
+import EventTarget from '../../event-target';
 
 const _ = browser.i18n.getMessage;
 

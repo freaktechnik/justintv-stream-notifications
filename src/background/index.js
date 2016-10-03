@@ -1,4 +1,3 @@
-import Notifier from "./notifier";
 import SDK from "./sdk";
 import { selectOrOpenTab } from "./channel/utils";
 import ChannelController from "./channel/controller";
@@ -7,9 +6,9 @@ import LiveState from './channel/live-state';
 import ListView from './list';
 import serializedProviders from "./providers/serialized";
 import * as qs from './queue/service';
+import Notifier from "./notifier";
 
-const PASSIVE_LISTENER = { passive: true },
-    S_TO_MS_FACTOR = 1000;
+const S_TO_MS_FACTOR = 1000;
 
 // Init things
 
@@ -31,17 +30,18 @@ list.addEventListener("ready", () => {
         "panel_extras",
         "theme"
     ]).then(([ updateInterval, style, extras, theme ]) => {
+        console.log(updateInterval, style, extras, theme);
         list.setQueueStatus(parseInt(updateInterval, 10) !== 0);
         list.setStyle(parseInt(style, 10));
         list.setExtrasVisibility(extras);
         list.setTheme(parseInt(theme, 10));
     });
-}, PASSIVE_LISTENER);
+});
 
-list.addEventListener("opencm", () => controller.showManager(), PASSIVE_LISTENER);
+list.addEventListener("opencm", () => controller.showManager());
 list.addEventListener("addchannel", ({ detail: [ login, type ] }) => {
     controller.addChannel(login, type);
-}, PASSIVE_LISTENER);
+});
 list.addEventListener("refresh", ({ detail: channelId }) => {
     if(channelId) {
         controller.updateChannel(channelId);
@@ -49,7 +49,7 @@ list.addEventListener("refresh", ({ detail: channelId }) => {
     else {
         controller.updateChannels();
     }
-}, PASSIVE_LISTENER);
+});
 list.addEventListener("open", ({ detail: [ channelId, what ] }) => {
     let p;
     if(typeof channelId === "string") {
@@ -63,9 +63,9 @@ list.addEventListener("open", ({ detail: [ channelId, what ] }) => {
     }
 
     p.then((channel) => selectOrOpenTab(channel, what));
-}, PASSIVE_LISTENER);
-list.addEventListener("pause", () => qs.pause(), PASSIVE_LISTENER);
-list.addEventListener("resume", () => qs.resume(), PASSIVE_LISTENER);
+});
+list.addEventListener("pause", () => qs.pause());
+list.addEventListener("resume", () => qs.resume());
 list.addEventListener("copy", ({ detail: [ channel, type ] }) => {
     controller.copyChannelURL(channel, type).then((channel) => {
         notifier.notifyCopied(channel.uname);
@@ -77,26 +77,26 @@ list.addEventListener("copy", ({ detail: [ channel, type ] }) => {
 notifier.addEventListener("click", async ({ detail: channelId }) => {
     const channel = await controller.getChannel(channelId);
     selectOrOpenTab(channel);
-}, PASSIVE_LISTENER);
+});
 
 controller.addEventListener("channelupdated", ({ detail: channel }) => {
     notifier.sendNotification(channel);
     list.onChannelChanged(channel);
-}, PASSIVE_LISTENER);
+});
 
 controller.addEventListener("channelsadded", ({ detail: channels }) => {
     list.addChannels(channels);
     channels.forEach((channel) => notifier.sendNotification(channel));
-}, PASSIVE_LISTENER);
+});
 
 controller.addEventListener("channeldeleted", ({ detail: channelId }) => {
     notifier.onChannelRemoved(channelId);
     list.removeChannel(channelId);
-}, PASSIVE_LISTENER);
+});
 
-controller.addEventListener("beforechanneldeleted", () => qs.pause(), PASSIVE_LISTENER);
+controller.addEventListener("beforechanneldeleted", () => qs.pause());
 //TODO do counting instead of relying on randomness being in our favor ;)
-controller.addEventListener("afterchanneldeleted", () => qs.resume(), PASSIVE_LISTENER);
+controller.addEventListener("afterchanneldeleted", () => qs.resume());
 
 prefs.get([
     "theme",
@@ -148,7 +148,7 @@ prefs.addEventListener("change", ({ detail: { pref, value } }) => {
         qs.updateOptions(S_TO_MS_FACTOR * interval);
         list.setQueueStatus(interval !== 0);
     }
-}, PASSIVE_LISTENER);
+});
 
 // Do migration of channel data if necessary
 browser.storage.local.get("migrated").then((value) => {

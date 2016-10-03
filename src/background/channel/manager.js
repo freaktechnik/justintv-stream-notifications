@@ -6,6 +6,7 @@
  * @module channel/manager
  */
 import { emit } from "../../utils";
+import EventTarget from '../../event-target';
 
 const MANAGER_URL = browser.runtime.getURL("manager/index.html");
 
@@ -244,6 +245,9 @@ export default class ChannelsManager extends EventTarget {
      */
     _emitToWorker(target, ...data) {
         if(this.port !== null) {
+            if(data.length == 1) {
+                data = data[0];
+            }
             this.port.postMessage({
                 target,
                 data
@@ -258,8 +262,8 @@ export default class ChannelsManager extends EventTarget {
      */
     open() {
         if(this.tabID === null) {
-            return browser.tabs.open({
-                url: "./channels-manager.html"
+            return browser.tabs.create({
+                url: "./manager/index.html"
             }).then((tab) => {
                 this.tabID = tab.id;
                 return tab;

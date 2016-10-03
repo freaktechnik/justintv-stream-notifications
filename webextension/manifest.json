@@ -41,5 +41,5 @@
         "alarms",
         "clipboardWrite"
     ],
-    "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; child-src 'none'; frame-ancestors 'none'; media-src 'none'"
+    "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; child-src 'none'; media-src 'none'"
 }
