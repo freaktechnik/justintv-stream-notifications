@@ -321,19 +321,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('remap-istanbul');
 
-    grunt.registerTask('jpmtest', 'Runs tests with jpm', function(verbose) {
-        var done = this.async();
-        var isVerbose = verbose !== "undefined";
-        require("jpm/lib/test")(grunt.config('pkg'), {
-            binary: grunt.config('firefoxBinary'),
-            addonDir: require("path").resolve("build/"),
-            verbose: isVerbose,
-            stopOnError: isVerbose
-        }).then(function(r) { done(r.code === 0); }, function(e) {
-            done(e);
-        });
-    });
-
     grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
         global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");

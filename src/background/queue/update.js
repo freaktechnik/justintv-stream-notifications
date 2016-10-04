@@ -113,7 +113,6 @@ export default class UpdateQueue extends PauseableQueue {
             console.log("[Queue]> Getting " + this.queue[index].url);
 
             const req = super.getRequest(index);
-            console.log(req);
             if(req.persist) {
 
                 // explication of the skipping logic in the addRequest method

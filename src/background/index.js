@@ -16,8 +16,6 @@ const notifier = new Notifier(),
     controller = new ChannelController(),
     list = new ListView();
 
-console.log("Constructed list");
-
 list.addEventListener("ready", () => {
     controller.getChannelsByType()
         .then((channels) => list.addChannels(channels));
@@ -30,7 +28,6 @@ list.addEventListener("ready", () => {
         "panel_extras",
         "theme"
     ]).then(([ updateInterval, style, extras, theme ]) => {
-        console.log(updateInterval, style, extras, theme);
         list.setQueueStatus(parseInt(updateInterval, 10) !== 0);
         list.setStyle(parseInt(style, 10));
         list.setExtrasVisibility(extras);

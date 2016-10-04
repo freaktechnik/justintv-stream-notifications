@@ -10,6 +10,7 @@ import '../content/l10n';
 import './list.css';
 import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
+import LiveState from '../background/channel/live-state';
 
 const port = browser.runtime.connect({ name: "list" });
 
@@ -46,6 +47,7 @@ const CHANNEL_ID_PREFIX = "channel",
             subtarget: ".category"
         }
     ],
+    channelIsLive = (channel) => channel.live.state == LiveState.LIVE || (nonLiveDisplay < 3 && channel.live.state > LiveState.LIVE),
     getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10),
     contextMenuCommand = (event) => {
         port.postMessage({
@@ -139,13 +141,14 @@ const CHANNEL_ID_PREFIX = "channel",
         }
     },
     insertChannel = (channel, node) => {
-        if(channel.live.isLive && (channel.live.state <= 0 || nonLiveDisplay === 0)) {
+        const isNonLive = channel.live.state >= LiveState.REDIRECT;
+        if(channel.live.state == LiveState.LIVE || (nonLiveDisplay === 0 && isNonLive)) {
             insertBefore(live, node, channel.uname);
         }
-        else if(channel.live.isLive && nonLiveDisplay == 1) {
+        else if(isNonLive && nonLiveDisplay == 1) {
             insertBefore(secondaryLive, node, channel.uname);
         }
-        else if(channel.live.isLive && nonLiveDisplay == 2) {
+        else if(isNonLive && nonLiveDisplay == 2) {
             insertBefore(distinct, node, channel.uname);
         }
         else {
@@ -195,7 +198,7 @@ const CHANNEL_ID_PREFIX = "channel",
         channelNode.querySelector(".title").textContent = channel.title;
         channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
         toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
-        toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == 2);
+        toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == LiveState.REBROADCAST);
         if(!("viewers" in channel) || channel.viewers < 0) {
             hide(channelNode.querySelector(".viewersWrapper"));
         }
@@ -213,7 +216,7 @@ const CHANNEL_ID_PREFIX = "channel",
         else {
             channelNode.id = EXPLORE_ID_PREFIX + channel.login;
             channelNode.dataset.url = channel.url[0];
-            channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channel.live.isLive ? channel.url[0] : channel.archiveUrl));
+            channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channelIsLive(channel) ? channel.url[0] : channel.archiveUrl));
         }
         channelNode.addEventListener("contextmenu", contextMenuListener);
 
@@ -233,7 +236,7 @@ const CHANNEL_ID_PREFIX = "channel",
 
         insertChannel(channel, channelNode);
         hideNoChannels();
-        if(channel.live.isLive) {
+        if(channelIsLive(channel)) {
             hideNoOnline();
         }
     },
@@ -268,7 +271,7 @@ const CHANNEL_ID_PREFIX = "channel",
         nameNode.textContent = channel.uname;
         channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
         toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
-        toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == 2);
+        toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == LiveState.REBROADCAST);
 
         viewers.textContent = channel.viewers;
         toggle(channelNode.querySelector(".viewersWrapper"), ("viewers" in channel) && channel.viewers > 0);
@@ -276,11 +279,11 @@ const CHANNEL_ID_PREFIX = "channel",
         category.textContent = channel.category;
         toggle(channelNode.querySelector(".categoryWrapper"), !!channel.category);
 
-        channelNode.classList.toggle("nonlive", channel.live.state > 0);
+        channelNode.classList.toggle("nonlive", channel.live.state > LiveState.LIVE);
 
         // only update images if the user is online to avoid broken images
         if(navigator.onLine) {
-            if(channel.live.isLive) {
+            if(channelIsLive(channel)) {
                 channelNode.querySelector("a>img").setAttribute("src", channel.thumbnail + "?timestamp=" + Date.now());
             }
 
@@ -484,9 +487,9 @@ port.onMessage.addListener((event) => {
         }
         else {
             hide(document.getElementById("noresults"));
-            channels.forEach((channel) => {
-                explore.appendChild(buildChannel(channel, true));
-            });
+            explore.append.apply(explore, channels.map((channel) => {
+                return buildChannel(channel, true);
+            }));
         }
 
         hideLoading();

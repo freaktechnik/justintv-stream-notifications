@@ -154,8 +154,7 @@ class LiveState {
         return {
             state: this.state,
             alternateUsername: this.alternateUsername,
-            alternateURL: this.alternateURL,
-            isLive: this.isLive()
+            alternateURL: this.alternateURL
         };
     }
     /**

@@ -82,7 +82,9 @@ export default class ChannelController extends EventTarget {
          */
         this._queue = [];
 
-        const managerError = (name, type, itemType, canceled = () => false) => {
+        const managerError = (e, name, type, itemType, canceled = () => false) => {
+                console.error("loading", itemType, ":", name, type, "an error occured");
+                console.error(e);
                 if(canceled()) {
                     this._manager.onCancel(name, type, itemType);
                 }
@@ -103,13 +105,13 @@ export default class ChannelController extends EventTarget {
         this._manager = new ChannelsManager();
         this._manager.addEventListener("addchannel", ({ detail: [ name, type, canceled ] }) => this.addChannel(name, type, canceled)
                             .then(() => this._manager._deleteCancelingValue("channel", type, name),
-                                  () => managerError(name, type, "channel", canceled)));
+                                  (e) => managerError(e, name, type, "channel", canceled)));
         this._manager.addEventListener("removechannel", ({ detail }) => this.removeChannel(detail));
         this._manager.addEventListener("updatechannel", ({ detail }) => this.updateChannel(detail)
                             .catch(managerDoneLoading));
         this._manager.addEventListener("adduser", ({ detail: [ username, type, canceled ] }) => this.addUser(username, type, canceled)
                             .then(() => this._manager._deleteCancelingValue("user", type, username),
-                                  () => managerError(username, type, "user", canceled)));
+                                  (e) => managerError(e, username, type, "user", canceled)));
         this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(detail));
         this._manager.addEventListener("updatefavorites", ({ detail }) => this.updateUser(detail)
                             .catch(managerDoneLoading));

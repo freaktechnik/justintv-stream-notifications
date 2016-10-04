@@ -53,5 +53,6 @@ module.exports = {
 	        chunks: [ 'list' ],
 	        defaultLanguage
         })
-    ]
+    ],
+    devtool: "inline-source-map"
 };

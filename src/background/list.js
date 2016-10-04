@@ -150,7 +150,6 @@ class ListView extends EventTarget {
         this.nonlive = new Set();
 
         browser.runtime.onConnect.addListener((port) => {
-            console.error(port);
             if(port.name == "list") {
                 this._setupPort(port);
             }
@@ -164,7 +163,6 @@ class ListView extends EventTarget {
     }
 
     _setupPort(port) {
-        console.log("Connecting to panel...");
         this.port = port;
 
         this.setNonLiveDisplay();
@@ -219,7 +217,6 @@ class ListView extends EventTarget {
         });
 
         this.port.onDisconnect.addListener(() => {
-            console.log("Disconnecting from panel..");
             this.port = null;
         });
     }
@@ -449,7 +446,6 @@ class ListView extends EventTarget {
      * @param {number} theme - Theme type.
      */
     setTheme(theme) {
-        console.log("Setting theme to", theme, typeof theme);
         this._emitToList("theme", theme);
     }
 
@@ -460,7 +456,6 @@ class ListView extends EventTarget {
      * @param {module:channel/core.Channel} channel - Channel that changed.
      */
     onChannelChanged(channel) {
-        console.log("updating state for", channel.login);
         if(channel.live.state > 0 && this.nonLiveDisplay === ListView.LIVE_DISTINCT) {
             this.setChannelDistinct(channel);
         }
@@ -472,7 +467,7 @@ class ListView extends EventTarget {
         }
     }
 
-    setFeatured(channels, type, q) {
+    setFeatured(channels, type, q = null) {
         this._emitToList("setFeatured", { channels, type, q });
     }
 }

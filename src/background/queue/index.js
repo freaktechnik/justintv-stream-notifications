@@ -82,13 +82,11 @@ export default class RequestQueue extends EventTarget {
      * @param {number} index - Index of the request to fetch.
      */
     getRequest(index) {
-        const spec = this.queue[index];
+        const spec = this.queue.splice(index, 1)[0];
         fetch(spec.url, {
             headers: spec.headers
         }).then((response) => {
-            console.log(response);
             return response.json().then((json) => {
-                console.log(json);
                 response.parsedJSON = json;
                 spec.onComplete(response);
             }, () => {

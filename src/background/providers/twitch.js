@@ -356,7 +356,7 @@ class Twitch extends GenericProvider {
         const data = await this._qs.queueRequest(baseURL + "/streams/featured", headers);
         if(data.parsedJSON && "featured" in data.parsedJSON && data.parsedJSON.featured.length) {
             let chans = data.parsedJSON.featured;
-            if(await not(this._mature)) {
+            if(await not(this._mature())) {
                 chans = chans.filter((chan) => !chan.stream.channel.mature);
             }
 
@@ -376,7 +376,7 @@ class Twitch extends GenericProvider {
         const data = await this._qs.queueRequest(baseURL + "/search/streams?" + querystring.stringify({ q: query }), headers);
         if(data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length) {
             let chans = data.parsedJSON.streams;
-            if(await not(this._mature)) {
+            if(await not(this._mature())) {
                 chans = chans.filter((chan) => !chan.channel.mature);
             }
 

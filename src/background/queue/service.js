@@ -102,7 +102,6 @@ class QueueService {
                         });
                     }
                     else {
-                        console.log("passing on to the provider");
                         resolve(data);
                     }
                 },
@@ -146,7 +145,7 @@ class QueueService {
      * @param {module:queue/service~updateRequestCallback} callback - Called
      *                                           whenever a request is done (for
      *                                           each provided URL).
-     * @param {Object.<string,string>} [headers={}] - An object with header-value
+     * @param {Object.<string,string>} [rawHeaders={}] - An object with header-value
      *                                                pairs to send with the
      *                                                request.
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]

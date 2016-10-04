@@ -20,7 +20,7 @@ class Preferences extends EventTarget {
         }
         else {
             return SDK.doAction({
-                target: "get-pref-"+pref,
+                target: "get-pref-" + pref,
                 pref
             });
         }
@@ -28,7 +28,7 @@ class Preferences extends EventTarget {
 
     set(pref, value) {
         return SDK.doAction({
-            target: "set-pref-"+pref,
+            target: "set-pref-" + pref,
             pref,
             value
         });
