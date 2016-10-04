@@ -64,20 +64,20 @@ import EventTarget from '../event-target';
  */
 
 const LIVE_ICONS = {
-        "16": "images/icon16.png",
-        "18": "images/icon18.png",
-        "32": "images/icon32.png",
-        "36": "images/icon36.png",
-        "48": "images/icon48.png",
-        "64": "images/icon64.png"
+        "16": "assets/images/icon16.png",
+        "18": "assets/images/icon18.png",
+        "32": "assets/images/icon32.png",
+        "36": "assets/images/icon36.png",
+        "48": "assets/images/icon48.png",
+        "64": "assets/images/icon64.png"
     },
     OFFLINE_ICONS = {
-        "16": "images/offline16.png",
-        "18": "images/offline18.png",
-        "32": "images/offline32.png",
-        "36": "images/offline36.png",
-        "48": "images/offline48.png",
-        "64": "images/offline64.png"
+        "16": "assets/images/offline16.png",
+        "18": "assets/images/offline18.png",
+        "32": "assets/images/offline32.png",
+        "36": "assets/images/offline36.png",
+        "48": "assets/images/offline48.png",
+        "64": "assets/images/offline64.png"
     },
     _ = browser.i18n.getMessage;
 
@@ -201,9 +201,11 @@ class ListView extends EventTarget {
                           () => this.setFeatured([], event.type, event.query));
             }
             else if(event.target == "explore") {
-                providers[event.type].getFeaturedChannels()
-                    .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.type),
-                          () => this.setFeatured([], event.type));
+                if(event.type) {
+                    providers[event.type].getFeaturedChannels()
+                        .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.type),
+                              () => this.setFeatured([], event.type));
+                }
             }
             else if(event.target == "copy") {
                 emit(this, "copy", event.channelId);
@@ -239,7 +241,7 @@ class ListView extends EventTarget {
         if(size > 0) {
             if(await prefs.get("panel_badge")) {
                 browser.browserAction.setBadgeText({
-                    text: size
+                    text: size.toString()
                 });
             }
             else {
@@ -249,7 +251,7 @@ class ListView extends EventTarget {
             }
 
             browser.browserAction.setIcon({
-                imageData: LIVE_ICONS
+                path: LIVE_ICONS
             });
             browser.browserAction.setTitle({
                 title: _("listTooltipLive")
@@ -260,7 +262,7 @@ class ListView extends EventTarget {
                 text: ""
             });
             browser.browserAction.setIcon({
-                imageData: OFFLINE_ICONS
+                path: OFFLINE_ICONS
             });
             browser.browserAction.setTitle({
                 title: _("listTooltipOffline")

@@ -14,9 +14,6 @@ import GenericProvider from "./generic-provider";
 
 const type = "youtube",
     apiKey = prefs.get('youtube_apiKey'),
-    headers = {
-        Referer: "extension:jtvn.humanoids.be"
-    },
     baseURL = "https://www.googleapis.com/youtube/v3/",
     getLocale = () => {
         return browser.i18n.getUILanguage();
@@ -44,7 +41,7 @@ class YouTube extends GenericProvider {
                 "id": categoryId,
                 "hl": getLocale(),
                 "key": await apiKey
-            }), headers);
+            }));
 
             if(data.parsedJSON && "items" in data.parsedJSON && data.parsedJSON.items.length) {
                 return data.parsedJSON.items[0].snippet.title;
@@ -62,7 +59,7 @@ class YouTube extends GenericProvider {
                 id: channelId,
                 fields: "items(snippet/title,snippet/thumbnails)",
                 key: await apiKey
-            }), headers);
+            }));
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
             const ch = new Channel(channelId, this._type);
             ch.url.push("https://youtube.com/channel/" + ch.login + "/live");
@@ -87,7 +84,7 @@ class YouTube extends GenericProvider {
                 forUsername: username,
                 fields: "items(id,snippet/title,snippet/thumbnails)",
                 key: await apiKey
-            }), headers);
+            }));
 
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
             const ch = new User(data.parsedJSON.items[0].id, this._type);
@@ -108,7 +105,7 @@ class YouTube extends GenericProvider {
                 pageSize: subsOptions.maxResults,
                 initialPage: "",
                 request: (url) => {
-                    return this._qs.queueRequest(url, headers);
+                    return this._qs.queueRequest(url);
                 },
                 getPageNumber(page, pageSize, data) {
                     return data.parsedJSON.nextPageToken;
@@ -158,7 +155,7 @@ class YouTube extends GenericProvider {
                 forUsername: username,
                 fields: "items(id,snippet/title,snippet/thumbnails)",
                 key: await apiKey
-            }), headers);
+            }));
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
             const ch = new Channel(data.parsedJSON.items[0].id, this._type);
             ch.url.push("https://youtube.com/channel/" + ch.login);
@@ -204,7 +201,7 @@ class YouTube extends GenericProvider {
                     pageSize: subsOptions.maxResults,
                     initialPage: "",
                     request: (url) => {
-                        return this._qs.queueRequest(url, headers);
+                        return this._qs.queueRequest(url);
                     },
                     getPageNumber(page, pageSize, data) {
                         return data.parsedJSON.nextPageToken;
@@ -245,7 +242,7 @@ class YouTube extends GenericProvider {
                     console.warn("Can't get favorites for youtube user " + ch.uname + " without oAuth as somebody with reading rights of this user's subs.");
                 }
             }
-        }, headers);
+        });
     }
     async updateRequest(channels) {
         let offlineCount = 0;
@@ -268,7 +265,7 @@ class YouTube extends GenericProvider {
                     fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
                     key: await apiKey,
                     hl: getLocale()
-                }), headers);
+                }));
                 if(videos.parsedJSON && videos.parsedJSON.items) {
                     return Promise.all(videos.parsedJSON.items.map((video) => {
                         return this._getCategory(video.snippet.categoryId).then((category) => {
@@ -322,7 +319,7 @@ class YouTube extends GenericProvider {
                 emit(this, "updatedchannels", channel);
                 done();
             }
-        }, headers);
+        });
     }
     async updateChannel(channellogin) {
         const [ ch, response ] = await Promise.all([
@@ -335,7 +332,7 @@ class YouTube extends GenericProvider {
                 eventType: "live",
                 type: "video",
                 key
-            }), headers))
+            })))
         ]);
 
         if(response.parsedJSON && response.parsedJSON.items) {
@@ -350,7 +347,7 @@ class YouTube extends GenericProvider {
                     fields: "items(snippet(categoryId,title,thumbnails/medium/url),liveStreamingDetails/concurrentViewers)",
                     key: await apiKey,
                     hl: getLocale()
-                }), headers);
+                }));
                 if(video.parsedJSON && video.parsedJSON.items) {
                     ch.title = video.parsedJSON.items[0].snippet.title;
                     ch.thumbnail = video.parsedJSON.items[0].snippet.thumbnails.medium.url;
@@ -376,20 +373,16 @@ class YouTube extends GenericProvider {
                 eventType: "live",
                 type: "video",
                 key: await apiKey
-            }), headers);
+            }));
             if(!response.parsedJSON || !response.parsedJSON.items || !response.parsedJSON.items.length) {
                 channel.live.setLive(false);
                 channel.url = [ "https://youtube.com/channel/" + channel.login ];
+                return null;
             }
-            return response;
+            return response.parsedJSON.items[0].id.videoId;
         }));
 
-        streamIds = streamIds.map((response) => {
-            if(response.parsedJSON && response.parsedJSON.items && response.parsedJSON.items.length) {
-                return response.parsedJSON.items[0].id.videoId;
-            }
-            return null;
-        }).filter((id) => id !== null);
+        streamIds = streamIds.filter((id) => id !== null);
 
         const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify({
             part: "id, snippet, liveStreamingDetails",
@@ -397,7 +390,7 @@ class YouTube extends GenericProvider {
             fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
             key: await apiKey,
             hl: getLocale()
-        }), headers);
+        }));
 
         if(videos.parsedJSON && videos.parsedJSON.items) {
             await Promise.all(videos.parsedJSON.items.map((video) => {
@@ -432,9 +425,9 @@ class YouTube extends GenericProvider {
             safeSearch: (await this._mature()) ? "moderate" : "strict",
             q: query,
             key: await apiKey
-        }), headers);
+        }));
 
-        let streamIds = [];
+        let streamIds;
         if(response.parsedJSON && response.parsedJSON.items && response.parsedJSON.items.length) {
             streamIds = response.parsedJSON.items.map((entry) => entry.id.videoId);
         }
@@ -444,16 +437,16 @@ class YouTube extends GenericProvider {
 
         const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify(
             {
-                part: "id, snippet, liveStreamingDetails",
+                part: "id,snippet,liveStreamingDetails",
                 id: streamIds.join(","),
                 fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
                 key: (await apiKey),
                 hl: getLocale()
             }
-         ), headers);
+         ));
 
         if(videos.parsedJSON && videos.parsedJSON.items) {
-            return await Promise.all(videos.parsedJSON.items.map(async (video) => {
+            return Promise.all(videos.parsedJSON.items.map(async (video) => {
                 const channel = await this._getChannelById(video.snippet.channelId);
                 channel.live.setLive(true);
                 channel.url = [

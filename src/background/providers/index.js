@@ -15,7 +15,6 @@ import azubu from "./azubu";
 import beam from "./beam";
 import picarto from "./picarto";
 import newlivestream from "./new-livestream";
-import streamup from "./streamup";
 import douyutv from "./douyutv";
 import dailymotion from "./dailymotion";
 
@@ -30,7 +29,6 @@ export default {
     beam,
     picarto,
     newlivestream,
-    streamup,
     douyutv,
     dailymotion
 };

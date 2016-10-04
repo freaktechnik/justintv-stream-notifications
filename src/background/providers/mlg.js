@@ -37,10 +37,10 @@ import GenericProvider from "./generic-provider";
 import LiveState from "../channel/live-state";
 
 const type = "mlg",
-    chatURL = "http://chat.majorleaguegaming.com/",
-    baseURL = 'http://streamapi.majorleaguegaming.com/service/streams/',
-    infoURL = 'http://www.majorleaguegaming.com/api/channels/all.js',
-    gameURL = 'http://www.majorleaguegaming.com/api/games/all.js',
+    chatURL = "https://chat.majorleaguegaming.com/",
+    baseURL = 'https://streamapi.majorleaguegaming.com/service/streams/',
+    infoURL = 'https://www.majorleaguegaming.com/api/channels/all.js',
+    gameURL = 'https://www.majorleaguegaming.com/api/games/all.js',
     infoArgs = "?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id";
 
 /**
@@ -64,8 +64,6 @@ function isLive(status) {
 let games = [];
 
 class MLG extends GenericProvider {
-    authURL = [ "http://mlg.tv" ];
-
     async _getGame(id) {
         const game = games.find((g) => g.id == id);
         if(!game) {
@@ -75,7 +73,7 @@ class MLG extends GenericProvider {
                 return data.parsedJSON.data.items.find((g) => g.id == id).name;
             }
             else {
-                throw data.parsedJSON ? data.json.errors : "Could not fetch games for " + this.name;
+                throw data.parsedJSON ? data.parsedJSON.errors : "Could not fetch games for " + this.name;
             }
         }
         else {
@@ -106,11 +104,11 @@ class MLG extends GenericProvider {
         const data = await this._qs.queueRequest(infoURL + infoArgs);
         if(data.ok && data.parsedJSON.status_code == 200) {
             const cho = data.parsedJSON.data.items.find((ch) => ch.slug.toLowerCase() == channelname.toLowerCase());
-            return this._getChannelFromJSON(cho);
+            if(cho) {
+                return this._getChannelFromJSON(cho);
+            }
         }
-        else {
-            throw "Couldn't get the channel details for " + channelname + " for " + this.name;
-        }
+        throw "Couldn't get the channel details for " + channelname + " for " + this.name;
     }
     updateRequest(channels) {
         this._qs.queueUpdateRequest([ baseURL + "all" ], this._qs.HIGH_PRIORITY, async (data) => {

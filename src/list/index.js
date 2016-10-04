@@ -10,7 +10,7 @@ import '../content/l10n';
 import './list.css';
 import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
-import LiveState from '../background/channel/live-state';
+import LiveState from '../live-state';
 
 const port = browser.runtime.connect({ name: "list" });
 

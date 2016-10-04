@@ -141,10 +141,6 @@
         "message": "Picarto.TV",
         "description": "Provider name for picarto.tv"
     },
-    "providerstreamup": {
-        "message": "Streamup",
-        "description": "Provider name for streamup.com"
-    },
     "providertwitch": {
         "message": "Twitch",
         "description": "Provider name for twitch.tv"

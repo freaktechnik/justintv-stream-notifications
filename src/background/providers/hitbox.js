@@ -13,9 +13,9 @@ import { not } from '../logic';
 
 const type = "hitbox",
     archiveURL = "/videos",
-    chatURL = "http://hitbox.tv/embedchat/",
+    chatURL = "https://hitbox.tv/embedchat/",
     pageSize = 100,
-    baseURL = "http://api.hitbox.tv",
+    baseURL = "https://api.hitbox.tv",
     cdnURL = "http://edge.sf.hitbox.tv";
 
 function getChannelFromJson(json) {

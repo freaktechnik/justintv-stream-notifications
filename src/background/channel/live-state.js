@@ -8,6 +8,7 @@
  */
 import { omit } from "underscore";
 import prefs from "../preferences";
+import LiveStateConst from '../../live-state';
 
 /**
  * @typedef {number} LiveStateIndicator
@@ -26,12 +27,12 @@ import prefs from "../preferences";
  */
 
 const IGNORED_PROPERTIES = [ "state", "isLive" ],
-    OFFLINE = -1,
-    LIVE = 0,
-    REDIRECT = 1,
-    REBROADCAST = 2,
-    TOWARD_LIVE = 0,
-    TOWARD_OFFLINE = 1,
+    OFFLINE = LiveStateConst.OFFLINE,
+    LIVE = LiveStateConst.LIVE,
+    REDIRECT = LiveStateConst.REDIRECT,
+    REBROADCAST = LiveStateConst.REBROADCAST,
+    TOWARD_LIVE = LiveStateConst.TOWARD_LIVE,
+    TOWARD_OFFLINE = LiveStateConst.TOWARD_OFFLINE,
     getDefaultInterpretation = () => {
         return prefs.get("panel_nonlive").then((value) => {
             return parseInt(value, 10) < 3 ? TOWARD_LIVE : TOWARD_OFFLINE;

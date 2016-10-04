@@ -21,15 +21,15 @@ function getChannelFromJSON(jsonChannel) {
         ret.archiveUrl = jsonChannel.originalUrl;
     }
     if("url" in jsonChannel) {
-        ret.url.push("http://ustream.tv/channel/" + jsonChannel.url);
+        ret.url.push("http://www.ustream.tv/channel/" + jsonChannel.url);
         if(!ret.archiveUrl) {
-            ret.archiveUrl = "http://ustream.tv/channel/" + jsonChannel.url;
+            ret.archiveUrl = "http://www.ustream.tv/channel/" + jsonChannel.url;
         }
     }
     if("tinyurl" in jsonChannel) {
         ret.url.push(jsonChannel.tinyurl);
         if(!ret.archiveUrl) {
-            ret.archiveUrl = "http://ustream.tv/channel/" + jsonChannel.url;
+            ret.archiveUrl = "http://www.ustream.tv/channel/" + jsonChannel.url;
         }
     }
     ret.chatUrl = chatURL + jsonChannel.id;
@@ -62,11 +62,11 @@ class Ustream extends GenericProvider {
     authURL = [ "http://ustream.tv" ];
 
     async getChannelDetails(channelname) {
-        let data = await this._qs.queueRequest("http://ustream.tv/" + channelname),
+        let data = await this._qs.queueRequest("http://www.ustream.tv/" + channelname),
             retried = false;
 
         if(!data.ok) {
-            data = await this._qs.queueRequest("http://ustream.tv/channel/" + channelname);
+            data = await this._qs.queueRequest("http://www.ustream.tv/channel/" + channelname);
             if(!data.ok) {
                 throw "Error getting channel details for channel " + channelname;
             }

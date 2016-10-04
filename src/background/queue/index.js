@@ -84,15 +84,18 @@ export default class RequestQueue extends EventTarget {
     getRequest(index) {
         const spec = this.queue.splice(index, 1)[0];
         fetch(spec.url, {
-            headers: spec.headers
+            headers: spec.headers,
+            redirect: "follow"
         }).then((response) => {
-            return response.json().then((json) => {
+            const jsonClone = response.clone();
+            return jsonClone.json().then((json) => {
                 response.parsedJSON = json;
                 spec.onComplete(response);
             }, () => {
                 spec.onComplete(response);
             });
         }, (error) => {
+            console.error(error);
             if(spec.onError) {
                 spec.onError(error);
             }

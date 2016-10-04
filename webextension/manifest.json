@@ -39,7 +39,16 @@
         "notifications",
         "storage",
         "alarms",
-        "clipboardWrite"
+        "clipboardWrite",
+        "https://www.googleapis.com/youtube/v3/*",
+        "http://livestream.com/api/*",
+        "https://api.twitch.tv/api/*",
+        "https://ptvappapi.picarto.tv/*",
+        "http://www.ustream.tv/*",
+        "http://www.douyutv.com/api/v1/*",
+        "http://*.api.channel.livestream.com/2.0/*",
+        "https://www.majorleaguegaming.com/api/*",
+        "https://streamapi.majorleaguegaming.com/service/streams/*"
     ],
     "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; child-src 'none'; media-src 'none'"
 }
