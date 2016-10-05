@@ -74,3 +74,14 @@ export const filterAsync = async (array, callback) => {
     return array.filter((a, i) => predicates[i]);
 };
 
+/**
+ * Pipe an event from one target to another.
+ *
+ * @param {module:event-target.EventTarget} source - Object emitting the event.
+ * @param {string} event - Event to pipe through.
+ * @param {module:event-target.EventTarget} target - Target to pipe to.
+ */
+export const pipe = (source, event, target) => {
+    source.addEventListener(event, (e) => target.dispatchEvent(e));
+};
+

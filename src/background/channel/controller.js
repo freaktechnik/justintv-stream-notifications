@@ -3,10 +3,10 @@
  * @license MPL-2.0
  * @module channel/controller
  */
-import providers from "../providers"; //TODO
+import providers from "../providers";
 import ChannelsManager from "./manager";
 import ChannelList from "./list";
-//import EventSink from '../providers/events'; //TODO replace with giving a special channel list to providers? Makes them more than just data providers. Not sure how to get the events from channel list in there though.
+import EventSink from '../providers/events';
 import { emit, invokeOnce, when } from "../../utils";
 import serializedProviders from "../providers/serialized";
 import ParentalControls from "../parental-controls";
@@ -291,7 +291,7 @@ export default class ChannelController extends EventTarget {
          * @type module:providers/events.EventSink
          * @private
          */
-        /*this._eventSink = new EventSink();
+        this._eventSink = new EventSink();
         this._eventSink.addEventListener("updateduser", ({ detail }) => {
             this._list.setUser(detail);
         });
@@ -308,7 +308,7 @@ export default class ChannelController extends EventTarget {
             else {
                 this._list.setChannel(channels).catch(() => this._list.addChannel(channels));
             }
-        });*/
+        });
 
         const channelsCb = (channels) => {
                 if(channels.length) {

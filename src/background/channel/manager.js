@@ -113,31 +113,6 @@ export default class ChannelsManager extends EventTarget {
                 this._setupPort(port);
             }
         });
-
-        //TODO search for existing channel managers
-        browser.tabs.query({
-            url: MANAGER_URL + "*"
-        }).then((tabs) => {
-            if(tabs.length) {
-                this.tabID = tabs[0];
-            }
-        });
-
-        browser.tabs.onUpdated.addListener((tabID, changeInfo) => {
-            if(tabID === this.tabID && "url" in changeInfo && !changeInfo.url.startsWith(MANAGER_URL)) {
-                this.tabID = null;
-                this.port = null;
-            }
-            else if(this.tabID == null && "url" in changeInfo && changeInfo.url.startsWith(MANAGER_URL)) {
-                this.tabID = tabID;
-            }
-        });
-
-        browser.tabs.onRemoved.addListener((tabID) => {
-            if(tabID === this.tabID) {
-                this.tabID = null;
-            }
-        });
     }
     /**
      * @type {boolean}
@@ -163,8 +138,14 @@ export default class ChannelsManager extends EventTarget {
 
         if(!isSecondary) {
             this.port = port;
+            this.tabID = port.sender.tab.id
             this.loading = true;
         }
+
+        port.onDisconnect.addListener((message) => {
+            this.port = null;
+            this.tabID = null;
+        });
 
         port.onMessage.addListener((message) => {
             if(message.target == "ready") {

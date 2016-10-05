@@ -76,7 +76,8 @@ export const create = async (channels, users) => {
         meta: Object.freeze({
             version: manifest.version,
             platform: platform.os,
-            platformArch: platform.arch
+            platformArch: platform.arch,
+            language: browser.i18n.getUILanguage()
         })
     };
     Object.freeze(debugDump);

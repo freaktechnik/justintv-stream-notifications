@@ -171,12 +171,21 @@ export default class Notifier extends EventTarget {
             }
 
             if(title !== null) {
-                browser.notifications.create(`cn${channel.id}`, {
-                    type: "basic",
-                    title,
-                    message: channel.title,
-                    iconUrl: channel.getBestImageForSize(NOTIFICATION_ICON_SIZE)
-                });
+                const icon = await fetch(channel.getBestImageForSize(NOTIFICATION_ICON_SIZE)),
+                    opts = {
+                        type: "basic",
+                        title,
+                        message: channel.title
+                    };
+
+                if(!icon.ok) {
+                    console.warn("Could not load icon for notification");
+                }
+                else {
+                    opts.iconUrl = URL.createObjectURL(await icon.blob());
+                }
+
+                browser.notifications.create(`cn${channel.id}`, opts);
             }
         }
 
@@ -211,6 +220,7 @@ export default class Notifier extends EventTarget {
      */
     notifyCopied(channelName) {
         browser.notifications.create("copy", {
+            type: "basic",
             title: _("copyNotification", channelName),
             iconURL: "../images/icon64.png"
         });
