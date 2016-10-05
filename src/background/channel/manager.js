@@ -8,8 +8,6 @@
 import { emit } from "../../utils";
 import EventTarget from '../../event-target';
 
-const MANAGER_URL = browser.runtime.getURL("manager/index.html");
-
 /**
  * Store a channel. Listeners should call
  * {@link module:channel/manager.ChannelsManager#onChannelAdded} once the
@@ -138,11 +136,11 @@ export default class ChannelsManager extends EventTarget {
 
         if(!isSecondary) {
             this.port = port;
-            this.tabID = port.sender.tab.id
+            this.tabID = port.sender.tab.id;
             this.loading = true;
         }
 
-        port.onDisconnect.addListener((message) => {
+        port.onDisconnect.addListener(() => {
             this.port = null;
             this.tabID = null;
         });
