@@ -31,7 +31,7 @@
             <nav>
                 <div class="topbar">
                     <ul class="tabstrip inline-list" role="tablist">
-                        <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" <%= translateElement("panel_tab_live") %></a></li>
+                        <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" class="current" aria-selected="true" <%= translateElement("panel_tab_live") %></a></li>
                         <li role="presentation" id="nonliveTab" hidden><a href="#nonlive" role="tab" aria-controls="nonlive" data-tab="4" <%= translateElement("panel_tab_nonlive") %></a></li>
                         <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" <%= translateElement("panel_tab_offline") %></a></li>
                         <li role="presentation" id="exploreTab"><a href="#featured" role="tab" aria-controls="featured" data-tab="3" <%= translateElement("panel_tab_explore") %></a></li>
@@ -67,16 +67,16 @@
                 <ul id="secondarylive" hidden>
                 </ul>
             </section>
-            <section class="tabcontent live" role="tabpanel" data-tab="4">
+            <section class="tabcontent live" role="tabpanel" data-tab="4" hidden>
                 <ul id="nonlive">
                 </ul>
             </section>
-            <section class="tabcontent" role="tabpanel" data-tab="2">
+            <section class="tabcontent" role="tabpanel" data-tab="2" hidden>
                 <div id="nochannels" <%= translateElement("panel_nothing") %></div>
                 <ul id="offline">
                 </ul>
             </section>
-            <section class="tabcontent live" role="tabpanel" data-tab="3">
+            <section class="tabcontent live" role="tabpanel" data-tab="3" hidden>
                 <select id="exploreprovider">
                 </select>
                 <div id="loadingexplore" <%= translateElement("panel_loading") %></div>

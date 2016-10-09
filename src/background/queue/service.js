@@ -14,7 +14,7 @@ import prefs from "../preferences";
 
 const queue = new UpdateQueue(),
     services = {},
-    defaultRequeue = (response) => !response.ok,
+    defaultRequeue = (response) => !response.ok && response.status !== 404 && response.status !== 420,
     completeCallback = (requeue, callback, url, data) => {
         if(!requeue(data)) {
             callback(data, url);

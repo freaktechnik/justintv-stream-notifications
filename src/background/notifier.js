@@ -95,7 +95,7 @@ export default class Notifier extends EventTarget {
      * @async
      */
     showNotifications() {
-        return and(
+        return or(
             this.onlineNotifications(),
             this.titleNotifications(),
             this.offlineNotifications(),
@@ -146,11 +146,13 @@ export default class Notifier extends EventTarget {
         const [ tab, showNotifications ] = await Promise.all([
             browser.tabs.query({
                 active: true,
-                currentWindow: true
+                currentWindow: true,
+                url: channel.url
             }),
             this.showNotifications()
         ]);
-        if(showNotifications && !channel.url.some((url) => url === tab.url)) {
+        console.log(showNotifications, tab.length && tab[0].url);
+        if(showNotifications && !tab.length) {
             const liveInterpretation = await this._getLiveInterpretation();
             let title = null;
             if((await and(channel.live.isLive(LiveState.TOWARD_OFFLINE), this.onlineNotifications())) && this._channelStateChanged(channel)) {
@@ -171,19 +173,12 @@ export default class Notifier extends EventTarget {
             }
 
             if(title !== null) {
-                const icon = await fetch(channel.getBestImageForSize(NOTIFICATION_ICON_SIZE)),
-                    opts = {
-                        type: "basic",
-                        title,
-                        message: channel.title
-                    };
-
-                if(!icon.ok) {
-                    console.warn("Could not load icon for notification");
-                }
-                else {
-                    opts.iconUrl = URL.createObjectURL(await icon.blob());
-                }
+                const opts = {
+                    type: "basic",
+                    title,
+                    message: channel.title,
+                    iconUrl: channel.getBestImageForSize(NOTIFICATION_ICON_SIZE)
+                };
 
                 browser.notifications.create(`cn${channel.id}`, opts);
             }

@@ -3,10 +3,8 @@
  *  Licensed under the MPL 2.0
  */
 body {
-    overflow-x: hidden;
     background-color: var(--inverted-bg);
     font-size: 12px;
-    min-width: 300px;
     max-width: 400px;
 }
 

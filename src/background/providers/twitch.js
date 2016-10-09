@@ -31,6 +31,9 @@ const type = "twitch",
             ret[s] = urlForSize(imgURL, s);
         });
         return ret;
+    },
+    dedupe = (a, b) => {
+        return a.filter((c) => b.every((d) => c.id !== d.id));
     };
 prefs.get('twitch_clientId').then((id) => {
     headers['Client-ID'] = id;
@@ -214,7 +217,7 @@ class Twitch extends GenericProvider {
                     emit(this, "updatedchannels", liveChans);
                 }
                 if(liveChans.length != channels.length) {
-                    let offlineChans = channels.filter((channel) => !data.some((cho) => cho.id == channel.id));
+                    let offlineChans = dedupe(channels, data);
                     const playlistChans = await filterAsync(data, (cho) => not(cho.live.isLive(LiveState.TOWARD_OFFLINE)));
                     offlineChans = offlineChans.concat(playlistChans);
                     let chans = await this._getHostedChannels(offlineChans, liveChans);
@@ -237,7 +240,6 @@ class Twitch extends GenericProvider {
         });
     }
     async updateChannel(channelname, ignoreHosted = false) {
-        console.log("twitch.updateChannel:", channelname, ignoreHosted);
         const [ data, channel ] = await Promise.all([
             getStreamTypeParam("?").then((p) => this._qs.queueRequest(baseURL + '/streams/' + channelname + p, headers)),
             this.getChannelDetails(channelname)
@@ -332,8 +334,8 @@ class Twitch extends GenericProvider {
         const liveChans = await filterAsync(ret, (cho) => cho.live.isLive(LiveState.TOWARD_OFFLINE));
 
         if(liveChans.length != channels.length) {
-            const playlistChans = await Promise.all(ret.map(async (cho) => {
-                if(await cho.live.isLive(LiveState.TOWARD_OFFLINE)) {
+            const playlistChans = (await Promise.all(ret.map(async (cho) => {
+                if(await not(cho.live.isLive(LiveState.TOWARD_OFFLINE))) {
                     try {
                         const meta = await this._getActivePlaylistInfo(cho);
                         cho.title = meta.title;
@@ -343,8 +345,9 @@ class Twitch extends GenericProvider {
                     catch(e) { /* emtpy */ }
                     return cho;
                 }
-            }));
-            let offlineChans = channels.filter((channel) => ret.every((cho) => cho.id !== channel.id));
+                return null;
+            }))).filter((c) => c !== null);
+            let offlineChans = dedupe(channels, ret);
             offlineChans = offlineChans.concat(playlistChans);
             const offChans = await this._getHostedChannels(offlineChans, liveChans);
             ret = liveChans.concat(offChans);
@@ -413,7 +416,7 @@ class Twitch extends GenericProvider {
         }
     }
     async _getHostedChannels(channels, liveChans) {
-        if(prefs.twitch_showHosting) {
+        if(await prefs.get("twitch_showHosting")) {
             let channelIds = await Promise.all(channels.map((channel) => this._getChannelId(channel)));
             channelIds = channelIds.filter((id) => id !== null);
 
