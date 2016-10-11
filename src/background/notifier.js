@@ -151,7 +151,7 @@ export default class Notifier extends EventTarget {
             }),
             this.showNotifications()
         ]);
-        console.log(showNotifications, tab.length && tab[0].url);
+
         if(showNotifications && !tab.length) {
             const liveInterpretation = await this._getLiveInterpretation();
             let title = null;

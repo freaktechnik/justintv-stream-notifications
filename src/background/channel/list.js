@@ -114,6 +114,8 @@ export default class ChannelList extends EventTarget {
     constructor() {
         super();
 
+        this.idCache = new Map();
+
         this.openDB(NAME);
     }
 
@@ -170,6 +172,7 @@ export default class ChannelList extends EventTarget {
                         const cursor = event.target.result;
 
                         if(cursor) {
+                            this.idCache.set(cursor.value.type + cursor.value.login, cursor.value.id);
                             if(cursor.value.lastModified < minDate) {
                                 cursor.value.live.state = LiveState.OFFLINE;
                                 cursor.update(cursor.value);
@@ -223,18 +226,25 @@ export default class ChannelList extends EventTarget {
     getChannelId(name, type) {
         console.info("ChannelList.getChannelId(" + name + "," + type + ")");
         return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels"),
-                index = transaction.objectStore("channels").index("typename"),
-                req = index.get([ type, name ]);
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(req.result.id);
-                }
-                else {
-                    reject();
-                }
-            };
-            req.onerror = reject;
+            if(this.idCache.has(type + name)) {
+                console.warn("HIT ID CACHE");
+                resolve(this.idCache.get(type + name));
+            }
+            else {
+                const transaction = this.db.transaction("channels"),
+                    index = transaction.objectStore("channels").index("typename"),
+                    req = index.get([ type, name ]);
+                req.onsuccess = () => {
+                    if(req.result) {
+                        this.idCache.set(type + name, req.result.id);
+                        resolve(req.result.id);
+                    }
+                    else {
+                        reject();
+                    }
+                };
+                req.onerror = reject;
+            }
         });
     }
 
@@ -356,6 +366,7 @@ export default class ChannelList extends EventTarget {
 
             req.onsuccess = () => {
                 channel.id = req.result;
+                this.idCache.set(channel.type + channel.login, channel.id);
                 emit(this, "channelsadded", [ channel ]);
                 resolve(channel);
             };
@@ -395,6 +406,7 @@ export default class ChannelList extends EventTarget {
                                 const req = store.add(channel.serialize());
                                 req.onsuccess = () => {
                                     channels[i].id = req.result;
+                                    this.idCache.set(channel.type + channel.login, req.result);
                                     addedChannels.push(channels[i]);
                                 };
                                 /* istanbul ignore next */
@@ -467,10 +479,10 @@ export default class ChannelList extends EventTarget {
             const req = store.put(channel.serialize());
 
             req.onsuccess = () => {
-                this.getChannel(req.result).then((chan) => {
-                    resolve(chan);
-                    emit(this, "channelupdated", chan);
-                });
+                this.idCache.set(channel.type + channel.login, req.result);
+                channel.id = req.result; //TODO was there a reason to fetch the channel here?
+                resolve(channel);
+                emit(this, "channelupdated", channel);
             };
             req.onerror = reject;
         });
@@ -494,10 +506,9 @@ export default class ChannelList extends EventTarget {
                 req = store.put(user.serialize());
 
             req.onsuccess = () => {
-                resolve(this.getUser(req.result).then((usr) => {
-                    emit(this, "userupdated", usr);
-                    return user;
-                }));
+                user.id = req.result;
+                emit(this, "userupdated", user);
+                resolve(user);
             };
             req.onerror = reject;
         });
@@ -530,6 +541,7 @@ export default class ChannelList extends EventTarget {
                 console.log("queued deletion");
 
                 req.onsuccess = () => {
+                    this.idCache.delete(channel.type + channel.login);
                     resolve(channel);
                     emit(this, "channeldeleted", channel);
                 };

@@ -424,7 +424,7 @@ class Twitch extends GenericProvider {
                 data = await this._qs.queueRequest("https://tmi.twitch.tv/hosts?" + querystring.stringify({
                     "include_logins": 1,
                     host: channelIds.join(",")
-                }));
+                }), headers);
 
             if(data.parsedJSON && "hosts" in data.parsedJSON && data.parsedJSON.hosts.length) {
                 // Check each hosted channel for his status

@@ -77,7 +77,8 @@ export const create = async (channels, users) => {
             version: manifest.version,
             platform: platform.os,
             platformArch: platform.arch,
-            language: browser.i18n.getUILanguage()
+            language: browser.i18n.getUILanguage(),
+            lastError: browser.runtime.lastError
         })
     };
     Object.freeze(debugDump);

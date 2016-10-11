@@ -3,6 +3,10 @@
  *  Licensed under MPL 2.0
  */
 
+html, body {
+    height: 100%;
+}
+
 main {
     width: 100%;
 }
@@ -39,7 +43,7 @@ main {
     flex-grow: 1;
     height: 1.2em;
     box-sizing: content-box;
-    
+
     background-color: var(--inverted-bg);
     color: var(--inverted-text);
 }
