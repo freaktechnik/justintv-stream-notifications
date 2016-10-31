@@ -22,7 +22,6 @@ module.exports = {
                 loader: 'babel',
                 query: {
                     plugins: [
-                        "transform-async-to-generator",
                         "transform-class-properties",
                         "transform-es2015-modules-commonjs-simple"
                     ]

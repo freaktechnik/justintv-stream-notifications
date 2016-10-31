@@ -230,7 +230,6 @@ module.exports = function(grunt) {
         babel: {
             options: {
                 plugins: [
-                    "transform-async-to-generator",
                     [
                         "transform-es2015-modules-commonjs-simple",
                         {

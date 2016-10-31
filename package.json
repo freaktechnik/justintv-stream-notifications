@@ -245,7 +245,6 @@
   "devDependencies": {
     "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.5",
-    "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "codecov": "^1.0.1",
