@@ -255,7 +255,7 @@
     "grunt-contrib-copy": ">=0.8.2",
     "grunt-env": ">=0.4.4",
     "grunt-header": "^1.1.0",
-    "grunt-istanbul": ">=0.6.1",
+    "grunt-istanbul": ">=0.7.2",
     "grunt-jpm": ">=0.1.0",
     "grunt-jsdoc": "^2.1.0",
     "grunt-package": ">=0.1.3",
