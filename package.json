@@ -264,7 +264,7 @@
     "istanbul-jpm": "*",
     "jpm": "^1.1.4",
     "load-grunt-tasks": "^3.5.2",
-    "remap-istanbul": "^0.8.2"
+    "remap-istanbul": "^0.8.4"
   },
   "scripts": {
     "grunt": "grunt",
