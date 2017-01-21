@@ -245,7 +245,7 @@
     "babel-plugin-transform-class-properties": "^6.22.0",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "codecov": "^1.0.1",
-    "eslint": "^3.13.1",
+    "eslint": "^3.14.0",
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-freaktechnik": "^2.0.0",
     "grunt": ">=1.0.1",
