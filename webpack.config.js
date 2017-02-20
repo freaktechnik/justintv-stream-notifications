@@ -22,8 +22,7 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     plugins: [
-                        "transform-class-properties",
-                        "transform-es2015-modules-commonjs-simple"
+                        "transform-class-properties"
                     ]
                 }
             },
