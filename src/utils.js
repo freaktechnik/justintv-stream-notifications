@@ -84,5 +84,5 @@ export const filterAsync = async (array, callback) => {
  * @returns {undefined}
  */
 export const pipe = (source, event, target) => {
-    source.addEventListener(event, (e) => target.dispatchEvent(e));
+    source.addEventListener(event, (e) => target.dispatchEvent(e), { passive: true });
 };

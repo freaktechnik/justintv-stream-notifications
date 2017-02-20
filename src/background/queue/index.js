@@ -4,7 +4,7 @@
  * @license MPL-2.0
  * @module queue
  */
-import EventTarget from '../../event-target';
+import EventTarget from 'event-target-shim';
 
 /**
  * @typedef {Object} external:sdk/request.RequestOptions

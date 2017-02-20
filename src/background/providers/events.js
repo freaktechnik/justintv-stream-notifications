@@ -6,7 +6,7 @@
  */
 import providers from './index';
 import { pipe } from '../../utils';
-import EventTarget from '../../event-target';
+import EventTarget from 'event-target-shim';
 
 const USER_EVENTS = [
         "updateduser",

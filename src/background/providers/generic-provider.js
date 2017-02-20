@@ -9,7 +9,7 @@
 import prefs from "../preferences";
 import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
-import EventTarget from '../../event-target';
+import EventTarget from 'event-target-shim';
 
 const _ = browser.i18n.getMessage,
     methodNotSupported = (type, method) => Promise.reject(type + "." + method + " is not supported"),

@@ -13,7 +13,7 @@ import { emit } from "../utils";
 import prefs from "./preferences";
 import LiveState from "./channel/live-state";
 import providers from './providers';
-import EventTarget from '../event-target';
+import EventTarget from 'event-target-shim';
 
 /**
  * Should open the ChannelsManager.

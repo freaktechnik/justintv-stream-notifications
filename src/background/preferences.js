@@ -1,6 +1,6 @@
 import SDK from './sdk';
 import { emit } from "../utils";
-import EventTarget from '../event-target';
+import EventTarget from 'event-target-shim';
 
 //TODO move to storage.local & options_ui
 

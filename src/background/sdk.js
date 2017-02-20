@@ -5,7 +5,7 @@
  * @license MPL-2.0
  */
 import { emit } from "../utils";
-import EventTarget from '../event-target';
+import EventTarget from 'event-target-shim';
 
 class SDKCommunication extends EventTarget {
     constructor() {

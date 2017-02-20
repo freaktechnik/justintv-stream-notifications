@@ -6,7 +6,7 @@
  * @module channel/manager
  */
 import { emit } from "../../utils";
-import EventTarget from '../../event-target';
+import EventTarget from 'event-target-shim';
 
 /**
  * Store a channel. Listeners should call
