@@ -70,6 +70,7 @@ export default class UpdateQueue extends PauseableQueue {
      *
      * @param {number} index - Index of the request to fetch.
      * @fires module:queue/update.UpdateQueue#allpriorizedloaded
+     * @returns {undefined}
      */
     getRequest(index) {
         if(this.getFirstPriorized()) {
@@ -99,6 +100,7 @@ export default class UpdateQueue extends PauseableQueue {
      * Fetch the request at the given index.
      *
      * @param {number} index - Index in the queue of the request.
+     * @returns {undefined}
      */
     getRequestByIndex(index) {
         console.info(this.queue.length + " jobs left in the queue.");
@@ -139,6 +141,7 @@ export default class UpdateQueue extends PauseableQueue {
      * Fetch all priorized requests.
      *
      * @fires module:queue/update.UpdateQueue#allpriorizedloaded
+     * @returns {undefined}
      */
     getAllPriorized() {
         this.queue.filter((req) => req.priorize).forEach(() => {

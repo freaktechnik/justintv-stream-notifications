@@ -12,8 +12,6 @@ import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
 import LiveState from '../live-state';
 
-const port = browser.runtime.connect({ name: "list" });
-
 let live,
     secondaryLive,
     offline,
@@ -23,7 +21,8 @@ let live,
     currentStyle,
     providers,
     nonLiveDisplay;
-const CHANNEL_ID_PREFIX = "channel",
+const port = browser.runtime.connect({ name: "list" }),
+    CHANNEL_ID_PREFIX = "channel",
     EXPLORE_ID_PREFIX = "explorechan",
     CONTEXTMENU_ID = "context",
     EXPLORE_CONTEXTMENU_ID = "explore-context",
@@ -355,7 +354,7 @@ const CHANNEL_ID_PREFIX = "channel",
     },
     hasOption = (provider) => {
         const providerDropdown = document.getElementById("exploreprovider");
-        for(let o of providerDropdown.options) {
+        for(const o of providerDropdown.options) {
             if(o.value == provider) {
                 return true;
             }
@@ -408,7 +407,7 @@ const CHANNEL_ID_PREFIX = "channel",
             hideNoOnline();
         }
 
-        for(let node of channelsToMove) {
+        for(const node of channelsToMove) {
             insertBefore(parent, node, node.querySelector(".name").textContent);
         }
 

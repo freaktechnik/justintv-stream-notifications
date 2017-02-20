@@ -9,16 +9,16 @@
  */
 
 function translateElementAttributes(element) {
-    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder' ];
-    const ariaAttrMap = {
-        "ariaLabel": 'aria-label',
-        "ariaValueText": 'aria-valuetext',
-        "ariaMozHint": 'aria-moz-hint'
-    };
-    const attrSeparator = '.';
+    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder' ],
+        ariaAttrMap = {
+            "ariaLabel": 'aria-label',
+            "ariaValueText": 'aria-valuetext',
+            "ariaMozHint": 'aria-moz-hint'
+        },
+        attrSeparator = '.';
 
     // Translate allowed attributes.
-    for(let attribute of attrList) {
+    for(const attribute of attrList) {
         const data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + attribute);
         if(data && data != "??") {
             element.setAttribute(attribute, data);
@@ -26,7 +26,7 @@ function translateElementAttributes(element) {
     }
 
     // Translate aria attributes.
-    for(let attrAlias in ariaAttrMap) {
+    for(const attrAlias in ariaAttrMap) {
         const data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + attrAlias);
         if(data && data != "??") {
             element.setAttribute(ariaAttrMap[attrAlias], data);
@@ -38,7 +38,7 @@ function translateElement(element = document) {
 
     // Get all children that are marked as being translateable.
     const children = element.querySelectorAll('*[data-l10n-id]');
-    for(let child of children) {
+    for(const child of children) {
         const data = browser.i18n.getMessage(child.dataset.l10nId);
         if(data && data != "??") {
             child.textContent = data;

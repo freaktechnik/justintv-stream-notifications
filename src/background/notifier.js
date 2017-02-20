@@ -12,14 +12,14 @@ import { and, or, not } from './logic';
 import { emit } from '../utils';
 import EventTarget from '../event-target';
 
-const _ = browser.i18n.getMessage;
+const _ = browser.i18n.getMessage,
 
 /**
  * Size of the image shown in the notification.
  * @const {number}
  * @default 100
  */
-const NOTIFICATION_ICON_SIZE = 100;
+    NOTIFICATION_ICON_SIZE = 100;
 
 /**
  * @class module:notifier.Notifier
@@ -54,7 +54,7 @@ export default class Notifier extends EventTarget {
     /**
      * If online notifications should be shown.
      *
-     * @returns {boolean}
+     * @returns {boolean} Show online notifications when true.
      * @async
      */
     onlineNotifications() {
@@ -63,7 +63,7 @@ export default class Notifier extends EventTarget {
     /**
      * If title change notifications should be shown.
      *
-     * @returns {boolean}
+     * @returns {boolean} Show title change notifications when true.
      * @async
      */
     titleNotifications() {
@@ -72,7 +72,7 @@ export default class Notifier extends EventTarget {
     /**
      * If offline notifications should be shown.
      *
-     * @returns {boolean}
+     * @returns {boolean} Show offline notifications when true.
      * @async
      */
     offlineNotifications() {
@@ -82,7 +82,7 @@ export default class Notifier extends EventTarget {
      * If non-live types are handled like a non-binary state, they get custom
      * notifications when this is set.
      *
-     * @returns {boolean}
+     * @returns {boolean} Show non-live notifications when true.
      * @async
      */
     nonliveNotifications() {
@@ -91,7 +91,7 @@ export default class Notifier extends EventTarget {
     /**
      * If any notifications are to be shown.
      *
-     * @returns {boolean}
+     * @returns {boolean} Can show notifications when true.
      * @async
      */
     showNotifications() {
@@ -106,6 +106,7 @@ export default class Notifier extends EventTarget {
      * Store a channel's state.
      *
      * @param {module:channel/core.Channel} channel - The channel to store.
+     * @returns {undefined}
      */
     _setChannelState(channel) {
         this.channelStates.set(channel.id, {
@@ -118,7 +119,7 @@ export default class Notifier extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - The channel that might
      *                                                have changed.
-     * @returns {boolean}
+     * @returns {boolean} When true the channel state changed.
      */
     _channelStateChanged(channel) {
         const oldState = this.channelStates.get(channel.id);
@@ -140,6 +141,7 @@ export default class Notifier extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - The channel to show a
      *                                                notification for.
+     * @returns {undefined}
      */
     async sendNotification(channel) {
         // Mute notifications for the current tab
@@ -198,6 +200,7 @@ export default class Notifier extends EventTarget {
      * channel from the internal map.
      *
      * @param {number} channelId - ID of the channel that was removed.
+     * @returns {undefined}
      */
     onChannelRemoved(channelId) {
         if(this.channelTitles.has(channelId)) {
@@ -212,6 +215,7 @@ export default class Notifier extends EventTarget {
      * Notify the user, that the string has been copied to the clipboard.
      *
      * @param {string} channelName - Name of the channel that was copied.
+     * @returns {undefined}
      */
     notifyCopied(channelName) {
         browser.notifications.create("copy", {

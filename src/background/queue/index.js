@@ -80,6 +80,7 @@ export default class RequestQueue extends EventTarget {
      * Fetch the request with the given index in the queue.
      *
      * @param {number} index - Index of the request to fetch.
+     * @returns {undefined}
      */
     getRequest(index) {
         const spec = this.queue.splice(index, 1)[0];
@@ -109,6 +110,7 @@ export default class RequestQueue extends EventTarget {
      * Fetch the request with the given ID.
      *
      * @param {number|string} query - ID or URL of the request to fetch.
+     * @returns {undefined}
      */
     getRequestById(query) {
         return this.getRequest(this.getRequestIndex(query));
@@ -117,6 +119,7 @@ export default class RequestQueue extends EventTarget {
      * Fetch multiple requests from the top of the queue.
      *
      * @param {number} [batchSize=this.queue.length] - Number of requests to get.
+     * @returns {undefined}
      */
     getRequestBatch(batchSize = this.queue.length) {
         if(batchSize > this.queue.length) {
@@ -134,6 +137,7 @@ export default class RequestQueue extends EventTarget {
      * @param {number} interval - Interval in milliseconds.
      * @param {number} amount - A percentage of requests to get per batch.
      * @param {number} maxSize - The max number of requests to get per batch.
+     * @returns {undefined}
      */
     async autoFetch(interval, amount, maxSize) {
         this.interval = interval;
@@ -150,6 +154,8 @@ export default class RequestQueue extends EventTarget {
     }
     /**
      * Remove all requests and ongoing intervals.
+     *
+     * @returns {undefined}
      */
     clear() {
         if(this.workingOnQueue()) {

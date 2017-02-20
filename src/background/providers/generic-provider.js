@@ -11,9 +11,8 @@ import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
 import EventTarget from '../../event-target';
 
-const _ = browser.i18n.getMessage;
-
-const methodNotSupported = (type, method) => Promise.reject(type + "." + method + " is not supported"),
+const _ = browser.i18n.getMessage,
+    methodNotSupported = (type, method) => Promise.reject(type + "." + method + " is not supported"),
     queues = new WeakMap(),
     queueFor = (provider) => queues.get(provider);
 
@@ -174,7 +173,7 @@ export default class GenericProvider extends EventTarget {
      * Indicates if exploring features should hold mature results. Respects
      * parental control settings of the OS.
      *
-     * @returns {boolean}
+     * @returns {boolean} Explore features should hold mature results if true.
      * @protected
      * @async
      */
@@ -271,6 +270,7 @@ export default class GenericProvider extends EventTarget {
      * @fires module:providers/generic-provider.GenericProvider#updateduser
      * @fires module:providers/generic-provider.GenericProvider#newchannels
      * @abstract
+     * @returns {undefined}
      */
     updateFavsRequest(users) {
         throw this.name + ".updateFavsRequest is not supported.";
@@ -278,6 +278,8 @@ export default class GenericProvider extends EventTarget {
     /**
      * Unqueues the reocurring update request for updating the favorite
      * channels of the users.
+     *
+     * @returns {undefined}
      */
     removeFavsRequest() {
         this._qs.unqueueUpdateRequest(this._qs.LOW_PRIORITY);
@@ -290,6 +292,7 @@ export default class GenericProvider extends EventTarget {
      *                                                        objects to update.
      * @fires module:providers/generic-provider.GenericProvider#updatedchannels
      * @abstract
+     * @returns {undefined}
      */
     updateRequest(channels) {
         throw this.name + ".updateRequest is not supported.";
@@ -297,6 +300,8 @@ export default class GenericProvider extends EventTarget {
     /**
      * Unqueues the reocurring update request for updating the live status of
      * all channels for this provider.
+     *
+     * @returns {undefined}
      */
     removeRequest() {
         this._qs.unqueueUpdateRequest(this._qs.HIGH_PRIORITY);

@@ -191,7 +191,7 @@ class Twitch extends GenericProvider {
                         let oldChan = channels.find((ch) => cho.login == ch.login);
                         if(oldChan === undefined) {
                             const findChan = (chan, ch) => ch.login == chan;
-                            for(let i of idOfChannel.entries()) {
+                            for(const i of idOfChannel.entries()) {
                                 if(i[1] == obj.channel._id) {
                                     oldChan = channels.find(findChan.bind(null, i[0]));
                                     if(oldChan !== undefined) {

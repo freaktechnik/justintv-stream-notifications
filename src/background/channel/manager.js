@@ -212,6 +212,7 @@ export default class ChannelsManager extends EventTarget {
      * @param {string} type - Object type (user or channel).
      * @param {string} provider - Object provider name.
      * @param {string} name - Object login.
+     * @returns {undefined}
      */
     _deleteCancelingValue(type, provider, name) {
         this.cancelingValues.delete(type + provider + name);
@@ -221,6 +222,7 @@ export default class ChannelsManager extends EventTarget {
      *
      * @param {string} target - Name of the event to emit.
      * @param {?} data - Data to send.
+     * @returns {undefined}
      */
     _emitToWorker(target, ...data) {
         if(this.port !== null) {
@@ -259,6 +261,7 @@ export default class ChannelsManager extends EventTarget {
      *
      * @param {Object.<module:providers/generic-provider.GenericProvider>} providers
      *                                  - Availabe providers in serialized form.
+     * @returns {undefined}
      */
     addProviders(providers) {
         this._emitToWorker("addproviders", providers);
@@ -268,6 +271,7 @@ export default class ChannelsManager extends EventTarget {
      * _deleteCancelingValue if invoked from the manager.
      *
      * @param {module:channel/core.Channel} channelObj - The added channel.
+     * @returns {undefined}
      */
     onChannelAdded(channelObj) {
         this.loading = false;
@@ -277,6 +281,7 @@ export default class ChannelsManager extends EventTarget {
      * Callback when a channel was removed.
      *
      * @param {number} channelId - ID of the removed channel.
+     * @returns {undefined}
      */
     onChannelRemoved(channelId) {
         this._emitToWorker("remove", channelId);
@@ -285,6 +290,7 @@ export default class ChannelsManager extends EventTarget {
      * Callback when a channel was updated.
      *
      * @param {module:channel/core.Channel} channelObj - The updated channel.
+     * @returns {undefined}
      */
     onChannelUpdated(channelObj) {
         this.loading = false;
@@ -295,6 +301,7 @@ export default class ChannelsManager extends EventTarget {
      * if invoked from the manager.
      *
      * @param {module:channel/core.User} user - The added user.
+     * @returns {undefined}
      */
     onUserAdded(user) {
         this.loading = false;
@@ -304,6 +311,7 @@ export default class ChannelsManager extends EventTarget {
      * Callback when a user was removed.
      *
      * @param {number} userId - The ID of the removed user.
+     * @returns {undefined}
      */
     onUserRemoved(userId) {
         this._emitToWorker("removeuser", userId);
@@ -312,6 +320,7 @@ export default class ChannelsManager extends EventTarget {
      * Callback when a user was updated.
      *
      * @param {module:channel/core.User} user - The user that was updated.
+     * @returns {undefined}
      */
     onUserUpdated(user) {
         this.loading = false;
@@ -324,6 +333,7 @@ export default class ChannelsManager extends EventTarget {
      * @param {string} [type] - Type of the object that was to be added.
      * @param {string} [itemType] - Type of the object that had an error
      *                            (user/channel).
+     * @returns {undefined}
      */
     onError(name, type, itemType) {
         this.loading = false;
@@ -336,11 +346,26 @@ export default class ChannelsManager extends EventTarget {
             this._emitToWorker("error");
         }
     }
+    /**
+     * Listener to be called when an action is canceled.
+     *
+     * @param {string} [name] - Name of the object whose action was canceled.
+     * @param {string} [type] - Type/provider of the object whose action was
+     *        canceled.
+     * @param {string} [itemType] - Type of the object whoese action was cacneled.
+     * @returns {undefined}
+     */
     onCancel(name, type, itemType) {
         this.loading = false;
         this._deleteCancelingValue(itemType, type, name);
     }
 
+    /**
+     * Set the theme of the channel manager.
+     *
+     * @param {string} theme - Theme ID of the theme to use.
+     * @returns {undefined}
+     */
     setTheme(theme) {
         this._emitToWorker("theme", theme);
     }

@@ -329,6 +329,7 @@ class ListView extends EventTarget {
      * Set the style of the list.
      *
      * @param {module:list~Style} style - Style to set.
+     * @returns {undefined}
      */
     setStyle(style = this._style) {
         this._style = style;
@@ -339,6 +340,7 @@ class ListView extends EventTarget {
      * Set the visibility of the extras.
      *
      * @param {boolean} visible - Visibility of extras.
+     * @returns {undefined}
      */
     setExtrasVisibility(visible = this._extras) {
         this._extras = visible;
@@ -349,6 +351,7 @@ class ListView extends EventTarget {
      * Set the display type for non-live content.
      *
      * @param {module:list~NonLiveDisplay} style - Display mode of non-live content.
+     * @returns {undefined}
      */
     setNonLiveDisplay(style = this.nonLiveDisplay) {
         this.nonLiveDisplay = style;
@@ -364,6 +367,7 @@ class ListView extends EventTarget {
      * Add channels to the list. Updates the live state.
      *
      * @param {Array.<module:channel/core.Channel>} channels - Channels to add.
+     * @returns {undefined}
      */
     addChannels(channels) {
         if(channels.some((channel) => channel.live.isLive())) {
@@ -377,6 +381,7 @@ class ListView extends EventTarget {
      * Remove a channel from the list. Updates the liveState if appropriate.
      *
      * @param {number} channelId - ID of the channel to remove.
+     * @returns {undefined}
      */
     removeChannel(channelId) {
         this._unregisterChannel(channelId);
@@ -387,6 +392,7 @@ class ListView extends EventTarget {
      * update the info of a channel.
      *
      * @param {module:channel/core.Channel} channel - Channel to mark live.
+     * @returns {undefined}
      */
     setChannelLive(channel) {
         this._updateChannel(channel);
@@ -397,6 +403,7 @@ class ListView extends EventTarget {
      * Mark a channel as offline. Also updates liveState if appropriate.
      *
      * @param {module:channel/core.Channel} channel - Channel to mark offline.
+     * @returns {undefined}
      */
     setChannelOffline(channel) {
         this._updateChannel(channel);
@@ -408,6 +415,7 @@ class ListView extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - Channel to give a distinct
      *                                                state to.
+     * @returns {undefined}
      */
     setChannelDistinct(channel) {
         this._updateChannel(channel);
@@ -419,6 +427,7 @@ class ListView extends EventTarget {
      *
      * @param {Object.<module:providers/generic-provider.GenericProvider>} serializedProviders
      *                                                    - Available providers.
+     * @returns {undefined}
      */
     setProviders(serializedProviders) {
         this._emitToList("setProviders", serializedProviders);
@@ -428,6 +437,7 @@ class ListView extends EventTarget {
      * Indicate if the update queue is running in the background or not.
      *
      * @param {boolean} enabled - If queue is enabled.
+     * @returns {undefined}
      */
     setQueueStatus(enabled) {
         this._emitToList("queueStatus", enabled);
@@ -437,6 +447,7 @@ class ListView extends EventTarget {
      * Indicate if the queue is temporarily paused.
      *
      * @param {boolean} paused - If queue is paused.
+     * @returns {undefined}
      */
     setQueuePaused(paused) {
         this._emitToList("queuePaused", paused);
@@ -446,6 +457,7 @@ class ListView extends EventTarget {
      * Set the theme.
      *
      * @param {number} theme - Theme type.
+     * @returns {undefined}
      */
     setTheme(theme) {
         this._emitToList("theme", theme);
@@ -456,6 +468,7 @@ class ListView extends EventTarget {
      * state of the channel. Updates liveState if appropriate.
      *
      * @param {module:channel/core.Channel} channel - Channel that changed.
+     * @returns {undefined}
      */
     onChannelChanged(channel) {
         if(channel.live.state > 0 && this.nonLiveDisplay === ListView.LIVE_DISTINCT) {

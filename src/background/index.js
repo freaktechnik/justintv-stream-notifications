@@ -8,10 +8,10 @@ import serializedProviders from "./providers/serialized";
 import * as qs from './queue/service';
 import Notifier from "./notifier";
 
-const S_TO_MS_FACTOR = 1000;
+const S_TO_MS_FACTOR = 1000,
 
 // Init things
-const notifier = new Notifier(),
+    notifier = new Notifier(),
     controller = new ChannelController(),
     list = new ListView();
 

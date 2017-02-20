@@ -12,6 +12,7 @@ import '../content/l10n';
 import './channels-manager.css';
 import '../content/shared.css';
 
+let providers;
 const filters = [
     {
         subtarget: "span"
@@ -22,7 +23,24 @@ const filters = [
     ],
     listener = () => {
         filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not([hidden])"), filters);
+    },
+    port = browser.runtime.connect({ name: "manager" }),
+
+// Methods modifying the DOM
+
+    channels = document.querySelector("#channels"),
+    users = document.querySelector("#users"),
+    popup = document.querySelector("#popup"),
+    hasOption = (provider) => {
+        const providerDropdown = document.querySelector("#providerDropdown");
+        for(const o of providerDropdown.options) {
+            if(o.value == provider) {
+                return true;
+            }
+        }
+        return false;
     };
+
 window.addEventListener("load", () => {
     document.getElementById("searchField").addEventListener("keyup", listener);
     document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
@@ -37,25 +55,6 @@ window.addEventListener("load", () => {
         }
     });
 });
-
-let providers;
-const port = browser.runtime.connect({ name: "manager" });
-
-// Methods modifying the DOM
-
-const channels = document.querySelector("#channels"),
-    users = document.querySelector("#users"),
-    popup = document.querySelector("#popup");
-
-const hasOption = (provider) => {
-    const providerDropdown = document.querySelector("#providerDropdown");
-    for(let o of providerDropdown.options) {
-        if(o.value == provider) {
-            return true;
-        }
-    }
-    return false;
-};
 
 function hideError() {
     document.getElementById("channelNameField").setCustomValidity("");
@@ -457,7 +456,7 @@ port.onMessage.addListener((message) => {
     else if(message.target == "addproviders") {
         providers = message.data;
         const providerDropdown = document.querySelector("#providerDropdown");
-        for(let provider in providers) {
+        for(const provider in providers) {
             if(!hasOption(provider)) {
                 const opt = new Option(providers[provider].name, provider);
                 opt.disabled = !providers[provider].enabled;

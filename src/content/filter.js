@@ -84,6 +84,7 @@ export function matches(node, query, rules) {
  * @param {string} query - String to look for.
  * @param {DOMNode} root - Node to start search on.
  * @param {RuleSet} rules - Rules to apply to the query.
+ * @returns {undefined}
  */
 export function filter(query, root, rules) {
     const nodes = root.children;

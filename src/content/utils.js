@@ -8,6 +8,7 @@
  * Hide an element. Unselects the element if it was previously selected.
  *
  * @param {DOMNode} el - Node to hide.
+ * @returns {undefined}
  */
 export function hide(el) {
     el.setAttribute("hidden", true);
@@ -20,6 +21,7 @@ export function hide(el) {
  * Shows an element.
  *
  * @param {DOMNode} el - Node to show.
+ * @returns {undefined}
  */
 export function show(el) {
     el.removeAttribute("hidden");
@@ -31,6 +33,7 @@ export function show(el) {
  *
  * @param {DOMNode} node - Node to toggle.
  * @param {boolean} condition - Condition whether the node should be shown.
+ * @returns {undefined}
  */
 export function toggle(node, condition) {
     if(condition) {

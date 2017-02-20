@@ -24,7 +24,8 @@
  * and then returns an array of all data. Runs immediately after construction.
  *
  * @class
- * @param {module:pagination-helper~PaginationHelperOptions} options
+ * @param {module:pagination-helper~PaginationHelperOptions} options - Pagination
+ *        helper configuration.
  * @alias module:pagination-helper.PaginationHelper
  */
 function PaginationHelper(options) {
@@ -118,6 +119,7 @@ PaginationHelper.prototype.getPageNumber = function(page, pageSize) {
  * was fetched onComplete is called.
  *
  * @param {boolean} [initial=false] - If this is the first fetched page.
+ * @returns {undefined}
  */
 PaginationHelper.prototype.getPage = function(initial = false) {
     const cbk = (data) => {
@@ -144,7 +146,8 @@ PaginationHelper.prototype.getPage = function(initial = false) {
  * Get a PaginationHelper that resolves a promise. The specified callback
  * functions are not handeld promise aware.
  *
- * @param {module:pagination-helper~PaginationHelperOptions} options
+ * @param {module:pagination-helper~PaginationHelperOptions} options - Pagination
+ *        helper configuration without onComplete.
  * @async
  * @returns {undefined} The PaginationHelper is done.
  * @alias module:pagination-helper.promisedPaginationHelper

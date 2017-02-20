@@ -26,7 +26,7 @@ import allProviders from "./index";
  */
 const serializeProviders = (providers) => {
     const ret = {};
-    for(let p in providers) {
+    for(const p in providers) {
         ret[p] = Object.freeze({
             name: providers[p].name,
             supports: providers[p].supports,

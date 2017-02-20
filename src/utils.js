@@ -24,6 +24,7 @@ export const when = (target, event) => {
             target[property].addListener(listener);
         });
     }
+    return Promise.resolve();
 };
 
 export const emit = (target, event, ...detail) => {
@@ -80,8 +81,8 @@ export const filterAsync = async (array, callback) => {
  * @param {module:event-target.EventTarget} source - Object emitting the event.
  * @param {string} event - Event to pipe through.
  * @param {module:event-target.EventTarget} target - Target to pipe to.
+ * @returns {undefined}
  */
 export const pipe = (source, event, target) => {
     source.addEventListener(event, (e) => target.dispatchEvent(e));
 };
-

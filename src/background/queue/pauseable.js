@@ -81,6 +81,7 @@ export default class PauseableQueue extends RequestQueue {
      * Temporarily halt execution of the queue.
      *
      * @fires module:queue/pauseable.PauseableQueue#pause
+     * @returns {undefined}
      */
     pause() {
         if(this._configured && this.interval !== 0) {
@@ -92,6 +93,7 @@ export default class PauseableQueue extends RequestQueue {
      * Resume the queue.
      *
      * @fires module:queue/pauseable.PauseableQueue#resume
+     * @returns {undefined}
      */
     resume() {
         if(this._configured) {

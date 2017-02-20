@@ -8,7 +8,7 @@
 export default {
     stringify(obj) {
         const qs = new URLSearchParams();
-        for(let q in obj) {
+        for(const q in obj) {
             qs.append(q, obj[q]);
         }
 

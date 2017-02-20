@@ -9,25 +9,25 @@ import { pipe } from '../../utils';
 import EventTarget from '../../event-target';
 
 const USER_EVENTS = [
-    "updateduser",
-    "newchannels"
-];
-const BASE_EVENTS = [
-    "updatedchannels"
-];
+        "updateduser",
+        "newchannels"
+    ],
+    BASE_EVENTS = [
+        "updatedchannels"
+    ];
 
 class EventSink extends EventTarget {
     constructor() {
         super();
 
-        for(let p in providers) {
+        for(const p in providers) {
             const provider = providers[p];
-            for(let e of BASE_EVENTS) {
+            for(const e of BASE_EVENTS) {
                 pipe(provider, e, this);
             }
 
             if(provider.supports.favorites) {
-                for(let e of USER_EVENTS) {
+                for(const e of USER_EVENTS) {
                     pipe(provider, e, this);
                 }
             }

@@ -120,6 +120,7 @@ class QueueService {
      *
      * @param {module:queue/service~QueuePriority?} priority - Priority of
      *                                                      reuqests to unqueue.
+     * @returns {undefined}
      */
     unqueueUpdateRequest(priority) {
         if(!priority) {
@@ -150,6 +151,7 @@ class QueueService {
      *                                                request.
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determinines if a request should be re-run.
+     * @returns {undefined}
      */
     queueUpdateRequest(urls, priority, callback, rawHeaders = {}, requeue = defaultRequeue) {
         console.log("Requeueing " + priority + " priority update request");
@@ -188,6 +190,7 @@ export const getServiceForProvider = (providerName) => {
  * Set the internal queue refresh properties.
  *
  * @param {module:queue/pauseable~QueueOptions} options - Queue options.
+ * @returns {undefined}
  */
 export const setOptions = (options) => {
     console.log("[QS]> setting queue options:" + options.toSource());
@@ -200,6 +203,7 @@ export const setOptions = (options) => {
  * Change the interval of the internal queue.
  *
  * @param {number} interval - Refresh interval in milliseconds.
+ * @returns {undefined}
  */
 export const updateOptions = (interval) => {
     console.log("[QS]> setting interval to " + interval);
@@ -208,6 +212,8 @@ export const updateOptions = (interval) => {
 
 /**
  * Pause the internal queue.
+ *
+ * @returns {undefined}
  */
 export const pause = () => {
     queue.pause();
@@ -215,6 +221,8 @@ export const pause = () => {
 
 /**
  * Resume the internal queue.
+ *
+ * @returns {undefined}
  */
 export const resume = () => {
     queue.resume();
@@ -235,7 +243,8 @@ export const resume = () => {
 /**
  * Add event listeners to the internal queue.
  *
- * @param {module:queue/service~QueueServiceListener} <ObjectPattern> - Listeners to add.
+ * @param {module:queue/service~QueueServiceListener} listeners - Listeners to add.
+ * @returns {undefined}
  */
 export const addListeners = ({ containsPriorized, priorizedLoaded, paused, resumed }) => {
     if(containsPriorized) {
@@ -255,7 +264,9 @@ export const addListeners = ({ containsPriorized, priorizedLoaded, paused, resum
 /**
  * Remove event listeners from the internal queue.
  *
- * @param {module:queue/service~QueueServiceListener} <ObjectPattern> - Listeners to remove.
+ * @param {module:queue/service~QueueServiceListener} listeners - Listeners to
+ *        remove.
+ * @returns {undefined}
  */
 export const removeListeners = ({ containsPriorized, priorizedLoaded, paused, resumed }) => {
     if(containsPriorized) {
