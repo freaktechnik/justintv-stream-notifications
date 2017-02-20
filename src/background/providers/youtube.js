@@ -66,9 +66,10 @@ class YouTube extends GenericProvider {
             ch.url.push("https://gaming.youtube.com/channel/" + ch.login + "/live");
             ch.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
             ch.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
-            ch.image = { "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                         "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                       };
+            ch.image = {
+                "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+            };
             ch.uname = data.parsedJSON.items[0].snippet.title;
             return ch;
         }
@@ -87,17 +88,18 @@ class YouTube extends GenericProvider {
             }));
 
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
-            const ch = new User(data.parsedJSON.items[0].id, this._type);
+            const ch = new User(data.parsedJSON.items[0].id, this._type),
+                subsOptions = {
+                    part: "snippet",
+                    channelId: data.parsedJSON.items[0].id,
+                    maxResults: 50,
+                    key: await apiKey
+                };
             let page = 0;
-            const subsOptions = {
-                part: "snippet",
-                channelId: data.parsedJSON.items[0].id,
-                maxResults: 50,
-                key: await apiKey
+            ch.image = {
+                "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
             };
-            ch.image = { "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                         "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                       };
             ch.uname = data.parsedJSON.items[0].snippet.title;
 
             const subscriptions = await promisedPaginationHelper({
@@ -130,8 +132,10 @@ class YouTube extends GenericProvider {
                     const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
                     ret.archiveUrl = "https://youtube.com/channel/" + ret.login + "/videos";
                     ret.chatUrl = "https://youtube.com/channel/" + ret.login + "/discussion";
-                    ret.image = { "88": sub.snippet.thumbnails.default.url,
-                                 "240": sub.snippet.thumbnails.high.url };
+                    ret.image = {
+                        "88": sub.snippet.thumbnails.default.url,
+                        "240": sub.snippet.thumbnails.high.url
+                    };
                     ret.uname = sub.snippet.title;
                     return ret;
                 });
@@ -161,9 +165,10 @@ class YouTube extends GenericProvider {
             ch.url.push("https://youtube.com/channel/" + ch.login);
             ch.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
             ch.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
-            ch.image = { "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                     "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                   };
+            ch.image = {
+                "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+            };
             ch.uname = data.parsedJSON.items[0].snippet.title;
             return ch;
         }
@@ -192,9 +197,10 @@ class YouTube extends GenericProvider {
                         key: await apiKey
                     };
                 let page = 0;
-                ch.image = { "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                             "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                           };
+                ch.image = {
+                    "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                    "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+                };
                 ch.uname = data.parsedJSON.items[0].snippet.title;
                 const subscriptions = await promisedPaginationHelper({
                     url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
@@ -229,8 +235,10 @@ class YouTube extends GenericProvider {
                         const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
                         ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
                         ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
-                        ret.image = { "88": sub.snippet.thumbnails.default.url,
-                                     "240": sub.snippet.thumbnails.high.url };
+                        ret.image = {
+                            "88": sub.snippet.thumbnails.default.url,
+                            "240": sub.snippet.thumbnails.high.url
+                        };
                         ret.uname = sub.snippet.title;
                         return ret;
                     }));

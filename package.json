@@ -224,7 +224,7 @@
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
-    "firefox": ">=49.0a1"
+    "firefox": ">=53.0a1"
   },
   "license": "MPL-2.0",
   "repository": {
@@ -257,11 +257,12 @@
     "git-prepush-hook": "^1.0.1",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": ">=0.6.0",
     "grunt-contrib-copy": ">=0.8.2",
     "grunt-env": ">=0.4.4",
     "grunt-header": "^1.1.0",
-    "grunt-istanbul": ">=0.6.1",
+    "grunt-istanbul": "^0.7.2",
     "grunt-package": ">=0.1.3",
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
     "html-webpack-plugin": "^2.22.0",
@@ -271,7 +272,7 @@
     "load-grunt-tasks": "^3.5.2",
     "remap-istanbul": "^0.6.4",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.2"
+    "webpack": "^2.2.1"
   },
   "scripts": {
     "grunt": "grunt",
@@ -281,13 +282,10 @@
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",
     "run": "webpack && grunt dev && jpm run --addon-dir build/"
   },
-  "pre-push": [
-    "lint-cache"
-  ],
+  "pre-push": [],
   "permissions": {
     "multiprocess": true
   },
   "hasEmbeddedWebExtension": true,
-  "icon": "icon48.png",
-  "pre-push": []
+  "icon": "icon48.png"
 }

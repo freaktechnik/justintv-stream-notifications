@@ -24,8 +24,10 @@ function getChannelFromJson(json) {
     cho.url.push(json.channel.channel_link);
     cho.archiveUrl = json.channel.channel_link + archiveURL;
     cho.chatUrl = chatURL + json.channel.user_name;
-    cho.image = { "200": cdnURL + json.channel.user_logo,
-                  "50": cdnURL + json.channel.user_logo_small };
+    cho.image = {
+        "200": cdnURL + json.channel.user_logo,
+        "50": cdnURL + json.channel.user_logo_small
+    };
     cho.title = json.media_status;
     cho.category = json.category_name;
     cho.viewers = json.media_views;

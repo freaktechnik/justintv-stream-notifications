@@ -15,12 +15,12 @@ module.exports = {
         filename: "[name]/index.js"
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel',
-                query: {
+                loader: 'babel-loader',
+                options: {
                     plugins: [
                         "transform-class-properties",
                         "transform-es2015-modules-commonjs-simple"
@@ -29,16 +29,21 @@ module.exports = {
             },
             {
                 test: /\.(svg|png)$/,
-                loader: 'file?name=assets/images/[name].[ext]'
+                loader: 'file-loader?name=assets/images/[name].[ext]'
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style', 'css')
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
             }
         ]
     },
     plugins: [
-		new ExtractTextPlugin("[name]/style.css"),
+		new ExtractTextPlugin({
+            filename: "[name]/style.css"
+        }),
 		new HtmlWebpackPlugin({
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',

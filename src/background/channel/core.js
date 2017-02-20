@@ -148,11 +148,11 @@ class Item {
  *
  * @extends module:channel/core~Item
  */
-class User extends Item
-{
+class User extends Item {
     /**
-     * @param {module:channel/core~SerializedUser} properties
-     * @returns {module:channel/core.User}
+     * @param {module:channel/core~SerializedUser} properties - Serialized object
+     *        to turn into a user.
+     * @returns {module:channel/core.User} User based on the serialized object.
      */
     static deserialize(properties) {
         const props = omit(properties, ITEM_ARGS);
@@ -161,9 +161,9 @@ class User extends Item
     }
 
     /**
-     * @param {string} login
-     * @param {string} type
-     * @param {number} [id]
+     * @param {string} login - Login of the user.
+     * @param {string} type - Type/Provider of the user.
+     * @param {number} [id] - ID of the user.
      */
     constructor(login, type, id) {
         super(login, type, id);
@@ -200,8 +200,10 @@ class User extends Item
  */
 class Channel extends Item {
     /**
-     * @param {module:channel/core~SerializedChannel} properties
-     * @returns {module:channel/core.Channel}
+     * @param {module:channel/core~SerializedChannel} properties - Serialzed object
+     *        to deserialize into a channel.
+     * @returns {module:channel/core.Channel} Deserialized channel based on the
+     *          object.
      */
     static deserialize(properties) {
         const props = omit(properties, ITEM_ARGS);
@@ -270,10 +272,11 @@ class Channel extends Item {
     mature = false;
 
     /**
-     * @param {string} login
-     * @param {string} type
-     * @param {number} [id]
-     * @param {module:channel/live-state~SerializedLiveState} [state]
+     * @param {string} login - Login of the channel.
+     * @param {string} type - Type/Provider of the channel.
+     * @param {number} [id] - ID of the channel.
+     * @param {module:channel/live-state~SerializedLiveState} [state] - Live state
+     *        of the channel.
      */
     constructor(login, type, id, state) {
         super(login, type, id);

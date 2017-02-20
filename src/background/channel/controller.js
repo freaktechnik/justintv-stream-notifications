@@ -39,13 +39,13 @@ import EventTarget from '../../event-target';
  *          mature if parental controls are activated.
  */
 const filterInapropriateChannels = (channels) => {
-    if(ParentalControls.enabled) {
-        return channels.filter((c) => !c.mature);
-    }
-    else {
-        return channels;
-    }
-};
+        if(ParentalControls.enabled) {
+            return channels.filter((c) => !c.mature);
+        }
+        else {
+            return channels;
+        }
+    },
 /**
  * Filter channels to exclude existing favorites.
  *
@@ -53,9 +53,9 @@ const filterInapropriateChannels = (channels) => {
  * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
  * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
  */
-const filterExistingFavs = (user, channels) => {
-    return channels.filter((ch) => !user.favorites.includes(ch.login));
-};
+    filterExistingFavs = (user, channels) => {
+        return channels.filter((ch) => !user.favorites.includes(ch.login));
+    };
 
 /**
  * Controller for all the channel stuff. Handles getting info from providers
@@ -321,7 +321,7 @@ export default class ChannelController extends EventTarget {
                 }
             };
 
-        for(let p in providers) {
+        for(const p in providers) {
             if(providers[p].enabled) {
                 this.getChannelsByType(p).then(channelsCb);
                 if(providers[p].supports.favorites) {
@@ -335,25 +335,29 @@ export default class ChannelController extends EventTarget {
      * Another method in this module that makes magic happen...
      * The promise is resolved with all the arguments this method was called.
      *
-     * @param {?} args
+     * @param {?} args - Arguments to the callback.
      * @async
      * @private
+     * @returns {undefined}
      */
     _ensureQueueReady(...args) {
         if(!this._ready) {
             return new Promise((resolve) => this._queue.push(partial(resolve, ...args)));
         }
         else {
-            return Promise.resolve(...args);
+            return Promise.resolve(args);
         }
     }
     /**
      * Get the details of a channel and store them in the ChannelList.
      *
-     * @param {string} name
-     * @param {string} type
-     * @param {Funtion} [canceled=() => false]
-     * @returns {module:channel/core.Channel}
+     * @param {string} name - Username of the channel to add.
+     * @param {string} type - Type/provider of the channel to add.
+     * @param {Funtion} [canceled=() => false] - Canceling checker.
+     * @returns {module:channel/core.Channel} Resulting channel object.
+     * @throws If the provider is disabled.
+     * @throws If parental controls are enabled and the channel is marked mature.
+     * @throws If the action is canceled.
      */
     async addChannel(name, type, canceled = () => false) {
         if(type in providers && providers[type].enabled) {
@@ -377,8 +381,9 @@ export default class ChannelController extends EventTarget {
     /**
      * Update a channel and store it in the ChannelList.
      *
-     * @param {number} channelId
-     * @returns {module:channel/core.Channel?}
+     * @param {number} channelId - ID of the channel to update.
+     * @returns {module:channel/core.Channel?} Updated channel object. May be
+     *          null if the provider is disabled.
      */
     async updateChannel(channelId) {
         await this._ensureQueueReady();
@@ -394,8 +399,10 @@ export default class ChannelController extends EventTarget {
      * Update channels by provider. Doesn't update if the provider is disabled.
      *
      * @param {string} [provider=null] - Type of channels to update. All
-     *                                        channels are updated if left out.
+     *                                   channels are updated if left out.
      * @returns {Array.<module:channel/core.Channel>|module:channel/core.Channel}
+     *          List of updated channel objects, if multiple were updated, else
+     *          object of the updated channel.
      */
     async updateChannels(provider = null) {
         if(provider === null || !(provider in providers)) {
@@ -428,7 +435,7 @@ export default class ChannelController extends EventTarget {
      * Get a channel.
      *
      * @param {number} channelId - ID of the channel.
-     * @returns {module:channel/core.Channel}
+     * @returns {module:channel/core.Channel} Channel instance.
      * @async
      */
     getChannel(channelId) {
@@ -440,7 +447,8 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider=null] - Type of the channels to return. If
      *                                      left out, all channels are returned.
-     * @returns {Array.<module:channel/core.Channel>}
+     * @returns {Array.<module:channel/core.Channel>} List of channels with for
+     *          the given type/provider.
      * @async
      */
     getChannelsByType(provider = null) {
@@ -451,7 +459,7 @@ export default class ChannelController extends EventTarget {
      * Remove a channel from the ChannelList.
      *
      * @param {number} channelId
-     * @returns {module:channel/core.Channel}
+     * @returns {module:channel/core.Channel} Removed channel.
      * @async
      */
     removeChannel(channelId) {
@@ -461,12 +469,13 @@ export default class ChannelController extends EventTarget {
     /**
      * Add a user and its favorites.
      *
-     * @param {string} username
-     * @param {string} type
-     * @param {Function} [canceled=() => false]
+     * @param {string} username - Username of the user to add.
+     * @param {string} type - Type/provider of the user to add.
+     * @param {Function} [canceled=() => false] - Canceling checker.
      * @returns {module:channel/core.User} An array with the added user and an array of added
-     *                 channels.
+     *          channels.
      * @throws Gets rejected if the provider doesn't support favorites.
+     * @throws When the action is canceled.
      */
     async addUser(username, type, canceled = () => false) {
         if(type in providers && providers[type].supports.favorites) {
@@ -493,25 +502,25 @@ export default class ChannelController extends EventTarget {
     }
     /**
      * @private
-     * @param {module:channel/core.User} user
+     * @param {module:channel/core.User} user - User instance to update.
      * @async
-     * @returns {module:channel/core.User}
+     * @returns {module:channel/core.User} Updated user.
      */
     async _updateUser(user) {
-        const [ updatedUser, channels ] = await providers[user.type].getUserFavorites(user.login);
-        const [ finalUser ] = await Promise.all([
-            this._list.setUser(updatedUser),
-            // Can't just call this.addUser(user.login, user.type) because of this.
-            this._list.addChannels(filterInapropriateChannels(filterExistingFavs(user, channels)))
-        ]);
+        const [ updatedUser, channels ] = await providers[user.type].getUserFavorites(user.login),
+            [ finalUser ] = await Promise.all([
+                this._list.setUser(updatedUser),
+                // Can't just call this.addUser(user.login, user.type) because of this.
+                this._list.addChannels(filterInapropriateChannels(filterExistingFavs(user, channels)))
+            ]);
         return finalUser;
     }
     /**
-     * Update a user and add any new favorites.
+     * Update a user or all users and add any new favorites.
      *
      * @param {number} [userId] - ID of the user, if not specified updates
-     *                               all users.
-     * @returns {Array.<module:channel/core.User>}
+     *                            all users.
+     * @returns {Array.<module:channel/core.User>} Updated user instances.
      */
     async updateUser(userId) {
         await this._ensureQueueReady();
@@ -532,8 +541,9 @@ export default class ChannelController extends EventTarget {
      * Get all users of the given type.
      *
      * @param {string} [provider=null] - Type the users should be of. If
-     *                                        omuitted all users are returned.
-     * @returns {Array.<module:channel/core.User>}
+     *                                        omitted all users are returned.
+     * @returns {Array.<module:channel/core.User>} User instances for the given
+     *          type/provider.
      * @async
      */
     getUsersByType(provider = null) {
@@ -544,9 +554,10 @@ export default class ChannelController extends EventTarget {
      * Remove a user from the ChannelList and optionally remove the channels it
      * favorited.
      *
-     * @param {number} userId
-     * @param {boolean} [removeFavorites=false]
-     * @returns {module:channel/core.User}
+     * @param {number} userId - ID of the user to remove.
+     * @param {boolean} [removeFavorites=false] - Also remove favorited channels
+     *        of the user.
+     * @returns {module:channel/core.User} Removed user instance.
      */
     async removeUser(userId, removeFavorites = false) {
         await this._ensureQueueReady();
@@ -560,9 +571,9 @@ export default class ChannelController extends EventTarget {
     /**
      * @private
      * @async
-     * @param {string} provider
-     * @param {Array} credentials
-     * @returns {Array.<module:channel/core.User>}
+     * @param {string} provider - Provider/type to add credentials for.
+     * @param {Array} credentials - Resulting credentials from a search.
+     * @returns {Array.<module:channel/core.User>} Added user instances.
      */
     _addFoundCredentials(provider, credentials) {
         return Promise.all(credentials.filter((credential) => credential.username).map((credential) => {
@@ -573,9 +584,9 @@ export default class ChannelController extends EventTarget {
     /**
      * @private
      * @async
-     * @param {string} provider
-     * @param {string} url
-     * @returns {Array.<module:channel/core.User>}
+     * @param {string} provider - Provider to search for users.
+     * @param {string} url - URL to search for credentials for.
+     * @returns {Array.<module:channel/core.User>} Users found for the given url.
      */
     _findUsersByURL(provider, url) {
         return logins.search({ url })
@@ -586,7 +597,9 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider] - Provider to add users stored in the
      * credentials for. If not provided, all providers are searched.
-     * @returns {Array}
+     * @returns {Array.<module:channel/core.User} Users added based on saved
+     *          credentials.
+     * @throws If the provider does not support adding users based on credentials.
      * @async
      */
     autoAddUsers(provider) {
@@ -607,6 +620,7 @@ export default class ChannelController extends EventTarget {
     /**
      * Opens or focueses a tab with the manager.
      *
+     * @returns {undefined}
      * @async
      */
     showManager() {
@@ -616,7 +630,8 @@ export default class ChannelController extends EventTarget {
     /**
      * Set the theme of the channel manager.
      *
-     * @param {number} theme
+     * @param {number} theme - Theme ID to use.
+     * @returns {undefined}
      */
     setTheme(theme) {
         this._ensureQueueReady().then(() => this._manager.setTheme(theme));
@@ -627,6 +642,7 @@ export default class ChannelController extends EventTarget {
      *
      * @param {number|string} id - ID or login.
      * @param {string} [type] - Type if not an ID is given.
+     * @returns {undefined}
      */
     async copyChannelURL(id, type) {
         let channel;
@@ -641,9 +657,8 @@ export default class ChannelController extends EventTarget {
             channel = await this._list.getChannel(id);
         }
 
-        const url = channel.live.alternateURL ? channel.live.alternateURL : channel.url[0];
-
-        const p = when(document, "copy");
+        const url = channel.live.alternateURL ? channel.live.alternateURL : channel.url[0],
+            p = when(document, "copy");
         document.execCommand("copy", false, null);
         const [ e, pattern ] = await Promise.all([
             p,
