@@ -260,7 +260,10 @@ module.exports = function(grunt) {
                     sourceMaps: true,
                     // workaround remap-istanbul not handling relative paths properly
                     //TODO currently maps lib/ to build/lib/
-                    sourceRoot: 'build/instrument/build'
+                    sourceRoot: 'build/instrument/build',
+                    presets: [
+                        'es2017'
+                    ]
                 },
                 files: [
                     {
