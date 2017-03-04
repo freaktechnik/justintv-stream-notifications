@@ -257,6 +257,7 @@
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-freaktechnik": "^2.0.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "fake-indexeddb": "^1.0.11",
     "file-loader": "^0.10.0",
     "git-prepush-hook": "^1.0.1",
     "grunt": ">=1.0.1",

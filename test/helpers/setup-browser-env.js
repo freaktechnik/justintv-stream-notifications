@@ -5,6 +5,8 @@ import sinon from 'sinon';
 import ChromeEvent from 'sinon-chrome/events';
 import { URLSearchParams } from 'url';
 import { setup } from './default-behavior';
+import indexedDB from 'fake-indexeddb';
+import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
 
 // DOM environment
 browserEnv([ 'window', 'document', 'navigator', 'EventTarget', 'Event', 'CustomEvent', 'URL' ]);
@@ -12,6 +14,8 @@ browserEnv([ 'window', 'document', 'navigator', 'EventTarget', 'Event', 'CustomE
 // Additional Web APIs
 global.fetch = sinon.stub();
 global.URLSearchParams = URLSearchParams;
+global.indexedDB = indexedDB;
+global.IDBKeyRange = IDBKeyRange;
 
 // WebExtension APIs
 //global.chrome = chrome;
