@@ -2,109 +2,95 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-"use strict";
+import test from "ava";
+import { selectOrOpenTab } from '../../../src/background/channel/utils';
+import { getChannel } from "../../helpers/channel-user";
+import LiveState from "../../../src/background/channel/live-state";
+import { setup } from "../../helpers/default-behavior";
 
-const requireHelper = require("./require_helper"),
-    tabs = require("sdk/tabs"),
-    channelUtils = requireHelper('../lib/channel/utils'),
-    { wait } = require("./event/helpers"),
-    { getChannel } = require("./channeluser/utils"),
-    self = require("sdk/self"),
-    LiveState = requireHelper("../lib/channel/live-state").default;
+const setupAndRun = (args, tabId) => {
+    const tabs = [];
+    if(tabId !== undefined) {
+        tabs.push({ id: tabId });
+    }
+    browser.tabs.query.returns(Promise.resolve(tabs));
 
-exports['test open archive'] = function* (assert) {
-    const channel = getChannel();
-
-    channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "ready");
-
-    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened woth archive url for offline channel");
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
+    return selectOrOpenTab(...args);
 };
 
-exports['test focus archive'] = function* (assert) {
+test.beforeEach(() => {
+    browser.flush();
+    setup();
+});
+
+test.serial('open archive', async (t) => {
     const channel = getChannel();
-    channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "ready");
 
-    tabs.open({ url: self.data.url("channels-manager.html") });
+    await setupAndRun([ channel ]);
 
-    const tabToClose = yield wait(tabs, "ready");
+    t.true(browser.tabs.query.calledOnce);
+    t.is(browser.tabs.query.lastCall.args[0].url[0], channel.archiveUrl);
+    t.true(browser.tabs.create.calledOnce);
+    t.is(browser.tabs.create.lastCall.args[0].url, channel.archiveUrl, "Tab was opened woth archive url for offline channel");
+});
 
-    yield channelUtils.selectOrOpenTab(channel);
-
-    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was correctly activated");
-    tabToClose.close();
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
-
-exports['test open live channel when archive is already opened'] = function* (assert) {
+test.serial('focus archive', async (t) => {
     const channel = getChannel();
-    channelUtils.selectOrOpenTab(channel);
-    const tabToClose = yield wait(tabs, "ready");
+
+    await setupAndRun([ channel ], 5);
+
+    t.true(browser.tabs.query.calledOnce);
+    t.is(browser.tabs.query.lastCall.args[0].url[0], channel.archiveUrl);
+    t.true(browser.tabs.update.calledOnce);
+    t.is(browser.tabs.update.lastCall.args[0], 5);
+    t.true(browser.tabs.update.lastCall.args[1].active);
+});
+
+test.serial('open live channel', async (t) => {
+    const channel = getChannel();
 
     channel.live.setLive(true);
 
-    channelUtils.selectOrOpenTab(channel);
-    yield wait(tabs, "ready");
+    await setupAndRun([ channel ]);
 
-    assert.equal(tabs.activeTab.url, channel.url[0], "New tab was opened for the live channel");
+    t.true(browser.tabs.query.calledOnce);
+    t.deepEqual(browser.tabs.query.lastCall.args[0].url, channel.url);
+    t.true(browser.tabs.create.calledOnce);
+    t.is(browser.tabs.create.lastCall.args[0].url, channel.url[0], "New tab was opened for the live channel");
+});
 
-    tabToClose.close();
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
-
-exports['test open live channel'] = function* (assert) {
-    const channel = getChannel();
-    channel.live.setLive(true);
-    yield channelUtils.selectOrOpenTab(channel);
-
-    assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
-
-exports['test open hosted live channel'] = function* (assert) {
+test.serial('open hosted live channel', async (t) => {
     const channel = getChannel();
     channel.live = new LiveState(LiveState.REDIRECT);
     channel.live.alternateURL = "http://example.com/alternate";
-    yield channelUtils.selectOrOpenTab(channel);
 
-    assert.equal(tabs.activeTab.url, channel.url[0], "Tab was opened for the live channel");
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
+    await setupAndRun([ channel ]);
 
-exports['test force open archive'] = function* (assert) {
+    t.true(browser.tabs.query.calledOnce);
+    t.deepEqual(browser.tabs.query.lastCall.args[0].url, channel.url);
+    t.true(browser.tabs.create.calledOnce);
+    t.is(browser.tabs.create.lastCall.args[0].url, channel.url[0], "Tab was opened for the live channel");
+});
+
+test.serial('force open archive', async (t) => {
     const channel = getChannel();
     channel.live.setLive(true);
-    channelUtils.selectOrOpenTab(channel, "archive");
-    yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, channel.archiveUrl, "Tab was opened with the archive url despite the channel being live");
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
+    await setupAndRun([ channel, "archive" ]);
 
-exports['test open chat'] = function* (assert) {
+    t.true(browser.tabs.query.calledOnce);
+    t.is(browser.tabs.query.lastCall.args[0].url[0], channel.archiveUrl);
+    t.true(browser.tabs.create.calledOnce);
+    t.is(browser.tabs.create.lastCall.args[0].url, channel.archiveUrl, "Tab was opened with the archive url despite the channel being live");
+});
+
+test.serial('open chat', async (t) => {
     const channel = getChannel();
-    channelUtils.selectOrOpenTab(channel, "chat");
-    yield wait(tabs, "ready");
 
-    assert.equal(tabs.activeTab.url, channel.chatUrl, "Tab was opened with the url for the chat");
-    const p = wait(tabs, "close");
-    tabs.activeTab.close();
-    yield p;
-};
+    await setupAndRun([ channel, "chat" ]);
 
-require("sdk/test").run(exports);
-
+    t.true(browser.tabs.query.calledOnce);
+    t.is(browser.tabs.query.lastCall.args[0].url[0], channel.chatUrl);
+    t.true(browser.tabs.create.calledOnce);
+    t.is(browser.tabs.create.lastCall.args[0].url, channel.chatUrl, "Tab was opened with the url for the chat");
+});

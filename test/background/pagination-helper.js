@@ -2,111 +2,107 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-"use strict";
+import test from "ava";
+import sinon from "sinon";
+import { PaginationHelper, promisedPaginationHelper } from "../../src/background/pagination-helper";
 
-const requireHelper = require("./require_helper"),
-    { PaginationHelper, promisedPaginationHelper } = requireHelper("../lib/pagination-helper");
-
-exports.testPaginationHelper = function(assert, done) {
-    const URL = "http://example.com/?offset=";
-    let count = 0;
+test.cb("PaginationHelper with callbacks", (t) => {
+    const URL = "http://example.com/?offset=",
+        cbk = sinon.spy((url, callback, initial) => {
+            t.is(url, URL + (cbk.callCount - 1));
+            if(initial) {
+                callback(cbk.callCount);
+            }
+            else {
+                return Promise.resolve(cbk.callCount);
+            }
+        });
     new PaginationHelper({
         url: URL,
         pageSize: 1,
-        request(url, callback, initial) {
-            assert.equal(url, URL + count++, "request got the correct URL");
-            if(initial) {
-                callback(count);
-            }
-            else {
-                return Promise.resolve(count);
-            }
-        },
+        request: cbk,
         fetchNextPage(data) {
-            assert.equal(data, count, "fetchNextPage got the correct data");
+            t.is(data, cbk.callCount, "fetchNextPage got the correct data");
             return data < 2;
         },
         onComplete(data) {
-            assert.ok(Array.isArray(data), "data is an array");
-            assert.equal(data[0], 1, "First data element is has the correct value");
-            assert.equal(data[data.length - 1], count, "Last data element has the correct value");
-            assert.equal(data.length, count, "data has the correct length");
-            done();
+            t.true(Array.isArray(data), "data is an array");
+            t.is(data[0], 1, "First data element is has the correct value");
+            t.is(data[data.length - 1], cbk.callCount, "Last data element has the correct value");
+            t.is(data.length, cbk.callCount, "data has the correct length");
+            t.end();
         },
         getItems(data) {
-            assert.equal(data, count, "getItems got the correct data");
+            t.is(data, cbk.callCount, "getItems got the correct data");
             return data;
         }
     });
-};
+});
 
 
-exports.testPaginationHelperPageNumberGenerator = function(assert, done) {
+test.cb("PaginationHelper Page Number Generator", (t) => {
     const URL = "http://example.com/?offset=",
-        hash = "asdf";
-    let count = 0;
+        hash = "asdf",
+        cbk = sinon.spy((page, pageSize, data) => {
+            t.is(page, "", "Initial page value was passed in correctly");
+            t.is(pageSize, 1, "Page size was passed in correctly");
+            t.is(data, cbk.callCount - 1, "Correct data was passed to getPageNumber");
+            return hash;
+        });
     new PaginationHelper({
         url: URL,
         pageSize: 1,
         initialPage: "",
         request(url, callback) {
-            if(count === 0) {
-                assert.equal(url, URL, "Initial URL is correct");
+            if(cbk.callCount === 0) {
+                t.is(url, URL, "Initial ,URL is correct");
             }
             else {
-                assert.equal(url, URL + hash, "URL has hash the second time");
+                t.is(url, URL + hash, "URL has hash the second time");
             }
-            callback(count);
+            callback(cbk.callCount);
         },
-        getPageNumber(page, pageSize, data) {
-            assert.equal(page, "", "Initial page value was passed in correctly");
-            assert.equal(pageSize, 1, "Page size was passed in correctly");
-            assert.equal(data, count, "Correct data was passed to getPageNumber");
-            count++;
-            return hash;
-        },
+        getPageNumber: cbk,
         fetchNextPage(data) {
-            assert.equal(data, count, "Next page called and data inptu is correct");
+            t.is(data, cbk.callCount, "Next page called and data inptu is correct");
             return data < 1;
         },
         onComplete(data) {
-            assert.ok(Array.isArray(data), "Data is an array");
-            assert.equal(data[0], 0, "data's first item is correct");
-            assert.equal(data[data.length - 1], count, "data's last item is correct");
-            assert.equal(data.length, 2, "Data has the correct amount of items");
-            done();
+            t.true(Array.isArray(data), "Data is an array");
+            t.is(data[0], 0, "data's first item is correct");
+            t.is(data[data.length - 1], cbk.callCount, "data's last item is correct");
+            t.is(data.length, 2, "Data has the correct amount of items");
+            t.end();
         },
         getItems(data) {
-            assert.equal(data, count, "getItems got the correct data");
+            t.is(data, cbk.callCount, "getItems got the correct data");
             return data;
         }
     });
-};
+});
 
-exports.testPromisedPaginationHelper = function* (assert) {
-    let count = 0;
+test("Promised PaginationHelper", async (t) => {
     const URL = "http://example.com/?offset=",
-        data = yield promisedPaginationHelper({
+        cbk = sinon.spy((url, callback) => {
+            t.is(url, URL + (cbk.callCount - 1), "request got the correct URL");
+            callback(cbk.callCount);
+        }),
+        data = await promisedPaginationHelper({
             url: URL,
             pageSize: 1,
-            request(url, callback) {
-                assert.equal(url, URL + count++, "request got the correct URL");
-                callback(count);
-            },
+            request: cbk,
             fetchNextPage(data) {
-                assert.equal(data, count, "fetchNextPage got the correct data");
+                t.is(data, cbk.callCount, "fetchNextPage got the correct data");
                 return data < 1;
             },
             getItems(data) {
-                assert.equal(data, count, "getItems got the correct data");
+                t.is(data, cbk.callCount, "getItems got the correct data");
                 return data;
             }
         });
 
-    assert.ok(Array.isArray(data), "data is an array");
-    assert.equal(data[0], 1, "First data element is has the correct value");
-    assert.equal(data[data.length - 1], count, "Last data element has the correct value");
-    assert.equal(data.length, count, "data has the correct length");
-};
-
-require("sdk/test").run(exports);
+    t.true(Array.isArray(data), "data is an array");
+    t.is(data[0], 1, "First data element is has the correct value");
+    t.is(data[data.length - 1], cbk.callCount, "Last data element has the correct value");
+    t.is(data.length, cbk.callCount, "data has the correct length");
+});

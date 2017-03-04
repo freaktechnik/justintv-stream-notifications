@@ -3,30 +3,27 @@
  * @author Martin Giger
  * @license MPL-2.0
  */
-"use strict";
+import test from "ava";
+import sinon from "sinon";
+import { invokeOnce } from "../src/utils";
 
-const requireHelper = require("./require_helper"),
-    { invokeOnce } = requireHelper("../lib/utils");
-
-exports.testInvokeOnce = function(assert, done) {
-    let counter = 0,
-        id = 0;
-    const cbk = () => {
-            assert.equal(++counter, 1);
-            assert.equal(id, 2);
-            done();
-        },
+test("invokeOnce", async (t) => {
+    let id = 0;
+    const cbk = sinon.spy(() => {
+            t.is(id, 2);
+            return Promise.resolve();
+        }),
         firstCbk = invokeOnce(id++, cbk),
         secondCbk = invokeOnce(id++, cbk),
         thirdCbk = invokeOnce(id, cbk);
 
-    assert.equal(typeof firstCbk, "function");
-    assert.equal(typeof secondCbk, "function");
-    assert.equal(typeof thirdCbk, "function");
+    t.is(typeof firstCbk, "function");
+    t.is(typeof secondCbk, "function");
+    t.is(typeof thirdCbk, "function");
 
     firstCbk();
     secondCbk();
-    thirdCbk();
-};
+    await thirdCbk();
 
-require("sdk/test").run(exports);
+    t.true(cbk.calledOnce);
+});
