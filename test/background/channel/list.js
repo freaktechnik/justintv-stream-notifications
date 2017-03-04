@@ -9,7 +9,7 @@ import { User, Channel } from '../../../src/background/channel/core';
 import LiveState from "../../../src/background/channel/live-state";
 import { getUser, getChannel } from "../../helpers/channel-user";
 import { when } from "../../../src/utils";
-import prefs from '../../../prefs.json';
+import prefs from '../../../src/prefs.json';
 
 test('channellist get invalid users', (t) => {
     return Promise.all([
