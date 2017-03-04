@@ -189,3 +189,8 @@ bower_components/
 locale/*.json
 !locale/en-US.json
 .eslintcache
+
+webextension/background
+webextension/list
+webextension/manager
+webextension/options
