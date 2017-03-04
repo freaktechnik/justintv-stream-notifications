@@ -14,7 +14,7 @@ const testUpdateUser = async (t, p) => {
     const promise = when(sink, "updateuser");
 
     emit(providers[p], "updateuser", getUser('test', p));
-    const user = await promise;
+    const { detail: user } = await promise;
     t.is(user.login, 'test');
     t.is(user.type, p);
 };
@@ -25,7 +25,7 @@ const testUpdateChannels = async (t, p) => {
     const promise = when(sink, "updatedchannels");
 
     emit(providers[p], "updatedchannels", [ getChannel('test', p) ]);
-    const channels = await promise;
+    const { detail: channels } = await promise;
     t.is(channels.length, 1);
     t.is(channels[0].login, 'test');
     t.is(channels[0].type, p);
@@ -36,7 +36,7 @@ const testNewChannels = async (t, p) => {
     const promise = when(sink, "newchannels");
 
     emit(providers[p], "newchannels", [ getChannel('test', p) ]);
-    const channels = await promise;
+    const { detail: channels } = await promise;
     t.is(channels.length, 1);
     t.is(channels[0].login, 'test');
     t.is(channels[0].type, p);

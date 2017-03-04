@@ -186,9 +186,8 @@ test.serial('clear event', async (t) => {
     let p = when(t.context.list, "clear");
     t.context.list.clear();
 
-    let result = await p;
-    t.is(typeof result, "boolean", "Result is a boolean");
-    t.true(!result, "DB was soft cleared");
+    let { detail: result } = await p;
+    t.false(result, "DB was soft cleared");
 
     t.context.list.db.close();
     delete t.context.list.db;
@@ -197,7 +196,7 @@ test.serial('clear event', async (t) => {
     t.context.list.clear();
 
     result = await p;
-    t.is(typeof result, "boolean", "Result is a boolean");
+    result = result.detail;
     t.true(result, "DB was hard cleared");
 });
 
