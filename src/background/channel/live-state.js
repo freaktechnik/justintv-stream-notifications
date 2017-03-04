@@ -176,6 +176,7 @@ class LiveState {
         else if(interpretation === TOWARD_OFFLINE) {
             return this.state === LIVE;
         }
+        return false;
     }
     /**
      * Set the state to live or not live. Simple as can be.

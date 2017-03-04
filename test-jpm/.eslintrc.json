@@ -1,0 +1,12 @@
+{
+    "rules": {
+        "node/no-missing-require": 0,
+        "node/no-unpublished-require": 0,
+        "no-console": 0,
+        "node/no-unsupported-features": 0,
+        "consistent-this": 0,
+        "one-var": 0,
+        "prefer-const": 0
+    },
+    "extends": "plugin:freaktechnik/node"
+}

@@ -44,7 +44,7 @@ class Douyutv extends GenericProvider {
                 return getChannelFromJSON(data.parsedJSON.data);
             }
             else {
-                throw "Couldn't get room info for douyutv channel with ID " + username;
+                throw new Error("Couldn't get room info for douyutv channel with ID " + username);
             }
         });
     }

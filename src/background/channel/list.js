@@ -10,7 +10,7 @@
 import { emit } from "../../utils";
 import prefs from "../preferences";
 import { Channel, User } from "./core";
-import LiveState from "./live-state";
+import LiveState from "../../live-state";
 import EventTarget from 'event-target-shim';
 
 /**

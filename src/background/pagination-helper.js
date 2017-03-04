@@ -130,7 +130,7 @@ PaginationHelper.prototype.getPage = function(initial = false) {
             }
             else {
                 if(this.onComplete) {
-                    this.onComplete(Array.slice(this.result));
+                    this.onComplete(this.result.slice());
                 }
                 this.result.length = 0;
             }

@@ -12,7 +12,7 @@ import * as qs from "../queue/service";
 import EventTarget from 'event-target-shim';
 
 const _ = browser.i18n.getMessage,
-    methodNotSupported = (type, method) => Promise.reject(type + "." + method + " is not supported"),
+    methodNotSupported = (type, method) => Promise.reject(new Error(type + "." + method + " is not supported")),
     queues = new WeakMap(),
     queueFor = (provider) => queues.get(provider);
 
@@ -135,7 +135,7 @@ export default class GenericProvider extends EventTarget {
      * @abstract
      * @type {Array.<string>}
      */
-    static authURL = [];
+    authURL = [];
 
     /**
      * Generic base-class for all providers. Implements common patterns and helpers.
@@ -273,7 +273,7 @@ export default class GenericProvider extends EventTarget {
      * @returns {undefined}
      */
     updateFavsRequest(users) {
-        throw this.name + ".updateFavsRequest is not supported.";
+        throw new Error(this.name + ".updateFavsRequest is not supported.");
     }
     /**
      * Unqueues the reocurring update request for updating the favorite
@@ -340,7 +340,7 @@ export default class GenericProvider extends EventTarget {
      * @async
      * @returns {Array.<module:channel/core.Channel>} An array of featured
      *                                                channels.
-     * @see {@link module:lib/providers/generic-provider.GenericProvider#_mature}
+     * @see {@link module:providers/generic-provider.GenericProvider#_mature}
      */
     getFeaturedChannels() {
         return this.search("");

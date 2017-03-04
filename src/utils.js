@@ -56,7 +56,7 @@ export const invokeOnce = (newId, fn) => {
     return function(...args) {
         if(fn.currentId == newId) {
             delete fn.currentId;
-            fn(...args);
+            return fn(...args);
         }
     };
 };

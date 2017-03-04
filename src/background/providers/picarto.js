@@ -36,10 +36,10 @@ class Picarto extends GenericProvider {
         return this._qs.queueRequest(`${baseURL}/channel/${channelname.toLowerCase()}?key=${apiKey}`)
             .then((resp) => {
                 if(resp.ok) {
-                    return getChannelFromJSON(resp.parseJSON);
+                    return getChannelFromJSON(resp.parsedJSON);
                 }
                 else {
-                    throw `Channel ${channelname} does not exist for ${this.name}`;
+                    throw new Error(`Channel ${channelname} does not exist for ${this.name}`);
                 }
             });
     }
@@ -47,7 +47,7 @@ class Picarto extends GenericProvider {
         const urls = channels.map((channel) => `${baseURL}/channel/${channel.login}?key=${apiKey}`);
         this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (page) => {
             if(page.ok) {
-                const channel = getChannelFromJSON(page.parseJSON);
+                const channel = getChannelFromJSON(page.parsedJSON);
                 emit(this, "updatedchannels", channel);
             }
         });

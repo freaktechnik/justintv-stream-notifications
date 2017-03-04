@@ -74,7 +74,7 @@ class YouTube extends GenericProvider {
             return ch;
         }
         else {
-            throw "Getting channel details failed: " + data.status;
+            throw new Error("Getting channel details failed: " + data.status);
         }
     }
 
@@ -145,11 +145,11 @@ class YouTube extends GenericProvider {
             else {
                 /** @todo Sometimes needs oAuth for some reason, I guess privacy
                   * settings. This also triggers when the user follows noone. */
-                throw "Can't get favorites for youtube user " + username + " without oAuth as somebody with reading rights of this user's subs.";
+                throw new Error("Can't get favorites for youtube user " + username + " without oAuth as somebody with reading rights of this user's subs.");
             }
         }
         else {
-            throw "Error getting details for youtube user " + username;
+            throw new Error("Error getting details for youtube user " + username);
         }
     }
     async getChannelDetails(username) {
@@ -294,7 +294,7 @@ class YouTube extends GenericProvider {
                     }));
                 }
                 else {
-                    throw "Could not find the given stream";
+                    throw new Error("Could not find the given stream");
                 }
             },
             done = (id) => {
@@ -440,7 +440,7 @@ class YouTube extends GenericProvider {
             streamIds = response.parsedJSON.items.map((entry) => entry.id.videoId);
         }
         else {
-            throw "No search results found for " + this.name + " with " + query;
+            throw new Error(`No search results found for ${this.name} with ${query}`);
         }
 
         const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify(
@@ -472,7 +472,7 @@ class YouTube extends GenericProvider {
             }));
         }
 
-        throw "None of the searchresults exist for " + this.name;
+        throw new Error("None of the searchresults exist for " + this.name);
     }
 }
 

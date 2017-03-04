@@ -5,6 +5,7 @@
  * @license MPL-2.0
  * @module providers
  */
+
 import twitch from "./twitch";
 import hitbox from "./hitbox";
 import ustream from "./ustream";

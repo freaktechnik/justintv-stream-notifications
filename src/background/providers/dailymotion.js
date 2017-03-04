@@ -51,7 +51,7 @@ class Dailymotion extends GenericProvider {
                 }
             }
             else {
-                throw `Could not get details for ${id} on ${this._type}`;
+                throw new Error(`Could not get details for ${id} on ${this._type}`);
             }
         });
     }
@@ -78,7 +78,7 @@ class Dailymotion extends GenericProvider {
                 return channel;
             }
             else {
-                throw `Could not update ${channel.login} on ${this._type}`;
+                throw new Error(`Could not update ${channel.login} on ${this._type}`);
             }
         });
     }
@@ -268,7 +268,7 @@ class Dailymotion extends GenericProvider {
                 });
             }
             else {
-                throw "Didn't find any search results channels with " + query + " for " + this._type;
+                throw new Error("Didn't find any search results channels with " + query + " for " + this._type);
             }
         });
     }

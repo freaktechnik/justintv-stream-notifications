@@ -27,7 +27,7 @@ const type = "newlivestream",
 
 class NewLivestream extends GenericProvider {
     authURL = [ "http://livestream.com" ];
-    supportsFavorites = true;
+    _supportsFavorites = true;
 
     async _getChannelStatus(json, channel) {
        // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
@@ -85,7 +85,7 @@ class NewLivestream extends GenericProvider {
             return [ usr, channels ];
         }
         else {
-            throw "Couldn't get favorites for the channel " + username + " on " + this.name;
+            throw new Error(`Couldn't get favorites for the channel ${username} on ${this.name}`);
         }
     }
     getChannelDetails(channelname) {
@@ -94,7 +94,7 @@ class NewLivestream extends GenericProvider {
                 return getChannelFromJSON(data.parsedJSON);
             }
             else {
-                throw "Couldn't get details for the " + this.name + " channel " + channelname;
+                throw new Error(`Couldn't get details for the ${this.name} channel ${channelname}`);
             }
         });
     }
@@ -162,7 +162,7 @@ class NewLivestream extends GenericProvider {
             return this._getChannelStatus(data.parsedJSON, channel);
         }
         else {
-            throw "Couldn't get details for the new livestream channel " + channelname;
+            throw new Error("Couldn't get details for the new livestream channel " + channelname);
         }
     }
 }

@@ -19,7 +19,7 @@ export async function selectOrOpenTab(channel, what) {
     if(what === "chat") {
         toCheck.push(channel.chatUrl);
     }
-    else if(what === "archive" || !channel.live.isLive()) {
+    else if(what === "archive" || !(await channel.live.isLive())) {
         toCheck.push(channel.archiveUrl);
     }
     else {

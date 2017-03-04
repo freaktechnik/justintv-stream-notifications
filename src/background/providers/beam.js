@@ -75,7 +75,7 @@ class Beam extends GenericProvider {
                 if(response.ok && response.parsedJSON) {
                     return response.parsedJSON.find((val) => val.username == username).id;
                 }
-                throw `Could not find user for ${username}`;
+                throw new Error(`Could not find user for ${username}`);
             });
         });
     }
@@ -115,7 +115,7 @@ class Beam extends GenericProvider {
             return [ ch, channels ];
         }
         else {
-            throw `Could not get favorites for user ${username} on ${this.name}`;
+            throw new Error(`Could not get favorites for user ${username} on ${this.name}`);
         }
     }
     async updateFavsRequest(users) {
@@ -169,7 +169,7 @@ class Beam extends GenericProvider {
                 return getChannelFromJSON(response.parsedJSON);
             }
             else {
-                throw "Error getting the details for the beam channel " + channelname;
+                throw new Error("Error getting the details for the beam channel " + channelname);
             }
         });
     }
@@ -193,7 +193,7 @@ class Beam extends GenericProvider {
             return chans.map((chan) => getChannelFromJSON(chan));
         }
         else {
-            throw "Didn't find any featured channels for " + this.name;
+            throw new Error("Didn't find any featured channels for " + this.name);
         }
     }
     async search(query) {
@@ -207,7 +207,7 @@ class Beam extends GenericProvider {
             return chans.map((chan) => getChannelFromJSON(chan));
         }
         else {
-            throw "No results for " + query + " on " + this.name;
+            throw new Error("No results for " + query + " on " + this.name);
         }
     }
 }

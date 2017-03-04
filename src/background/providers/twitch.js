@@ -77,7 +77,7 @@ class Twitch extends GenericProvider {
     async getUserFavorites(username) {
         const data = await this._qs.queueRequest(baseURL + '/users/' + username, headers);
 
-        if(data.json && !data.json.error) {
+        if(data.parsedJSON && !data.parsedJSON.error) {
             const channels = await promisedPaginationHelper({
                     url: baseURL + '/users/' + username + '/follows/channels?limit=' + itemsPerPage + '&offset=',
                     pageSize: itemsPerPage,
@@ -104,7 +104,7 @@ class Twitch extends GenericProvider {
             return [ user, channels ];
         }
         else {
-            throw "Couldn't fetch twitch user " + username;
+            throw new Error(`Couldn't fetch ${this.name} user ${username}`);
         }
     }
     getChannelDetails(channelname) {
@@ -115,7 +115,7 @@ class Twitch extends GenericProvider {
                 return getChannelFromJSON(data.parsedJSON);
             }
             else {
-                throw data.parsedJSON ? data.parsedJSON.error : "Could not fetch details for " + this.name + " channel " + channelname;
+                throw new Error(data.parsedJSON ? data.parsedJSON.error : "Could not fetch details for " + this.name + " channel " + channelname);
             }
         });
     }
@@ -372,7 +372,7 @@ class Twitch extends GenericProvider {
             });
         }
         else {
-            throw "Could not get any featured channel for " + this.name;
+            throw new Error("Could not get any featured channel for " + this.name);
         }
     }
     async search(query) {
@@ -392,7 +392,7 @@ class Twitch extends GenericProvider {
             });
         }
         else {
-            throw "No results for the search " + query + " on " + this.name;
+            throw new Error("No results for the search " + query + " on " + this.name);
         }
     }
     _getChannelId(channel) {
@@ -508,11 +508,11 @@ class Twitch extends GenericProvider {
                 };
             }
             else {
-                throw "VOD not found";
+                throw new Error("VOD not found");
             }
         }
         else {
-            throw "Not a channel with an active playlist";
+            throw new Error("Not a channel with an active playlist");
         }
     }
 }

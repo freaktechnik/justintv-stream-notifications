@@ -73,7 +73,7 @@ class MLG extends GenericProvider {
                 return data.parsedJSON.data.items.find((g) => g.id == id).name;
             }
             else {
-                throw data.parsedJSON ? data.parsedJSON.errors : "Could not fetch games for " + this.name;
+                throw new Error(data.parsedJSON ? data.parsedJSON.errors : "Could not fetch games for " + this.name);
             }
         }
         else {
@@ -108,7 +108,7 @@ class MLG extends GenericProvider {
                 return this._getChannelFromJSON(cho);
             }
         }
-        throw "Couldn't get the channel details for " + channelname + " for " + this.name;
+        throw new Error("Couldn't get the channel details for " + channelname + " for " + this.name);
     }
     updateRequest(channels) {
         this._qs.queueUpdateRequest([ baseURL + "all" ], this._qs.HIGH_PRIORITY, async (data) => {
@@ -154,7 +154,7 @@ class MLG extends GenericProvider {
             return channel;
         }
         else {
-            throw "Something went wrong when updating " + channelname;
+            throw new Error("Something went wrong when updating " + channelname);
         }
     }
     async updateChannels(channels) {
@@ -180,7 +180,7 @@ class MLG extends GenericProvider {
                 return channel;
             }));
         }
-        throw "Could not update channels";
+        throw new Error("Could not update channels");
     }
 }
 

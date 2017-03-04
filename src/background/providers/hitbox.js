@@ -88,16 +88,17 @@ class Hitbox extends GenericProvider {
             return [ usr, channels ];
         }
         else {
-            throw "Error getting info for Hitbox user " + username;
+            throw new Error("Error getting info for Hitbox user " + username);
         }
     }
     getChannelDetails(channelname) {
         return this._qs.queueRequest(baseURL + '/media/live/' + channelname).then((data) => {
+            console.log(data);
             if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
                 return getChannelFromJson(data.parsedJSON.livestream[0]);
             }
             else {
-                throw "Error getting details for Hitbox channel " + channelname;
+                throw new Error(`Error getting details for ${this.name} channel ${channelname}`);
             }
         });
     }
@@ -160,7 +161,7 @@ class Hitbox extends GenericProvider {
             return chans.map((chan) => getChannelFromJson(chan));
         }
         else {
-            throw "Couldn't find any channels for the search on " + this.name + " that match " + query;
+            throw new Error(`Couldn't find any channels for the search on ${this.name} that match ${query}`);
         }
     }
 }

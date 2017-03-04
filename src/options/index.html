@@ -1,0 +1,85 @@
+<% var requireString = require("../content/insert-string.js"),
+    translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage),
+    prefs = require("../prefs.json"); %>
+<!DOCTYPE html>
+<html>
+    <!--
+        Created by Martin Giger
+        Licensed under the MPL 2.0
+    -->
+    <head>
+        <meta charset="utf-8">
+        <link rel="help" href="http://streamnotifier.ch/help/panel" hreflang="en" type="text/html">
+        <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">
+    </head>
+    <body>
+        <main class="panel">
+            <button id="manageChannels"<%= translateElement('manageChannels_label') %></button>
+            <% var visiblePrefs = [],
+                hiddenPrefs = [];
+            for(var p in prefs) {
+                prefs[p].id = p;
+                if(prefs[p].hidden) {
+                    hiddenPrefs.push(prefs[p]);
+                }
+                else {
+                    visiblePrefs.push(prefs[p]);
+                }
+            }
+            function printPref(pref){
+                //TODO print description if availble
+                let input = "";
+                if(pref.type == "radio") {
+                    let options = "";
+                    for(const o of pref.options) {
+                        options += `<option${o.value==pref.value?" selected":""} value="${o.value}"${translateElement(pref.id+"_options."+o.label)}</option>`;
+                    }
+                    input = `<select id="${pref.id}">${options}</select>`;
+                }
+                else {
+                    const props = {
+                        id: pref.id
+                    };
+                    if(pref.type == "string") {
+                        props.type = "text";
+                        props.placeholder = pref.value;
+                    }
+                    else if(pref.type == "bool") {
+                        props.type = "checkbox";
+                    }
+                    else if(pref.type == "integer") {
+                        props.type = "number";
+                        props.min = 0;
+                        props.step = 1;
+                        props.placeholder = pref.value;
+                    }
+
+                    input = "<input";
+                    for(const p of props) {
+                        input += ` ${p}="${props[p]}"`;
+                    }
+                    input += ">";
+                }
+                return `<div class="panel-formElements-item">
+    <label for="${pref.id}"${translateElement(pref.id+"_title")}</label>
+    ${input}
+</div>`;
+            } %>
+            <form id="submitform">
+                <section class="panel-section panel-section-formElements">
+                    <% for(const pref of visiblePrefs) { %>
+                        <%= printPref(pref) %>
+                    <% } %>
+                </section>
+                <section class="panel-section panel-section-formElements" hidden id="hiddenprefs">
+                    <details>
+                        <summary<%= translateElement("advancedOptions") %></summary>
+                        <% for(const pref of hiddenPrefs) { %>
+                            <%= printPref(pref) %>
+                        <% } %>
+                    </details>
+                </section>
+            </form>
+        </main>
+    </body>
+</html>

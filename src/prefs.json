@@ -1,0 +1,152 @@
+{
+    "updateInterval": {
+        "type": "integer",
+        "value": 30
+    },
+    "onlineNotification": {
+        "type": "bool",
+        "value": true
+    },
+    "titleChangeNotification": {
+        "type": "bool",
+        "value": true
+    },
+    "offlineNotification": {
+        "type": "bool",
+        "value": false
+    },
+    "nonliveNotification": {
+        "type": "bool",
+        "value": false
+    },
+    "panel_style": {
+        "type": "radio",
+        "value": "1",
+        "options": [
+            {
+                "value": "0",
+                "label": "Minimal"
+            },
+            {
+                "value": "1",
+                "label": "Normal"
+            },
+            {
+                "value": "2",
+                "label": "Thumbnail"
+            }
+        ]
+    },
+    "panel_nonlive": {
+        "type": "radio",
+        "value": "1",
+        "options": [
+            {
+                "value": "0",
+                "label": "Live"
+            },
+            {
+                "value": "1",
+                "label": "Livebottom"
+            },
+            {
+                "value": "2",
+                "label": "Distinct"
+            },
+            {
+                "value": "3",
+                "label": "Offline"
+            }
+        ]
+    },
+    "panel_extras": {
+        "type": "bool",
+        "value": false
+    },
+    "panel_badge": {
+        "type": "bool",
+        "value": false
+    },
+    "theme": {
+        "type": "radio",
+        "value": "0",
+        "options": [
+            {
+                "value": "0",
+                "label": "Light"
+            },
+            {
+                "value": "1",
+                "label": "Dark"
+            }
+        ]
+    },
+    "copy_pattern": {
+        "type": "string",
+        "value": "{URL}"
+    },
+    "updateTab": {
+        "type": "bool",
+        "value": true
+    },
+    "queue_ratio": {
+        "type": "integer",
+        "value": 2,
+        "hidden": true
+    },
+    "queue_maxRequestBatchSize": {
+        "type": "integer",
+        "value": 8,
+        "hidden": true
+    },
+    "panel_minWidth": {
+        "type": "integer",
+        "value": 320,
+        "hidden": true
+    },
+    "panel_maxHeight": {
+        "type": "integer",
+        "value": 400,
+        "hidden": true
+    },
+    "twitch_clientId": {
+        "type": "string",
+        "value": "1owsrolvxz8khldqe6puadzd8bldq34",
+        "hidden": true
+    },
+    "twitch_showHosting": {
+        "type": "bool",
+        "value": true,
+        "hidden": true
+    },
+    "twitch_showPlaylist": {
+        "type": "bool",
+        "value": true,
+        "hidden": true
+    },
+    "youtube_apiKey": {
+        "type": "string",
+        "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM",
+        "hidden": true
+    },
+    "mlg_showRebroadcasts": {
+        "type": "bool",
+        "value": true,
+        "hidden": true
+    },
+    "channellist_cacheTime": {
+        "type": "integer",
+        "value": 600000,
+        "hidden": true
+    },
+    "queueservice_maxRetries": {
+        "type": "integer",
+        "value": 5,
+        "hidden": true
+    },
+    "find_mature": {
+        "type": "bool",
+        "value": true,
+        "hidden": true
+    }
+}

@@ -4,12 +4,9 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module test/providers/mock-qs
+ * @todo Switch to using the fetch shim instead.
  */
-"use strict";
-
-const qs = require("sdk/querystring"),
-    { defer } = require("sdk/core/promise"),
-    mockAPIEnpoints = require("./mockAPI.json");
+import mockAPIEnpoints from "./mockAPI.json";
 
 /**
  * Get an API response from the mock APIs.
@@ -21,20 +18,20 @@ const qs = require("sdk/querystring"),
 const getRequest = (type, url) => {
     if(type === "youtube") {
         const u = url.split("?");
-        u[1] = qs.parse(u[1]);
-        delete u[1].part;
-        if("fields" in u[1]) {
-            delete u[1].fields;
+        u[1] = new URLSearchParams(u[1]);
+        u[1].delete('part');
+        if(u[1].has("fields")) {
+            u[1].delete("fields");
         }
-        if("hl" in u[1]) {
-            delete u[1].hl;
+        if(u[1].has("hl")) {
+            u[1].delete("hl");
         }
-        if("relevanceLanguage" in u[1]) {
-            delete u[1].relevanceLanguage;
+        if(u[1].has("relevanceLanguage")) {
+            u[1].delete("relevanceLanguage");
         }
-        delete u[1].key;
+        u[1].delete("key");
 
-        u[1] = qs.stringify(u[1]);
+        u[1] = u[1].toString();
 
         url = u.join("?");
     }
@@ -42,19 +39,24 @@ const getRequest = (type, url) => {
         url = url.split("?")[0];
     }
 
-    console.log("Getting", url);
     if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
         return {
             status: 200,
-            json: mockAPIEnpoints[type][url],
-            text: typeof mockAPIEnpoints[type][url] === "string"
-                ? mockAPIEnpoints[type][url]
-                : JSON.stringify(mockAPIEnpoints[type][url])
+            parsedJSON: mockAPIEnpoints[type][url],
+            text() {
+                return Promise.resolve(
+                    typeof mockAPIEnpoints[type][url] === "string"
+                    ? mockAPIEnpoints[type][url]
+                    : JSON.stringify(mockAPIEnpoints[type][url])
+                );
+            },
+            ok: true
         };
     }
     else {
         return {
-            status: 404
+            status: 404,
+            ok: false
         };
     }
 };
@@ -88,7 +90,6 @@ const getMockAPIQS = (originalQS, type, active = true) => {
         LOW_PRIORITY: originalQS.LOW_PRIORITY
     };
 };
-exports.getMockAPIQS = getMockAPIQS;
 
 /**
  * @typedef {module:queue/service.QueueService} MockQS
@@ -107,19 +108,24 @@ exports.getMockAPIQS = getMockAPIQS;
  *                  whenever a request gets resolved.
  */
 const getMockQS = (originalQS, ignoreQR = false) => {
-    const { promise, resolve } = defer();
+    let resolvePromise;
+    const promise = new Promise((resolve) => {
+        resolvePromise = resolve;
+    });
     return {
         queueRequest(url) {
             if(!ignoreQR) {
-                resolve(url);
+                resolvePromise(url);
             }
-            return Promise.resolve({});
+            return Promise.resolve({
+                ok: false
+            });
         },
         unqueueUpdateRequest(priority) {
-            resolve(priority);
+            resolvePromise(priority);
         },
         queueUpdateRequest(urls, priority, callback) {
-            resolve({
+            resolvePromise({
                 urls,
                 priority,
                 callback
@@ -130,10 +136,8 @@ const getMockQS = (originalQS, ignoreQR = false) => {
         LOW_PRIORITY: originalQS.LOW_PRIORITY
     };
 };
-exports.getMockQS = getMockQS;
 
 const endpoints = Object.keys(mockAPIEnpoints);
-exports.apiEndpoints = endpoints;
 
 /**
  * These are either defunct providers, or providers that don't use polling
@@ -142,5 +146,5 @@ exports.apiEndpoints = endpoints;
  * @type {Array.<string>}
  */
 const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
-exports.IGNORE_QSUPDATE_PROVIDERS = IGNORE_QSUPDATE_PROVIDERS;
 
+export { getMockQS, getMockAPIQS, endpoints as apiEndpoints, IGNORE_QSUPDATE_PROVIDERS };

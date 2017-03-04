@@ -68,7 +68,7 @@ class Ustream extends GenericProvider {
         if(!data.ok) {
             data = await this._qs.queueRequest("http://www.ustream.tv/channel/" + channelname);
             if(!data.ok) {
-                throw "Error getting channel details for channel " + channelname;
+                throw new Error("Error getting channel details for channel " + channelname);
             }
             retried = true;
         }
@@ -87,7 +87,7 @@ class Ustream extends GenericProvider {
             return getChannelFromJSON(jsonChannel);
         }
         else {
-            throw "Error getting channel details for channel " + channelname;
+            throw new Error("Error getting channel details for channel " + channelname);
         }
     }
     updateRequest(channels) {
@@ -106,7 +106,7 @@ class Ustream extends GenericProvider {
                 return getChannelFromJSON(data.parsedJSON.channel);
             }
             else {
-                throw "Could not update channel " + channelname + " for " + this.name;
+                throw new Error(`Could not update channel ${channelname} for ${this.name}`);
             }
         });
     }

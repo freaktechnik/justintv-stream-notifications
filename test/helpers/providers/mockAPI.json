@@ -399,7 +399,7 @@
         }
     },
     "hitbox": {
-        "http://api.hitbox.tv/media/live/test": {
+        "https://api.hitbox.tv/media/live/test": {
             "livestream": [
                 {
                     "channel": {
@@ -417,7 +417,7 @@
                 }
             ]
         },
-        "http://api.hitbox.tv/media/live/live": {
+        "https://api.hitbox.tv/media/live/live": {
             "livestream": [
                 {
                     "channel": {
@@ -435,7 +435,7 @@
                 }
             ]
         },
-        "http://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=": {
+        "https://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=": {
             "livestream": [
                 {
                     "channel": {
@@ -453,7 +453,7 @@
                 }
             ]
         },
-        "http://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
+        "https://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
             "livestream": [
                 {
                     "channel": {
@@ -471,7 +471,7 @@
                 }
             ]
         },
-        "http://api.hitbox.tv/user/test": {
+        "https://api.hitbox.tv/user/test": {
             "user_name": "test",
             "user_cover": null,
             "user_status": "1",
@@ -487,7 +487,7 @@
             "twitter_enabled": null,
             "user_beta_profile": "0"
         },
-        "http://api.hitbox.tv/following/user?user_name=test&limit=100&offset=0": {
+        "https://api.hitbox.tv/following/user?user_name=test&limit=100&offset=0": {
             "request": {
                 "this":"/following/user"
             },
@@ -1663,8 +1663,8 @@
         ]
     },
     "ustream": {
-        "http://ustream.tv/test": "<meta name=\"ustream:channel_id\" content=\"0\">",
-        "http://ustream.tv/live": "<meta name=\"ustream:channel_id\" content=\"1\">",
+        "http://www.ustream.tv/test": "<meta name=\"ustream:channel_id\" content=\"0\">",
+        "http://www.ustream.tv/live": "<meta name=\"ustream:channel_id\" content=\"1\">",
         "https://api.ustream.tv/channels/0.json": {
             "channel": {
                 "id": 0,
@@ -1705,7 +1705,7 @@
         }
     },
     "mlg": {
-        "http://www.majorleaguegaming.com/api/channels/all.js?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id": {
+        "https://www.majorleaguegaming.com/api/channels/all.js?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id": {
             "status_code": 200,
             "data": {
                 "items": [
@@ -1734,7 +1734,7 @@
                 ]
             }
         },
-        "http://streamapi.majorleaguegaming.com/service/streams/all": {
+        "https://streamapi.majorleaguegaming.com/service/streams/all": {
             "status_code": 200,
             "data": {
                 "items": [
@@ -1751,7 +1751,7 @@
                 ]
             }
         },
-        "http://streamapi.majorleaguegaming.com/service/streams/status/test": {
+        "https://streamapi.majorleaguegaming.com/service/streams/status/test": {
             "status_code": 200,
             "data": {
                 "channel_id": 0,
@@ -1760,7 +1760,7 @@
                 "viewers": 0
             }
         },
-        "http://streamapi.majorleaguegaming.com/service/streams/status/live": {
+        "https://streamapi.majorleaguegaming.com/service/streams/status/live": {
             "status_code": 200,
             "data": {
                 "channel_id": 1,

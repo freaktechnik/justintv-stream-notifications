@@ -8,7 +8,8 @@ module.exports = {
     entry: {
         background: "./src/background/index.js",
         list: "./src/list/index.js",
-        manager: "./src/manager/index.js"
+        manager: "./src/manager/index.js",
+        options: "./src/options/index.js"
     },
     output: {
         path: "webextension",
@@ -55,6 +56,12 @@ module.exports = {
 	        filename: 'list/index.html',
 	        chunks: [ 'list' ],
 	        defaultLanguage
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/options/index.html',
+            filename: 'options/index.html',
+            chunks: [ 'options' ],
+            defaultLanguage
         })
     ],
     devtool: "inline-source-map"

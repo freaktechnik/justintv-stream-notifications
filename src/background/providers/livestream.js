@@ -47,7 +47,7 @@ class Livestream extends GenericProvider {
             return ch;
         }
         else {
-            throw "Error getting details for the Livestream channel " + username;
+            throw new Error("Error getting details for the Livestream channel " + username);
         }
     }
     updateRequest(channels) {

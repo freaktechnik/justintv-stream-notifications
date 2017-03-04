@@ -1,0 +1,263 @@
+/**
+ * Common stylesheets
+ * Created by Martin Giger
+ * Licensed under the MPLv2
+ */
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    line-height: 1.2em;
+
+    -moz-user-select: none;
+
+    --accent-dark-bg: #2c24c5;
+    --accent-dark-text: white;
+    --accent-light-bg: #497dfe;
+    --accent-light-text: white;
+
+    --inverted-bg: var(--accent-dark-text);
+    --inverted-text: black;
+    --inverted-separator: var(--accent-dark-bg);
+}
+
+.dark {
+    --inverted-bg: #242424;
+    --inverted-text: white;
+}
+
+.black {
+    --inverted-bg: black;
+    --inverted-text: gray;
+}
+
+.loading {
+    cursor: progress !important;
+}
+
+.inline-list {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.inline-list > li {
+    display: inline;
+    list-style-type: none;
+}
+
+.right {
+    text-align: right;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+[hidden] {
+    display: none !important;
+    visibility: hidden;
+}
+
+/* visual things */
+
+/* TOPBAR */
+.topbar {
+    display: flex;
+    background: var(--accent-dark-bg);
+}
+
+.topbar button {
+    -moz-appearance: none;
+}
+
+.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited, .topbar button {
+    color: var(--accent-dark-text);
+    text-decoration: none;
+    display: inline-block;
+    background-color: var(--accent-dark-bg);
+    font-size: inherit;
+    border: none;
+    box-sizing: border-box;
+}
+
+.topbar .tabstrip a.current, .topbar .toolbar a:hover, .topbar a:active, .topbar a[aria-pressed="true"], .topbar button:hover, .topbar button:active {
+    background: var(--accent-light-bg);
+    color: var(--accent-light-text);
+}
+
+/* END TOPBAR */
+/*
+ *  Created by Martin Giger
+ *  Licensed under MPL 2.0
+ */
+
+html, body {
+    height: 100%;
+}
+
+main {
+    width: 100%;
+}
+
+.topbar a {
+    padding: 1em;
+}
+
+.actionbar {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.actionbar {
+    border-bottom: 1px solid var(--inverted-separator);
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.actionbar .flex {
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+}
+
+.actionbar .flex input {
+    -moz-appearance: none;
+    border: none;
+    color: initial;
+    font-size: initial;
+    padding: 1em;
+    border-right: 1px solid var(--inverted-separator);
+    flex-grow: 1;
+    height: 1.2em;
+    box-sizing: content-box;
+
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.actionbar a.button:link, .actionbar a.button:hover, .actionbar a.button:active, .actionbar a.button:visited, .actionbar button {
+    color: var(--inverted-text);
+    background-color: var(--inverted-bg);
+    text-decoration: none;
+    display: inline-block;
+    padding: 1em;
+    border: none;
+    border-right: 1px solid var(--inverted-separator);
+    font-size: inherit;
+    box-sizing: border-box;
+    height: 3.2em;
+}
+
+.actionbar li:last-child a.button, .actionbar li:last-child button {
+    border-right: none;
+}
+
+.selectableItemsList {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: calc(100vh - 6.4rem - 1px);
+    border: none;
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.selectableItemsList>option {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    font-size: initial;
+    background-color: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.selectableItemsList > options:checked {
+    background-color: var(--accent-light-bg);
+    color: var(--accent-light-text);
+}
+
+.selectableItemsList > option:checked small {
+    color: var(--accent-light-text);
+}
+
+.selectableItemsList>option:hover:not(:last-child) {
+    border-bottom: 1px solid var(--inverted-separator);
+}
+.selectableItemsList>option:hover:not(:first-child) {
+    border-top: 1px solid var(--inverted-separator);
+}
+
+.selectableItemsList>option img {
+    height: 50px;
+    width: 50px;
+    padding: .5em;
+    vertical-align: middle;
+}
+
+.selectableItemsList>option small {
+    margin-left: .3em;
+    color: grey;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+.popup dialog {
+    display: inline-block;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+    padding: 1em;
+    margin: 8em auto;
+    text-align: initial;
+    max-width: 30em;
+}
+
+.popup dialog h1 {
+    font-size: 1.2em;
+    margin: .2em;
+}
+
+#loadingWrapper progress {
+    width: 100%;
+}
+
+.popup button {
+    font-size: initial;
+    border: none;
+    border-top: 1px solid var(--inverted-separator);
+    margin-bottom: -1em;
+    padding: 1em;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.popup button[type="button"] {
+    border-right: 1px solid var(--inverted-separator);
+    margin-left: -1em;
+}
+
+
+.popup button[type="submit"] {
+    float: right;
+    border-left: 1px solid var(--inverted-separator);
+    margin-right: -1em;
+}
+
+.popup button.fullwidth-button {
+    border-right: none;
+    border-left: none;
+    width: calc(100% + 2em);
+}
+
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJtYW5hZ2VyL3N0eWxlLmNzcyIsInNvdXJjZVJvb3QiOiIifQ==*/

@@ -82,7 +82,7 @@ class Azubu extends GenericProvider {
             return [ user, channels ];
         }
         else {
-            throw "Couldn't fetch the details for the azubu user " + username;
+            throw new Error("Couldn't fetch the details for the azubu user " + username);
         }
     }
 
@@ -92,7 +92,7 @@ class Azubu extends GenericProvider {
                 return getChannelFromJSON(data.parsedJSON.data);
             }
             else {
-                throw "Error getting channel details for channel " + channelname;
+                throw new Error("Error getting channel details for channel " + channelname);
             }
         });
     }
@@ -210,7 +210,7 @@ class Azubu extends GenericProvider {
                 return data.parsedJSON.data.map(getChannelFromJSON);
             }
             else {
-                throw "No featured channels found for " + this.name;
+                throw new Error("No featured channels found for " + this.name);
             }
         });
     }
@@ -225,7 +225,7 @@ class Azubu extends GenericProvider {
                 return data.parsedJSON.data.map(getChannelFromJSON);
             }
             else {
-                throw "No results found for " + query + " on " + this.name;
+                throw new Error("No results found for " + query + " on " + this.name);
             }
         });
     }

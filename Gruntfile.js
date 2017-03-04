@@ -151,7 +151,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'test',
+                        cwd: 'test-jpm',
                         src: ['**/*', '!**/*~', '!.eslintrc.json'],
                         dest: 'build/test'
                     },

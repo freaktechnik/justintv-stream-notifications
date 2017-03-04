@@ -316,5 +316,173 @@
     "panel_tab_offline": {
         "message": "Offline",
         "description": "Label of the tab with all offline channels in the panel"
+    },
+    "manageChannels_label": {
+        "message": "Open Channels Manager",
+        "description": "Label of the button to open the channel manager from the preferences"
+    },
+    "updateInterval_title": {
+        "message": "Update Interval",
+        "description": "Title of the update interval setting in the preferences"
+    },
+    "updateInterval_description": {
+        "message": "Interval of the addon checking wether a stream is live in seconds. When 0, the states aren't automatically updated.",
+        "description": "Description of the update interval setting in the preferences"
+    },
+    "onlineNotification_title": {
+        "message": "Show a notification when a stream goes online",
+        "description": "Title of the online notifications setting in the preferences"
+    },
+    "titleChangeNotification_title": {
+        "message": "Show a notification when a stream changes the title",
+        "description": "Title of the title change notifications setting in the preferences"
+    },
+    "offlineNotification_title": {
+        "message": "Show a notification when a stream goes offline",
+        "description": "Title of the offline notifications setting in the preferences"
+    },
+    "nonliveNotification_title": {
+        "message": "Show a notification when a stream enters a non-live state",
+        "description": "Title of the non-live notifications setting in the preferences"
+    },
+    "nonliveNotification_description": {
+        "message": "This option is only relevant, when non-live streams aren't considered as live or offline.",
+        "description": "Description of the non-live notifications setting in the preferences"
+    },
+    "panel_style_title": {
+        "message": "Panel item display style",
+        "description": "Title of the panel item style setting in the preferences"
+    },
+    "panel_style_options.Minimal": {
+        "message": "Minimal",
+        "description": "Label of the minimal option of the panel item style setting in the preferences"
+    },
+    "panel_style_options.Normal": {
+        "message": "Normal",
+        "description": "Label of the normal option of the panel item style setting in the preferences"
+    },
+    "panel_style_options.Thumbnail": {
+        "message": "Big Thumbnail",
+        "description": "Label of the thumbnail option of the panel item style setting in the preferences"
+    },
+    "panel_nonlive_title": {
+        "message": "Treat non-live streams as",
+        "description": "Title of the non-live treatment setting in the preferences"
+    },
+    "panel_nonlive_description": {
+        "message": "Non-live streams include things like hosted channels or rebroadcasts.",
+        "description": "Description of the non-live treatment setting in the preferences"
+    },
+    "panel_nonlive_options.Live": {
+        "message": "Live",
+        "description": "Live option of the non-live treatment setting in the preferences"
+    },
+    "panel_nonlive_options.Livebottom": {
+        "message": "Live but sort to bottom",
+        "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
+    },
+    "panel_nonlive_options.Distinct": {
+        "message": "Distinct state (adds a tab)",
+        "description": "Distinct state option of the non-live treatment setting in the preferences"
+    },
+    "panel_nonlive_options.Offline": {
+        "message": "Offline",
+        "description": "Offline option of the non-live treatment setting in the preferences"
+    },
+    "panel_extras_title": {
+        "message": "Extra info in panel",
+        "description": "Title of the panel extras setting in the preferences"
+    },
+    "panel_extras_description": {
+        "message": "Displays the viewer count, category and provider name of a channel in the pannel when available.",
+        "description": "Description of the panel extras setting in the preferences"
+    },
+    "panel_badge_title": {
+        "message": "Display counter badge",
+        "description": "Title of the panel badge setting in the preferences"
+    },
+    "panel_badge_description": {
+        "message": "Displays the number of live channels on the button if any.",
+        "description": "Description of the panel badge setting in the preferences"
+    },
+    "theme_title": {
+        "message": "Theme",
+        "description": "Title of the theme setting in the preferences"
+    },
+    "theme_options.Light": {
+        "message": "Light",
+        "description": "Light option of the theme setting in the preferences"
+    },
+    "theme_options.Dark": {
+        "message": "Dark",
+        "description": "Dark option of the theme setting in the preferences"
+    },
+    "copy_pattern_title": {
+        "message": "Stream URL copy pattern",
+        "description": "Title of the copy pattern setting in the preferences"
+    },
+    "copy_pattern_description": {
+        "message": "Customize the string that gets copied with the copy stream URL action in the panel context menu. {URL} gets replaced with the stream URL.",
+        "description": "Description of the copy pattern setting in the preferences"
+    },
+    "updateTab_title": {
+        "message": "Open a tab with update info after an update",
+        "description": "Title of the update tab setting in the preferences"
+    },
+    "updateTab_description": {
+        "message": "A tab with information about new features is opened when the extension is updated.",
+        "description": "Description of the update tab setting in the preferences"
+    },
+    "queue_ratio_title": {
+        "message": "Queue Request Treshhold",
+        "description": "Title of the queue ratio setting in the preferences"
+    },
+    "queue_maxRequestBatchSize_title": {
+        "message": "Max Requests per Batch",
+        "description": "Title of the request batch size setting in the preferences"
+    },
+    "panel_minWidth_title": {
+        "message": "Minimum Panel width",
+        "description": "Title of the panel minimum width setting in the preferences"
+    },
+    "panel_maxHeight£_title": {
+        "message": "Maximum Panel height",
+        "description": "Title of the panel maximum height setting in the preferences"
+    },
+    "twitch_clientId_title": {
+        "message": "Twitch Client ID",
+        "description": "Title of the Twitch Client ID setting in the preferences"
+    },
+    "twitch_showHosting_title": {
+        "message": "Check if a Twitch Channel is hosting",
+        "description": "Title of the Twitch hosting setting in the preferences"
+    },
+    "twitch_showPlaylist_title": {
+        "message": "Show channels replaying recordings from a playlist",
+        "description": "Title of the Twitch playlist setting in the preferences"
+    },
+    "youtube_apiKey_title": {
+        "message": "YouTube API Key",
+        "description": "Title of the YouTube API key setting in the preferences"
+    },
+    "mlg_showRebroadcasts_title": {
+        "message": "Show MLG rebroadcasts",
+        "description": "Title of the MLG rebroadcasts setting in the preferences"
+    },
+    "channellist_cacheTime_title": {
+        "message": "Time to cache channel states while the browser is closed",
+        "description": "Title of the cache time setting in the preferences"
+    },
+    "queueservice_maxRetries_title": {
+        "message": "Maximum number of attempts before a request is discarded",
+        "description": "Title of the request retry limit setting in the preferences"
+    },
+    "find_mature": {
+        "message": "Find mature content in the explore tab",
+        "description": "Title of the mature setting in the preferences"
+    },
+    "advancedOptions": {
+        "message": "Advanced Options",
+        "description": "Advanced extension preferences collapsed message"
     }
 }
