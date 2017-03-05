@@ -47,7 +47,7 @@ test('pauseable queue events', async () => {
     q.clear();
 });
 
-test('network observers', async () => {
+test.serial('network observers', async () => {
     const q = new PauseableQueue();
     await q.autoFetch(25, 0.5, 2);
 
@@ -62,7 +62,7 @@ test('network observers', async () => {
     q.clear();
 });
 
-test('autoFetch in offline mode', async (t) => {
+test.serial('autoFetch in offline mode', async (t) => {
     const previousMode = navigator.onLine,
         q = new PauseableQueue();
     await q.autoFetch(25, 0.5, 2);

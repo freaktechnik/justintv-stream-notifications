@@ -6,8 +6,8 @@ import test from 'ava';
 import RequestQueue from '../../../src/background/queue';
 import { promiseSpy } from '../../helpers/promise-spy';
 
-/* TODO: Integration test of autofetch
 const QUEUE_ALARM_NAME = "main-queue";
+/* TODO: Integration test of autofetch
 const spinQueue = () => {
     browser.alarms.onAlarm.dispatch({
         name: QUEUE_ALARM_NAME
