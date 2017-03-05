@@ -46,7 +46,7 @@ export default class Notifier extends EventTarget {
         this.channelStates = new Map();
         browser.notifications.onClicked.addListener((id) => {
             if(id.startsWith("cn")) {
-                emit(this, "click", id.substr(2));
+                emit(this, "click", parseInt(id.substr(2), 10));
             }
         });
     }
