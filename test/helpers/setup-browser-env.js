@@ -9,9 +9,10 @@ import indexedDB from 'fake-indexeddb';
 import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
 import Headers from 'fetch-headers';
 import Navigator from './navigator';
+import EventTarget from 'event-target-shim';
 
 // DOM environment
-browserEnv([ 'window', 'document', 'EventTarget', 'Event', 'CustomEvent', 'URL' ]);
+browserEnv([ 'window', 'document', 'Event', 'CustomEvent', 'URL' ]);
 
 // Additional Web APIs
 global.fetch = sinon.stub();
@@ -33,6 +34,10 @@ global.indexedDB = indexedDB;
 global.IDBKeyRange = IDBKeyRange;
 global.Headers = Headers;
 global.navigator = new Navigator();
+// Use the EventTarget shim, as that is loaded bevore the browser env in navigator.js
+global.EventTarget = EventTarget;
+
+window.indexedDB = indexedDB;
 
 // WebExtension APIs
 //global.chrome = chrome;

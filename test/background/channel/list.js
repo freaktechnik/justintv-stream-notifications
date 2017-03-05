@@ -6,25 +6,24 @@
 import test from 'ava';
 import ChannelList from '../../../src/background/channel/list';
 import { User, Channel } from '../../../src/background/channel/core';
-import LiveState from "../../../src/background/channel/live-state";
 import { getUser, getChannel } from "../../helpers/channel-user";
 import { when } from "../../../src/utils";
 import prefs from '../../../src/prefs.json';
 
-test('channellist get invalid users', (t) => {
+test.serial('get invalid users', (t) => {
     return Promise.all([
-        t.throws(t.context.list.getUser()),
-        t.throws(t.context.list.getUser(-1)),
-        t.throws(t.context.list.getUser('doesnot', 'exist'))
+        t.throws(t.context.list.getUser(), Error, 'Missing ID'),
+        t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
+        t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
     ]);
 });
 
-test.serial('channellist add-remove user', async (t) => {
+test.serial('add-remove user', async (t) => {
     const referenceUser = getUser();
     let user = await t.context.list.addUser(referenceUser);
 
     t.true(user instanceof User, "User is a user");
-    t.true(user.id, "The user has an ID");
+    t.true("id" in user, "The user has an ID");
     t.is(user.uname, referenceUser.uname);
 
     await t.throws(t.context.list.addUser(referenceUser));
@@ -50,7 +49,7 @@ test.serial('get user by login and type', async (t) => {
     const referenceUser = await t.context.list.addUser(getUser()),
         user = await t.context.list.getUser('test', 'test');
     t.true(user instanceof User, "The user is a user");
-    t.true(user.id, "User has an ID");
+    t.true("id" in user, "User has an ID");
     t.is(user.login, referenceUser.login);
     t.is(user.type, referenceUser.type);
     t.is(user.uname, referenceUser.uname);
@@ -120,7 +119,7 @@ test.serial('add channel', async (t) => {
         channel = await t.context.list.addChannel(referenceChannel);
 
     t.true(channel instanceof Channel, "Channel is a channel");
-    t.true(channel.id, "The channel has an ID");
+    t.true("id" in channel, "The channel has an ID");
     t.is(channel.uname, referenceChannel.uname);
     t.is(channel.type, referenceChannel.type);
     t.is(channel.login, referenceChannel.login);
@@ -184,20 +183,22 @@ test.serial('clear without db', async (t) => {
 
 test.serial('clear event', async (t) => {
     let p = when(t.context.list, "clear");
-    t.context.list.clear();
+    let r = await t.context.list.clear();
 
     let { detail: result } = await p;
+    t.is(r, result, 'Promise and event hold same soft-clear flag');
     t.false(result, "DB was soft cleared");
 
     t.context.list.db.close();
     delete t.context.list.db;
 
     p = when(t.context.list, "clear");
-    t.context.list.clear();
+    r = await t.context.list.clear();
 
     result = await p;
     result = result.detail;
     t.true(result, "DB was hard cleared");
+    t.is(result, r, 'Promise and event hold the same data');
 });
 
 test.serial('add one channel with addchannels', async (t) => {
@@ -206,7 +207,7 @@ test.serial('add one channel with addchannels', async (t) => {
 
     t.is(channels.length, 1);
     t.true(channels[0] instanceof Channel, "Channel is a channel");
-    t.true(channels[0].id, "The channel has an ID");
+    t.true("id" in channels[0], "The channel has an ID");
     t.is(channels[0].uname, "lorem ipsum");
 });
 
@@ -216,7 +217,7 @@ test.serial('add one channel in an array with addchannels', async (t) => {
 
     t.is(channels.length, 1);
     t.true(channels[0] instanceof Channel, "Channel is a channel");
-    t.true(channels[0].id, "The channel has an ID");
+    t.true("id" in channels[0], "The channel has an ID");
     t.is(channels[0].uname, "lorem ipsum");
 });
 
@@ -227,7 +228,7 @@ test.serial('add channels', async (t) => {
     t.is(channels.length, 2);
     channels.forEach((channel, i) => {
         t.true(channel instanceof Channel, "Channel is a channel");
-        t.true(channel.id, "The channel has an ID");
+        t.true("id" in channel, "The channel has an ID");
         t.is(channel.uname, chans[i].uname);
     });
 });
@@ -263,10 +264,12 @@ test.serial('get channel by id', async (t) => {
     t.is(referenceChannel.id, channel.id);
 });
 
-test('get invalid channel', async (t) => {
-    await t.throws(t.context.list.getChannel());
-    await t.throws(t.context.list.getChannel(-1));
-    await t.throws(t.context.list.getChannel('doesnot', 'exist'));
+test.serial('get invalid channel', (t) => {
+    return Promise.all([
+        t.throws(t.context.list.getChannel(), Error, 'No ID'),
+        t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+        t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    ]);
 });
 
 test.serial('set channel', async (t) => {
@@ -436,7 +439,9 @@ test.serial('channel offline setting', (t) => {
             .then(() => {
                 return t.context.list.getChannel(channel.login, channel.type);
             }).then((channel) => {
-                t.true(!channel.live.isLive());
+                return channel.live.isLive();
+            }).then((isLive) => {
+                t.false(isLive);
             }));
         };
         req.onerror = reject;
@@ -451,7 +456,7 @@ test.serial('set channel with new login', async (t) => {
     t.is(newChannel.login, sameChannel.login);
 });
 
-test('opening open list', async (t) => {
+test.serial('opening open list', async (t) => {
     t.not(t.context.list.db, null);
 
     await t.context.list.openDB("channellist");
@@ -459,15 +464,15 @@ test('opening open list', async (t) => {
     t.not(t.context.list.db, null);
 });
 
-test.serial('list upgrade from v1 to v2', async (t) => {
+test.serial('list upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     await t.context.list.close();
     await new Promise((resolve, reject) => {
         const request = indexedDB.deleteDatabase("channellist");
         request.onerror = reject;
-        request.onsuccess = () => resolve();
+        request.onsuccess = resolve;
     });
 
-    let request = indexedDB.open("channellist", 1);
+    const request = indexedDB.open("channellist", 1);
     request.onupgradeneeded = (e) => {
         const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
         users.createIndex("typename", [ "type", "login" ], { unique: true });
@@ -480,57 +485,12 @@ test.serial('list upgrade from v1 to v2', async (t) => {
         request.onsuccess = resolve;
         request.onerror = reject;
     });
-
-    const channelID = await new Promise((resolve, reject) => {
-        const transaction = db.transaction("channels", "readwrite"),
-            store = transaction.objectStore("channels"),
-            req = store.add({
-                login: "test",
-                type: "twitch",
-                favorites: [],
-                url: [ "https://localhost" ],
-                archiveUrl: "https://localhost",
-                chatUrl: "https://localhost",
-                image: {},
-                live: true,
-                title: "",
-                viewers: 14,
-                lastModified: Date.now(),
-                category: ""
-            });
-
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = reject;
-    });
     db.close();
-
-    await t.context.list.openDB("channellist");
-    await t.context.list.close();
-
-    request = indexedDB.open("channellist", 2);
-    const { target: { result: newDB } } = await new Promise((resolve, reject) => {
-        request.onsuccess = resolve;
-        request.onerror = reject;
-    });
-
-    const channel = await new Promise((resolve, reject) => {
-        const transaction = newDB.transaction("channels", "readwrite"),
-            store = transaction.objectStore("channels"),
-            req = store.get(channelID);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = reject;
-    });
-    newDB.close();
-
-    t.true(!("favorites" in channel), "Favorites was deleted from the channel");
-    t.is(typeof channel.live, "object", "The live property was convertied");
-    t.is(channel.live.state, LiveState.OFFLINE, "State was reset");
-    t.is(channel.live.isLive, false, "It's properly serialized");
 
     await t.context.list.openDB("channellist");
 });
 
-test.beforeEach(async (t) => {
+test.serial.beforeEach(async (t) => {
     const channels = [
         getChannel('foo', 'extra'),
         getChannel('bar', 'extra'),
@@ -541,15 +501,17 @@ test.beforeEach(async (t) => {
         getUser('foo', 'extra'),
         getUser('bar', 'extra')
     ];
-    t.context.list = new ChannelList();
-    const p = when(t.context.list, "ready");
+    if(!t.context.list) {
+        t.context.list = new ChannelList();
+    }
     t.context.extraChannels = channels.length;
     t.context.extraUsers = users.length;
 
-    await p;
+    await t.context.list.openDB();
     await t.context.list.addChannels(channels);
     return Promise.all(users.map((u) => t.context.list.addUser(u)));
 });
-test.afterEach((t) => {
-    return t.notThrows(t.context.list.clear().then(() => t.context.list.close()));
+test.serial.afterEach.always(async (t) => {
+    await t.context.list.clear();
+    return t.context.list.close();
 });

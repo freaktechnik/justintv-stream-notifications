@@ -9,11 +9,13 @@
  * @todo test for Client-ID
  */
 import test from 'ava';
-import { twitch as provider } from "../../../src/background/providers";
+import providers from "../../../src/background/providers";
 import { getMockAPIQS } from "../../helpers/providers/mock-qs";
 import { when } from "../../../src/utils";
 import { getChannel } from "../../helpers/channel-user";
 import LiveState from "../../../src/background/channel/live-state";
+
+const provider = providers.twitch;
 
 const originalQS = provider._qs;
 test.before(() => {
@@ -96,7 +98,7 @@ test("Twitch Update Redirects", async (t) => {
     provider.updateRequest([
         channel
     ]);
-    const ret = await prom;
+    const { detail: ret } = await prom;
 
     t.is(ret.length, 1, "Update returns the channel");
     t.is(ret[0].login, 'mlg', "Returned channel has the updated login");

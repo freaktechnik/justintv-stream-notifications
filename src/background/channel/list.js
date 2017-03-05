@@ -147,14 +147,16 @@ export default class ChannelList extends EventTarget {
             request.onupgradeneeded = (e) => {
                 this.db = e.target.result;
 
-                const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-                users.createIndex("typename", [ "type", "login" ], { unique: true });
-                users.createIndex("type", "type", { unique: false });
-                //users.createIndex("id", "id", { unique: true });
-                const channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-                channels.createIndex("typename", [ "type", "login" ], { unique: true });
-                channels.createIndex("type", "type", { unique: false });
-                //channels.createIndex("id", "id", { unique: true });
+                if(e.oldVersion != 1) {
+                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+                    users.createIndex("typename", [ "type", "login" ], { unique: true });
+                    users.createIndex("type", "type", { unique: false });
+                    //users.createIndex("id", "id", { unique: true });
+                    const channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
+                    channels.createIndex("typename", [ "type", "login" ], { unique: true });
+                    channels.createIndex("type", "type", { unique: false });
+                    //channels.createIndex("id", "id", { unique: true });
+                }
             };
 
             // DB is ready
@@ -240,7 +242,7 @@ export default class ChannelList extends EventTarget {
                         resolve(req.result.id);
                     }
                     else {
-                        reject();
+                        reject(new Error("Could not fetch channel for the given info"));
                     }
                 };
                 req.onerror = reject;
@@ -266,7 +268,7 @@ export default class ChannelList extends EventTarget {
                     resolve(req.result.id);
                 }
                 else {
-                    reject();
+                    reject(new Error("Could not find any result for the given user info"));
                 }
             };
             req.onerror = reject;
@@ -288,7 +290,7 @@ export default class ChannelList extends EventTarget {
             id = await this.getChannelId(id, type);
         }
         if(!id) {
-            throw "No ID specified";
+            throw new Error("No ID specified");
         }
 
         return new Promise((resolve, reject) => {
@@ -301,7 +303,7 @@ export default class ChannelList extends EventTarget {
                     resolve(Channel.deserialize(req.result));
                 }
                 else {
-                    reject();
+                    reject(new Error("No result for the given ID"));
                 }
             };
             req.onerror = reject;
@@ -323,7 +325,7 @@ export default class ChannelList extends EventTarget {
         }
 
         if(!id) {
-            throw "No ID specified";
+            throw new Error("No ID specified");
         }
 
         return new Promise((resolve, reject) => {
@@ -336,7 +338,7 @@ export default class ChannelList extends EventTarget {
                     resolve(User.deserialize(req.result));
                 }
                 else {
-                    reject();
+                    reject(new Error("Could not fetch specified user"));
                 }
             };
             req.onerror = reject;
@@ -615,7 +617,12 @@ export default class ChannelList extends EventTarget {
      */
     async liveStatus(type) {
         const channels = await this.getChannelsByType(type);
-        return channels.some((channel) => channel.live.isLive());
+        for(const channel of channels) {
+            if(await channel.live.isLive()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

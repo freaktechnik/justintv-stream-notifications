@@ -12,8 +12,6 @@ import { when } from "../../../src/utils";
 import LiveState from "../../../src/live-state";
 
 test.before(() => {
-    browser.i18n.getMessage.returnsArg(0);
-
     SDKStubs.onMessage.dispatch({
         target: "pc-enabled-reply",
         payload: false

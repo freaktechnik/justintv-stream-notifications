@@ -40,4 +40,4 @@ const getChannel = (login = 'test', type = TYPE, id = null) => {
     return channel;
 };
 
-export { getUser, getChannel, Channel };
+export { getUser, getChannel };

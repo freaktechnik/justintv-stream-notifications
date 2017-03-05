@@ -4,10 +4,12 @@
  * @license MPL-2.0
  */
 import test from 'ava';
-import { youtube } from "../../../src/background/providers";
+import providers from "../../../src/background/providers";
 import { getMockAPIQS, getMockQS } from "../../helpers/providers/mock-qs";
 
-test("Get Channel ID Fallback", async (t) => {
+const youtube = providers.youtube;
+
+test.serial("Get Channel ID Fallback", async (t) => {
     const oldQS = youtube._qs;
     youtube._setQs(getMockAPIQS(oldQS, "youtube"));
 
@@ -20,7 +22,7 @@ test("Get Channel ID Fallback", async (t) => {
     youtube._setQs(oldQS);
 });
 
-test("Get no Category", async (t) => {
+test.serial("Get no Category", async (t) => {
     const oldQS = youtube._qs;
     youtube._setQs(getMockQS(oldQS));
 
