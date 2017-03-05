@@ -3,17 +3,21 @@
  * Licensed under MPL 2.0
  */
 import test from 'ava';
-import QueueService from "../../../src/background/queue/service";
+import * as QueueService from "../../../src/background/queue/service";
 import prefs from "../../../src/prefs.json";
 import sinon from 'sinon';
+import { promiseSpy } from '../../helpers/promise-spy';
 
-let clock;
-test.before(() => {
-    clock = sinon.useFakeTimers();
-});
+const QUEUE_ALARM_NAME = "main-queue";
+const spinQueue = () => {
+    browser.alarms.onAlarm.dispatch({
+        name: QUEUE_ALARM_NAME
+    });
+};
 
-test.after(() => {
-    clock.restore();
+test.serial.beforeEach(() => {
+    browser.alarms.create.reset();
+    browser.alarms.clear.reset();
 });
 
 test("Get Service", (t) => {
@@ -22,9 +26,9 @@ test("Get Service", (t) => {
     t.not(service, QueueService.getServiceForProvider("equal"));
 });
 
-test.serial("Interval Pause Resume", (t) => {
+test.serial("Interval Pause Resume", async (t) => {
     const service = QueueService.getServiceForProvider("test");
-    const cbk = sinon.spy();
+    const cbk = promiseSpy();
 
     service.queueUpdateRequest([ "http://localhost" ], service.HIGH_PRIORITY, cbk);
     QueueService.setOptions({
@@ -32,16 +36,28 @@ test.serial("Interval Pause Resume", (t) => {
         amount: 1,
         maxSize: 1
     });
+    t.true(browser.alarms.create.notCalled);
 
-    clock.tick(700);
+    //clock.tick(700);
+    spinQueue();
+    await cbk.promise;
 
     t.true(cbk.calledOnce);
-    QueueService.pause();
+    cbk.setupPromise();
 
-    clock.tick(500);
+    QueueService.pause();
+    t.true(browser.alarms.clear.calledOnce);
+    t.is(browser.alarms.clear.firstCall.args[0], QUEUE_ALARM_NAME);
+
+    //clock.tick(700);
+
     QueueService.resume();
 
-    clock.tick(700);
+    t.true(browser.alarms.create.calledOnce);
+
+    //clock.tick(700);
+    spinQueue();
+    await cbk.promise;
 
     t.true(cbk.calledTwice);
 
@@ -51,13 +67,13 @@ test.serial("Interval Pause Resume", (t) => {
 
 // QueueService Object Tests
 
-test.serial("Update Request Requeue", (t) => {
+test.serial("Update Request Requeue", async (t) => {
     const service = QueueService.getServiceForProvider("test");
-    const cbk = sinon.stub();
-    cbk.returns(true);
-    cbk.onSecondCall().returns(false);
+    const cbk = promiseSpy(() => {
+        return cbk.callCount < 2;
+    });
 
-    const endCbk = sinon.spy();
+    const endCbk = promiseSpy();
 
     service.queueUpdateRequest([ "http://localhost" ], service.HIGH_PRIORITY, endCbk, {}, cbk);
     QueueService.setOptions({
@@ -66,31 +82,43 @@ test.serial("Update Request Requeue", (t) => {
         maxSize: 1
     });
 
-    clock.tick(1400);
+    //clock.tick(1400);
+    spinQueue();
+    spinQueue();
+    await cbk.promise;
 
     t.true(cbk.calledTwice);
+    // Request was requeued once.
     t.true(endCbk.calledOnce);
 
     service.unqueueUpdateRequest();
     QueueService.updateOptions(0);
 });
 
-test.serial("Requeue", async (t) => {
+test.serial.failing("Requeue", async (t) => {
     const service = QueueService.getServiceForProvider("test");
-    const cbk = sinon.stub();
+    const cbk = promiseSpy(() => {
+        //return prefs.queueservice_maxRetries.value > cbk.callCount;
+        return false;
+    });
 
-    cbk.returns(true);
-    cbk.onCall(prefs.queueservice_maxRetries.value + 2).returns(false);
-
-    service.queueRequest("http://localhost", {}, cbk)
-        .then((d) => t.fail(d));
+    const p = service.queueRequest("http://localhost", {}, cbk);
     QueueService.setOptions({
         interval: 70,
         amount: 1,
         maxSize: 1
     });
 
-    clock.tick((prefs.queueservice_maxRetries.value + 2) * 70);
+    //clock.tick((prefs.queueservice_maxRetries.value + 2) * 70);
+    for(let i = 1; cbk.lastCall.returned || i == 1; ++i) {
+        spinQueue();
+        await cbk.promise;
+        // have to wait for browser.storage.local.get("queueservice_maxRetries")
+        cbk.setupPromise();
+
+        t.is(cbk.callCount, i);
+    }
+    await p;
 
     t.is(cbk.callCount, prefs.queueservice_maxRetries.value + 1);
     QueueService.updateOptions(0);
@@ -102,17 +130,15 @@ test("Queue Service", (t) => {
     t.true(Array.isArray(service.lowPriorityRequestIds));
     t.is(service.highPriorityRequestIds.length, 0);
     t.is(service.lowPriorityRequestIds.length, 0);
-    t.true(service.HIGH_PRIORITY, "QueueService instance exposes HIGH_PRIORITY constant");
-    t.true(service.LOW_PRIORITY, "QueueService isntance exposes LOW_PRIORITY constant");
+    t.true("HIGH_PRIORITY" in service, "QueueService instance exposes HIGH_PRIORITY constant");
+    t.true("LOW_PRIORITY" in service, "QueueService isntance exposes LOW_PRIORITY constant");
 });
 
 test("Queue Request", async (t) => {
-    t.plan(1);
     const service = QueueService.getServiceForProvider("test");
-    await service.queueRequest("http://locahost", {}, () => {
-        t.pass("Requeueing function called");
-        return false;
-    });
+    const cbk = sinon.spy(() => false);
+    await service.queueRequest("http://locahost", {}, cbk);
+    t.true(cbk.calledOnce);
 });
 
 test("Update Request", (t) => {

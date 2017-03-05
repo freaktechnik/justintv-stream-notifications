@@ -7,15 +7,32 @@ import { URLSearchParams } from 'url';
 import { setup } from './default-behavior';
 import indexedDB from 'fake-indexeddb';
 import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
+import Headers from 'fetch-headers';
+import Navigator from './navigator';
 
 // DOM environment
-browserEnv([ 'window', 'document', 'navigator', 'EventTarget', 'Event', 'CustomEvent', 'URL' ]);
+browserEnv([ 'window', 'document', 'EventTarget', 'Event', 'CustomEvent', 'URL' ]);
 
 // Additional Web APIs
 global.fetch = sinon.stub();
+fetch.returns(Promise.resolve({
+    ok: true,
+    status: 200,
+    clone() {
+        return this;
+    },
+    json() {
+        return Promise.resolve({});
+    },
+    test() {
+        return Promise.resolve("{}");
+    }
+}));
 global.URLSearchParams = URLSearchParams;
 global.indexedDB = indexedDB;
 global.IDBKeyRange = IDBKeyRange;
+global.Headers = Headers;
+global.navigator = new Navigator();
 
 // WebExtension APIs
 //global.chrome = chrome;

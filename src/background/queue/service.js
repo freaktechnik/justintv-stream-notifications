@@ -82,7 +82,7 @@ class QueueService {
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determines if the request should be re-run.
      * @param {number} [attempt=0] - Counter to avoid requeuing infinitely.
-     * @returns {Promise} A promise resolving with the Add-on SDK Request response.
+     * @returns {Promise} A promise resolving with the Request response.
      */
     queueRequest(url, headers = {}, requeue = defaultRequeue, attempt = 0) {
         console.log("Queueing " + url);
@@ -193,7 +193,7 @@ export const getServiceForProvider = (providerName) => {
  * @returns {undefined}
  */
 export const setOptions = (options) => {
-    console.log("[QS]> setting queue options:" + options.toSource());
+    console.log("[QS]> setting queue options:" + JSON.stringify(options, null, 2));
     queue.autoFetch(options.interval,
                     options.amount,
                     options.maxSize);

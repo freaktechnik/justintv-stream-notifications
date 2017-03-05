@@ -7,13 +7,18 @@ import UpdateQueue from '../../../src/background/queue/update';
 import PauseableQueue from '../../../src/background/queue/pauseable';
 import { when } from "../../../src/utils";
 import sinon from 'sinon';
+import { promiseSpy } from '../../helpers/promise-spy';
 
-let clock;
-test.before(() => {
-    clock = sinon.useFakeTimers();
-});
-test.after(() => {
-    clock.restore();
+const QUEUE_ALARM_NAME = "main-queue";
+const spinQueue = () => {
+    browser.alarms.onAlarm.dispatch({
+        name: QUEUE_ALARM_NAME
+    });
+};
+
+test.serial.beforeEach(() => {
+    browser.alarms.create.reset();
+    browser.alarms.clear.reset();
 });
 
 test('construction', (t) => {
@@ -23,9 +28,9 @@ test('construction', (t) => {
     q.clear();
 });
 
-test.serial("Interval Pause/Resume", (t) => {
+test.serial("Interval Pause/Resume", async (t) => {
     const queue = new UpdateQueue();
-    const cbk = sinon.spy();
+    const cbk = promiseSpy();
 
     queue.addRequest({
         url: "https://localhost",
@@ -33,16 +38,26 @@ test.serial("Interval Pause/Resume", (t) => {
     }, true);
     queue.autoFetch(700, 1, 1);
 
-    clock.tick(700);
+    // clock.tick(700);
+    spinQueue();
+    await cbk.promise;
 
     t.true(cbk.calledOnce);
+    cbk.setupPromise();
+
     queue.pause();
 
-    clock.tick(500);
+    // clock.tick(700);
+
+    t.true(browser.alarms.clear.calledOnce);
+    t.is(browser.alarms.clear.firstCall.args[0], QUEUE_ALARM_NAME);
 
     queue.resume();
+    t.true(browser.alarms.create.calledOnce);
 
-    clock.tick(700);
+    //clock.tick(700);
+    spinQueue();
+    await cbk.promise;
 
     t.true(cbk.calledTwice);
 
@@ -101,129 +116,172 @@ test('contains priorized', (t) => {
     q.clear();
 });
 
-test('get just a request', (t) => {
+test('get just a request', async (t) => {
     const q = new UpdateQueue();
+    const cbk = promiseSpy();
 
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     });
     t.is(q.queue.length, 1);
 
     q.getRequest(0);
+    await cbk.promise;
+
     t.is(q.queue.length, 0);
+    t.true(cbk.calledOnce);
 
     q.clear();
 });
 
 test('get multiple priorized requests', async (t) => {
     const q = new UpdateQueue();
+    const cbk = promiseSpy();
 
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     }, false, true);
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     }, false, true);
     t.is(q.queue.length, 2);
 
     q.getRequest(0);
+    await cbk.promise;
+
     t.is(q.queue.length, 1);
+    t.true(cbk.calledOnce);
 
     const p = when(q, "allpriorizedloaded");
+    cbk.setupPromise();
+
     q.getRequest(0);
-    await p;
+    await Promise.all([
+        p,
+        cbk.promise
+    ]);
     t.is(q.queue.length, 0);
+    t.true(cbk.calledTwice);
 
     q.clear();
 });
 
-test.cb('persistent request by index', (t) => {
-    let counter = 0;
+test('persistent request by index', async (t) => {
     const q = new UpdateQueue();
+    const cbk = promiseSpy();
+
     q.addRequest({
         url: "https://localhost",
-        onComplete: () => {
-            t.is(counter, 1);
-            t.is(q.queue[0].skipped, 0);
-            q.clear();
-            t.end();
-        }
+        onComplete: cbk
     }, true, false, 1);
 
     q.getRequestByIndex(0);
-    ++counter;
 
     t.is(q.queue[0].skipped, 1);
+    t.true(cbk.notCalled);
 
     q.getRequestByIndex(0);
+    await cbk.promise;
+
+    t.true(cbk.calledOnce);
+
+    q.clear();
 });
 
 test('persistent priorized request by index', async (t) => {
-    let resolvePromise,
-        p = new Promise((resolve) => {
-            resolvePromise = resolve;
-        });
+    const cbk = promiseSpy();
     const q = new UpdateQueue();
     q.addRequest({
         url: "https://localhost",
-        onComplete: () => resolvePromise
+        onComplete: cbk
     }, true, true, 1);
 
     q.getRequestByIndex(0);
-    await p.promise;
+    await cbk.promise;
     t.is(q.queue[0].skipped, 0, "Skips got reset after priorized fetch");
     t.false(q.queue[0].priorize, "Request was unpriorized after first fetch");
+    t.true(cbk.calledOnce);
 
-    p = new Promise((resolve) => {
-        resolvePromise = resolve;
-    });
+    cbk.setupPromise();
 
     q.getRequestByIndex(0);
     t.is(q.queue[0].skipped, 1, "Request skipped the second time");
+    t.true(cbk.calledOnce);
 
     q.getRequestByIndex(0);
-    await p;
+    await cbk.promise;
     t.is(q.queue[0].skipped, 0, "Skip was reset after unpriorized fetch");
+    t.true(cbk.calledTwice);
 
     q.clear();
 });
 
 test('get all priorized', async (t) => {
     const q = new UpdateQueue();
+    let resolvePromise;
+    const rp = new Promise((resolve) => {
+        resolvePromise = resolve;
+    });
+    const cbk = sinon.spy(() => {
+        if(cbk.calledTwice) {
+            resolvePromise();
+        }
+    });
+    const cbk2 = sinon.spy();
 
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     }, false, true);
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk2
     });
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     }, false, true);
 
     t.is(q.queue.length, 3);
 
     const p = when(q, "allpriorizedloaded");
     q.getAllPriorized();
-    await p;
+    await Promise.all([
+        p,
+        rp
+    ]);
 
     t.is(q.queue.length, 1);
+    t.true(cbk.calledTwice);
+    t.true(cbk2.notCalled);
 
     q.clear();
 });
 
-test('resume with priorized queued', async () => {
+test('resume with priorized queued', async (t) => {
     const q = new UpdateQueue();
+    const cbk = promiseSpy();
     q.pause();
 
     q.addRequest({
-        url: "https://localhost"
+        url: "https://localhost",
+        onComplete: cbk
     }, false, true);
 
     const p = when(q, "allpriorizedloaded");
 
+    t.true(cbk.notCalled);
+
     q.resume();
-    await p;
+    await Promise.all([
+        p,
+        cbk.promise
+    ]);
+
+    t.true(cbk.calledOnce);
 
     q.clear();
 });
