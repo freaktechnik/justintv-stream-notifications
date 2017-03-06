@@ -9,7 +9,7 @@ import SDK from "./sdk";
 
 export const search = ({ url }) => {
     return SDK.doAction({
-        target: "passwords-search",
+        target: "passwords-search-" + url,
         url
     });
 };

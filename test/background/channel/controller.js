@@ -15,29 +15,47 @@ const TESTUSER = {
         name: "freaktechnik",
         type: "twitch"
     },
-    storeCredential = (url, username, password) => {
-        console.warn(url, username, password);
-        //TODO
-        //return loginManager.addLogin(new LoginInfo(url, url + "/submit", null, username, password, 'username', 'password'));
+    sendCredentials = (p) => {
+        let start = 0;
+        if(p == TESTUSER.type) {
+            start = 1;
+            SDKStubs.onMessage.dispatch({
+                target: `passwords-search-${providers[p].authURL[0]}-reply`,
+                payload: [
+                    {
+                        username: TESTUSER.name
+                    },
+                    {
+                        username: ""
+                    }
+                ]
+            });
+        }
+        for(let i = start; i < providers[p].authURL.length; ++i) {
+            SDKStubs.onMessage.dispatch({
+                target: `passwords-search-${providers[p].authURL[i]}-reply`,
+                payload: []
+            });
+        }
     };
-/*
-test.serial.failing("Credentials", async (t) => {
-    t.fail("Test disabled");
-    await storeCredential(providers[TESTUSER.type].authURL[0], TESTUSER.name, "test");
-    await storeCredential(providers[TESTUSER.type].authURL[0], "", "test");
 
+const testProviderCredentials = async (t, p) => {
     const cc = new ChannelController();
     await cc._ensureQueueReady();
 
-    let res;
-    for(const p in providers) {
-        if(p == TESTUSER.type) {
-            res = await cc.autoAddUsers(p);
-            t.true(res.length > 0, "Found credential for " + p);
-        }
-        else if(providers[p].supports.credentials) {
-            if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-                res = await cc.autoAddUsers(p);
+    let res, prom;
+    if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+        if(providers[p].supports.credentials) {
+            prom = cc.autoAddUsers(p);
+            sendCredentials(p);
+            res = await prom;
+            if(p == TESTUSER.type) {
+                t.true(res.length > 0, "Found credential for " + p);
+
+                const users = await cc.getUsersByType();
+                await Promise.all(users.map((u) => cc.removeUser(u.id, true)));
+            }
+            else if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
                 t.is(res.length, 0, "found no credentials for " + p);
             }
         }
@@ -45,29 +63,28 @@ test.serial.failing("Credentials", async (t) => {
             await t.throws(cc.autoAddUsers(p));
         }
     }
+};
+testProviderCredentials.title = (title, p) => `${title} for ${p}`;
 
-    let users = await cc.getUsersByType();
-    for(const u of users) {
-        await cc.removeUser(u.id, true);
+for(const p in providers) {
+    test.serial('Provider credentials', testProviderCredentials, p);
+}
+
+test.serial("Credentials", async (t) => {
+    const cc = new ChannelController();
+    await cc._ensureQueueReady();
+
+    const prom = cc.autoAddUsers();
+
+    for(const p in providers) {
+        sendCredentials(p);
     }
-
-    res = await cc.autoAddUsers();
+    const res = await prom;
     t.true(res.some((r) => r.length > 0), "All credentials finds some");
 
-    users = await cc.getUsersByType();
-    for(const u of users) {
-        await cc.removeUser(u.id, true);
-    }
-    /*await new Promise((resolve, reject) => {
-            passwords.remove({
-            formSubmitURL: providers[TESTUSER.type].authURL[0] + "/submit",
-            username: TESTUSER.name,
-            password: "test",
-            onComplete: p.resolve,
-            onError: p.reject
-        });
-    });*/
-//});
+    const users = await cc.getUsersByType();
+    return Promise.all(users.map((u) => cc.removeUser(u.id, true)));
+});
 
 test("Add User", async (t) => {
     const cc = new ChannelController();
@@ -345,4 +362,5 @@ test.before(() => {
 
 test.after(() => {
     providers[TESTUSER.type]._setQs(oldQS);
+    SDKStubs.onMessage._listeners.length = 0;
 });

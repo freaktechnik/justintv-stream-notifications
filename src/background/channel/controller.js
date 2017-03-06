@@ -478,6 +478,7 @@ export default class ChannelController extends EventTarget {
      * @throws When the action is canceled.
      */
     async addUser(username, type, canceled = () => false) {
+        console.log("addUSer", username);
         if(type in providers && providers[type].supports.favorites) {
             let [ user, channels ] = await providers[type].getUserFavorites(username);
             await this._ensureQueueReady();
@@ -497,7 +498,7 @@ export default class ChannelController extends EventTarget {
             return u;
         }
         else {
-            throw "Can't add users for provider " + type;
+            throw new Error("Can't add users for provider " + type);
         }
     }
     /**
