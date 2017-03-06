@@ -257,7 +257,6 @@
     "fake-indexeddb": "^1.0.11",
     "fetch-headers": "^2.0.0",
     "file-loader": "^0.10.0",
-    "git-prepush-hook": "^1.0.1",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
     "grunt-cli": "^1.2.0",
@@ -271,7 +270,6 @@
     "html-webpack-plugin": "^2.22.0",
     "istanbul-jpm": "*",
     "jpm": "^1.2.0",
-    "json-loader": "^0.5.4",
     "load-grunt-tasks": "^3.5.2",
     "mz": "^2.6.0",
     "nyc": "^10.1.2",
@@ -283,13 +281,14 @@
   },
   "scripts": {
     "grunt": "grunt",
-    "test": "npm run lint && nyc ava && webpack && grunt test && jpm test --addon-dir build/ && grunt after-coverage",
+    "test": "npm run modern-test && webpack && grunt test && jpm test --addon-dir build/",
+    "modern-test": "npm run lint && nyc -r lcov -r text ava",
+    "coverage": "grunt after-coverage & codecov",
     "lint": "eslint lib/ test/ test-jpm/ src/",
     "lint-cache": "npm run lint -- --cache",
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",
     "run": "webpack && grunt dev && jpm run --addon-dir build/"
   },
-  "pre-push": [],
   "permissions": {
     "multiprocess": true
   },

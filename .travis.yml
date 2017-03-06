@@ -10,8 +10,6 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
 - get-firefox -ceb unbranded-release -t ../
-after_success:
-- ./node_modules/.bin/codecov
 branches:
   except:
   - gh-pages
