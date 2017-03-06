@@ -293,6 +293,8 @@ test("Disabled Provider", async (t) => {
         //TODO have a plan b here.
     }
 });
+
+test.serial.todo("Copy local channel to clipboard");
 /*
 test.serial.failing("Copy Local Channel To Clipboard", async (t) => {
     t.fail("Clipboard tests need to be updated");
@@ -344,6 +346,7 @@ test.serial.failing("Copy External Channel To Clipboard", async (t) => {
         clipboard.set(prevClipboard);
     }
 });*/
+test.serial.todo("Copy external channel to clipboard");
 
 test("Copy Invalid Channel To Clipboard", async (t) => {
     const cc = new ChannelController();

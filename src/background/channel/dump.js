@@ -49,11 +49,11 @@ export const PREFS_MAPPING = Object.freeze({
  * @async
  */
 export const create = async (channels, users) => {
-    const p = {};
-    const promises = [];
-    for(let branch in PREFS_MAPPING) {
+    const p = {},
+        promises = [];
+    for(const branch in PREFS_MAPPING) {
         p[branch] = {};
-        for(let name in PREFS_MAPPING[branch]) {
+        for(const name in PREFS_MAPPING[branch]) {
             promises.push(prefs.get(PREFS_MAPPING[branch][name]).then((value) => {
                 p[branch][name] = value;
             }));
@@ -62,25 +62,24 @@ export const create = async (channels, users) => {
 
     await Promise.all(promises);
 
-    for(let branch in p) {
+    for(const branch in p) {
         Object.freeze(p[branch]);
     }
 
-    const platform = await browser.runtime.getPlatformInfo();
-    const manifest = browser.runtime.getManifest();
-
-    const debugDump = {
-        channels: channels.map((c) => c.serialize()),
-        users: users.map((u) => u.serialize()),
-        prefs: Object.freeze(p),
-        meta: Object.freeze({
-            version: manifest.version,
-            platform: platform.os,
-            platformArch: platform.arch,
-            language: browser.i18n.getUILanguage(),
-            lastError: browser.runtime.lastError
-        })
-    };
+    const platform = await browser.runtime.getPlatformInfo(),
+        manifest = browser.runtime.getManifest(),
+        debugDump = {
+            channels: channels.map((c) => c.serialize()),
+            users: users.map((u) => u.serialize()),
+            prefs: Object.freeze(p),
+            meta: Object.freeze({
+                version: manifest.version,
+                platform: platform.os,
+                platformArch: platform.arch,
+                language: browser.i18n.getUILanguage(),
+                lastError: browser.runtime.lastError
+            })
+        };
     Object.freeze(debugDump);
 
     return debugDump;
@@ -120,8 +119,8 @@ export const copy = async (channels, users) => {
  */
 export const load = (debugDump) => {
     const promises = [];
-    for(let branch in debugDump.prefs) {
-        for(let name in debugDump.prefs[branch]) {
+    for(const branch in debugDump.prefs) {
+        for(const name in debugDump.prefs[branch]) {
             promises.push(prefs.set(PREFS_MAPPING[branch][name], debugDump.prefs[branch][name]));
         }
     }
