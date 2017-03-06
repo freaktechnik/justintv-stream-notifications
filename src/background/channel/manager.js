@@ -148,7 +148,9 @@ export default class ChannelsManager extends EventTarget {
         port.onMessage.addListener((message) => {
             if(message.target == "ready") {
                 if(isSecondary) {
-                    this._emitToWorker("secondary");
+                    port.postMessage({
+                        target: 'secondary'
+                    });
                 }
                 else {
                     console.log("[Manager]> Page ready");
@@ -160,7 +162,9 @@ export default class ChannelsManager extends EventTarget {
                     this.open();
                 }
                 else {
-                    this._emitToWorker("reload");
+                    port.postMessage({
+                        target: "reload"
+                    });
                 }
             }
             else if(message.target == "adduser") {
