@@ -98,7 +98,7 @@ test("Callbacks Loading", (t) => {
     t.false(cm.loading);
 });
 
-test("Callbacks", async (t) => {
+test("Callbacks", (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
     cm._setupPort(port);
@@ -147,7 +147,7 @@ test("Make Sure No Throws", (t) => {
     t.notThrows(() => cm.setTheme());
 });
 
-test("add providers", async (t) => {
+test("add providers", (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
     cm._setupPort(port);

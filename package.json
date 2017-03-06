@@ -220,7 +220,6 @@
   ],
   "name": "justintv-stream-notifications",
   "version": "3.3.0",
-  "lib": "lib",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
@@ -237,9 +236,7 @@
   "dependencies": {
     "event-target-shim": "^2.0.0",
     "md5": "^2.2.1",
-    "notification-box": "^0.1.1",
     "open-iconic": "^1.1.1",
-    "preferences-utils": "0.0.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -255,7 +252,7 @@
     "css-loader": "^0.26.1",
     "eslint": "^3.6.0",
     "eslint-plugin-babel": "^4.0.1",
-    "eslint-plugin-freaktechnik": "^2.0.0",
+    "eslint-plugin-freaktechnik": "^2.1.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "fake-indexeddb": "^1.0.11",
     "fetch-headers": "^2.0.0",

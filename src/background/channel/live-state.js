@@ -139,7 +139,8 @@ class LiveState {
     /**
      * The default interpretation mode based on a user's preference.
      *
-     * @type {module:channel/live-state~LiveStateInterpretation}
+     * @returns {module:channel/live-state~LiveStateInterpretation} Default live
+     *          state interpretation mode as per the visibility pref.
      * @async
      */
     static defaultInterpretation() {
@@ -182,6 +183,7 @@ class LiveState {
      * Set the state to live or not live. Simple as can be.
      *
      * @param {boolean} live - Shortcut to set the object to simple states.
+     * @returns {undefined}
      */
     setLive(live) {
         this._state = live ? LIVE : OFFLINE;

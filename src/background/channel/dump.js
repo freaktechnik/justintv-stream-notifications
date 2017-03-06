@@ -90,6 +90,7 @@ export const create = async (channels, users) => {
  *
  * @param {Array.<module:channel/core.Channel>} channels - Channels to dump.
  * @param {Array.<module:channel/core.User>} users - Users to dump.
+ * @returns {undefined}
  */
 export const copy = async (channels, users) => {
     const data = await exports.create(channels, users),

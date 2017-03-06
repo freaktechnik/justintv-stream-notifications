@@ -148,11 +148,11 @@ export default class ChannelList extends EventTarget {
                 this.db = e.target.result;
 
                 if(e.oldVersion != 1) {
-                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true }),
+                        channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
                     users.createIndex("typename", [ "type", "login" ], { unique: true });
                     users.createIndex("type", "type", { unique: false });
                     //users.createIndex("id", "id", { unique: true });
-                    const channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
                     channels.createIndex("typename", [ "type", "login" ], { unique: true });
                     channels.createIndex("type", "type", { unique: false });
                     //channels.createIndex("id", "id", { unique: true });
@@ -281,7 +281,7 @@ export default class ChannelList extends EventTarget {
      * @param {(number|string)} id - ID of login of the channel.
      * @param {string} [type] - Type of the channel if a login was passed as
      *                             first argument.
-     * @returns {module:channel/core.Channel}
+     * @returns {module:channel/core.Channel} Requested channel instance.
      * @throws The channel doesn't exist or no arguments passed.
      */
     async getChannel(id, type) {
@@ -316,7 +316,7 @@ export default class ChannelList extends EventTarget {
      * @param {(number|string)} id - ID of login of the user.
      * @param {string} [type] - Type of the user if a login was passed as first
      *                             argument.
-     * @returns {module:channel/core.User}
+     * @returns {module:channel/core.User} Requested user instance.
      * @throws The user doesn't exist or no arguments passed.
      */
     async getUser(id, type) {
@@ -631,7 +631,8 @@ export default class ChannelList extends EventTarget {
      * @param {string} [type] - Type all the channels should have. If left out,
      *                             all channels are returned.
      * @async
-     * @returns {Array.<module:channel/core.Channel>}
+     * @returns {Array.<module:channel/core.Channel>} Array of all channels for
+     *          the given type. May be empty.
      */
     getChannelsByType(type) {
         return new Promise((resolve, reject) => {
@@ -679,7 +680,8 @@ export default class ChannelList extends EventTarget {
      * @param {string} [type] - The type all returned users should have. If left
      *                             out all users are returned.
      * @async
-     * @returns {Array.<module:channel/core.User>}
+     * @returns {Array.<module:channel/core.User>} Array of users for the given
+     *          type. May be empty.
      */
     getUsersByType(type) {
         return new Promise((resolve, reject) => {
@@ -726,7 +728,8 @@ export default class ChannelList extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - Channel to search users's
      *                                                  favorites for.
-     * @returns {Array.<module:channel/core.User>}
+     * @returns {Array.<module:channel/core.User>} List of users that follow the
+     *          given channel.
      */
     async getUsersByFavorite(channel) {
         const users = await this.getUsersByType(channel.type);
@@ -741,11 +744,11 @@ export default class ChannelList extends EventTarget {
      *
      * @param {number} channelId - ID of the channel that users have favorited.
      * @fires module:channel/list.ChannelList#userdeleted
-     * @returns {Array.<module:channel/core.User>}
+     * @returns {Array.<module:channel/core.User>} List of users that were removed.
      */
     async removeUsersWithFavorite(channelId) {
-        const channel = await this.getChannel(channelId);
-        const users = await this.getUsersByFavorite(channel);
+        const channel = await this.getChannel(channelId),
+            users = await this.getUsersByFavorite(channel);
         return Promise.all(users.map((user) => {
             console.log("Removing user " + user.login + " because he follows " + channel.login);
             return this.removeUser(user.id);
@@ -756,7 +759,8 @@ export default class ChannelList extends EventTarget {
      * Get all channels that are favorited by a user.
      *
      * @param {module:channel/core.User} user - User to get the favorites of.
-     * @returns {Array.<module:channel/core.Channel>}
+     * @returns {Array.<module:channel/core.Channel>} List of channels a user
+     *          follows.
      */
     async getChannelsByUserFavorites(user) {
         const channels = await this.getChannelsByType(user.type);
@@ -771,7 +775,7 @@ export default class ChannelList extends EventTarget {
      * @param {number} userId - ID of the user whose favorites should be removed.
      * @fires module:channel/list.ChannelList#channeldeleted
      * @fires module:channel/list.ChannelList#beforechanneldeleted
-     * @returns {Array.<module:channel/core.Channel>}
+     * @returns {Array.<module:channel/core.Channel>} List of removed channels.
      */
     async removeChannelsByUserFavorites(userId) {
         const user = await this.getUser(userId),

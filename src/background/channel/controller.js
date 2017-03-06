@@ -458,7 +458,7 @@ export default class ChannelController extends EventTarget {
     /**
      * Remove a channel from the ChannelList.
      *
-     * @param {number} channelId
+     * @param {number} channelId - Id of the channel to remove.
      * @returns {module:channel/core.Channel} Removed channel.
      * @async
      */
@@ -478,7 +478,6 @@ export default class ChannelController extends EventTarget {
      * @throws When the action is canceled.
      */
     async addUser(username, type, canceled = () => false) {
-        console.log("addUSer", username);
         if(type in providers && providers[type].supports.favorites) {
             let [ user, channels ] = await providers[type].getUserFavorites(username);
             await this._ensureQueueReady();
@@ -578,7 +577,6 @@ export default class ChannelController extends EventTarget {
      */
     _addFoundCredentials(provider, credentials) {
         return Promise.all(credentials.filter((credential) => credential.username).map((credential) => {
-            console.log(`Found a credential for ${provider} user ${credential.username}`);
             return this.addUser(credential.username, provider);
         }));
     }
@@ -598,7 +596,7 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider] - Provider to add users stored in the
      * credentials for. If not provided, all providers are searched.
-     * @returns {Array.<module:channel/core.User} Users added based on saved
+     * @returns {Array.<module:channel/core.User>} Users added based on saved
      *          credentials.
      * @throws If the provider does not support adding users based on credentials.
      * @async
@@ -610,12 +608,11 @@ export default class ChannelController extends EventTarget {
                 .map(this.autoAddUsers.bind(this)));
         }
         else if(providers[provider].supports.credentials) {
-            console.log(`Searching login name for ${provider}`);
             return Promise.all(providers[provider].authURL.map(this._findUsersByURL.bind(this, provider)))
                 .then(flatten);
         }
         else {
-            return Promise.reject(`Provider ${provider} does not support auto adding users`);
+            return Promise.reject(new Error(`Provider ${provider} does not support auto adding users`));
         }
     }
     /**

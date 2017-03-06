@@ -4,12 +4,7 @@ module.exports = function(grunt) {
 
     // Load package.json
     var pkg = grunt.file.readJSON("package.json");
-    var dependencies = Object.keys(pkg.dependencies).map(function(d) {
-        return d + "/**/*";
-    });
-    dependencies.push("is-buffer/**/*");
-    dependencies.push("charenc/**/*");
-    dependencies.push("crypt/**/*");
+    var dependencies = [];
 
     grunt.initConfig({
         preVersion: "01",
