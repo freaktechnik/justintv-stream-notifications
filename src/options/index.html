@@ -55,7 +55,7 @@
                     }
 
                     input = "<input";
-                    for(const p of props) {
+                    for(const p in props) {
                         input += ` ${p}="${props[p]}"`;
                     }
                     input += ">";
