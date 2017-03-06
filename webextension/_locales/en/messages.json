@@ -445,7 +445,7 @@
         "message": "Minimum Panel width",
         "description": "Title of the panel minimum width setting in the preferences"
     },
-    "panel_maxHeight£_title": {
+    "panel_maxHeight_title": {
         "message": "Maximum Panel height",
         "description": "Title of the panel maximum height setting in the preferences"
     },
@@ -477,7 +477,7 @@
         "message": "Maximum number of attempts before a request is discarded",
         "description": "Title of the request retry limit setting in the preferences"
     },
-    "find_mature": {
+    "find_mature_title": {
         "message": "Find mature content in the explore tab",
         "description": "Title of the mature setting in the preferences"
     },

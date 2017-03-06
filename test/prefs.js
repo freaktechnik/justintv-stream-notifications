@@ -30,7 +30,7 @@ const translation = (t, prefName, pref) => {
         }
     }
 };
-translation.name = (title, prefName) => `${title} for ${prefName}`;
+translation.title = (title, prefName) => `${title} for ${prefName}`;
 
 for(const p in prefs) {
     test('Translations exist', translation, p, prefs[p]);

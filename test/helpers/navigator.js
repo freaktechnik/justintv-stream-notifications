@@ -25,4 +25,4 @@ export default class NavigatorOnLine extends EventTarget {
         }
         this._online = val;
     }
-};
+}
