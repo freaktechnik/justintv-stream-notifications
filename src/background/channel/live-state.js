@@ -8,7 +8,7 @@
  */
 import { omit } from "underscore";
 import prefs from "../preferences";
-import LiveStateConst from '../../live-state';
+import LiveStateConst from '../../live-state.json';
 
 /**
  * @typedef {number} LiveStateIndicator

@@ -3,7 +3,7 @@
  * @license MPL-2.0
  */
 import test from "ava";
-import LiveState from "../src/live-state.js";
+import LiveState from "../src/live-state.json";
 
 test("Test exported constants", (t) => {
     t.is(typeof LiveState, "object");

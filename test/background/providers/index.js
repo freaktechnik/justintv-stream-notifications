@@ -9,7 +9,7 @@ import { getChannel, getUser } from "../../helpers/channel-user";
 import { Channel, User } from "../../../src/background/channel/core";
 import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
 import { when } from "../../../src/utils";
-import LiveState from "../../../src/live-state";
+import LiveState from "../../../src/live-state.json";
 
 test.before(() => {
     SDKStubs.onMessage.dispatch({

@@ -10,7 +10,7 @@ import '../content/l10n';
 import './list.css';
 import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
-import LiveState from '../live-state';
+import LiveState from '../live-state.json';
 
 let live,
     secondaryLive,
