@@ -10,6 +10,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
 - get-firefox -ceb unbranded-release -t ../
+after_success: npm run coverage
 branches:
   except:
   - gh-pages
