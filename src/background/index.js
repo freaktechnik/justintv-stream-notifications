@@ -9,6 +9,7 @@ import * as qs from './queue/service';
 import Notifier from "./notifier";
 
 const S_TO_MS_FACTOR = 1000,
+    BASE_URL = "http://streamnotifier.ch",
 
 // Init things
     notifier = new Notifier(),
@@ -157,5 +158,21 @@ browser.storage.local.get("migrated").then((value) => {
                 migrated: true
             });
         });
+    }
+});
+
+browser.runtime.onInstall.addListener(async ({ reason }) => {
+    if(await prefs.get('updateTab')) {
+        if(reason == 'install') {
+            await browser.tabs.create({
+                url: BASE_URL + "/firstrun/"
+            });
+        }
+        else if(reason == 'update') {
+            await browser.tabs.create({
+                url: `${BASE_URL}/changes/${browser.runtime.getManifest().version}/`,
+                active: false
+            });
+        }
     }
 });
