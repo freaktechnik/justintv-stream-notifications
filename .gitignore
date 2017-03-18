@@ -195,5 +195,6 @@ webextension/background
 webextension/list
 webextension/manager
 webextension/options
+webextension/content
 webextension/assets/images/open-iconic.min.svg
 webextension/icon*.png

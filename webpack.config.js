@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const manifest = require("./webextension/manifest.json");
+const CommonsChunkPlugin = require("webpack").optimize.CommonsChunkPlugin;
 
 const defaultLanguage = manifest.default_locale;
 
@@ -44,25 +45,41 @@ module.exports = {
 		new ExtractTextPlugin({
             filename: "[name]/style.css"
         }),
+        new CommonsChunkPlugin({
+            name: "content",
+            chunks: [
+                'manager',
+                'list',
+                'options'
+            ]
+        })
 		new HtmlWebpackPlugin({
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',
-		    chunks: [ 'manager' ],
+		    chunks: [
+                'content',
+                'manager'
+            ],
 		    favicon: 'webextension/assets/images/icon32.png',
 		    defaultLanguage
 	    }),
 	    new HtmlWebpackPlugin({
 	        template: 'src/list/index.html',
 	        filename: 'list/index.html',
-	        chunks: [ 'list' ],
+	        chunks: [
+                'content',
+                'list'
+            ],
 	        defaultLanguage
         }),
         new HtmlWebpackPlugin({
             template: 'src/options/index.html',
             filename: 'options/index.html',
-            chunks: [ 'options' ],
+            chunks: [
+                'content',
+                'options'
+            ],
             defaultLanguage
         })
-    ],
-    devtool: "inline-source-map"
+    ]
 };
