@@ -1,0 +1,8 @@
+{
+    "OFFLINE": -1,
+    "LIVE": 0,
+    "REDIRECT": 1,
+    "REBROADCAST": 2,
+    "TOWARD_LIVE": 0,
+    "TOWARD_OFFLINE": 1
+}

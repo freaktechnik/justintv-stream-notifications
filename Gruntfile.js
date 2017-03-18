@@ -4,17 +4,11 @@ module.exports = function(grunt) {
 
     // Load package.json
     var pkg = grunt.file.readJSON("package.json");
-    var dependencies = Object.keys(pkg.dependencies).map(function(d) {
-        return d + "/**/*";
-    });
-    dependencies.push("is-buffer/**/*");
-    dependencies.push("charenc/**/*");
-    dependencies.push("crypt/**/*");
+    var dependencies = [];
 
     grunt.initConfig({
         preVersion: "01",
         pkg: pkg,
-        firefoxBinary: process.env.JPM_FIREFOX_BINARY || '/usr/bin/firefox-trunk',
         banner:
             "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today(\"yyyy-mm-dd\") %>\n" +
             "<%= pkg.homepage ? \" * \" + pkg.homepage + \"\\n\" : \"\" %>" +
@@ -33,13 +27,6 @@ module.exports = function(grunt) {
             });
             grunt.config.set('package.translate.add.locales', locales);
             return locales;
-        },
-        jpm: {
-            options: {
-                src: 'build/',
-                xpi: '.',
-                "firefox-bin": "<%= firefoxBinary %>"
-            }
         },
         transifex: {
             mainProperties: {
@@ -112,14 +99,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jsdoc: {
-            dist: {
-                src: ['lib/**/*.js', 'README.md', 'package.json'],
-                options: {
-                    destination: 'doc'
-                }
-            }
-        },
         copy: {
             translate: {
                 expand: true,
@@ -131,12 +110,6 @@ module.exports = function(grunt) {
             },
             build: {
                 files: [
-                    {
-                        expand: true,
-                        cwd: 'data',
-                        src: ['**/*', '!**/*~'],
-                        dest: 'build/data'
-                    },
                     {
                         expand: true,
                         cwd: 'node_modules',
@@ -151,9 +124,21 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        cwd: 'data',
-                        src: ['icon.png', 'icon64.png'],
+                        cwd: 'webextension/assets/images',
+                        src: ['icon48.png', 'icon64.png'],
                         dest: 'build/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'webextension',
+                        src: ['**/*', '!**/*~'],
+                        dest: 'build/webextension'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'webextension/_locales',
+                        src: ['**/*'],
+                        dest: 'build/_locales'
                     }
                 ]
             },
@@ -161,7 +146,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'test',
+                        cwd: 'test-jpm',
                         src: ['**/*', '!**/*~', '!.eslintrc.json'],
                         dest: 'build/test'
                     },
@@ -241,14 +226,6 @@ module.exports = function(grunt) {
             options: {
                 plugins: [
                     [
-                        "transform-async-to-module-method",
-                        {
-                            // this will mostly work.
-                            module: "../utils",
-                            method: "cc"
-                        }
-                    ],
-                    [
                         "transform-es2015-modules-commonjs-simple",
                         {
                             loose: false,
@@ -278,7 +255,10 @@ module.exports = function(grunt) {
                     sourceMaps: true,
                     // workaround remap-istanbul not handling relative paths properly
                     //TODO currently maps lib/ to build/lib/
-                    sourceRoot: 'build/instrument/build'
+                    sourceRoot: 'build/instrument/build',
+                    presets: [
+                        'es2017'
+                    ]
                 },
                 files: [
                     {
@@ -304,59 +284,13 @@ module.exports = function(grunt) {
             }
         },
         makeReport: {
-            src: 'coverage/reports/**/*.json',
+            src: ['coverage/reports/**/*.json'],
             options: {
                 type: 'lcov',
                 dir: 'coverage/reports',
                 print: 'detail'
             }
-        },
-        env: {
-            coverage: {
-                JPM_MEASURING_COVERAGE: true
-            },
-            run: {
-                FIREFOX_BIN: '<%= firefoxBinary %>'
-            }
-        },
-        coveralls: {
-            options: {
-                src: 'coverage/reports/lcov.info',
-                force: true
-            }
-        },
-        bower: {
-            build: {
-                dest: 'build/data'
-            }
-        },
-        remapIstanbul: {
-            build: {
-                files: [
-                    {
-                        src: 'coverage/reports/coverage.json',
-                        dest: 'coverage/reports/coverage.json',
-                        type: 'json',
-                        basePath: 'build/instrument/build/lib'
-                    }
-                ]
-            }
         }
-    });
-
-    grunt.loadNpmTasks('remap-istanbul');
-
-    grunt.registerTask('jpmtest', 'Runs tests with jpm', function(verbose) {
-        var done = this.async();
-        var isVerbose = verbose !== "undefined";
-        require("jpm/lib/test")(grunt.config('pkg'), {
-            binary: grunt.config('firefoxBinary'),
-            addonDir: require("path").resolve("build/"),
-            verbose: isVerbose,
-            stopOnError: isVerbose
-        }).then(function(r) { done(r.code === 0); }, function(e) {
-            done(e);
-        });
     });
 
     grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
@@ -364,21 +298,13 @@ module.exports = function(grunt) {
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
-    grunt.registerTask('prepare-test', [ 'prepare-common', 'babel:dev', 'copy:dev', 'package:dev' ]);
+    grunt.registerTask('prepare-test', [ 'copy:build', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
-    grunt.registerTask('quicktest', 'Shortest path to run tests', function(verbose) {
-		grunt.task.run('prepare-test');
-		grunt.task.run('jpmtest'+":"+verbose);
-		grunt.task.run('clean:dev');
-	});
-    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage', 'jpmtest', 'readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
+    grunt.registerTask('coverage', ['clean:coverage', 'instrument', 'copy:coverage' ]);
+    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'coverage']);
-    grunt.registerTask('prepare-common', ['copy:build', 'bower']);
-    grunt.registerTask('build', ['clean', 'prepare-common', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate', 'jpm:xpi']);
-    grunt.registerTask('prepare-dev', ['prepare-common', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
-    grunt.registerTask('dev', ['prepare-dev', 'jpm:xpi', 'clean:dev']);
-    grunt.registerTask('run-dev', ['prepare-dev', 'env:run', 'jpm:run']);
-    grunt.registerTask('doc', ['jsdoc']);
+    grunt.registerTask('build', ['clean', 'copy:build', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate']);
+    grunt.registerTask('dev', ['copy:build', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
 
     grunt.registerTask('default', ['test']);
 };

@@ -219,12 +219,11 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.3.1",
-  "lib": "lib",
+  "version": "3.3.0",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
-    "firefox": ">=49.0a1"
+    "firefox": ">=53.0a1"
   },
   "license": "MPL-2.0",
   "repository": {
@@ -235,44 +234,84 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "dependencies": {
+    "event-target-shim": "^2.0.0",
     "md5": "^2.2.1",
-    "notification-box": "^0.1.1",
-    "preferences-utils": "0.0.1"
+    "open-iconic": "^1.1.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "babel-plugin-transform-async-to-module-method": "^6.8.0",
-    "babel-plugin-transform-class-properties": "^6.22.0",
+    "ajv": "^4.11.3",
+    "ava": "^0.18.2",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
-    "codecov": "^2.0.1",
-    "eslint": "^3.14.0",
+    "babel-preset-es2017": "^6.22.0",
+    "browser-env": "^2.0.22",
+    "codecov": "^2.0.2",
+    "css-loader": "^0.27.3",
+    "eslint": "^3.18.0",
     "eslint-plugin-babel": "^4.0.1",
-    "eslint-plugin-freaktechnik": "^2.0.0",
+    "eslint-plugin-freaktechnik": "^2.1.0",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "fake-indexeddb": "^1.0.11",
+    "fetch-headers": "^2.0.0",
+    "file-loader": "^0.10.0",
     "grunt": ">=1.0.1",
     "grunt-babel": ">=6.0.0",
-    "grunt-bower": ">=0.21.4",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": ">=0.6.0",
     "grunt-contrib-copy": ">=0.8.2",
-    "grunt-env": ">=0.4.4",
     "grunt-header": "^1.1.0",
-    "grunt-istanbul": ">=0.7.2",
-    "grunt-jpm": ">=0.1.0",
-    "grunt-jsdoc": "^2.1.0",
+    "grunt-istanbul": "^0.7.2",
     "grunt-package": ">=0.1.3",
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
-    "husky": "^0.13.0",
+    "html-webpack-plugin": "^2.22.0",
     "istanbul-jpm": "*",
-    "jpm": "^1.1.4",
+    "jpm": "^1.2.0",
     "load-grunt-tasks": "^3.5.2",
-    "remap-istanbul": "^0.9.0"
+    "mz": "^2.6.0",
+    "nyc": "^10.1.2",
+    "sinon": "^2.0.0",
+    "sinon-chrome": "^2.1.3",
+    "style-loader": "^0.14.1",
+    "webpack": "^2.2.1"
   },
   "scripts": {
     "grunt": "grunt",
-    "test": "npm run lint && grunt test",
-    "prepush": "npm run lint -- --cache",
-    "lint": "eslint data/ lib/ test/"
+    "test": "npm run modern-test && webpack && grunt test && jpm test --addon-dir build/ -b $JPM_FIREFOX_BINARY",
+    "modern-test": "npm run lint && nyc ava",
+    "coverage": "nyc report && grunt after-coverage && codecov",
+    "lint": "eslint lib/ test/ test-jpm/ src/",
+    "lint-cache": "npm run lint -- --cache",
+    "build": "webpack && grunt build && jpm xpi --addon-dir build/",
+    "run": "webpack && grunt dev && jpm run --addon-dir build/"
   },
   "permissions": {
     "multiprocess": true
+  },
+  "hasEmbeddedWebExtension": true,
+  "icon": "icon48.png",
+  "ava": {
+    "babel": "inherit",
+    "require": [
+      "babel-core/register",
+      "./test/helpers/setup-browser-env.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@ava/stage-4"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs",
+      "transform-class-properties"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
   }
 }

@@ -1,0 +1,90 @@
+<% var requireString = require("../content/insert-string.js"),
+            translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
+<!DOCTYPE html>
+<html>
+    <!--
+        Created by Martin Giger
+        Licensed under the MPL 2.0
+    -->
+    <head>
+        <meta charset="utf-8">
+        <link rel="help" href="http://streamnotifier.ch/help/panel" hreflang="en" type="text/html">
+        <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">
+    </head>
+    <body>
+        <menu id="context" type="context">
+            <menuitem id="contextRefresh" <%= translateElement("context_refresh", "label") %></menuitem>
+            <menuitem id="contextOpen" <%= translateElement("context_open", "label") %></menuitem>
+            <menuitem id="contextChat" <%= translateElement("context_chat", "label") %></menuitem>
+            <menuitem id="contextCopy" <%= translateElement("context_copy", "label") %></menuitem>
+        </menu>
+        <menu id="explore-context" type="context">
+            <menuitem id="contextAdd" <%= translateElement("context_add", "label") %></menuitem>
+            <menuitem id="contextExploreCopy" <%= translateElement("context_copy", "label") %></menuitem>
+        </menu>
+        <menu id="queue-context" type="context">
+            <menuitem id="pauseAutorefresh" <%= translateElement("context_pause", "label") %></menuitem>
+            <menuitem id="resumeAutorefresh" hidden <%= translateElement("context_resume", "label") %></menuitem>
+        </menu>
+
+        <main class="tabbed default">
+            <nav>
+                <div class="topbar">
+                    <ul class="tabstrip inline-list" role="tablist">
+                        <li role="presentation"><a href="#live" role="tab" aria-controls="live" data-tab="1" class="current" aria-selected="true" <%= translateElement("panel_tab_live") %></a></li>
+                        <li role="presentation" id="nonliveTab" hidden><a href="#nonlive" role="tab" aria-controls="nonlive" data-tab="4" <%= translateElement("panel_tab_nonlive") %></a></li>
+                        <li role="presentation"><a href="#offline" role="tab" aria-controls="offline" data-tab="2" <%= translateElement("panel_tab_offline") %></a></li>
+                        <li role="presentation" id="exploreTab"><a href="#featured" role="tab" aria-controls="featured" data-tab="3" <%= translateElement("panel_tab_explore") %></a></li>
+                    </ul>
+                    <ul class="toolbar inline-list right" role="toolbar">
+                        <li>
+                            <button id="searchButton" aria-pressed="false" aria-controls="searchField" <%= translateElement("panel_search", "title") %>
+                                <svg class="icon" viewBox="0 0 8 8">
+                                    <use xlink:href="../assets/images/open-iconic.min.svg#magnifying-glass"></use>
+                                </svg>
+                            </button>
+                        </li>
+                        <li>
+                            <button id="refreshButton" <%= translateElement("panel_refresh", "title") %>
+                                <svg class="icon" viewBox="0 0 8 8">
+                                    <use xlink:href="../assets/images/open-iconic.min.svg#reload"></use>
+                                </svg>
+                            </button>
+                        </li>
+                        <li><button id="configure" <%= translateElement("panel_manage", "title") %>
+                            <svg class="icon" viewBox="0 0 8 8">
+                                <use xlink:href="../assets/images/open-iconic.min.svg#wrench"></use>
+                            </svg>
+                        </button></li>
+                    </ul>
+                </div>
+                <input type="search" id="searchField" hidden <%= translateElement("cm_filter", "placeholder") %>
+            </nav>
+            <section class="tabcontent live" role="tabpanel" data-tab="1">
+                <div id="noonline" <%= translateElement("panel_nothing_live") %></div>
+                <ul id="live">
+                </ul>
+                <ul id="secondarylive" hidden>
+                </ul>
+            </section>
+            <section class="tabcontent live" role="tabpanel" data-tab="4" hidden>
+                <ul id="nonlive">
+                </ul>
+            </section>
+            <section class="tabcontent" role="tabpanel" data-tab="2" hidden>
+                <div id="nochannels" <%= translateElement("panel_nothing") %></div>
+                <ul id="offline">
+                </ul>
+            </section>
+            <section class="tabcontent live" role="tabpanel" data-tab="3" hidden>
+                <select id="exploreprovider">
+                </select>
+                <div id="loadingexplore" <%= translateElement("panel_loading") %></div>
+                <div id="noresults" hidden <%= translateElement("panel_no_results") %></div>
+                <ul id="featured">
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>
+

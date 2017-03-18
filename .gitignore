@@ -189,3 +189,11 @@ bower_components/
 locale/*.json
 !locale/en-US.json
 .eslintcache
+.nyc_output
+
+webextension/background
+webextension/list
+webextension/manager
+webextension/options
+webextension/assets/images/open-iconic.min.svg
+webextension/icon*.png

@@ -1,0 +1,59 @@
+{
+    "manifest_version": 2,
+    "name": "__MSG_extensionName__",
+    "description": "__MSG_extensionDescription__",
+    "default_locale": "en",
+    "applications": {
+        "gecko": {
+            "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack"
+        }
+    },
+    "homepage_url": "http://streamnotifier.ch",
+    "version": "4.0.0",
+    "icons": {
+        "16": "assets/images/icon16.png",
+        "18": "assets/images/icon18.png",
+        "32": "assets/images/icon32.png",
+        "36": "assets/images/icon36.png",
+        "48": "assets/images/icon48.png",
+        "64": "assets/images/icon64.png"
+    },
+    "browser_action": {
+        "browser_style": false,
+        "default_icon": {
+            "16": "assets/images/offline16.png",
+            "18": "assets/images/offline18.png",
+            "32": "assets/images/offline32.png",
+            "36": "assets/images/offline36.png",
+            "48": "assets/images/offline48.png",
+            "64": "assets/images/offline64.png"
+        },
+        "default_popup": "list/index.html",
+        "default_title": "__MSG_listTooltipOffline__"
+    },
+    "background": {
+        "scripts": [ "background/index.js" ]
+    },
+    "permissions": [
+        "tabs",
+        "notifications",
+        "storage",
+        "alarms",
+        "clipboardWrite",
+        "https://www.googleapis.com/youtube/v3/*",
+        "http://livestream.com/api/*",
+        "https://api.twitch.tv/api/*",
+        "https://tmi.twitch.tv/*",
+        "https://ptvappapi.picarto.tv/*",
+        "http://www.ustream.tv/*",
+        "http://www.douyutv.com/api/v1/*",
+        "http://*.api.channel.livestream.com/2.0/*",
+        "https://www.majorleaguegaming.com/api/*",
+        "https://streamapi.majorleaguegaming.com/service/streams/*"
+    ],
+    "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; child-src 'none'; media-src 'none'",
+    "options_ui": {
+        "page": "options/index.html",
+        "browser_style": true
+    }
+}
