@@ -281,7 +281,7 @@
   "scripts": {
     "grunt": "grunt",
     "test": "npm run modern-test && webpack && grunt test && jpm test --addon-dir build/ -b $JPM_FIREFOX_BINARY",
-    "modern-test": "npm run lint && nyc -r lcov -r text ava",
+    "modern-test": "npm run lint && nyc ava",
     "coverage": "grunt after-coverage && codecov",
     "lint": "eslint lib/ test/ test-jpm/ src/",
     "lint-cache": "npm run lint -- --cache",
@@ -307,6 +307,12 @@
     "plugins": [
       "transform-es2015-modules-commonjs",
       "transform-class-properties"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
     ]
   }
 }

@@ -93,7 +93,6 @@ class Hitbox extends GenericProvider {
     }
     getChannelDetails(channelname) {
         return this._qs.queueRequest(baseURL + '/media/live/' + channelname).then((data) => {
-            console.log(data);
             if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
                 return getChannelFromJson(data.parsedJSON.livestream[0]);
             }

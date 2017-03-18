@@ -29,7 +29,6 @@ const [ registerService, unregisterService ] = helper.createMock("@mozilla.org/p
         if(!enabled) {
             throw "Logging when not enabled";
         }
-        console.log("will log:", type == Ci.nsIParentalControlsService.ePCLog_URIVisit);
         if(type == Ci.nsIParentalControlsService.ePCLog_URIVisit) {
             PCLog.push(uri);
         }

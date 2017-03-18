@@ -291,12 +291,6 @@ module.exports = function(grunt) {
                 print: 'detail'
             }
         },
-        coveralls: {
-            options: {
-                src: 'coverage/reports/lcov.info',
-                force: true
-            }
-        },
         remapIstanbul: {
             build: {
                 files: [
@@ -304,7 +298,7 @@ module.exports = function(grunt) {
                         src: 'coverage/reports/coverage.json',
                         dest: 'coverage/reports/coverage.json',
                         type: 'json',
-                        basePath: 'build/instrument/build/lib'
+                        basePath: 'lib'
                     }
                 ]
             }
