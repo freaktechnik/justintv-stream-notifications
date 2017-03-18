@@ -52,7 +52,7 @@ module.exports = {
                 'list',
                 'options'
             ]
-        })
+        }),
 		new HtmlWebpackPlugin({
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',
