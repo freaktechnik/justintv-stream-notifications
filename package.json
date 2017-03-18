@@ -4,39 +4,45 @@
       "type": "control",
       "name": "manageChannels",
       "title": "Manage Channels",
-      "label": "Open Channels Manager"
+      "label": "Open Channels Manager",
+      "hidden": true
     },
     {
       "type": "integer",
       "name": "updateInterval",
       "title": "Update Interval",
       "description": "Interval of the addon checking wether a stream is live in seconds. When 0, the states aren't automatically updated.",
-      "value": 30
+      "value": 30,
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "onlineNotification",
       "title": "Show a notification when a stream goes online",
-      "value": true
+      "value": true,
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "titleChangeNotification",
       "title": "Show a notification when a stream changes the title",
-      "value": true
+      "value": true,
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "offlineNotification",
       "title": "Show a notification when a stream goes offline",
-      "value": false
+      "value": false,
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "nonliveNotification",
       "title": "Show a notification when a stream enters a non-live state",
       "description": "This option is only relevant, when non-live streams aren't considered as live or offline.",
-      "value": false
+      "value": false,
+      "hidden": true
     },
     {
       "type": "radio",
@@ -56,7 +62,8 @@
           "value": "2",
           "label": "Thumbnail"
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "type": "radio",
@@ -81,21 +88,24 @@
           "value": "3",
           "label": "Offline"
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "panel_extras",
       "title": "Extra info in panel",
       "description": "Displays the viewer count and the category name of a channel in the panel when availble.",
-      "value": false
+      "value": false,
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "panel_badge",
       "title": "Display counter badge",
       "description": "Displays the number of live channels on the button if any.",
-      "value": false
+      "value": false,
+      "hidden": true
     },
     {
       "type": "radio",
@@ -111,21 +121,24 @@
           "value": "1",
           "label": "Dark"
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "type": "string",
       "name": "copy_pattern",
       "title": "Stream URL copy pattern",
       "description": "Customize the string that gets copied with the copy stream URL action in the panel context menu. {URL} gets replaced with the stream URL.",
-      "value": "{URL}"
+      "value": "{URL}",
+      "hidden": true
     },
     {
       "type": "bool",
       "name": "updateTab",
       "title": "Open a tab with update info after an update",
       "description": "A tab with informations about new features is opened when the extension is updated.",
-      "value": true
+      "value": true,
+      "hidden": true
     },
     {
       "type": "integer",
@@ -286,7 +299,7 @@
     "lint": "eslint lib/ test/ test-jpm/ src/",
     "lint-cache": "npm run lint -- --cache",
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",
-    "run": "webpack && grunt dev && jpm run --addon-dir build/"
+    "start": "webpack && grunt dev && jpm run --addon-dir build/"
   },
   "permissions": {
     "multiprocess": true
