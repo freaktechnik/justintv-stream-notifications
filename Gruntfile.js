@@ -290,22 +290,8 @@ module.exports = function(grunt) {
                 dir: 'coverage/reports',
                 print: 'detail'
             }
-        },
-        remapIstanbul: {
-            build: {
-                files: [
-                    {
-                        src: 'coverage/reports/coverage.json',
-                        dest: 'coverage/reports/coverage.json',
-                        type: 'json',
-                        basePath: 'lib'
-                    }
-                ]
-            }
         }
     });
-
-    grunt.loadNpmTasks('remap-istanbul');
 
     grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
         global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
@@ -315,7 +301,7 @@ module.exports = function(grunt) {
     grunt.registerTask('prepare-test', [ 'copy:build', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     grunt.registerTask('coverage', ['clean:coverage', 'instrument', 'copy:coverage' ]);
-    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
+    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('build', ['clean', 'copy:build', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate']);
     grunt.registerTask('dev', ['copy:build', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
