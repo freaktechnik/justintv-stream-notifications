@@ -9,7 +9,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv -in .transifexrc.enc -out .transifexrc -d
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
-- get-firefox -ceb unbranded-release -t ../
+- get-firefox -cet ../
 after_success: npm run coverage
 branches:
   except:
