@@ -262,7 +262,6 @@
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": ">=0.6.0",
     "grunt-contrib-copy": ">=0.8.2",
-    "grunt-env": ">=0.4.4",
     "grunt-header": "^1.1.0",
     "grunt-istanbul": "^0.7.2",
     "grunt-package": ">=0.1.3",

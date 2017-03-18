@@ -291,11 +291,6 @@ module.exports = function(grunt) {
                 print: 'detail'
             }
         },
-        env: {
-            coverage: {
-                JPM_MEASURING_COVERAGE: true
-            }
-        },
         coveralls: {
             options: {
                 src: 'coverage/reports/lcov.info',
@@ -325,7 +320,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('prepare-test', [ 'copy:build', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
-    grunt.registerTask('coverage', ['env:coverage', 'clean:coverage', 'instrument', 'copy:coverage' ]);
+    grunt.registerTask('coverage', ['clean:coverage', 'instrument', 'copy:coverage' ]);
     grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'remapIstanbul', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('build', ['clean', 'copy:build', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate']);
