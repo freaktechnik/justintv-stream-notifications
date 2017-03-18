@@ -281,7 +281,7 @@
     "grunt": "grunt",
     "test": "npm run modern-test && webpack && grunt test && jpm test --addon-dir build/ -b $JPM_FIREFOX_BINARY",
     "modern-test": "npm run lint && nyc ava",
-    "coverage": "nyc report && grunt after-coverage && codecov && codecov -f \"coverage/reports/coverage.lcov\"",
+    "coverage": "nyc report && grunt after-coverage && codecov",
     "lint": "eslint lib/ test/ test-jpm/ src/",
     "lint-cache": "npm run lint -- --cache",
     "build": "webpack && grunt build && jpm xpi --addon-dir build/",

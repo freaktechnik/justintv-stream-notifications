@@ -172,15 +172,7 @@ module.exports = function(grunt) {
                         dest: 'build/node_modules'
                     }
                 ]
-            },
-            "after-coverage": {
-                expand: true,
-                src: [ 'coverage/lcov.info' ],
-                dest: 'coverage/reports',
-                rename: function(dest, src) {
-                    return dest + src.replace("coverage/lcov.info", "/coverage.lcov");
-                }
-            },
+            }
         },
         "package": {
             translate: {
@@ -309,7 +301,7 @@ module.exports = function(grunt) {
     grunt.registerTask('prepare-test', [ 'copy:build', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
     grunt.registerTask('coverage', ['clean:coverage', 'instrument', 'copy:coverage' ]);
-    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'clean:dev', 'copy:after-coverage', 'makeReport']);
+    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'clean:dev', 'makeReport']);
     grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('build', ['clean', 'copy:build', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate']);
     grunt.registerTask('dev', ['copy:build', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
