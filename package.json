@@ -290,6 +290,7 @@
     "sinon-chrome": "^2.1.3",
     "style-loader": "^0.14.1",
     "transifex-loader": "^3.3.0",
+    "web-ext": "^1.8.1",
     "webpack": "^2.2.1"
   },
   "scripts": {
