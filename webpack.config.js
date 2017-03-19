@@ -61,7 +61,6 @@ module.exports = {
                 'content',
                 'manager'
             ],
-		    favicon: 'webextension/assets/images/icon32.png',
 		    defaultLanguage
 	    }),
 	    new HtmlWebpackPlugin({
