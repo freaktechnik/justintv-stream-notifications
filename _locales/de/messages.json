@@ -1,0 +1,438 @@
+{
+    "cm_tab_users": {
+        "message": "Benutzer",
+        "description": "Label of the tab that contains all users in the channel manager"
+    },
+    "panel_minWidth_title": {
+        "message": "Minimum Panel width",
+        "description": "Title of the panel minimum width setting in the preferences"
+    },
+    "cm_add": {
+        "message": "Hinzufügen…",
+        "description": "Label on button that opens a dialog to add a channel or user."
+    },
+    "twitch_clientId_title": {
+        "message": "Twitch Client ID",
+        "description": "Title of the Twitch Client ID setting in the preferences"
+    },
+    "panel_maxHeight_title": {
+        "message": "Maximum Panel height",
+        "description": "Title of the panel maximum height setting in the preferences"
+    },
+    "cm_options": {
+        "message": "Einstellungen öffnen",
+        "description": "Label of the button to open the extension options in the channel manager"
+    },
+    "channellist_cacheTime_title": {
+        "message": "Time to cache channel states while the browser is closed",
+        "description": "Title of the cache time setting in the preferences"
+    },
+    "cm_title": {
+        "message": "Kanalverwaltung",
+        "description": "Title of the channel manager tab"
+    },
+    "nonliveNotification": {
+        "message": "$CHANNEL$ $STATE$",
+        "description": "Notification when a channel changes a non-live state"
+    },
+    "copyNotification": {
+        "message": "Stream URL von $CHANNEL$ in die Zwischenablage kopiert",
+        "description": "Notification content after the URL of a stream was copied from the panel context menu"
+    },
+    "panel_style_title": {
+        "message": "Panel Stil",
+        "description": "Title of the panel item style setting in the preferences"
+    },
+    "youtube_apiKey_title": {
+        "message": "YouTube API Key",
+        "description": "Title of the YouTube API key setting in the preferences"
+    },
+    "advancedOptions": {
+        "message": "Advanced Options",
+        "description": "Advanced extension preferences collapsed message"
+    },
+    "cm_dialog_cancel": {
+        "message": "Abbrechen",
+        "description": "Cancel the dialog for adding a user or channel."
+    },
+    "panel_nonlive_description": {
+        "message": "Nicht-live Streams beinhalten gehostete Streams und Wiederausstrahlungen.",
+        "description": "Description of the non-live treatment setting in the preferences"
+    },
+    "providerlivestream": {
+        "message": "Original Livestream",
+        "description": "Provider name for the original livestream.com"
+    },
+    "providerhitbox": {
+        "message": "Hitbox",
+        "description": "Provider name for hitbox.tv"
+    },
+    "panel_tab_offline": {
+        "message": "Offline",
+        "description": "Label of the tab with all offline channels in the panel"
+    },
+    "panel_badge_description": {
+        "message": "Zeigt die Anzahl der aktuell streamended Kanäle auf dem Symbolleistenknopf.",
+        "description": "Description of the panel badge setting in the preferences"
+    },
+    "extensionDescription": {
+        "message": "Erhalte eine Benachrichtigung, wenn ein verfolgter Streamer live geht. Diese Erweiterung gibt dir die Kontrolle darüber, welche Kanäle geprüft werden und schnellen Zugriff auf all diese Kanäle über ein praktisches Panel.",
+        "description": "Description of the extension"
+    },
+    "queueservice_maxRetries_title": {
+        "message": "Maximum number of attempts before a request is discarded",
+        "description": "Title of the request retry limit setting in the preferences"
+    },
+    "cm_remove": {
+        "message": "Entfernen",
+        "description": "Label of the button to remove the selected users or channels"
+    },
+    "theme_title": {
+        "message": "Aussehen",
+        "description": "Title of the theme setting in the preferences"
+    },
+    "listTooltipOffline": {
+        "message": "Keine Kanäle sind live im Moment",
+        "description": "Button tooltip when there are no live channels in the panel"
+    },
+    "panel_nonlive_options.Livebottom": {
+        "message": "Unten im \"Live\" Tab",
+        "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
+    },
+    "context_copy.label": {
+        "message": "Stream URL kopieren",
+        "description": "Context menu action to copy the URL of a channel in the panel"
+    },
+    "cm_help": {
+        "message": "Hilfe",
+        "description": "Label of the help button in the channel manager"
+    },
+    "panel_nonlive_options.Offline": {
+        "message": "Offline",
+        "description": "Offline option of the non-live treatment setting in the preferences"
+    },
+    "nonliveNotificationStateRebroadcast": {
+        "message": "strahlt einen alten Stream wieder aus",
+        "description": "Rebroadcasting state for nonliveNotification"
+    },
+    "cm_autoAdd.title": {
+        "message": "Für gespeicherte Anmeldedaten auf unterstützten Seiten werden die gefolgten Kanäle automatisch hinzugefügt",
+        "description": "Tooltip for the auto add button (cm_autoAdd)."
+    },
+    "panel_badge_title": {
+        "message": "Zeige Live-Zähler",
+        "description": "Title of the panel badge setting in the preferences"
+    },
+    "manageChannels_label": {
+        "message": "Kanalverwaltung öffnen",
+        "description": "Label of the button to open the channel manager from the preferences"
+    },
+    "panel_style_options.Minimal": {
+        "message": "Minimal",
+        "description": "Label of the minimal option of the panel item style setting in the preferences"
+    },
+    "channelManagerLoadError": {
+        "message": "Konnte \"$CHANNEL$\" von $TYPE$ nicht laden. Stellen Sie sicher, dass der korrekte Benutzername benutzt wird.",
+        "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$."
+    },
+    "cm_dialog_username": {
+        "message": "Benutzername:",
+        "description": "Label for the username field in the dialog to add a channel or user"
+    },
+    "mlg_showRebroadcasts_title": {
+        "message": "Show MLG rebroadcasts",
+        "description": "Title of the MLG rebroadcasts setting in the preferences"
+    },
+    "panel_nonlive_options.Distinct": {
+        "message": "Eigener Tab",
+        "description": "Distinct state option of the non-live treatment setting in the preferences"
+    },
+    "cm_dialog_user": {
+        "message": "Benutzer",
+        "description": "Select label for adding a user"
+    },
+    "updateInterval_title": {
+        "message": "Aktualisierungsabstand",
+        "description": "Title of the update interval setting in the preferences"
+    },
+    "context_refresh.label": {
+        "message": "Kanalstatus aktualisieren",
+        "description": "Refresh the status of a channel from the context menu in the panel"
+    },
+    "offlineNotification_title": {
+        "message": "Benachrichtigen, wenn ein Stream offline geht",
+        "description": "Title of the offline notifications setting in the preferences"
+    },
+    "providerazubu": {
+        "message": "Azubu",
+        "description": "Provider name of azubu.tv"
+    },
+    "panel_tab_explore": {
+        "message": "Entdecken",
+        "description": "Label of the explore tab in the panel"
+    },
+    "updateNotification": {
+        "message": "$CHANNEL$ hat den Titel geändert",
+        "description": "Notification title when a channel changes the stream title"
+    },
+    "queue_maxRequestBatchSize_title": {
+        "message": "Max Requests per Batch",
+        "description": "Title of the request batch size setting in the preferences"
+    },
+    "panel_nonlive_options.Live": {
+        "message": "Live",
+        "description": "Live option of the non-live treatment setting in the preferences"
+    },
+    "listTooltipLive": {
+        "message": "Aktuell streamende Kanäle",
+        "description": "Button tooltip for the panel when there are channels live"
+    },
+    "cm_dialog_title": {
+        "message": "Neuer…",
+        "description": "Title of the dialog to add a new channel or user"
+    },
+    "provideryoutube": {
+        "message": "YouTube",
+        "description": "Provider name for youtube.com"
+    },
+    "panel_extras_title": {
+        "message": "Zusätzliche Infos im Panel",
+        "description": "Title of the panel extras setting in the preferences"
+    },
+    "providerustream": {
+        "message": "Ustream",
+        "description": "Provider name for ustream.tv"
+    },
+    "providerPicartoMultistream": {
+        "message": "Multistream",
+        "description": "A multistream stream on Picarto.TV"
+    },
+    "panel_style_options.Normal": {
+        "message": "Normal",
+        "description": "Label of the normal option of the panel item style setting in the preferences"
+    },
+    "panel_style_options.Thumbnail": {
+        "message": "Vorschaubild",
+        "description": "Label of the thumbnail option of the panel item style setting in the preferences"
+    },
+    "cm_dialog_submit": {
+        "message": "OK",
+        "description": "Confirmation action in the dialog to add a channel or user"
+    },
+    "providernewlivestream": {
+        "message": "Neues Livestream",
+        "description": "Provider name for the new livestream.com"
+    },
+    "cm_remove.title": {
+        "message": "Enternt die ausgewählten Benutzer.",
+        "description": "Tooltip of the button to remove the selected users or channels"
+    },
+    "panel_no_results": {
+        "message": "Keine Resultate.",
+        "description": "The search in the explore tab of the panel held no results"
+    },
+    "providerdouyutv": {
+        "message": "DouyuTV",
+        "description": "Provider for douyutv.com"
+    },
+    "titleChangeNotification_title": {
+        "message": "Benachrichtigen, wenn der Streamtitel ändert",
+        "description": "Title of the title change notifications setting in the preferences"
+    },
+    "nonliveNotification_description": {
+        "message": "Diese Option ist nur relevant, wenn nicht-live Streams nicht als live oder offline behandelt werden.",
+        "description": "Description of the non-live notifications setting in the preferences"
+    },
+    "theme_options.Dark": {
+        "message": "Dunkel",
+        "description": "Dark option of the theme setting in the preferences"
+    },
+    "panel_manage.title": {
+        "message": "Öffnet die Kanalverwaltung in einem Tab",
+        "description": "Tooltip on the button to open the channel manager from the panel"
+    },
+    "nonliveNotification_title": {
+        "message": "Benachrichtigen, wenn ein Stream einen nicht-live Status einnimmt",
+        "description": "Title of the non-live notifications setting in the preferences"
+    },
+    "providermlg": {
+        "message": "MLG.tv",
+        "description": "Provider name for MLG.tv"
+    },
+    "providertwitch": {
+        "message": "Twitch",
+        "description": "Provider name for twitch.tv"
+    },
+    "cm_dialog_channel": {
+        "message": "Kanal",
+        "description": "Select label for adding a channel"
+    },
+    "context_resume.label": {
+        "message": "Aktualisierungen Fortsetzen",
+        "description": "Context menu action on the refresh button in the panel to resume the queue"
+    },
+    "cm_autoAdd": {
+        "message": "Automatisch hinzufügen",
+        "description": "Button to automatically add all users the user has credentials stored for"
+    },
+    "panel_nonlive_title": {
+        "message": "Behandle nicht-live Streams als",
+        "description": "Title of the non-live treatment setting in the preferences"
+    },
+    "copy_pattern_description": {
+        "message": "Bestimmt den Satz, der mit der Stream URL kopiert wird. {URL} wird durch die URL des Streams ersetzt.",
+        "description": "Description of the copy pattern setting in the preferences"
+    },
+    "panel_loading": {
+        "message": "Laden...",
+        "description": "Channels are being loaded into the panel"
+    },
+    "panel_search.title": {
+        "message": "Kanäle nach einem Suchbegriff filtern",
+        "description": "Tooltip on the search button in the panel"
+    },
+    "cm_dialog_providers": {
+        "message": "Dienst:",
+        "description": "Label for the type selector"
+    },
+    "cm_secondary_label": {
+        "message": "Es ist schon eine Kanalverwaltung geöffnet. Es kann nur eine aufs mal genutzt werden. Wenn dies der einzige Tab mit der Kanalverwaltung ist, versuchen Sie den Tab neu zu laden.",
+        "description": "Message shown when opening a second instance of the channel manager"
+    },
+    "channelManagerGenericError": {
+        "message": "Ein Fehler ist passiert.",
+        "description": "An unknown error was encountered while trying to fetch a channel or user."
+    },
+    "updateInterval_description": {
+        "message": "Das Zeitintervall, in dem das Add-on den Status der Kanäle überprüft in Sekunden. Null beduetet, dass der Status der Kanäle nicht aktualisiert wird.",
+        "description": "Description of the update interval setting in the preferences"
+    },
+    "twitch_showHosting_title": {
+        "message": "Check if a Twitch Channel is hosting",
+        "description": "Title of the Twitch hosting setting in the preferences"
+    },
+    "cm_update": {
+        "message": "Aktualisieren",
+        "description": "Label of the button to update the metadata of the selected users or channels"
+    },
+    "panel_tab_live": {
+        "message": "Live",
+        "description": "Label of the tab with the live channels in the panel"
+    },
+    "cm_tab_channels": {
+        "message": "Kanäle",
+        "description": "Label of the tab that contains all channels in the channel manager"
+    },
+    "find_mature_title": {
+        "message": "Find mature content in the explore tab",
+        "description": "Title of the mature setting in the preferences"
+    },
+    "queue_ratio_title": {
+        "message": "Queue Request Treshhold",
+        "description": "Title of the queue ratio setting in the preferences"
+    },
+    "panel_nothing_live": {
+        "message": "Niemand ist live.",
+        "description": "Message in the live tab when no channel is live"
+    },
+    "onlineNotification_title": {
+        "message": "Benachrichtigen, wenn ein Stream live geht",
+        "description": "Title of the online notifications setting in the preferences"
+    },
+    "panel_refresh.title": {
+        "message": "Aktualisiert den Status aller Kanäle",
+        "description": "Tooltip on the refresh button in the panel"
+    },
+    "providerpicarto": {
+        "message": "Picarto.TV",
+        "description": "Provider name for picarto.tv"
+    },
+    "copy_pattern_title": {
+        "message": "Kopiermuster mit Stream URL",
+        "description": "Title of the copy pattern setting in the preferences"
+    },
+    "context_open.label": {
+        "message": "Streamarchiv öffnen",
+        "description": "Context menu action to open the archive page of a channel in the panel"
+    },
+    "onlineNotification": {
+        "message": "$CHANNEL$ ist jetzt live!",
+        "description": "Notification title when a channel goes live"
+    },
+    "cm_update.title": {
+        "message": "Aktualisiert die Eigenschafter der ausgewählten Benutzer.",
+        "description": "Tooltip of the button to update the metadata of the selected users or channels"
+    },
+    "cm_secondary_button": {
+        "message": "Gehe zur ersten Kanalverwaltung",
+        "description": "Button to go to the primary channel manager"
+    },
+    "updateTab_title": {
+        "message": "Updateinfos in einem Tab öffnen",
+        "description": "Title of the update tab setting in the preferences"
+    },
+    "context_chat.label": {
+        "message": "Chat öffnen",
+        "description": "Context menu action to open the chat of a channel in the panel"
+    },
+    "cm_filter.placeholder": {
+        "message": "Suchbegriff…",
+        "description": "Placeholder in the filter field for the channel manager"
+    },
+    "context_add.label": {
+        "message": "Kanal hinzufügen",
+        "description": "Context menu action to add a channel from the explore tab in the context menu"
+    },
+    "extensionName": {
+        "message": "Live Stream Benachrichtigungen",
+        "description": "Name of the extension"
+    },
+    "cm_dialog_loading": {
+        "message": "Laden…",
+        "description": "Loading status indicator while adding a channel or user"
+    },
+    "twitch_showPlaylist_title": {
+        "message": "Show channels replaying recordings from a playlist",
+        "description": "Title of the Twitch playlist setting in the preferences"
+    },
+    "panel_tab_nonlive": {
+        "message": "Nicht-live",
+        "description": "Label of the optional non-live tab in the panel"
+    },
+    "nonliveNotificationStateRedirect": {
+        "message": "leitet nun zu $CHANNEL$ weiter",
+        "description": "Redirecting state for nonliveNotification"
+    },
+    "context_pause.label": {
+        "message": "Aktualisierungen Pausieren",
+        "description": "Context menu action on the refresh button in the panel to pause the queue"
+    },
+    "offlineNotification": {
+        "message": "$CHANNEL$ ging offline!",
+        "description": "Notification title when a channel goes offline"
+    },
+    "theme_options.Light": {
+        "message": "Hell",
+        "description": "Light option of the theme setting in the preferences"
+    },
+    "panel_nothing": {
+        "message": "Keine Kanäle hinzugefügt.",
+        "description": "Message in the offline tab when there are no channels"
+    },
+    "updateTab_description": {
+        "message": "Ein Tab mit Informationen zur neuen Version wird beim Start des Browsers geöffnet, nachdem die Erweiterung aktualisiert wurde.",
+        "description": "Description of the update tab setting in the preferences"
+    },
+    "providerbeam": {
+        "message": "Beam",
+        "description": "Provider name of beam.pro"
+    },
+    "providerdailymotion": {
+        "message": "Dailymotion",
+        "description": "Provider name for dailymotion"
+    },
+    "panel_extras_description": {
+        "message": "Zeigt die Anzahl Zuschauer, die Kategorie und den Typ der Kanäle im Panel an, wenn verfügbar.",
+        "description": "Description of the panel extras setting in the preferences"
+    }
+}
