@@ -103,17 +103,13 @@ export default class UpdateQueue extends PauseableQueue {
      * @returns {undefined}
      */
     getRequestByIndex(index) {
-        console.info(this.queue.length + " jobs left in the queue.");
         if(this.queue[index].skip > this.queue[index].skipped &&
            !this.queue[index].priorize) {
-            console.log("[Queue]> Skipping " + this.queue[index].url);
             this.queue[index].skipped++;
 
             this.queue.push(this.queue.splice(index, 1)[0]);
         }
         else {
-            console.log("[Queue]> Getting " + this.queue[index].url);
-
             const req = super.getRequest(index);
             if(req.persist) {
 

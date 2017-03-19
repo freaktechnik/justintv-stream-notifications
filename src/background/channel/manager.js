@@ -131,7 +131,6 @@ export default class ChannelsManager extends EventTarget {
         }
     }
     _setupPort(port) {
-        console.log("[Manager]> Attached");
         const isSecondary = this.port !== null;
 
         if(!isSecondary) {
@@ -153,7 +152,6 @@ export default class ChannelsManager extends EventTarget {
                     });
                 }
                 else {
-                    console.log("[Manager]> Page ready");
                     emit(this, "getdata");
                 }
             }

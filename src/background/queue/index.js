@@ -207,7 +207,6 @@ export default class RequestQueue extends EventTarget {
      */
     removeRequest(query) {
         if(this.requestQueued(query)) {
-            console.log("[Queue]> removing request");
             this.queue.splice(this.getRequestIndex(query), 1);
             return true;
         }

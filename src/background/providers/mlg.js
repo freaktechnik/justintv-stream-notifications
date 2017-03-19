@@ -81,7 +81,6 @@ class MLG extends GenericProvider {
         }
     }
     async _getChannelFromJSON(jsonChannel) {
-        console.info("MLG:getChannelFromJSON");
         const ret = new Channel(jsonChannel.stream_name, this._type);
         ret.uname = jsonChannel.name;
         ret.url.push(jsonChannel.url);
@@ -134,12 +133,10 @@ class MLG extends GenericProvider {
         });
     }
     async updateChannel(channelname) {
-        console.info("MLG.updateChannel");
         const [ data, info ] = await Promise.all([
             this._qs.queueRequest(baseURL + 'status/' + channelname),
             this._qs.queueRequest(infoURL + infoArgs)
         ]);
-        console.info("MLG.updateChannel.requestCallback");
         if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
             const id = info.parsedJSON.data.items.find((ch) => ch.id == data.parsedJSON.data.channel_id),
                 channel = await this._getChannelFromJSON(id);
@@ -158,7 +155,6 @@ class MLG extends GenericProvider {
         }
     }
     async updateChannels(channels) {
-        console.info("MLG.updateChannels");
         const [ data, info ] = await Promise.all([
             this._qs.queueRequest(baseURL + "all"),
             this._qs.queueRequest(infoURL + infoArgs)

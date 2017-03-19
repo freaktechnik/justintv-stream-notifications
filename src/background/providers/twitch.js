@@ -108,7 +108,6 @@ class Twitch extends GenericProvider {
         }
     }
     getChannelDetails(channelname) {
-        console.info("twitch.getChannelDetails");
         return this._qs.queueRequest(baseURL + '/channels/' + channelname, headers).then((data) => {
             if(data.parsedJSON && !data.parsedJSON.error) {
                 idOfChannel.set(data.parsedJSON.name, data.parsedJSON._id);

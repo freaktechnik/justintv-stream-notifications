@@ -29,7 +29,6 @@ class Livestream extends GenericProvider {
             ]);
 
         if(data.parsedJSON && data.parsedJSON.channel) {
-            console.info("Creating livestream channel");
             ch.uname = data.parsedJSON.channel.title;
             ch.title = "";
             ch.url.push(data.parsedJSON.channel.link);

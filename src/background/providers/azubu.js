@@ -13,7 +13,6 @@ const type = "azubu",
     pageSize = 100;
 
 function getChannelFromJSON(jsonChannel) {
-    console.info("Azubu:getChannelFromJSON");
     const ret = new Channel(jsonChannel.user.username, type),
         channelUrl = jsonChannel.url_channel || "http://www.azubu.tv/" + ret.login;
     if("display_name" in jsonChannel.user) {
@@ -178,7 +177,6 @@ class Azubu extends GenericProvider {
         });
     }
     updateChannels(channels) {
-        console.info("Azubu.updateChannels");
         if(channels.length === 0) {
             return Promise.resolve([]);
         }

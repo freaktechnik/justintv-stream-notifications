@@ -35,7 +35,6 @@ class YouTube extends GenericProvider {
          * @method
          */
         this._getCategory = memoize(async (categoryId) => {
-            console.info(this.name + "._getCategory(", categoryId, ")");
             const data = await this._qs.queueRequest(baseURL + "videoCategories?" + querystring.stringify({
                 "part": "snippet",
                 "id": categoryId,

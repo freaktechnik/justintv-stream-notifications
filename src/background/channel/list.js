@@ -132,7 +132,6 @@ export default class ChannelList extends EventTarget {
      * @throws Could not open the DB.
      */
     openDB(name, dontTry = false) {
-        console.log(`ChannelList.openDB(${name},${dontTry})`);
         // Quick path if DB is already opened.
         if(this.db) {
             return Promise.resolve();
@@ -226,10 +225,8 @@ export default class ChannelList extends EventTarget {
      * @returns {number} The ID of the channel if it exists.
      */
     getChannelId(name, type) {
-        console.info("ChannelList.getChannelId(" + name + "," + type + ")");
         return new Promise((resolve, reject) => {
             if(this.idCache.has(type + name)) {
-                console.warn("HIT ID CACHE");
                 resolve(this.idCache.get(type + name));
             }
             else {
@@ -285,7 +282,6 @@ export default class ChannelList extends EventTarget {
      * @throws The channel doesn't exist or no arguments passed.
      */
     async getChannel(id, type) {
-        console.info("ChannelList.getChannel(" + id + ")");
         if(type) {
             id = await this.getChannelId(id, type);
         }
@@ -354,7 +350,6 @@ export default class ChannelList extends EventTarget {
      * @returns {module:channel/core.Channel} Added channel with the ID set.
      */
     async addChannel(channel) {
-        console.info("ChannelList.addChannel(" + channel.login + ")");
         channel.lastModified = Date.now();
 
         if(await this.channelExists(channel.login, channel.type)) {
@@ -385,7 +380,6 @@ export default class ChannelList extends EventTarget {
      * @returns {Array.<module:channel/core.Channel>} Added channels with their ID set.
      */
     addChannels(channels) {
-        console.info("ChannelList.addChannels(channels)");
         if(channels instanceof Channel) {
             return this.addChannel(channels).then((channel) => [ channel ]);
         }
@@ -403,7 +397,6 @@ export default class ChannelList extends EventTarget {
                         const ireq = index.get([ channel.type, channel.login ]);
                         ireq.onsuccess = () => {
                             if(!ireq.result) {
-                                console.log("Adding channel " + channel.login);
                                 channel.lastModified = Date.now();
                                 const req = store.add(channel.serialize());
                                 req.onsuccess = () => {
@@ -417,7 +410,7 @@ export default class ChannelList extends EventTarget {
                                 };
                             }
                             else {
-                                console.log("Channel " + channel.login + " has already been added");
+                                console.warn("Channel " + channel.login + " has already been added");
                             }
                         };
                     }, this);
@@ -467,7 +460,6 @@ export default class ChannelList extends EventTarget {
      * @returns {module:channel/core.Channel} The new version of the channel.
      */
     async setChannel(channel) {
-        console.info("ChannelList.setChannel(" + channel.id + ")");
         if(!("id" in channel)) {
             channel.id = await this.getChannelId(channel.login, channel.type);
         }
@@ -527,7 +519,6 @@ export default class ChannelList extends EventTarget {
      * @returns {module:channel/core.Channel} Resolves to the removed channel.
      */
     async removeChannel(id, type) {
-        console.info("ChannelList.removeChannel(" + id + ")");
         if(type) {
             id = await this.getChannelId(id, type);
         }
@@ -540,7 +531,6 @@ export default class ChannelList extends EventTarget {
                 const transaction = this.db.transaction("channels", "readwrite"),
                     store = transaction.objectStore("channels"),
                     req = store.delete(id);
-                console.log("queued deletion");
 
                 req.onsuccess = () => {
                     this.idCache.delete(channel.type + channel.login);
@@ -586,7 +576,6 @@ export default class ChannelList extends EventTarget {
      * @returns {boolean} Resolves to a boolean indicating if the channel exists.
      */
     channelExists(id, type) {
-        console.info("ChannelList.channelExists(", id, ",", type, ")");
         return this.getChannel(id, type).then((channel) => !!channel, () => false);
     }
 
@@ -599,8 +588,6 @@ export default class ChannelList extends EventTarget {
      * @returns {boolean} Resolves to a boolean indicating if the user exists.
      */
     userExists(id, type) {
-        console.info("ChannelList.userExists(", id, ",", type, ")");
-
         return this.getUser(id, type).then((channel) => !!channel, () => false);
     }
 
@@ -734,7 +721,6 @@ export default class ChannelList extends EventTarget {
     async getUsersByFavorite(channel) {
         const users = await this.getUsersByType(channel.type);
         return users.filter((user) => {
-            console.log("Scanning user " + user.login + " with the favorites " + user.favorites);
             return user.favorites.indexOf(channel.login) !== -1;
         });
     }
@@ -750,7 +736,6 @@ export default class ChannelList extends EventTarget {
         const channel = await this.getChannel(channelId),
             users = await this.getUsersByFavorite(channel);
         return Promise.all(users.map((user) => {
-            console.log("Removing user " + user.login + " because he follows " + channel.login);
             return this.removeUser(user.id);
         }));
     }
@@ -795,15 +780,12 @@ export default class ChannelList extends EventTarget {
      * @returns {boolean} If true the DB was deleted.
      */
     clear() {
-        console.info("ChannelList.clear");
-
         const done = (hard = false) => {
             emit(this, "clear", hard);
             return Promise.resolve(hard);
         };
 
         if(this.db) {
-            console.info("Clearing object stores");
             const transaction = this.db.transaction([ "channels", "users" ], "readwrite"),
                 channels = transaction.objectStore("channels"),
                 users = transaction.objectStore("users"),
@@ -820,7 +802,6 @@ export default class ChannelList extends EventTarget {
             return Promise.all([ chanPromise, usrPromise ]).then(() => done(false));
         }
         else {
-            console.log("Deleting and reinitializing the DB");
             /*
              * This is the slower path, so we avoid it. It needs all transactions
              * to be done in order to slowly erase the whole DB from the disk, just
@@ -832,7 +813,7 @@ export default class ChannelList extends EventTarget {
                 request.onerror = reject;
                 request.onsuccess = () => resolve();
                 /* istanbul ignore next */
-                request.onblocked = () => console.log("Deleting database was blocked");
+                request.onblocked = () => console.warn("Deleting database was blocked");
             });
 
             // Reopen the DB after it's been cleared. Don't try to fix it, if it

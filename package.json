@@ -300,7 +300,7 @@
     "coverage": "nyc report && grunt after-coverage && codecov",
     "lint": "npm run lint-js && npm run lint-webext",
     "lint-js": "eslint lib/ test/ test-jpm/ src/",
-    "lint-webext": "webpack && web-ext lint -s webextension/",
+    "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
     "build": "webpack && npm run use-json-txrc && grunt build && npm run use-orig-txrc && jpm xpi --addon-dir build/",
     "start": "webpack && npm run use-json-txrc && grunt dev && npm run use-orig-txrc && jpm run --addon-dir build/",
     "use-json-txrc": "mv .transifexrc .transifexrc.orig && mv .transifexrc.json .transifexrc",

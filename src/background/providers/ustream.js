@@ -11,7 +11,6 @@ const type = "ustream",
     baseURL = 'https://api.ustream.tv/';
 
 function getChannelFromJSON(jsonChannel) {
-    console.info("ustream:getChannelFromJSON");
     const ret = new Channel(jsonChannel.id, type);
     ret.uname = jsonChannel.title;
 
@@ -99,9 +98,7 @@ class Ustream extends GenericProvider {
         });
     }
     updateChannel(channelname) {
-        console.info("Ustream.updateChannel");
         return this._qs.queueRequest(baseURL + 'channels/' + channelname + ".json").then((data) => {
-            console.info("Ustream.updateChannel.requestCallback");
             if(data.parsedJSON && data.parsedJSON.channel) {
                 return getChannelFromJSON(data.parsedJSON.channel);
             }

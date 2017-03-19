@@ -85,7 +85,6 @@ class QueueService {
      * @returns {Promise} A promise resolving with the Request response.
      */
     queueRequest(url, headers = {}, requeue = defaultRequeue, attempt = 0) {
-        console.log("Queueing " + url);
         return new Promise((resolve, reject) => {
             const id = queue.addRequest({
                 url,
@@ -154,7 +153,6 @@ class QueueService {
      * @returns {undefined}
      */
     queueUpdateRequest(urls, priority, callback, rawHeaders = {}, requeue = defaultRequeue) {
-        console.log("Requeueing " + priority + " priority update request");
         this.unqueueUpdateRequest(priority);
         const requests = this.getRequestProperty(priority),
             skips = priority == QueueService.LOW_PRIORITY ? 4 : 0,
@@ -193,7 +191,6 @@ export const getServiceForProvider = (providerName) => {
  * @returns {undefined}
  */
 export const setOptions = (options) => {
-    console.log("[QS]> setting queue options:" + JSON.stringify(options, null, 2));
     queue.autoFetch(options.interval,
                     options.amount,
                     options.maxSize);
@@ -206,7 +203,6 @@ export const setOptions = (options) => {
  * @returns {undefined}
  */
 export const updateOptions = (interval) => {
-    console.log("[QS]> setting interval to " + interval);
     queue.autoFetch(interval);
 };
 

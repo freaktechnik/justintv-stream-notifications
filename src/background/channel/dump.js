@@ -100,7 +100,6 @@ export const copy = async (channels, users) => {
 
     e.clipboardData.setData("application/json", JSON.stringify(data, null, 2));
     e.preventDefault();
-    console.log("Data dump copied to clipboard");
 };
 
 /**
