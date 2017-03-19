@@ -1,6 +1,14 @@
 // Load vendor deps
 import 'file-loader?name=vendor/[name].[ext]!underscore/underscore-min.js';
 import 'file-loader?name=vendor/[name].[ext]!event-target-shim/dist/event-target-shim.min.js';
+// l10n
+import '../../_locales/de/messages.json';
+import '../../_locales/en/messages.json';
+import '../../_locales/es_MX/messages.json';
+import '../../_locales/fr/messages.json';
+import '../../_locales/hr/messages.json';
+import '../../_locales/ru/messages.json';
+import '../../_locales/uk_UA/messages.json';
 
 // Load module deps
 import SDK from "./sdk";

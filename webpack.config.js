@@ -3,7 +3,6 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const manifest = require("./webextension/manifest.json");
 const webpack = require("webpack");
 
-
 const defaultLanguage = manifest.default_locale;
 
 module.exports = {
@@ -39,6 +38,13 @@ module.exports = {
                     fallback: 'style-loader',
                     use: 'css-loader'
                 })
+            },
+            {
+                test: /_locales\/[a-zA-Z_]{2,5}\/messages\.json$/,
+                use: [
+                    'file-loader?name=[path][name].[ext]',
+                    'transifex-loader'
+                ]
             }
         ]
     },

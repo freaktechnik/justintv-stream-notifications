@@ -191,11 +191,7 @@ locale/*.json
 .eslintcache
 .nyc_output
 
-webextension/background
-webextension/list
-webextension/manager
-webextension/options
-webextension/content
-webextension/vendor
+webextension/*
+!webextension/assets
+!webextension/manifest.json
 webextension/assets/images/open-iconic.min.svg
-webextension/icon*.png

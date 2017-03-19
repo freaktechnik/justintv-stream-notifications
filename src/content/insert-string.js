@@ -35,7 +35,7 @@ const attrMap = {
 
 module.exports = (defaultLanguage) => {
     //TODO cannot be found
-    const bundle = require("../../webextension/_locales/" + defaultLanguage + "/messages.json");
+    const bundle = require("!!json-loader!../../_locales/" + defaultLanguage + "/messages.json");
 
     return translateElement.bind(null, bundle);
 };
