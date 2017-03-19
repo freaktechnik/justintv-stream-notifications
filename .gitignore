@@ -180,6 +180,8 @@ npm-debug.log
 .sass-cache
 
 .transifexrc
+.transifexrc.json
+.transifexrc.orig
 
 doc/
 build/

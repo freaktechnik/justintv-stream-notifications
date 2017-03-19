@@ -7,7 +7,9 @@ env:
   - JPM_FIREFOX_BINARY=$TRAVIS_BUILD_DIR/../firefox/firefox
   - JPM_MEASURING_COVERAGE=true
 before_install:
-- openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv -in .transifexrc.enc -out .transifexrc -d
+- openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv
+  -in secret.tar.enc -out secret.tar -d
+- tar xvf secret.tar
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
 - get-firefox -cet ../
@@ -24,7 +26,7 @@ deploy:
   provider: releases
   api_key:
     secure: FhQ1eXOReVAgWbhWU3XC/zzbbarHk8G5x3X8EBU1HIdS6nbOfMphIj3fPh78wCSF19EouuOpVr4sl4Sk1KBV7NoeHAwWKmxTeNxnxy2K2cQ/SIraOm5Emls5ckXINZx51IVW/mcKtXJANLXu9Wo4q+7ZJ6ZPpVmNK1qEBSx8ITc=
-  file: "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack-${TRAVIS_TAG}.xpi"
+  file: jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack-${TRAVIS_TAG}.xpi
   on:
     repo: freaktechnik/justintv-stream-notifications
     tags: true

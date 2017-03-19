@@ -2,7 +2,7 @@ import test from 'ava';
 import Ajv from 'ajv';
 import prefs from '../src/prefs.json';
 import schema from './helpers/prefs.schema.json';
-import translations from '../webextension/_locales/en/messages.json';
+import translations from '../_locales/en/messages.json';
 
 test('Prefs follow the schema', (t) => {
     const ajv = new Ajv();
