@@ -132,6 +132,7 @@ main {
     margin: 8em auto;
     text-align: initial;
     max-width: 30em;
+    border: none;
 }
 
 .popup dialog h1 {
@@ -170,4 +171,3 @@ main {
     border-left: none;
     width: calc(100% + 2em);
 }
-

@@ -196,5 +196,6 @@ webextension/list
 webextension/manager
 webextension/options
 webextension/content
+webextension/vendor
 webextension/assets/images/open-iconic.min.svg
 webextension/icon*.png

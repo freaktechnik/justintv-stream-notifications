@@ -1,7 +1,8 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const manifest = require("./webextension/manifest.json");
-const CommonsChunkPlugin = require("webpack").optimize.CommonsChunkPlugin;
+const webpack = require("webpack");
+
 
 const defaultLanguage = manifest.default_locale;
 
@@ -45,7 +46,7 @@ module.exports = {
 		new ExtractTextPlugin({
             filename: "[name]/style.css"
         }),
-        new CommonsChunkPlugin({
+        new webpack.optimize.CommonsChunkPlugin({
             name: "content",
             chunks: [
                 'manager',
@@ -81,5 +82,9 @@ module.exports = {
             ],
             defaultLanguage
         })
-    ]
+    ],
+    externals: {
+        underscore: '_',
+        'event-target-shim': 'eventTargetShim'
+    }
 };

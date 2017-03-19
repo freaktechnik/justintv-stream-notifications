@@ -1,3 +1,8 @@
+// Load vendor deps
+import 'file-loader?name=vendor/[name].[ext]!underscore/underscore-min.js';
+import 'file-loader?name=vendor/[name].[ext]!event-target-shim/dist/event-target-shim.min.js';
+
+// Load module deps
 import SDK from "./sdk";
 import { selectOrOpenTab } from "./channel/utils";
 import ChannelController from "./channel/controller";
