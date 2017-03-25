@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const manifest = require("./webextension/manifest.json");
 const webpack = require("webpack");
+const path = require("path");
 
 const defaultLanguage = manifest.default_locale;
 
@@ -13,7 +14,7 @@ module.exports = {
         options: "./src/options/index.js"
     },
     output: {
-        path: "webextension",
+        path: path.resolve(__dirname, "./webextension"),
         filename: "[name]/index.js"
     },
     module: {

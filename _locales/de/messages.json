@@ -4,7 +4,7 @@
         "description": "Label of the tab that contains all users in the channel manager"
     },
     "panel_minWidth_title": {
-        "message": "Minimum Panel width",
+        "message": "Minimale Panelbreite",
         "description": "Title of the panel minimum width setting in the preferences"
     },
     "cm_add": {
@@ -12,11 +12,11 @@
         "description": "Label on button that opens a dialog to add a channel or user."
     },
     "twitch_clientId_title": {
-        "message": "Twitch Client ID",
+        "message": "Twitche Client ID",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
     "panel_maxHeight_title": {
-        "message": "Maximum Panel height",
+        "message": "Maximale Panelhöhe",
         "description": "Title of the panel maximum height setting in the preferences"
     },
     "cm_options": {
@@ -24,7 +24,7 @@
         "description": "Label of the button to open the extension options in the channel manager"
     },
     "channellist_cacheTime_title": {
-        "message": "Time to cache channel states while the browser is closed",
+        "message": "Kanalstatus Cachezeit bei geschlossenem Browser",
         "description": "Title of the cache time setting in the preferences"
     },
     "cm_title": {
@@ -44,11 +44,11 @@
         "description": "Title of the panel item style setting in the preferences"
     },
     "youtube_apiKey_title": {
-        "message": "YouTube API Key",
+        "message": "YouTube API Schlüssel",
         "description": "Title of the YouTube API key setting in the preferences"
     },
     "advancedOptions": {
-        "message": "Advanced Options",
+        "message": "Erweiterte Einstellungen",
         "description": "Advanced extension preferences collapsed message"
     },
     "cm_dialog_cancel": {
@@ -80,7 +80,7 @@
         "description": "Description of the extension"
     },
     "queueservice_maxRetries_title": {
-        "message": "Maximum number of attempts before a request is discarded",
+        "message": "Maximale Versuchsanzahl bis eine Anfrage verworfen wird",
         "description": "Title of the request retry limit setting in the preferences"
     },
     "cm_remove": {
@@ -140,7 +140,7 @@
         "description": "Label for the username field in the dialog to add a channel or user"
     },
     "mlg_showRebroadcasts_title": {
-        "message": "Show MLG rebroadcasts",
+        "message": "Zeige MLG Wiederausstrahlungen",
         "description": "Title of the MLG rebroadcasts setting in the preferences"
     },
     "panel_nonlive_options.Distinct": {
@@ -176,7 +176,7 @@
         "description": "Notification title when a channel changes the stream title"
     },
     "queue_maxRequestBatchSize_title": {
-        "message": "Max Requests per Batch",
+        "message": "Maximale Anfragezahl pro Aktualisierungsdurchlauf",
         "description": "Title of the request batch size setting in the preferences"
     },
     "panel_nonlive_options.Live": {
@@ -308,7 +308,7 @@
         "description": "Description of the update interval setting in the preferences"
     },
     "twitch_showHosting_title": {
-        "message": "Check if a Twitch Channel is hosting",
+        "message": "Hostingstatus von Twitchkanälen prüfen",
         "description": "Title of the Twitch hosting setting in the preferences"
     },
     "cm_update": {
@@ -324,11 +324,11 @@
         "description": "Label of the tab that contains all channels in the channel manager"
     },
     "find_mature_title": {
-        "message": "Find mature content in the explore tab",
+        "message": "Nicht jugendfreie Inhalte im Entdecken Tab anzeigen",
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
-        "message": "Queue Request Treshhold",
+        "message": "Anfragenanteil pro Aktualisierungsdurchgang",
         "description": "Title of the queue ratio setting in the preferences"
     },
     "panel_nothing_live": {
@@ -392,7 +392,7 @@
         "description": "Loading status indicator while adding a channel or user"
     },
     "twitch_showPlaylist_title": {
-        "message": "Show channels replaying recordings from a playlist",
+        "message": "Playlisten von Twitchkanälen prüfen",
         "description": "Title of the Twitch playlist setting in the preferences"
     },
     "panel_tab_nonlive": {

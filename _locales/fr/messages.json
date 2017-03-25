@@ -4,7 +4,7 @@
         "description": "Label of the tab that contains all users in the channel manager"
     },
     "panel_minWidth_title": {
-        "message": "Minimum Panel width",
+        "message": "Largeur maximum du panneau",
         "description": "Title of the panel minimum width setting in the preferences"
     },
     "cm_add": {
@@ -12,11 +12,11 @@
         "description": "Label on button that opens a dialog to add a channel or user."
     },
     "twitch_clientId_title": {
-        "message": "Twitch Client ID",
+        "message": "ID Client Twitch",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
     "panel_maxHeight_title": {
-        "message": "Maximum Panel height",
+        "message": "Hauteur maximum du panneau",
         "description": "Title of the panel maximum height setting in the preferences"
     },
     "cm_options": {
@@ -24,7 +24,7 @@
         "description": "Label of the button to open the extension options in the channel manager"
     },
     "channellist_cacheTime_title": {
-        "message": "Time to cache channel states while the browser is closed",
+        "message": "Temps de mise en cache des états des chaînes alors que le navigateur est fermé",
         "description": "Title of the cache time setting in the preferences"
     },
     "cm_title": {
@@ -32,11 +32,11 @@
         "description": "Title of the channel manager tab"
     },
     "nonliveNotification": {
-        "message": "$CHANNEL$ is now $STATE$.",
+        "message": "$CHANNEL$ est maintenant $STATE$.",
         "description": "Notification when a channel changes a non-live state"
     },
     "copyNotification": {
-        "message": "Copied the stream URL of $CHANNEL$ to the clipboard",
+        "message": "Copier l'URL du flux de $CHANNEL$ dans le presse-papiers",
         "description": "Notification content after the URL of a stream was copied from the panel context menu"
     },
     "panel_style_title": {
@@ -44,11 +44,11 @@
         "description": "Title of the panel item style setting in the preferences"
     },
     "youtube_apiKey_title": {
-        "message": "YouTube API Key",
+        "message": "Clé API de YouTube",
         "description": "Title of the YouTube API key setting in the preferences"
     },
     "advancedOptions": {
-        "message": "Advanced Options",
+        "message": "Options avancées",
         "description": "Advanced extension preferences collapsed message"
     },
     "cm_dialog_cancel": {
@@ -56,7 +56,7 @@
         "description": "Cancel the dialog for adding a user or channel."
     },
     "panel_nonlive_description": {
-        "message": "Non-live streams include things like hosted channels or rebroadcasts.",
+        "message": "Les flux qui ne sont pas en direct incluent des éléments tels que des chaînes hébergées ou des rediffusions.",
         "description": "Description of the non-live treatment setting in the preferences"
     },
     "providerlivestream": {
@@ -72,15 +72,15 @@
         "description": "Label of the tab with all offline channels in the panel"
     },
     "panel_badge_description": {
-        "message": "Displays the number of live channels on the button if any.",
+        "message": "Afficher le nombre de chaînes en direct sur sur l'icône, le cas échéant.",
         "description": "Description of the panel badge setting in the preferences"
     },
     "extensionDescription": {
-        "message": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
+        "message": "Recevez une notification, chaque fois qu'un streamer que vous suivez commence à diffuser. Cette extension dispose d'un contrôle avancé sur les chaînes qu'elle surveille et d'un panneau pour un accès rapide à ces chaînes. ",
         "description": "Description of the extension"
     },
     "queueservice_maxRetries_title": {
-        "message": "Maximum number of attempts before a request is discarded",
+        "message": "Nombre maximal de tentatives avant de rejeter une demande",
         "description": "Title of the request retry limit setting in the preferences"
     },
     "cm_remove": {
@@ -88,7 +88,7 @@
         "description": "Label of the button to remove the selected users or channels"
     },
     "theme_title": {
-        "message": "Theme",
+        "message": "Thème",
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
@@ -96,11 +96,11 @@
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "panel_nonlive_options.Livebottom": {
-        "message": "Live but sort to bottom",
+        "message": "En ligne mais ranger vers le bas",
         "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
     },
     "context_copy.label": {
-        "message": "Copy Stream URL",
+        "message": "Copier l'URL du flux",
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "cm_help": {
@@ -112,7 +112,7 @@
         "description": "Offline option of the non-live treatment setting in the preferences"
     },
     "nonliveNotificationStateRebroadcast": {
-        "message": "rebroadcasting",
+        "message": "rediffuse",
         "description": "Rebroadcasting state for nonliveNotification"
     },
     "cm_autoAdd.title": {
@@ -120,7 +120,7 @@
         "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
     "panel_badge_title": {
-        "message": "Display counter badge",
+        "message": "Afficher un compteur",
         "description": "Title of the panel badge setting in the preferences"
     },
     "manageChannels_label": {
@@ -132,7 +132,7 @@
         "description": "Label of the minimal option of the panel item style setting in the preferences"
     },
     "channelManagerLoadError": {
-        "message": "Couldn't load \"$CHANNEL$\" for $TYPE$. Please make sure you are using the correct username.",
+        "message": "Impossible de charger \"$CHANNEL$\" pour $TYPE$. Veuillez vous assurer d'utiliser le bon nom d'utilisateur.",
         "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$."
     },
     "cm_dialog_username": {
@@ -140,11 +140,11 @@
         "description": "Label for the username field in the dialog to add a channel or user"
     },
     "mlg_showRebroadcasts_title": {
-        "message": "Show MLG rebroadcasts",
+        "message": "Montrer les rediffusions de MLG",
         "description": "Title of the MLG rebroadcasts setting in the preferences"
     },
     "panel_nonlive_options.Distinct": {
-        "message": "Distinct state (adds a tab)",
+        "message": "Etat distinctif (ajouter un onglet)",
         "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "cm_dialog_user": {
@@ -168,7 +168,7 @@
         "description": "Provider name of azubu.tv"
     },
     "panel_tab_explore": {
-        "message": "Explore",
+        "message": "Explorer",
         "description": "Label of the explore tab in the panel"
     },
     "updateNotification": {
@@ -176,7 +176,7 @@
         "description": "Notification title when a channel changes the stream title"
     },
     "queue_maxRequestBatchSize_title": {
-        "message": "Max Requests per Batch",
+        "message": "Nombre maximal de demandes par groupe",
         "description": "Title of the request batch size setting in the preferences"
     },
     "panel_nonlive_options.Live": {
@@ -220,7 +220,7 @@
         "description": "Confirmation action in the dialog to add a channel or user"
     },
     "providernewlivestream": {
-        "message": "New Livestream",
+        "message": "Nouvelle diffusion en direct",
         "description": "Provider name for the new livestream.com"
     },
     "cm_remove.title": {
@@ -228,7 +228,7 @@
         "description": "Tooltip of the button to remove the selected users or channels"
     },
     "panel_no_results": {
-        "message": "No results.",
+        "message": "Aucun résultat.",
         "description": "The search in the explore tab of the panel held no results"
     },
     "providerdouyutv": {
@@ -240,11 +240,11 @@
         "description": "Title of the title change notifications setting in the preferences"
     },
     "nonliveNotification_description": {
-        "message": "This option is only relevant, when non-live streams aren't considered as live or offline.",
+        "message": "Cette option est pertinente seulement quand des flux qui ne sont pas en direct ne sont pas considérés comme en ligne ou hors ligne.",
         "description": "Description of the non-live notifications setting in the preferences"
     },
     "theme_options.Dark": {
-        "message": "Dark",
+        "message": "Sombre",
         "description": "Dark option of the theme setting in the preferences"
     },
     "panel_manage.title": {
@@ -252,7 +252,7 @@
         "description": "Tooltip on the button to open the channel manager from the panel"
     },
     "nonliveNotification_title": {
-        "message": "Show a notification when a stream enters a non-live state",
+        "message": "Afficher une notification quand un flux est dans un état qui n'est pas du direct",
         "description": "Title of the non-live notifications setting in the preferences"
     },
     "providermlg": {
@@ -268,7 +268,7 @@
         "description": "Select label for adding a channel"
     },
     "context_resume.label": {
-        "message": "Resume Refresh Queue",
+        "message": "Reprendre Rafraîchir File d'attente",
         "description": "Context menu action on the refresh button in the panel to resume the queue"
     },
     "cm_autoAdd": {
@@ -276,11 +276,11 @@
         "description": "Button to automatically add all users the user has credentials stored for"
     },
     "panel_nonlive_title": {
-        "message": "Treat non-live streams as",
+        "message": "Traiter les flux qui ne sont pas en direct comme",
         "description": "Title of the non-live treatment setting in the preferences"
     },
     "copy_pattern_description": {
-        "message": "Customize the string that gets copied with the copy stream URL action in the panel context menu. {URL} gets replaced with the stream URL.",
+        "message": "Modifie le lien copié avec l'action de copie de l'URL du flux dans le menu contextuel du panneau. L'{URL} est remplacée par l'URL du flux.",
         "description": "Description of the copy pattern setting in the preferences"
     },
     "panel_loading": {
@@ -296,7 +296,7 @@
         "description": "Label for the type selector"
     },
     "cm_secondary_label": {
-        "message": "There already is a Channels Manager open. You can only use one at a time. If this is the only open tab with it, try reloading this page.",
+        "message": "Il y a déjà un gestionnaire de chaînes ouvert. Vous pouvez n'en ouvrir qu'un à la fois. Si c'est le seul onglet ouvert, essayez de recharger cette page.",
         "description": "Message shown when opening a second instance of the channel manager"
     },
     "channelManagerGenericError": {
@@ -308,7 +308,7 @@
         "description": "Description of the update interval setting in the preferences"
     },
     "twitch_showHosting_title": {
-        "message": "Check if a Twitch Channel is hosting",
+        "message": "Vérifier si une chaîne Twitch héberge",
         "description": "Title of the Twitch hosting setting in the preferences"
     },
     "cm_update": {
@@ -324,11 +324,11 @@
         "description": "Label of the tab that contains all channels in the channel manager"
     },
     "find_mature_title": {
-        "message": "Find mature content in the explore tab",
+        "message": "Trouver du contenu explicite dans l'onglet explorer",
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
-        "message": "Queue Request Treshhold",
+        "message": "File d'attente Demande Seuil",
         "description": "Title of the queue ratio setting in the preferences"
     },
     "panel_nothing_live": {
@@ -348,7 +348,7 @@
         "description": "Provider name for picarto.tv"
     },
     "copy_pattern_title": {
-        "message": "Stream URL copy pattern",
+        "message": "Modèle de copie d'URL de flux",
         "description": "Title of the copy pattern setting in the preferences"
     },
     "context_open.label": {
@@ -364,7 +364,7 @@
         "description": "Tooltip of the button to update the metadata of the selected users or channels"
     },
     "cm_secondary_button": {
-        "message": "Go to first Channels Manager",
+        "message": "Aller au premier gestionnaire de chaînes",
         "description": "Button to go to the primary channel manager"
     },
     "updateTab_title": {
@@ -392,19 +392,19 @@
         "description": "Loading status indicator while adding a channel or user"
     },
     "twitch_showPlaylist_title": {
-        "message": "Show channels replaying recordings from a playlist",
+        "message": "Afficher les chaînes jouant les enregistrements d'une liste de lecture",
         "description": "Title of the Twitch playlist setting in the preferences"
     },
     "panel_tab_nonlive": {
-        "message": "Non-live",
+        "message": "Pas en direct",
         "description": "Label of the optional non-live tab in the panel"
     },
     "nonliveNotificationStateRedirect": {
-        "message": "redirecting to $CHANNEL$",
+        "message": "redirige vers $CHANNEL$",
         "description": "Redirecting state for nonliveNotification"
     },
     "context_pause.label": {
-        "message": "Pause Refresh Queue",
+        "message": "Pause Rafraîchir File d'attente",
         "description": "Context menu action on the refresh button in the panel to pause the queue"
     },
     "offlineNotification": {
@@ -412,7 +412,7 @@
         "description": "Notification title when a channel goes offline"
     },
     "theme_options.Light": {
-        "message": "Light",
+        "message": "Clair",
         "description": "Light option of the theme setting in the preferences"
     },
     "panel_nothing": {
@@ -432,7 +432,7 @@
         "description": "Provider name for dailymotion"
     },
     "panel_extras_description": {
-        "message": "Displays the viewer count, category and provider name of a channel in the pannel when available.",
+        "message": "Afficher le nombre de spectateurs, la catégorie et le nom du fournisseur d'une chaîne dans le panneau lorsque cela est possible.",
         "description": "Description of the panel extras setting in the preferences"
     }
 }
