@@ -1,4 +1,3 @@
-import SDK from './sdk';
 import { emit } from "../utils";
 import EventTarget from 'event-target-shim';
 import prefInfo from '../prefs.json';
@@ -18,25 +17,15 @@ const getDefaultValue = (pref) => {
 class Preferences extends EventTarget {
     constructor() {
         super();
-        this.get("migrated").then(async (val) => {
-            if(!val) {
-                const oldPrefs = await SDK.doAction({
-                    target: "migrate-prefs"
-                });
-                await Promise.all(Object.keys(oldPrefs).map((p) => {
-                    return this.set(p, oldPrefs[p]);
-                }));
-            }
-            browser.storage.onChange.addListener((changes, area) => {
-                if(area === AREA) {
-                    for(const c in changes) {
-                        emit(this, "change", {
-                            pref: c,
-                            value: changes[c].newValue
-                        });
-                    }
+        browser.storage.onChanged.addListener((changes, area) => {
+            if(area === AREA) {
+                for(const c in changes) {
+                    emit(this, "change", {
+                        pref: c,
+                        value: changes[c].newValue
+                    });
                 }
-            });
+            }
         });
     }
 

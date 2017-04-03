@@ -13,7 +13,7 @@ import LiveState from "../../../src/live-state.json";
 
 test.before(() => {
     SDKStubs.onMessage.dispatch({
-        target: "pc-enabled-reply",
+        command: "pc-enabled-reply",
         payload: false
     });
 });

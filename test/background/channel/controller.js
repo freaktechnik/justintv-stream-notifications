@@ -20,7 +20,7 @@ const TESTUSER = {
         if(p == TESTUSER.type) {
             start = 1;
             SDKStubs.onMessage.dispatch({
-                target: `passwords-search-${providers[p].authURL[0]}-reply`,
+                command: `passwords-search-${providers[p].authURL[0]}-reply`,
                 payload: [
                     {
                         username: TESTUSER.name
@@ -33,7 +33,7 @@ const TESTUSER = {
         }
         for(let i = start; i < providers[p].authURL.length; ++i) {
             SDKStubs.onMessage.dispatch({
-                target: `passwords-search-${providers[p].authURL[i]}-reply`,
+                command: `passwords-search-${providers[p].authURL[i]}-reply`,
                 payload: []
             });
         }

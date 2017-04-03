@@ -7,17 +7,19 @@ import ParentalControls from "../../src/background/parental-controls";
 
 test("Enabled", async (t) => {
     SDKStubs.onMessage.dispatch({
-        target: "pc-enabled-reply",
+        command: "pc-enabled-reply",
         payload: false
     });
+    await ParentalControls.p;
+
     t.false(ParentalControls.enabled, "Parental controls state is correct");
 
     SDKStubs.onMessage.dispatch({
-        target: "pc-enabled-reply",
+        command: "pc-enabled-reply",
         payload: true
     });
     // Clean up async promise queue
-    await Promise.resolve();
+    await ParentalControls.p;
 
-    t.true(ParentalControls.enabled);
+    t.true(ParentalControls.enabled, "PC is enabled");
 });

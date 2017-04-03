@@ -14,6 +14,7 @@ import prefs from "./preferences";
 import LiveState from "./channel/live-state";
 import providers from './providers';
 import EventTarget from 'event-target-shim';
+import Port from '../port';
 
 /**
  * Should open the ChannelsManager.
@@ -130,7 +131,6 @@ class ListView extends EventTarget {
     static OFFLINE = 3;
 
     ready = false;
-    port = null;
     /**
      * @constructs
      * @fires module:list.ListView#opencm
@@ -149,10 +149,62 @@ class ListView extends EventTarget {
         this.live = new Set();
         this.nonlive = new Set();
 
-        browser.runtime.onConnect.addListener((port) => {
-            if(port.name == "list") {
-                this._setupPort(port);
+        this.port = new Port("list");
+        this.port.addEventListener("connect", () => {
+            this.setNonLiveDisplay();
+        });
+        this.port.addEventListener("message", ({ detail: event }) => {
+            switch(event.command) {
+            case "openUrl":
+                emit(this, "open", event.payload);
+                break;
+            case "openChat":
+                emit(this, "open", event.payload, "chat");
+                break;
+            case "openArchive":
+                emit(this, "open", event.payload, "archive");
+                break;
+            case "refresh":
+            case "copy":
+                emit(this, event.command, event.payload);
+                break;
+            case "configure":
+                emit(this, "opencm");
+                break;
+            case "add":
+                emit(this, "addchannel", event.payload.type, event.payload.login);
+                break;
+            case "pause":
+            case "resume":
+                emit(this, event.command);
+                break;
+            case "ready":
+                this.ready = true;
+                emit(this, "ready");
+                break;
+            case "search":
+                providers[event.payload.type].search(event.payload.query)
+                    .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload.type, event.payload.query),
+                          () => this.setFeatured([], event.payload.type, event.payload.query));
+                break;
+            case "explore":
+                if(event.payload) {
+                    providers[event.payload].getFeaturedChannels()
+                        .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload),
+                              () => this.setFeatured([], event.payload));
+                }
+                break;
+            case "copyexternal":
+                emit(this, "copy", event.payload.login, event.payload.type);
+                break;
+            case "removedLive":
+                this._unregisterChannel(event.payload);
+                break;
+            default:
+                // Nothing to do here.
             }
+        }, {
+            passive: true
         });
 
         prefs.addEventListener("change", (event) => {
@@ -162,74 +214,8 @@ class ListView extends EventTarget {
         }, { passive: false });
     }
 
-    _setupPort(port) {
-        this.port = port;
-
-        this.setNonLiveDisplay();
-        this.port.onMessage.addListener((event) => {
-            if(event.target == "openUrl") {
-                emit(this, "open", event.channelId);
-            }
-            else if(event.target == "openChat") {
-                emit(this, "open", event.channelId, "chat");
-            }
-            else if(event.target == "openArchive") {
-                emit(this, "open", event.channelId, "archive");
-            }
-            else if(event.target == "refresh") {
-                emit(this, "refresh", event.channelId);
-            }
-            else if(event.target == "configure") {
-                emit(this, "opencm");
-            }
-            else if(event.target == "add") {
-                emit(this, "addchannel", event.type, event.login);
-            }
-            else if(event.target == "pause") {
-                emit(this, "pause");
-            }
-            else if(event.target == "resume") {
-                emit(this, "resume");
-            }
-            else if(event.target == "ready") {
-                this.ready = true;
-                emit(this, "ready");
-            }
-            else if(event.target == "search") {
-                providers[event.type].search(event.query)
-                    .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.type, event.query),
-                          () => this.setFeatured([], event.type, event.query));
-            }
-            else if(event.target == "explore") {
-                if(event.type) {
-                    providers[event.type].getFeaturedChannels()
-                        .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.type),
-                              () => this.setFeatured([], event.type));
-                }
-            }
-            else if(event.target == "copy") {
-                emit(this, "copy", event.channelId);
-            }
-            else if(event.target == "copyexternal") {
-                emit(this, "copy", event.login, event.type);
-            }
-            else if(event.target == "removedLive") {
-                this._unregisterChannel(event.channelId);
-            }
-        });
-
-        this.port.onDisconnect.addListener(() => {
-            this.port = null;
-        });
-    }
-
     _emitToList(event, data) {
-        if(this.port) {
-            this.port.postMessage({
-                target: event,
-                data
-            });
-        }
+        this.port.send(event, data);
     }
 
     get countNonlive() {

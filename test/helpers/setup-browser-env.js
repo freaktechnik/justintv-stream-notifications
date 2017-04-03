@@ -44,5 +44,6 @@ window.indexedDB = indexedDB;
 
 // Gets called by src/backbround/sdk.js
 global.SDKStubs = getPort();
+global.SDKStubs.name = "sdk-connection";
 global.browser = browser;
 setup();

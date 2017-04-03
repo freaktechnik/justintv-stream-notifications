@@ -8,13 +8,13 @@ import SDK from './sdk';
 
 let enabled = false;
 
-const getEnabled = () => SDK.doAction({ target: "pc-enabled" }).then((e) => {
+const getEnabled = () => SDK.doAction("pc-enabled").then((e) => {
     enabled = e;
 });
 
 export default {
     get enabled() {
-        getEnabled();
+        this.p = getEnabled();
         return enabled;
     }
 };

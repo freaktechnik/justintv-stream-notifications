@@ -7,6 +7,7 @@ import test from 'ava';
 import ChannelsManager from "../../../src/background/channel/manager";
 import getPort from '../../helpers/port';
 import { when } from '../../../src/utils';
+import { PortGoneError } from '../../../src/port';
 
 const FAKE_ITEM = {
         serialize() {
@@ -15,7 +16,7 @@ const FAKE_ITEM = {
     },
     getManagerPort = (name = 'manager') => {
         const port = getPort();
-        port.name = name;
+        port.name = 'manager';
         port.sender = {
             tab: {
                 id: name
@@ -33,6 +34,7 @@ test.beforeEach(() => {
 test.afterEach(() => {
     browser.tabs.create.reset();
     browser.tabs.update.reset();
+    browser.runtime.onConnect._listeners.length = 0;
 });
 
 test.serial("Tab", async (t) => {
@@ -59,16 +61,16 @@ test("Loading", (t) => {
     t.true(cm.loading);
 });
 
-test("Loading with Worker", (t) => {
+test.serial("Loading with Worker", (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     cm.loading = false;
-    t.is(port.postMessage.lastCall.args[0].target, 'doneloading');
+    t.is(port.postMessage.lastCall.args[0].command, 'doneloading');
 
     cm.loading = true;
-    t.is(port.postMessage.lastCall.args[0].target, 'isloading');
+    t.is(port.postMessage.lastCall.args[0].command, 'isloading');
 });
 
 test("Callbacks Loading", (t) => {
@@ -98,39 +100,39 @@ test("Callbacks Loading", (t) => {
     t.false(cm.loading);
 });
 
-test("Callbacks", (t) => {
+test.serial("Callbacks", (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     cm.onChannelAdded(FAKE_ITEM);
-    t.is(port.postMessage.lastCall.args[0].target, 'add');
+    t.is(port.postMessage.lastCall.args[0].command, 'add');
 
     cm.onChannelUpdated(FAKE_ITEM);
-    t.is(port.postMessage.lastCall.args[0].target, 'update');
+    t.is(port.postMessage.lastCall.args[0].command, 'update');
 
     cm.onChannelRemoved();
-    t.is(port.postMessage.lastCall.args[0].target, 'remove');
+    t.is(port.postMessage.lastCall.args[0].command, 'remove');
 
     cm.onUserAdded(FAKE_ITEM);
-    t.is(port.postMessage.lastCall.args[0].target, 'adduser');
+    t.is(port.postMessage.lastCall.args[0].command, 'adduser');
 
     cm.onUserUpdated(FAKE_ITEM);
-    t.is(port.postMessage.lastCall.args[0].target, 'updateuser');
+    t.is(port.postMessage.lastCall.args[0].command, 'updateuser');
 
     cm.onUserRemoved();
-    t.is(port.postMessage.lastCall.args[0].target, 'removeuser');
+    t.is(port.postMessage.lastCall.args[0].command, 'removeuser');
 
     cm.onError();
-    t.is(port.postMessage.lastCall.args[0].target, 'error');
+    t.is(port.postMessage.lastCall.args[0].command, 'error');
 
     cm.onError("test");
-    t.is(port.postMessage.lastCall.args[0].target, 'error');
-    t.is(port.postMessage.lastCall.args[0].data[0], 'test');
+    t.is(port.postMessage.lastCall.args[0].command, 'error');
+    t.is(port.postMessage.lastCall.args[0].payload[0], 'test');
 
     cm.setTheme(0);
-    t.is(port.postMessage.lastCall.args[0].target, 'theme');
-    t.is(port.postMessage.lastCall.args[0].data, 0);
+    t.is(port.postMessage.lastCall.args[0].command, 'theme');
+    t.is(port.postMessage.lastCall.args[0].payload, 0);
 });
 
 test("Make Sure No Throws", (t) => {
@@ -147,87 +149,106 @@ test("Make Sure No Throws", (t) => {
     t.notThrows(() => cm.setTheme());
 });
 
-test("add providers", (t) => {
+test.serial("add providers", (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     cm.addProviders("test");
-    t.is(port.postMessage.lastCall.args[0].target, 'addproviders');
-    t.is(port.postMessage.lastCall.args[0].data, 'test');
+    t.is(port.postMessage.lastCall.args[0].command, 'addproviders');
+    t.is(port.postMessage.lastCall.args[0].payload, 'test');
 });
 
-test("Detaching Worker Without Closing Tab", async (t) => {
+test.serial("Detaching Worker Without Closing Tab", async (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     const p = when(cm, 'getdata');
     port.onMessage.dispatch({
-        target: "ready"
+        command: "ready"
     });
     await p;
 
-    t.not(cm.port, null);
+    t.not(cm.tabID, null);
 
     port.onDisconnect.dispatch();
 
-    t.is(cm.port, null);
+    await t.throws(cm.port.disconnectPromise, PortGoneError);
+    t.is(cm.tabID, null);
 });
 
-test("Additional Manager", async (t) => {
+test.serial("Additional Manager", async (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     const p = when(cm, 'getdata');
     port.onMessage.dispatch({
-        target: "ready"
+        command: "ready"
     });
     await p;
 
     const secondPort = getManagerPort('manager2');
-    cm._setupPort(secondPort);
+    const spp = when(cm.port, "duplicate");
+    browser.runtime.onConnect.dispatch(secondPort);
+    const { detail: spw } = await spp;
 
-    t.is(cm.port.name, 'manager');
+    t.is(cm.tabID, 'manager');
+    const fp = when(spw, 'ready');
     secondPort.onMessage.dispatch({
-        target: "ready"
+        command: "ready"
     });
+    await fp;
+
     t.true(secondPort.postMessage.called);
-    t.is(secondPort.postMessage.lastCall.args[0].target, 'secondary');
+    t.is(secondPort.postMessage.lastCall.args[0].command, 'secondary');
 });
 
 test.serial("Additional Manager to Primary", async (t) => {
     const cm = new ChannelsManager();
     const port = getManagerPort();
-    cm._setupPort(port);
+    browser.runtime.onConnect.dispatch(port);
 
     const p = when(cm, 'getdata');
     port.onMessage.dispatch({
-        target: "ready"
+        command: "ready"
     });
     await p;
 
     const secondPort = getManagerPort('manager2');
-    cm._setupPort(secondPort);
+    const spp = when(cm.port, 'duplicate');
+    browser.runtime.onConnect.dispatch(secondPort);
+    const { detail: spw } = await spp;
 
-    t.is(cm.port.name, 'manager');
+    t.is(cm.tabID, 'manager');
     secondPort.onMessage.dispatch({
-        target: "ready"
+        command: "ready"
     });
 
+    let fp = when(spw, 'focus');
     secondPort.onMessage.dispatch({
-        target: 'focus'
+        command: 'focus'
     });
+    await fp;
+
     t.true(browser.tabs.update.calledOnce);
 
     port.onDisconnect.dispatch();
+    await t.throws(cm.port.disconnectPromise, PortGoneError);
 
+    fp = when(spw, 'focus');
     secondPort.onMessage.dispatch({
-        target: 'focus'
+        command: 'focus'
     });
-    t.is(secondPort.postMessage.lastCall.args[0].target, 'reload');
+    await fp;
 
-    cm._setupPort(secondPort);
-    t.is(cm.port.name, 'manager2', "Reloading makes secondary primary tab");
+    t.is(secondPort.postMessage.lastCall.args[0].command, 'reload');
+    secondPort.onDisconnect.dispatch();
+    await t.throws(spw.disconnectPromise, PortGoneError);
+
+    const spr = when(cm.port, 'connect');
+    browser.runtime.onConnect.dispatch(secondPort);
+    await spr;
+    t.is(cm.tabID, 'manager2', "Reloading makes secondary primary tab");
 });

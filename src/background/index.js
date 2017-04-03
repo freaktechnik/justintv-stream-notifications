@@ -160,9 +160,9 @@ prefs.addEventListener("change", ({ detail: { pref, value } }) => {
     }
 });
 
-// Do migration of channel data if necessary
-browser.storage.local.get("migrated").then((value) => {
-    if(!value.migrated) {
+// Do migration of channel data and prefs if necessary
+prefs.get("migrated").then((migrated) => {
+    if(!migrated) {
         SDK.doAction("migrate-channels").then(([ channels, users ]) => {
             return Promise.all(users.map((user) => controller.addUser(user.login, user.type)))
                 .then(() => Promise.all(channels.map((channel) => controller.addChannel(channel.login, channel.type))));
@@ -170,6 +170,11 @@ browser.storage.local.get("migrated").then((value) => {
             return browser.storage.local.set({
                 migrated: true
             });
+        });
+        SDK.doAction("migrate-prefs").then((oldPrefs) => {
+            Promise.all(Object.keys(oldPrefs).map((p) => {
+                return prefs.set(p, oldPrefs[p]);
+            }));
         });
     }
 });

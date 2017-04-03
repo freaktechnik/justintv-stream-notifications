@@ -3,6 +3,8 @@ import { format } from '../format-pref';
 import '../content/l10n';
 import { toggle } from '../content/utils';
 
+//TODO prefs reset button & help button for advanced prefs?
+
 class OptionsPage {
     static EVENT_TYPES = {
         "radio": "change",
@@ -18,15 +20,22 @@ class OptionsPage {
     }
 
     constructor() {
-        window.addEventListener("DOMContentReady", () => {
-            this.loadValues().then(this.attachListeners.bind(this));
+        if(document.readyState == "loading") {
+            document.addEventListener("DOMContentLoaded", this.setup.bind(this), {
+                passive: true,
+                capture: false
+            });
+        }
+        else {
+            this.setup();
+        }
+    }
 
-            //TODO show hidden prefs if not under parental controls.
-            toggle(document.getElementById("hiddenprefs"), false);
-        }, {
-            passive: true,
-            capture: false
-        });
+    setup() {
+        this.loadValues().then(this.attachListeners.bind(this));
+
+        //TODO show hidden prefs if not under parental controls.
+        toggle(document.getElementById("hiddenprefs"), false);
     }
 
     getValue(p) {

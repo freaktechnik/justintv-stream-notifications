@@ -36,7 +36,7 @@
         "description": "Notification when a channel changes a non-live state"
     },
     "copyNotification": {
-        "message": "Copier l'URL du flux de $CHANNEL$ dans le presse-papiers",
+        "message": "Copier l'URL du stream de $CHANNEL$ dans le presse-papiers",
         "description": "Notification content after the URL of a stream was copied from the panel context menu"
     },
     "panel_style_title": {
@@ -56,7 +56,7 @@
         "description": "Cancel the dialog for adding a user or channel."
     },
     "panel_nonlive_description": {
-        "message": "Les flux qui ne sont pas en direct incluent des éléments tels que des chaînes hébergées ou des rediffusions.",
+        "message": "Les streams qui ne sont pas en direct incluent des éléments tels que des chaînes hébergées ou des rediffusions.",
         "description": "Description of the non-live treatment setting in the preferences"
     },
     "providerlivestream": {
@@ -100,7 +100,7 @@
         "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
     },
     "context_copy.label": {
-        "message": "Copier l'URL du flux",
+        "message": "Copier l'URL du stream",
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "cm_help": {
@@ -160,7 +160,7 @@
         "description": "Refresh the status of a channel from the context menu in the panel"
     },
     "offlineNotification_title": {
-        "message": "Afficher une notification lorsqu'un flux est hors ligne",
+        "message": "Afficher une notification lorsqu'un stream est hors ligne",
         "description": "Title of the offline notifications setting in the preferences"
     },
     "providerazubu": {
@@ -236,11 +236,11 @@
         "description": "Provider for douyutv.com"
     },
     "titleChangeNotification_title": {
-        "message": "Afficher une notification lorsqu'un flux change de titre",
+        "message": "Afficher une notification lorsqu'un stream change de titre",
         "description": "Title of the title change notifications setting in the preferences"
     },
     "nonliveNotification_description": {
-        "message": "Cette option est pertinente seulement quand des flux qui ne sont pas en direct ne sont pas considérés comme en ligne ou hors ligne.",
+        "message": "Cette option est pertinente seulement quand des streams qui ne sont pas en direct ne sont pas considérés comme en ligne ou hors ligne.",
         "description": "Description of the non-live notifications setting in the preferences"
     },
     "theme_options.Dark": {
@@ -252,7 +252,7 @@
         "description": "Tooltip on the button to open the channel manager from the panel"
     },
     "nonliveNotification_title": {
-        "message": "Afficher une notification quand un flux est dans un état qui n'est pas du direct",
+        "message": "Afficher une notification quand un stream est dans un état qui n'est pas du direct",
         "description": "Title of the non-live notifications setting in the preferences"
     },
     "providermlg": {
@@ -276,11 +276,11 @@
         "description": "Button to automatically add all users the user has credentials stored for"
     },
     "panel_nonlive_title": {
-        "message": "Traiter les flux qui ne sont pas en direct comme",
+        "message": "Traiter les streams qui ne sont pas en direct comme",
         "description": "Title of the non-live treatment setting in the preferences"
     },
     "copy_pattern_description": {
-        "message": "Modifie le lien copié avec l'action de copie de l'URL du flux dans le menu contextuel du panneau. L'{URL} est remplacée par l'URL du flux.",
+        "message": "Modifie le lien copié avec l'action de copie de l'URL du stream dans le menu contextuel du panneau. L'{URL} est remplacée par l'URL du stream.",
         "description": "Description of the copy pattern setting in the preferences"
     },
     "panel_loading": {
@@ -304,7 +304,7 @@
         "description": "An unknown error was encountered while trying to fetch a channel or user."
     },
     "updateInterval_description": {
-        "message": "Intervalle de rafraichissement du module lorsque le flux est en direct (en secondes). 0 : pas de rafraichissement automatique",
+        "message": "Intervalle de rafraichissement du module lorsque le stream est en direct (en secondes). 0 : pas de rafraichissement automatique",
         "description": "Description of the update interval setting in the preferences"
     },
     "twitch_showHosting_title": {
@@ -336,7 +336,7 @@
         "description": "Message in the live tab when no channel is live"
     },
     "onlineNotification_title": {
-        "message": "Afficher une notification lorsqu'un flux est en ligne",
+        "message": "Afficher une notification lorsqu'un stream est en ligne",
         "description": "Title of the online notifications setting in the preferences"
     },
     "panel_refresh.title": {
@@ -348,7 +348,7 @@
         "description": "Provider name for picarto.tv"
     },
     "copy_pattern_title": {
-        "message": "Modèle de copie d'URL de flux",
+        "message": "Modèle de copie d'URL de stream",
         "description": "Title of the copy pattern setting in the preferences"
     },
     "context_open.label": {

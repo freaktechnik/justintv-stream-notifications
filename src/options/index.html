@@ -46,12 +46,16 @@
                     }
                     else if(pref.type == "bool") {
                         props.type = "checkbox";
+                        if(pref.value) {
+                            props.checked = pref.value;
+                        }
                     }
                     else if(pref.type == "integer") {
                         props.type = "number";
                         props.min = 0;
                         props.step = 1;
                         props.placeholder = pref.value;
+                        props.value = pref.value;
                     }
 
                     input = "<input";

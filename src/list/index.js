@@ -11,6 +11,7 @@ import './list.css';
 import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
 import LiveState from '../live-state.json';
+import Port from '../port';
 
 let live,
     secondaryLive,
@@ -21,7 +22,7 @@ let live,
     currentStyle,
     providers,
     nonLiveDisplay;
-const port = browser.runtime.connect({ name: "list" }),
+const port = new Port("list", true),
     CHANNEL_ID_PREFIX = "channel",
     EXPLORE_ID_PREFIX = "explorechan",
     CONTEXTMENU_ID = "context",
@@ -49,10 +50,7 @@ const port = browser.runtime.connect({ name: "list" }),
     channelIsLive = (channel) => channel.live.state == LiveState.LIVE || (nonLiveDisplay < 3 && channel.live.state > LiveState.LIVE),
     getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10),
     contextMenuCommand = (event) => {
-        port.postMessage({
-            target: event,
-            channelId: getChannelIdFromId(currentMenuTarget.id)
-        });
+        port.send(event, getChannelIdFromId(currentMenuTarget.id));
         if(event == "openArchive" || event == "openChat") {
             window.close();
         }
@@ -62,20 +60,14 @@ const port = browser.runtime.connect({ name: "list" }),
         if(e) {
             e.preventDefault();
         }
-        port.postMessage({
-            target: "open",
-            channelId
-        });
+        port.send("open", channelId);
         window.close();
     },
     openUrl = (url, e) => {
         if(e) {
             e.preventDefault();
         }
-        port.postMessage({
-            target: "openUrl",
-            url
-        });
+        port.send("openUrl", url);
         window.close();
     },
     displayNoOnline = () => {
@@ -242,10 +234,7 @@ const port = browser.runtime.connect({ name: "list" }),
     removeChannel = (channelId) => {
         const channelNode = document.getElementById(CHANNEL_ID_PREFIX + channelId);
         if(channelNode.parentNode.id === "live") {
-            port.postMessage({
-                target: "removedLive",
-                channelId
-            });
+            port.send("removedLive", channelId);
             // Smaller two, since we remove the channel node after this, as we still
             // needed its parent's id before.
             if(countLiveChannels() < 2) {
@@ -312,22 +301,17 @@ const port = browser.runtime.connect({ name: "list" }),
     },
     getFeaturedChannels = (type) => {
         displayLoading();
-        port.postMessage({
-            target: "explore",
-            type
-        });
+        port.send("explore", type);
     },
     providerSearch = (type, query) => {
         displayLoading();
-        port.postMessage({
-            target: "search",
+        port.send("search", {
             type,
             query
         });
     },
     externalContextMenuCommand = (command) => {
-        port.postMessage({
-            target: command,
+        port.send(command, {
             type: currentMenuTarget.className,
             login: currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length)
         });
@@ -337,9 +321,7 @@ const port = browser.runtime.connect({ name: "list" }),
         if(event) {
             event.preventDefault();
         }
-        port.postMessage({
-            target: name
-        });
+        port.send(name);
         if(name == "configure") {
             window.close();
         }
@@ -420,56 +402,58 @@ const port = browser.runtime.connect({ name: "list" }),
     };
 
 // Set up port commmunication listeners
-port.onMessage.addListener((event) => {
-    if(event.target == "setStyle") {
-        setStyle(event.data);
-    }
-    else if(event.target == "setExtras") {
-        setExtrasVisibility(event.data);
-    }
-    else if(event.target == "addChannels") {
-        event.data.forEach(addChannel);
-    }
-    else if(event.target == "removeChannel") {
-        removeChannel(event.data);
-    }
-    else if(event.target == "setOnline") {
-        makeChannelLive(event.data);
-    }
-    else if(event.target == "setOffline") {
-        makeChannelOffline(event.data);
-    }
-    else if(event.target == "setDistinct") {
-        makeChannelDistinct(event.data);
-    }
-    else if(event.target == "setNonLiveDisplay") {
-        setNonLiveDisplay(event.data);
-    }
-    else if(event.target == "queuePaused") {
-        toggleQueueContextItems(event.data);
-        document.getElementById("refreshButton").classList.toggle("running", !event.data);
-    }
+port.addEventListener(({ detail: event }) => {
+    switch(event.command) {
+    case "setStyle":
+        setStyle(event.payload);
+        break;
+    case "setExtras":
+        setExtrasVisibility(event.payload);
+        break;
+    case "addChannels":
+        event.payload.forEach(addChannel);
+        break;
+    case "removeChannel":
+        removeChannel(event.payload);
+        break;
+    case "setOnline":
+        makeChannelLive(event.payload);
+        break;
+    case "setOffline":
+        makeChannelOffline(event.payload);
+        break;
+    case "setDistinct":
+        makeChannelDistinct(event.payload);
+        break;
+    case "setNonLiveDisplay":
+        setNonLiveDisplay(event.payload);
+        break;
+    case "queuePaused":
+        toggleQueueContextItems(event.payload);
+        document.getElementById("refreshButton").classList.toggle("running", !event.payload);
+        break;
     // Queue autorefresh is enabled/disabled in the settings
-    else if(event.target == "queueStatus") {
+    case "queueStatus": {
         const button = document.getElementById("refreshButton");
-        if(event.data) {
+        if(event.payload) {
             button.setAttribute("contextmenu", "queue-context");
         }
         else {
             button.removeAttribute("contextmenu");
         }
 
-        button.classList.toggle("running", event.data);
+        button.classList.toggle("running", event.payload);
+        break;
     }
-    else if(event.target == "setProviders") {
-        providers = event.data;
+    case "setProviders":
+        providers = event.payload;
         addExploreProviders(
             Object.keys(providers)
             .filter((p) => providers[p].supports.featured)
         );
-    }
-    else if(event.target == "setFeatured") {
-        const { channels, type, q } = event.data;
+        break;
+    case "setFeatured": {
+        const { channels, type, q } = event.payload;
         if(type !== document.getElementById("exploreprovider").value ||
            (q !== null &&
             document.getElementById("searchField").value != q)
@@ -492,14 +476,18 @@ port.onMessage.addListener((event) => {
         }
 
         hideLoading();
+        break;
     }
-    else if(event.target == "theme") {
-        setTheme(event.data);
+    case "theme":
+        setTheme(event.payload);
+        break;
+    default:
+        // Nothing to do.
     }
 });
 
 // Set up DOM listeners and all that.
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
     live = document.getElementById("live");
     offline = document.getElementById("offline");
     distinct = document.getElementById("nonlive");

@@ -47,7 +47,12 @@ function translateElement(element = document) {
     }
 }
 
-window.addEventListener("load", () => translateElement(), {
-    capturing: false,
-    passive: true
-});
+if(document.readyState == "loading") {
+    document.addEventListener("DOMContentLoaded", () => translateElement(), {
+        capturing: false,
+        passive: true
+    });
+}
+else {
+    translateElement();
+}

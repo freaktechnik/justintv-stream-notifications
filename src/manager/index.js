@@ -7,6 +7,7 @@
 //TODO clicking ok twice shows error panel -> ok sent while loading?
 import { hide, show } from '../content/utils';
 import { filter } from '../content/filter';
+import Port from '../port';
 import '../content/tabbed';
 import '../content/l10n';
 import './channels-manager.css';
@@ -24,7 +25,7 @@ const filters = [
     listener = () => {
         filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not([hidden])"), filters);
     },
-    port = browser.runtime.connect({ name: "manager" }),
+    port = new Port("manager", true),
 
 // Methods modifying the DOM
 
@@ -41,7 +42,7 @@ const filters = [
         return false;
     };
 
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("searchField").addEventListener("keyup", listener);
     document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
     document.getElementById("channels").addEventListener("itemadded", () => {
@@ -97,16 +98,12 @@ function removeSelectedItems(removeFollows) {
     const selected = getSelectedItemIds();
     if(users.hasAttribute("hidden")) {
         selected.forEach((channelId) => {
-            port.postMessage({
-                target: "removechannel",
-                channelId
-            });
+            port.send("removechannel", channelId);
         });
     }
     else {
         selected.forEach((userId) => {
-            port.postMessage({
-                target: "removeuser",
+            port.send("removeuser", {
                 userId,
                 removeFollows
             });
@@ -333,7 +330,7 @@ document.querySelector("main.tabbed").addEventListener("tabchanged", (evt) => {
 }, false);
 
 document.querySelector("#autoAdd").addEventListener("click", () => {
-    port.postMessage({ target: "autoadd" });
+    port.send("autoadd");
 }, false);
 
 document.querySelector("#showDialog").addEventListener("click", showDialog, false);
@@ -346,7 +343,7 @@ document.querySelector("#removeItem").addEventListener("click", (e) => {
 document.querySelector("a[rel='help']").addEventListener("click", (e) => {
     if(e.shiftKey) {
         e.preventDefault();
-        port.postMessage({ target: "debugdump" });
+        port.send("debugdump");
     }
 });
 
@@ -354,18 +351,12 @@ document.querySelector("#updateItem").addEventListener("click", () => {
     const selected = getSelectedItemIds();
     if(users.hasAttribute("hidden")) {
         selected.forEach((channelId) => {
-            port.postMessage({
-                target: "updatechannel",
-                channelId
-            });
+            port.send("updatechannel", channelId);
         });
     }
     else {
         selected.forEach((userId) => {
-            port.postMessage({
-                target: "updatefavorites",
-                userId
-            });
+            port.send("updatefavorites", userId);
         });
     }
 });
@@ -374,14 +365,11 @@ document.querySelector("#channelRadio").addEventListener("change", updateSelect)
 document.querySelector("#userRadio").addEventListener("change", updateSelect);
 
 popup.querySelector("button[type='button']").addEventListener("click", () => {
-    port.postMessage({
-        target: "cancel",
-        values: [
-            popup.querySelector("#channelRadio").checked ? "channel" : "user",
-            popup.querySelector("#providerDropdown").value,
-            popup.querySelector("#channelNameField").value
-        ]
-    });
+    port.send("cancel", [
+        popup.querySelector("#channelRadio").checked ? "channel" : "user",
+        popup.querySelector("#providerDropdown").value,
+        popup.querySelector("#channelNameField").value
+    ]);
     hideDialog();
     resetDialogForms();
 });
@@ -399,15 +387,13 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
     show(popup.querySelector("#loadingWrapper"));
     if(field.value.length > 0) {
         if(popup.querySelector("#channelRadio").checked) {
-            port.postMessage({
-                target: "addchannel",
+            port.send("addchannel", {
                 username: field.value,
                 type: popup.querySelector("#providerDropdown").value
             });
         }
         else {
-            port.postMessage({
-                target: "adduser",
+            port.send("adduser", {
                 username: field.value,
                 type: popup.querySelector("#providerDropdown").value
             });
@@ -417,44 +403,45 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
 
 document.getElementById("options").addEventListener("click", (e) => {
     e.preventDefault();
-    port.postMessage({ target: "showoptions" });
+    port.send("showoptions");
 }, false);
 
 // Add-on communication backend
 
-port.postMessage({ target: "ready" });
+port.send("ready");
 
-port.onMessage.addListener((message) => {
-    if(message.target == "secondary") {
+port.addEventListener("message", ({ detail: message }) => {
+    switch(message.command) {
+    case "secondary":
         show(document.querySelector("#secondary-manager"));
         document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
             e.preventDefault();
-            port.postMessage({ target: "focus" });
+            port.send("focus");
         });
-    }
-    else if(message.target == "reload") {
+        break;
+    case "reload":
         location.reload();
-    }
-    else if(message.target == "add") {
-        addChannel(message.data);
-    }
-    else if(message.target == "remove") {
-        removeChannel(message.data);
-    }
-    else if(message.target == "update") {
-        updateChannel(message.data);
-    }
-    else if(message.target == "adduser") {
-        addUser(message.data);
-    }
-    else if(message.target == "removeuser") {
-        removeUser(message.data);
-    }
-    else if(message.target == "updateuser") {
-        updateUser(message.data);
-    }
-    else if(message.target == "addproviders") {
-        providers = message.data;
+        break;
+    case "add":
+        addChannel(message.payload);
+        break;
+    case "remove":
+        removeChannel(message.payload);
+        break;
+    case "update":
+        updateChannel(message.payload);
+        break;
+    case "adduser":
+        addUser(message.payload);
+        break;
+    case "removeuser":
+        removeUser(message.payload);
+        break;
+    case "updateuser":
+        updateUser(message.payload);
+        break;
+    case "addproviders": {
+        providers = message.payload;
         const providerDropdown = document.querySelector("#providerDropdown");
         for(const provider in providers) {
             if(!hasOption(provider)) {
@@ -463,28 +450,33 @@ port.onMessage.addListener((message) => {
                 providerDropdown.add(opt);
             }
         }
+        break;
     }
-    else if(message.target == "isloading") {
+    case "isloading":
         document.querySelector("main").classList.add("loading");
         users.classList.add("loading");
         channels.classList.add("loading");
-    }
-    else if(message.target == "doneloading") {
+        break;
+    case "doneloading":
         document.querySelector("main").classList.remove("loading");
         users.classList.remove("loading");
         channels.classList.remove("loading");
-    }
-    else if(message.target == "error") {
+        break;
+    case "error": {
         let msg;
-        if(message.data) {
-            msg = browser.i18n.getMessage("channelManagerLoadError", message.data);
+        if(message.payload) {
+            msg = browser.i18n.getMessage("channelManagerLoadError", message.payload);
         }
         else {
             msg = browser.i18n.getMessage("channelManagerGenericError");
         }
         showError(msg);
+        break;
     }
-    else if(message.target == "theme") {
-        document.body.classList.toggle("dark", message.data === 1);
+    case "theme":
+        document.body.classList.toggle("dark", message.payload === 1);
+        break;
+    default:
+        // Do nothing
     }
 });
