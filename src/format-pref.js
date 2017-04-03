@@ -9,7 +9,7 @@ export const format = (value, type) => {
         if(typeof value != "number") {
             return Number.parseInt(value, 10);
         }
-        else if(!Number.isInteger(value) && Number.isFinit(value)) {
+        else if(!Number.isInteger(value) && Number.isFinite(value)) {
             return Math.round(value);
         }
         else if(Number.isInteger(value) && value < 0) {
