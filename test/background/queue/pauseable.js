@@ -13,7 +13,7 @@ test('construction', (t) => {
     const q = new PauseableQueue();
     t.true(q instanceof RequestQueue);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('pauseable queue paused porperty', async (t) => {
@@ -30,36 +30,42 @@ test('pauseable queue paused porperty', async (t) => {
     q.resume();
     t.false(q.paused);
 
-    q.clear();
+    q._cleanup();
 });
 
-test('pauseable queue events', async () => {
+test('pauseable queue events', async (t) => {
     const q = new PauseableQueue();
     await q.autoFetch(25, 0.5, 2);
     let p = when(q, "pause");
     q.pause();
     await p;
+    t.true(q.paused);
 
     p = when(q, "resume");
     q.resume();
     await p;
+    t.false(q.paused);
 
-    q.clear();
+    q._cleanup();
 });
 
-test.serial('network observers', async () => {
+test.serial('network observers', async (t) => {
     const q = new PauseableQueue();
     await q.autoFetch(25, 0.5, 2);
+
+    t.false(q.paused);
 
     let p = when(q, "pause");
     navigator.onLine = false;
     await p;
+    t.true(q.paused);
 
     p = when(q, "resume");
     navigator.onLine = true;
     await p;
+    t.false(q.paused);
 
-    q.clear();
+    q._cleanup();
 });
 
 test.serial('autoFetch in offline mode', async (t) => {
@@ -67,7 +73,7 @@ test.serial('autoFetch in offline mode', async (t) => {
         q = new PauseableQueue();
     await q.autoFetch(25, 0.5, 2);
 
-    const p = when(navigator, "offline");
+    const p = when(window, "offline");
     navigator.onLine = false;
     await p;
 
@@ -76,6 +82,6 @@ test.serial('autoFetch in offline mode', async (t) => {
     await q.autoFetch(25, 0.5, 2);
     t.is(q.interval, 0);
 
-    q.clear();
+    q._cleanup();
     navigator.onLine = previousMode;
 });

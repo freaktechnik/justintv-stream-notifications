@@ -464,7 +464,7 @@ test.serial('opening open list', async (t) => {
     t.not(t.context.list.db, null);
 });
 
-test.serial('list upgrade from v1 to v2 shouldnt fail opening', async (t) => {
+test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     await t.context.list.close();
     await new Promise((resolve, reject) => {
         const request = indexedDB.deleteDatabase("channellist");
@@ -487,7 +487,7 @@ test.serial('list upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     });
     db.close();
 
-    await t.context.list.openDB("channellist");
+    await t.notThrows(t.context.list.openDB("channellist"));
 });
 
 test.serial.beforeEach(async (t) => {

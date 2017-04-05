@@ -25,7 +25,7 @@ test('construction', (t) => {
     const q = new UpdateQueue();
     t.true(q instanceof PauseableQueue);
 
-    q.clear();
+    q._cleanup();
 });
 
 test.serial("Interval Pause/Resume", async (t) => {
@@ -61,7 +61,7 @@ test.serial("Interval Pause/Resume", async (t) => {
 
     t.true(cbk.calledTwice);
 
-    queue.clear();
+    queue._cleanup();
 });
 
 test('adding new request to queue', (t) => {
@@ -73,7 +73,7 @@ test('adding new request to queue', (t) => {
     t.false(q.queue[0].persist);
     t.is(q.queue[0].skip, 0);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('adding new priorized persisting request to queue', async (t) => {
@@ -87,7 +87,7 @@ test('adding new priorized persisting request to queue', async (t) => {
     t.is(q.queue[0].skip, 1);
     await p;
 
-    q.clear();
+    q._cleanup();
 });
 
 test('adding new priorized request to queue', async (t) => {
@@ -101,7 +101,7 @@ test('adding new priorized request to queue', async (t) => {
     t.false(q.queue[0].persist);
     t.is(q.queue[0].skip, 0);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('contains priorized', (t) => {
@@ -113,7 +113,7 @@ test('contains priorized', (t) => {
 
     t.true(q.containsPriorized());
 
-    q.clear();
+    q._cleanup();
 });
 
 test('get just a request', async (t) => {
@@ -132,7 +132,7 @@ test('get just a request', async (t) => {
     t.is(q.queue.length, 0);
     t.true(cbk.calledOnce);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('get multiple priorized requests', async (t) => {
@@ -166,7 +166,7 @@ test('get multiple priorized requests', async (t) => {
     t.is(q.queue.length, 0);
     t.true(cbk.calledTwice);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('persistent request by index', async (t) => {
@@ -188,7 +188,7 @@ test('persistent request by index', async (t) => {
 
     t.true(cbk.calledOnce);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('persistent priorized request by index', async (t) => {
@@ -216,7 +216,7 @@ test('persistent priorized request by index', async (t) => {
     t.is(q.queue[0].skipped, 0, "Skip was reset after unpriorized fetch");
     t.true(cbk.calledTwice);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('get all priorized', async (t) => {
@@ -258,7 +258,7 @@ test('get all priorized', async (t) => {
     t.true(cbk.calledTwice);
     t.true(cbk2.notCalled);
 
-    q.clear();
+    q._cleanup();
 });
 
 test('resume with priorized queued', async (t) => {
@@ -283,5 +283,5 @@ test('resume with priorized queued', async (t) => {
 
     t.true(cbk.calledOnce);
 
-    q.clear();
+    q._cleanup();
 });

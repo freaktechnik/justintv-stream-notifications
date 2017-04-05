@@ -56,27 +56,28 @@ const testProviders = (t, p) => {
 };
 testProviders.title = (title, p) => `Basic properties of ${p}`;
 
-const testSupports = async (t, p) => {
+const testNotSupportsFavorites = async (t, p) => {
     const provider = providers[p];
 
-    if(!provider.supports.favorites) {
-        await t.throws(provider.getUserFavorites(), Error, "doesn't implement getUserFavorites");
-        t.throws(provider.updateFavsRequest, Error, "doesn't implement updateFavsRequest");
-    }
-    // Can't test else unless APIs get emulated (see testRequests)
-
-    if(provider.supports.credentials) {
-        t.true(provider.authURL.length > 0, "has at least one auth URL");
-    }
-    // Else is not relevant.
-
-    if(!provider.supports.featured) {
-        await t.throws(provider.getFeaturedChannels(), Error, "doesn't implement getFeaturedChannels");
-        await t.throws(provider.search(), Error, "doesn't implement search");
-    }
-    // can't test else unless APIs get emulated (see testRequests)
+    await t.throws(provider.getUserFavorites(), Error, "doesn't implement getUserFavorites");
+    t.throws(provider.updateFavsRequest, Error, "doesn't implement updateFavsRequest");
 };
-testSupports.title = (title, p) => `Support implementations of ${p}`;
+testNotSupportsFavorites.title = (title, p) => `Support favorites false implementation of ${p}`;
+
+const testSupportsCredentials = (t, p) => {
+    const provider = providers[p];
+
+    t.true(provider.authURL.length > 0, "has at least one auth URL");
+};
+testSupportsCredentials.title = (title, p) => `Support credentials implementation of ${p}`;
+
+const testNotSupportsFeatured = async (t, p) => {
+    const provider = providers[p];
+
+    await t.throws(provider.getFeaturedChannels(), Error, "doesn't implement getFeaturedChannels");
+    await t.throws(provider.search(), Error, "doesn't implement search");
+};
+testNotSupportsFeatured.title = (title, p) => `Support featured false implementation of ${p}`;
 
 const testRequests = async (t, p) => {
     const channels = [ getChannel() ],
@@ -270,12 +271,20 @@ testMock.title = (title, p) => `Mocked requests with ${p}`;
 
 const macros = [
     testProviders,
-    testSupports,
     testMock
 ];
 
 for(const p in providers) {
     test(macros, p);
+    if(!providers[p].supports.favorites) {
+        test(testNotSupportsFavorites, p);
+    }
+    else if(providers[p].supports.credentials) {
+        test(testSupportsCredentials, p);
+    }
+    if(!providers[p].supports.featured) {
+        test(testNotSupportsFeatured, p);
+    }
 }
 
 test("GenericProvider", async (t) => {

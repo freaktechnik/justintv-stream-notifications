@@ -47,9 +47,22 @@ export default class PauseableQueue extends RequestQueue {
          */
         this._queueState = {};
 
-        window.addEventListener("offline", () => this.pause(), { passive: true });
-        window.addEventListener("online", () => this.resume(), { passive: true });
+        this._listeners = {
+            offline: this.pause.bind(this),
+            online: this.resume.bind(this)
+        };
+        for(const l in this._listeners) {
+            window.addEventListener(l, this._listeners[l], { passive: true });
+        }
     }
+
+    _cleanup() {
+        for(const l in this._listeners) {
+            window.removeEventListener(l, this._listeners[l]);
+        }
+        this.clear();
+    }
+
     /**
      * @type {boolean}
      * @default false
@@ -84,7 +97,7 @@ export default class PauseableQueue extends RequestQueue {
      * @returns {undefined}
      */
     pause() {
-        if(this._configured && this.interval !== 0) {
+        if(this._configured && !this.paused) {
             this.autoFetch(0);
             emit(this, "pause");
         }

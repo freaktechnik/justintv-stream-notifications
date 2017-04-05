@@ -15,14 +15,15 @@ export default class NavigatorOnLine extends EventTarget {
     }
 
     set onLine(val) {
-        if(val && !this._online) {
+        const wasOnline = this._online;
+        this._online = val;
+        if(val && !wasOnline) {
             emit(this, "online");
             emit(window, "online");
         }
-        else if(!val && this._online) {
+        else if(!val && wasOnline) {
             emit(this, "offline");
             emit(window, "offline");
         }
-        this._online = val;
     }
 }

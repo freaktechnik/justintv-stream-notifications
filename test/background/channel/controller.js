@@ -44,30 +44,30 @@ const testProviderCredentials = async (t, p) => {
     await cc._ensureQueueReady();
 
     let res, prom;
-    if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-        if(providers[p].supports.credentials) {
-            prom = cc.autoAddUsers(p);
-            sendCredentials(p);
-            res = await prom;
-            if(p == TESTUSER.type) {
-                t.true(res.length > 0, "Found credential for " + p);
+    if(providers[p].supports.credentials) {
+        prom = cc.autoAddUsers(p);
+        sendCredentials(p);
+        res = await prom;
+        if(p == TESTUSER.type) {
+            t.true(res.length > 0, "Found credential for " + p);
 
-                const users = await cc.getUsersByType();
-                await Promise.all(users.map((u) => cc.removeUser(u.id, true)));
-            }
-            else if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-                t.is(res.length, 0, "found no credentials for " + p);
-            }
+            const users = await cc.getUsersByType();
+            await Promise.all(users.map((u) => cc.removeUser(u.id, true)));
         }
-        else {
-            await t.throws(cc.autoAddUsers(p));
+        else if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+            t.is(res.length, 0, "found no credentials for " + p);
         }
+    }
+    else {
+        await t.throws(cc.autoAddUsers(p));
     }
 };
 testProviderCredentials.title = (title, p) => `${title} for ${p}`;
 
 for(const p in providers) {
-    test.serial('Provider credentials', testProviderCredentials, p);
+    if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+        test.serial('Provider credentials', testProviderCredentials, p);
+    }
 }
 
 test.serial("Credentials", async (t) => {
