@@ -18,7 +18,9 @@ const PREFS = {
     },
     applyPrefs = (oldPrefs) => {
         for(const p in oldPrefs) {
-            browser.storage.local.get.withArgs(PREFS[p]).returns(Promise.resolve({
+            browser.storage.local.get.withArgs({
+                [PREFS[p]]: defaultPrefs[PREFS[p]].value
+            }).returns(Promise.resolve({
                 [PREFS[p]]: oldPrefs[p]
             }));
         }
@@ -31,7 +33,7 @@ const PREFS = {
     },
     resetPrefs = () => {
         browser.storage.local.get.reset();
-        browser.storage.local.get.returns(Promise.resolve({}));
+        browser.storage.local.get.returns(Promise.resolve(global.defaultPrefReturn));
     };
 
 const testNotifierNotifications = async (t, f) => {
@@ -61,6 +63,39 @@ test("Prefs", async (t) => {
     t.is(await notifier.nonliveNotifications(), defaultPrefs.nonliveNotification.value, "Nonlive notifications vlaue matches the pref");
 });
 
+const SHOW_NOTIFICATIONS = [
+    {
+        live: true
+    },
+    {
+        title: true
+    },
+    {
+        offline: true
+    },
+    {
+        nonlive: true
+    }
+];
+
+const testShowNotifications = async (t, config) => {
+    const notifier = new Notifier();
+
+    applyPrefs(Object.assign({
+        live: false,
+        title: false,
+        offline: false,
+        nonlive: false
+    }, config));
+
+    t.true(await notifier.showNotifications());
+};
+testShowNotifications.title = (title, config) => `${title} with ${Object.keys(config)[0]}`;
+
+for(const config of SHOW_NOTIFICATIONS) {
+    test.serial('Show Notifications pref', testShowNotifications, config);
+}
+
 test.serial("Show Notifications prefs", async (t) => {
     const notifier = new Notifier();
 
@@ -72,42 +107,13 @@ test.serial("Show Notifications prefs", async (t) => {
     });
 
     t.false(await notifier.showNotifications(), "No notifications should be shown if all of them are disabled");
-
-    browser.storage.local.get.withArgs("onlineNotification").returns(Promise.resolve({
-        onlineNotification: true
-    }));
-    t.true(await notifier.showNotifications(), "If online is true, notifications are shown");
-
-    browser.storage.local.get.withArgs("onlineNotification").returns(Promise.resolve({
-        onlineNotification: false
-    }));
-    browser.storage.local.get.withArgs("titleChangeNotification").returns(Promise.resolve({
-        titleChangeNotification: true
-    }));
-    t.true(await notifier.showNotifications(), "If title change is enabled, notifications are shown");
-
-    browser.storage.local.get.withArgs("titleChangeNotification").returns(Promise.resolve({
-        titleChangeNotification: false
-    }));
-    browser.storage.local.get.withArgs("offlineNotification").returns(Promise.resolve({
-        offlineNotification: true
-    }));
-    t.true(await notifier.showNotifications(), "If offline is enabled, notifications are shown");
-
-    browser.storage.local.get.withArgs("offlineNotification").returns(Promise.resolve({
-        offlineNotification: false
-    }));
-    browser.storage.local.get.withArgs("nonliveNotification").returns(Promise.resolve({
-        nonliveNotification: true
-    }));
-    t.true(await notifier.showNotifications(), "If nonlive is enabled, notifications are shown");
 });
 
 test.serial("Non-live Notifications", async (t) => {
     browser.notifications.create.reset();
-    browser.storage.local.get.withArgs("nonliveNotification").returns(Promise.resolve({
-        nonliveNotification: true
-    }));
+    applyPrefs({
+        nonlive: true
+    });
 
     const notifier = new Notifier(),
         channel = getChannel('test', 'test', 1);

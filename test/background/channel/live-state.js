@@ -98,12 +98,12 @@ test('isLive', (t) => {
 });
 
 test('defaultInterpretation', async (t) => {
-    browser.storage.local.get.withArgs("panel_nonlive").returns(Promise.resolve({
+    browser.storage.local.get.withArgs({ "panel_nonlive": global.defaultPrefReturn.panel_nonlive }).returns(Promise.resolve({
         "panel_nonlive": 2
     }));
     t.is(await LiveState.defaultInterpretation(), LiveState.TOWARD_LIVE);
 
-    browser.storage.local.get.withArgs("panel_nonlive").returns(Promise.resolve({
+    browser.storage.local.get.withArgs({ "panel_nonlive": global.defaultPrefReturn.panel_nonlive }).returns(Promise.resolve({
         "panel_nonlive": 3
     }));
     t.is(await LiveState.defaultInterpretation(), LiveState.TOWARD_OFFLINE);

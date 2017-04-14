@@ -38,24 +38,24 @@ class Preferences extends EventTarget {
      *          for unset preferences.
      */
     get(pref) {
-        return browser.storage[AREA].get(pref).then((value) => {
+        // Build an object with pref name and default value.
+        const request = {};
+        if(Array.isArray(pref)) {
+            for(const p of pref) {
+                request[p] = getDefaultValue(p);
+            }
+        }
+        else {
+            request[pref] = getDefaultValue(pref);
+        }
+        return browser.storage[AREA].get(request).then((value) => {
             if(Array.isArray(pref)) {
                 return pref.map((p) => {
-                    if(p in value) {
-                        return value[p];
-                    }
-                    else {
-                        return getDefaultValue(p);
-                    }
+                    return value[p];
                 });
             }
             else {
-                if(!(pref in value)) {
-                    return getDefaultValue(pref);
-                }
-                else {
-                    return value[pref];
-                }
+                return value[pref];
             }
         });
     }
