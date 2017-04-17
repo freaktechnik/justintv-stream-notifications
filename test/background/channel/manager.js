@@ -26,9 +26,9 @@ const FAKE_ITEM = {
     };
 
 test.beforeEach(() => {
-    browser.tabs.create.returns(Promise.resolve({
+    browser.tabs.create.resolves({
         id: 0
-    }));
+    });
 });
 
 test.afterEach(() => {

@@ -167,7 +167,7 @@ class LiveState {
      * @returns {boolean} Whether the live state should be considered live.
      */
     async isLive(interpretation) {
-        if(!interpretation) {
+        if(interpretation === undefined) {
             interpretation = await getDefaultInterpretation();
         }
 

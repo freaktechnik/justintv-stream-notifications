@@ -5,6 +5,7 @@
  */
 import test from "ava";
 import LiveState from "../../../src/background/channel/live-state";
+import prefs from '../../../src/prefs.json';
 
 test('exports', (t) => {
     t.true("deserialize" in LiveState, "deserialize is in LiveState");
@@ -61,53 +62,63 @@ test('Deserialize', (t) => {
     t.deepEqual(state.serialize(), serialized, "Serializing the deserialized object holds the same result");
 });
 
-test('isLive', (t) => {
-    const statesToTest = [
-        {
-            name: "offline",
-            value: LiveState.OFFLINE,
-            [LiveState.TOWARD_LIVE]: false,
-            [LiveState.TOWARD_OFFLINE]: false
-        },
-        {
-            name: "live",
-            value: LiveState.LIVE,
-            [LiveState.TOWARD_LIVE]: true,
-            [LiveState.TOWARD_OFFLINE]: true
-        },
-        {
-            name: "redirect",
-            value: LiveState.REDIRECT,
-            [LiveState.TOWARD_LIVE]: true,
-            [LiveState.TOWARD_OFFLINE]: false
-        },
-        {
-            name: "rebroadcast",
-            value: LiveState.REBROADCAST,
-            [LiveState.TOWARD_LIVE]: true,
-            [LiveState.TOWARD_OFFLINE]: false
-        }
-    ];
+const statesToTest = [
+    {
+        name: "offline",
+        value: LiveState.OFFLINE,
+        [LiveState.TOWARD_LIVE]: false,
+        [LiveState.TOWARD_OFFLINE]: false
+    },
+    {
+        name: "live",
+        value: LiveState.LIVE,
+        [LiveState.TOWARD_LIVE]: true,
+        [LiveState.TOWARD_OFFLINE]: true
+    },
+    {
+        name: "redirect",
+        value: LiveState.REDIRECT,
+        [LiveState.TOWARD_LIVE]: true,
+        [LiveState.TOWARD_OFFLINE]: false
+    },
+    {
+        name: "rebroadcast",
+        value: LiveState.REBROADCAST,
+        [LiveState.TOWARD_LIVE]: true,
+        [LiveState.TOWARD_OFFLINE]: false
+    }
+];
+const testStates = async (t, testState) => {
+    const state = new LiveState(testState.value);
 
-    return Promise.all(statesToTest.map(async (testState) => {
-        const state = new LiveState(testState.value);
+    t.is(await state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], "correctly treated TOWARD_LIVE");
+    t.is(await state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], "correctly treated TOWARD_OFFLINE");
+};
+testStates.title = (title, state) => `${title} for ${state.name}`;
 
-        t.is(await state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], testState.name + " is treated correctly TOWARD_LIVE");
-        t.is(await state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], testState.name + " is treated correctly TOWARD_OFFLINE");
-    }));
-});
+for(const testState of statesToTest) {
+    test('isLive', testStates, testState);
+}
 
-test('defaultInterpretation', async (t) => {
-    browser.storage.local.get.withArgs({ "panel_nonlive": global.defaultPrefReturn.panel_nonlive }).returns(Promise.resolve({
-        "panel_nonlive": 2
-    }));
-    t.is(await LiveState.defaultInterpretation(), LiveState.TOWARD_LIVE);
+const testDefaultInterpretation = async (t, i, interpretation) => {
+    browser.storage.local.get.withArgs({ "panel_nonlive": prefs.panel_nonlive.value }).resolves({
+        "panel_nonlive": i
+    });
+    t.is(await LiveState.defaultInterpretation(), interpretation);
 
-    browser.storage.local.get.withArgs({ "panel_nonlive": global.defaultPrefReturn.panel_nonlive }).returns(Promise.resolve({
-        "panel_nonlive": 3
-    }));
-    t.is(await LiveState.defaultInterpretation(), LiveState.TOWARD_OFFLINE);
-});
+    browser.storage.local.get.reset();
+    browser.storage.local.get.callsFake((props) => Promise.resolve(props));
+};
+test.defaultInterpretation = (title, i, state) => `${title} with ${i} intepreted as ${state}`;
+const expectedStates = [
+    LiveState.TOWARD_LIVE,
+    LiveState.TOWARD_LIVE,
+    LiveState.TOWARD_LIVE,
+    LiveState.TOWARD_OFFLINE
+];
+for(const i in expectedStates) {
+    test.serial('defaultInterpretation', testDefaultInterpretation, i, expectedStates[i]);
+}
 
 test.todo('isLive default param value');
 

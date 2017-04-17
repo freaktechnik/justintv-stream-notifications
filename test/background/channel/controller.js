@@ -250,9 +250,9 @@ test.serial("Queue", async (t) => {
 test.serial("Open Manager", async (t) => {
     const cc = new ChannelController();
 
-    browser.tabs.create.returns(Promise.resolve({
+    browser.tabs.create.resolves({
         id: 'tab'
-    }));
+    });
 
     await cc.showManager();
 

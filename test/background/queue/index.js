@@ -25,7 +25,7 @@ test.serial.beforeEach(() => {
     browser.alarms.create.reset();
 });
 
-browser.alarms.clear.returns(Promise.resolve());
+browser.alarms.clear.resolves();
 
 test('adding new request to queue', (t) => {
     const q = new RequestQueue(),

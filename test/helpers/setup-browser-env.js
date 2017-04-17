@@ -16,7 +16,7 @@ browserEnv([ 'window', 'document', 'Event', 'CustomEvent', 'URL' ]);
 
 // Additional Web APIs
 global.fetch = sinon.stub();
-fetch.returns(Promise.resolve({
+fetch.resolves({
     ok: true,
     status: 200,
     clone() {
@@ -25,10 +25,10 @@ fetch.returns(Promise.resolve({
     json() {
         return Promise.resolve({});
     },
-    test() {
+    text() {
         return Promise.resolve("{}");
     }
-}));
+});
 global.URLSearchParams = URLSearchParams;
 global.indexedDB = indexedDB;
 global.IDBKeyRange = IDBKeyRange;

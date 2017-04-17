@@ -20,9 +20,9 @@ const PREFS = {
         for(const p in oldPrefs) {
             browser.storage.local.get.withArgs({
                 [PREFS[p]]: defaultPrefs[PREFS[p]].value
-            }).returns(Promise.resolve({
+            }).resolves({
                 [PREFS[p]]: oldPrefs[p]
-            }));
+            });
         }
     },
     getChannelFromFixture = (p) => {
@@ -33,7 +33,7 @@ const PREFS = {
     },
     resetPrefs = () => {
         browser.storage.local.get.reset();
-        browser.storage.local.get.returns(Promise.resolve(global.defaultPrefReturn));
+        browser.storage.local.get.callsFake((props) => Promise.resolve(props));
     };
 
 const testNotifierNotifications = async (t, f) => {
@@ -188,11 +188,11 @@ test.serial("Mute Notification", async (t) => {
         channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
 
-    browser.tabs.query.returns(Promise.resolve([
+    browser.tabs.query.resolves([
         {
             url: "https://example.com"
         }
-    ]));
+    ]);
 
     await notifier.sendNotification(channel);
 
@@ -212,7 +212,7 @@ test("Click Listener", async (t) => {
 });
 
 test.beforeEach(() => {
-    browser.tabs.query.returns(Promise.resolve([]));
+    browser.tabs.query.resolves([]);
     resetPrefs();
 });
 

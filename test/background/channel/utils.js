@@ -13,7 +13,7 @@ const setupAndRun = (args, tabId) => {
     if(tabId !== undefined) {
         tabs.push({ id: tabId });
     }
-    browser.tabs.query.returns(Promise.resolve(tabs));
+    browser.tabs.query.resolves(tabs);
 
     return selectOrOpenTab(...args);
 };

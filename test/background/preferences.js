@@ -7,15 +7,15 @@ const SINGLE_PREF = 'copy_pattern';
 
 test.afterEach(() => {
     browser.storage.local.get.flush();
-    browser.storage.local.get.returns(Promise.resolve(global.defaultPrefReturn));
+    browser.storage.local.get.callsFake((props) => Promise.resolve(props));
 });
 
 test.serial('get single pref value', async (t) => {
     const val = 'lorem ipsum';
     const arg = { [SINGLE_PREF]: defaults[SINGLE_PREF].value };
-    browser.storage.local.get.withArgs(arg).returns(Promise.resolve({
+    browser.storage.local.get.withArgs(arg).resolves({
         [SINGLE_PREF]: val
-    }));
+    });
 
     t.is(await prefs.get(SINGLE_PREF), val);
     t.deepEqual(browser.storage.local.get.lastCall.args[0], arg);
@@ -37,7 +37,7 @@ test.serial('get multipe pref values', async (t) => {
         "twitch_clientId": 'ipsum',
         "foo": 'bar'
     };
-    browser.storage.local.get.returns(Promise.resolve(testPrefs));
+    browser.storage.local.get.resolves(testPrefs);
 
     const arg = {};
     for(const p in testPrefs) {
@@ -58,7 +58,7 @@ test.serial('get multiple default values', async (t) => {
     for(const p in defaults) {
         defaultMap[p] = defaults[p].value;
     }
-    browser.storage.local.get.returns(Promise.resolve(defaultMap));
+    browser.storage.local.get.resolves(defaultMap);
 
     t.deepEqual(await prefs.get(Object.keys(defaults)), Object.values(defaultMap));
     t.deepEqual(browser.storage.local.get.lastCall.args[0], defaultMap);
@@ -73,7 +73,7 @@ test('set single pref value', async (t) => {
     });
 
     browser.storage.local.set.reset();
-    browser.storage.local.set.returns(Promise.resolve());
+    browser.storage.local.set.resolves();
 });
 
 test('open prefs page', (t) => {

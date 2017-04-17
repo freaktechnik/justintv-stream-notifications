@@ -7,7 +7,7 @@ import PauseableQueue from "../../../src/background/queue/pauseable";
 import RequestQueue from "../../../src/background/queue";
 import { when } from "../../../src/utils";
 
-browser.alarms.clear.returns(Promise.resolve());
+browser.alarms.clear.resolves();
 
 test('construction', (t) => {
     const q = new PauseableQueue();
