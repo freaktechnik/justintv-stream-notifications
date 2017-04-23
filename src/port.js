@@ -43,11 +43,11 @@ class PortWrapper extends EventTarget {
     setup(port) {
         this.port = port;
         this.port.onMessage.addListener((message) => {
-            let e;
+            let e = true;
             if(message.command != "message") {
                 e = emit(this, message.command, message);
             }
-            if(!e || !e.defaultPrevented) {
+            if(e) {
                 emit(this, "message", message);
             }
         });

@@ -34,21 +34,26 @@ export const when = (target, event) => {
  * @param {string} event - Type of the event.
  * @param {?} detail - One or more details. Multiple details will be passed in
  *                     an array as the detail property of the event.
- * @returns {Event} The emitted event.
+ * @returns {boolean} If the event fully propagated.
  */
 export const emit = (target, event, ...detail) => {
     let eventInstance;
+    const init = {
+        cancelable: true
+    };
     if(detail.length) {
         if(detail.length == 1) {
-            detail = detail[0];
+            init.detail = detail[0];
         }
-        eventInstance = new CustomEvent(event, { detail });
+        else {
+            init.detail = detail;
+        }
+        eventInstance = new CustomEvent(event, init);
     }
     else {
-        eventInstance = new Event(event);
+        eventInstance = new Event(event, init);
     }
-    target.dispatchEvent(eventInstance);
-    return eventInstance;
+    return target.dispatchEvent(eventInstance);
 };
 
 /**

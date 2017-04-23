@@ -72,28 +72,44 @@ test('when non-emitter', (t) => {
 
 test('emit', (t) => {
     const emitter = {
-        dispatchEvent: sinon.spy()
+        dispatchEvent: sinon.spy(() => true)
     };
 
-    emit(emitter, 'test');
+    let e = emit(emitter, 'test');
 
     t.true(emitter.dispatchEvent.calledOnce);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof Event);
     t.false(emitter.dispatchEvent.lastCall.args[0] instanceof CustomEvent);
+    t.true(e);
 
-    emit(emitter, 'test', 'a');
+    e = emit(emitter, 'test', 'a');
 
     t.true(emitter.dispatchEvent.calledTwice);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof Event);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof CustomEvent);
     t.is(emitter.dispatchEvent.lastCall.args[0].detail, 'a');
+    t.true(e);
 
-    emit(emitter, 'test', 'a', 'b');
+    e = emit(emitter, 'test', 'a', 'b');
 
     t.true(emitter.dispatchEvent.calledThrice);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof Event);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof CustomEvent);
     t.deepEqual(emitter.dispatchEvent.lastCall.args[0].detail, [ 'a', 'b' ]);
+    t.true(e);
+});
+
+test('emit event instance', (t) => {
+    const emitter = {
+        dispatchEvent: (e) => {
+            e.preventDefault();
+            return false;
+        }
+    };
+
+    const e = emit(emitter, 'test');
+
+    t.false(e);
 });
 
 test.todo('filterAsync');

@@ -3,6 +3,7 @@ import Port from '../src/port';
 import { NoPortError, PortGoneError } from '../src/port';
 import getPort from './helpers/port';
 import { when } from '../src/utils';
+import sinon from 'sinon';
 
 test.afterEach(() => {
     browser.runtime.onConnect._listeners.length = 0;
@@ -203,4 +204,32 @@ test.serial("request rejected due to error", async (t) => {
 
     const error = await t.throws(promise);
     t.is(error, "foo baz");
+});
+
+test.serial("prevent default of command event prevents message event", async (t) => {
+    const port = getPort();
+    port.name = "test-port";
+    const p = new Port(port.name);
+    browser.runtime.onConnect.dispatch(port);
+
+    const promise = new Promise((resolve) => {
+        p.addEventListener("test", (e) => {
+            e.preventDefault();
+            resolve();
+        }, {
+            passive: false,
+            capture: false,
+            once: true
+        });
+    });
+    const messageSpy = sinon.spy();
+
+    p.addEventListener("message", messageSpy);
+
+    port.onMessage.dispatch({
+        command: "test"
+    });
+    await promise;
+
+    t.false(messageSpy.called);
 });
