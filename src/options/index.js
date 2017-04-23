@@ -64,7 +64,7 @@ class OptionsPage {
         }
 
         document.getElementById("manageChannels").addEventListener("click", () => {
-            //TODO tell channel controller to open manager
+            browser.runtime.sendMessage("manageChannels");
         });
 
         const boundStoreValues = this.storeValues.bind(this);

@@ -19,7 +19,7 @@ let live,
     distinct,
     explore,
     currentMenuTarget,
-    currentStyle,
+    currentStyle = "default",
     providers,
     nonLiveDisplay;
 const port = new Port("list", true),

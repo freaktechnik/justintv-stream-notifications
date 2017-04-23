@@ -139,6 +139,10 @@
         "message": "Benutzername:",
         "description": "Label for the username field in the dialog to add a channel or user"
     },
+    "resetOptions": {
+        "message": "Standardeinstellungen wiederherstellen",
+        "description": "Button to reset all preferences to their default value"
+    },
     "mlg_showRebroadcasts_title": {
         "message": "Zeige MLG Wiederausstrahlungen",
         "description": "Title of the MLG rebroadcasts setting in the preferences"

@@ -116,13 +116,17 @@ prefs.get([
     "panel_nonlive",
     "updateInterval",
     "queue_ratio",
-    "queue_maxRequestBatchSize"
+    "queue_maxRequestBatchSize",
+    "panel_extras",
+    "panel_style"
 ]).then(([
     theme,
     nonlive,
     interval,
     ratio,
-    batchSize
+    batchSize,
+    extras,
+    style
 ]) => {
     controller.setTheme(parseInt(theme, 10));
     list.setNonLiveDisplay(nonlive);
@@ -131,6 +135,8 @@ prefs.get([
         amount: 1 / ratio,
         maxSize: batchSize
     });
+    list.setExtrasVisibility(extras);
+    list.setStyle(parseInt(style, 10));
 });
 
 qs.addListeners({
@@ -139,27 +145,40 @@ qs.addListeners({
 });
 
 prefs.addEventListener("change", ({ detail: { pref, value } }) => {
-    if(pref == "manageChannels") {
+    switch(pref) {
+    case "manageChannels":
         controller.showManager();
-    }
-    else if(pref == "theme") {
+        break;
+    case "theme": {
         const theme = parseInt(value, 10);
         controller.setTheme(theme);
         list.setTheme(theme);
+        break;
     }
-    else if(pref == "panel_nonlive") {
+    case "panel_nonlive":
         list.setNonLiveDisplay(parseInt(value, 10));
-    }
-    else if(pref == "panel_extras") {
+        break;
+    case "panel_extras":
         list.setExtrasVisibility(value);
-    }
-    else if(pref == "panel_style") {
+        break;
+    case "panel_style":
         list.setStyle(parseInt(value, 10));
-    }
-    else if(pref == "updateInterval") {
+        break;
+    case "updateInterval": {
         const interval = parseInt(value, 10);
         qs.updateOptions(S_TO_MS_FACTOR * interval);
         list.setQueueStatus(interval !== 0);
+        break;
+    }
+    default:
+        //ignore
+    }
+});
+
+// Handle options page things.
+browser.runtime.onMessage.addListener((message) => {
+    if(message == "manageChannels") {
+        controller.showManager();
     }
 });
 

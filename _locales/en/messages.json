@@ -484,5 +484,9 @@
     "advancedOptions": {
         "message": "Advanced Options",
         "description": "Advanced extension preferences collapsed message"
+    },
+    "resetOptions": {
+        "message": "Reset to default",
+        "description": "Button to reset all preferences to their default value"
     }
 }
