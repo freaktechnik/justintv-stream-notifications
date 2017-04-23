@@ -126,7 +126,6 @@ class PortWrapper extends EventTarget {
 /**
  * Unified two-way command and response protocol for Ports.
  *
- * @todo Handle a second port with the same name being opened.
  * @extends PortWrapper
  */
 export default class Port extends PortWrapper {
