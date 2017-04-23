@@ -17,9 +17,9 @@ import ChannelController from "./channel/controller";
 import prefs from './preferences';
 import LiveState from './channel/live-state';
 import ListView from './list';
-import serializedProviders from "./providers/serialized";
 import * as qs from './queue/service';
 import Notifier from "./notifier";
+import prefInfo from '../prefs.json';
 
 const S_TO_MS_FACTOR = 1000,
     BASE_URL = "http://streamnotifier.ch",
@@ -32,16 +32,6 @@ const S_TO_MS_FACTOR = 1000,
 list.addEventListener("ready", () => {
     controller.getChannelsByType()
         .then((channels) => list.addChannels(channels));
-
-    list.setProviders(serializedProviders);
-
-    prefs.get([
-        "updateInterval",
-        "theme"
-    ]).then(([ updateInterval, theme ]) => {
-        list.setQueueStatus(parseInt(updateInterval, 10) !== 0);
-        list.setTheme(parseInt(theme, 10));
-    });
 });
 
 list.addEventListener("opencm", () => controller.showManager());
@@ -112,31 +102,19 @@ controller.addEventListener("beforechanneldeleted", () => qs.pause());
 controller.addEventListener("afterchanneldeleted", () => qs.resume());
 
 prefs.get([
-    "theme",
-    "panel_nonlive",
     "updateInterval",
     "queue_ratio",
-    "queue_maxRequestBatchSize",
-    "panel_extras",
-    "panel_style"
+    "queue_maxRequestBatchSize"
 ]).then(([
-    theme,
-    nonlive,
     interval,
     ratio,
-    batchSize,
-    extras,
-    style
+    batchSize
 ]) => {
-    controller.setTheme(parseInt(theme, 10));
-    list.setNonLiveDisplay(nonlive);
     qs.setOptions({
         interval: S_TO_MS_FACTOR * interval,
         amount: 1 / ratio,
         maxSize: batchSize
     });
-    list.setExtrasVisibility(extras);
-    list.setStyle(parseInt(style, 10));
 });
 
 qs.addListeners({
@@ -144,34 +122,47 @@ qs.addListeners({
     resumed: () => list.setQueuePaused(false)
 });
 
-prefs.addEventListener("change", ({ detail: { pref, value } }) => {
-    switch(pref) {
-    case "manageChannels":
-        controller.showManager();
-        break;
-    case "theme": {
-        const theme = parseInt(value, 10);
-        controller.setTheme(theme);
-        list.setTheme(theme);
-        break;
+const usedPrefs = {
+        "theme": [
+            list.setTheme.bind(list),
+            controller.setTheme.bind(controller)
+        ],
+        "panel_nonlive": [
+            list.setNonLiveDisplay.bind(list)
+        ],
+        "panel_extras": [
+            list.setExtrasVisibility.bind(list)
+        ],
+        "panel_style": [
+            list.setStyle.bind(list)
+        ],
+        "updateInterval": [
+            (interval) => list.setQueueStatus(interval !== 0)
+        ]
+    },
+    upKeys = Object.keys(usedPrefs),
+    applyValue = (p, v) => {
+        if(prefInfo[p].type == "radio") {
+            v = parseInt(v, 10);
+        }
+        for(const f of usedPrefs[p]) {
+            f(v);
+        }
+    };
+
+prefs.get(upKeys).then((values) => {
+    for(const p in usedPrefs) {
+        applyValue(p, values[upKeys.indexOf(p)]);
     }
-    case "panel_nonlive":
-        list.setNonLiveDisplay(parseInt(value, 10));
-        break;
-    case "panel_extras":
-        list.setExtrasVisibility(value);
-        break;
-    case "panel_style":
-        list.setStyle(parseInt(value, 10));
-        break;
-    case "updateInterval": {
+});
+
+prefs.addEventListener("change", ({ detail: { pref, value } }) => {
+    if(pref == "updateInterval") {
         const interval = parseInt(value, 10);
         qs.updateOptions(S_TO_MS_FACTOR * interval);
-        list.setQueueStatus(interval !== 0);
-        break;
     }
-    default:
-        //ignore
+    if(pref in usedPrefs) {
+        applyValue(pref, value);
     }
 });
 

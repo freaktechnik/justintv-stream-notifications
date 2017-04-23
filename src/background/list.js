@@ -15,6 +15,7 @@ import LiveState from "./channel/live-state";
 import providers from './providers';
 import EventTarget from 'event-target-shim';
 import Port from '../port';
+import serializedProviders from "./providers/serialized";
 
 /**
  * Should open the ChannelsManager.
@@ -182,6 +183,9 @@ class ListView extends EventTarget {
                 this.setNonLiveDisplay();
                 this.setStyle();
                 this.setExtrasVisibility();
+                this.setTheme();
+                this.setQueueStatus();
+                this.setProviders();
                 break;
             case "search":
                 providers[event.payload.type].search(event.payload.query)
@@ -412,21 +416,20 @@ class ListView extends EventTarget {
     /**
      * Set the available providers.
      *
-     * @param {Object.<module:providers/generic-provider.GenericProvider>} serializedProviders
-     *                                                    - Available providers.
      * @returns {undefined}
      */
-    setProviders(serializedProviders) {
+    setProviders() {
         this._emitToList("setProviders", serializedProviders);
     }
 
     /**
      * Indicate if the update queue is running in the background or not.
      *
-     * @param {boolean} enabled - If queue is enabled.
+     * @param {boolean} [enabled] - If queue is enabled.
      * @returns {undefined}
      */
-    setQueueStatus(enabled) {
+    setQueueStatus(enabled = this._queueStatus) {
+        this._queueStatus = enabled;
         this._emitToList("queueStatus", enabled);
     }
 
@@ -443,10 +446,11 @@ class ListView extends EventTarget {
     /**
      * Set the theme.
      *
-     * @param {number} theme - Theme type.
+     * @param {number} [theme] - Theme type.
      * @returns {undefined}
      */
-    setTheme(theme) {
+    setTheme(theme = this._theme) {
+        this._theme = theme;
         this._emitToList("theme", theme);
     }
 

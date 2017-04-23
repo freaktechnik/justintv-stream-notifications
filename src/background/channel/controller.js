@@ -8,7 +8,6 @@ import ChannelsManager from "./manager";
 import ChannelList from "./list";
 import EventSink from '../providers/events';
 import { emit, invokeOnce, when } from "../../utils";
-import serializedProviders from "../providers/serialized";
 import ParentalControls from "../parental-controls";
 import { flatten, partial, debounce } from "underscore";
 import * as debugDump from "./dump";
@@ -123,8 +122,6 @@ export default class ChannelController extends EventTarget {
                 this.getUsersByType()
                     .then((users) => users.forEach((usr) => this._manager.onUserAdded(usr)))
             ]).then(managerDoneLoading, managerDoneLoading);
-
-            this._manager.addProviders(serializedProviders);
         });
         this._manager.addEventListener("debugdump", () => {
             Promise.all([

@@ -9,6 +9,7 @@
 import { emit, when } from "../../utils";
 import EventTarget from 'event-target-shim';
 import Port from '../../port.js';
+import serializedProviders from "../providers/serialized";
 
 /**
  * Store a channel. Listeners should call
@@ -117,41 +118,50 @@ export default class ChannelsManager extends EventTarget {
             this.tabID = null;
         });
         this.port.addEventListener("message", ({ detail: message }) => {
-            if(message.command == "ready") {
+            switch(message.command) {
+            case "ready":
                 emit(this, "getdata");
-            }
-            else if(message.command == "adduser") {
+                this.setTheme();
+                this.addProviders(serializedProviders);
+                break;
+            case "adduser":
                 if(message.payload.username !== null) {
                     this.loading = true;
                     this.cancelingValues.set("user" + message.payload.type + message.payload.username, false);
                     emit(this, "adduser", message.payload.username, message.payload.type,
                          () => this.cancelingValues.get("user" + message.payload.type + message.payload.username));
                 }
-            }
-            else if(message.command == "addchannel") {
+                break;
+            case "addchannel":
                 if(message.payload.username !== null) {
                     this.loading = true;
                     this.cancelingValues.set("channel" + message.payload.type + message.payload.username, false);
                     emit(this, "addchannel", message.payload.username, message.payload.type,
                          () => this.cancelingValues.get("channel" + message.payload.type + message.payload.username));
                 }
-            }
-            else if(message.command == "cancel") {
+                break;
+            case "cancel":
                 this.loading = false;
                 this.cancelingValues.set(message.payload.join(""), true);
-            }
-            else if(message.command == "removechannel") {
+                break;
+            case "removechannel":
                 emit(this, "removechannel", message.payload);
-            }
-            if(message.command == "removeuser") {
+                break;
+            case "removeuser":
                 emit(this, "removeuser", message.payload.userId, message.payload.removeFavorites);
-            }
-            else if(message.command == "updatefavorites" || message.command == "updatechannel" || message.command == "autoadd") {
+                break;
+            case "updatefavorites":
+            case "updatechannel":
+            case "autoadd":
                 this.loading = true;
                 emit(this, message.command, message.payload);
-            }
-            else if(message.command == "debugdump" || message.command == "showoptions") {
+                break;
+            case "debugdump":
+            case "showoptions":
                 emit(this, message.command);
+                break;
+            default:
+                // ignore
             }
         }, {
             passive: true
@@ -346,10 +356,11 @@ export default class ChannelsManager extends EventTarget {
     /**
      * Set the theme of the channel manager.
      *
-     * @param {string} theme - Theme ID of the theme to use.
+     * @param {string} [theme] - Theme ID of the theme to use.
      * @returns {undefined}
      */
-    setTheme(theme) {
+    setTheme(theme = this._theme) {
+        this._theme = theme;
         this._emitToWorker("theme", theme);
     }
 }
