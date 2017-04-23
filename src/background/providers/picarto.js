@@ -3,7 +3,6 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/picarto
- * @todo Fix live status detection. Probably not possible before picarto gets an API.
  */
 import { emit } from "../../utils";
 import { Channel } from '../channel/core';

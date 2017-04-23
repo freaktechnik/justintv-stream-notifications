@@ -31,7 +31,6 @@ class YouTube extends GenericProvider {
          * @argument {string} categoryId
          * @return {string}
          * @async
-         * @todo Handle locale changes -> use memoize and make lang an argument?
          * @method
          */
         this._getCategory = memoize(async (categoryId) => {

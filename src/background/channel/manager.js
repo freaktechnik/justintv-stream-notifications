@@ -4,7 +4,6 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module channel/manager
- * @todo Use Port class, however the singleton model is a bit of a problem here.
  */
 import { emit, when } from "../../utils";
 import EventTarget from 'event-target-shim';
@@ -332,7 +331,6 @@ export default class ChannelsManager extends EventTarget {
         this.loading = false;
         if(name) {
             this._deleteCancelingValue(itemType, type, name);
-            //TODO move i18n to content
             this._emitToWorker("error", name, type);
         }
         else {
