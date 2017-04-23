@@ -402,7 +402,7 @@ const port = new Port("list", true),
     };
 
 // Set up port commmunication listeners
-port.addEventListener(({ detail: event }) => {
+port.addEventListener("message", ({ detail: event }) => {
     switch(event.command) {
     case "setStyle":
         setStyle(event.payload);

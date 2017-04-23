@@ -37,13 +37,9 @@ list.addEventListener("ready", () => {
 
     prefs.get([
         "updateInterval",
-        "panel_style",
-        "panel_extras",
         "theme"
-    ]).then(([ updateInterval, style, extras, theme ]) => {
+    ]).then(([ updateInterval, theme ]) => {
         list.setQueueStatus(parseInt(updateInterval, 10) !== 0);
-        list.setStyle(parseInt(style, 10));
-        list.setExtrasVisibility(extras);
         list.setTheme(parseInt(theme, 10));
     });
 });
@@ -60,8 +56,15 @@ list.addEventListener("refresh", ({ detail: channelId }) => {
         controller.updateChannels();
     }
 });
-list.addEventListener("open", ({ detail: [ channelId, what ] }) => {
-    let p;
+list.addEventListener("open", ({ detail }) => {
+    let channelId, what, p;
+    if(Array.isArray(detail)) {
+        channelId = detail[0];
+        what = detail[1];
+    }
+    else {
+        channelId = detail;
+    }
     if(typeof channelId === "string") {
         p = Promise.resolve({
             url: [ channelId ],
@@ -179,8 +182,8 @@ prefs.get("migrated").then((migrated) => {
     }
 });
 
-browser.runtime.onInstall.addListener(async ({ reason }) => {
-    if(await prefs.get('updateTab')) {
+browser.runtime.onInstalled.addListener(async ({ reason }) => {
+    if((reason == 'install' || reason == 'update') && await prefs.get('updateTab')) {
         if(reason == 'install') {
             await browser.tabs.create({
                 url: BASE_URL + "/firstrun/"

@@ -150,11 +150,9 @@ class ListView extends EventTarget {
         this.nonlive = new Set();
 
         this.port = new Port("list");
-        this.port.addEventListener("connect", () => {
-            this.setNonLiveDisplay();
-        });
         this.port.addEventListener("message", ({ detail: event }) => {
             switch(event.command) {
+            case "open":
             case "openUrl":
                 emit(this, "open", event.payload);
                 break;
@@ -181,6 +179,9 @@ class ListView extends EventTarget {
             case "ready":
                 this.ready = true;
                 emit(this, "ready");
+                this.setNonLiveDisplay();
+                this.setStyle();
+                this.setExtrasVisibility();
                 break;
             case "search":
                 providers[event.payload.type].search(event.payload.query)
@@ -207,7 +208,7 @@ class ListView extends EventTarget {
             passive: true
         });
 
-        prefs.addEventListener("change", (event) => {
+        prefs.addEventListener("change", ({ detail: event }) => {
             if(event.pref == "panel_badge") {
                 this.updateBadge();
             }

@@ -57,7 +57,7 @@ class OptionsPage {
     }
     attachListeners() {
         for(const p in prefs) {
-            document.getElementById(p).addEventListener(OptionsPage.EVENT_TYPES[prefs[p].type], this.savePref.bind(this, prefs[p].id, prefs[p].type), {
+            document.getElementById(p).addEventListener(OptionsPage.EVENT_TYPES[prefs[p].type], this.savePref.bind(this, p, prefs[p].type), {
                 capture: false,
                 passive: true
             });
