@@ -43,11 +43,13 @@ class PortWrapper extends EventTarget {
     setup(port) {
         this.port = port;
         this.port.onMessage.addListener((message) => {
+            let e;
             if(message.command != "message") {
-                emit(this, message.command, message);
+                e = emit(this, message.command, message);
             }
-            //TODO don't send this event if the command specific one was canceled.
-            emit(this, "message", message);
+            if(!e || !e.defaultPrevented) {
+                emit(this, "message", message);
+            }
         });
         this.disconnectPromise = new Promise((r, reject) => {
             this.port.onDisconnect.addListener(() => {

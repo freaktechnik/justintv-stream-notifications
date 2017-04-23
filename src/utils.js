@@ -27,16 +27,28 @@ export const when = (target, event) => {
     return Promise.resolve();
 };
 
+/**
+ * Emits an event on an EventTarget.
+ *
+ * @param {external:EventTarget} target - Target to dispatch the event on.
+ * @param {string} event - Type of the event.
+ * @param {?} detail - One or more details. Multiple details will be passed in
+ *                     an array as the detail property of the event.
+ * @returns {Event} The emitted event.
+ */
 export const emit = (target, event, ...detail) => {
+    let eventInstance;
     if(detail.length) {
         if(detail.length == 1) {
             detail = detail[0];
         }
-        target.dispatchEvent(new CustomEvent(event, { detail }));
+        eventInstance = new CustomEvent(event, { detail });
     }
     else {
-        target.dispatchEvent(new Event(event));
+        eventInstance = new Event(event);
     }
+    target.dispatchEvent(eventInstance);
+    return eventInstance;
 };
 
 /**
