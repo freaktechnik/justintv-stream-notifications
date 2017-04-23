@@ -102,7 +102,9 @@ test('emit', (t) => {
 test('emit event instance', (t) => {
     const emitter = {
         dispatchEvent: (e) => {
+            t.true(e.cancelable);
             e.preventDefault();
+            t.true(e.defaultPrevented);
             return false;
         }
     };
