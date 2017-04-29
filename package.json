@@ -268,7 +268,7 @@
     "eslint-plugin-freaktechnik": "^2.1.0",
     "eslint-plugin-xss": "^0.1.8",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
-    "fake-indexeddb": "^1.0.11",
+    "fake-indexeddb": "^2.0.0",
     "fetch-headers": "^2.0.0",
     "file-loader": "^0.11.0",
     "grunt": ">=1.0.1",
