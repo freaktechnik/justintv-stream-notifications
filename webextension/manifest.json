@@ -55,5 +55,12 @@
     "options_ui": {
         "page": "options/index.html",
         "browser_style": true
+    },
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+L"
+            }
+        }
     }
 }

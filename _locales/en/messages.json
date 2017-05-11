@@ -8,11 +8,11 @@
         "description": "Description of the extension"
     },
     "listTooltipOffline": {
-        "message": "No channel is live at the moment",
+        "message": "No channel is live at the moment (Ctrl+Shift+L)",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "listTooltipLive": {
-        "message": "Currently live channels",
+        "message": "Currently live channels (Ctrl+Shift+L)",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "onlineNotification": {
