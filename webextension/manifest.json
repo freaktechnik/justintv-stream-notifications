@@ -9,6 +9,7 @@
         }
     },
     "homepage_url": "http://streamnotifier.ch",
+    "author": "freaktechnik",
     "version": "4.0.0",
     "icons": {
         "16": "assets/images/icon16.png",

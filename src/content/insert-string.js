@@ -5,7 +5,7 @@ const attrMap = {
     getString = (bundle, id) => {
         const str = bundle[id];
         if(!str || !("message" in str) || !str.message.trim().length) {
-            throw "Empty string ${id}";
+            throw new Error(`Empty string ${id}`);
         }
         return str.message;
     },
@@ -16,7 +16,7 @@ const attrMap = {
 
         let string = '';
         if(attrs && attrs.length > 0) {
-            for(const attr in attrs) {
+            for(const attr of attrs) {
                 let a = attr;
                 if(attr in attrMap) {
                     a = attrMap[attr];
