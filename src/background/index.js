@@ -69,10 +69,17 @@ list.addEventListener("open", ({ detail }) => {
 });
 list.addEventListener("pause", () => qs.pause());
 list.addEventListener("resume", () => qs.resume());
-list.addEventListener("copy", ({ detail: [ channel, type ] }) => {
-    controller.copyChannelURL(channel, type).then((channel) => {
-        notifier.notifyCopied(channel.uname);
-    });
+list.addEventListener("copy", async ({ detail }) => {
+    let channel;
+    if(Array.isArray(detail)) {
+        // login + type
+        channel = await controller.copyChannelURL(...detail);
+    }
+    else {
+        // Channel ID
+        channel = await controller.copyChannelURL(detail);
+    }
+    notifier.notifyCopied(channel.uname);
 });
 
 // Wire things up
