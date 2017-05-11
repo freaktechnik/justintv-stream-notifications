@@ -2,35 +2,37 @@ const attrMap = {
         "aria-label": "ariaLabel"
     },
     attrSeparator = ".",
-    translateElement = (bundle, id, attr, simple = false) => {
-        let str = ` data-l10n-id="${id}">`,
-            string = bundle[id];
-        if(attr && !(attr in attrMap)) {
-            string = bundle[id + attrSeparator + attr];
+    getString = (bundle, id) => {
+        const str = bundle[id];
+        if(!str || !("message" in str) || !str.message.trim().length) {
+            throw "Empty string ${id}";
         }
-        else if(attr && attr in attrMap) {
-            string = bundle[id + attrSeparator + attrMap[attr]];
-        }
-
-        if(!string || !("message" in string) || !string.message.trim().length) {
-            throw `Empty string ${id}`;
-        }
-        else {
-            string = string.message;
-        }
-
+        return str.message;
+    },
+    translateElement = (bundle, id, attrs, simple = false, noContent = false) => {
         if(simple) {
-            return string;
+            return getString(bundle, id);
         }
 
-        if(!attr) {
-            str += string;
-        }
-        else {
-            str = ` ${attr}="${string}"${str}`;
+        let string = '';
+        if(attrs && attrs.length > 0) {
+            for(const attr in attrs) {
+                let a = attr;
+                if(attr in attrMap) {
+                    a = attrMap[attr];
+                }
+                string += `${attr}="${getString(bundle, id + attrSeparator + a)}" `;
+            }
+            string += `data-l10n-attrs="${attrs.join(',')}" `;
         }
 
-        return str;
+        string += `data-l10n-id="${id}">`;
+
+        if(!noContent) {
+            string += getString(bundle, id);
+        }
+
+        return string;
     };
 
 module.exports = (defaultLanguage) => {

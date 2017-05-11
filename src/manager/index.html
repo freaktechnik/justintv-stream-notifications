@@ -28,10 +28,10 @@
             </nav>
             <ul role="toolbar" class="toolbar inline-list actionbar" aria-controls="channels">
                 <li><button id="showDialog" aria-controls="popup" <%= translateElement("cm_add") %></button></li>
-                <li><button id="updateItem" title="<%= translateElement("cm_update", "title", true) %>" <%= translateElement("cm_update") %></button></li>
-                <li><button id="removeItem" title="<%= translateElement("cm_remove", "title", true) %>" <%= translateElement("cm_remove") %></button></li>
-                <li hidden><button id="autoAdd" title="<%= translateElement("cm_autoAdd", "title", true) %>" aria-controls="users" <%= translateElement("cm_autoAdd") %></button></li>
-                <li class="flex"><input type="search" id="searchField" <%= translateElement("cm_filter", "placeholder") %></li>
+                <li><button id="updateItem" <%= translateElement("cm_update", [ 'title' ]) %></button></li>
+                <li><button id="removeItem" <%= translateElement("cm_remove", [ 'title' ]) %></button></li>
+                <li hidden><button id="autoAdd" aria-controls="users" <%= translateElement("cm_autoAdd", [ 'title' ]) %></button></li>
+                <li class="flex"><input type="search" id="searchField" <%= translateElement("cm_filter", [ "placeholder" ], false, true) %></li>
                 <li><a class="button" href="http://streamnotifier.ch/help/channels-manager/" target="blank" hreflang="en" rel="help" <%= translateElement("cm_help") %></a></li>
             </ul>
             <select multiple id="channels" class="selectableItemsList tabcontent loading" role="tabpanel" data-tab="1">

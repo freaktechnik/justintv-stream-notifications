@@ -9,48 +9,54 @@
  */
 
 function translateElementAttributes(element) {
-    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder' ],
+    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder', 'abbr', 'content', 'download', 'srcdoc', 'value' ],
         ariaAttrMap = {
-            "ariaLabel": 'aria-label',
-            "ariaValueText": 'aria-valuetext',
-            "ariaMozHint": 'aria-moz-hint'
+            'aria-label': 'ariaLabel',
+            'aria-value-text': 'ariaValueText',
+            'aria-moz-hint': 'ariaMozHint'
         },
-        attrSeparator = '.';
+        attrSeparator = '.',
+        presentAttributes = element.dataset.l10nAttrs.split(",");
 
     // Translate allowed attributes.
-    for(const attribute of attrList) {
-        const data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + attribute);
+    for(const attribute of presentAttributes) {
+        let data;
+        if(attrList.includes(attribute)) {
+            data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + attribute);
+        }
+        // Translate ARIA attributes
+        else if(attribute in ariaAttrMap) {
+            data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + ariaAttrMap[attribute]);
+        }
+
         if(data && data != "??") {
             element.setAttribute(attribute, data);
-        }
-    }
-
-    // Translate aria attributes.
-    for(const attrAlias in ariaAttrMap) {
-        const data = browser.i18n.getMessage(element.dataset.l10nId + attrSeparator + attrAlias);
-        if(data && data != "??") {
-            element.setAttribute(ariaAttrMap[attrAlias], data);
         }
     }
 }
 
 function translateElement(element = document) {
-
+    //TODO follow the tranlsate attribute's instructions (yes/no/inherit)
     // Get all children that are marked as being translateable.
     const children = element.querySelectorAll('*[data-l10n-id]');
     for(const child of children) {
-        const data = browser.i18n.getMessage(child.dataset.l10nId);
-        if(data && data != "??") {
-            child.textContent = data;
+        if(!element.dataset.l10nNocontent) {
+            const data = browser.i18n.getMessage(child.dataset.l10nId);
+            if(data && data != "??") {
+                child.textContent = data;
+            }
         }
-        translateElementAttributes(child);
+        if(element.dataset.l10nAttrs) {
+            translateElementAttributes(child);
+        }
     }
 }
 
 if(document.readyState == "loading") {
     document.addEventListener("DOMContentLoaded", () => translateElement(), {
-        capturing: false,
-        passive: true
+        capture: false,
+        passive: true,
+        once: true
     });
 }
 else {

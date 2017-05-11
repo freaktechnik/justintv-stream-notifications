@@ -15,18 +15,18 @@
     </head>
     <body>
         <menu id="context" type="context">
-            <menuitem id="contextRefresh" <%= translateElement("context_refresh", "label") %></menuitem>
-            <menuitem id="contextOpen" <%= translateElement("context_open", "label") %></menuitem>
-            <menuitem id="contextChat" <%= translateElement("context_chat", "label") %></menuitem>
-            <menuitem id="contextCopy" <%= translateElement("context_copy", "label") %></menuitem>
+            <menuitem id="contextRefresh" <%= translateElement("context_refresh") %></menuitem>
+            <menuitem id="contextOpen" <%= translateElement("context_open") %></menuitem>
+            <menuitem id="contextChat" <%= translateElement("context_chat") %></menuitem>
+            <menuitem id="contextCopy" <%= translateElement("context_copy") %></menuitem>
         </menu>
         <menu id="explore-context" type="context">
-            <menuitem id="contextAdd" <%= translateElement("context_add", "label") %></menuitem>
-            <menuitem id="contextExploreCopy" <%= translateElement("context_copy", "label") %></menuitem>
+            <menuitem id="contextAdd" <%= translateElement("context_add") %></menuitem>
+            <menuitem id="contextExploreCopy" <%= translateElement("context_copy") %></menuitem>
         </menu>
         <menu id="queue-context" type="context">
-            <menuitem id="pauseAutorefresh" <%= translateElement("context_pause", "label") %></menuitem>
-            <menuitem id="resumeAutorefresh" hidden <%= translateElement("context_resume", "label") %></menuitem>
+            <menuitem id="pauseAutorefresh" <%= translateElement("context_pause") %></menuitem>
+            <menuitem id="resumeAutorefresh" hidden <%= translateElement("context_resume") %></menuitem>
         </menu>
 
         <main class="tabbed default">
@@ -40,27 +40,27 @@
                     </ul>
                     <ul class="toolbar inline-list right" role="toolbar">
                         <li>
-                            <button id="searchButton" aria-pressed="false" aria-controls="searchField" <%= translateElement("panel_search", "title") %>
+                            <button id="searchButton" aria-pressed="false" aria-controls="searchField" <%= translateElement("panel_search", [ "title" ], false, true) %>
                                 <svg class="icon" viewBox="0 0 8 8">
                                     <use xlink:href="../assets/images/open-iconic.min.svg#magnifying-glass"></use>
                                 </svg>
                             </button>
                         </li>
                         <li>
-                            <button id="refreshButton" <%= translateElement("panel_refresh", "title") %>
+                            <button id="refreshButton" <%= translateElement("panel_refresh", [ "title" ], false, true) %>
                                 <svg class="icon" viewBox="0 0 8 8">
                                     <use xlink:href="../assets/images/open-iconic.min.svg#reload"></use>
                                 </svg>
                             </button>
                         </li>
-                        <li><button id="configure" <%= translateElement("panel_manage", "title") %>
+                        <li><button id="configure" <%= translateElement("panel_manage", [ "title" ], false, true) %>
                             <svg class="icon" viewBox="0 0 8 8">
                                 <use xlink:href="../assets/images/open-iconic.min.svg#wrench"></use>
                             </svg>
                         </button></li>
                     </ul>
                 </div>
-                <input type="search" id="searchField" hidden <%= translateElement("cm_filter", "placeholder") %>
+                <input type="search" id="searchField" hidden <%= translateElement("cm_filter", [ "placeholder" ], false, true) %>
             </nav>
             <section class="tabcontent live" role="tabpanel" data-tab="1">
                 <div id="noonline" <%= translateElement("panel_nothing_live") %></div>
