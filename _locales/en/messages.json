@@ -110,8 +110,8 @@
         "description": "Provider name of azubu.tv"
     },
     "providerbeam": {
-        "message": "Beam",
-        "description": "Provider name of beam.pro"
+        "message": "Mixer",
+        "description": "Provider name of Mixer (formerly beam.pro)"
     },
     "providerdailymotion": {
         "message": "Dailymotion",
