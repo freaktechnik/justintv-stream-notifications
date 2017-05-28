@@ -363,7 +363,6 @@ export default class ChannelsManager extends EventTarget {
     }
 
     copyDump(dump) {
-        console.log("Seinding dump", dump);
         this.port.reply("debugdump", dump);
     }
 }
