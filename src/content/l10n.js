@@ -42,13 +42,13 @@ function translateElement(element = document) {
     // Get all children that are marked as being translateable.
     const children = element.querySelectorAll('*[data-l10n-id]');
     for(const child of children) {
-        if(!element.dataset.l10nNocontent) {
+        if(!child.dataset.l10nNocontent) {
             const data = browser.i18n.getMessage(child.dataset.l10nId);
             if(data && data != "??") {
                 child.textContent = data;
             }
         }
-        if(element.dataset.l10nAttrs) {
+        if(child.dataset.l10nAttrs) {
             translateElementAttributes(child);
         }
     }

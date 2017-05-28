@@ -127,9 +127,8 @@ export default class ChannelController extends EventTarget {
             Promise.all([
                 this.getChannelsByType(),
                 this.getUsersByType()
-            ]).then(([ channels, users ]) => {
-                return debugDump.copy(channels, users);
-            });
+            ]).then(([ channels, users ]) => debugDump.create(channels, users))
+                .then((dump) => this._manager.copyDump(JSON.stringify(dump, undefined, 2)));
         });
         this._manager.addEventListener("showoptions", () => {
             prefs.open();

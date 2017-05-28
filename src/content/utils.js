@@ -43,3 +43,20 @@ export function toggle(node, condition) {
         hide(node);
     }
 }
+
+/**
+ * Copy a string to the clipboard. Side effects: temporarily appends a textarea
+ * to the body of the document.
+ *
+ * @param {string} string - String to copy to the clipboard.
+ * @returns {boolean} If the operation was successfull.
+ */
+export function copy(string) {
+    const input = document.createElement("textarea");
+    input.value = string;
+    document.body.appendChild(input);
+    input.select();
+    const result = document.execCommand("copy");
+    input.remove();
+    return result;
+}

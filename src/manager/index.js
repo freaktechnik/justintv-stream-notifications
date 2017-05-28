@@ -5,7 +5,7 @@
  * @license MPL 2.0
  */
 //TODO clicking ok twice shows error panel -> ok sent while loading?
-import { hide, show } from '../content/utils';
+import { hide, show, copy } from '../content/utils';
 import { filter } from '../content/filter';
 import Port from '../port';
 import '../content/tabbed';
@@ -343,7 +343,11 @@ document.querySelector("#removeItem").addEventListener("click", (e) => {
 document.querySelector("a[rel='help']").addEventListener("click", (e) => {
     if(e.shiftKey) {
         e.preventDefault();
-        port.send("debugdump");
+        port.request("debugdump").then((dump) => {
+            if(!copy(dump)) {
+                console.warn("Could not copy debug dump", JSON.parse(dump));
+            }
+        });
     }
 });
 

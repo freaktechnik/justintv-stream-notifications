@@ -8,7 +8,6 @@
  */
 import prefs from "../preferences";
 import { Channel, User } from "./core";
-import { when } from "../../utils";
 
 export const PREFS_MAPPING = Object.freeze({
     queue: Object.freeze({
@@ -83,23 +82,6 @@ export const create = async (channels, users) => {
     Object.freeze(debugDump);
 
     return debugDump;
-};
-
-/**
- * Creates and copies the data dump to the clipboard.
- *
- * @param {Array.<module:channel/core.Channel>} channels - Channels to dump.
- * @param {Array.<module:channel/core.User>} users - Users to dump.
- * @returns {undefined}
- */
-export const copy = async (channels, users) => {
-    const data = await exports.create(channels, users),
-        p = when(document, "copy");
-    document.execCommand("copy", false, null);
-    const e = await p;
-
-    e.clipboardData.setData("application/json", JSON.stringify(data, null, 2));
-    e.preventDefault();
 };
 
 /**

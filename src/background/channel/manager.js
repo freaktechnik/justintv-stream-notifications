@@ -361,4 +361,9 @@ export default class ChannelsManager extends EventTarget {
         this._theme = theme;
         this._emitToWorker("theme", theme);
     }
+
+    copyDump(dump) {
+        console.log("Seinding dump", dump);
+        this.port.reply("debugdump", dump);
+    }
 }
