@@ -50,39 +50,6 @@ test("Dump frozen", async (t) => {
     checkObject(dumpData, (...args) => t.true(...args));
 });
 
-test.serial.todo("Copying");
-/*
-test.serial("Copying", (t) => {
-    const CHANNELS_FIXTURE = [
-            getChannel()
-        ],
-        USERS_FIXTURE = [
-            getUser()
-        ];
-
-    dump.copy(CHANNELS_FIXTURE, USERS_FIXTURE);
-
-    const copied = clipboard.get('text'),
-        dumpData = JSON.parse(copied);
-
-    t.true("channels" in dumpData, "Channels were dumped to clipboard");
-    t.true("users" in dumpData, "users were dumped to clipboard");
-    t.true("prefs" in dumpData, "prefs were dumped to clipboard");
-    t.true("meta" in dumpData, "meta info was dumped to clipboard");
-
-    t.is(dumpData.channels.length, 1);
-    t.deepEqual(dumpData.channels[0], CHANNELS_FIXTURE[0].serialize(), "Channels survived dumping to clipboard");
-
-    t.is(dumpData.users.length, 1);
-    t.deepEqual(dumpData.users[0], USERS_FIXTURE[0].serialize(), "Users survived dumping to clipboard");
-
-    for(let branch in dumpData.prefs) {
-        for(let name in dumpData.prefs[branch]) {
-            t.is(await prefs.get(dump.PREFS_MAPPING[branch][name]), dumpData.prefs[branch][name], `Value for ${branch}.${name} exported to clipboard correctly`);
-        }
-    }
-});*/
-
 test.serial("Prefs import", async (t) => {
     const dumpData = await dump.create(CHANNELS_FIXTURE, USERS_FIXTURE);
 

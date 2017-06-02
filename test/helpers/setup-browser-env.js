@@ -10,6 +10,7 @@ import Headers from 'fetch-headers';
 import Navigator from './navigator';
 import EventTarget from 'event-target-shim';
 import getPort from './port';
+import execCommand  from './exec-command';
 
 // DOM environment
 browserEnv([ 'window', 'document', 'Event', 'CustomEvent', 'URL' ]);
@@ -38,6 +39,8 @@ global.navigator = new Navigator();
 global.EventTarget = EventTarget;
 
 window.indexedDB = indexedDB;
+
+document.execCommand = execCommand;
 
 // WebExtension APIs
 //global.chrome = chrome;
