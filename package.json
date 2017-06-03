@@ -253,7 +253,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "ajv": "^5.0.0",
+    "ajv": "^5.1.5",
     "ava": "^0.19.1",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.0.0",
@@ -262,10 +262,10 @@
     "babel-preset-es2017": "^6.22.0",
     "browser-env": "^2.0.22",
     "codecov": "^2.0.2",
-    "css-loader": "^0.28.0",
+    "css-loader": "^0.28.4",
     "eslint": "^3.18.0",
     "eslint-plugin-babel": "^4.0.1",
-    "eslint-plugin-freaktechnik": "^2.1.0",
+    "eslint-plugin-freaktechnik": "^2.3.0",
     "eslint-plugin-xss": "^0.1.8",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "fake-indexeddb": "^2.0.0",
@@ -286,12 +286,12 @@
     "load-grunt-tasks": "^3.5.2",
     "mz": "^2.6.0",
     "nyc": "^11.0.2",
-    "sinon": "^2.0.0",
+    "sinon": "^2.3.2",
     "sinon-chrome": "^2.2.0",
     "style-loader": "^0.18.1",
     "transifex-loader": "^3.3.0",
     "web-ext": "^1.9.1",
-    "webpack": "^2.2.1"
+    "webpack": "^2.6.1"
   },
   "scripts": {
     "grunt": "grunt",
