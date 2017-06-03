@@ -13,6 +13,8 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 - npm i -g get-firefox
 - get-firefox -cet ../
+install:
+- npm i --no-save
 after_success: npm run coverage
 branches:
   except:
