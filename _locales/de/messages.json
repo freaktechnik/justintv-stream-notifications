@@ -19,6 +19,10 @@
         "message": "Maximale Panelhöhe",
         "description": "Title of the panel maximum height setting in the preferences"
     },
+    "context_resume": {
+        "message": "Aktualisierungen Fortsetzen",
+        "description": "Context menu action on the refresh button in the panel to resume the queue"
+    },
     "cm_options": {
         "message": "Einstellungen öffnen",
         "description": "Label of the button to open the extension options in the channel manager"
@@ -92,16 +96,16 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "No channel is live at the moment (Ctrl+Shift+L)",
+        "message": "Keine Kanäle sind im Moment live (Ctrl+Shift+L)",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "panel_nonlive_options.Livebottom": {
         "message": "Unten im \"Live\" Tab",
         "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
     },
-    "context_copy.label": {
-        "message": "Stream URL kopieren",
-        "description": "Context menu action to copy the URL of a channel in the panel"
+    "context_chat": {
+        "message": "Chat öffnen",
+        "description": "Context menu action to open the chat of a channel in the panel"
     },
     "cm_help": {
         "message": "Hilfe",
@@ -159,10 +163,6 @@
         "message": "Aktualisierungsabstand",
         "description": "Title of the update interval setting in the preferences"
     },
-    "context_refresh.label": {
-        "message": "Kanalstatus aktualisieren",
-        "description": "Refresh the status of a channel from the context menu in the panel"
-    },
     "offlineNotification_title": {
         "message": "Benachrichtigen, wenn ein Stream offline geht",
         "description": "Title of the offline notifications setting in the preferences"
@@ -188,7 +188,7 @@
         "description": "Live option of the non-live treatment setting in the preferences"
     },
     "listTooltipLive": {
-        "message": "Currently live channels (Ctrl+Shift+L)",
+        "message": "Aktuell streamende Kanäle (Ctrl+Shift+L)",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
@@ -202,6 +202,10 @@
     "panel_extras_title": {
         "message": "Zusätzliche Infos im Panel",
         "description": "Title of the panel extras setting in the preferences"
+    },
+    "context_pause": {
+        "message": "Aktualisierungen Pausieren",
+        "description": "Context menu action on the refresh button in the panel to pause the queue"
     },
     "providerustream": {
         "message": "Ustream",
@@ -222,6 +226,10 @@
     "cm_dialog_submit": {
         "message": "OK",
         "description": "Confirmation action in the dialog to add a channel or user"
+    },
+    "context_refresh": {
+        "message": "Kanalstatus aktualisieren",
+        "description": "Refresh the status of a channel from the context menu in the panel"
     },
     "providernewlivestream": {
         "message": "Neues Livestream",
@@ -270,10 +278,6 @@
     "cm_dialog_channel": {
         "message": "Kanal",
         "description": "Select label for adding a channel"
-    },
-    "context_resume.label": {
-        "message": "Aktualisierungen Fortsetzen",
-        "description": "Context menu action on the refresh button in the panel to resume the queue"
     },
     "cm_autoAdd": {
         "message": "Automatisch hinzufügen",
@@ -347,6 +351,10 @@
         "message": "Aktualisiert den Status aller Kanäle",
         "description": "Tooltip on the refresh button in the panel"
     },
+    "context_open": {
+        "message": "Streamarchiv öffnen",
+        "description": "Context menu action to open the archive page of a channel in the panel"
+    },
     "providerpicarto": {
         "message": "Picarto.TV",
         "description": "Provider name for picarto.tv"
@@ -354,10 +362,6 @@
     "copy_pattern_title": {
         "message": "Kopiermuster mit Stream URL",
         "description": "Title of the copy pattern setting in the preferences"
-    },
-    "context_open.label": {
-        "message": "Streamarchiv öffnen",
-        "description": "Context menu action to open the archive page of a channel in the panel"
     },
     "onlineNotification": {
         "message": "$CHANNEL$ ist jetzt live!",
@@ -375,17 +379,9 @@
         "message": "Updateinfos in einem Tab öffnen",
         "description": "Title of the update tab setting in the preferences"
     },
-    "context_chat.label": {
-        "message": "Chat öffnen",
-        "description": "Context menu action to open the chat of a channel in the panel"
-    },
     "cm_filter.placeholder": {
         "message": "Suchbegriff…",
         "description": "Placeholder in the filter field for the channel manager"
-    },
-    "context_add.label": {
-        "message": "Kanal hinzufügen",
-        "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
     "extensionName": {
         "message": "Live Stream Benachrichtigungen",
@@ -394,6 +390,10 @@
     "cm_dialog_loading": {
         "message": "Laden…",
         "description": "Loading status indicator while adding a channel or user"
+    },
+    "context_add": {
+        "message": "Kanal hinzufügen",
+        "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
     "twitch_showPlaylist_title": {
         "message": "Playlisten von Twitchkanälen prüfen",
@@ -407,9 +407,9 @@
         "message": "leitet nun zu $CHANNEL$ weiter",
         "description": "Redirecting state for nonliveNotification"
     },
-    "context_pause.label": {
-        "message": "Aktualisierungen Pausieren",
-        "description": "Context menu action on the refresh button in the panel to pause the queue"
+    "context_copy": {
+        "message": "Stream URL kopieren",
+        "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "offlineNotification": {
         "message": "$CHANNEL$ ging offline!",
@@ -428,8 +428,8 @@
         "description": "Description of the update tab setting in the preferences"
     },
     "providerbeam": {
-        "message": "Beam",
-        "description": "Provider name of beam.pro"
+        "message": "Mixer",
+        "description": "Provider name of Mixer (formerly beam.pro)"
     },
     "providerdailymotion": {
         "message": "Dailymotion",

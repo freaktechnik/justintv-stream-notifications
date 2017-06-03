@@ -26,6 +26,7 @@ module.exports = {
                 options: {
                     plugins: [
                         "transform-class-properties"
+                        //TODO somehow has asyncToGenerator
                     ]
                 }
             },
@@ -54,17 +55,26 @@ module.exports = {
             filename: "[name]/style.css"
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: "content",
+            name: "content", //TODO ensure this excludes common
             chunks: [
                 'manager',
                 'list',
                 'options'
             ]
         }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "common",
+            chunks: [
+                'manager',
+                'list',
+                'background' //TODO options not included because it doesn't use port.
+            ]
+        }),
 		new HtmlWebpackPlugin({
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',
 		    chunks: [
+                'common',
                 'content',
                 'manager'
             ],
@@ -74,6 +84,7 @@ module.exports = {
 	        template: 'src/list/index.html',
 	        filename: 'list/index.html',
 	        chunks: [
+                'common',
                 'content',
                 'list'
             ],
