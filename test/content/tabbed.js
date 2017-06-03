@@ -61,6 +61,7 @@ test("constructor", (t) => {
     const tab = tabbed.querySelector('a[data-tab="1"]');
     t.true(tab.classList.contains("current"));
     t.is(tab.getAttribute("aria-selected"), "true");
+    t.is(document.activeElement, tab);
 
     const tabcontent = tabbed.querySelector('section[data-tab="1"]');
     t.false(tabcontent.hidden);
@@ -80,6 +81,7 @@ test("constructor with preselected tab", (t) => {
     const tab = tabbed.querySelector('a[data-tab="2"]');
     t.true(tab.classList.contains("current"));
     t.is(tab.getAttribute("aria-selected"), "true");
+    t.is(document.activeElement, tab);
 
     const tabcontent = tabbed.querySelector('section[data-tab="2"]');
     t.false(tabcontent.hidden);
@@ -97,6 +99,7 @@ test("select", (t) => {
     t.true(tab.classList.contains("current"));
     t.is(tab.getAttribute("aria-selected"), "true");
     t.is(tab.tabIndex, 0);
+    t.is(document.activeElement, tab);
 
     const tabcontent = tabbed.querySelector('section[data-tab="2"]');
     t.false(tabcontent.hidden);
@@ -173,5 +176,42 @@ test("getContentByIndex throws with invalid index", (t) => {
 });
 
 
-test.todo("keyboard events");
-test.todo("click events");
+test("keyboard events", (t) => {
+    const tabbed = getTabbed(3);
+    const instance = new Tabbed(tabbed);
+
+    const leftEvent = new window.KeyboardEvent("keypress", { key: "ArrowLeft" });
+    const rightEvent = new window.KeyboardEvent("keypress", { key: "ArrowRight" });
+
+    t.is(instance.current, 1);
+
+    document.activeElement.dispatchEvent(leftEvent);
+    t.is(instance.current, 1);
+
+    document.activeElement.dispatchEvent(rightEvent);
+    t.is(instance.current, 2);
+
+    document.activeElement.dispatchEvent(rightEvent);
+    t.is(instance.current, 3);
+
+    document.activeElement.dispatchEvent(rightEvent);
+    t.is(instance.current, 3);
+
+    document.activeElement.dispatchEvent(leftEvent);
+    t.is(instance.current, 2);
+});
+
+test("click events", (t) => {
+    const tabbed = getTabbed(3);
+    const instance = new Tabbed(tabbed);
+
+    const clickEvent = new window.MouseEvent("click", {});
+
+    const tab = instance.getTabByIndex(2);
+    tab.dispatchEvent(clickEvent);
+
+    t.is(instance.current, 2);
+    t.is(document.activeElement, tab);
+    t.true(tab.classList.contains("current"));
+    t.is(tab.getAttribute("aria-selected"), "true");
+});
