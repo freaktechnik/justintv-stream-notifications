@@ -8,7 +8,7 @@
 import { hide, show, copy } from '../content/utils';
 import { filter } from '../content/filter';
 import Port from '../port';
-import '../content/tabbed';
+import Tabbed from '../content/tabbed';
 import '../content/l10n';
 import './channels-manager.css';
 import '../content/shared.css';
@@ -32,6 +32,7 @@ const filters = [
     channels = document.querySelector("#channels"),
     users = document.querySelector("#users"),
     popup = document.querySelector("#popup"),
+    tabbed = document.querySelector("main.tabbed"),
     hasOption = (provider) => {
         const providerDropdown = document.querySelector("#providerDropdown");
         for(const o of providerDropdown.options) {
@@ -42,19 +43,18 @@ const filters = [
         return false;
     };
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("searchField").addEventListener("keyup", listener);
-    document.querySelector("main.tabbed").addEventListener("tabchanged", listener);
-    document.getElementById("channels").addEventListener("itemadded", () => {
-        if(!document.getElementById("channels").hidden) {
-            listener();
-        }
-    });
-    document.getElementById("users").addEventListener("itemadded", () => {
-        if(!document.getElementById("users").hidden) {
-            listener();
-        }
-    });
+tabbed._tabbed = new Tabbed(tabbed);
+document.getElementById("searchField").addEventListener("keyup", listener);
+tabbed.addEventListener("tabchanged", listener);
+channels.addEventListener("itemadded", () => {
+    if(!document.getElementById("channels").hidden) {
+        listener();
+    }
+});
+users.addEventListener("itemadded", () => {
+    if(!document.getElementById("users").hidden) {
+        listener();
+    }
 });
 
 function hideError() {
@@ -266,7 +266,7 @@ function showError(msg) {
     popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
 }
 
-if(document.querySelector(".tabbed a.current") && document.querySelector(".tabbed a.current").dataset.tab == 1) {
+if(tabbed.querySelector("a.current") && tabbed.querySelector("a.current").dataset.tab == 1) {
     hide(document.querySelector("#autoAdd").parentNode);
     checkChannel();
 }
@@ -315,7 +315,7 @@ document.addEventListener("keypress", (evt) => {
     }
 }, true);
 
-document.querySelector("main.tabbed").addEventListener("tabchanged", (evt) => {
+tabbed.addEventListener("tabchanged", (evt) => {
     if(evt.detail == 1) {
         hide(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "channels");

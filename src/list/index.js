@@ -5,7 +5,7 @@
  */
 import { hide, show, toggle } from '../content/utils';
 import { filter, matches } from '../content/filter';
-import '../content/tabbed';
+import Tabbed from '../content/tabbed';
 import '../content/l10n';
 import './list.css';
 import '../content/shared.css';
@@ -21,7 +21,8 @@ let live,
     currentMenuTarget,
     currentStyle = "default",
     providers,
-    nonLiveDisplay;
+    nonLiveDisplay,
+    tabbed;
 const port = new Port("list", true),
     CHANNEL_ID_PREFIX = "channel",
     EXPLORE_ID_PREFIX = "explorechan",
@@ -104,18 +105,17 @@ const port = new Port("list", true),
             newClass = "default";
         }
         if(newClass != currentStyle) {
-            const main = document.querySelector(".tabbed");
             if(currentStyle) {
-                main.classList.replace(currentStyle, newClass);
+                tabbed.classList.replace(currentStyle, newClass);
             }
             else {
-                main.classList.add(newClass);
+                tabbed.classList.add(newClass);
             }
             currentStyle = newClass;
         }
     },
     setExtrasVisibility = (visible) => {
-        document.querySelector(".tabbed").classList.toggle("extras", visible);
+        tabbed.classList.toggle("extras", visible);
     },
     findInsertionNodeIn = (list, name) => {
         // Find the node to insert before in order to keep the list sorted
@@ -361,7 +361,6 @@ const port = new Port("list", true),
     },
     setNonLiveDisplay = (display) => {
         const nonLiveTab = document.getElementById("nonliveTab"),
-            tabbed = document.querySelector(".tabbed"),
             channelsToMove = Array.from(document.querySelectorAll(".nonlive"));
 
         toggle(nonLiveTab, display == 2);
@@ -511,7 +510,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("contextExploreCopy").addEventListener("click", externalContextMenuCommand.bind(null, "copyexternal"), false);
     document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "pause", null), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "resume", null), false);
-    document.querySelector(".tabbed").addEventListener("tabchanged", (e) => {
+    tabbed = document.querySelector(".tabbed");
+    tabbed._tabbed = new Tabbed(tabbed);
+    tabbed.addEventListener("tabchanged", (e) => {
         if(e.detail === 3) {
             applySearchToExplore(exploreSelect, field);
         }

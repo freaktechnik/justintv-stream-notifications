@@ -11,9 +11,17 @@ import Navigator from './navigator';
 import EventTarget from 'event-target-shim';
 import getPort from './port';
 import execCommand from './exec-command';
+import polyfillDataset from 'element-dataset';
 
 // DOM environment
-browserEnv([ 'window', 'document', 'Event', 'CustomEvent', 'URL' ]);
+browserEnv([
+    'window',
+    'document',
+    'Event',
+    'CustomEvent',
+    'URL',
+    'HTMLElement'
+]);
 
 // Additional Web APIs
 global.fetch = sinon.stub();
@@ -35,12 +43,13 @@ global.indexedDB = indexedDB;
 global.IDBKeyRange = IDBKeyRange;
 global.Headers = Headers;
 global.navigator = new Navigator();
-// Use the EventTarget shim, as that is loaded bevore the browser env in navigator.js
+// Use the EventTarget shim, as that is loaded before the browser env in navigator.js
 global.EventTarget = EventTarget;
 
 window.indexedDB = indexedDB;
 
 document.execCommand = execCommand;
+polyfillDataset();
 
 // WebExtension APIs
 //global.chrome = chrome;
