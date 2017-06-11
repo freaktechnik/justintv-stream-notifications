@@ -288,7 +288,7 @@
     "sinon": "^2.3.4",
     "sinon-chrome": "^2.2.0",
     "style-loader": "^0.18.2",
-    "transifex-loader": "^3.3.0",
+    "transifex-loader": "^3.4.1",
     "web-ext": "^1.9.1",
     "webpack": "^2.6.1"
   },
