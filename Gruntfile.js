@@ -156,16 +156,6 @@ module.exports = function(grunt) {
                         dest: 'build'
                     }
                 ]
-            },
-            coverage: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'node_modules',
-                        src: ['istanbul-jpm/**/*'],
-                        dest: 'build/node_modules'
-                    }
-                ]
             }
         },
         "package": {
@@ -263,33 +253,7 @@ module.exports = function(grunt) {
                     },
                 ]
             }
-        },
-        instrument: {
-            files: 'build/lib/**/*.js',
-            options: {
-                lazy: true,
-                basePath: 'build/instrument/',
-                instrumenter: istanbulJpm.Instrumenter
-            }
-        },
-        storeCoverage: {
-            options: {
-                dir: 'coverage/reports'
-            }
-        },
-        makeReport: {
-            src: ['coverage/reports/**/*.json'],
-            options: {
-                type: 'lcov',
-                dir: 'coverage/reports',
-                print: 'detail'
-            }
         }
-    });
-
-    grunt.registerTask('readcoverageglobal', 'Reads the coverage global JPM wrote', function() {
-        global.__coverage__ = require("istanbul-jpm/global-node").global.__coverage__;
-        grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
