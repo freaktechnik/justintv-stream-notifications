@@ -146,12 +146,6 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'test-jpm',
-                        src: ['**/*', '!**/*~', '!.eslintrc.json'],
-                        dest: 'build/test'
-                    },
-                    {
-                        expand: true,
                         cwd: 'locale',
                         src: ['*.properties'],
                         dest: 'build/locale'
@@ -298,13 +292,9 @@ module.exports = function(grunt) {
         grunt.log.ok("Read '__coverage__' global stored in /tmp/istanbul-jpm-coverage.json");
     });
 
-    grunt.registerTask('prepare-test', [ 'copy:build', 'babel:dev', 'copy:dev', 'package:dev' ]);
     grunt.registerTask('rename-translate', [ 'copy:translate', 'clean:translate' ]);
-    grunt.registerTask('coverage', ['clean:coverage', 'instrument', 'copy:coverage' ]);
-    grunt.registerTask('after-coverage', ['readcoverageglobal', 'storeCoverage', 'clean:dev', 'makeReport']);
-    grunt.registerTask('test', ['prepare-test', 'coverage']);
     grunt.registerTask('build', ['clean', 'copy:build', 'babel:build', 'header', 'transifex', 'rename-translate', 'package:build', 'package:translate']);
     grunt.registerTask('dev', ['copy:build', 'babel:dev', 'copy:dev', 'package:dev', 'transifex:packageJson', 'rename-translate', 'package:translate' ]);
 
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('default', ['dev']);
 };
