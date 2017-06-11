@@ -1,6 +1,5 @@
 module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
-    var istanbulJpm = require("istanbul-jpm");
 
     // Load package.json
     var pkg = grunt.file.readJSON("package.json");
