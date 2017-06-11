@@ -7,7 +7,7 @@ import test from 'ava';
 import ChannelsManager from "../../../src/background/channel/manager";
 import getPort from '../../helpers/port';
 import { when } from '../../../src/utils';
-import { PortGoneError } from '../../../src/port';
+import { PortGoneError, default as Port } from '../../../src/port';
 
 const FAKE_ITEM = {
         serialize() {
@@ -133,6 +133,10 @@ test.serial("Callbacks", (t) => {
     cm.setTheme(0);
     t.is(port.postMessage.lastCall.args[0].command, 'theme');
     t.is(port.postMessage.lastCall.args[0].payload, 0);
+
+    cm.copyDump('foo');
+    t.is(port.postMessage.lastCall.args[0].command, `debugdump${Port.REPLY_SUFFIX}`);
+    t.is(port.postMessage.lastCall.args[0].payload, 'foo');
 });
 
 test("Make Sure No Throws", (t) => {
@@ -147,6 +151,7 @@ test("Make Sure No Throws", (t) => {
     t.notThrows(() => cm.onUserRemoved());
     t.notThrows(() => cm.onError());
     t.notThrows(() => cm.setTheme());
+    t.notThrows(() => cm.copyDump());
 });
 
 test.serial("add providers", (t) => {
