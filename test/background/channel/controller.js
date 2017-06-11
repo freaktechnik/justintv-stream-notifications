@@ -294,67 +294,6 @@ test("Disabled Provider", async (t) => {
     }
 });
 
-test.serial.todo("Copy local channel to clipboard");
-/*
-test.serial.failing("Copy Local Channel To Clipboard", async (t) => {
-    t.fail("Clipboard tests need to be updated");
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    const referenceChannel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
-
-    const prevClipboard = clipboard.get();
-
-    clipboard.set("foobar", "text");
-
-    const channel = await cc.copyChannelURL(referenceChannel.id);
-    t.is(channel.id, referenceChannel.id, "Channel returned is the same as the one we requested to copy the URL for");
-    t.is(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
-
-    clipboard.set("foobar", "text");
-
-    const prevPattern = prefs.copy_pattern;
-    prefs.copy_pattern = "Test {URL} foo bar";
-    const expectedString = prefs.copy_pattern.replace("{URL}", channel.url[0]);
-    await cc.copyChannelURL(channel.id);
-    t.is(expectedString, clipboard.get(), "Copied string matches waht we'd expect based on the pref");
-    prefs.copy_pattern = prevPattern;
-
-    //TODO test alternativeURL
-
-    if(prevClipboard) {
-        clipboard.set(prevClipboard);
-    }
-    await cc.removeChannel(channel.id);
-});
-
-test.serial.failing("Copy External Channel To Clipboard", async (t) => {
-    t.fail("Clipboard tests need to be updated");
-    return;
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    const prevClipboard = clipboard.get();
-    clipboard.set("foobar", "text");
-
-    const channel = await cc.copyChannelURL(TESTUSER.name, TESTUSER.type);
-    t.is(channel.type, TESTUSER.type, "Channel type matches the type we gave");
-    t.is(channel.login, TESTUSER.name, "Channel login matches the given login");
-    t.is(channel.url[0], clipboard.get(), "Copied URL matches the channel's URL");
-
-    if(prevClipboard) {
-        clipboard.set(prevClipboard);
-    }
-});*/
-test.serial.todo("Copy external channel to clipboard");
-
-test("Copy Invalid Channel To Clipboard", async (t) => {
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    await t.throws(cc.copyChannelURL(TESTUSER.name, "foobar"));
-});
-
 let oldQS;
 test.before(() => {
     const provider = providers[TESTUSER.type];
