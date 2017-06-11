@@ -89,7 +89,6 @@ list.addEventListener("copied", async ({ detail }) => {
     else {
         channel = await controller.getChannel(detail);
     }
-    console.log("bout to notify with", channel.uname);
     notifier.notifyCopied(channel.uname);
 });
 

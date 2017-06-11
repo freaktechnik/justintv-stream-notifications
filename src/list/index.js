@@ -400,7 +400,6 @@ const port = new Port("list", true),
         document.body.classList.toggle("dark", theme === 1);
     },
     afterCopy = (success, details) => {
-        console.log(success, details);
         if(success) {
             port.send("copied", details);
         }
