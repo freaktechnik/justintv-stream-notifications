@@ -297,7 +297,7 @@
     "test": "npm run lint && nyc ava",
     "coverage": "nyc report && codecov",
     "lint": "npm run lint-js && npm run lint-webext",
-    "lint-js": "eslint lib/ test/ test-jpm/ src/",
+    "lint-js": "eslint lib/ test/ src/",
     "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
     "build": "webpack && npm run use-json-txrc && grunt build && npm run use-orig-txrc && jpm xpi --addon-dir build/",
     "start": "webpack && npm run use-json-txrc && grunt dev && npm run use-orig-txrc && jpm run --addon-dir build/",
