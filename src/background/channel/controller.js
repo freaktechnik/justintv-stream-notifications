@@ -7,7 +7,7 @@ import providers from "../providers";
 import ChannelsManager from "./manager";
 import ChannelList from "./list";
 import EventSink from '../providers/events';
-import { emit, invokeOnce, when } from "../../utils";
+import { emit, invokeOnce } from "../../utils";
 import ParentalControls from "../parental-controls";
 import { flatten, partial, debounce } from "underscore";
 import * as debugDump from "./dump";
@@ -631,6 +631,13 @@ export default class ChannelController extends EventTarget {
         this._ensureQueueReady().then(() => this._manager.setTheme(theme));
     }
 
+    getExternalChannel(login, type) {
+        if(!(type in providers)) {
+            throw new Error("Specified type is not known");
+        }
+        return providers[type].updateChannel(login);
+    }
+
     /**
      * Copies the stream URL of the given channel to the clipboard.
      *
@@ -638,30 +645,18 @@ export default class ChannelController extends EventTarget {
      * @param {string} [type] - Type if not an ID is given.
      * @returns {undefined}
      */
-    async copyChannelURL(id, type) {
+    async copyableChannelURL(id, type) {
         let channel;
         if(type) {
-            if(!(type in providers)) {
-                throw "Specified type is not known";
-            }
-
-            channel = await providers[type].updateChannel(id);
+            channel = await this.getExternalChannel(id, type);
         }
         else {
             channel = await this._list.getChannel(id);
         }
 
         const url = channel.live.alternateURL ? channel.live.alternateURL : channel.url[0],
-            p = when(document, "copy");
-        document.execCommand("copy", false, null);
-        const [ e, pattern ] = await Promise.all([
-            p,
-            prefs.get("copy_pattern")
-        ]);
+            pattern = await prefs.get("copy_pattern");
 
-        e.clipboardData.setData("text/plain", pattern.replace("{URL}", url));
-        e.preventDefault();
-
-        return channel;
+        return pattern.replace("{URL}", url);
     }
 }

@@ -70,15 +70,26 @@ list.addEventListener("open", ({ detail }) => {
 list.addEventListener("pause", () => qs.pause());
 list.addEventListener("resume", () => qs.resume());
 list.addEventListener("copy", async ({ detail }) => {
-    let channel;
+    let copy;
     if(Array.isArray(detail)) {
         // login + type
-        channel = await controller.copyChannelURL(...detail);
+        copy = await controller.copyableChannelURL(...detail);
     }
     else {
         // Channel ID
-        channel = await controller.copyChannelURL(detail);
+        copy = await controller.copyableChannelURL(detail);
     }
+    list.copyChannelURL(copy, Array.isArray(detail));
+});
+list.addEventListener("copied", async ({ detail }) => {
+    let channel;
+    if(Array.isArray(detail)) {
+        channel = await controller.getExternalChannel(...detail);
+    }
+    else {
+        channel = await controller.getChannel(detail);
+    }
+    console.log("bout to notify with", channel.uname);
     notifier.notifyCopied(channel.uname);
 });
 

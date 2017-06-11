@@ -33,7 +33,12 @@
         "default_title": "__MSG_listTooltipOffline__"
     },
     "background": {
-        "scripts": [ "vendor/underscore-min.js", "vendor/event-target-shim.min.js", "common/index.js", "background/index.js" ]
+        "scripts": [
+            "vendor/underscore-min.js",
+            "vendor/event-target-shim.min.js",
+            "common/index.js",
+            "background/index.js"
+        ]
     },
     "permissions": [
         "tabs",

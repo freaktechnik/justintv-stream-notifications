@@ -221,7 +221,8 @@ export default class Notifier extends EventTarget {
         browser.notifications.create("copy", {
             type: "basic",
             title: _("copyNotification", channelName),
-            iconURL: "../images/icon64.png"
+            message: "",
+            iconUrl: "assets/images/icon64.png"
         });
     }
 }

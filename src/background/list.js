@@ -165,6 +165,7 @@ class ListView extends EventTarget {
                 break;
             case "refresh":
             case "copy":
+            case "copied":
                 emit(this, event.command, event.payload);
                 break;
             case "configure":
@@ -475,6 +476,11 @@ class ListView extends EventTarget {
 
     setFeatured(channels, type, q = null) {
         this._emitToList("setFeatured", { channels, type, q });
+    }
+
+    copyChannelURL(string, external = false) {
+        const command = external ? "copyexternal" : "copy";
+        this.port.reply(command, string);
     }
 }
 

@@ -3,7 +3,7 @@
  * @license MPL-2.0
  * @todo Ctrl+F should toggle filter
  */
-import { hide, show, toggle } from '../content/utils';
+import { hide, show, toggle, copy } from '../content/utils';
 import { filter, matches } from '../content/filter';
 import Tabbed from '../content/tabbed';
 import '../content/l10n';
@@ -398,6 +398,12 @@ const port = new Port("list", true),
     },
     setTheme = (theme) => {
         document.body.classList.toggle("dark", theme === 1);
+    },
+    afterCopy = (success, details) => {
+        console.log(success, details);
+        if(success) {
+            port.send("copied", details);
+        }
     };
 
 // Set up port commmunication listeners
@@ -505,9 +511,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"), false);
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"), false);
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"), false);
-    document.getElementById("contextCopy").addEventListener("click", contextMenuCommand.bind(null, "copy"), false);
+    document.getElementById("contextCopy").addEventListener("click", () => {
+        const id = getChannelIdFromId(currentMenuTarget.id);
+        port.request("copy", id)
+            .then(copy)
+            .then((s) => afterCopy(s, id));
+        currentMenuTarget = null;
+    }, false);
     document.getElementById("contextAdd").addEventListener("click", externalContextMenuCommand.bind(null, "add"), false);
-    document.getElementById("contextExploreCopy").addEventListener("click", externalContextMenuCommand.bind(null, "copyexternal"), false);
+    document.getElementById("contextExploreCopy").addEventListener("click", () => {
+        const type = currentMenuTarget.className,
+            login = currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length);
+        port.request("copyexternal", {
+            type,
+            login
+        })
+            .then(copy)
+            .then((s) => afterCopy(s, [ login, type ]));
+        currentMenuTarget = null;
+    }, false);
     document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "pause", null), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "resume", null), false);
     tabbed = document.querySelector(".tabbed");

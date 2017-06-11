@@ -55,29 +55,23 @@ module.exports = {
             filename: "[name]/style.css"
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: "content", //TODO ensure this excludes common
-            chunks: [
-                'manager',
-                'list',
-                'options'
-            ]
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
             name: "common",
             chunks: [
+                'options',
                 'manager',
                 'list',
-                'background' //TODO options not included because it doesn't use port.
-            ]
+                'background'
+            ],
+            minChunks: 3
         }),
 		new HtmlWebpackPlugin({
 		    template: 'src/manager/index.html',
 		    filename: 'manager/index.html',
 		    chunks: [
                 'common',
-                'content',
                 'manager'
             ],
+            chunksSortMode: 'dependency',
 		    defaultLanguage
 	    }),
 	    new HtmlWebpackPlugin({
@@ -85,18 +79,19 @@ module.exports = {
 	        filename: 'list/index.html',
 	        chunks: [
                 'common',
-                'content',
                 'list'
             ],
+            chunksSortMode: 'dependency',
 	        defaultLanguage
         }),
         new HtmlWebpackPlugin({
             template: 'src/options/index.html',
             filename: 'options/index.html',
             chunks: [
-                'content',
+                'common',
                 'options'
             ],
+            chunksSortMode: 'dependency',
             defaultLanguage
         })
     ],
