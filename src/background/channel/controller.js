@@ -631,7 +631,16 @@ export default class ChannelController extends EventTarget {
         this._ensureQueueReady().then(() => this._manager.setTheme(theme));
     }
 
-    getExternalChannel(login, type) {
+    /**
+     * Get a channel object detached from the channel list.
+     *
+     * @param {string} login - Login of the channel.
+     * @param {string} type - Provider of the channel.
+     * @returns {module:channel/core.Channel} Channel object for the
+     *          requested channel.
+     * @throws {Error} when the specified type is not known.
+     */
+    async getExternalChannel(login, type) {
         if(!(type in providers)) {
             throw new Error("Specified type is not known");
         }
