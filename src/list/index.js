@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
     explore = document.getElementById("featured");
     secondaryLive = document.getElementById("secondarylive");
     const exploreSelect = document.getElementById("exploreprovider"),
-        field = document.querySelector("#searchField");
+        field = document.getElementById("searchField");
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
     document.getElementById("refreshButton").addEventListener("click", (e) => {
@@ -529,8 +529,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((s) => afterCopy(s, [ login, type ]));
         currentMenuTarget = null;
     }, false);
-    document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "pause", null), false);
-    document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent.bind(null, "resume", null), false);
+    document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent("pause"), false);
+    document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent("resume"), false);
     tabbed = document.querySelector(".tabbed");
     tabbed._tabbed = new Tabbed(tabbed);
     tabbed.addEventListener("tabchanged", (e) => {
