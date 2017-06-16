@@ -22,7 +22,6 @@ import Notifier from "./notifier";
 import prefInfo from '../prefs.json';
 
 const S_TO_MS_FACTOR = 1000,
-    BASE_URL = "http://streamnotifier.ch",
 
 // Init things
     notifier = new Notifier(),
@@ -208,19 +207,21 @@ prefs.get("migrated").then((migrated) => {
         });
     }
 });
-
+/* (doesn't work in embedded webexts)
 browser.runtime.onInstalled.addListener(async ({ reason }) => {
-    if((reason == 'install' || reason == 'update') && await prefs.get('updateTab')) {
-        if(reason == 'install') {
-            await browser.tabs.create({
-                url: BASE_URL + "/firstrun/"
-            });
-        }
-        else if(reason == 'update') {
-            await browser.tabs.create({
-                url: `${BASE_URL}/changes/${browser.runtime.getManifest().version}/`,
-                active: false
-            });
-        }
+    if(reason == 'install') {
+        await Tour.onInstalled();
+    }
+    else if(reason == 'update') {
+        await Tour.onUpdate();
+    }
+});
+(but this does...) */
+SDK.doAction("load-reason").then((reason) => {
+    if(reason == 'install') {
+        await Tour.onInstalled();
+    }
+    else if(reason == 'upgrade') {
+        await Tour.onUpdate();
     }
 });
