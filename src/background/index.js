@@ -20,6 +20,7 @@ import ListView from './list';
 import * as qs from './queue/service';
 import Notifier from "./notifier";
 import prefInfo from '../prefs.json';
+import Tour from './tour';
 
 const S_TO_MS_FACTOR = 1000,
 
@@ -208,20 +209,20 @@ prefs.get("migrated").then((migrated) => {
     }
 });
 /* (doesn't work in embedded webexts)
-browser.runtime.onInstalled.addListener(async ({ reason }) => {
+browser.runtime.onInstalled.addListener(({ reason }) => {
     if(reason == 'install') {
-        await Tour.onInstalled();
+        return Tour.onInstalled();
     }
     else if(reason == 'update') {
-        await Tour.onUpdate();
+        return Tour.onUpdate();
     }
 });
 (but this does...) */
 SDK.doAction("load-reason").then((reason) => {
     if(reason == 'install') {
-        await Tour.onInstalled();
+        return Tour.onInstalled();
     }
     else if(reason == 'upgrade') {
-        await Tour.onUpdate();
+        return Tour.onUpdate();
     }
 });

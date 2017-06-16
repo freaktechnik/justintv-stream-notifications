@@ -300,7 +300,7 @@
     "lint-js": "eslint lib/ test/ src/",
     "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
     "build": "webpack && npm run use-json-txrc && grunt build && npm run use-orig-txrc && jpm xpi --addon-dir build/",
-    "start": "webpack && npm run use-json-txrc && grunt dev && npm run use-orig-txrc && jpm run --addon-dir build/",
+    "start": "webpack && npm run use-json-txrc && grunt dev --force && npm run use-orig-txrc && jpm run --addon-dir build/",
     "use-json-txrc": "mv .transifexrc .transifexrc.orig && mv .transifexrc.json .transifexrc",
     "use-orig-txrc": "mv .transifexrc .transifexrc.json && mv .transifexrc.orig .transifexrc"
   },

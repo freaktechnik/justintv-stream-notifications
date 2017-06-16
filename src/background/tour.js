@@ -33,3 +33,5 @@ const BASE_URL = "http://streamnotifier.ch",
             }
         }
     };
+
+export default Tour;
