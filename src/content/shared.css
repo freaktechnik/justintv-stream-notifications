@@ -67,7 +67,7 @@ body {
 }
 
 .topbar button {
-    -moz-appearance: none;
+    appearance: none;
 }
 
 .topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited, .topbar button {
