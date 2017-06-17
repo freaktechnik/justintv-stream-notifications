@@ -34,7 +34,7 @@ main {
 }
 
 .actionbar .flex input {
-    -moz-appearance: none;
+    appearance: none;
     border: none;
     color: initial;
     font-size: initial;
