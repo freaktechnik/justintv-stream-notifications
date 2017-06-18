@@ -45,7 +45,7 @@ test.serial('get multipe pref values', async (t) => {
             arg[p] = defaults[p].value;
         }
         else {
-            arg[p] = undefined;
+            arg[p] = false;
         }
     }
 
