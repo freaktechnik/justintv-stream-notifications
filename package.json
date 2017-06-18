@@ -232,7 +232,7 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.4.0pre1",
+  "version": "3.4.0pre2",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {

@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     var dependencies = [];
 
     grunt.initConfig({
-        preVersion: "01",
+        preVersion: "02",
         pkg: pkg,
         banner:
             "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today(\"yyyy-mm-dd\") %>\n" +

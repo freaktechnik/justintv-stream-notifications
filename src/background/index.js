@@ -191,23 +191,25 @@ browser.runtime.onMessage.addListener((message) => {
 });
 
 // Do migration of channel data and prefs if necessary
-prefs.get("migrated").then((migrated) => {
-    if(!migrated) {
-        SDK.doAction("migrate-channels").then(([ channels, users ]) => {
-            return Promise.all(users.map((user) => controller.addUser(user.login, user.type)))
-                .then(() => Promise.all(channels.map((channel) => controller.addChannel(channel.login, channel.type))));
-        }).then(() => {
-            return browser.storage.local.set({
-                migrated: true
+const migrateData = () => {
+    prefs.get("migrated").then((migrated) => {
+        if(!migrated) {
+            SDK.doAction("migrate-channels").then(([ channels, users ]) => {
+                return Promise.all(users.map((user) => controller.addUser(user.login, user.type)))
+                    .then(() => Promise.all(channels.map((channel) => controller.addChannel(channel.login, channel.type))));
+            }).then(() => {
+                return browser.storage.local.set({
+                    migrated: true
+                });
             });
-        });
-        SDK.doAction("migrate-prefs").then((oldPrefs) => {
-            Promise.all(Object.keys(oldPrefs).map((p) => {
-                return prefs.set(p, oldPrefs[p]);
-            }));
-        });
-    }
-});
+            SDK.doAction("migrate-prefs").then((oldPrefs) => {
+                Promise.all(Object.keys(oldPrefs).map((p) => {
+                    return prefs.set(p, oldPrefs[p]);
+                }));
+            });
+        }
+    });
+};
 /* (doesn't work in embedded webexts)
 browser.runtime.onInstalled.addListener(({ reason }) => {
     if(reason == 'install') {
@@ -220,9 +222,11 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 (but this does...) */
 SDK.doAction("load-reason").then((reason) => {
     if(reason == 'install') {
+        migrateData();
         return Tour.onInstalled();
     }
     else if(reason == 'upgrade') {
+        migrateData();
         return Tour.onUpdate();
     }
 });

@@ -9,7 +9,7 @@ const getDefaultValue = (pref) => {
         }
         else {
             console.error("No default value for", pref);
-            return undefined;
+            return false;
         }
     },
     AREA = "local";
