@@ -13,10 +13,10 @@ import { not } from '../logic';
 
 const type = "hitbox",
     archiveURL = "/videos",
-    chatURL = "https://hitbox.tv/embedchat/",
+    chatURL = "https://smashcast.tv/embedchat/",
     pageSize = 100,
-    baseURL = "https://api.hitbox.tv",
-    cdnURL = "http://edge.sf.hitbox.tv";
+    baseURL = "https://api.smashcast.tv",
+    cdnURL = "https://edge.sf.hitbox.tv";
 
 function getChannelFromJson(json) {
     const cho = new Channel(json.channel.user_name, type);
@@ -38,7 +38,7 @@ function getChannelFromJson(json) {
 }
 
 class Hitbox extends GenericProvider {
-    authURL = [ "http://www.hitbox.tv" ];
+    authURL = [ "https://www.smashcast.tv" ];
     _supportsFavorites = true;
     _supportsCredentials = true;
     _supportsFeatured = true;

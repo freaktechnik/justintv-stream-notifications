@@ -83,7 +83,6 @@ test('open prefs page', (t) => {
     browser.runtime.openOptionsPage.reset();
 });
 
-
 test('pref changed event', async (t) => {
     const promise = when(prefs, 'change');
 

@@ -12,7 +12,6 @@ import ustream from "./ustream";
 import youtube from "./youtube";
 import livestream from "./livestream";
 import mlg from "./mlg";
-import azubu from "./azubu";
 import beam from "./beam";
 import picarto from "./picarto";
 import newlivestream from "./new-livestream";
@@ -26,7 +25,6 @@ export default {
     youtube,
     livestream,
     mlg,
-    azubu,
     beam,
     picarto,
     newlivestream,

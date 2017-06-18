@@ -399,12 +399,12 @@
         }
     },
     "hitbox": {
-        "https://api.hitbox.tv/media/live/test": {
+        "https://api.smashcast.tv/media/live/test": {
             "livestream": [
                 {
                     "channel": {
                         "user_name": "test",
-                        "channel_link": "http://hitbox.tv/test",
+                        "channel_link": "https://smashcast.tv/test",
                         "user_logo": "",
                         "user_logo_small": ""
                     },
@@ -417,12 +417,12 @@
                 }
             ]
         },
-        "https://api.hitbox.tv/media/live/live": {
+        "https://api.smashcast.tv/media/live/live": {
             "livestream": [
                 {
                     "channel": {
                         "user_name": "live",
-                        "channel_link": "http://hitbox.tv/live",
+                        "channel_link": "https://smashcast.tv/live",
                         "user_logo": "",
                         "user_logo_small": ""
                     },
@@ -435,12 +435,12 @@
                 }
             ]
         },
-        "https://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=": {
+        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=": {
             "livestream": [
                 {
                     "channel": {
                         "user_name": "featured",
-                        "channel_link": "http://hitbox.tv/featured",
+                        "channel_link": "https://smashcast.tv/featured",
                         "user_logo": "",
                         "user_logo_small": ""
                     },
@@ -453,12 +453,12 @@
                 }
             ]
         },
-        "https://api.hitbox.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
+        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
             "livestream": [
                 {
                     "channel": {
                         "user_name": "test",
-                        "channel_link": "http://hitbox.tv/test",
+                        "channel_link": "https://smashcast.tv/test",
                         "user_logo": "",
                         "user_logo_small": ""
                     },
@@ -471,7 +471,7 @@
                 }
             ]
         },
-        "https://api.hitbox.tv/user/test": {
+        "https://api.smashcast.tv/user/test": {
             "user_name": "test",
             "user_cover": null,
             "user_status": "1",
@@ -487,7 +487,7 @@
             "twitter_enabled": null,
             "user_beta_profile": "0"
         },
-        "https://api.hitbox.tv/following/user?user_name=test&limit=100&offset=0": {
+        "https://api.smashcast.tv/following/user?user_name=test&limit=100&offset=0": {
             "request": {
                 "this":"/following/user"
             },

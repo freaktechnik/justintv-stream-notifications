@@ -105,10 +105,6 @@
         "message": "Multistream",
         "description": "A multistream stream on Picarto.TV"
     },
-    "providerazubu": {
-        "message": "Azubu",
-        "description": "Provider name of azubu.tv"
-    },
     "providerbeam": {
         "message": "Mixer",
         "description": "Provider name of Mixer (formerly beam.pro)"
@@ -122,8 +118,8 @@
         "description": "Provider for douyutv.com"
     },
     "providerhitbox": {
-        "message": "Hitbox",
-        "description": "Provider name for hitbox.tv"
+        "message": "Smashcast",
+        "description": "Provider name for smashcast.tv (formerly hitbox.tv/azubu.tv)"
     },
     "providerlivestream": {
         "message": "Original Livestream",
