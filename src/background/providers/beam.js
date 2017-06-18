@@ -48,16 +48,9 @@ function getChannelFromJSON(jsonChannel) {
 function getImageFromAvatars(avatars) {
     const image = {};
     if(Array.isArray(avatars) && avatars.length) {
-        avatars.forEach((avatar) => {
-            /*
-             * The URL given by the API doesn't work at this point. Reconstruct
-             * the one used on the site.
-             */
-            image[avatar.meta.size.split("x")[0]] = `https://images.beam.pro/${avatar.meta.size}/https://uploads.beam.pro/avatar/${avatar.relid}.jpg`;
-        });
-    }
-    else {
-        image["220"] = DEFAULT_AVATAR_URL;
+        for(const avatar of avatars) {
+            image[avatar.meta.size.split("x")[0]] = avatar.url;
+        }
     }
     return image;
 }
