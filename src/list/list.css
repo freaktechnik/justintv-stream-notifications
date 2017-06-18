@@ -223,13 +223,6 @@ nav {
     --channel-text-color: #FFF;
 }
 
-.azubu a {
-    --channel-bg-color-r: 0;
-    --channel-bg-color-g: 0;
-    --channel-bg-color-b: 0;
-    --channel-text-color: #3693E0;
-}
-
 .beam a {
     --channel-bg-color-r: 17;
     --channel-bg-color-g: 19;
