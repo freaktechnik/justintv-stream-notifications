@@ -56,7 +56,7 @@ function getImageFromAvatars(avatars) {
 }
 
 class Beam extends GenericProvider {
-    authURL = [ "https://beam.pro" ];
+    authURL = [ "https://mixer.com", "https://beam.pro" ];
     _supportsFavorites = true;
     _supportsCredentials = true;
     _supportsFeatured = true;
