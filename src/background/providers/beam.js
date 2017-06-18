@@ -14,10 +14,9 @@ import GenericProvider from "./generic-provider";
 import { not } from '../logic';
 
 const type = "beam",
-    chatURL = "https://beam.pro/embed/chat/",
-    baseURL = 'https://beam.pro/api/v1/',
+    chatURL = "https://mixer.com/embed/chat/",
+    baseURL = 'https://mixer.com/api/v1/',
     pageSize = 50,
-    DEFAULT_AVATAR_URL = "https://beam.pro/_latest/img/media/profile.jpg",
     SIZES = [ '50', '70', '150', '300' ],
     getImageFromUserID = (id) => {
         const image = {};
@@ -33,9 +32,10 @@ function getChannelFromJSON(jsonChannel) {
     ret.title = jsonChannel.name;
     ret.viewers = jsonChannel.viewersCurrent;
     // this is the actual thumbnail and not just the default channel thumbnail thing.
-    ret.thumbnail = "https://thumbs.beam.pro/channel/" + jsonChannel.id + ".big.jpg";
-    ret.url.push("https://beam.pro/" + jsonChannel.token);
-    ret.archiveUrl = "https://beam.pro/" + jsonChannel.token;
+    //ret.thumbnail = "https://thumbs.beam.pro/channel/" + jsonChannel.id + ".big.jpg";
+    ret.thumbnail = jsonChannel.thumbnail.url;
+    ret.url.push("https://mixer.com/" + jsonChannel.token);
+    ret.archiveUrl = "https://mixer.com/" + jsonChannel.token;
     ret.chatUrl = chatURL + jsonChannel.token;
     ret.mature = jsonChannel.audience === "18+";
     ret.image = getImageFromUserID(jsonChannel.user.id);
