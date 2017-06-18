@@ -45,13 +45,13 @@ const filterInapropriateChannels = (channels) => {
             return channels;
         }
     },
-/**
- * Filter channels to exclude existing favorites.
- *
- * @param {module:channel/core.User} user - User whose favs should be excluded.
- * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
- * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
- */
+    /**
+     * Filter channels to exclude existing favorites.
+     *
+     * @param {module:channel/core.User} user - User whose favs should be excluded.
+     * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
+     * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
+     */
     filterExistingFavs = (user, channels) => {
         return channels.filter((ch) => !user.favorites.includes(ch.login));
     };
@@ -103,17 +103,17 @@ export default class ChannelController extends EventTarget {
          */
         this._manager = new ChannelsManager();
         this._manager.addEventListener("addchannel", ({ detail: [ name, type, canceled ] }) => this.addChannel(name, type, canceled)
-                            .then(() => this._manager._deleteCancelingValue("channel", type, name),
-                                  (e) => managerError(e, name, type, "channel", canceled)));
+            .then(() => this._manager._deleteCancelingValue("channel", type, name),
+                (e) => managerError(e, name, type, "channel", canceled)));
         this._manager.addEventListener("removechannel", ({ detail }) => this.removeChannel(detail));
         this._manager.addEventListener("updatechannel", ({ detail }) => this.updateChannel(detail)
-                            .catch(managerDoneLoading));
+            .catch(managerDoneLoading));
         this._manager.addEventListener("adduser", ({ detail: [ username, type, canceled ] }) => this.addUser(username, type, canceled)
-                            .then(() => this._manager._deleteCancelingValue("user", type, username),
-                                  (e) => managerError(e, username, type, "user", canceled)));
+            .then(() => this._manager._deleteCancelingValue("user", type, username),
+                (e) => managerError(e, username, type, "user", canceled)));
         this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(detail));
         this._manager.addEventListener("updatefavorites", ({ detail }) => this.updateUser(detail)
-                            .catch(managerDoneLoading));
+            .catch(managerDoneLoading));
         this._manager.addEventListener("autoadd", () => this.autoAddUsers().catch(managerDoneLoading));
         this._manager.addEventListener("getdata", () => {
             Promise.all([
@@ -404,8 +404,8 @@ export default class ChannelController extends EventTarget {
         if(provider === null || !(provider in providers)) {
             return Promise.all(
                 Object.keys(providers)
-                .filter((p) => providers[p].enabled)
-                .map(this.updateChannels.bind(this))
+                    .filter((p) => providers[p].enabled)
+                    .map(this.updateChannels.bind(this))
             );
         }
         else if(providers[provider].enabled) {
@@ -530,7 +530,7 @@ export default class ChannelController extends EventTarget {
 
         return Promise.all(
             users.filter((user) => providers[user.type].supports.favorites)
-            .map(this._updateUser.bind(this))
+                .map(this._updateUser.bind(this))
         );
     }
     /**

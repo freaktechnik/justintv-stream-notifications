@@ -192,8 +192,8 @@ export const getServiceForProvider = (providerName) => {
  */
 export const setOptions = (options) => {
     queue.autoFetch(options.interval,
-                    options.amount,
-                    options.maxSize);
+        options.amount,
+        options.maxSize);
 };
 
 /**

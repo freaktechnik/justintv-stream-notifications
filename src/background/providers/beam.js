@@ -114,7 +114,7 @@ class Beam extends GenericProvider {
     async updateFavsRequest(users) {
         const urls = await Promise.all(
             users.map((user) => this._getUserIdFromUsername(user.login)
-                                .then((id) => baseURL + "users/" + id))
+                .then((id) => baseURL + "users/" + id))
         );
 
         this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (data, url) => {
@@ -147,10 +147,10 @@ class Beam extends GenericProvider {
                         Promise.all(follows.filter((sub) => {
                             return oldUser.favorites.every((fav) => fav !== sub.token);
                         }).map((sub) => this.getChannelDetails(sub.token)))
-                        .then((channels) => {
-                            emit(this, "newchannels", channels);
-                            oldUser.favorites = ch.favorites;
-                        });
+                            .then((channels) => {
+                                emit(this, "newchannels", channels);
+                                oldUser.favorites = ch.favorites;
+                            });
                     }
                 });
             }

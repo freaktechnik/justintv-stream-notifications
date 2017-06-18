@@ -46,8 +46,8 @@ const getRequest = (type, url) => {
             text() {
                 return Promise.resolve(
                     typeof mockAPIEnpoints[type][url] === "string"
-                    ? mockAPIEnpoints[type][url]
-                    : JSON.stringify(mockAPIEnpoints[type][url])
+                        ? mockAPIEnpoints[type][url]
+                        : JSON.stringify(mockAPIEnpoints[type][url])
                 );
             },
             ok: true

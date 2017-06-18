@@ -156,7 +156,7 @@ const port = new Port("list", true),
     buildChannel = (channel, unspecific = false) => {
         const channelNode = document.createElement("li");
         channelNode.insertAdjacentHTML("beforeend",
-`<a href="" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
+            `<a href="" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
     <img src="">
     <div>
         <img srcset="" sizes="30w">
@@ -279,7 +279,7 @@ const port = new Port("list", true),
                 .map((s) => channel.image[s] + " " + s + "w").join(",");
         }
     },
-//TODO placing stuff (live channel goes hosted -> might need reordering)
+    //TODO placing stuff (live channel goes hosted -> might need reordering)
     makeChannelLive = (channel) => {
         hideNoOnline();
         updateNodeContent(channel);
@@ -453,7 +453,7 @@ port.addEventListener("message", ({ detail: event }) => {
         providers = event.payload;
         addExploreProviders(
             Object.keys(providers)
-            .filter((p) => providers[p].supports.featured)
+                .filter((p) => providers[p].supports.featured)
         );
         break;
     case "setFeatured": {

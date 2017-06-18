@@ -30,7 +30,7 @@ class NewLivestream extends GenericProvider {
     _supportsFavorites = true;
 
     async _getChannelStatus(json, channel) {
-       // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
+        // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
         const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != -1)) ||
             (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != -1));
 

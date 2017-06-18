@@ -436,13 +436,13 @@ test.serial('channel offline setting', (t) => {
     return new Promise((resolve, reject) => {
         req.onsuccess = () => {
             resolve(t.context.list.close().then(() => t.context.list.openDB("channellist"))
-            .then(() => {
-                return t.context.list.getChannel(channel.login, channel.type);
-            }).then((channel) => {
-                return channel.live.isLive();
-            }).then((isLive) => {
-                t.false(isLive);
-            }));
+                .then(() => {
+                    return t.context.list.getChannel(channel.login, channel.type);
+                }).then((channel) => {
+                    return channel.live.isLive();
+                }).then((isLive) => {
+                    t.false(isLive);
+                }));
         };
         req.onerror = reject;
     });

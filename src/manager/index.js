@@ -15,19 +15,19 @@ import '../content/shared.css';
 
 let providers;
 const filters = [
-    {
-        subtarget: "span"
-    },
-    {
-        subtarget: "small"
-    }
+        {
+            subtarget: "span"
+        },
+        {
+            subtarget: "small"
+        }
     ],
     listener = () => {
         filter(document.getElementById("searchField").value, document.querySelector(".selectableItemsList:not([hidden])"), filters);
     },
     port = new Port("manager", true),
 
-// Methods modifying the DOM
+    // Methods modifying the DOM
 
     channels = document.querySelector("#channels"),
     users = document.querySelector("#users"),

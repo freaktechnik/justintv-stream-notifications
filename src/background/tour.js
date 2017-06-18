@@ -13,6 +13,8 @@ const BASE_URL = "http://streamnotifier.ch",
         },
         /**
          * Runs things that should run when the extension is installed.
+         *
+         * @returns {?} Resolves when the actions are ran.
          */
         async onInstalled() {
             if(await Tour.enabled()) {
@@ -23,6 +25,8 @@ const BASE_URL = "http://streamnotifier.ch",
         },
         /**
          * Runs things that should happen when the extension is updated.
+         *
+         * @returns {?} Resolves after the actions were executed.
          */
         async onUpdate() {
             if(await Tour.enabled()) {

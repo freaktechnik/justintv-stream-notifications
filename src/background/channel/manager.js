@@ -128,7 +128,7 @@ export default class ChannelsManager extends EventTarget {
                     this.loading = true;
                     this.cancelingValues.set("user" + message.payload.type + message.payload.username, false);
                     emit(this, "adduser", message.payload.username, message.payload.type,
-                         () => this.cancelingValues.get("user" + message.payload.type + message.payload.username));
+                        () => this.cancelingValues.get("user" + message.payload.type + message.payload.username));
                 }
                 break;
             case "addchannel":
@@ -136,7 +136,7 @@ export default class ChannelsManager extends EventTarget {
                     this.loading = true;
                     this.cancelingValues.set("channel" + message.payload.type + message.payload.username, false);
                     emit(this, "addchannel", message.payload.username, message.payload.type,
-                         () => this.cancelingValues.get("channel" + message.payload.type + message.payload.username));
+                        () => this.cancelingValues.get("channel" + message.payload.type + message.payload.username));
                 }
                 break;
             case "cancel":

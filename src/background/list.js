@@ -191,13 +191,13 @@ class ListView extends EventTarget {
             case "search":
                 providers[event.payload.type].search(event.payload.query)
                     .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload.type, event.payload.query),
-                          () => this.setFeatured([], event.payload.type, event.payload.query));
+                        () => this.setFeatured([], event.payload.type, event.payload.query));
                 break;
             case "explore":
                 if(event.payload) {
                     providers[event.payload].getFeaturedChannels()
                         .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload),
-                              () => this.setFeatured([], event.payload));
+                            () => this.setFeatured([], event.payload));
                 }
                 break;
             case "copyexternal":

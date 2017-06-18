@@ -449,7 +449,7 @@ class YouTube extends GenericProvider {
                 key: (await apiKey),
                 hl: getLocale()
             }
-         ));
+        ));
 
         if(videos.parsedJSON && videos.parsedJSON.items) {
             return Promise.all(videos.parsedJSON.items.map(async (video) => {
