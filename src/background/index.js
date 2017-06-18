@@ -195,8 +195,9 @@ const migrateData = () => {
     prefs.get("migrated").then((migrated) => {
         if(!migrated) {
             SDK.doAction("migrate-channels").then(([ channels, users ]) => {
-                return Promise.all(users.map((user) => controller.addUser(user.login, user.type)))
-                    .then(() => Promise.all(channels.map((channel) => controller.addChannel(channel.login, channel.type))));
+                const ignoreAzubu = (o) => o.type != "azubu";
+                return Promise.all(users.filter(ignoreAzubu).map((user) => controller.addUser(user.login, user.type)))
+                    .then(() => Promise.all(channels.filter(ignoreAzubu).map((channel) => controller.addChannel(channel.login, channel.type))));
             }).then(() => {
                 return browser.storage.local.set({
                     migrated: true
