@@ -216,7 +216,8 @@ module.exports = function(grunt) {
                         }
                     ],
                     "transform-class-properties"
-                ]
+                ],
+                babelrc: false
             },
             build: {
                 options: {

@@ -24,9 +24,9 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
+                    babelrc: false,
                     plugins: [
                         "transform-class-properties"
-                        //TODO somehow has asyncToGenerator
                     ]
                 }
             },
