@@ -168,10 +168,10 @@ nav {
 }
 
 .hitbox a {
-    --channel-bg-color-r: 20;
-    --channel-bg-color-g: 20;
-    --channel-bg-color-b: 20;
-    --channel-text-color: #ACE600;
+    --channel-bg-color-r: 255;
+    --channel-bg-color-g: 255;
+    --channel-bg-color-b: 255;
+    --channel-text-color: #133C65;
 }
 
 .ustream a {
