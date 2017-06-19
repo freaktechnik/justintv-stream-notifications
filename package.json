@@ -290,7 +290,7 @@
     "style-loader": "^0.18.2",
     "transifex-loader": "^3.4.1",
     "web-ext": "^1.9.1",
-    "webpack": "^2.6.1"
+    "webpack": "^3.0.0"
   },
   "scripts": {
     "grunt": "grunt",
