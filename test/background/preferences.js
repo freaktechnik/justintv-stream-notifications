@@ -83,7 +83,7 @@ test('open prefs page', (t) => {
     browser.runtime.openOptionsPage.reset();
 });
 
-test('pref changed event', async (t) => {
+test.serial('pref changed event', async (t) => {
     const promise = when(prefs, 'change');
 
     browser.storage.onChanged.dispatch({
@@ -99,4 +99,50 @@ test('pref changed event', async (t) => {
         pref: 'foo',
         value: 'bar'
     });
+});
+
+test.serial('pref changed event for different area', async (t) => {
+    const promise = when(prefs, 'change');
+
+    browser.storage.onChanged.dispatch({
+        foo: {
+            oldValue: 'bar',
+            newValue: 'baz'
+        }
+    }, 'sync');
+
+    browser.storage.onChanged.dispatch({
+        bar: {
+            oldValue: 'foo',
+            newValue: 'bar'
+        }
+    }, 'local');
+
+    const { detail: pref } = await promise;
+    t.deepEqual(pref, {
+        pref: 'bar',
+        value: 'foo'
+    });
+});
+
+test.serial('reset single pref', async (t) => {
+    browser.storage.local.remove.resolves();
+
+    await prefs.reset('foo');
+
+    t.true(browser.storage.local.remove.calledOnce);
+    t.is(browser.storage.local.remove.lastCall.args[0], 'foo');
+
+    browser.storage.local.remove.flush();
+});
+
+test.serial('reset all prefs', async (t) => {
+    browser.storage.local.remove.resolves();
+
+    await prefs.reset();
+
+    t.true(browser.storage.local.remove.calledOnce);
+    t.is(browser.storage.local.remove.lastCall.args[0], Object.keys(defaults));
+
+    browser.storage.local.remove.flush();
 });

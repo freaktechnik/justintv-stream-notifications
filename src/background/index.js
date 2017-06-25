@@ -188,6 +188,9 @@ browser.runtime.onMessage.addListener((message) => {
     if(message == "manageChannels") {
         controller.showManager();
     }
+    else if(message == "resetPrefs") {
+        return prefs.reset().then(() => 'reset');
+    }
 });
 
 // Do migration of channel data and prefs if necessary

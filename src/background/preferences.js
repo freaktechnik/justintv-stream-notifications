@@ -69,6 +69,10 @@ class Preferences extends EventTarget {
     open() {
         browser.runtime.openOptionsPage();
     }
+
+    reset(pref = Object.keys(prefInfo)) {
+        return browser.storage[AREA].remove(pref);
+    }
 }
 
 export default new Preferences();

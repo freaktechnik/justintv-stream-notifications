@@ -40,7 +40,11 @@ class OptionsPage {
 
     getValue(p) {
         const type = prefs[p].type;
-        return format(document.getElementById(p)[OptionsPage.VALUE_PROPERTY[type]], type);
+        const formatted = format(document.getElementById(p)[OptionsPage.VALUE_PROPERTY[type]], type);
+        if(type === "string" && formatted == '') {
+            return prefs[p].value;
+        }
+        return formatted;
     }
 
     savePref(id) {
@@ -65,6 +69,16 @@ class OptionsPage {
 
         document.getElementById("manageChannels").addEventListener("click", () => {
             browser.runtime.sendMessage("manageChannels");
+        }, {
+            passive: true,
+            capture: false
+        });
+
+        document.getElementById("reset").addEventListener("click", () => {
+            browser.runtime.sendMessage("resetPrefs").then(() => this.loadValues(true));
+        }, {
+            passive: true,
+            capture: false
         });
 
         const boundStoreValues = this.storeValues.bind(this);
@@ -79,10 +93,25 @@ class OptionsPage {
             capture: true
         });
     }
-    loadValues() {
-        return browser.storage.local.get(Object.keys(prefs)).then((stored) => {
+    loadValues(withDefaults = false) {
+        let request;
+        if(withDefaults) {
+            request = {};
+            for(const p in prefs) {
+                if(prefs[p].type !== "string") {
+                    request[p] = prefs[p].value;
+                }
+                else {
+                    request[p] = '';
+                }
+            }
+        }
+        else {
+            request = Object.keys(prefs);
+        }
+        return browser.storage.local.get(request).then((stored) => {
             for(const p in stored) {
-                document.getElementById(p).value = stored[p];
+                document.getElementById(p)[OptionsPage.VALUE_PROPERTY[prefs[p].type]] = stored[p];
             }
         });
     }
