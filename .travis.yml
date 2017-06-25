@@ -1,12 +1,11 @@
 sudo: false
 language: node_js
 node_js: stable
-before_install:
-- openssl aes-256-cbc -K $encrypted_a56afc9f0968_key -iv $encrypted_a56afc9f0968_iv
-  -in secret.tar.enc -out secret.tar -d
-- tar xvf secret.tar
 install:
 - npm i --no-save
+before_script:
+- echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\npassword = '"$TRANSIFEX_PASSWORD"$'\n' > .transifexrc
+- echo $'{"user":"'"$TRANSIFEX_USER"$'","pass":"'"$TRANSIFEX_PASSWORD"$'"}' > .transifexrc.json
 after_success: npm run coverage
 branches:
   except:
