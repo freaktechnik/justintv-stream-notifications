@@ -3,7 +3,7 @@ import { format } from '../format-pref';
 import '../content/l10n';
 import { toggle } from '../content/utils';
 
-//TODO prefs reset button & help button for advanced prefs?
+//TODO help button for advanced prefs?
 
 class OptionsPage {
     static EVENT_TYPES = {
