@@ -5,7 +5,6 @@ install:
 - npm i --no-save
 before_script:
 - echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\npassword = '"$TRANSIFEX_PASSWORD"$'\n' > .transifexrc
-- echo $'{"user":"'"$TRANSIFEX_USER"$'","pass":"'"$TRANSIFEX_PASSWORD"$'"}' > .transifexrc.json
 after_success: npm run coverage
 branches:
   except:
