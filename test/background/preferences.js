@@ -142,7 +142,7 @@ test.serial('reset all prefs', async (t) => {
     await prefs.reset();
 
     t.true(browser.storage.local.remove.calledOnce);
-    t.is(browser.storage.local.remove.lastCall.args[0], Object.keys(defaults));
+    t.deepEqual(browser.storage.local.remove.lastCall.args[0], Object.keys(defaults));
 
     browser.storage.local.remove.flush();
 });
