@@ -1,4 +1,4 @@
-# ![](data/icon36.png) Live Stream Notifier
+# ![](webextension/assets/images/icon.svg) Live Stream Notifier
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/freaktechnik/justintv-stream-notifications.svg)](https://greenkeeper.io/)
 [![Travis CI Builds](https://travis-ci.org/freaktechnik/justintv-stream-notifications.svg)](https://travis-ci.org/freaktechnik/justintv-stream-notifications) [![codecov.io](https://codecov.io/github/freaktechnik/justintv-stream-notifications/coverage.svg?branch=master)](https://codecov.io/github/freaktechnik/justintv-stream-notifications?branch=master) ![Dependencies](https://david-dm.org/freaktechnik/justintv-stream-notifications.svg) [![Dependency Status](https://dependencyci.com/github/freaktechnik/justintv-stream-notifications/badge)](https://dependencyci.com/github/freaktechnik/justintv-stream-notifications)

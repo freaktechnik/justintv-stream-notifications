@@ -12,23 +12,16 @@
     "author": "freaktechnik",
     "version": "3.4.0",
     "icons": {
-        "16": "assets/images/icon16.png",
-        "18": "assets/images/icon18.png",
-        "32": "assets/images/icon32.png",
-        "36": "assets/images/icon36.png",
-        "48": "assets/images/icon48.png",
-        "64": "assets/images/icon64.png"
+        "16": "assets/images/icon.svg",
+        "18": "assets/images/icon.svg",
+        "32": "assets/images/icon.svg",
+        "36": "assets/images/icon.svg",
+        "48": "assets/images/icon.svg",
+        "64": "assets/images/icon.svg"
     },
     "browser_action": {
         "browser_style": false,
-        "default_icon": {
-            "16": "assets/images/offline16.png",
-            "18": "assets/images/offline18.png",
-            "32": "assets/images/offline32.png",
-            "36": "assets/images/offline36.png",
-            "48": "assets/images/offline48.png",
-            "64": "assets/images/offline64.png"
-        },
+        "default_icon": "assets/images/offline.svg",
         "default_popup": "list/index.html",
         "default_title": "__MSG_listTooltipOffline__"
     },

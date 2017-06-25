@@ -222,7 +222,7 @@ export default class Notifier extends EventTarget {
             type: "basic",
             title: _("copyNotification", channelName),
             message: "",
-            iconUrl: "assets/images/icon64.png"
+            iconUrl: "assets/images/icon.svg"
         });
     }
 }

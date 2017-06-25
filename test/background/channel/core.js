@@ -35,11 +35,11 @@ test('user toString', (t) => {
 
 test('user image getter method', (t) => {
     const user = getUser();
-    t.is(user.getBestImageForSize(1), user.image['18']);
-    t.is(user.getBestImageForSize("18"), user.image['18']);
-    t.is(user.getBestImageForSize(18), user.image['18']);
-    t.is(user.getBestImageForSize(19), user.image['64'], "19");
-    t.is(user.getBestImageForSize(40), user.image['64'], "40");
+    t.is(user.getBestImageForSize(1), user.image['48']);
+    t.is(user.getBestImageForSize("18"), user.image['48']);
+    t.is(user.getBestImageForSize(48), user.image['48']);
+    t.is(user.getBestImageForSize(49), user.image['64'], "49");
+    t.is(user.getBestImageForSize(50), user.image['64'], "50");
     t.is(user.getBestImageForSize(999), user.image['64'], "999");
 });
 

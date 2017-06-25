@@ -16,7 +16,7 @@ const TYPE = "test";
 const getUser = (login = 'test', type = TYPE) => {
     const user = new User(login, type);
     user.uname = 'lorem ipsum';
-    user.image = { '18': browser.extension.getURL('icon18.png'), 64: browser.extension.getURL('icon64.png') };
+    user.image = { '48': browser.extension.getURL('icon48.png'), 64: browser.extension.getURL('icon64.png') };
     return user;
 };
 
@@ -35,7 +35,7 @@ const getChannel = (login = 'test', type = TYPE, id = null) => {
     channel.archiveUrl = browser.extension.getURL('list.html#archive');
     channel.chatUrl = browser.extension.getURL('list.html#chat');
     channel.uname = 'lorem ipsum';
-    channel.image = { '18': browser.extension.getURL('icon18.png'), 64: browser.extension.getURL('icon64.png') };
+    channel.image = { '48': browser.extension.getURL('icon48.png'), 64: browser.extension.getURL('icon64.png') };
     channel.title = "Lorem Ipsum, dolor sit amet";
     return channel;
 };

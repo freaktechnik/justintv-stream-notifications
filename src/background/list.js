@@ -65,22 +65,8 @@ import serializedProviders from "./providers/serialized";
  * @typedef {number} NonLiveDisplay
  */
 
-const LIVE_ICONS = {
-        "16": "assets/images/icon16.png",
-        "18": "assets/images/icon18.png",
-        "32": "assets/images/icon32.png",
-        "36": "assets/images/icon36.png",
-        "48": "assets/images/icon48.png",
-        "64": "assets/images/icon64.png"
-    },
-    OFFLINE_ICONS = {
-        "16": "assets/images/offline16.png",
-        "18": "assets/images/offline18.png",
-        "32": "assets/images/offline32.png",
-        "36": "assets/images/offline36.png",
-        "48": "assets/images/offline48.png",
-        "64": "assets/images/offline64.png"
-    },
+const LIVE_ICONS = "assets/images/icon.svg",
+    OFFLINE_ICONS = "assets/images/offline.svg",
     _ = browser.i18n.getMessage;
 
 /**
