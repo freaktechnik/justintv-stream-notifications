@@ -34,8 +34,9 @@ class OptionsPage {
     setup() {
         this.loadValues().then(this.attachListeners.bind(this));
 
-        //TODO show hidden prefs if not under parental controls.
-        toggle(document.getElementById("hiddenprefs"), false);
+        browser.runtime.sendMessage("pcStatus").then((status) => {
+            toggle(document.getElementById("hiddenprefs"), !status);
+        });
     }
 
     getValue(p) {

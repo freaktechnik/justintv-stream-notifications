@@ -21,6 +21,7 @@ import * as qs from './queue/service';
 import Notifier from "./notifier";
 import prefInfo from '../prefs.json';
 import Tour from './tour';
+import ParentalControls from './parental-controls';
 
 const S_TO_MS_FACTOR = 1000,
 
@@ -185,11 +186,14 @@ prefs.addEventListener("change", ({ detail: { pref, value } }) => {
 
 // Handle options page things.
 browser.runtime.onMessage.addListener((message) => {
-    if(message == "manageChannels") {
+    if(message === "manageChannels") {
         controller.showManager();
     }
-    else if(message == "resetPrefs") {
+    else if(message === "resetPrefs") {
         return prefs.reset().then(() => 'reset');
+    }
+    else if(message === "pcStatus") {
+        return Promise.resolve(ParentalControls.enabled);
     }
 });
 

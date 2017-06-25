@@ -20,7 +20,6 @@ export const PREFS_MAPPING = Object.freeze({
         style: "panel_style",
         extras: "panel_extras",
         width: "panel_minWidth",
-        height: "panel_maxHeight",
         badge: "panel_badge"
     }),
     misc: Object.freeze({

@@ -104,11 +104,6 @@
         "value": 320,
         "hidden": true
     },
-    "panel_maxHeight": {
-        "type": "integer",
-        "value": 400,
-        "hidden": true
-    },
     "twitch_clientId": {
         "type": "string",
         "value": "1owsrolvxz8khldqe6puadzd8bldq34",

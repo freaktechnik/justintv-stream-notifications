@@ -441,10 +441,6 @@
         "message": "Minimum Panel width",
         "description": "Title of the panel minimum width setting in the preferences"
     },
-    "panel_maxHeight_title": {
-        "message": "Maximum Panel height",
-        "description": "Title of the panel maximum height setting in the preferences"
-    },
     "twitch_clientId_title": {
         "message": "Twitch Client ID",
         "description": "Title of the Twitch Client ID setting in the preferences"
@@ -454,7 +450,7 @@
         "description": "Title of the Twitch hosting setting in the preferences"
     },
     "twitch_showPlaylist_title": {
-        "message": "Show channels replaying recordings from a playlist",
+        "message": "Show Twitch channels replaying recordings from a playlist",
         "description": "Title of the Twitch playlist setting in the preferences"
     },
     "youtube_apiKey_title": {
@@ -474,7 +470,7 @@
         "description": "Title of the request retry limit setting in the preferences"
     },
     "find_mature_title": {
-        "message": "Find mature content in the explore tab",
+        "message": "Allow mature content",
         "description": "Title of the mature setting in the preferences"
     },
     "advancedOptions": {
