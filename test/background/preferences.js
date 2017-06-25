@@ -121,7 +121,7 @@ test.serial('pref changed event for different area', async (t) => {
     const { detail: pref } = await promise;
     t.deepEqual(pref, {
         pref: 'bar',
-        value: 'foo'
+        value: 'bar'
     });
 });
 
