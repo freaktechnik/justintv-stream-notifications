@@ -280,7 +280,7 @@
     "grunt-header": "^1.1.0",
     "grunt-package": ">=0.1.3",
     "grunt-transifex": "git+https://github.com/moustachedelait/grunt-transifex.git",
-    "html-webpack-plugin": "^2.22.0",
+    "html-webpack-plugin": "^2.29.0",
     "jpm": "^1.2.0",
     "load-grunt-tasks": "^3.5.2",
     "mz": "^2.6.0",
