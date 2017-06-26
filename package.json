@@ -264,7 +264,7 @@
     "codecov": "^2.0.2",
     "css-loader": "^0.28.4",
     "element-dataset": "^2.2.6",
-    "eslint": "4.1.1",
+    "eslint": "^4.1.1",
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-freaktechnik": "^2.4.0",
     "eslint-plugin-xss": "^0.1.8",
