@@ -139,7 +139,7 @@ export default class ChannelController extends EventTarget {
          * explains more or less what's going on.
          */
         const deletedTypes = new Map(),
-        // We only want the afterchannelsdeleted event to fire after all channels are gone.
+            // We only want the afterchannelsdeleted event to fire after all channels are gone.
             debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
             deleteCallback = (type) => {
                 this._list.getChannelsByType(type).then((channels) => {

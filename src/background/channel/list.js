@@ -20,13 +20,12 @@ import EventTarget from 'event-target-shim';
  * @default 2
  */
 const VERSION = 2,
-
-/**
- * Database name.
- *
- * @const {string}
- * @default "channellist"
- */
+    /**
+     * Database name.
+     *
+     * @const {string}
+     * @default "channellist"
+     */
     NAME = "channellist";
 
 /**

@@ -14,11 +14,11 @@ import EventTarget from 'event-target-shim';
 
 const _ = browser.i18n.getMessage,
 
-/**
- * Size of the image shown in the notification.
- * @const {number}
- * @default 100
- */
+    /**
+     * Size of the image shown in the notification.
+     * @const {number}
+     * @default 100
+     */
     NOTIFICATION_ICON_SIZE = 100;
 
 /**

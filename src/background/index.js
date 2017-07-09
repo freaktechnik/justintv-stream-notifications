@@ -25,7 +25,7 @@ import ParentalControls from './parental-controls';
 
 const S_TO_MS_FACTOR = 1000,
 
-// Init things
+    // Init things
     notifier = new Notifier(),
     controller = new ChannelController(),
     list = new ListView();
