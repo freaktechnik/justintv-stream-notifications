@@ -173,7 +173,7 @@ function addChannel(channel) {
     /*
         DOM structure:
         <option id="channelId">
-            <img srcset="" sizes="50w">
+            <img srcset="" sizes="50px">
             <span>
                 Username
             </span>
@@ -190,9 +190,9 @@ function addChannel(channel) {
             title = document.createTextNode(getChannelUname(channel)),
             type = document.createTextNode(providers[channel.type].name),
             evObj = new CustomEvent("itemadded", { detail: channelNode });
-        image.sizes = "50w";
+        image.sizes = "50px";
         image.srcset = Object.keys(channel.image)
-            .map((s) => channel.image[s] + " " + s + "w").join(",");
+            .map((s) => `${channel.image[s]} ${s}w`).join(",");
         channelNode.id = "channel" + channel.id;
         small.appendChild(type);
         span.appendChild(title);

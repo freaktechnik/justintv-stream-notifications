@@ -159,7 +159,7 @@ const port = new Port("list", true),
             `<a href="" contextmenu="${unspecific ? EXPLORE_CONTEXTMENU_ID : CONTEXTMENU_ID}">
     <img src="">
     <div>
-        <img srcset="" sizes="30w">
+        <img srcset="" sizes="30px">
         <span class="rebroadcast hide-offline" hidden><svg class="icon" viewBox="0 0 8 8">
             <use xlink:href="../assets/images/open-iconic.min.svg#loop"></use>
         </svg> </span><span class="name"></span><span class="nonlivename hide-offline" hidden> → <span class="alternate-name"></span></span><br>
@@ -183,7 +183,8 @@ const port = new Port("list", true),
         </aside>
     </div>
 </a>`);
-        channelNode.querySelector("div img").setAttribute("srcset", Object.keys(channel.image).map((s) => channel.image[s] + " " + s + "w").join(","));
+        channelNode.querySelector("div img").srcset = Object.keys(channel.image).map((s) => `${channel.image[s]} ${s}w`).join(",");
+        channelNode.querySelector("div img").sizes = "30px";
         channelNode.querySelector("a > img").setAttribute("src", channel.thumbnail);
         channelNode.querySelector(".name").textContent = channel.uname;
         channelNode.querySelector(".title").textContent = channel.title;
