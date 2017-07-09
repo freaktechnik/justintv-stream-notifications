@@ -253,7 +253,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "ajv": "^5.1.5",
+    "ajv": "^5.2.1",
     "ava": "^0.20.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.1.0",
