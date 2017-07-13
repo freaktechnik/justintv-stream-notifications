@@ -254,7 +254,7 @@
   },
   "devDependencies": {
     "ajv": "^5.2.1",
-    "ava": "^0.20.0",
+    "ava": "^0.21.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.1.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
