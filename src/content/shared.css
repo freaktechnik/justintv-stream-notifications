@@ -20,6 +20,9 @@ body {
     --inverted-bg: var(--accent-dark-text);
     --inverted-text: black;
     --inverted-separator: var(--accent-dark-bg);
+
+    --warn: #fc9b0a;
+    --error: #d51e1e;
 }
 
 .dark {

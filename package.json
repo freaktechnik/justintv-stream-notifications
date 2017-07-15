@@ -253,10 +253,10 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "ajv": "^5.2.1",
+    "ajv": "^5.2.2",
     "ava": "^0.21.0",
     "babel-eslint": "^7.0.0",
-    "babel-loader": "^7.1.0",
+    "babel-loader": "^7.1.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "babel-preset-es2017": "^6.22.0",
@@ -284,13 +284,13 @@
     "jpm": "^1.2.0",
     "load-grunt-tasks": "^3.5.2",
     "mz": "^2.6.0",
-    "nyc": "^11.0.2",
-    "sinon": "^2.3.5",
+    "nyc": "^11.0.3",
+    "sinon": "^2.3.8",
     "sinon-chrome": "^2.2.0",
     "style-loader": "^0.18.2",
     "transifex-loader": "^3.4.1",
-    "web-ext": "^1.9.1",
-    "webpack": "^3.0.0"
+    "web-ext": "^1.10.1",
+    "webpack": "^3.3.0"
   },
   "scripts": {
     "grunt": "grunt",

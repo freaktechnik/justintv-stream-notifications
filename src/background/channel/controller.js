@@ -14,6 +14,7 @@ import * as debugDump from "./dump";
 import prefs from "../preferences";
 import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
+import ErrorState from '../error-state';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded
@@ -28,16 +29,15 @@ import EventTarget from 'event-target-shim';
  * @type {module:channel/core.Channel}
  */
 
-//const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-reset-add-ons-and-settings",
-
-/**
- * Filters mature channels if parental controls are activated.
- *
- * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
- * @returns {Array.<module:channel/core.Channel>} Filtered of channels marked as
- *          mature if parental controls are activated.
- */
-const filterInapropriateChannels = (channels) => {
+const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-reset-add-ons-and-settings",
+    /**
+     * Filters mature channels if parental controls are activated.
+     *
+     * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
+     * @returns {Array.<module:channel/core.Channel>} Filtered of channels marked as
+     *          mature if parental controls are activated.
+     */
+    filterInapropriateChannels = (channels) => {
         if(ParentalControls.enabled) {
             return channels.filter((c) => !c.mature);
         }
@@ -209,7 +209,7 @@ export default class ChannelController extends EventTarget {
              * queued, which would lead to them being readded to the list.
              * So this is all totally needed, especially the length of this
              * very comment is crucial to the operation. For more long
-             * comments, explaining stuff, check out the lib/utils module,
+             * comments, explaining stuff, check out the background/utils module,
              * where invokeOnce is kind of explained.
              */
             if(!deletedTypes.has(channel.type)) {
@@ -247,40 +247,27 @@ export default class ChannelController extends EventTarget {
         this._list.addEventListener("userupdated", ({ detail }) => {
             this._manager.onUserUpdated(detail);
         });
-        /*this._list.addEventListener("clear", ({ detail: hard }) => {
+        this._list.addEventListener("clear", ({ detail: hard }) => {
             if(hard) {
-                //TODO swap out the panel and warning state on the button
-                showNotificationBox({
-                    value: "jtvn-dberased",
-                    label: _("lost_channels"),
-                    priority: "WARNING_HIGH",
-                    persistence: 10,
-                    image: self.data.url("./icon18.png"),
-                    buttons: [
-                        {
-                            label: _("manageChannels_label"),
-                            onClick: () => this.showManager()
-                        }
-                    ]
+                const es = new ErrorState(browser.i18n.getMessage("lost_channels"), ErrorState.RECOVERABLE, [
+                    browser.i18n.getMessage("manageChannels_label")
+                ]);
+                es.addEventListener("action", async () => {
+                    await this.showManager();
+                    es.resolve();
+                }, {
+                    once: true,
+                    passive: true,
+                    capture: false
                 });
             }
         });
         this._list.addEventListener("unfixableerror", () => {
-            //TODO swap out panel and add warning state to button
-            showNotificationBox({
-                value: "jtvn-restorefailed",
-                label: _("restore_failed"),
-                priority: "CRITICAL_LOW",
-                persistence: 10,
-                image: self.data.url("./offline18.png"),
-                buttons: [
-                    {
-                        label: _("restore_action"),
-                        onClick: () => tabs.open({ url: REFRESH_PROFILE_URL })
-                    }
-                ]
-            });
-        });*/
+            const es = new ErrorState(browser.i18n.getMessage("restore_failed"), ErrorState.UNRECOVERABLE, [
+                browser.i18n.getMessage("restore_action")
+            ]);
+            es.addEventListener("action", () => browser.tabs.create({ url: REFRESH_PROFILE_URL }));
+        });
         // Provider update events
 
         /**

@@ -1,0 +1,31 @@
+body {
+    font-size: 12px;
+}
+
+#errors {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#errors > li {
+    margin: 0;
+    padding: .5em;
+}
+
+p {
+    margin: 0;
+}
+
+.recoverable {
+    background-color: var(--warn);
+}
+
+.unrecoverable {
+    background-color: var(--error);
+    color: white;
+}
+
+.buttons {
+    margin-top: .5em;
+}

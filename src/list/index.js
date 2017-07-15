@@ -161,23 +161,23 @@ const port = new Port("list", true),
     <div>
         <img srcset="" sizes="30px">
         <span class="rebroadcast hide-offline" hidden><svg class="icon" viewBox="0 0 8 8">
-            <use xlink:href="../assets/images/open-iconic.min.svg#loop"></use>
+            <use xlink:href="../../assets/images/open-iconic.min.svg#loop"></use>
         </svg> </span><span class="name"></span><span class="nonlivename hide-offline" hidden> → <span class="alternate-name"></span></span><br>
         <span class="title hide-offline"></span>
         <aside>
             <span class="viewersWrapper hide-offline">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="../assets/images/open-iconic.min.svg#eye"></use>
+                    <use xlink:href="../../assets/images/open-iconic.min.svg#eye"></use>
                 </svg>&nbsp;<span class="viewers">0</span>&#x20;
             </span>
             <span class="categoryWrapper hide-offline">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="../assets/images/open-iconic.min.svg#tag"></use>
+                    <use xlink:href="../../assets/images/open-iconic.min.svg#tag"></use>
                 </svg>&nbsp;<span class="category"></span>&#x20;
             </span>
             <span class="providerWrapper">
                 <svg class="icon" viewBox="0 0 8 8">
-                    <use xlink:href="../assets/images/open-iconic.min.svg#hard-drive"></use>
+                    <use xlink:href="../../assets/images/open-iconic.min.svg#hard-drive"></use>
                 </svg>&nbsp;<span class="provider"></span>
             </span>
         </aside>

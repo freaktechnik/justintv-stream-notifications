@@ -12,17 +12,13 @@
     "author": "freaktechnik",
     "version": "3.4.0",
     "icons": {
-        "16": "assets/images/icon.svg",
-        "18": "assets/images/icon.svg",
-        "32": "assets/images/icon.svg",
-        "36": "assets/images/icon.svg",
         "48": "assets/images/icon.svg",
         "64": "assets/images/icon.svg"
     },
     "browser_action": {
         "browser_style": false,
         "default_icon": "assets/images/offline.svg",
-        "default_popup": "list/index.html",
+        "default_popup": "popup/list/index.html",
         "default_title": "__MSG_listTooltipOffline__"
     },
     "background": {

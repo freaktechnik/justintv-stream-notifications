@@ -9,9 +9,10 @@ const defaultLanguage = manifest.default_locale;
 module.exports = {
     entry: {
         background: "./src/background/index.js",
-        list: "./src/list/index.js",
+        "popup/list": "./src/list/index.js",
         manager: "./src/manager/index.js",
-        options: "./src/options/index.js"
+        options: "./src/options/index.js",
+        "popup/errorState": "./src/errorState/index.js"
     },
     output: {
         path: path.resolve(__dirname, "./webextension"),
@@ -59,7 +60,7 @@ module.exports = {
             chunks: [
                 'options',
                 'manager',
-                'list',
+                'popup/list',
                 'background'
             ],
             minChunks: 3
@@ -76,10 +77,10 @@ module.exports = {
 	    }),
 	    new HtmlWebpackPlugin({
 	        template: 'src/list/index.html',
-	        filename: 'list/index.html',
+	        filename: 'popup/list/index.html',
 	        chunks: [
                 'common',
-                'list'
+                'popup/list'
             ],
             chunksSortMode: 'dependency',
 	        defaultLanguage
@@ -90,6 +91,15 @@ module.exports = {
             chunks: [
                 'common',
                 'options'
+            ],
+            chunksSortMode: 'dependency',
+            defaultLanguage
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/errorState/index.html',
+            filename: "popup/errorState/index.html",
+            chunks: [
+                'popup/errorState'
             ],
             chunksSortMode: 'dependency',
             defaultLanguage

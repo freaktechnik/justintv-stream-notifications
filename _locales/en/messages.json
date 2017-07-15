@@ -480,5 +480,25 @@
     "resetOptions": {
         "message": "Reset to default",
         "description": "Button to reset all preferences to their default value"
+    },
+    "errorState1": {
+        "message": "Recoverable error with Live Stream Notifier",
+        "description": "Error title when a recoverable error is blocking the extension"
+    },
+    "errorState2": {
+        "message": "Unrecoverable error with Live Stream Notifier",
+        "description": "Error title when an unrecoverable error is blocking the extension"
+    },
+    "lost_channels": {
+        "message": "Live Stream Notifier could not read the saved channels. To restore the extension, all channels and users have been removed.",
+        "description": "Error while trying to read the DB, however the DB could be cleared"
+    },
+    "restore_failed": {
+        "message": "Sadly Live Stream Notifier's attempt at restoring its database failed. The only known fix is to reset the profile.",
+        "description": "Error while trying to read the DB, no actions from within the extension will work."
+    },
+    "restore_action": {
+        "message": "Show me how",
+        "description": "Button leading to instructions how to reset a Firefox profile."
     }
 }

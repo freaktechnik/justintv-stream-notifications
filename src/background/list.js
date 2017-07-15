@@ -16,6 +16,7 @@ import providers from './providers';
 import EventTarget from 'event-target-shim';
 import Port from '../port';
 import serializedProviders from "./providers/serialized";
+import { errorStateManager } from './error-state';
 
 /**
  * Should open the ChannelsManager.
@@ -215,36 +216,38 @@ class ListView extends EventTarget {
     }
 
     async updateBadge() {
-        const size = this.live.size + (this.countNonlive ? this.nonlive.size : 0);
-        if(size > 0) {
-            if(await prefs.get("panel_badge")) {
-                browser.browserAction.setBadgeText({
-                    text: size.toString()
+        if(!(await errorStateManager.IN_ERROR_STATE)) {
+            const size = this.live.size + (this.countNonlive ? this.nonlive.size : 0);
+            if(size > 0) {
+                if(await prefs.get("panel_badge")) {
+                    browser.browserAction.setBadgeText({
+                        text: size.toString()
+                    });
+                }
+                else {
+                    browser.browserAction.setBadgeText({
+                        text: ""
+                    });
+                }
+
+                browser.browserAction.setIcon({
+                    path: LIVE_ICONS
+                });
+                browser.browserAction.setTitle({
+                    title: _("listTooltipLive")
                 });
             }
             else {
                 browser.browserAction.setBadgeText({
                     text: ""
                 });
+                browser.browserAction.setIcon({
+                    path: OFFLINE_ICONS
+                });
+                browser.browserAction.setTitle({
+                    title: _("listTooltipOffline")
+                });
             }
-
-            browser.browserAction.setIcon({
-                path: LIVE_ICONS
-            });
-            browser.browserAction.setTitle({
-                title: _("listTooltipLive")
-            });
-        }
-        else {
-            browser.browserAction.setBadgeText({
-                text: ""
-            });
-            browser.browserAction.setIcon({
-                path: OFFLINE_ICONS
-            });
-            browser.browserAction.setTitle({
-                title: _("listTooltipOffline")
-            });
         }
     }
 

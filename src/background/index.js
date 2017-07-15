@@ -22,6 +22,15 @@ import Notifier from "./notifier";
 import prefInfo from '../prefs.json';
 import Tour from './tour';
 import ParentalControls from './parental-controls';
+import { errorStateManager } from './error-state';
+
+const qsPause = () => qs.pause(),
+    qsResume = () => qs.resume();
+
+errorStateManager.addEventListener("register", qsPause, {
+    capture: false,
+    passive: true
+});
 
 const S_TO_MS_FACTOR = 1000,
 
@@ -29,6 +38,14 @@ const S_TO_MS_FACTOR = 1000,
     notifier = new Notifier(),
     controller = new ChannelController(),
     list = new ListView();
+
+errorStateManager.addEventListener("empty", () => {
+    qs.resume();
+    list.updateBadge();
+}, {
+    capture: false,
+    passive: true
+});
 
 list.addEventListener("ready", () => {
     controller.getChannelsByType()
@@ -68,8 +85,8 @@ list.addEventListener("open", ({ detail }) => {
 
     p.then((channel) => selectOrOpenTab(channel, what));
 });
-list.addEventListener("pause", () => qs.pause());
-list.addEventListener("resume", () => qs.resume());
+list.addEventListener("pause", qsPause);
+list.addEventListener("resume", qsResume);
 list.addEventListener("copy", async ({ detail }) => {
     let copy;
     if(Array.isArray(detail)) {
@@ -115,9 +132,9 @@ controller.addEventListener("channeldeleted", ({ detail: channelId }) => {
     list.removeChannel(channelId);
 });
 
-controller.addEventListener("beforechanneldeleted", () => qs.pause());
+controller.addEventListener("beforechanneldeleted", qsPause);
 //TODO do counting instead of relying on randomness being in our favor ;)
-controller.addEventListener("afterchanneldeleted", () => qs.resume());
+controller.addEventListener("afterchanneldeleted", qsResume);
 
 prefs.get([
     "updateInterval",
@@ -199,7 +216,7 @@ browser.runtime.onMessage.addListener((message) => {
 
 // Do migration of channel data and prefs if necessary
 const migrateData = () => {
-    prefs.get("migrated").then((migrated) => {
+    browser.storage.local.get("migrated").then(({ migrated }) => {
         if(!migrated) {
             SDK.doAction("migrate-channels").then(([ channels, users ]) => {
                 const ignoreAzubu = (o) => o.type != "azubu";
