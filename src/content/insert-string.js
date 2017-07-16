@@ -21,12 +21,12 @@ const attrMap = {
                 if(attr in attrMap) {
                     a = attrMap[attr];
                 }
-                string += `${attr}="${getString(bundle, id + attrSeparator + a)}" `;
+                string += ` ${attr}="${getString(bundle, id + attrSeparator + a)}"`;
             }
-            string += `data-l10n-attrs="${attrs.join(',')}" `;
+            string += ` data-l10n-attrs="${attrs.join(',')}"`;
         }
 
-        string += `data-l10n-id="${id}">`;
+        string += ` data-l10n-id="${id}">`;
 
         if(!noContent) {
             string += getString(bundle, id);

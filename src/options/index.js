@@ -3,6 +3,8 @@ import { format } from '../format-pref';
 import '../content/l10n';
 import { toggle } from '../content/utils';
 import errorStateWidget from '../content/error-state';
+import './options.css';
+import '../content/shared.css';
 
 //TODO help button for advanced prefs?
 

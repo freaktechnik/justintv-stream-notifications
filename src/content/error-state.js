@@ -39,8 +39,8 @@ class ErrorStateView {
             hook.appendChild(this.root);
         });
 
-        browser.storage.onChanged.addListener((change) => {
-            if(change.areaName === "local" && "errorStates" in change.changes) {
+        browser.storage.onChanged.addListener((change, areaName) => {
+            if(areaName === "local" && "errorStates" in change.changes) {
                 for(const e of change.changes.newValue) {
                     if(change.changes.oldValue.every(({ id }) => id !== e.id)) {
                         this.addError(e);

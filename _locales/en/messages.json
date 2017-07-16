@@ -500,5 +500,9 @@
     "restore_action": {
         "message": "Show me how",
         "description": "Button leading to instructions how to reset a Firefox profile."
+    },
+    "pref_value_hidden": {
+        "message": "hidden",
+        "description": "Shown as placeholder when a value is set but hidden in the preferences."
     }
 }

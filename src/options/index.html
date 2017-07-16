@@ -16,8 +16,10 @@
         <main class="panel">
             <div id="errorStates">
             </div>
-            <button id="manageChannels"<%= translateElement('manageChannels_label') %></button>
-            <button id="reset"<%= translateElement('resetOptions') %></button>
+            <div class="topbar">
+                <button id="manageChannels"<%= translateElement('manageChannels_label') %></button>
+                <button id="reset"<%= translateElement('resetOptions') %></button>
+            </div>
             <% var visiblePrefs = [],
                 hiddenPrefs = [];
             for(var p in prefs) {
@@ -48,6 +50,9 @@
                         if(!pref.hideDefault) {
                             props.placeholder = pref.value;
                         }
+                        else {
+                            props.placeholder = translateElement("pref_value_hidden", undefined, true);
+                        }
                     }
                     else if(pref.type == "bool") {
                         props.type = "checkbox";
@@ -69,8 +74,15 @@
                     }
                     input += ">";
                 }
+                let description;
+                try {
+                    description = `<small${translateElement(pref.id+"_description")}</small>`;
+                }
+                catch(e) {
+                    description = '';
+                }
                 return `<div class="panel-formElements-item">
-    <label for="${pref.id}"${translateElement(pref.id+"_title")}</label>
+    <div class="label"><label for="${pref.id}"${translateElement(pref.id+"_title")}</label>${description}</div>
     ${input}
 </div>`;
             } %>
