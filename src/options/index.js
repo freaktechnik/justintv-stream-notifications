@@ -115,7 +115,9 @@ class OptionsPage {
         }
         return browser.storage.local.get(request).then((stored) => {
             for(const p in stored) {
-                document.getElementById(p)[OptionsPage.VALUE_PROPERTY[prefs[p].type]] = stored[p];
+                if(!prefs[p].hideDefault || prefs[p].value !== stored[p]) {
+                    document.getElementById(p)[OptionsPage.VALUE_PROPERTY[prefs[p].type]] = stored[p];
+                }
             }
         });
     }

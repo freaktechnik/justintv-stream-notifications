@@ -45,7 +45,9 @@
                     };
                     if(pref.type == "string") {
                         props.type = "text";
-                        props.placeholder = pref.value;
+                        if(!pref.hideDefault) {
+                            props.placeholder = pref.value;
+                        }
                     }
                     else if(pref.type == "bool") {
                         props.type = "checkbox";

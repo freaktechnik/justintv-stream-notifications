@@ -107,7 +107,8 @@
     "twitch_clientId": {
         "type": "string",
         "value": "1owsrolvxz8khldqe6puadzd8bldq34",
-        "hidden": true
+        "hidden": true,
+        "hideDefault": true
     },
     "twitch_showHosting": {
         "type": "bool",
@@ -122,7 +123,8 @@
     "youtube_apiKey": {
         "type": "string",
         "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM",
-        "hidden": true
+        "hidden": true,
+        "hideDefault": true
     },
     "mlg_showRebroadcasts": {
         "type": "bool",

@@ -48,6 +48,11 @@
                     },
                     "minItems": 2,
                     "uniqueItems": true
+                },
+                "hideDefault": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Don't show the default value in preferences."
                 }
             },
             "required": [
