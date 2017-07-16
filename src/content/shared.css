@@ -89,3 +89,37 @@ body {
 }
 
 /* END TOPBAR */
+
+/* START ERROR STATE */
+.esv summary {
+    padding: 0 .5em;
+}
+
+.esv ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.esv ul li {
+    margin: 0;
+    padding: .5em;
+}
+
+.esv ul > li p {
+    margin: 0;
+}
+
+.esv .buttons {
+    margin-top: .5em;
+}
+
+.recoverable {
+    background-color: var(--warn);
+}
+
+.unrecoverable {
+    background-color: var(--error);
+    color: white;
+}
+/* END ERROR STATE */

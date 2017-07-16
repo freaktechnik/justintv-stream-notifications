@@ -486,7 +486,7 @@
         "description": "Error title when a recoverable error is blocking the extension"
     },
     "errorState2": {
-        "message": "Unrecoverable error with Live Stream Notifier",
+        "message": "Critical error with Live Stream Notifier",
         "description": "Error title when an unrecoverable error is blocking the extension"
     },
     "lost_channels": {

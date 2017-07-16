@@ -2,6 +2,7 @@ import prefs from '../prefs.json';
 import { format } from '../format-pref';
 import '../content/l10n';
 import { toggle } from '../content/utils';
+import errorStateWidget from '../content/error-state';
 
 //TODO help button for advanced prefs?
 
@@ -37,6 +38,8 @@ class OptionsPage {
         browser.runtime.sendMessage("pcStatus").then((status) => {
             toggle(document.getElementById("hiddenprefs"), !status);
         });
+
+        errorStateWidget(document.getElementById("errorStates"));
     }
 
     getValue(p) {
