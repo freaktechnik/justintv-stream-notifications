@@ -15,10 +15,6 @@
         "message": "Twitche Client ID",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
-    "panel_maxHeight_title": {
-        "message": "Maximale Panelhöhe",
-        "description": "Title of the panel maximum height setting in the preferences"
-    },
     "context_resume": {
         "message": "Aktualisierungen Fortsetzen",
         "description": "Context menu action on the refresh button in the panel to resume the queue"
@@ -68,8 +64,8 @@
         "description": "Provider name for the original livestream.com"
     },
     "providerhitbox": {
-        "message": "Hitbox",
-        "description": "Provider name for hitbox.tv"
+        "message": "Smashcast",
+        "description": "Provider name for smashcast.tv (formerly hitbox.tv/azubu.tv)"
     },
     "panel_tab_offline": {
         "message": "Offline",
@@ -96,7 +92,7 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "Keine Kanäle sind im Moment live (Ctrl+Shift+L)",
+        "message": "Keine Kanäle sind im Moment live (Strg+Umschalt+L)",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "panel_nonlive_options.Livebottom": {
@@ -167,10 +163,6 @@
         "message": "Benachrichtigen, wenn ein Stream offline geht",
         "description": "Title of the offline notifications setting in the preferences"
     },
-    "providerazubu": {
-        "message": "Azubu",
-        "description": "Provider name of azubu.tv"
-    },
     "panel_tab_explore": {
         "message": "Entdecken",
         "description": "Label of the explore tab in the panel"
@@ -178,6 +170,10 @@
     "updateNotification": {
         "message": "$CHANNEL$ hat den Titel geändert",
         "description": "Notification title when a channel changes the stream title"
+    },
+    "lost_channels": {
+        "message": "Live Stream Notifier konnte die gespeicherten Kanäle nicht lesen. Leider mussten alle Kanäle und Benutzer entfernt werden.",
+        "description": "Error while trying to read the DB, however the DB could be cleared"
     },
     "queue_maxRequestBatchSize_title": {
         "message": "Maximale Anfragezahl pro Aktualisierungsdurchlauf",
@@ -187,8 +183,12 @@
         "message": "Live",
         "description": "Live option of the non-live treatment setting in the preferences"
     },
+    "errorState1": {
+        "message": "Behebbarer Fehler in Live Stream Benachrichtigungen",
+        "description": "Error title when a recoverable error is blocking the extension"
+    },
     "listTooltipLive": {
-        "message": "Aktuell streamende Kanäle (Ctrl+Shift+L)",
+        "message": "Aktuell streamende Kanäle (Strg+Umschalt+L)",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
@@ -315,6 +315,10 @@
         "message": "Das Zeitintervall, in dem das Add-on den Status der Kanäle überprüft in Sekunden. Null beduetet, dass der Status der Kanäle nicht aktualisiert wird.",
         "description": "Description of the update interval setting in the preferences"
     },
+    "restore_action": {
+        "message": "Anleitung",
+        "description": "Button leading to instructions how to reset a Firefox profile."
+    },
     "twitch_showHosting_title": {
         "message": "Hostingstatus von Twitchkanälen prüfen",
         "description": "Title of the Twitch hosting setting in the preferences"
@@ -327,12 +331,16 @@
         "message": "Live",
         "description": "Label of the tab with the live channels in the panel"
     },
+    "restore_failed": {
+        "message": "Leider schlug der Versuch von Life Stream Notifier seine Datenbank wiederherzustellen fehl. Die einzige bekannte Lösung ist das Profil zurückzusetzen.",
+        "description": "Error while trying to read the DB, no actions from within the extension will work."
+    },
     "cm_tab_channels": {
         "message": "Kanäle",
         "description": "Label of the tab that contains all channels in the channel manager"
     },
     "find_mature_title": {
-        "message": "Nicht jugendfreie Inhalte im Entdecken Tab anzeigen",
+        "message": "Nich jugendfreie Inhalte erlauben",
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
@@ -379,6 +387,10 @@
         "message": "Updateinfos in einem Tab öffnen",
         "description": "Title of the update tab setting in the preferences"
     },
+    "errorState2": {
+        "message": "Kritischer Fehler in Live Stream Benachrichtigungen",
+        "description": "Error title when an unrecoverable error is blocking the extension"
+    },
     "cm_filter.placeholder": {
         "message": "Suchbegriff…",
         "description": "Placeholder in the filter field for the channel manager"
@@ -396,7 +408,7 @@
         "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
     "twitch_showPlaylist_title": {
-        "message": "Playlisten von Twitchkanälen prüfen",
+        "message": "Twitchkanäle, die Playlisten wiedergeben zeigen",
         "description": "Title of the Twitch playlist setting in the preferences"
     },
     "panel_tab_nonlive": {

@@ -182,7 +182,6 @@ export default class ChannelList extends EventTarget {
                         else {
                             resolve();
                             emit(this, "ready");
-                            emit(this, "unfixableerror");
                         }
                     };
                 });

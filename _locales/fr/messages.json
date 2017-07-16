@@ -15,10 +15,6 @@
         "message": "ID Client Twitch",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
-    "panel_maxHeight_title": {
-        "message": "Hauteur maximum du panneau",
-        "description": "Title of the panel maximum height setting in the preferences"
-    },
     "context_resume": {
         "message": "Reprendre Rafraîchir File d'attente",
         "description": "Context menu action on the refresh button in the panel to resume the queue"
@@ -68,8 +64,8 @@
         "description": "Provider name for the original livestream.com"
     },
     "providerhitbox": {
-        "message": "Hitbox",
-        "description": "Provider name for hitbox.tv"
+        "message": "Smashcast",
+        "description": "Provider name for smashcast.tv (formerly hitbox.tv/azubu.tv)"
     },
     "panel_tab_offline": {
         "message": "Hors Ligne",
@@ -167,10 +163,6 @@
         "message": "Afficher une notification lorsqu'un stream est hors ligne",
         "description": "Title of the offline notifications setting in the preferences"
     },
-    "providerazubu": {
-        "message": "Azubu",
-        "description": "Provider name of azubu.tv"
-    },
     "panel_tab_explore": {
         "message": "Explorer",
         "description": "Label of the explore tab in the panel"
@@ -179,6 +171,10 @@
         "message": "$CHANNEL$ a actualisé le titre",
         "description": "Notification title when a channel changes the stream title"
     },
+    "lost_channels": {
+        "message": "LIve Stream Notifier n'a pas pu lire les chaînes enregistrés. Pour restaurer l'extension, toutes les chaînes et les utilisateurs ont été supprimés.",
+        "description": "Error while trying to read the DB, however the DB could be cleared"
+    },
     "queue_maxRequestBatchSize_title": {
         "message": "Nombre maximal de demandes par groupe",
         "description": "Title of the request batch size setting in the preferences"
@@ -186,6 +182,10 @@
     "panel_nonlive_options.Live": {
         "message": "En Ligne",
         "description": "Live option of the non-live treatment setting in the preferences"
+    },
+    "errorState1": {
+        "message": "Recoverable error with Live Stream Notifier",
+        "description": "Error title when a recoverable error is blocking the extension"
     },
     "listTooltipLive": {
         "message": "Currently live channels (Ctrl+Shift+L)",
@@ -315,6 +315,10 @@
         "message": "Intervalle de rafraichissement du module lorsque le stream est en direct (en secondes). 0 : pas de rafraichissement automatique",
         "description": "Description of the update interval setting in the preferences"
     },
+    "restore_action": {
+        "message": "Me montrer comment",
+        "description": "Button leading to instructions how to reset a Firefox profile."
+    },
     "twitch_showHosting_title": {
         "message": "Vérifier si une chaîne Twitch héberge",
         "description": "Title of the Twitch hosting setting in the preferences"
@@ -327,12 +331,16 @@
         "message": "En Ligne",
         "description": "Label of the tab with the live channels in the panel"
     },
+    "restore_failed": {
+        "message": "Malheureusement la tentative de Live Stream Notifier pour restaurer sa base de données à échoué. Le seul correctif connu est de réinitialiser le profil.",
+        "description": "Error while trying to read the DB, no actions from within the extension will work."
+    },
     "cm_tab_channels": {
         "message": "Chaînes",
         "description": "Label of the tab that contains all channels in the channel manager"
     },
     "find_mature_title": {
-        "message": "Trouver du contenu explicite dans l'onglet explorer",
+        "message": "Allow mature content",
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
@@ -379,6 +387,10 @@
         "message": "Ouvrir un onglet d'informations après une mise à jour",
         "description": "Title of the update tab setting in the preferences"
     },
+    "errorState2": {
+        "message": "Critical error with Live Stream Notifier",
+        "description": "Error title when an unrecoverable error is blocking the extension"
+    },
     "cm_filter.placeholder": {
         "message": "Filtrer…",
         "description": "Placeholder in the filter field for the channel manager"
@@ -396,7 +408,7 @@
         "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
     "twitch_showPlaylist_title": {
-        "message": "Afficher les chaînes jouant les enregistrements d'une liste de lecture",
+        "message": "Show Twitch channels replaying recordings from a playlist",
         "description": "Title of the Twitch playlist setting in the preferences"
     },
     "panel_tab_nonlive": {
