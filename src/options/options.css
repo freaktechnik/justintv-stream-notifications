@@ -1,0 +1,33 @@
+.label {
+    width: 40%;
+    text-align: right;
+    display: inline-block;
+    margin-bottom: .5em;
+}
+
+.label small, .label label {
+    display: block;
+}
+
+input, select {
+    vertical-align: top;
+}
+
+input:not([type="checkbox"]), select {
+    width: 59%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.topbar {
+    margin-bottom: 1em;
+}
+
+.topbar button {
+    padding: .5em;
+}
+
+summary {
+    font-size: 1.2em;
+    font-weight: bolder;
+}
