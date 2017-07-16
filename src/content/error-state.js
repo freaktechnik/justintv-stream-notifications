@@ -20,6 +20,7 @@ class ErrorStateView {
     constructor(hook) {
         this.root = document.createElement("details");
         this.root.open = true;
+        this.root.hidden = true;
         this.root.classList.add("esv");
         this.currentGravity = 0;
 
@@ -63,7 +64,7 @@ class ErrorStateView {
 
         if(gravity != this.currentGravity) {
             if(gravity === 0) {
-                this.root.hidden = true;
+                this.root.shidden = true;
             }
             else {
                 this.root.hidden = false;
