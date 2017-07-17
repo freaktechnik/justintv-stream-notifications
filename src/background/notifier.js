@@ -161,7 +161,12 @@ export default class Notifier extends EventTarget {
                 title = _("onlineNotification", channel.toString());
             }
             else if((await and(channel.live.isLive(liveInterpretation), this.titleNotifications(), or(channel.live.state === LiveState.LIVE, this.nonliveNotifications()))) && !this._channelStateChanged(channel) && this.channelTitles.get(channel.id) != channel.title) {
-                title = _("updateNotification", channel.toString());
+                if(channel.live.state !== LiveState.REDIRECT) {
+                    title = _("updateNotification", channel.toString());
+                }
+                else {
+                    title = _("redirectUpdateNotification", channel.toString(), channel.live.alternateUsername);
+                }
             }
             else if((await and(not(channel.live.isLive(liveInterpretation)), this.offlineNotifications())) && this.channelTitles.has(channel.id)) {
                 title = _("offlineNotification", channel.toString());

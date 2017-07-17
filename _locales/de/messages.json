@@ -79,6 +79,10 @@
         "message": "Erhalte eine Benachrichtigung, wenn ein verfolgter Streamer live geht. Diese Erweiterung gibt dir die Kontrolle darüber, welche Kanäle geprüft werden und schnellen Zugriff auf all diese Kanäle über ein praktisches Panel.",
         "description": "Description of the extension"
     },
+    "pref_value_hidden": {
+        "message": "geschützt",
+        "description": "Shown as placeholder when a value is set but hidden in the preferences."
+    },
     "queueservice_maxRetries_title": {
         "message": "Maximale Versuchsanzahl bis eine Anfrage verworfen wird",
         "description": "Title of the request retry limit setting in the preferences"
@@ -358,6 +362,10 @@
     "panel_refresh.title": {
         "message": "Aktualisiert den Status aller Kanäle",
         "description": "Tooltip on the refresh button in the panel"
+    },
+    "redirectUpdateNotification": {
+        "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
+        "description": "Notification title when a channel changes the stream title"
     },
     "context_open": {
         "message": "Streamarchiv öffnen",

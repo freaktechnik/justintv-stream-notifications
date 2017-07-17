@@ -504,5 +504,19 @@
     "pref_value_hidden": {
         "message": "hidden",
         "description": "Shown as placeholder when a value is set but hidden in the preferences."
+    },
+    "redirectUpdateNotification": {
+        "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
+        "description": "Notification title when a channel changes the stream title",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "redirectTarget": {
+                "content": "$2",
+                "example": "Eisenhower"
+            }
+        }
     }
 }

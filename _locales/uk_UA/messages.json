@@ -79,6 +79,10 @@
         "message": "Get notified, whenever a followed streamer goes live. This extension features advanced control over the channels it monitors and a panel for quick access to those channels.",
         "description": "Description of the extension"
     },
+    "pref_value_hidden": {
+        "message": "hidden",
+        "description": "Shown as placeholder when a value is set but hidden in the preferences."
+    },
     "queueservice_maxRetries_title": {
         "message": "Maximum number of attempts before a request is discarded",
         "description": "Title of the request retry limit setting in the preferences"
@@ -358,6 +362,10 @@
     "panel_refresh.title": {
         "message": "Refresh the live statuses of all channels",
         "description": "Tooltip on the refresh button in the panel"
+    },
+    "redirectUpdateNotification": {
+        "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
+        "description": "Notification title when a channel changes the stream title"
     },
     "context_open": {
         "message": "Open Archive Page",
