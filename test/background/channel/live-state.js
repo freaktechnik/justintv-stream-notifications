@@ -16,6 +16,7 @@ test('exports', (t) => {
     t.true("REBROADCAST" in LiveState, "LiveState has the REBROADCAST constant");
     t.true("TOWARD_LIVE" in LiveState, "LiveState has the TOWARD_LIVE constant");
     t.true("TOWARD_OFFLINE" in LiveState, "LiveState has the TOWARD_OFFLINE constant");
+    t.true("TOWARD_BROADCASTING" in LiveState, "LiveState has the TOWARD_BROADCASTING constant");
 });
 
 test('Construction', (t) => {
@@ -67,25 +68,29 @@ const statesToTest = [
         name: "offline",
         value: LiveState.OFFLINE,
         [LiveState.TOWARD_LIVE]: false,
-        [LiveState.TOWARD_OFFLINE]: false
+        [LiveState.TOWARD_OFFLINE]: false,
+        [LiveState.TOWARD_BROADCASTING]: false
     },
     {
         name: "live",
         value: LiveState.LIVE,
         [LiveState.TOWARD_LIVE]: true,
-        [LiveState.TOWARD_OFFLINE]: true
+        [LiveState.TOWARD_OFFLINE]: true,
+        [LiveState.TOWARD_BROADCASTING]: true
     },
     {
         name: "redirect",
         value: LiveState.REDIRECT,
         [LiveState.TOWARD_LIVE]: true,
-        [LiveState.TOWARD_OFFLINE]: false
+        [LiveState.TOWARD_OFFLINE]: false,
+        [LiveState.TOWARD_BROADCASTING]: false
     },
     {
         name: "rebroadcast",
         value: LiveState.REBROADCAST,
         [LiveState.TOWARD_LIVE]: true,
-        [LiveState.TOWARD_OFFLINE]: false
+        [LiveState.TOWARD_OFFLINE]: false,
+        [LiveState.TOWARD_BROADCASTING]: true
     }
 ];
 const testStates = async (t, testState) => {
@@ -93,6 +98,7 @@ const testStates = async (t, testState) => {
 
     t.is(await state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], "correctly treated TOWARD_LIVE");
     t.is(await state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], "correctly treated TOWARD_OFFLINE");
+    t.is(await state.isLive(LiveState.TOWARD_BROADCASTING), testState[LiveState.TOWARD_BROADCASTING], "correctly treated TOWARD_BROADCASTING");
 };
 testStates.title = (title, state) => `${title} for ${state.name}`;
 

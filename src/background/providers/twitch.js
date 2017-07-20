@@ -54,14 +54,7 @@ function getChannelFromJSON(jsonChannel) {
 }
 
 function getStreamTypeParam(delim = "&") {
-    return prefs.get('twitch_showPlaylist').then((showPlaylist) => {
-        if(showPlaylist) {
-            return delim + "stream_type=all";
-        }
-        else {
-            return delim + "&stream_type=live";
-        }
-    });
+    return Promise.resolve(delim + "stream_type=live");
 }
 
 class Twitch extends GenericProvider {
@@ -157,7 +150,7 @@ class Twitch extends GenericProvider {
     updateRequest(channels) {
         const channelsString = channels.map((c) => c.login).join(",");
         new PaginationHelper({
-            url: baseURL + "/streams?channel=" + channelsString + "&stream_type=all&limit=" + itemsPerPage + "&offset=",
+            url: baseURL + "/streams?channel=" + channelsString + "&stream_type=live&limit=" + itemsPerPage + "&offset=",
             pageSize: itemsPerPage,
             request: (url, callback, initial) => {
                 if(initial) {
@@ -173,14 +166,11 @@ class Twitch extends GenericProvider {
             getItems: (data) => {
                 if(data.parsedJSON && "streams" in data.parsedJSON) {
                     let streams = data.parsedJSON.streams;
-                    if(!prefs.twitch_showPlaylist) {
-                        streams = streams.filter((s) => !s.is_playlist);
-                    }
                     return streams.map((obj) => {
                         const cho = getChannelFromJSON(obj.channel);
                         cho.viewers = obj.viewers;
                         cho.thumbnail = obj.preview.medium;
-                        if(obj.is_playlist) {
+                        if(obj.stream_type === "watch_party") {
                             cho.live = new LiveState(LiveState.REBROADCAST);
                         }
                         else {
@@ -211,28 +201,13 @@ class Twitch extends GenericProvider {
                 }
             },
             onComplete: async (data) => {
-                const liveChans = await filterAsync(data, (cho) => cho.live.isLive(LiveState.TOWARD_OFFLINE));
+                const liveChans = await filterAsync(data, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING));
                 if(liveChans.length) {
                     emit(this, "updatedchannels", liveChans);
                 }
                 if(liveChans.length != channels.length) {
-                    let offlineChans = dedupe(channels, data);
-                    const playlistChans = await filterAsync(data, (cho) => not(cho.live.isLive(LiveState.TOWARD_OFFLINE)));
-                    offlineChans = offlineChans.concat(playlistChans);
-                    let chans = await this._getHostedChannels(offlineChans, liveChans);
-                    chans = await Promise.all(chans.map((chan) => {
-                        if(chan.live.state == LiveState.REBROADCAST) {
-                            return this._getActivePlaylistInfo(chan).then((meta) => {
-                                chan.title = meta.title;
-                                chan.category = meta.game;
-                                chan.thumbnail = meta.thumbnail;
-                                return chan;
-                            }, () => chan);
-                        }
-                        else {
-                            return chan;
-                        }
-                    }));
+                    const offlineChans = dedupe(channels, data),
+                        chans = await this._getHostedChannels(offlineChans, liveChans);
                     emit(this, "updatedchannels", chans);
                 }
             }
@@ -244,37 +219,22 @@ class Twitch extends GenericProvider {
             this.getChannelDetails(channelname)
         ]);
 
-        if(data.parsedJSON && data.parsedJSON.stream !== null &&
-           (!ignoreHosted || !data.parsedJSON.stream.is_playlist)) {
+        if(data.parsedJSON && data.parsedJSON.stream !== null) {
             channel.viewers = data.parsedJSON.stream.viewers;
             channel.thumbnail = data.parsedJSON.stream.preview.medium;
-            if(data.parsedJSON.stream.is_playlist) {
+            if(data.parsedJSON.stream.stream_type === "watch_party") {
                 channel.live = new LiveState(LiveState.REBROADCAST);
-                try {
-                    const meta = await this._getActivePlaylistInfo(channel);
-                    channel.title = meta.title;
-                    channel.category = meta.game;
-                    channel.thumbnail = meta.thumbnail;
-                }
-                catch(e) {
-                    // empty
-                }
             }
             else {
                 channel.live.setLive(true);
             }
         }
 
-        if(await channel.live.isLive(LiveState.TOWARD_OFFLINE)) {
+        if((await channel.live.isLive(LiveState.TOWARD_LIVE)) || ignoreHosted) {
             return channel;
         }
         else {
-            if(!ignoreHosted) {
-                return this._getHostedChannel(channel);
-            }
-            else {
-                return channel;
-            }
+            return this._getHostedChannel(channel);
         }
     }
     async updateChannels(channels) {
@@ -305,7 +265,7 @@ class Twitch extends GenericProvider {
                 cho = getChannelFromJSON(obj.channel);
                 cho.viewers = obj.viewers;
                 cho.thumbnail = obj.preview.medium;
-                if(obj.is_playlist) {
+                if(obj.stream_type === "watch_party") {
                     cho.live = new LiveState(LiveState.REBROADCAST);
                 }
                 else {
@@ -330,25 +290,11 @@ class Twitch extends GenericProvider {
                 }
             }));
 
-        const liveChans = await filterAsync(ret, (cho) => cho.live.isLive(LiveState.TOWARD_OFFLINE));
+        const liveChans = await filterAsync(ret, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING));
 
         if(liveChans.length != channels.length) {
-            const playlistChans = (await Promise.all(ret.map(async (cho) => {
-                if(await not(cho.live.isLive(LiveState.TOWARD_OFFLINE))) {
-                    try {
-                        const meta = await this._getActivePlaylistInfo(cho);
-                        cho.title = meta.title;
-                        cho.category = meta.game;
-                        cho.thumbnail = meta.thumbnail;
-                    }
-                    catch(e) { /* emtpy */ }
-                    return cho;
-                }
-                return null;
-            }))).filter((c) => c !== null);
-            let offlineChans = dedupe(channels, ret);
-            offlineChans = offlineChans.concat(playlistChans);
-            const offChans = await this._getHostedChannels(offlineChans, liveChans);
+            const offlineChans = dedupe(channels, ret),
+                offChans = await this._getHostedChannels(offlineChans, liveChans);
             ret = liveChans.concat(offChans);
         }
 
@@ -491,28 +437,6 @@ class Twitch extends GenericProvider {
     }
     _getHostedChannel(channel) {
         return this._getHostedChannels([ channel ]).then((chs) => chs[0]);
-    }
-    async _getActivePlaylistInfo(channel) {
-        const id = await this._getChannelId(channel),
-            playlist = await this._qs.queueRequest("https://api.twitch.tv/api/playlists/channels/" + id, headers);
-
-        if(playlist.parsedJSON && playlist.parsedJSON.enabled && playlist.parsedJSON.active && playlist.parsedJSON.playhead) {
-            const playhead = playlist.parsedJSON.playhead,
-                vod = await this._qs.queueRequest(baseURL + "/videos/v" + playhead.vods[playhead.active_vod_index].id, headers);
-            if(vod.parsedJSON) {
-                return {
-                    title: vod.parsedJSON.title,
-                    game: vod.parsedJSON.game,
-                    thumbnail: vod.parsedJSON.preview
-                };
-            }
-            else {
-                throw new Error("VOD not found");
-            }
-        }
-        else {
-            throw new Error("Not a channel with an active playlist");
-        }
     }
 }
 

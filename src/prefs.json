@@ -115,11 +115,6 @@
         "value": true,
         "hidden": true
     },
-    "twitch_showPlaylist": {
-        "type": "bool",
-        "value": true,
-        "hidden": true
-    },
     "youtube_apiKey": {
         "type": "string",
         "value": "AIzaSyD24JzaWYvPlnhvGbuNIv1J5ueNgd59EPM",

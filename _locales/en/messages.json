@@ -449,10 +449,6 @@
         "message": "Check if a Twitch Channel is hosting",
         "description": "Title of the Twitch hosting setting in the preferences"
     },
-    "twitch_showPlaylist_title": {
-        "message": "Show Twitch channels replaying recordings from a playlist",
-        "description": "Title of the Twitch playlist setting in the preferences"
-    },
     "youtube_apiKey_title": {
         "message": "YouTube API Key",
         "description": "Title of the YouTube API key setting in the preferences"

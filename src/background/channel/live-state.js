@@ -33,6 +33,7 @@ const IGNORED_PROPERTIES = [ "state", "isLive" ],
     REBROADCAST = LiveStateConst.REBROADCAST,
     TOWARD_LIVE = LiveStateConst.TOWARD_LIVE,
     TOWARD_OFFLINE = LiveStateConst.TOWARD_OFFLINE,
+    TOWARD_BROADCASTING = LiveStateConst.TOWARD_BROADCASTING,
     getDefaultInterpretation = () => {
         return prefs.get("panel_nonlive").then((value) => {
             return parseInt(value, 10) < 3 ? TOWARD_LIVE : TOWARD_OFFLINE;
@@ -103,6 +104,18 @@ class LiveState {
      * @const
      */
     static TOWARD_OFFLINE = TOWARD_OFFLINE;
+
+    /**
+     * Interprets everything where the channels itself is broadcasting as live
+     * (thus rebroadcasts are live, redirects are not).
+     *
+     * @type {module:channel/live-state~LiveStateInterpretation}
+     * @default 2
+     * @const
+     */
+    static get TOWARD_BROADCASTING() {
+        return TOWARD_BROADCASTING;
+    }
 
     /**
      * @param {module:channel/live-state~SerializedLiveState} serializedLiveState
@@ -176,6 +189,9 @@ class LiveState {
         }
         else if(interpretation === TOWARD_OFFLINE) {
             return this.state === LIVE;
+        }
+        else if(interpretation === TOWARD_BROADCASTING) {
+            return this.state === LIVE || this.state === REBROADCAST;
         }
         return false;
     }

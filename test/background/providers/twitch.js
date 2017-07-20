@@ -3,9 +3,6 @@
  *
  * @author Martin Giger
  * @license MPL-2.0
- * @todo test playlist and hosting for all three methods
- * @todo test hosting preferred over playlist
- * @todo test hosting & playlist testchannels with the things disabled
  * @todo test for Client-ID
  */
 import test from 'ava';
@@ -56,17 +53,8 @@ test("Hosting to offline 3", async (t) => {
 
 test("Hosting", async (t) => {
     const ret = await provider.updateChannel('pyrionflax');
-    t.true(ret.live.state > LiveState.LIVE);
     t.is(ret.live.state, LiveState.REDIRECT);
     t.is(ret.live.alternateUsername, "NVIDIA");
-});
-
-test("Playlist", async (t) => {
-    const ret = await provider.updateChannel('totalbiscuit');
-    t.is(ret.title, "VOD title");
-    t.true(ret.live.state > LiveState.LIVE);
-    t.is(ret.live.state, LiveState.REBROADCAST);
-    t.is(ret.category, "Gremlins, Inc.");
 });
 
 test("Twitch Hosting Redirects", async (t) => {
@@ -105,3 +93,5 @@ test("Twitch Update Redirects", async (t) => {
     t.true(await ret[0].live.isLive(LiveState.TOWARD_LIVE), "Returned channel is live");
     t.is(ret[0].id, 15, "Returned channel still has its ID");
 });
+
+test.todo("Vodcasts");
