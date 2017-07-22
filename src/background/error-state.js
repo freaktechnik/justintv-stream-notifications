@@ -146,8 +146,7 @@ export default class ErrorState extends EventTarget {
         if(!ErrorState.currentGravity || ErrorState.currentGravity < gravity) {
             ErrorState.currentGravity = gravity;
             ErrorState.replaceIcon();
-            const oldURL = await ErrorState.replacePanel("popup/errorState/index.html");
-            ErrorState.oldPopupURL = oldURL;
+            ErrorState.oldPopupURL = await ErrorState.replacePanel("popup/errorState/index.html");
         }
     }
 
@@ -178,7 +177,7 @@ export default class ErrorState extends EventTarget {
         this.gravity = gravity;
         this.actions = actions;
         this.id = `${this.gravity}:${Date.now()}`;
-        Promise.all([
+        this._ready = Promise.all([
             ErrorState.register(this),
             this.addNotification()
         ]).catch((e) => console.error("Error initializing error state", e));
