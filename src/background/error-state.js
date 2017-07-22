@@ -52,9 +52,11 @@ class ErrorStateManager extends EventTarget {
     }
 
     /**
+     * Not static because the class is not public, only the instance.
+     *
      * @returns {Promise.<boolean>} If there currently are any error states.
      */
-    static get IN_ERROR_STATE() {
+    get IN_ERROR_STATE() {
         return browser.storage.local.get(errorStatesQuery)
             .then(({ errorStates }) => errorStates.length > 0);
     }

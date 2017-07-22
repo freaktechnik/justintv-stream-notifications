@@ -364,7 +364,7 @@
         "description": "Tooltip on the refresh button in the panel"
     },
     "redirectUpdateNotification": {
-        "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
+        "message": "$REDIRECTTARGET$ (von $CHANNEL$ weitergeleitet) hat den Titel geändert",
         "description": "Notification title when a channel changes the stream title"
     },
     "context_open": {
