@@ -6,22 +6,9 @@
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
-![Azubu icon](/img/azubu.png)
------
-[Azubu](http://azubu.tv) is an eSports streaming platform.
-
-### Features
-
- - Stream page
- - Separate chat page
- - Adding a user's favorites (followees)
- - Automatically adding the browser user's favorites
- - Monitoring the status of channels
- - Exploring featured channels and global search
-
-![Beam.pro icon](/img/beampro.png)
+![Mixer icon](/img/MixerLogo_Light.svg)
 ------
-[Beam.pro](https://beam.pro) is a game streaming platform.
+[Mixer](https://mixer.com) is a game streaming platform focussing on low-latency streams. It was acquired by Microsoft and renamed from its former name "Beam.pro".
 
 ### Features
 
@@ -40,10 +27,10 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Stream page
  - Monitoring the status of channels
 
-![Hitbox icon](/img/hitbox-icon.png) Hitbox
+![Smashcast icon](/img/Smashcast-Logo.png)
 ------
 
-[Hitbox](http://hitbox.tv) is a game streaming competitor, mainly to Twitch. However there are no content restrictions like on Twitch.
+[Smashcast](https://smashcast.tv) is a game streaming competitor, mainly to Twitch. It is the merged efforts of the previous services of Hitbox and Azubu.
 
 ### Features
 
@@ -78,7 +65,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 ![Majorleaguegaming icon](/img/mlg-logo.png)
 ------
-[MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform.
+[MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform owned by Activision-Blizzard.
 
 ### Features
 
@@ -109,7 +96,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 ![Twitch textmark](/img/twitch-icon.png)
 ------
-[Twitch](https://twitch.tv) is the initial provider of the extension and focusses on games.
+[Twitch](https://twitch.tv) is the initial provider of the extension and focusses on games. It is owned by Amazon.
 
 ### Features
 
@@ -142,4 +129,3 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Adding a user's favorites (subscribed channels)
  - Monitoring the status of channels
  - Exploring featured channels and global search
-
