@@ -6,19 +6,6 @@
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
-![Mixer icon](/img/MixerLogo_Light.svg)
-------
-[Mixer](https://mixer.com) is a game streaming platform focussing on low-latency streams. It was acquired by Microsoft and renamed from its former name "Beam.pro".
-
-### Features
-
- - Stream page
- - Separate chat page
- - Monitoring the status of channels
- - Adding a user's favorites (followees)
- - Automatically adding the browser user's favorites
- - Exploring featured channels and global search
-
 ![DouyuTV icon](/img/douyutv.png)
 ------
 [DouyuTV](http://douyutv.com) is a chinese game streaming platform.
@@ -26,21 +13,6 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 ### Features
  - Stream page
  - Monitoring the status of channels
-
-![Smashcast icon](/img/Smashcast-Logo.png)
-------
-
-[Smashcast](https://smashcast.tv) is a game streaming competitor, mainly to Twitch. It is the merged efforts of the previous services of Hitbox and Azubu.
-
-### Features
-
- - VOD Archive page
- - Stream page
- - Separate chat page
- - Monitoring the status of channels
- - Adding a user's favorites (followees)
- - Automatically adding the browser user's favorites
- - Exploring featured channels and global search
 
 ![Livestream icon](/img/livestream-logo.png)
 ----------
@@ -74,6 +46,19 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Separate chat page
  - Monitoring the status of channels
 
+![Mixer icon](/img/MixerLogo_Light.svg)
+------
+[Mixer](https://mixer.com) is a game streaming platform focussing on low-latency streams. It was acquired by Microsoft and renamed from its former name "Beam.pro".
+
+### Features
+
+ - Stream page
+ - Separate chat page
+ - Monitoring the status of channels
+ - Adding a user's favorites (followees)
+ - Automatically adding the browser user's favorites
+ - Exploring featured channels and global search
+
 ![Picarto.TV icon](/img/picarto.png)
 ------
 [Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
@@ -82,6 +67,21 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
  - Stream page
  - Monitoring the status of channels
+
+![Smashcast icon](/img/Smashcast-Logo.png)
+------
+
+[Smashcast](https://smashcast.tv) is a game streaming competitor, mainly to Twitch. It is the merged efforts of the previous services of Hitbox and Azubu.
+
+### Features
+
+ - VOD Archive page
+ - Stream page
+ - Separate chat page
+ - Monitoring the status of channels
+ - Adding a user's favorites (followees)
+ - Automatically adding the browser user's favorites
+ - Exploring featured channels and global search
 
 ![Streamup icon](/img/streamup.png)
 ------
