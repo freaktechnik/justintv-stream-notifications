@@ -7,3 +7,9 @@ images/Thumbs.db
 *.xpi
 Thumbs.db
 noe10s.json
+node_modules/
+webextension/
+build/
+locale/
+.nyc_output/
+.transifexrc*
