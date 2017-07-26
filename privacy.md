@@ -12,7 +12,7 @@ The extension has to regularly send requests to the API endpoints of the sites y
 When using the YouTube features of the extension, the same applies: requests are sent to the YouTube API Services to get information on channels and their live streams or subscriptions. Never are those requests made in a manner that indicates your YouTube or Google account over the API.
 The data returned by those requests (username, profile picture, subscribers, video title, video category, video thumbnail, channel IDs, viewer count) will be stored by the extension on your machine and may be removed as soon as associated channels and or users are no longer tracked using the extension.
 
-The YouTube API Services may be provided under their own privacy policy, see http://www.google.com/policies/privacy.
+The YouTube API Services may be provided under their own privacy policy, see [google.com/policies/privacy](https://www.google.com/policies/privacy).
 
 # Website
 This website is hosted on GitHub pages, which means it is running on GitHub infrastructure. The most relevant resource thus is [GitHub's privacy statement](https://help.github.com/articles/github-privacy-statement/).
