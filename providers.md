@@ -6,6 +6,17 @@
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
+![Dailymotion icon](/img/dailymotion.png)
+------
+[Dailymotion](https://www.dailymotion.com) is a video upload site comparable to YouTube that also offers livestreams.
+
+### Features
+ - Stream page
+ - VOD Archive page
+ - Monitoring the status of channels
+ - Adding a user's favorites (followees)
+ - Exploring featured channels and global search
+
 ![DouyuTV icon](/img/douyutv.png)
 ------
 [DouyuTV](http://douyutv.com) is a chinese game streaming platform.
@@ -82,17 +93,6 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Adding a user's favorites (followees)
  - Automatically adding the browser user's favorites
  - Exploring featured channels and global search
-
-![Streamup icon](/img/streamup.png)
-------
-[Streamup](https://streamup.com) is an entertainment streaming platform open for all.
-
-### Features
- - VOD Archive page
- - Stream page
- - Separate chat page
- - Adding a user's favorites (followees)
- - Monitoring the status of channels
 
 ![Twitch textmark](/img/twitch-icon.png)
 ------
