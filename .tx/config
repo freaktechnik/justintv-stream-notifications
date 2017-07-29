@@ -19,3 +19,10 @@ source_lang = en
 file_filter = _locales/<lang>/messages.json
 type = CHROME
 lang_map = en_US:en
+
+[live-stream-notifier.amo]
+source_file = _locales/en/amo.json
+source_lang = en
+file_filter = _locales/<lang>/amo.json
+type = KEYVALUEJSON
+lang_map = en_US:en

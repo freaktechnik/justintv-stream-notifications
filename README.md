@@ -7,7 +7,7 @@ This is an add-on for Firefox, based on the Mozilla add-on SDK.
 
 ## Description
 
-This extension shows you a notification, whenever a followed channel on Twitch, Smashcast, Ustream, Livestream, MLG.tv, Mixer or YouTube goes live. But the notifications don't stop there: you can also get notifications when a stream changes the title or goes offline. If a followed Twitch channel is hosting somebody else, you'll get notified, too.
+This extension shows you a notification, whenever a followed channel on Twitch, Smashcast, Ustream, Livestream, MLG.tv, Mixer or YouTube goes live. It can also show notifications when a stream changes the title, hosts another channel, replays a past broadcast or goes offline.
 
 ### Channel Management
 You can manage the followed channels with a powerful channels manager, which lets you auto import all the channels you follow with one click, add all channels a user follows or just add a single channel. Of course it also lets you remove channels.
