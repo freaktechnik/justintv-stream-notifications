@@ -415,10 +415,6 @@
         "message": "Kanal hinzufügen",
         "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
-    "twitch_showPlaylist_title": {
-        "message": "Twitchkanäle, die Playlisten wiedergeben zeigen",
-        "description": "Title of the Twitch playlist setting in the preferences"
-    },
     "panel_tab_nonlive": {
         "message": "Nicht-live",
         "description": "Label of the optional non-live tab in the panel"
