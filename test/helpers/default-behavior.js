@@ -1,7 +1,6 @@
 import manifest from '../../webextension/manifest.json';
 
 export const setup = () => {
-    browser.runtime.connect.returns(global.SDKStubs);
     // Work around sinon-chrome being sinon < 2
     browser.storage.local.get.callsFake((props) => Promise.resolve(props));
     browser.storage.local.set.resolves();

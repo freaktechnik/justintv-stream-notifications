@@ -322,7 +322,7 @@ tabbed.addEventListener("tabchanged", (evt) => {
         checkChannel();
     }
     else if(evt.detail == 2) {
-        show(document.querySelector("#autoAdd").parentNode);
+        //show(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "users");
         checkUser();
     }

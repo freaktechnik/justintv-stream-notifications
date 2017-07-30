@@ -178,16 +178,9 @@ npm-debug.log
 .sass-cache
 
 .transifexrc
-.transifexrc.json
-.transifexrc.orig
 
 doc/
-build/
 coverage/
-transpiled/
-bower_components/
-locale/*.json
-!locale/en-US.json
 .eslintcache
 .nyc_output
 
@@ -195,3 +188,4 @@ webextension/*
 !webextension/assets
 !webextension/manifest.json
 webextension/assets/images/open-iconic.min.svg
+web-ext-artifacts

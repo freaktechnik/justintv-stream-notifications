@@ -5,19 +5,11 @@
 import test from 'ava';
 import ParentalControls from "../../src/background/parental-controls";
 
-test("Enabled", async (t) => {
-    SDKStubs.onMessage.dispatch({
-        command: "pc-enabled-reply",
-        payload: false
-    });
+test.failing("Enabled", async (t) => {
     await ParentalControls.p;
 
     t.false(ParentalControls.enabled, "Parental controls state is correct");
 
-    SDKStubs.onMessage.dispatch({
-        command: "pc-enabled-reply",
-        payload: true
-    });
     // Clean up async promise queue
     await ParentalControls.p;
 

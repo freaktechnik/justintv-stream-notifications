@@ -3,11 +3,11 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/freaktechnik/justintv-stream-notifications.svg)](https://greenkeeper.io/)
 [![Travis CI Builds](https://travis-ci.org/freaktechnik/justintv-stream-notifications.svg)](https://travis-ci.org/freaktechnik/justintv-stream-notifications) [![codecov.io](https://codecov.io/github/freaktechnik/justintv-stream-notifications/coverage.svg?branch=master)](https://codecov.io/github/freaktechnik/justintv-stream-notifications?branch=master) ![Dependencies](https://david-dm.org/freaktechnik/justintv-stream-notifications.svg) [![Dependency Status](https://dependencyci.com/github/freaktechnik/justintv-stream-notifications/badge)](https://dependencyci.com/github/freaktechnik/justintv-stream-notifications)
 
-This is an add-on for Firefox, based on the Mozilla add-on SDK.
+This is an add-on for Firefox, using the modern WebExtension APIs.
 
 ## Description
 
-This extension shows you a notification, whenever a followed channel on Twitch, Smashcast, Ustream, Livestream, MLG.tv, Mixer or YouTube goes live. It can also show notifications when a stream changes the title, hosts another channel, replays a past broadcast or goes offline.
+This extension shows you a notification, whenever a followed channel on Twitch, Smashcast, Ustream, Livestream, MLG.tv, Mixer, Dailymotion or YouTube goes live. It can also show notifications when a stream changes the title, hosts another channel, replays a past broadcast or goes offline.
 
 ### Channel Management
 You can manage the followed channels with a powerful channels manager, which lets you auto import all the channels you follow with one click, add all channels a user follows or just add a single channel. Of course it also lets you remove channels.

@@ -11,7 +11,6 @@ import '../../_locales/ru/messages.json';
 import '../../_locales/uk_UA/messages.json';
 
 // Load module deps
-import SDK from "./sdk";
 import { selectOrOpenTab } from "./channel/utils";
 import ChannelController from "./channel/controller";
 import prefs from './preferences';
@@ -214,44 +213,11 @@ browser.runtime.onMessage.addListener((message) => {
     }
 });
 
-// Do migration of channel data and prefs if necessary
-const migrateData = () => {
-    browser.storage.local.get("migrated").then(({ migrated }) => {
-        if(!migrated) {
-            SDK.doAction("migrate-channels").then(([ channels, users ]) => {
-                const ignoreAzubu = (o) => o.type != "azubu";
-                return Promise.all(users.filter(ignoreAzubu).map((user) => controller.addUser(user.login, user.type)))
-                    .then(() => Promise.all(channels.filter(ignoreAzubu).map((channel) => controller.addChannel(channel.login, channel.type))));
-            }).then(() => {
-                return browser.storage.local.set({
-                    migrated: true
-                });
-            });
-            SDK.doAction("migrate-prefs").then((oldPrefs) => {
-                Promise.all(Object.keys(oldPrefs).map((p) => {
-                    return prefs.set(p, oldPrefs[p]);
-                }));
-            });
-        }
-    });
-};
-/* (doesn't work in embedded webexts)
 browser.runtime.onInstalled.addListener(({ reason }) => {
     if(reason == 'install') {
         return Tour.onInstalled();
     }
     else if(reason == 'update') {
-        return Tour.onUpdate();
-    }
-});
-(but this does...) */
-SDK.doAction("load-reason").then((reason) => {
-    if(reason == 'install') {
-        migrateData();
-        return Tour.onInstalled();
-    }
-    else if(reason == 'upgrade') {
-        migrateData();
         return Tour.onUpdate();
     }
 });

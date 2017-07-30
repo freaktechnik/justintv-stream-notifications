@@ -9,7 +9,6 @@ import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
 import Headers from 'fetch-headers';
 import Navigator from './navigator';
 import EventTarget from 'event-target-shim';
-import getPort from './port';
 import execCommand from './exec-command';
 import polyfillDataset from 'element-dataset';
 
@@ -54,8 +53,5 @@ polyfillDataset();
 // WebExtension APIs
 //global.chrome = chrome;
 
-// Gets called by src/backbround/sdk.js
-global.SDKStubs = getPort();
-global.SDKStubs.name = "sdk-connection";
 global.browser = browser;
 setup();

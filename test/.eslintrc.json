@@ -1,7 +1,4 @@
 {
-    "globals": {
-        "SDKStubs": true
-    },
     "env": {
         "webextensions": true,
         "browser": true

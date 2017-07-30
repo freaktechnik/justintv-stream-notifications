@@ -11,13 +11,6 @@ import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from
 import { when } from "../../../src/utils";
 import LiveState from "../../../src/live-state.json";
 
-test.before(() => {
-    SDKStubs.onMessage.dispatch({
-        command: "pc-enabled-reply",
-        payload: false
-    });
-});
-
 test.afterEach(() => {
     providers.beam._getUserIdFromUsername.cache = {};
 });
@@ -292,10 +285,6 @@ test("GenericProvider", async (t) => {
     t.is(genericProvider._type, "test");
 
     const maturePromise = genericProvider._mature();
-    SDKStubs.onMessage.dispatch({
-        target: "get-pref-find_mature-reply",
-        payload: true
-    });
     t.is(await maturePromise, true);
 
     t.is(genericProvider.name, "providertest");

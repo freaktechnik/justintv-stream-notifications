@@ -1,3 +1,5 @@
+# NOTE: SOME OF THIS IS OUTDATED AND HAS TO BE REWRITTEN
+
 # Contributing to Live Stream Notifier
 This is a document guiding you on how to contribute to Live Stream Notifier. It
 is separated by conribution nature and not limited to code contributions.
@@ -13,8 +15,6 @@ as things like your operating system and extension version.
 You can help to translate the extension on [Transifex](https://www.transifex.com/freaktechnik/live-stream-notifier).
 If your language doesn't exist yet, just request a new team for it and I'll
 approve it as soon as possible.
-
-There is [a toutorial](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/l10n) how translations work and how you can live-test them.
 
 I try to give as much contextual information as possible on Transifex. The glossary contains some common words, sometimes there are specific translation instructions or screenshots (in the string comments). If you're unsure where the string would be used, check the name of the string key, it generally contains whatever part it belongs to and if it's a label or whatever.
 
