@@ -18,7 +18,7 @@ const BASE_URL = "http://streamnotifier.ch",
          */
         async onInstalled() {
             if(await Tour.enabled()) {
-                return browser.tabs.create({
+                await browser.tabs.create({
                     url: BASE_URL + "/firstrun/"
                 });
             }
@@ -30,7 +30,7 @@ const BASE_URL = "http://streamnotifier.ch",
          */
         async onUpdate() {
             if(await Tour.enabled()) {
-                return browser.tabs.create({
+                await browser.tabs.create({
                     url: `${BASE_URL}/changes/${browser.runtime.getManifest().version}/`,
                     active: false
                 });

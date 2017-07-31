@@ -24,19 +24,44 @@ import ParentalControls from './parental-controls';
 import { errorStateManager } from './error-state';
 
 const qsPause = () => qs.pause(),
-    qsResume = () => qs.resume();
+    qsResume = () => qs.resume(),
+    S_TO_MS_FACTOR = 1000,
+    // Init things
+    notifier = new Notifier(),
+    controller = new ChannelController(),
+    list = new ListView(),
+    usedPrefs = {
+        "theme": [
+            list.setTheme.bind(list),
+            controller.setTheme.bind(controller)
+        ],
+        "panel_nonlive": [
+            list.setNonLiveDisplay.bind(list)
+        ],
+        "panel_extras": [
+            list.setExtrasVisibility.bind(list)
+        ],
+        "panel_style": [
+            list.setStyle.bind(list)
+        ],
+        "updateInterval": [
+            (interval) => list.setQueueStatus(interval !== 0)
+        ]
+    },
+    upKeys = Object.keys(usedPrefs),
+    applyValue = (p, v) => {
+        if(prefInfo[p].type == "radio") {
+            v = parseInt(v, 10);
+        }
+        for(const f of usedPrefs[p]) {
+            f(v);
+        }
+    };
 
 errorStateManager.addEventListener("register", qsPause, {
     capture: false,
     passive: true
 });
-
-const S_TO_MS_FACTOR = 1000,
-
-    // Init things
-    notifier = new Notifier(),
-    controller = new ChannelController(),
-    list = new ListView();
 
 errorStateManager.addEventListener("empty", () => {
     qs.resume();
@@ -156,34 +181,6 @@ qs.addListeners({
     resumed: () => list.setQueuePaused(false)
 });
 
-const usedPrefs = {
-        "theme": [
-            list.setTheme.bind(list),
-            controller.setTheme.bind(controller)
-        ],
-        "panel_nonlive": [
-            list.setNonLiveDisplay.bind(list)
-        ],
-        "panel_extras": [
-            list.setExtrasVisibility.bind(list)
-        ],
-        "panel_style": [
-            list.setStyle.bind(list)
-        ],
-        "updateInterval": [
-            (interval) => list.setQueueStatus(interval !== 0)
-        ]
-    },
-    upKeys = Object.keys(usedPrefs),
-    applyValue = (p, v) => {
-        if(prefInfo[p].type == "radio") {
-            v = parseInt(v, 10);
-        }
-        for(const f of usedPrefs[p]) {
-            f(v);
-        }
-    };
-
 prefs.get(upKeys).then((values) => {
     for(const p in usedPrefs) {
         applyValue(p, values[upKeys.indexOf(p)]);
@@ -215,9 +212,9 @@ browser.runtime.onMessage.addListener((message) => {
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
     if(reason == 'install') {
-        return Tour.onInstalled();
+        Tour.onInstalled();
     }
     else if(reason == 'update') {
-        return Tour.onUpdate();
+        Tour.onUpdate();
     }
 });

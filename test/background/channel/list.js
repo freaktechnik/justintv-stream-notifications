@@ -507,7 +507,7 @@ test.serial.beforeEach(async (t) => {
     t.context.extraChannels = channels.length;
     t.context.extraUsers = users.length;
 
-    await t.context.list.openDB();
+    await t.context.list.openDB("channellist");
     await t.context.list.addChannels(channels);
     return Promise.all(users.map((u) => t.context.list.addUser(u)));
 });
