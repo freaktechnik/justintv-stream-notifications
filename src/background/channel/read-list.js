@@ -9,205 +9,14 @@
  * @todo move out of background
  * @todo Unify Errors that other lists might re-use.
  */
-// setup event handling
-import { emit } from "../../utils";
+import ReadChannelList from '../../read-channel-list';
 import { Channel, User } from "./core";
-import EventTarget from 'event-target-shim';
 
 /**
- * IndexedDB version.
- *
- * @const {number}
- * @default 2
+ * @class module:channel/list.DeserializedReadChannelList
+ * @extends module:read-channel-list.ReadChannelList
  */
-const VERSION = 2,
-    /**
-     * Database name.
-     *
-     * @const {string}
-     * @default "channellist"
-     */
-    NAME = "channellist";
-
-/**
- * The ChannelList is ready to be used.
- *
- * @event module:channel/list.ReadChannelList#ready
- */
-
-export class FixListError extends Error {
-    constructor() {
-        super("Could not open list, please fix");
-    }
-}
-
-/**
- * @class module:channel/list.ReadChannelList
- * @extends external:EventTarget
- */
-export default class ReadChannelList extends EventTarget {
-    /**
-     * Database name.
-     *
-     * @type {string}
-     * @readonly
-     * @default "channellist"
-     */
-    static get name() {
-        return NAME;
-    }
-    /**
-     * Reference to the DB
-     *
-     * @type {IndexedDB?}
-     */
-    db = null;
-    /**
-     * Holds a promise until the DB is being opened.
-     *
-     * @type {Promise?}
-     */
-    _openingDB = null;
-    /**
-     * @constructs
-     * @fires module:channel/list.ReadChannelList#ready
-     */
-    constructor() {
-        super();
-
-        this.idCache = new Map();
-
-        this.openDB(NAME);
-    }
-
-    /**
-     * Opens the DB, initializes the schema if it's a new DB or sets channels
-     * offline that were online and have last been updated a certain time ago.
-     *
-     * @param {string} name - Name of the DB to open.
-     * @param {boolean} [dontTry=false] - Don't try to fix the DB.
-     * @async
-     * @fires module:channel/list.ReadChannelList#ready
-     * @returns {undefined} The DB is ready.
-     * @throws Could not open the DB. Has a boolean that is true when a clear
-     *         should be tried.
-     */
-    openDB(name, dontTry = false) {
-        // Quick path if DB is already opened.
-        if(this.db) {
-            return Promise.resolve();
-        }
-        else if(this._openingDB !== null) {
-            return this._openingDB;
-        }
-
-        this._openingDB = new Promise((resolve, reject) => {
-            // Try to open the DB
-            const request = window.indexedDB.open(name, VERSION);
-            request.onupgradeneeded = (e) => {
-                this.db = e.target.result;
-
-                if(e.oldVersion != 1) {
-                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true }),
-                        channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-                    users.createIndex("typename", [ "type", "login" ], { unique: true });
-                    users.createIndex("type", "type", { unique: false });
-                    //users.createIndex("id", "id", { unique: true });
-                    channels.createIndex("typename", [ "type", "login" ], { unique: true });
-                    channels.createIndex("type", "type", { unique: false });
-                    //channels.createIndex("id", "id", { unique: true });
-                }
-            };
-
-            // DB is ready
-            request.onsuccess = (e) => {
-                this.db = e.target.result;
-
-                resolve();
-                emit(this, "ready");
-            };
-
-            /* istanbul ignore next */
-            request.onerror = () => {
-                console.error(request.error);
-                if(!dontTry) {
-                    if(this.db) {
-                        this.db.close();
-                        delete this.db;
-                    }
-                    console.error("Couldn't delete the DB");
-                    reject(new FixListError(request.error));
-                }
-                else {
-                    reject(request.error);
-                }
-            };
-        });
-        // Clear it once the promise is done.
-        this._openingDB.then(() => {
-            this._openingDB = null;
-        }, () => {
-            this._openingDB = null;
-        });
-        return this._openingDB;
-    }
-
-    /**
-     * Gets the ID of a channel, if it is in the ChannelList.
-     *
-     * @param {string} name - Login of the channel.
-     * @param {string} type - Type of the channel.
-     * @async
-     * @returns {number} The ID of the channel if it exists.
-     */
-    getChannelId(name, type) {
-        return new Promise((resolve, reject) => {
-            if(this.idCache.has(type + name)) {
-                resolve(this.idCache.get(type + name));
-            }
-            else {
-                const transaction = this.db.transaction("channels"),
-                    index = transaction.objectStore("channels").index("typename"),
-                    req = index.get([ type, name ]);
-                req.onsuccess = () => {
-                    if(req.result) {
-                        this.idCache.set(type + name, req.result.id);
-                        resolve(req.result.id);
-                    }
-                    else {
-                        reject(new Error("Could not fetch channel for the given info"));
-                    }
-                };
-                req.onerror = reject;
-            }
-        });
-    }
-
-    /**
-     * Gets the ID of a user, if it is in the ChannelList.
-     *
-     * @param {string} name - Login of the user.
-     * @param {string} type - Type of the user.
-     * @async
-     * @returns {number} The ID of the user (if it exsits).
-     */
-    getUserId(name, type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                index = transaction.objectStore("users").index("typename"),
-                req = index.get([ type, name ]);
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(req.result.id);
-                }
-                else {
-                    reject(new Error("Could not find any result for the given user info"));
-                }
-            };
-            req.onerror = reject;
-        });
-    }
-
+export default class DeserializedReadChannelList extends ReadChannelList {
     /**
      * Get the specified channel.
      *
@@ -218,28 +27,8 @@ export default class ReadChannelList extends EventTarget {
      * @throws The channel doesn't exist or no arguments passed.
      */
     async getChannel(id, type) {
-        if(type) {
-            id = await this.getChannelId(id, type);
-        }
-        if(!id) {
-            throw new Error("No ID specified");
-        }
-
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels"),
-                store = transaction.objectStore("channels"),
-                req = store.get(id);
-
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(Channel.deserialize(req.result));
-                }
-                else {
-                    reject(new Error("No result for the given ID"));
-                }
-            };
-            req.onerror = reject;
-        });
+        const channel = await super.getChannel(id, type);
+        return Channel.deserialize(channel);
     }
 
     /**
@@ -252,53 +41,34 @@ export default class ReadChannelList extends EventTarget {
      * @throws The user doesn't exist or no arguments passed.
      */
     async getUser(id, type) {
-        if(type) {
-            id = await this.getUserId(id, type);
-        }
-
-        if(!id) {
-            throw new Error("No ID specified");
-        }
-
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                store = transaction.objectStore("users"),
-                req = store.get(id);
-
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(User.deserialize(req.result));
-                }
-                else {
-                    reject(new Error("Could not fetch specified user"));
-                }
-            };
-            req.onerror = reject;
-        });
+        const user = await super.getUser(id, type);
+        return User.deserialize(user);
     }
 
     /**
-     * Check if a channel is in the ChannelList.
+     * Get all channels with the specified type.
      *
-     * @param {(number|string)} id - ID or login of the channel.
-     * @param {string} [type] - Type of the channel if no ID was passed.
-     * @async
-     * @returns {boolean} Resolves to a boolean indicating if the channel exists.
+     * @param {string} [type] - Type all the channels should have. If left out,
+     *                             all channels are returned.
+     * @returns {Array.<module:channel/core.Channel>} Array of all channels for
+     *          the given type. May be empty.
      */
-    channelExists(id, type) {
-        return this.getChannel(id, type).then((channel) => !!channel, () => false);
+    async getChannelsByType(type) {
+        const channels = await super.getChannelsByType(type);
+        return channels.map((ch) => Channel.deserialize(ch));
     }
 
     /**
-     * Check if a user is in the ChannelList.
+     * Get all users in the ChannelList with a certain type.
      *
-     * @param {(number|string)} id - ID or login of the user.
-     * @param {string} [type] - Type of the user if no ID was passed.
-     * @async
-     * @returns {boolean} Resolves to a boolean indicating if the user exists.
+     * @param {string} [type] - The type all returned users should have. If left
+     *                             out all users are returned.
+     * @returns {Array.<module:channel/core.User>} Array of users for the given
+     *          type. May be empty.
      */
-    userExists(id, type) {
-        return this.getUser(id, type).then((channel) => !!channel, () => false);
+    async getUsersByType(type) {
+        const users = await super.getUsersByType(type);
+        return users.map((u) => User.deserialize(u));
     }
 
     /**
@@ -323,104 +93,6 @@ export default class ReadChannelList extends EventTarget {
     }
 
     /**
-     * Get all channels with the specified type.
-     *
-     * @param {string} [type] - Type all the channels should have. If left out,
-     *                             all channels are returned.
-     * @async
-     * @returns {Array.<module:channel/core.Channel>} Array of all channels for
-     *          the given type. May be empty.
-     */
-    getChannelsByType(type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels"),
-                store = transaction.objectStore("channels"),
-                retchans = [];
-
-            transaction.onerror = reject;
-
-            if(!type) {
-                store.index("typename").openCursor().onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retchans.push(Channel.deserialize(cursor.value));
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retchans);
-                    }
-                };
-            }
-            else {
-                const keyRange = IDBKeyRange.only(type),
-                    index = store.index("type");
-
-                index.openCursor(keyRange).onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retchans.push(Channel.deserialize(cursor.value));
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retchans);
-                    }
-                };
-            }
-        });
-    }
-
-    /**
-     * Get all users in the ChannelList with a certain type.
-     *
-     * @param {string} [type] - The type all returned users should have. If left
-     *                             out all users are returned.
-     * @async
-     * @returns {Array.<module:channel/core.User>} Array of users for the given
-     *          type. May be empty.
-     */
-    getUsersByType(type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                store = transaction.objectStore("users"),
-                retusrs = [];
-
-            transaction.onerror = reject;
-
-            if(!type) {
-                store.index("typename").openCursor().onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retusrs.push(User.deserialize(cursor.value));
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retusrs);
-                    }
-                };
-            }
-            else {
-                const keyRange = IDBKeyRange.only(type),
-                    index = store.index("type");
-
-                index.openCursor(keyRange).onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retusrs.push(User.deserialize(cursor.value));
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retusrs);
-                    }
-                };
-            }
-        });
-    }
-
-    /**
      * Get all users that have the given channel as a favorite.
      *
      * @param {module:channel/core.Channel} channel - Channel to search users's
@@ -429,10 +101,8 @@ export default class ReadChannelList extends EventTarget {
      *          given channel.
      */
     async getUsersByFavorite(channel) {
-        const users = await this.getUsersByType(channel.type);
-        return users.filter((user) => {
-            return user.favorites.indexOf(channel.login) !== -1;
-        });
+        const users = await super.getUsersByFavorite(channel);
+        return users.map((u) => User.deserialize(u));
     }
 
     /**
@@ -443,28 +113,7 @@ export default class ReadChannelList extends EventTarget {
      *          follows.
      */
     async getChannelsByUserFavorites(user) {
-        const channels = await this.getChannelsByType(user.type);
-        return channels.filter((channel) => {
-            return user.favorites.some((channame) => channame == channel.login);
-        });
-    }
-
-    /**
-     * Close the DB.
-     *
-     * @async
-     * @returns {undefined} DB is being deleted, or may already be deleted.
-     */
-    close() {
-        return new Promise((resolve) => {
-            if(this.db) {
-                this.db.close();
-                this.db = null;
-                resolve();
-            }
-            else {
-                resolve();
-            }
-        });
+        const channels = await super.getChannelsByUserFavorites(user);
+        return channels.map((ch) => Channel.deserialize(ch));
     }
 }

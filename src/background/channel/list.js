@@ -12,7 +12,8 @@ import prefs from "../preferences";
 import { Channel } from "./core";
 import LiveState from "../../live-state";
 import ReadChannelList from './read-list';
-import { FixListError } from './read-list';
+import { FixListError } from '../../read-channel-list';
+import SerializedReadChannelList from '../../read-channel-list';
 
 /**
  * Whenever one or more channels are added to the ChannelList this event is
@@ -420,7 +421,7 @@ export default class ChannelList extends ReadChannelList {
              * to reinitialize it afterward.
              */
             const promise = new Promise((resolve, reject) => {
-                const request = indexedDB.deleteDatabase(ReadChannelList.name);
+                const request = indexedDB.deleteDatabase(SerializedReadChannelList.name);
 
                 request.onerror = reject;
                 request.onsuccess = () => resolve();
@@ -432,7 +433,7 @@ export default class ChannelList extends ReadChannelList {
             // doesn't want to open.
             return promise
                 .then(() => done(true))
-                .then(() => this.openDB(ReadChannelList.name, true))
+                .then(() => this.openDB(SerializedReadChannelList.name, true))
                 .then(() => true);
         }
     }

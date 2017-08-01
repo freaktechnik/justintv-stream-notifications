@@ -4,12 +4,10 @@
  * @todo Test events other than ready
  */
 import test from 'ava';
-import ChannelList from '../../../src/background/channel/list';
-import ReadChannelList from '../../../src/background/channel/read-list';
-import { User, Channel } from '../../../src/background/channel/core';
-import { getUser, getChannel } from "../../helpers/channel-user";
-import { FixListError } from '../../../src/read-channel-list';
-import RCL from '../../../src/read-channel-list';
+import ChannelList from '../src/background/channel/list';
+import ReadChannelList from '../src/read-channel-list';
+import { getUser, getChannel } from "./helpers/channel-user";
+import { FixListError } from '../src/read-channel-list';
 
 const setupDB = async () => {
     const channels = [
@@ -23,7 +21,7 @@ const setupDB = async () => {
             getUser('bar', 'extra')
         ];
     const list = new ChannelList();
-    await list.openDB(RCL.name);
+    await list.openDB(ReadChannelList.name);
     await list.addChannels(channels);
     await Promise.all(users.map((u) => list.addUser(u)));
     await list.close();
@@ -31,7 +29,7 @@ const setupDB = async () => {
 
 test("Static properties", (t) => {
     t.true("name" in ReadChannelList);
-    t.is(typeof RCL.name, "string");
+    t.is(typeof ReadChannelList.name, "string");
 });
 
 test("FixListError", (t) => {
@@ -50,7 +48,6 @@ test.serial('get invalid users', (t) => {
 test.serial('get user by login and type', async (t) => {
     const referenceUser = await t.context.list.getUser(t.context.referenceUser),
         user = await t.context.list.getUser(referenceUser.login, referenceUser.type);
-    t.true(user instanceof User, "The user is a user");
     t.true("id" in user, "User has an ID");
     t.is(user.login, referenceUser.login);
     t.is(user.type, referenceUser.type);
@@ -59,7 +56,6 @@ test.serial('get user by login and type', async (t) => {
 
 test.serial('get user by id', async (t) => {
     const user = await t.context.list.getUser(t.context.referenceUser);
-    t.true(user instanceof User, "The same user is a user");
     t.is(user.id, t.context.referenceUser, "The same user has the same ID");
 });
 
@@ -71,14 +67,13 @@ test.serial('get user id', async (t) => {
 
 test.serial('get users by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
+    await list.openDB(ReadChannelList.name);
     const user1 = await list.addUser(getUser()),
         user2 = await list.addUser(getUser('test2'));
 
     const users = await t.context.list.getUsersByType(user1.type);
     t.is(users.length, 2);
     users.forEach((user) => {
-        t.true(user instanceof User);
         t.is(user.type, "test");
     });
 
@@ -90,9 +85,6 @@ test.serial('get users by type', async (t) => {
 test.serial('get all users', async (t) => {
     const users = await t.context.list.getUsersByType();
     t.is(users.length, t.context.extraUsers);
-    users.forEach((user) => {
-        t.true(user instanceof User);
-    });
 });
 
 test.serial('get users by favorite', async (t) => {
@@ -105,7 +97,6 @@ test.serial('get users by favorite', async (t) => {
 
     const users = await t.context.list.getUsersByFavorite(chan);
     t.is(users.length, 1, "Correct amont of users with test_chan as favorite");
-    t.true(users[0] instanceof User, "Returned user is a User");
     t.is(users[0].favorites[0], chan.login, "User has test_chan as favorite");
 
     await list.removeUser(userId);
@@ -115,7 +106,6 @@ test.serial('get users by favorite', async (t) => {
 test.serial('get channel', async (t) => {
     const referenceChannel = await t.context.list.getChannel(t.context.referenceChannel),
         channel = await t.context.list.getChannel(referenceChannel.login, referenceChannel.type);
-    t.true(channel instanceof Channel, "The channel is a channel");
     t.is(channel.id, referenceChannel.id, "Channel has an ID");
     t.is(channel.login, referenceChannel.login);
     t.is(channel.type, referenceChannel.type);
@@ -124,7 +114,6 @@ test.serial('get channel', async (t) => {
 
 test.serial('get channel by id', async (t) => {
     const channel = await t.context.list.getChannel(t.context.referenceChannel);
-    t.true(channel instanceof Channel);
     t.is(t.context.referenceChannel, channel.id);
 });
 
@@ -168,49 +157,15 @@ test.serial('user exists', async (t) => {
     t.false(doesntexist, "The doesnot user doesn't exist");
 });
 
-test.serial('live status offline', async (t) => {
-    const channel = await t.context.list.getChannel(t.context.referenceChannel);
-
-    let liveStatus = await t.context.list.liveStatus(null);
-    t.false(liveStatus);
-
-    liveStatus = await t.context.list.liveStatus(channel.type);
-    t.false(liveStatus);
-
-    liveStatus = await t.context.list.liveStatus("exist");
-    t.false(liveStatus);
-});
-
-test.serial('live status live', async (t) => {
-    const list = new ChannelList();
-    const channel = getChannel();
-    channel.live.setLive(true);
-    await list.openDB(RCL.name);
-    const { id: channelId } = await list.addChannel(channel);
-
-    let liveStatus = await t.context.list.liveStatus(null);
-    t.true(liveStatus);
-
-    liveStatus = await t.context.list.liveStatus(channel.type);
-    t.true(liveStatus);
-
-    liveStatus = await t.context.list.liveStatus("exist");
-    t.false(liveStatus);
-
-    await list.removeChannel(channelId);
-    await list.close();
-});
-
 test.serial('get channels by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
+    await list.openDB(ReadChannelList.name);
     const channel = await list.addChannel(getChannel());
     const secondChannel = await list.addChannel(getChannel("foo"));
 
     const channels = await t.context.list.getChannelsByType(channel.type);
     t.is(channels.length, 2);
     channels.forEach((channel) => {
-        t.true(channel instanceof Channel);
         t.is(channel.type, "test");
     });
 
@@ -222,9 +177,6 @@ test.serial('get channels by type', async (t) => {
 test.serial('get all channels', async (t) => {
     const channels = await t.context.list.getChannelsByType(null);
     t.is(channels.length, t.context.extraChannels);
-    channels.forEach((channel) => {
-        t.true(channel instanceof Channel);
-    });
 });
 
 test.serial('get channels by user favorites', async (t) => {
@@ -243,7 +195,7 @@ test.serial('get channels by user favorites', async (t) => {
 test.serial('opening open list', async (t) => {
     t.not(t.context.list.db, null);
 
-    await t.context.list.openDB(RCL.name);
+    await t.context.list.openDB(ReadChannelList.name);
 
     t.not(t.context.list.db, null);
 });
@@ -251,12 +203,12 @@ test.serial('opening open list', async (t) => {
 test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     await t.context.list.close();
     await new Promise((resolve, reject) => {
-        const request = indexedDB.deleteDatabase(RCL.name);
+        const request = indexedDB.deleteDatabase(ReadChannelList.name);
         request.onerror = reject;
         request.onsuccess = resolve;
     });
 
-    const request = indexedDB.open(RCL.name, 1);
+    const request = indexedDB.open(ReadChannelList.name, 1);
     request.onupgradeneeded = (e) => {
         const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
         users.createIndex("typename", [ "type", "login" ], { unique: true });
@@ -271,7 +223,7 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     });
     await db.close();
 
-    await t.notThrows(t.context.list.openDB(RCL.name));
+    await t.notThrows(t.context.list.openDB(ReadChannelList.name));
     await t.context.list.close();
     await setupDB();
 });
@@ -290,7 +242,7 @@ test.serial.beforeEach(async (t) => {
         t.context.extraChannels = 4;
         t.context.extraUsers = 2;
     }
-    await t.context.list.openDB(RCL.name);
+    await t.context.list.openDB(ReadChannelList.name);
     t.context.referenceChannel = await t.context.list.getChannelId('foo', 'extra');
     t.context.referenceUser = await t.context.list.getUserId('foo', 'extra');
 });
@@ -301,7 +253,7 @@ test.serial.afterEach.always((t) => {
 
 test.after.always(async () => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
+    await list.openDB(ReadChannelList.name);
     await list.clear();
     return list.close();
 });
