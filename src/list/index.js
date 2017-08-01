@@ -405,6 +405,36 @@ const port = new Port("list", true),
         if(success) {
             port.send("copied", details);
         }
+    },
+    toggleSearch = () => {
+        const button = document.getElementById("searchButton"),
+            field = document.getElementById("searchField");
+        if(field.hasAttribute("hidden")) {
+            show(field);
+            field.focus();
+            button.setAttribute("aria-pressed", "true");
+        }
+        else {
+            hide(field);
+            field.value = "";
+            filter(field.value, live, filters);
+            filter(field.value, offline, filters);
+            filter(field.value, secondaryLive, filters);
+            button.setAttribute("aria-pressed", "false");
+            field.blur();
+
+            if(!explore.parentNode.hasAttribute("hidden")) {
+                const exploreSelect = document.getElementById("exploreprovider");
+                applySearchToExplore(exploreSelect, field);
+            }
+        }
+    },
+    refresh = (e) => {
+        forwardEvent("refresh", e);
+        if(!explore.parentNode.hasAttribute("hidden")) {
+            const exploreSelect = document.getElementById("exploreprovider");
+            getFeaturedChannels(exploreSelect.value);
+        }
     };
 
 // Set up port commmunication listeners
@@ -512,12 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
-    document.getElementById("refreshButton").addEventListener("click", (e) => {
-        forwardEvent("refresh", e);
-        if(!explore.parentNode.hasAttribute("hidden")) {
-            getFeaturedChannels(exploreSelect.value);
-        }
-    });
+    document.getElementById("refreshButton").addEventListener("click", refresh);
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"), false);
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"), false);
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"), false);
@@ -554,26 +579,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }, false);
     document.querySelector("#searchButton").addEventListener("click", (e) => {
         e.preventDefault();
-        if(field.hasAttribute("hidden")) {
-            show(field);
-            field.focus();
-            e.currentTarget.setAttribute("aria-pressed", "true");
-        }
-        else {
-            hide(field);
-            field.value = "";
-            filter(field.value, live, filters);
-            filter(field.value, offline, filters);
-            filter(field.value, secondaryLive, filters);
-            e.currentTarget.setAttribute("aria-pressed", "false");
-            field.blur();
-
-            if(!explore.parentNode.hasAttribute("hidden")) {
-                applySearchToExplore(exploreSelect, field);
-            }
-        }
+        toggleSearch();
     }, false);
-    field.addEventListener("keyup", () => {
+    field.addEventListener("input", () => {
         filter(field.value, live, filters);
         filter(field.value, offline, filters);
         filter(field.value, secondaryLive, filters);
@@ -581,6 +589,32 @@ document.addEventListener("DOMContentLoaded", () => {
             applySearchToExplore(exploreSelect, field);
         }
     }, false);
+
+    document.addEventListener("keypress", (e) => {
+        if(!e.altKey && !e.shiftKey && !e.metaKey) {
+            if(e.ctrlKey) {
+                switch(e.key) {
+                case 'F':
+                    e.preventDefault();
+                    toggleSearch();
+                    break;
+                case 'R':
+                    refresh(e);
+                    break;
+                case 'C':
+                    //TODO get currently hovered channel and dispatch copy command for it.
+                    break;
+                default:
+                }
+            }
+            else if(e.code == "F5") {
+                refresh(e);
+            }
+        }
+    }, {
+        capture: true,
+        passive: false
+    });
 
     forwardEvent("ready");
 });

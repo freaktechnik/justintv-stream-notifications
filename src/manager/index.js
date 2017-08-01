@@ -44,7 +44,7 @@ const filters = [
     };
 
 tabbed._tabbed = new Tabbed(tabbed);
-document.getElementById("searchField").addEventListener("keyup", listener);
+document.getElementById("searchField").addEventListener("input", listener);
 tabbed.addEventListener("tabchanged", listener);
 channels.addEventListener("itemadded", () => {
     if(!document.getElementById("channels").hidden) {

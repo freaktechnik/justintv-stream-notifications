@@ -176,7 +176,7 @@
         "description": "Notification title when a channel changes the stream title"
     },
     "lost_channels": {
-        "message": "LIve Stream Notifier n'a pas pu lire les chaînes enregistrés. Pour restaurer le module, toutes les chaînes et les utilisateurs ont été supprimés.",
+        "message": "Live Stream Notifier n'a pas pu lire les chaînes enregistrées. Pour restaurer le module, toutes les chaînes et les utilisateurs ont été supprimés.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
     "queue_maxRequestBatchSize_title": {
