@@ -45,8 +45,8 @@ class OptionsPage {
     }
 
     getValue(p) {
-        const type = prefs[p].type;
-        const formatted = format(document.getElementById(p)[OptionsPage.VALUE_PROPERTY[type]], type);
+        const type = prefs[p].type,
+            formatted = format(document.getElementById(p)[OptionsPage.VALUE_PROPERTY[type]], type);
         if(type === "string" && formatted == '') {
             return prefs[p].value;
         }
