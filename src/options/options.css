@@ -2,19 +2,22 @@
     width: 40%;
     text-align: right;
     display: inline-block;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
-.label small, .label label {
+.label small,
+.label label {
     display: block;
 }
 
-input, select {
+input,
+select {
     vertical-align: top;
     display: inline-block;
 }
 
-input:not([type="checkbox"]), select {
+input:not([type="checkbox"]),
+select {
     width: 59%;
     margin: 0;
     box-sizing: border-box;
@@ -25,7 +28,7 @@ input:not([type="checkbox"]), select {
 }
 
 .topbar button {
-    padding: .5em;
+    padding: 0.5em;
 }
 
 summary {

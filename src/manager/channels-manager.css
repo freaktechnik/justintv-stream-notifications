@@ -3,7 +3,8 @@
  *  Licensed under MPL 2.0
  */
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -36,19 +37,21 @@ main {
 .actionbar .flex input {
     appearance: none;
     border: none;
-    color: initial;
+    color: var(--inverted-text);
     font-size: initial;
     padding: 1em;
     border-right: 1px solid var(--inverted-separator);
     flex-grow: 1;
     height: 1.2em;
     box-sizing: content-box;
-
     background-color: var(--inverted-bg);
-    color: var(--inverted-text);
 }
 
-.actionbar a.button:link, .actionbar a.button:hover, .actionbar a.button:active, .actionbar a.button:visited, .actionbar button {
+.actionbar a.button:link,
+.actionbar a.button:hover,
+.actionbar a.button:active,
+.actionbar a.button:visited,
+.actionbar button {
     color: var(--inverted-text);
     background-color: var(--inverted-bg);
     text-decoration: none;
@@ -61,7 +64,8 @@ main {
     height: 3.2em;
 }
 
-.actionbar li:last-child a.button, .actionbar li:last-child button {
+.actionbar li:last-child a.button,
+.actionbar li:last-child button {
     border-right: none;
 }
 
@@ -75,7 +79,7 @@ main {
     color: var(--inverted-text);
 }
 
-.selectableItemsList>option {
+.selectableItemsList > option {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -86,7 +90,7 @@ main {
     color: var(--inverted-text);
 }
 
-.selectableItemsList > options:checked {
+.selectableItemsList > option:checked {
     background-color: var(--accent-light-bg);
     color: var(--accent-light-text);
 }
@@ -95,22 +99,23 @@ main {
     color: var(--accent-light-text);
 }
 
-.selectableItemsList>option:hover:not(:last-child) {
+.selectableItemsList > option:hover:not(:last-child) {
     border-bottom: 1px solid var(--inverted-separator);
 }
-.selectableItemsList>option:hover:not(:first-child) {
+
+.selectableItemsList > option:hover:not(:first-child) {
     border-top: 1px solid var(--inverted-separator);
 }
 
-.selectableItemsList>option img {
+.selectableItemsList > option img {
     height: 50px;
     width: 50px;
-    padding: .5em;
+    padding: 0.5em;
     vertical-align: middle;
 }
 
-.selectableItemsList>option small {
-    margin-left: .3em;
+.selectableItemsList > option small {
+    margin-left: 0.3em;
     color: grey;
 }
 
@@ -137,7 +142,7 @@ main {
 
 .popup dialog h1 {
     font-size: 1.2em;
-    margin: .2em;
+    margin: 0.2em;
 }
 
 #loadingWrapper progress {
@@ -158,7 +163,6 @@ main {
     border-right: 1px solid var(--inverted-separator);
     margin-left: -1em;
 }
-
 
 .popup button[type="submit"] {
     float: right;

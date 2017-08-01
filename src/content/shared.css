@@ -9,18 +9,15 @@ body {
     margin: 0;
     font-family: sans-serif;
     line-height: 1.2em;
-
     -moz-user-select: none;
 
     --accent-dark-bg: #2c24c5;
     --accent-dark-text: white;
     --accent-light-bg: #497dfe;
     --accent-light-text: white;
-
     --inverted-bg: var(--accent-dark-text);
     --inverted-text: black;
     --inverted-separator: var(--accent-dark-bg);
-
     --warn: #fc9b0a;
     --error: #d51e1e;
 }
@@ -73,7 +70,11 @@ body {
     appearance: none;
 }
 
-.topbar a:link, .topbar a:hover, .topbar a:active, .topbar a:visited, .topbar button {
+.topbar a:link,
+.topbar a:hover,
+.topbar a:active,
+.topbar a:visited,
+.topbar button {
     color: var(--accent-dark-text);
     text-decoration: none;
     display: inline-block;
@@ -83,7 +84,12 @@ body {
     box-sizing: border-box;
 }
 
-.topbar .tabstrip a.current, .topbar .toolbar a:hover, .topbar a:active, .topbar a[aria-pressed="true"], .topbar button:hover, .topbar button:active {
+.topbar .tabstrip a.current,
+.topbar .toolbar a:hover,
+.topbar a:active,
+.topbar a[aria-pressed="true"],
+.topbar button:hover,
+.topbar button:active {
     background: var(--accent-light-bg);
     color: var(--accent-light-text);
 }
@@ -92,7 +98,7 @@ body {
 
 /* START ERROR STATE */
 .esv summary {
-    padding: 0 .5em;
+    padding: 0 0.5em;
 }
 
 .esv ul {
@@ -103,7 +109,7 @@ body {
 
 .esv ul li {
     margin: 0;
-    padding: .5em;
+    padding: 0.5em;
 }
 
 .esv ul > li p {
@@ -111,7 +117,7 @@ body {
 }
 
 .esv .buttons {
-    margin-top: .5em;
+    margin-top: 0.5em;
 }
 
 .recoverable {
@@ -122,4 +128,5 @@ body {
     background-color: var(--error);
     color: white;
 }
+
 /* END ERROR STATE */

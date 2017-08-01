@@ -43,6 +43,8 @@
     "sinon": "^2.3.8",
     "sinon-chrome": "^2.2.0",
     "style-loader": "^0.18.2",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
     "transifex-loader": "^3.4.1",
     "web-ext": "^1.10.1",
     "webpack": "^3.3.0"
@@ -50,9 +52,10 @@
   "scripts": {
     "test": "npm run lint && nyc ava",
     "coverage": "nyc report && codecov",
-    "lint": "npm run lint-js && npm run lint-webext",
+    "lint": "npm run lint-js && npm run lint-css && npm run lint-webext",
     "lint-js": "eslint test/ src/",
     "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
+    "lint-css": "stylelint \"src/**/*.css\"",
     "build": "webpack && web-ext build -s webextension/",
     "start": "webpack && web-ext run -s webextension/"
   },
@@ -77,5 +80,12 @@
       "lcov",
       "text"
     ]
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "indentation": 4,
+      "color-named": "always-where-possible"
+    }
   }
 }

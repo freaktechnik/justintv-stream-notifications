@@ -9,7 +9,7 @@ body {
 }
 
 section > div {
-    padding: .2em 0;
+    padding: 0.2em 0;
 }
 
 ul {
@@ -27,12 +27,14 @@ nav {
     z-index: 10;
 }
 
-.topbar a, .topbar button {
-    padding: .5em;
+.topbar a,
+.topbar button {
+    padding: 0.5em;
     height: 2.2em;
 }
 
-#searchField, #exploreprovider {
+#searchField,
+#exploreprovider {
     width: 100%;
 }
 
@@ -53,22 +55,32 @@ nav {
     list-style: none;
 }
 
-.tabcontent li a, .tabcontent li a:link, .tabcontent li a:hover, .tabcontent li a:active, .tabcontent li a:visited {
+.tabcontent li a,
+.tabcontent li a:link,
+.tabcontent li a:hover,
+.tabcontent li a:active,
+.tabcontent li a:visited {
     text-decoration: none;
     cursor: context-menu;
     display: block;
 }
 
-.tabcontent li a, .tabcontent li a:link, .tabcontent li a:visited {
+.tabcontent li a,
+.tabcontent li a:link,
+.tabcontent li a:visited {
     color: var(--inverted-text);
 }
 
-.compact .tabcontent li a, .default .tabcontent li a, .thumbnail .tabcontent:not(.live) li a, .thumbnail .live li div, .tabcontent > span {
-    padding: .3em;
+.compact .tabcontent li a,
+.default .tabcontent li a,
+.thumbnail .tabcontent:not(.live) li a,
+.thumbnail .live li div,
+.tabcontent > span {
+    padding: 0.3em;
 }
 
 .tabcontent li div img {
-    margin-right: .3em;
+    margin-right: 0.3em;
     float: left;
 }
 
@@ -82,11 +94,12 @@ nav {
     height: 1em;
 }
 
-.default .tabcontent li a, .thumbnail .tabcontent li a {
+.default .tabcontent li a,
+.thumbnail .tabcontent li a {
     min-height: 30px;
 }
 
-.thumbnail .live li a>img {
+.thumbnail .live li a > img {
     width: 100%;
     display: block;
 }
@@ -98,18 +111,23 @@ nav {
 
 .thumbnail .live li div {
     position: absolute;
-    width: calc(100% - .6em);
+    width: calc(100% - 0.6em);
     bottom: 0;
 }
 
-.default .tabcontent li div img, .thumbnail .tabcontent li div img {
+.default .tabcontent li div img,
+.thumbnail .tabcontent li div img {
     width: 30px;
     height: 30px;
     vertical-align: middle;
 }
 
-.compact .tabcontent li a>img, .default .tabcontent li a>img, .tabcontent:not(.live) li a>img , .compact .tabcontent li .title,
-.tabcontent:not(.live) .hide-offline, aside {
+.compact .tabcontent li a > img,
+.default .tabcontent li a > img,
+.tabcontent:not(.live) li a > img,
+.compact .tabcontent li .title,
+.tabcontent:not(.live) .hide-offline,
+aside {
     display: none !important;
     visibility: hidden;
 }
@@ -122,8 +140,8 @@ nav {
 
 .icon {
     display: inline-block;
-    height: .9em;
-    width: .9em;
+    height: 0.9em;
+    width: 0.9em;
     fill: currentColor;
 }
 
@@ -155,7 +173,8 @@ nav {
     color: var(--channel-text-color);
 }
 
-.tabcontent a:hover, .thumbnail li a:hover div {
+.tabcontent a:hover,
+.thumbnail li a:hover div {
     background: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
     color: var(--channel-text-color) !important;
 }
@@ -171,7 +190,7 @@ nav {
     --channel-bg-color-r: 255;
     --channel-bg-color-g: 255;
     --channel-bg-color-b: 255;
-    --channel-text-color: #133C65;
+    --channel-text-color: #133c65;
 }
 
 .ustream a {
@@ -181,38 +200,58 @@ nav {
     --channel-bg-color-b: 250;
 }
 
-.ustream a:hover, .thumbnail .ustream a:hover div {
-    background: -moz-linear-gradient(center top , white 80%, #FAFAFA 100%) !important;
+.ustream a:hover,
+.thumbnail .ustream a:hover div {
+    background:
+        linear-gradient(
+            to bottom,
+            white 80%,
+            #fafafa 100%
+        ) !important;
 }
 
 .youtube a {
     --channel-bg-color-r: 204;
     --channel-bg-color-g: 24;
     --channel-bg-color-b: 30;
-    --channel-text-color: #FFF;
+    --channel-text-color: white;
 }
 
-.youtube a:hover, .thumbnail .youtube a:hover div {
+.youtube a:hover,
+.thumbnail .youtube a:hover div {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .livestream a {
-    --channel-text-color: #fff;
+    --channel-text-color: white;
     --channel-bg-color-r: 59;
     --channel-bg-color-g: 59;
     --channel-bg-color-b: 59;
 }
 
 .thumbnail .live .livestream a div {
-    background: -moz-linear-gradient(center top, rgba(59, 59, 59, 0.7) 0%,
-        rgba(56, 56, 56, 0.7) 16%, rgba(30, 30, 30, 0.7) 80%,
-        rgba(25, 25, 25, 0.7) 98%, rgba(0, 0, 0, 0.7) 100%);
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(59, 59, 59, 0.7) 0%,
+            rgba(56, 56, 56, 0.7) 16%,
+            rgba(30, 30, 30, 0.7) 80%,
+            rgba(25, 25, 25, 0.7) 98%,
+            rgba(0, 0, 0, 0.7) 100%
+        );
 }
 
-.livestream a:hover, .thumbnail .livestream a:hover div {
-    background: -moz-linear-gradient(center top, rgb(59, 59, 59) 0%,
-        rgb(56, 56, 56) 16%, rgb(30, 30, 30) 80%,
-        rgb(25, 25, 25) 98%, rgb(0, 0, 0) 100%) !important;
+.livestream a:hover,
+.thumbnail .livestream a:hover div {
+    background:
+        linear-gradient(
+            to bottom,
+            rgb(59, 59, 59) 0%,
+            rgb(56, 56, 56) 16%,
+            rgb(30, 30, 30) 80%,
+            rgb(25, 25, 25) 98%,
+            black 100%
+        ) !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -220,7 +259,7 @@ nav {
     --channel-bg-color-r: 60;
     --channel-bg-color-g: 125;
     --channel-bg-color-b: 230;
-    --channel-text-color: #FFF;
+    --channel-text-color: white;
 }
 
 .beam a {
@@ -238,7 +277,7 @@ nav {
 }
 
 .newlivestream a {
-    --channel-text-color: #CF202E;
+    --channel-text-color: #cf202e;
 }
 
 .streamup a {
