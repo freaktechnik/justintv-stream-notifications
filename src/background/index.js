@@ -71,11 +71,6 @@ errorStateManager.addEventListener("empty", () => {
     passive: true
 });
 
-list.addEventListener("ready", () => {
-    controller.getChannelsByType()
-        .then((channels) => list.addChannels(channels));
-});
-
 list.addEventListener("opencm", () => controller.showManager());
 list.addEventListener("addchannel", ({ detail: [ login, type ] }) => {
     controller.addChannel(login, type);

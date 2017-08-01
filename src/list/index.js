@@ -12,6 +12,7 @@ import '../content/shared.css';
 import 'open-iconic/sprite/open-iconic.min.svg';
 import LiveState from '../live-state.json';
 import Port from '../port';
+import ReadChannelList from '../read-channel-list';
 
 let live,
     secondaryLive,
@@ -571,6 +572,15 @@ document.addEventListener("DOMContentLoaded", () => {
             applySearchToExplore(exploreSelect, field);
         }
     }, false);
+
+    const list = new ReadChannelList();
+    list.addEventListener("ready", () => {
+        list.getChannelsByType().then((channels) => {
+            channels.forEach(addChannel);
+        });
+    }, {
+        once: true
+    });
 
     forwardEvent("ready");
 });

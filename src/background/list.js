@@ -6,7 +6,7 @@
  * @module list
  * @requires module:channel/utils
  * @requires module:list/firefox
- * @todo coutner badge vs. live state handling change
+ * @todo need to know badge stuff when constructed, not when popup opened (i.e rewrite that now with the list having its own db connection to load).
  */
 // setup event handling
 import { emit } from "../utils";
@@ -167,7 +167,6 @@ class ListView extends EventTarget {
                 break;
             case "ready":
                 this.ready = true;
-                emit(this, "ready");
                 this.setNonLiveDisplay();
                 this.setStyle();
                 this.setExtrasVisibility();
