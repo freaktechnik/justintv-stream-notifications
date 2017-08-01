@@ -203,7 +203,7 @@ class ListView extends EventTarget {
             if(event.pref == "panel_badge") {
                 this.updateBadge();
             }
-        }, { passive: false });
+        }, { passive: true, capture: false });
     }
 
     _emitToList(event, data) {
