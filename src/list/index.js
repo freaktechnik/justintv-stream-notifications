@@ -500,7 +500,16 @@ document.addEventListener("DOMContentLoaded", () => {
     explore = document.getElementById("featured");
     secondaryLive = document.getElementById("secondarylive");
     const exploreSelect = document.getElementById("exploreprovider"),
-        field = document.getElementById("searchField");
+        field = document.getElementById("searchField"),
+        list = new ReadChannelList();
+
+    list.addEventListener("ready", () => {
+        list.getChannelsByType().then((channels) => {
+            channels.forEach(addChannel);
+        });
+    }, {
+        once: true
+    });
 
     document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
     document.getElementById("refreshButton").addEventListener("click", (e) => {
@@ -572,15 +581,6 @@ document.addEventListener("DOMContentLoaded", () => {
             applySearchToExplore(exploreSelect, field);
         }
     }, false);
-
-    const list = new ReadChannelList();
-    list.addEventListener("ready", () => {
-        list.getChannelsByType().then((channels) => {
-            channels.forEach(addChannel);
-        });
-    }, {
-        once: true
-    });
 
     forwardEvent("ready");
 });

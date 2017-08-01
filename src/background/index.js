@@ -213,3 +213,5 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
         Tour.onUpdate();
     }
 });
+
+controller.getChannelsByType().then((channels) => list.addChannels(channels)).catch(console.error);
