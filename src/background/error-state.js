@@ -72,7 +72,7 @@ export default class ErrorState extends EventTarget {
      * Recoverable error within the extension. Resolving is possible during
      * runtime.
      *
-     * @type{module:error-state~ErrorType}
+     * @type {module:error-state~ErrorType}
      * @readonly
      * @default 1
      */
@@ -84,7 +84,7 @@ export default class ErrorState extends EventTarget {
      * Unrecoverable error within the extension. Resolving is impossible during
      * runtime and will require changes while the extension is not running.
      *
-     * @type{module:error-state~ErrorType}
+     * @type {module:error-state~ErrorType}
      * @readonly
      * @default 2
      */
