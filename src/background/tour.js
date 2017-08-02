@@ -30,8 +30,15 @@ const BASE_URL = "http://streamnotifier.ch",
          */
         async onUpdate() {
             if(await Tour.enabled()) {
+                const version = browser.runtime.getManifest().version;
+                let url = `${BASE_URL}/changes/${version}/`;
+
+                if(version.includes("pre")) {
+                    url = `https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/versions/beta#version-${version}`;
+                }
+
                 await browser.tabs.create({
-                    url: `${BASE_URL}/changes/${browser.runtime.getManifest().version}/`,
+                    url,
                     active: false
                 });
             }
