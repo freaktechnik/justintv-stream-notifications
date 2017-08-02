@@ -165,7 +165,7 @@ class Twitch extends GenericProvider {
             },
             getItems: (data) => {
                 if(data.parsedJSON && "streams" in data.parsedJSON) {
-                    let streams = data.parsedJSON.streams;
+                    const streams = data.parsedJSON.streams;
                     return streams.map((obj) => {
                         const cho = getChannelFromJSON(obj.channel);
                         cho.viewers = obj.viewers;
