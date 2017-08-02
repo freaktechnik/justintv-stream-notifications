@@ -16,7 +16,7 @@ const type = "youtube",
     apiKey = prefs.get('youtube_apiKey'),
     baseURL = "https://www.googleapis.com/youtube/v3/",
     getLocale = () => {
-        return browser.i18n.getUILanguage();
+        return browser.i18n.getUILanguage().replace("-", "_");
     };
 
 class YouTube extends GenericProvider {
