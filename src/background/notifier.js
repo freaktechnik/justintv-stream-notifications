@@ -188,6 +188,7 @@ export default class Notifier extends EventTarget {
                 };
 
                 browser.notifications.create(`cn${channel.id}`, opts);
+                browser.runtime.sendMessage("@notification-sound", "new-notification");
             }
         }
 
