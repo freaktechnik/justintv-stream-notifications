@@ -50,7 +50,7 @@
     "webpack": "^3.3.0"
   },
   "scripts": {
-    "test": "npm run lint && nyc ava",
+    "test": "npm run lint && nyc ava -c 10",
     "coverage": "nyc report && codecov",
     "lint": "npm run lint-js && npm run lint-css && npm run lint-webext",
     "lint-js": "eslint test/ src/",
