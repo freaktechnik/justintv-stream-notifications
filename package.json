@@ -232,7 +232,7 @@
     "alan2loin"
   ],
   "name": "justintv-stream-notifications",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "main": "lib/main.js",
   "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
   "engines": {
@@ -299,8 +299,9 @@
     "lint": "npm run lint-js && npm run lint-webext",
     "lint-js": "eslint lib/ test/ src/",
     "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
-    "build": "webpack && npm run use-json-txrc && grunt build && npm run use-orig-txrc && jpm xpi --addon-dir build/",
+    "build": "webpack && npm run fix-i18n && npm run use-json-txrc && grunt build && npm run use-orig-txrc && jpm xpi --addon-dir build/",
     "start": "webpack && npm run use-json-txrc && grunt dev --force && npm run use-orig-txrc && jpm run --addon-dir build/",
+    "fix-i18n": "node scripts/fix-i18n-placeholders.js",
     "use-json-txrc": "mv .transifexrc .transifexrc.orig && mv .transifexrc.json .transifexrc",
     "use-orig-txrc": "mv .transifexrc .transifexrc.json && mv .transifexrc.orig .transifexrc"
   },

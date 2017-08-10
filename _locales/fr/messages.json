@@ -40,7 +40,7 @@
         "description": "Notification content after the URL of a stream was copied from the panel context menu"
     },
     "panel_style_title": {
-        "message": "Style de fenêtre d'affichage",
+        "message": "Style d'affichage des éléments du panneau",
         "description": "Title of the panel item style setting in the preferences"
     },
     "youtube_apiKey_title": {
@@ -60,7 +60,7 @@
         "description": "Description of the non-live treatment setting in the preferences"
     },
     "providerlivestream": {
-        "message": "Livestream",
+        "message": "Ancien Livestream",
         "description": "Provider name for the original livestream.com"
     },
     "providerhitbox": {
@@ -76,11 +76,11 @@
         "description": "Description of the panel badge setting in the preferences"
     },
     "extensionDescription": {
-        "message": "Recevez une notification, chaque fois qu'un streamer que vous suivez commence à diffuser. Cette extension dispose d'un contrôle avancé sur les chaînes qu'elle surveille et d'un panneau pour un accès rapide à ces chaînes. ",
+        "message": "Recevez une notification, chaque fois qu'un streamer que vous suivez commence à diffuser. Ce module dispose d'un contrôle avancé sur les chaînes qu'elle surveille et d'un panneau pour un accès rapide à ces chaînes. ",
         "description": "Description of the extension"
     },
     "pref_value_hidden": {
-        "message": "hidden",
+        "message": "caché",
         "description": "Shown as placeholder when a value is set but hidden in the preferences."
     },
     "queueservice_maxRetries_title": {
@@ -96,7 +96,7 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "No channel is live at the moment (Ctrl+Shift+L)",
+        "message": "Aucune chaîne n'est en ligne pour le moment (Ctrl+Shift+L)",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "panel_nonlive_options.Livebottom": {
@@ -144,7 +144,7 @@
         "description": "Label for the username field in the dialog to add a channel or user"
     },
     "resetOptions": {
-        "message": "Reset to default",
+        "message": "Réinitialiser les réglages par défaut",
         "description": "Button to reset all preferences to their default value"
     },
     "mlg_showRebroadcasts_title": {
@@ -176,7 +176,7 @@
         "description": "Notification title when a channel changes the stream title"
     },
     "lost_channels": {
-        "message": "LIve Stream Notifier n'a pas pu lire les chaînes enregistrés. Pour restaurer l'extension, toutes les chaînes et les utilisateurs ont été supprimés.",
+        "message": "Live Stream Notifier n'a pas pu lire les chaînes enregistrées. Pour restaurer le module, toutes les chaînes et les utilisateurs ont été supprimés.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
     "queue_maxRequestBatchSize_title": {
@@ -188,11 +188,11 @@
         "description": "Live option of the non-live treatment setting in the preferences"
     },
     "errorState1": {
-        "message": "Recoverable error with Live Stream Notifier",
+        "message": "Erreur restaurable avec Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"
     },
     "listTooltipLive": {
-        "message": "Currently live channels (Ctrl+Shift+L)",
+        "message": "Chaînes actuellement en ligne (Ctrl+Shift+L)",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
@@ -236,7 +236,7 @@
         "description": "Refresh the status of a channel from the context menu in the panel"
     },
     "providernewlivestream": {
-        "message": "Nouvelle diffusion en direct",
+        "message": "Nouveau Livestream",
         "description": "Provider name for the new livestream.com"
     },
     "cm_remove.title": {
@@ -308,7 +308,7 @@
         "description": "Label for the type selector"
     },
     "cm_secondary_label": {
-        "message": "Il y a déjà un gestionnaire de chaînes ouvert. Vous pouvez n'en ouvrir qu'un à la fois. Si c'est le seul onglet ouvert, essayez de recharger cette page.",
+        "message": "Il y a déjà un gestionnaire de chaînes ouvert. Vous ne pouvez en ouvrir qu'un à la fois. Si c'est le seul onglet ouvert, essayez de recharger cette page.",
         "description": "Message shown when opening a second instance of the channel manager"
     },
     "channelManagerGenericError": {
@@ -344,7 +344,7 @@
         "description": "Label of the tab that contains all channels in the channel manager"
     },
     "find_mature_title": {
-        "message": "Allow mature content",
+        "message": "Autoriser le contenu explicite",
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
@@ -364,7 +364,7 @@
         "description": "Tooltip on the refresh button in the panel"
     },
     "redirectUpdateNotification": {
-        "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
+        "message": "$REDIRECTTARGET$(redirigé vers $CHANNEL$) a mis à jour le titre",
         "description": "Notification title when a channel changes the stream title"
     },
     "context_open": {
@@ -396,7 +396,7 @@
         "description": "Title of the update tab setting in the preferences"
     },
     "errorState2": {
-        "message": "Critical error with Live Stream Notifier",
+        "message": "Erreur critique avec Live Stream Notifier",
         "description": "Error title when an unrecoverable error is blocking the extension"
     },
     "cm_filter.placeholder": {
@@ -428,7 +428,7 @@
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "offlineNotification": {
-        "message": "$CHANNEL$ est devenu hors ligne !",
+        "message": "$CHANNEL$ est passé hors ligne !",
         "description": "Notification title when a channel goes offline"
     },
     "theme_options.Light": {
