@@ -6,12 +6,12 @@
     "applications": {
         "gecko": {
             "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-            "strict_min_version": "57.0"
+            "strict_min_version": "54.0"
         }
     },
     "homepage_url": "http://streamnotifier.ch",
     "author": "freaktechnik",
-    "version": "3.4.1",
+    "version": "3.5.0",
     "icons": {
         "48": "assets/images/icon.svg",
         "64": "assets/images/icon.svg"
