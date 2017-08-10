@@ -428,7 +428,7 @@
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "offlineNotification": {
-        "message": "$CHANNEL$ est devenu hors ligne !",
+        "message": "$CHANNEL$ est passé hors ligne !",
         "description": "Notification title when a channel goes offline"
     },
     "theme_options.Light": {
