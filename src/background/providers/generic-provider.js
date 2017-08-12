@@ -14,7 +14,12 @@ import EventTarget from 'event-target-shim';
 const _ = browser.i18n.getMessage,
     methodNotSupported = (type, method) => Promise.reject(new Error(type + "." + method + " is not supported")),
     queues = new WeakMap(),
-    queueFor = (provider) => queues.get(provider);
+    queueFor = (provider) => {
+        if(!queues.has(provider)) {
+            queues.set(provider, qs.getServiceForProvider(provider§._type));
+        }
+        return queues.get(provider);
+    };
 
 /**
  * @event module:providers/generic-provider.GenericProvider#updateduser
@@ -152,8 +157,6 @@ export default class GenericProvider extends EventTarget {
          * @protected
          */
         this._type = type;
-
-        queues.set(this, qs.getServiceForProvider(this._type));
     }
     /**
      * An instance of the QueueService for this provider.
