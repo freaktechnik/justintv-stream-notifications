@@ -1,18 +1,6 @@
 [main]
 host = https://www.transifex.com
 
-[live-stream-notifier.mainproperties]
-source_file = locale/en-US.properties
-source_lang = en_US
-file_filter = locale/<lang>.properties
-type = MOZILAPROPERTIES
-
-[live-stream-notifier.packagejson]
-source_file = locale/en-US.json
-source_lang = en_US
-file_filter = locale/<lang>.json
-type = KEYVALUEJSON
-
 [live-stream-notifier.messages]
 source_file = _locales/en/messages.json
 source_lang = en
