@@ -338,7 +338,7 @@
         "description": "Title of the offline notifications setting in the preferences"
     },
     "nonliveNotification_title": {
-        "message": "Show a notification when a stream enters a <abbr title=\"Streaming someone else or an earlier broadcast\">non-live</abbr> state",
+        "message": "Show a notification when a stream enters a non-live state",
         "description": "Title of the non-live notifications setting in the preferences"
     },
     "nonliveNotification_description": {
