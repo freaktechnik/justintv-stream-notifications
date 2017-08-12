@@ -260,7 +260,7 @@ export default class ChannelsManager extends EventTarget {
      */
     onChannelAdded(channelObj) {
         this.loading = false;
-        this._emitToWorker("add", channelObj.serialize());
+        this._emitToWorker("add", channelObj.id);
     }
     /**
      * Callback when a channel was removed.
@@ -279,7 +279,7 @@ export default class ChannelsManager extends EventTarget {
      */
     onChannelUpdated(channelObj) {
         this.loading = false;
-        this._emitToWorker("update", channelObj.serialize());
+        this._emitToWorker("update", channelObj.id);
     }
     /**
      * Callback when a user was added. Callers should call _deleteCancelingValue
@@ -290,7 +290,7 @@ export default class ChannelsManager extends EventTarget {
      */
     onUserAdded(user) {
         this.loading = false;
-        this._emitToWorker("adduser", user.serialize());
+        this._emitToWorker("adduser", user.id);
     }
     /**
      * Callback when a user was removed.
@@ -309,7 +309,7 @@ export default class ChannelsManager extends EventTarget {
      */
     onUserUpdated(user) {
         this.loading = false;
-        this._emitToWorker("updateuser", user.serialize());
+        this._emitToWorker("updateuser", user.id);
     }
     /**
      * Callback when an error occurs while adding something.

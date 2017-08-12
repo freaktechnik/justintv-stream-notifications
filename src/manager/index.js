@@ -425,7 +425,7 @@ list.openDB().then(() => {
 
 port.send("ready");
 
-port.addEventListener("message", ({ detail: message }) => {
+port.addEventListener("message", async ({ detail: message }) => {
     switch(message.command) {
     case "secondary":
         show(document.querySelector("#secondary-manager"));
@@ -437,24 +437,32 @@ port.addEventListener("message", ({ detail: message }) => {
     case "reload":
         location.reload();
         break;
-    case "add":
-        addChannel(message.payload);
+    case "add": {
+        const channel = await list.getChannel(message.payload);
+        addChannel(channel);
         break;
+    }
     case "remove":
         removeChannel(message.payload);
         break;
-    case "update":
-        updateChannel(message.payload);
+    case "update": {
+        const channel = await list.getChannel(message.payload);
+        updateChannel(channel);
         break;
-    case "adduser":
-        addUser(message.payload);
+    }
+    case "adduser": {
+        const user = await list.getUser(message.payload);
+        addUser(user);
         break;
+    }
     case "removeuser":
         removeUser(message.payload);
         break;
-    case "updateuser":
-        updateUser(message.payload);
+    case "updateuser": {
+        const user = await list.getUser(message.payload);
+        updateUser(user);
         break;
+    }
     case "addproviders": {
         providers = message.payload;
         const providerDropdown = document.querySelector("#providerDropdown");
