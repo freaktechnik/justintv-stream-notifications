@@ -16,7 +16,7 @@ const _ = browser.i18n.getMessage,
     queues = new WeakMap(),
     queueFor = (provider) => {
         if(!queues.has(provider)) {
-            queues.set(provider, qs.getServiceForProvider(provider§._type));
+            queues.set(provider, qs.getServiceForProvider(provider._type));
         }
         return queues.get(provider);
     };
