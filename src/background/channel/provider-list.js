@@ -43,15 +43,21 @@ export default class ProviderChannelList extends ReadChannelList {
     }
 
     channelExists(name) {
-        return super.channelExists(name, this.type);
+        return this.getChannelByName(name).then((c) => !!c, () => false);
     }
 
     userExists(name) {
-        return super.userExists(name, this.type);
+        return this.getUserByName(name).then((u) => !!u, () => false);
     }
 
-    liveStatus() {
-        return super.liveStatus(this.type);
+    async liveStatus() {
+        const channels = await this.getChannels();
+        for(const channel of channels) {
+            if(await channel.live.isLive()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getChannels() {
