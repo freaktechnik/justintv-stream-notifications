@@ -9,6 +9,7 @@ import { hide, show, copy } from '../content/utils';
 import { filter } from '../content/filter';
 import Port from '../port';
 import Tabbed from '../content/tabbed';
+import ReadChannelList from '../read-channel-list';
 import '../content/l10n';
 import './channels-manager.css';
 import '../content/shared.css';
@@ -409,6 +410,16 @@ document.getElementById("options").addEventListener("click", (e) => {
     e.preventDefault();
     port.send("showoptions");
 }, false);
+
+const list = new ReadChannelList();
+list.openDB().then(() => {
+    list.getChannelsByType().then((channels) => {
+        channels.forEach(addChannel);
+    });
+    list.getUsersByType().then((users) => {
+        users.forEach(addUser);
+    });
+});
 
 // Add-on communication backend
 

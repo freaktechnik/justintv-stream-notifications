@@ -85,7 +85,7 @@ export default class ReadChannelList extends EventTarget {
      * Opens the DB, initializes the schema if it's a new DB or sets channels
      * offline that were online and have last been updated a certain time ago.
      *
-     * @param {string} name - Name of the DB to open.
+     * @param {string} [name=ReadChannelList.name] - Name of the DB to open.
      * @param {boolean} [dontTry=false] - Don't try to fix the DB.
      * @async
      * @fires module:read-channel-list.ReadChannelList#ready
@@ -93,7 +93,7 @@ export default class ReadChannelList extends EventTarget {
      * @throws Could not open the DB. Has a boolean that is true when a clear
      *         should be tried.
      */
-    openDB(name, dontTry = false) {
+    openDB(name = ReadChannelList.name, dontTry = false) {
         // Quick path if DB is already opened.
         if(this.db) {
             return Promise.resolve();

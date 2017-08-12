@@ -67,11 +67,6 @@ import serializedProviders from "../providers/serialized";
  *
  */
 /**
- * Add all existing channels and users via the on callbacks.
- *
- * @event module:channel/manager.ChannelsManager#getdata
- */
-/**
  * Shift clicked help button to export debug info.
  *
  * @event module:channel/manager.ChannelsManager#debugdump
@@ -99,7 +94,6 @@ export default class ChannelsManager extends EventTarget {
      * @fires module:channel/manager.ChannelsManager#removeuser
      * @fires module:channel/manager.ChannelsManager#updatefavorites
      * @fires module:channel/manager.ChannelsManager#autoadd
-     * @fires module:channel/manager.ChannelsManager#getdata
      * @fires module:channel/manager.ChannelsManager#debugdump
      * @fires module:channel/manager.ChannelsManager#showoptions
      */
@@ -111,7 +105,7 @@ export default class ChannelsManager extends EventTarget {
         this.port = new Port("manager");
         this.port.addEventListener("connect", ({ detail: port }) => {
             this.tabID = port.sender.tab.id;
-            this.loading = true;
+            this.loading = false;
         });
         this.port.addEventListener("disconnect", () => {
             this.tabID = null;
@@ -119,7 +113,6 @@ export default class ChannelsManager extends EventTarget {
         this.port.addEventListener("message", ({ detail: message }) => {
             switch(message.command) {
             case "ready":
-                emit(this, "getdata");
                 this.setTheme();
                 this.addProviders(serializedProviders);
                 break;

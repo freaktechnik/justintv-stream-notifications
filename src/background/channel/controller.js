@@ -115,14 +115,6 @@ export default class ChannelController extends EventTarget {
         this._manager.addEventListener("updatefavorites", ({ detail }) => this.updateUser(detail)
             .catch(managerDoneLoading));
         this._manager.addEventListener("autoadd", () => this.autoAddUsers().catch(managerDoneLoading));
-        this._manager.addEventListener("getdata", () => {
-            Promise.all([
-                this.getChannelsByType()
-                    .then((channels) => channels.forEach((ch) => this._manager.onChannelAdded(ch))),
-                this.getUsersByType()
-                    .then((users) => users.forEach((usr) => this._manager.onUserAdded(usr)))
-            ]).then(managerDoneLoading, managerDoneLoading);
-        });
         this._manager.addEventListener("debugdump", () => {
             Promise.all([
                 this.getChannelsByType(),
