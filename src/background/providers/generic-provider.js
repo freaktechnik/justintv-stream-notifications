@@ -298,7 +298,7 @@ export default class GenericProvider extends EventTarget {
      * @returns {undefined}
      */
     updateRequest(channels) {
-        throw this.name + ".updateRequest is not supported.";
+        throw new Error(this.name + ".updateRequest is not supported.");
     }
     /**
      * Unqueues the reocurring update request for updating the live status of
