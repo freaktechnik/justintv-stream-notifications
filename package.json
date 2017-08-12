@@ -12,7 +12,7 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "engines": {
-      "node": ">= 8.0.0"
+    "node": ">= 8.0.0"
   },
   "dependencies": {
     "event-target-shim": "^2.0.0",
