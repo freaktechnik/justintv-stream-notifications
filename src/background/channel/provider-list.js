@@ -50,14 +50,8 @@ export default class ProviderChannelList extends ReadChannelList {
         return this.getUserByName(name).then((u) => !!u, () => false);
     }
 
-    async liveStatus() {
-        const channels = await this.getChannels();
-        for(const channel of channels) {
-            if(await channel.live.isLive()) {
-                return true;
-            }
-        }
-        return false;
+    liveStatus() {
+        return super.liveStatus(this.type);
     }
 
     getChannels() {
@@ -86,11 +80,17 @@ export default class ProviderChannelList extends ReadChannelList {
         }
     }
 
-    getChannelsByType() {
+    getChannelsByType(type) {
+        if(type === this.type) {
+            return this.getChannels();
+        }
         return Promise.reject(new Error("Not supported"));
     }
 
-    getUsersByType() {
+    getUsersByType(type) {
+        if(type == this.type) {
+            return this.getUsers();
+        }
         return Promise.reject(new Error("Not supported"));
     }
 }

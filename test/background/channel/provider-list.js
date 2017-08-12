@@ -159,3 +159,15 @@ test("getChannelsByType", async (t) => {
 test("getUsersByType", async (t) => {
     await t.throws(t.context.list.getUsersByType());
 });
+
+test("getChannelsByType with type is equal to getChannels", async (t) => {
+    const byType = await t.context.list.getChannelsByType(PROVIDER);
+    const channels = await t.context.list.getChannels();
+    t.deepEqual(byType, channels);
+})
+
+test("getUsersByType with type is equal to getUsers", async (t) => {
+    const byType = await t.context.list.getUsersByType(PROVIDER);
+    const users = await t.context.list.getUsers();
+    t.deepEqual(byType, users);
+})
