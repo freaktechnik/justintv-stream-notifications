@@ -169,11 +169,9 @@ test.serial("Detaching Worker Without Closing Tab", async (t) => {
     const port = getManagerPort();
     browser.runtime.onConnect.dispatch(port);
 
-    const p = when(cm, 'getdata');
     port.onMessage.dispatch({
         command: "ready"
     });
-    await p;
 
     t.not(cm.tabID, null);
 
@@ -188,11 +186,9 @@ test.serial("Additional Manager", async (t) => {
     const port = getManagerPort();
     browser.runtime.onConnect.dispatch(port);
 
-    const p = when(cm, 'getdata');
     port.onMessage.dispatch({
         command: "ready"
     });
-    await p;
 
     const secondPort = getManagerPort('manager2');
     const spp = when(cm.port, "duplicate");
@@ -215,11 +211,9 @@ test.serial("Additional Manager to Primary", async (t) => {
     const port = getManagerPort();
     browser.runtime.onConnect.dispatch(port);
 
-    const p = when(cm, 'getdata');
     port.onMessage.dispatch({
         command: "ready"
     });
-    await p;
 
     const secondPort = getManagerPort('manager2');
     const spp = when(cm.port, 'duplicate');
