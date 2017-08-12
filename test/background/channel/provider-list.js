@@ -98,7 +98,11 @@ test("getUsers", async (t) => {
 });
 
 test.todo("getUsersByFavorite");
-test.todo("getUsersByFavorite with wrong type");
+
+test("getUsersByFavorite with wrong type", async (t) => {
+    const { notChannel } = t.context;
+    await t.throws(t.context.list.getUsersByFavorite(notChannel));
+});
 
 test("getChannelId", async (t) => {
     const { referenceChannel } = t.context;
@@ -150,7 +154,11 @@ test("liveState", async (t) => {
 
 test.todo("liveState true");
 test.todo("getChannelsByUserFavorites");
-test.todo("getChannelsByUserFavorites with wrong type");
+
+test("getChannelsByUserFavorites with wrong type", async (t) => {
+    const { notUser } = t.context;
+    await t.throws(t.context.list.getChannelsByUserFavorites(notUser));
+});
 
 test("getChannelsByType", async (t) => {
     await t.throws(t.context.list.getChannelsByType());
