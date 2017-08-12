@@ -25,6 +25,7 @@ let live,
     nonLiveDisplay,
     tabbed;
 const port = new Port("list", true),
+    list = new ReadChannelList(),
     CHANNEL_ID_PREFIX = "channel",
     EXPLORE_ID_PREFIX = "explorechan",
     CONTEXTMENU_ID = "context",
@@ -118,9 +119,9 @@ const port = new Port("list", true),
     setExtrasVisibility = (visible) => {
         tabbed.classList.toggle("extras", visible);
     },
-    findInsertionNodeIn = (list, name) => {
+    findInsertionNodeIn = (root, name) => {
         // Find the node to insert before in order to keep the list sorted
-        let node = list.firstElementChild;
+        let node = root.firstElementChild;
 
         while(node && name.localeCompare(node.querySelector(".name").textContent) >= 0) {
             node = node.nextSibling;
@@ -438,7 +439,7 @@ const port = new Port("list", true),
     };
 
 // Set up port commmunication listeners
-port.addEventListener("message", ({ detail: event }) => {
+port.addEventListener("message", async ({ detail: event }) => {
     switch(event.command) {
     case "setStyle":
         setStyle(event.payload);
@@ -447,20 +448,29 @@ port.addEventListener("message", ({ detail: event }) => {
         setExtrasVisibility(event.payload);
         break;
     case "addChannels":
-        event.payload.forEach(addChannel);
+        for(const channelId of event.payload) {
+            const channel = await list.getChannel(channelId);
+            addChannel(channel);
+        }
         break;
     case "removeChannel":
         removeChannel(event.payload);
         break;
-    case "setOnline":
-        makeChannelLive(event.payload);
+    case "setOnline": {
+        const channel = await list.getChannel(event.payload);
+        makeChannelLive(channel);
         break;
-    case "setOffline":
-        makeChannelOffline(event.payload);
+    }
+    case "setOffline": {
+        const channel = await list.getChannel(event.payload);
+        makeChannelOffline(channel);
         break;
-    case "setDistinct":
-        makeChannelDistinct(event.payload);
+    }
+    case "setDistinct": {
+        const channel = await list.getchannel(event.payload);
+        makeChannelDistinct(channel);
         break;
+    }
     case "setNonLiveDisplay":
         setNonLiveDisplay(event.payload);
         break;
@@ -530,8 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
     explore = document.getElementById("featured");
     secondaryLive = document.getElementById("secondarylive");
     const exploreSelect = document.getElementById("exploreprovider"),
-        field = document.getElementById("searchField"),
-        list = new ReadChannelList();
+        field = document.getElementById("searchField");
 
     list.addEventListener("ready", () => {
         list.getChannelsByType().then((channels) => {

@@ -355,7 +355,7 @@ class ListView extends EventTarget {
         }
         channels.forEach(this._updateChannel, this);
         this.updateBadge();
-        this._emitToList("addChannels", channels.map((c) => c.serialize()));
+        this._emitToList("addChannels", channels.map((c) => c.id));
     }
     /**
      * Remove a channel from the list. Updates the liveState if appropriate.
@@ -376,7 +376,7 @@ class ListView extends EventTarget {
      */
     setChannelLive(channel) {
         this._updateChannel(channel);
-        this._emitToList("setOnline", channel.serialize());
+        this._emitToList("setOnline", channel.id);
         this.liveState = true;
     }
     /**
@@ -387,7 +387,7 @@ class ListView extends EventTarget {
      */
     setChannelOffline(channel) {
         this._updateChannel(channel);
-        this._emitToList("setOffline", channel.serialize());
+        this._emitToList("setOffline", channel.id);
     }
 
     /**
@@ -399,7 +399,7 @@ class ListView extends EventTarget {
      */
     setChannelDistinct(channel) {
         this._updateChannel(channel);
-        this._emitToList("setDistinct", channel.serialize());
+        this._emitToList("setDistinct", channel.id);
     }
 
     /**

@@ -412,13 +412,15 @@ document.getElementById("options").addEventListener("click", (e) => {
 }, false);
 
 const list = new ReadChannelList();
-list.openDB().then(() => {
+list.addEventListener("ready", () => {
     list.getChannelsByType().then((channels) => {
         channels.forEach(addChannel);
     });
     list.getUsersByType().then((users) => {
         users.forEach(addUser);
     });
+}, {
+    once: true
 });
 
 // Add-on communication backend
