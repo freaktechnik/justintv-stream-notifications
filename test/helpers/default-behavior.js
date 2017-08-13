@@ -12,4 +12,6 @@ export const setup = () => {
         "nacl_arch": 'x86'
     });
     browser.runtime.getManifest.returns(manifest);
+    browser.runtime.getURL.returnsArg(0);
+    browser.extension.getURL.returnsArg(0);
 };

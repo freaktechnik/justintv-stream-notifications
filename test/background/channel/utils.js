@@ -61,8 +61,7 @@ test.serial('open live channel', async (t) => {
 
 test.serial('open hosted live channel', async (t) => {
     const channel = getChannel();
-    channel.live = new LiveState(LiveState.REDIRECT);
-    channel.live.alternateURL = "http://example.com/alternate";
+    channel.live.redirectTo(getChannel('alternate'));
 
     await setupAndRun([ channel ]);
 

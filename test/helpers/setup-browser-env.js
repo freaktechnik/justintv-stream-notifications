@@ -50,6 +50,8 @@ window.indexedDB = indexedDB;
 document.execCommand = execCommand;
 polyfillDataset();
 
+window.devicePixelRatio = 1.0;
+
 // WebExtension APIs
 //global.chrome = chrome;
 

@@ -145,12 +145,51 @@ aside {
     fill: currentColor;
 }
 
-.nonlivename {
+.redirecting {
     display: none;
     visibility: hidden;
 }
 
-.nonlive .nonlivename {
+.redirecting .redirectors {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tabcontent .redirecting .redirectors li {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.tabcontent .redirecting .redirectors li a {
+    min-height: 1em;
+    padding: 0 0.1em;
+}
+
+.tabcontent .redirecting .redirectors li a > div {
+    background: none;
+    position: static;
+    width: 1em;
+    padding: 0;
+}
+
+.tabcontent .redirecting .redirectors li div > img {
+    height: 1em;
+    width: 1em;
+}
+
+.tabcontent .redirecting .redirectors li a > img,
+.tabcontent .redirecting .redirectors li a > div > *:not(img) {
+    display: none;
+    visibility: hidden;
+}
+
+.nonlive .redirecting {
     display: inline;
     visibility: visible;
 }

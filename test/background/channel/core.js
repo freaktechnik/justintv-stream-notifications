@@ -90,8 +90,7 @@ test('deserialize', (t) => {
             url: [ "https://example.com" ],
             live: {
                 state: 0,
-                alternateUsername: "",
-                alternateURL: ""
+                alternateChannel: undefined
             }
         },
         channel = Channel.deserialize(channelProps);

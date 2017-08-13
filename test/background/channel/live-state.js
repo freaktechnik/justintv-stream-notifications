@@ -39,8 +39,7 @@ test('Construction', (t) => {
 test('Serialize', (t) => {
     const expectedResult = {
             state: LiveState.OFFLINE,
-            alternateUsername: "",
-            alternateURL: ""
+            alternateChannel: undefined
         },
         state = new LiveState(),
         serialized = state.serialize();
@@ -52,14 +51,18 @@ test('Serialize', (t) => {
 test('Deserialize', (t) => {
     const serialized = {
             state: LiveState.REDIRECT,
-            alternateUsername: "test",
-            alternateURL: "https://example.com/test"
+            alternateChannel: {
+                login: "test",
+                uname: "test",
+                urls: [
+                    "https://example.com/test"
+                ]
+            },
         },
         state = LiveState.deserialize(serialized);
 
     t.is(state.state, serialized.state, "State was correctly deserialized");
-    t.is(state.alternateUsername, serialized.alternateUsername, "alternate username was correctly deserialized");
-    t.is(state.alternateURL, serialized.alternateURL, "alternate URL was correctly deserialized");
+    t.deepEqual(state.alternateChannel, serialized.alternateChannel, "alternate username was correctly deserialized");
     t.deepEqual(state.serialize(), serialized, "Serializing the deserialized object holds the same result");
 });
 

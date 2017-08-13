@@ -11,7 +11,7 @@ import ChannelController from "../../../src/background/channel/controller";
 import providers from "../../../src/background/providers";
 import { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
 import prefs from '../../../src/prefs.json';
-import LiveState from '../../../src/background/channel/live-state';
+import { getChannel } from '../../helpers/channel-user';
 
 const TESTUSER = {
     name: "freaktechnik",
@@ -330,8 +330,7 @@ test.serial('copyableChannelURL for redirecting channel from list', async (t) =>
     await cc._ensureQueueReady();
 
     const channel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
-    channel.live = new LiveState(LiveState.REDIRECT);
-    channel.live.alternateURL = 'https://example.com';
+    channel.live.redirectTo(getChannel());
     await cc._list.setChannel(channel);
 
     const string = await cc.copyableChannelURL(channel.id);

@@ -31,7 +31,7 @@ const getUser = (login = 'test', type = TYPE) => {
  */
 const getChannel = (login = 'test', type = TYPE, id = null) => {
     const channel = new Channel(login, type, id);
-    channel.url.push(browser.extension.getURL('list.html'));
+    channel.url.push(browser.extension.getURL('list.html#' + login));
     channel.archiveUrl = browser.extension.getURL('list.html#archive');
     channel.chatUrl = browser.extension.getURL('list.html#chat');
     channel.uname = 'lorem ipsum';

@@ -397,13 +397,7 @@ class Twitch extends GenericProvider {
                         try {
                             const hostedChannel = await this.updateChannel(hosting.target_login, true);
                             if(await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
-                                chan.title = hostedChannel.title;
-                                chan.thumbnail = hostedChannel.thumbnail;
-                                chan.viewers = hostedChannel.viewers;
-                                chan.category = hostedChannel.category;
-                                chan.live = new LiveState(LiveState.REDIRECT);
-                                chan.live.alternateUsername = hostedChannel.uname;
-                                chan.live.alternateURL = hostedChannel.url[0];
+                                chan.live.redirectTo(hostedChannel);
                             }
                             else {
                                 chan.live.setLive(false);

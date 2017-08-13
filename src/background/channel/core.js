@@ -88,15 +88,15 @@ class Item {
         // search next biggest image
         let index = Number.MAX_VALUE,
             biggest = 0;
-        Object.keys(this.image).forEach((s) => {
-            s = parseInt(s, 10);
-            if(s > size && s < index) {
-                index = s;
+        for(const s in this.image) {
+            const ints = parseInt(s, 10);
+            if(ints >= size && ints < index) {
+                index = ints;
             }
             if(s > biggest) {
-                biggest = s;
+                biggest = ints;
             }
-        });
+        }
 
         if(index > biggest) {
             index = biggest;

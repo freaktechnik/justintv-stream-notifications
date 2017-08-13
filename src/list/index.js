@@ -38,9 +38,6 @@ const port = new Port("list", true),
             subtarget: ".name"
         },
         {
-            subtarget: ".alternate-name"
-        },
-        {
             subtarget: ".title"
         },
         {
@@ -62,6 +59,7 @@ const port = new Port("list", true),
     openChannel = (channelId, e) => {
         if(e) {
             e.preventDefault();
+            e.stopPropagation();
         }
         port.send("open", channelId);
         window.close();
@@ -69,6 +67,7 @@ const port = new Port("list", true),
     openUrl = (url, e) => {
         if(e) {
             e.preventDefault();
+            e.stopPropagation();
         }
         port.send("openUrl", url);
         window.close();
@@ -133,21 +132,6 @@ const port = new Port("list", true),
             parent.insertBefore(node, findInsertionNodeIn(parent, uname));
         }
     },
-    insertChannel = (channel, node) => {
-        const isNonLive = channel.live.state >= LiveState.REDIRECT;
-        if(channel.live.state == LiveState.LIVE || (nonLiveDisplay === 0 && isNonLive)) {
-            insertBefore(live, node, channel.uname);
-        }
-        else if(isNonLive && nonLiveDisplay == 1) {
-            insertBefore(secondaryLive, node, channel.uname);
-        }
-        else if(isNonLive && nonLiveDisplay == 2) {
-            insertBefore(distinct, node, channel.uname);
-        }
-        else {
-            insertBefore(offline, node, channel.uname);
-        }
-    },
     contextMenuListener = (e) => {
         currentMenuTarget = e.currentTarget;
         const isOffline = e.currentTarget.parentNode.id == "offline";
@@ -162,9 +146,13 @@ const port = new Port("list", true),
     <img src="">
     <div>
         <img srcset="" sizes="30px">
+        <span class="redirecting hide-offline" hidden>
+            <ul class="redirectors"></ul>
+            →
+        </span>
         <span class="rebroadcast hide-offline" hidden><svg class="icon" viewBox="0 0 8 8">
             <use xlink:href="../../assets/images/open-iconic.min.svg#loop"></use>
-        </svg> </span><span class="name"></span><span class="nonlivename hide-offline" hidden> → <span class="alternate-name"></span></span><br>
+        </svg> </span><span class="name"></span><br>
         <span class="title hide-offline"></span>
         <aside>
             <span class="viewersWrapper hide-offline">
@@ -185,13 +173,12 @@ const port = new Port("list", true),
         </aside>
     </div>
 </a>`);
+        channelNode.title = channel.uname;
         channelNode.querySelector("div img").srcset = Object.keys(channel.image).map((s) => `${channel.image[s]} ${s}w`).join(",");
         channelNode.querySelector("div img").sizes = "30px";
         channelNode.querySelector("a > img").setAttribute("src", channel.thumbnail);
         channelNode.querySelector(".name").textContent = channel.uname;
         channelNode.querySelector(".title").textContent = channel.title;
-        channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
-        toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
         toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == LiveState.REBROADCAST);
         if(!("viewers" in channel) || channel.viewers < 0) {
             hide(channelNode.querySelector(".viewersWrapper"));
@@ -209,6 +196,7 @@ const port = new Port("list", true),
         }
         else {
             channelNode.id = EXPLORE_ID_PREFIX + channel.login;
+            channelNode.classList.add("unspecific");
             channelNode.dataset.url = channel.url[0];
             channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channelIsLive(channel) ? channel.url[0] : channel.archiveUrl));
         }
@@ -219,6 +207,51 @@ const port = new Port("list", true),
         }
 
         return channelNode;
+    },
+    addRedirect = (channel, channelNode) => {
+        let target = document.getElementById(EXPLORE_ID_PREFIX + channel.live.alternateChannel.login);
+        if(!target) {
+            target = buildChannel(channel.live.alternateChannel, true);
+        }
+
+        target.querySelector(".redirectors").appendChild(channelNode);
+        show(target.querySelector(".redirecting"));
+
+        // eslint-disable-next-line no-use-before-define
+        insertChannel(channel.live.alternateChannel, target);
+    },
+    insertChannel = (channel, node) => {
+        const isNonLive = channel.live.state >= LiveState.REDIRECT;
+
+        let nodeToRemove;
+        if((channel.live.state === LiveState.LIVE || (nonLiveDisplay === 2 && channel.live.state !== LiveState.LIVE) || channel.live.state === LiveState.OFFLINE) && node.parentNode && node.parentNode.classList.has("redirectors") && node.parentNode.childElementCount === 1) {
+            /*             li   ul         span       div        a          li */
+            nodeToRemove = node.parentNode.parentNode.parentNode.parentNode.parentNode;
+            if(!nodeToRemove.has('unspecific')) {
+                nodeToRemove = undefined;
+            }
+        }
+
+        if(channel.live.state === LiveState.LIVE || (nonLiveDisplay === 0 && isNonLive)) {
+            insertBefore(live, node, channel.uname);
+        }
+        else if(isNonLive && channel.live.state === LiveState.REDIRECT && channel.live.alternateChannel) {
+            //TODO don't do this if we're pretending redirects are offline. Also move them out of there when switching pref on the go.
+            addRedirect(channel, node);
+        }
+        else if(isNonLive && nonLiveDisplay == 1) {
+            insertBefore(secondaryLive, node, channel.uname);
+        }
+        else if(isNonLive && nonLiveDisplay == 2) {
+            insertBefore(distinct, node, channel.uname);
+        }
+        else {
+            insertBefore(offline, node, channel.uname);
+        }
+
+        if(nodeToRemove) {
+            nodeToRemove.remove();
+        }
     },
     countLiveChannels = () => live.childElementCount + secondaryLive.childElementCount,
     addChannel = (channel) => {
@@ -258,10 +291,9 @@ const port = new Port("list", true),
             viewers = channelNode.querySelector(".viewers"),
             category = channelNode.querySelector(".category");
 
+        channelNode.title = channel.uname;
         titleNode.textContent = channel.title;
         nameNode.textContent = channel.uname;
-        channelNode.querySelector(".alternate-name").textContent = channel.live.alternateUsername;
-        toggle(channelNode.querySelector(".nonlivename"), channel.live.alternateUsername !== "");
         toggle(channelNode.querySelector(".rebroadcast"), channel.live.state == LiveState.REBROADCAST);
 
         viewers.textContent = channel.viewers;

@@ -16,8 +16,7 @@ import LiveStateConst from '../../live-state.json';
 /**
  * @typedef {Object} SerializedLiveState
  * @property {module:channel/live-state~LiveStateIndicator} state
- * @property {string} alternateUsername
- * @property {string} alternateURL
+ * @property {module:channel/core~SerializedChannel} alternateChannel
  * @see {@link module:channel/live-state.LiveState}
  */
 /**
@@ -128,10 +127,6 @@ class LiveState {
         return Object.assign(new LiveState(serializedLiveState.state), props);
     }
 
-
-    alternateUsername = "";
-    alternateURL = "";
-
     /**
      * @constructs
      * @param {module:channel/live-state~LiveStateIndicator} [state={@link module:channel/live-state.LiveState.OFFLINE}]
@@ -139,6 +134,7 @@ class LiveState {
      */
     constructor(state = OFFLINE) {
         this._state = state;
+        this.alternateChannel = undefined;
     }
     /**
      * The state descriptor of this LiveState.
@@ -168,8 +164,7 @@ class LiveState {
     serialize() {
         return {
             state: this.state,
-            alternateUsername: this.alternateUsername,
-            alternateURL: this.alternateURL
+            alternateChannel: this.alternateChannel
         };
     }
     /**
@@ -203,8 +198,35 @@ class LiveState {
      */
     setLive(live) {
         this._state = live ? LIVE : OFFLINE;
-        this.alternateUsername = "";
-        this.alternateURL = "";
+        this.alternateChannel = undefined;
+    }
+
+    /**
+     * Redirect to a channel.
+     *
+     * @param {module:channel/core.Channel} channel - The channel to redirect to.
+     * @returns {undefined}
+     */
+    redirectTo(channel) {
+        this._state = REDIRECT;
+        if(channel.live.state !== REBROADCAST) {
+            channel.live._state = REDIRECT;
+        }
+        this.alternateChannel = channel.serialize();
+    }
+
+    get alternateUsername() {
+        if(this.alternateChannel) {
+            return this.alternateChannel.uname;
+        }
+        return "";
+    }
+
+    get alternateURL() {
+        if(this.alternateChannel) {
+            return this.alternateChannel.url[0];
+        }
+        return "";
     }
 }
 

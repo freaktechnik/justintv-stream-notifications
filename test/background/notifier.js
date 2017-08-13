@@ -459,7 +459,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -485,7 +487,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -511,7 +515,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -537,7 +543,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -555,7 +563,9 @@ const fixture = [
                 title: "foo",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -564,7 +574,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],
@@ -582,7 +594,9 @@ const fixture = [
                 title: "foo",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "foo"
+                    alternateChannel: {
+                        uname: "foo"
+                    }
                 }
             }
         ],
@@ -591,7 +605,9 @@ const fixture = [
                 title: "bar",
                 live: {
                     state: LiveState.REDIRECT,
-                    alternateUsername: "bar"
+                    alternateChannel: {
+                        uname: "bar"
+                    }
                 }
             }
         ],

@@ -44,8 +44,7 @@ test("Hosting to offline 2", async (t) => {
 test("Hosting to offline 3", async (t) => {
     // hosting but host target is offline
     const hostingChannel = getChannel('host-test', 'twitch');
-    hostingChannel.live = new LiveState(LiveState.REDIRECT);
-    hostingChannel.live.alternateUsername = "pyrionflax";
+    hostingChannel.live.redirectTo(getChannel('pyrionflax', 'twitch'));
 
     const channel = await provider._getHostedChannel(hostingChannel);
     t.false(await channel.live.isLive(LiveState.TOWARD_LIVE), "Channel is now marked as offline because the hosted channel is offline");
