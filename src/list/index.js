@@ -209,9 +209,19 @@ const port = new Port("list", true),
         return channelNode;
     },
     addRedirect = (channel, channelNode) => {
-        let target = document.getElementById(EXPLORE_ID_PREFIX + channel.live.alternateChannel.login);
+        let target;
+        const isInternal = "id" in channel.live.alternateChannel;
+        if(isInternal) {
+            target = document.getElementById(CHANNEL_ID_PREFIX + channel.live.alternateChannel.id);
+        }
+        else {
+            target = document.getElementById(EXPLORE_ID_PREFIX + channel.live.alternateChannel.login);
+        }
         if(!target) {
-            target = buildChannel(channel.live.alternateChannel, true);
+            target = buildChannel(channel.live.alternateChannel, !isInternal);
+            if(!matches(target, document.querySelector("#searchField").value, filters)) {
+                hide(target);
+            }
         }
 
         target.querySelector(".redirectors").appendChild(channelNode);
@@ -224,7 +234,7 @@ const port = new Port("list", true),
         const isNonLive = channel.live.state >= LiveState.REDIRECT;
 
         let nodeToRemove;
-        if((channel.live.state === LiveState.LIVE || (nonLiveDisplay === 2 && channel.live.state !== LiveState.LIVE) || channel.live.state === LiveState.OFFLINE) && node.parentNode && node.parentNode.classList.has("redirectors") && node.parentNode.childElementCount === 1) {
+        if(!node.classList.contains("unspecific") && (channel.live.state === LiveState.LIVE || (nonLiveDisplay === 3 && channel.live.state !== LiveState.LIVE) || channel.live.state === LiveState.OFFLINE) && node.parentNode && node.parentNode.classList.contains("redirectors") && node.parentNode.childElementCount === 1) {
             /*             li   ul         span       div        a          li */
             nodeToRemove = node.parentNode.parentNode.parentNode.parentNode.parentNode;
             if(!nodeToRemove.has('unspecific')) {

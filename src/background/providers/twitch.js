@@ -390,27 +390,34 @@ class Twitch extends GenericProvider {
                         });
                     }
 
-                    if(hosting.target_login &&
-                       existingChans.every((ch) => ch.login !== hosting.target_login)) {
-
+                    if(hosting.target_login) {
                         // Check the hosted channel's status, since he isn't a channel we already have in our lists.
-                        try {
-                            const hostedChannel = await this.updateChannel(hosting.target_login, true);
-                            if(await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
-                                chan.live.redirectTo(hostedChannel);
+                        let hostedChannel = existingChans.find((ch) => ch.login === hosting.target_login);
+                        if(hostedChannel && !hostedChannel.id) {
+                            hostedChannel = null;
+                        }
+                        if(!hostedChannel) {
+                            try {
+                                hostedChannel = await this.updateChannel(hosting.target_login, true);
+                                if(await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
+                                    hostedChannel.live = new LiveState(LiveState.REDIRECT);
+                                }
                             }
-                            else {
-                                chan.live.setLive(false);
+                            catch(e) {
+                                if(chan.live.state !== LiveState.REBROADCAST) {
+                                    chan.live.setLive(false);
+                                }
+                                return chan;
                             }
+                        }
+                        if(await hostedChannel.live.isLive(LiveState.TOWARD_BROADCASTING)) {
+                            chan.live.redirectTo(hostedChannel);
+                        }
+                        else {
+                            chan.live.setLive(false);
+                        }
 
-                            return chan;
-                        }
-                        catch(e) {
-                            if(chan.live.state != LiveState.REBROADCAST) {
-                                chan.live.setLive(false);
-                            }
-                            return chan;
-                        }
+                        return chan;
                     }
                     else {
                         if(chan.live.state != LiveState.REBROADCAST) {

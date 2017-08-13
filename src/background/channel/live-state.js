@@ -209,9 +209,6 @@ class LiveState {
      */
     redirectTo(channel) {
         this._state = REDIRECT;
-        if(channel.live.state !== REBROADCAST) {
-            channel.live._state = REDIRECT;
-        }
         this.alternateChannel = channel.serialize();
     }
 
