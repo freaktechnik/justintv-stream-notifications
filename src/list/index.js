@@ -247,6 +247,7 @@ const port = new Port("list", true),
         }
         else if(isNonLive && channel.live.state === LiveState.REDIRECT && channel.live.alternateChannel) {
             //TODO don't do this if we're pretending redirects are offline. Also move them out of there when switching pref on the go.
+            //TODO doesn't work with show as live
             addRedirect(channel, node);
         }
         else if(isNonLive && nonLiveDisplay == 1) {

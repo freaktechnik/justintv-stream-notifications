@@ -172,6 +172,7 @@ aside {
 
 .tabcontent .redirecting .redirectors li a {
     min-height: 1em;
+    padding: 0;
 }
 
 .tabcontent .redirecting .redirectors li a > div {
@@ -184,6 +185,7 @@ aside {
 .tabcontent .redirecting .redirectors li div > img {
     height: 1em;
     width: 1em;
+    filter: none;
 }
 
 .tabcontent .redirecting .redirectors li a > img,

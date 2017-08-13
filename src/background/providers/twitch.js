@@ -399,9 +399,6 @@ class Twitch extends GenericProvider {
                         if(!hostedChannel) {
                             try {
                                 hostedChannel = await this.updateChannel(hosting.target_login, true);
-                                if(await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
-                                    hostedChannel.live = new LiveState(LiveState.REDIRECT);
-                                }
                             }
                             catch(e) {
                                 if(chan.live.state !== LiveState.REBROADCAST) {
@@ -411,6 +408,9 @@ class Twitch extends GenericProvider {
                             }
                         }
                         if(await hostedChannel.live.isLive(LiveState.TOWARD_BROADCASTING)) {
+                            if(!hostedChannel.id && await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
+                                hostedChannel.live = new LiveState(LiveState.REDIRECT);
+                            }
                             chan.live.redirectTo(hostedChannel);
                         }
                         else {
