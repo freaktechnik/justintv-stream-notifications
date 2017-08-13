@@ -5,7 +5,6 @@
 import test from "ava";
 import { selectOrOpenTab } from '../../../src/background/channel/utils';
 import { getChannel } from "../../helpers/channel-user";
-import LiveState from "../../../src/background/channel/live-state";
 import { setup } from "../../helpers/default-behavior";
 
 const setupAndRun = (args, tabId) => {
