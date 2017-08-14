@@ -4,6 +4,9 @@
             "jsx": true
         }
     },
+    "rules": {
+        "no-fallthrough": 0
+    },
     "plugins": [
         "react"
     ],

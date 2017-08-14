@@ -9,13 +9,15 @@ const THEMES = [
         "default",
         "thumbnail"
     ],
-    providers = (state = [], event) => {
-        switch(event.command) {
-        case "setProviders":
-            return event.payload;
-        default:
-            return state;
-        }
+    simpleReducer = (setter, defaultValue = false) => {
+        return (state = defaultValue, event) => {
+            switch(event.command) {
+            case setter:
+                return event.payload;
+            default:
+                return state;
+            }
+        };
     },
     theme = (state = THEMES[0], event) => {
         switch(event.command) {
@@ -29,46 +31,6 @@ const THEMES = [
         switch(event.command) {
         case "setStyle":
             return STYLES[event.payload];
-        default:
-            return state;
-        }
-    },
-    nonLiveDisplay = (state = 1, event) => {
-        switch(event.command) {
-        case "setNonLiveDisplay":
-            return event.payload;
-        default:
-            return state;
-        }
-    },
-    extras = (state = false, event) => {
-        switch(event.command) {
-        case "setExtras":
-            return event.payload;
-        default:
-            return state;
-        }
-    },
-    queueStatus = (state = true, event) => {
-        switch(event.command) {
-        case "queueStatus":
-            return event.payload;
-        default:
-            return state;
-        }
-    },
-    queuePaused = (state = false, event) => {
-        switch(event.command) {
-        case "queuePaused":
-            return event.payload;
-        default:
-            return state;
-        }
-    },
-    featured = (state = [], event) => {
-        switch(event.command) {
-        case "setFeatured":
-            return event.payload;
         default:
             return state;
         }
@@ -92,22 +54,63 @@ const THEMES = [
             return state;
         }
     },
+    loading = (state = false, event) => {
+        if(event.command === "setFeatured") {
+            return false;
+        }
+        else if(event.command === "loading") {
+            return true;
+        }
+        else if(event.command === "setTab" && event.payload === 3) {
+            return true;
+        }
+        else {
+            return state;
+        }
+    },
+    query = (state = "", event) => {
+        switch(event.command) {
+        case "search":
+            return event.payload;
+        case "toggleSearch":
+            if(state !== "") {
+                return "";
+            }
+        default:
+            return state;
+        }
+    },
+    search = (state = false, event) => {
+        switch(event.command) {
+        case "toggleSearch":
+            return !state;
+        default:
+            return state;
+        }
+    },
     queue = combineReducers({
-        status: queueStatus,
-        paused: queuePaused
+        status: simpleReducer("queueStatus", true),
+        paused: simpleReducer("queuePaused")
     }),
     settings = combineReducers({
         theme,
         style,
-        nonLiveDisplay,
-        extras,
+        nonLiveDisplay: simpleReducer("setNonLiveDisplay", 0),
+        extras: simpleReducer("extras"),
         queue,
     }),
+    ui = combineReducers({
+        tab: simpleReducer("setTab", 0),
+        query,
+        search,
+        loading
+    }),
     handler = combineReducers({
-        providers,
+        providers: simpleReducer("setProviders", []),
         settings,
-        featured,
-        channels
+        featured: simpleReducer("setFeatured", []),
+        channels,
+        ui
     });
 
 export default handler;
