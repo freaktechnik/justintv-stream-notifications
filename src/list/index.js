@@ -13,6 +13,8 @@ import 'open-iconic/sprite/open-iconic.min.svg';
 import LiveState from '../live-state.json';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
+import reducer from './reducers';
+import { createStore } from 'redux';
 
 let live,
     secondaryLive,
@@ -20,12 +22,10 @@ let live,
     distinct,
     explore,
     currentMenuTarget,
-    currentStyle = "default",
-    providers,
-    nonLiveDisplay,
     tabbed;
 const port = new Port("list", true),
     list = new ReadChannelList(),
+    state = createStore(reducer),
     CHANNEL_ID_PREFIX = "channel",
     EXPLORE_ID_PREFIX = "explorechan",
     CONTEXTMENU_ID = "context",
@@ -47,7 +47,7 @@ const port = new Port("list", true),
             subtarget: ".category"
         }
     ],
-    channelIsLive = (channel) => channel.live.state == LiveState.LIVE || (nonLiveDisplay < 3 && channel.live.state > LiveState.LIVE),
+    channelIsLive = (channel) => channel.live.state == LiveState.LIVE || (state.getState().settings.nonLiveDisplay < 3 && channel.live.state > LiveState.LIVE),
     getChannelIdFromId = (id) => parseInt(id.substring(CHANNEL_ID_PREFIX.length), 10),
     contextMenuCommand = (event) => {
         port.send(event, getChannelIdFromId(currentMenuTarget.id));
@@ -105,14 +105,13 @@ const port = new Port("list", true),
         default:
             newClass = "default";
         }
-        if(newClass != currentStyle) {
-            if(currentStyle) {
-                tabbed.classList.replace(currentStyle, newClass);
+        if(newClass != state.getState().settings.style) {
+            if(state.getState().settings.style) {
+                tabbed.classList.replace(state.getState().settings.style, newClass);
             }
             else {
                 tabbed.classList.add(newClass);
             }
-            currentStyle = newClass;
         }
     },
     setExtrasVisibility = (visible) => {
@@ -136,8 +135,8 @@ const port = new Port("list", true),
         currentMenuTarget = e.currentTarget;
         const isOffline = e.currentTarget.parentNode.id == "offline";
         document.getElementById("contextOpen").disabled = isOffline;
-        document.getElementById("contextRefresh").disabled = !providers[e.currentTarget.className].enabled;
-        document.getElementById("contextAdd").disabled = !providers[e.currentTarget.className].enabled;
+        document.getElementById("contextRefresh").disabled = !state.getState().providers[e.currentTarget.className].enabled;
+        document.getElementById("contextAdd").disabled = !state.getState().providers[e.currentTarget.className].enabled;
     },
     buildChannel = (channel, unspecific = false) => {
         const channelNode = document.createElement("li");
@@ -188,7 +187,7 @@ const port = new Port("list", true),
             hide(channelNode.querySelector(".categoryWrapper"));
         }
         channelNode.querySelector(".category").textContent = channel.category;
-        channelNode.querySelector(".provider").textContent = providers[channel.type].name;
+        channelNode.querySelector(".provider").textContent = state.getState().providers[channel.type].name;
         channelNode.classList.add(channel.type);
         if(!unspecific) {
             channelNode.id = CHANNEL_ID_PREFIX + channel.id;
@@ -234,7 +233,7 @@ const port = new Port("list", true),
         const isNonLive = channel.live.state >= LiveState.REDIRECT;
 
         let nodeToRemove;
-        if(!node.classList.contains("unspecific") && (channel.live.state === LiveState.LIVE || (nonLiveDisplay === 3 && channel.live.state !== LiveState.LIVE) || channel.live.state === LiveState.OFFLINE) && node.parentNode && node.parentNode.classList.contains("redirectors") && node.parentNode.childElementCount === 1) {
+        if(!node.classList.contains("unspecific") && (channel.live.state === LiveState.LIVE || (state.getState().settings.nonLiveDisplay === 3 && channel.live.state !== LiveState.LIVE) || channel.live.state === LiveState.OFFLINE) && node.parentNode && node.parentNode.classList.contains("redirectors") && node.parentNode.childElementCount === 1) {
             /*             li   ul         span       div        a          li */
             nodeToRemove = node.parentNode.parentNode.parentNode.parentNode.parentNode;
             if(!nodeToRemove.has('unspecific')) {
@@ -242,7 +241,7 @@ const port = new Port("list", true),
             }
         }
 
-        if(channel.live.state === LiveState.LIVE || (nonLiveDisplay === 0 && isNonLive)) {
+        if(channel.live.state === LiveState.LIVE || (state.getState().settings.nonLiveDisplay === 0 && isNonLive)) {
             insertBefore(live, node, channel.uname);
         }
         else if(isNonLive && channel.live.state === LiveState.REDIRECT && channel.live.alternateChannel) {
@@ -250,10 +249,10 @@ const port = new Port("list", true),
             //TODO doesn't work with show as live
             addRedirect(channel, node);
         }
-        else if(isNonLive && nonLiveDisplay == 1) {
+        else if(isNonLive && state.getState().settings.nonLiveDisplay == 1) {
             insertBefore(secondaryLive, node, channel.uname);
         }
-        else if(isNonLive && nonLiveDisplay == 2) {
+        else if(isNonLive && state.getState().settings.nonLiveDisplay == 2) {
             insertBefore(distinct, node, channel.uname);
         }
         else {
@@ -395,7 +394,7 @@ const port = new Port("list", true),
             const providerDropdown = document.getElementById("exploreprovider");
             exploreProviders.forEach((p) => {
                 if(!hasOption(p)) {
-                    providerDropdown.add(new Option(providers[p].name, p));
+                    providerDropdown.add(new Option(state.getState().providers[p].name, p));
                 }
             });
             displayLoading();
@@ -412,11 +411,9 @@ const port = new Port("list", true),
         toggle(nonLiveTab, display == 2);
         toggle(secondaryLive, display == 1);
 
-        if(nonLiveDisplay == 2 && display != 2 && tabbed._tabbed.current == 4) {
+        if(state.getState().settings.nonLiveDisplay == 2 && display != 2 && tabbed._tabbed.current == 4) {
             tabbed._tabbed.select(1);
         }
-
-        nonLiveDisplay = display;
 
         // Reposition all existing non-live channels
         let parent = live;
