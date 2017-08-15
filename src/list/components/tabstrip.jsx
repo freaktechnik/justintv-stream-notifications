@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from './icon.jsx';
 import { connect } from 'react-redux';

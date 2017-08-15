@@ -1,5 +1,6 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import LiveState from '../live-state.json';
+import LiveState from '../../live-state.json';
 import { connect } from 'react-redux';
 import Icon from './icon.jsx';
 
@@ -82,7 +83,7 @@ const InnerChannel = (props) => {
         redirecting = <Redirecting channels={ props.redirectors }/>;
     }
     if(props.title && props.liveState !== LiveState.OFFLINE) {
-        title = ( <br/><span class="title">{ props.title }</span> );
+        title = ( <span class="title"><br/>{ props.title }</span> );
     }
     return ( <div>
         <Avatar image={ props.image } size="30"/>
@@ -166,7 +167,15 @@ Channels.propTypes = {
     loading: PropTypes.bool
 };
 
-//TODO filter if search terms are set.
+const filterChannels = (channels, query) => {
+    const queries = query.split(" ");
+    return channels.filter((ch) => {
+        return queries.every((q) => {
+            return ch.provider === q || ch.uname === q || ch.title === q || (ch.extras && (ch.extras.viewers === q || ch.extras.category === 1));
+        });
+    });
+};
+
 const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
     const internalRedirects = [], externalRedirects = [], shownChannels = [];
     for(const channel of channels) {
@@ -280,7 +289,7 @@ const sortChannels = (channels, type) => {
 const getVisibleChannels = (state) => {
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style);
     if(state.ui.tab !== 3) {
-        return sortChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay, saltedFormatChannel));
+        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay, saltedFormatChannel), state.ui.query));
     }
     else {
         return sortChannels(state.featured.map(saltedFormatChannel));
@@ -290,7 +299,7 @@ const getVisibleChannels = (state) => {
 const mapStateToProps = (state) => {
     //TODO explore panel
     return {
-        channels: state.channels,
+        channels: getVisibleChannels(state),
         extras: state.settings.extras,
         style: state.settings.style,
         type: state.ui.tab,

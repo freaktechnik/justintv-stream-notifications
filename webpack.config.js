@@ -9,7 +9,7 @@ const defaultLanguage = manifest.default_locale;
 module.exports = {
     entry: {
         background: "./src/background/index.js",
-        "popup/list": "./src/list/index.js",
+        "popup/list": "./src/list/index.jsx",
         manager: "./src/manager/index.js",
         options: "./src/options/index.js",
         "popup/errorState": "./src/errorState/index.js"
@@ -48,6 +48,16 @@ module.exports = {
                     'file-loader?name=[path][name].[ext]',
                     'transifex-loader'
                 ]
+            },
+            {
+                test: /\.jsx$/,
+                loader: 'babel-loader',
+                options: {
+                    babelrc: false,
+                    presets: [
+                        'react'
+                    ]
+                }
             }
         ]
     },

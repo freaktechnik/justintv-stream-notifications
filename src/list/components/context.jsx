@@ -1,5 +1,6 @@
 import { CompactChannel } from './channels.jsx';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const ContextItem = (props) => {
     return ( <li><button onClick={ props.onClick }>{ _(props.label) }</button></li> );
@@ -38,7 +39,7 @@ const ContextPanel = (props) => {
             <ContextItem label="openChannel"/>
             <ContextItem label="context_open"/>
             <ContextItem label="context_refresh"/>
-            { ...items }
+            { items }
             <ContextItem label="context_copy"/>
         </ul>
     </dialog> );
@@ -50,3 +51,5 @@ ContextPanel.propTypes = {
     redirectors: PropTypes.shape(CompactChannel.propType),
     hasChat: PropTypes.bool.isRequired
 };
+
+export default ContextPanel;
