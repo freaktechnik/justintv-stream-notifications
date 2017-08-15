@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "ajv": "^5.2.2",
-    "ava": "^0.21.0",
+    "ava": "^0.22.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
@@ -59,7 +59,7 @@
     "webpack": "^3.3.0"
   },
   "scripts": {
-    "test": "npm run lint && nyc ava -c 10",
+    "test": "npm run lint && nyc ava",
     "coverage": "nyc report && codecov",
     "lint": "npm run lint-js && npm run lint-css && npm run lint-webext",
     "lint-js": "eslint test/ src/",
