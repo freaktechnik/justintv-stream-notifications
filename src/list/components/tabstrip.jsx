@@ -27,7 +27,7 @@ const TabStrip = (props) => {
     if(props.showNonlive) {
         nonlive = <Tab title="panel_tab_nonlive" onClick={ ()=> props.onTabSelect(1) } active={ props.active === 1 }/>;
     }
-    return ( <ul class="tabstrip inline-list" role="tablist">
+    return ( <ul className="tabstrip inline-list" role="tablist">
         <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(0) } active={ props.active === 0 }/>
         { nonlive }
         <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(2) } active={ props.active === 2 }/>
@@ -67,7 +67,7 @@ Tool.propTypes = {
 
 const Tools = (props) => {
     //TODO refresh context menu
-    return ( <ul class="toolbar inline-list right" role="toolbar">
+    return ( <ul className="toolbar inline-list right" role="toolbar">
         <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") }/>
         <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "": "running" }/>
         <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("manage") }/>
@@ -84,7 +84,7 @@ const Toolbar = (props) => {
         searchField = <SearchField value={ props.query }/>
     }
     return ( <nav>
-        <div class="topbar">
+        <div className="topbar">
             <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect }/>
             <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused }/>
             { searchField }
@@ -113,20 +113,20 @@ const mapStateToProps = (state) => {
         showNonlive: state.settings.nonLiveDisplay === 1,
         query: state.ui.query,
         showSearch: state.ui.search,
-        queuePaused: state.queue.paused
+        queuePaused: state.settings.queue.paused
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTabSelect: (index) => dispatch({ command: "setTab", payload: index }),
+        onTabSelect: (index) => dispatch({ type: "setTab", payload: index }),
         onToolClick: (tool) => {
             //TODO actually, most of this handler shouldn't be in here, there should just be dispatching here
             if(tool === "toggleSearch") {
-                dispatch({ command: "toggleSearch" });
+                dispatch({ type: "toggleSearch" });
             }
             else if(tool === "refresh") {
                 //TODO trigger loading?
-                dispatch({ command: "loading" });
+                dispatch({ type: "loading" });
                 //TODO
                 browser.runtime.sendMessage();
             }

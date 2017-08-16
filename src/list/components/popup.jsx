@@ -4,7 +4,7 @@ import Channels from './channels.jsx';
 import Context from './context.jsx';
 
 export default () => (
-    <main>
+    <main className="tabbed">
         <TabStrip/>
         <Channels/>
         <Context/>

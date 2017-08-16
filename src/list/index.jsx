@@ -6,6 +6,7 @@ import reducers from './reducers';
 import Popup from './components/popup.jsx';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
+import '../content/shared.css';
 import './list.css';
 
 const store = createStore(reducers),
@@ -23,13 +24,16 @@ port.addEventListener("message", ({ detail: event }) => {
     if(event.command === "addChannels") {
         Promise.all(event.payload.map((id) => list.getChannel(id))).then((channels) => {
             store.dispatch({
-                command: "addChannels",
+                type: "addChannels",
                 payload: channels
             });
         });
     }
     else {
-        store.dispatch(event);
+        store.dispatch({
+            type: event.command,
+            payload: event.payload
+        });
     }
 }, {
     passive: true,

@@ -62,7 +62,7 @@ const Redirecting = (props) => {
         return ( <CompactChannel { ...ch } ref={ props.uname }/> );
     });
     return ( <span className="redirecting">
-        <ul class="reidrectors">
+        <ul className="reidrectors">
             { channels }
         </ul>
         →
@@ -83,15 +83,15 @@ const InnerChannel = (props) => {
         redirecting = <Redirecting channels={ props.redirectors }/>;
     }
     if(props.title && props.liveState !== LiveState.OFFLINE) {
-        title = ( <span class="title"><br/>{ props.title }</span> );
+        title = ( <span className="title"><br/>{ props.title }</span> );
     }
     return ( <div>
         <Avatar image={ props.image } size="30"/>
         { redirecting }
-        <span class="rebroadcast hide-offline" hidden={ props.liveState !== LiveState.REBROADCAST }>
+        <span className="rebroadcast hide-offline" hidden={ props.liveState !== LiveState.REBROADCAST }>
             <Icon type="loop"/>
         </span>
-        <span class="name">{ props.uname }</span>
+        <span className="name">{ props.uname }</span>
         { title }
         { extras }
     </div> );
@@ -128,7 +128,7 @@ Channel.propTypes = {
 
 const ChannelList = (props) => {
     const channels = props.channels.map((ch) => ( <Channel { ...ch } ref={ ch.id }/> ));
-    return ( <ul>
+    return ( <ul className="tabcontent" role="tabpanel">
         { channels }
     </ul> );
 };

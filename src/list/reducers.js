@@ -11,7 +11,7 @@ const THEMES = [
     ],
     simpleReducer = (setter, defaultValue = false) => {
         return (state = defaultValue, event) => {
-            switch(event.command) {
+            switch(event.type) {
             case setter:
                 return event.payload;
             default:
@@ -20,7 +20,7 @@ const THEMES = [
         };
     },
     theme = (state = THEMES[0], event) => {
-        switch(event.command) {
+        switch(event.type) {
         case "theme":
             return THEMES[event.payload];
         default:
@@ -28,7 +28,7 @@ const THEMES = [
         }
     },
     style = (state = STYLES[1], event) => {
-        switch(event.command) {
+        switch(event.type) {
         case "setStyle":
             return STYLES[event.payload];
         default:
@@ -36,7 +36,7 @@ const THEMES = [
         }
     },
     channels = (state = [], event) => {
-        switch(event.command) {
+        switch(event.type) {
         case "addChannels":
             return state.concat(event.payload);
         case "removeChannel":
@@ -55,13 +55,13 @@ const THEMES = [
         }
     },
     loading = (state = false, event) => {
-        if(event.command === "setFeatured") {
+        if(event.type === "setFeatured") {
             return false;
         }
-        else if(event.command === "loading") {
+        else if(event.type === "loading") {
             return true;
         }
-        else if(event.command === "setTab" && event.payload === 3) {
+        else if(event.type === "setTab" && event.payload === 3) {
             return true;
         }
         else {
@@ -69,7 +69,7 @@ const THEMES = [
         }
     },
     query = (state = "", event) => {
-        switch(event.command) {
+        switch(event.type) {
         case "search":
             return event.payload;
         case "toggleSearch":
@@ -81,7 +81,7 @@ const THEMES = [
         }
     },
     search = (state = false, event) => {
-        switch(event.command) {
+        switch(event.type) {
         case "toggleSearch":
             return !state;
         default:

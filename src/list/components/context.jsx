@@ -1,6 +1,9 @@
 import { CompactChannel } from './channels.jsx';
 import PropTypes from 'prop-types';
 import React from 'react';
+import LiveState from '../../live-state.json';
+
+const _ = browser.i18n.getMessage;
 
 const ContextItem = (props) => {
     return ( <li><button onClick={ props.onClick }>{ _(props.label) }</button></li> );
@@ -47,7 +50,7 @@ const ContextPanel = (props) => {
 ContextPanel.propTypes = {
     uname: PropTypes.string.isRequired,
     external: PropTypes.bool.isRequired,
-    liveState: PropTypes.oneOf(Object.keys(liveState)),
+    liveState: PropTypes.oneOf(Object.keys(LiveState)),
     redirectors: PropTypes.shape(CompactChannel.propType),
     hasChat: PropTypes.bool.isRequired
 };
