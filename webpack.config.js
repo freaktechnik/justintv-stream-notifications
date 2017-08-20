@@ -33,7 +33,13 @@ module.exports = {
             },
             {
                 test: /\.(svg|png)$/,
-                loader: 'file-loader?name=assets/images/[name].[ext]'
+                loader: 'file-loader',
+                options: {
+                    name: "[name].[ext]",
+                    useRelativePath: false,
+                    publicPath: '/',
+                    outputPath: 'assets/images/'
+                }
             },
             {
                 test: /\.css$/,
