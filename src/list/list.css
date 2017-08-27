@@ -33,12 +33,12 @@ nav {
     height: 2.2em;
 }
 
-#searchField,
-#exploreprovider {
+.searchField,
+.exploreprovider {
     width: 100%;
 }
 
-#refreshButton.running {
+.toolbar button.running {
     cursor: progress;
 }
 

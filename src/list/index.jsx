@@ -1,16 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 import Popup from './components/popup.jsx';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
+import middlewareFactory from './middleware';
 import '../content/shared.css';
 import './list.css';
 
-const store = createStore(reducers),
-    port = new Port("list", true),
+const port = new Port("list", true),
+    store = createStore(reducers, undefined, applyMiddleware(middlewareFactory(port))),
     list = new ReadChannelList();
 
 render(
@@ -29,6 +30,14 @@ port.addEventListener("message", ({ detail: event }) => {
             });
         });
     }
+    else if(event.command === "updateChannel") {
+        list.getChannel(event.payload).then((channel) => {
+            store.dispatch({
+                type: "updateChannel",
+                payload: channel
+            });
+        });
+    }
     else {
         store.dispatch({
             type: event.command,
@@ -40,9 +49,16 @@ port.addEventListener("message", ({ detail: event }) => {
     capture: false
 });
 
-list.getChannelsByType().then((channels) => {
-    store.dispatch({
-        command: "addChannels",
-        payload: channels
+port.send("ready");
+list.addEventListener("ready", () => {
+    list.getChannelsByType().then((channels) => {
+        store.dispatch({
+            type: "addChannels",
+            payload: channels
+        });
     });
+}, {
+    passive: true,
+    once: true,
+    capture: false
 });

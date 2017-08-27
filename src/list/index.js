@@ -28,37 +28,6 @@
         document.getElementById("contextRefresh").disabled = !state.getState().providers[e.currentTarget.className].enabled;
         document.getElementById("contextAdd").disabled = !state.getState().providers[e.currentTarget.className].enabled;
     },
-    buildChannel = (channel, unspecific = false) => {
-
-        if(!unspecific) {
-            channelNode.id = CHANNEL_ID_PREFIX + channel.id;
-            channelNode.querySelector("a").addEventListener("click", openChannel.bind(null, channel.id));
-        }
-        else {
-            channelNode.id = EXPLORE_ID_PREFIX + channel.login;
-            channelNode.classList.add("unspecific");
-            channelNode.dataset.url = channel.url[0];
-            channelNode.querySelector("a").addEventListener("click", openUrl.bind(null, channelIsLive(channel) ? channel.url[0] : channel.archiveUrl));
-        }
-        channelNode.addEventListener("contextmenu", contextMenuListener);
-
-        if(channel.live.state > 0) {
-            channelNode.classList.add("nonlive");
-        }
-
-        return channelNode;
-    },
-    getFeaturedChannels = (type) => {
-        displayLoading();
-        port.send("explore", type);
-    },
-    providerSearch = (type, query) => {
-        displayLoading();
-        port.send("search", {
-            type,
-            query
-        });
-    },
     externalContextMenuCommand = (command) => {
         port.send(command, {
             type: currentMenuTarget.className,
@@ -75,75 +44,15 @@
             window.close();
         }
     },
-    applySearchToExplore = (exploreSelect, field) => {
-        if(field.hasAttribute("hidden") || field.value === "") {
-            getFeaturedChannels(exploreSelect.value);
-        }
-        else {
-            providerSearch(exploreSelect.value, field.value);
-        }
-    },
-    hasOption = (provider) => {
-        const providerDropdown = document.getElementById("exploreprovider");
-        for(const o of providerDropdown.options) {
-            if(o.value == provider) {
-                return true;
-            }
-        }
-        return false;
-    },
-    addExploreProviders = (exploreProviders) => {
-        if(exploreProviders.length > 0) {
-            show(document.getElementById("exploreTab"));
-            const providerDropdown = document.getElementById("exploreprovider");
-            exploreProviders.forEach((p) => {
-                if(!hasOption(p)) {
-                    providerDropdown.add(new Option(state.getState().providers[p].name, p));
-                }
-            });
-            displayLoading();
-        }
-    },
     afterCopy = (success, details) => {
         if(success) {
             port.send("copied", details);
-        }
-    },
-    refresh = (e) => {
-        forwardEvent("refresh", e);
-        if(!explore.parentNode.hasAttribute("hidden")) {
-            const exploreSelect = document.getElementById("exploreprovider");
-            getFeaturedChannels(exploreSelect.value);
         }
     };
 
 // Set up port commmunication listeners
 port.addEventListener("message", async ({ detail: event }) => {
     switch(event.command) {
-    case "addChannels":
-        for(const channelId of event.payload) {
-            const channel = await list.getChannel(channelId);
-            addChannel(channel);
-        }
-        break;
-    case "removeChannel":
-        removeChannel(event.payload);
-        break;
-    case "setOnline": {
-        const channel = await list.getChannel(event.payload);
-        makeChannelLive(channel);
-        break;
-    }
-    case "setOffline": {
-        const channel = await list.getChannel(event.payload);
-        makeChannelOffline(channel);
-        break;
-    }
-    case "setDistinct": {
-        const channel = await list.getchannel(event.payload);
-        makeChannelDistinct(channel);
-        break;
-    }
     case "queuePaused":
         toggleQueueContextItems(event.payload);
         document.getElementById("refreshButton").classList.toggle("running", !event.payload);
@@ -168,16 +77,6 @@ port.addEventListener("message", async ({ detail: event }) => {
 
 // Set up DOM listeners and all that.
 document.addEventListener("DOMContentLoaded", () => {
-    list.addEventListener("ready", () => {
-        list.getChannelsByType().then((channels) => {
-            channels.forEach(addChannel);
-        });
-    }, {
-        once: true
-    });
-
-    document.getElementById("configure").addEventListener("click", forwardEvent.bind(null, "configure"));
-    document.getElementById("refreshButton").addEventListener("click", refresh);
     document.getElementById("contextRefresh").addEventListener("click", contextMenuCommand.bind(null, "refresh"), false);
     document.getElementById("contextOpen").addEventListener("click", contextMenuCommand.bind(null, "openArchive"), false);
     document.getElementById("contextChat").addEventListener("click", contextMenuCommand.bind(null, "openChat"), false);
@@ -203,27 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent("pause"), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent("resume"), false);
     tabbed = document.querySelector(".tabbed");
-    tabbed._tabbed = new Tabbed(tabbed);
-    tabbed.addEventListener("tabchanged", (e) => {
-        if(e.detail === 3) {
-            applySearchToExplore(exploreSelect, field);
-        }
-    }, false);
-    exploreSelect.addEventListener("change", () => {
-        applySearchToExplore(exploreSelect, field);
-    }, false);
-    document.querySelector("#searchButton").addEventListener("click", (e) => {
-        e.preventDefault();
-        toggleSearch();
-    }, false);
-    field.addEventListener("input", () => {
-        filter(field.value, live, filters);
-        filter(field.value, offline, filters);
-        filter(field.value, secondaryLive, filters);
-        if(!explore.parentNode.hasAttribute("hidden")) {
-            applySearchToExplore(exploreSelect, field);
-        }
-    }, false);
 
     document.addEventListener("keypress", (e) => {
         if(!e.altKey && !e.shiftKey && !e.metaKey) {
@@ -250,6 +128,4 @@ document.addEventListener("DOMContentLoaded", () => {
         capture: true,
         passive: false
     });
-
-    forwardEvent("ready");
 });

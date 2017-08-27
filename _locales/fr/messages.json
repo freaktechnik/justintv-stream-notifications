@@ -12,7 +12,7 @@
         "description": "Label on button that opens a dialog to add a channel or user."
     },
     "twitch_clientId_title": {
-        "message": "ID Client Twitch",
+        "message": "ID du client Twitch",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
     "context_resume": {
@@ -44,7 +44,7 @@
         "description": "Title of the panel item style setting in the preferences"
     },
     "youtube_apiKey_title": {
-        "message": "Clé API de YouTube",
+        "message": "Clé de l'API YouTube",
         "description": "Title of the YouTube API key setting in the preferences"
     },
     "advancedOptions": {
@@ -116,7 +116,7 @@
         "description": "Offline option of the non-live treatment setting in the preferences"
     },
     "nonliveNotificationStateRebroadcast": {
-        "message": "rediffuse",
+        "message": "en rediffusion",
         "description": "Rebroadcasting state for nonliveNotification"
     },
     "cm_autoAdd.title": {
@@ -348,7 +348,7 @@
         "description": "Title of the mature setting in the preferences"
     },
     "queue_ratio_title": {
-        "message": "File d'attente Demande Seuil",
+        "message": "Seuil de demande de file d'attente",
         "description": "Title of the queue ratio setting in the preferences"
     },
     "panel_nothing_live": {
@@ -420,7 +420,7 @@
         "description": "Label of the optional non-live tab in the panel"
     },
     "nonliveNotificationStateRedirect": {
-        "message": "redirige vers $CHANNEL$",
+        "message": "rediriger vers $CHANNEL$",
         "description": "Redirecting state for nonliveNotification"
     },
     "context_copy": {

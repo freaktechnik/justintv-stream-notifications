@@ -7,6 +7,7 @@ const path = require("path");
 const defaultLanguage = manifest.default_locale;
 
 module.exports = {
+    devtool: 'source-map',
     entry: {
         background: "./src/background/index.js",
         "popup/list": "./src/list/index.jsx",
@@ -68,6 +69,13 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            process: {
+                env: {
+                    NODE_ENV: '""'
+                }
+            }
+        }),
 		new ExtractTextPlugin({
             filename: "[name]/style.css"
         }),

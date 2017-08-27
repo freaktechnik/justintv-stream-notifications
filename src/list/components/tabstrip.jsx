@@ -6,12 +6,11 @@ import { connect } from 'react-redux';
 const _ = browser.i18n.getMessage;
 
 const Tab = (props) => {
-    const selected = {};
+    let className;
     if(props.active) {
-        selected.ariaSelected = "true";
-        selected.className = "current";
+        className = "current";
     }
-    return ( <li role="presentation"><button role="tab" onClick={ props.onClick } { ...selected }>{ _(props.title) }</button></li> );
+    return ( <li role="presentation"><button role="tab" onClick={ props.onClick } className={ className }>{ _(props.title) }</button></li> );
 };
 Tab.defaultProps = {
     active: false
@@ -44,16 +43,20 @@ TabStrip.propTypes = {
     onTabSelect: PropTypes.func.isRequired
 };
 
-const SearchField = ({ value = "" }) => {
-    return ( <input type="search" value={ value } placeholder={ _('cm_filter.placeholder') }/> );
+const SearchField = (props) => {
+    return ( <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/> );
+};
+SearchField.defaultProps = {
+    value: ""
 };
 SearchField.propTypes = {
-    value: PropTypes.string
+    value: PropTypes.string,
+    onSearch: PropTypes.func.isRequired
 };
 
 const Tool = (props) => {
     return ( <li>
-        <button title={ _(props.title) } onClick={ props.onClick }>
+        <button title={ _(`${props.title}.title`) } onClick={ props.onClick }>
             <Icon type={ props.icon } className={ props.className }/>
         </button>
     </li> );
@@ -69,19 +72,19 @@ const Tools = (props) => {
     //TODO refresh context menu
     return ( <ul className="toolbar inline-list right" role="toolbar">
         <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") }/>
-        <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "": "running" }/>
-        <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("manage") }/>
+        <Tool title="panel_refresh" icon="reload" onClick={ props.onToolClick("refresh") } className={ props.queuePaused ? "" : "running" }/>
+        <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("configure") }/>
     </ul> );
 };
 Tools.propTypes = {
     onToolClick: PropTypes.func.isRequired,
     queuePaused: PropTypes.bool
-}
+};
 
 const Toolbar = (props) => {
     let searchField;
     if(props.showSearch) {
-        searchField = <SearchField value={ props.query }/>
+        searchField = <SearchField value={ props.query } onSearch={ props.onSearch }/>;
     }
     return ( <nav>
         <div className="topbar">
@@ -104,7 +107,8 @@ Toolbar.propTypes = {
     onToolClick: PropTypes.func.isRequired,
     query: PropTypes.string,
     showSearch: PropTypes.bool,
-    queuePaused: PropTypes.bool
+    queuePaused: PropTypes.bool,
+    onSearch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -118,22 +122,34 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTabSelect: (index) => dispatch({ type: "setTab", payload: index }),
-        onToolClick: (tool) => {
+        onTabSelect(index) {
+            dispatch({ type: "setTab", payload: index });
+        },
+        onToolClick(tool) {
             //TODO actually, most of this handler shouldn't be in here, there should just be dispatching here
             if(tool === "toggleSearch") {
                 dispatch({ type: "toggleSearch" });
             }
             else if(tool === "refresh") {
-                //TODO trigger loading?
-                dispatch({ type: "loading" });
-                //TODO
-                browser.runtime.sendMessage();
+                dispatch({
+                    type: "loading",
+                    command: "refresh"
+                });
             }
             else {
-                //TODO
-                browser.runtime.sendMessage();
+                dispatch({
+                    command: tool
+                });
+                if(tool === "configure") {
+                    window.close();
+                }
             }
+        },
+        onSearch(event) {
+            dispatch({
+                type: "search",
+                payload: event.target.value
+            });
         }
     };
 };

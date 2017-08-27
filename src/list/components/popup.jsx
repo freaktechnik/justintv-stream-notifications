@@ -1,12 +1,18 @@
 import React from 'react';
 import TabStrip from './tabstrip.jsx';
 import Channels from './channels.jsx';
-import Context from './context.jsx';
+//import Context from './context.jsx';
 
-export default () => (
-    <main className="tabbed">
+const Popup = () => {
+    let contextMenu;
+    /*if(false) {
+        contextMenu = <Context/>;
+    }*/
+    return ( <main className="tabbed">
         <TabStrip/>
         <Channels/>
-        <Context/>
-    </main>
-);
+        { contextMenu }
+    </main> );
+};
+
+export default Popup;

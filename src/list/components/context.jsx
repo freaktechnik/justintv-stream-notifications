@@ -28,13 +28,13 @@ ContextItem.propTypes = {
 const ContextPanel = (props) => {
     const items = [];
     if(props.hasChat && props.liveState !== LiveState.OFFLINE) {
-        items.push(<ContextItem label="context_chat"/>);
+        items.push(<ContextItem label="context_chat" key="chat"/>);
     }
     if(props.external) {
-        items.push(<ContextItem label="context_add"/>);
+        items.push(<ContextItem label="context_add" key="add"/>);
     }
     else {
-        items.push(<ContextItem label="context_remove"/>);
+        items.push(<ContextItem label="context_remove" key="remove"/>);
     }
     return ( <dialog className="context-panel">
         <h1>{ props.uname }</h1>

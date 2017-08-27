@@ -39,8 +39,8 @@ Extras.propTypes = {
 };
 
 const Avatar = (props) => {
-    const srcet = Object.keys(props.image).map((s) => `${props.image[s]} ${s}w`).join(",");
-    return ( <img srcset={ srcset } sizes={ props.size + "px" } /> );
+    const srcset = Object.keys(props.image).map((s) => `${props.image[s]} ${s}w`).join(",");
+    return ( <img srcSet={ srcset } sizes={ props.size + "px" } /> );
 };
 Avatar.propTypes = {
     image: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -49,7 +49,7 @@ Avatar.propTypes = {
 
 export const CompactChannel = (props) => {
     return ( <li title={ props.uname }>
-        <Avatar image={ props.image } size="14"/>
+        <Avatar image={ props.image } size={ 14 }/>
     </li> );
 };
 CompactChannel.propTypes = {
@@ -59,7 +59,7 @@ CompactChannel.propTypes = {
 
 const Redirecting = (props) => {
     const channels = props.channels.map((ch) => {
-        return ( <CompactChannel { ...ch } ref={ props.uname }/> );
+        return ( <CompactChannel { ...ch } key={ ch.uname }/> );
     });
     return ( <span className="redirecting">
         <ul className="reidrectors">
@@ -72,6 +72,7 @@ Redirecting.propTypes = {
     channels: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)).isRequired
 };
 
+//TODO size of avatar changes when compact
 const InnerChannel = (props) => {
     let extras,
         redirecting,
@@ -86,7 +87,7 @@ const InnerChannel = (props) => {
         title = ( <span className="title"><br/>{ props.title }</span> );
     }
     return ( <div>
-        <Avatar image={ props.image } size="30"/>
+        <Avatar image={ props.image } size={ 30 }/>
         { redirecting }
         <span className="rebroadcast hide-offline" hidden={ props.liveState !== LiveState.REBROADCAST }>
             <Icon type="loop"/>
@@ -98,7 +99,7 @@ const InnerChannel = (props) => {
 };
 InnerChannel.propTypes = {
     image: PropTypes.objectOf(PropTypes.string).isRequired,
-    liveState: PropTypes.oneOf(Object.keys(LiveState)).isRequired,
+    liveState: PropTypes.oneOf(Object.values(LiveState)).isRequired,
     uname: PropTypes.string.isRequired,
     title: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
@@ -116,8 +117,8 @@ const Channel = (props) => {
     </li> );
 };
 Channel.propTypes = {
-    image: PropTypes.objectOf(React.PropTypes.string).isRequired,
-    liveState: PropTypes.oneOf(Object.keys(LiveState)).isRequired,
+    image: PropTypes.objectOf(PropTypes.string).isRequired,
+    liveState: PropTypes.oneOf(Object.values(LiveState)).isRequired,
     uname: PropTypes.string.isRequired,
     title: PropTypes.string,
     type: PropTypes.string.isRequired,
@@ -126,58 +127,102 @@ Channel.propTypes = {
     redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes))
 };
 
+const ProviderSelector = (props) => {
+    const options = [];
+    for(const p in props.providers) {
+        const provider = props.providers[p];
+        if(provider.supports.featured) {
+            options.push(<option value={ p }>{ provider.name }</option>);
+        }
+    }
+    return (
+        <select className="exploreprovider" value={ props.currentProvider } onChange={ props.onProvider }>
+            { options }
+        </select>
+    );
+};
+ProviderSelector.propTypes = {
+    providers: PropTypes.objectOf(PropTypes.object),
+    currentProvider: PropTypes.string,
+    onProvider: PropTypes.func.isRequired
+};
+
 const ChannelList = (props) => {
-    const channels = props.channels.map((ch) => ( <Channel { ...ch } ref={ ch.id }/> ));
+    const channels = props.channels.map((ch) => ( <Channel { ...ch } key={ ch.id }/> ));
     return ( <ul className="tabcontent" role="tabpanel">
         { channels }
     </ul> );
 };
 ChannelList.propTypes = {
-    channels: PropTypes.arrayOf(PropTypes.array).isRequired,
+    channels: PropTypes.arrayOf(PropTypes.shape(Channel.propTypes)).isRequired
 };
 
 const Channels = (props) => {
-    if(!props.channels.length || props.loading) {
-        if(props.type === 0) {
-            return ( <div>{ _('panel_nothing_live') }</div> );
+    let select;
+    if(props.type === 3) {
+        select = <ProviderSelector providers={ props.providers } currentProvider={ props.currentProvider } onProvider={ props.onProvider }/>;
+        if(props.loading) {
+            return ( <div className={ props.theme }>
+                { select }
+                <div>{ _('panel_loading') }</div>
+            </div> );
+        }
+    }
+    if(!props.channels.length) {
+        if(props.searching && props.type !== 3) {
+            return ( <div className={ props.theme }>{ _('panel_no_results') }</div> );
+        }
+        else if(props.type === 0) {
+            return ( <div className={ props.theme }>{ _('panel_nothing_live') }</div> );
         }
         else if(props.type === 2) {
-            return ( <div>{ _('panel_nothing') }</div> );
+            return ( <div className={ props.theme }>{ _('panel_nothing') }</div> );
         }
         else if(props.type === 3) {
-            if(!props.loading) {
-                return ( <div>{ _('panel_no_results') }</div> );
-            }
-            else {
-                return ( <div>{ _('panel_loading') }</div> );
-            }
+            return ( <div className={ props.theme }>
+                { select }
+                <div>{ _('panel_no_results') }</div>
+            </div> );
         }
     }
-    else {
-        //TODO explore panel also has provider dropdown
-        return ( <ChannelList { ...props }/>)
-    }
+    //TODO explore panel also has provider dropdown
+    return ( <div className={ props.theme }>
+        { select }
+        <ChannelList channels={ props.channels }/>
+    </div> );
 };
 Channels.defaultProps = {
-    loading: false
+    loading: false,
+    searching: false,
+    theme: 'light'
 };
 Channels.propTypes = {
-    channels: PropTypes.arrayOf(PropTypes.array).isRequired,
+    channels: PropTypes.arrayOf(PropTypes.shape(Channel.propTypes)).isRequired,
     type: PropTypes.oneOf([ 0, 1, 2, 3 ]).isRequired,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    providers: PropTypes.objectOf(PropTypes.object).isRequired,
+    currentProvider: PropTypes.string,
+    onProvider: PropTypes.func.isRequired,
+    searching: PropTypes.bool,
+    theme: PropTypes.string
 };
 
 const filterChannels = (channels, query) => {
-    const queries = query.split(" ");
-    return channels.filter((ch) => {
-        return queries.every((q) => {
-            return ch.provider === q || ch.uname === q || ch.title === q || (ch.extras && (ch.extras.viewers === q || ch.extras.category === 1));
+    if(query) {
+        const queries = query.split(" ");
+        return channels.filter((ch) => {
+            return queries.every((q) => {
+                return ch.provider === q || ch.uname === q || ch.title === q || (ch.extras && (ch.extras.viewers === q || ch.extras.category === 1));
+            });
         });
-    });
+    }
+    return channels;
 };
 
 const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
-    const internalRedirects = [], externalRedirects = [], shownChannels = [];
+    const internalRedirects = [],
+        externalRedirects = [],
+        shownChannels = [];
     for(const channel of channels) {
         if(channel.live.state === LiveState.LIVE && type !== 2) {
             shownChannels.push(formatChannel(channel));
@@ -222,7 +267,7 @@ const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
                 externals.push(external);
             }
             else {
-                target.rediectros.push(formatChannel(redirecting));
+                target.redirectors.push(formatChannel(redirecting));
             }
         }
         return shownChannels.concat(externals);
@@ -230,7 +275,7 @@ const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
     return shownChannels;
 };
 
-const formatChannel = (channel, providers, type, extras = true, style = 1) => {
+const formatChannel = (channel, providers, type, extras = true, style = "default") => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
@@ -244,13 +289,11 @@ const formatChannel = (channel, providers, type, extras = true, style = 1) => {
             provider: providers[channel.type].name
         };
     }
-    if(channel.live.state !== LiveState.OFFLINE && type !== 2) {
-        if(style === 2) {
+    if(channel.live.state !== LiveState.OFFLINE && type !== 2 && style !== "compact") {
+        if(style === "thumbnail") {
             formattedChannel.thumbnail = channel.thumbnail;
         }
-        if(style !== 0) {
-            formattedChannel.title = channel.title;
-        }
+        formattedChannel.title = channel.title;
     }
     else if(formattedChannel.extras) {
         delete formattedChannel.viewers;
@@ -265,6 +308,7 @@ const formatChannel = (channel, providers, type, extras = true, style = 1) => {
         formattedChannel.external = true;
         formattedChannel.id = channel.login + "|" + channel.type;
     }
+    return formattedChannel;
 };
 
 const sortChannels = (channels, type) => {
@@ -305,12 +349,21 @@ const mapStateToProps = (state) => {
         type: state.ui.tab,
         nonLiveDisplay: state.settings.nonLiveDisplay,
         providers: state.providers,
-        loading: false
+        loading: state.ui.loading,
+        currentProvider: state.ui.currentProvider,
+        searching: state.ui.search && state.ui.query.length,
+        theme: state.settings.theme
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        onProvider(event) {
+            dispatch({
+                type: "setProvider",
+                payload: event.target.value,
+                command: "explore"
+            });
+        }
     };
 };
 

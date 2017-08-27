@@ -41,7 +41,7 @@ const THEMES = [
             return state.concat(event.payload);
         case "removeChannel":
             return state.filter((ch) => ch.id !== event.payload);
-        case "channelUpdated":
+        case "updateChannel":
             return state.map((ch) => {
                 if(ch.id !== event.payload.id) {
                     return ch;
@@ -59,6 +59,9 @@ const THEMES = [
             return false;
         }
         else if(event.type === "loading") {
+            return true;
+        }
+        else if(event.type === "setProvider") {
             return true;
         }
         else if(event.type === "setTab" && event.payload === 3) {
@@ -103,10 +106,11 @@ const THEMES = [
         tab: simpleReducer("setTab", 0),
         query,
         search,
-        loading
+        loading,
+        currentProvider: simpleReducer("setProvider", 'twitch')
     }),
     handler = combineReducers({
-        providers: simpleReducer("setProviders", []),
+        providers: simpleReducer("setProviders", {}),
         settings,
         featured: simpleReducer("setFeatured", []),
         channels,

@@ -189,9 +189,6 @@ class ListView extends EventTarget {
             case "copyexternal":
                 emit(this, "copy", event.payload.login, event.payload.type);
                 break;
-            case "removedLive":
-                this._unregisterChannel(event.payload);
-                break;
             default:
                 // Nothing to do here.
             }
@@ -367,40 +364,6 @@ class ListView extends EventTarget {
         this._unregisterChannel(channelId);
         this._emitToList("removeChannel", channelId);
     }
-    /**
-     * Mark a channel as live. Also updates the liveState. Can also be user to
-     * update the info of a channel.
-     *
-     * @param {module:channel/core.Channel} channel - Channel to mark live.
-     * @returns {undefined}
-     */
-    setChannelLive(channel) {
-        this._updateChannel(channel);
-        this._emitToList("setOnline", channel.id);
-        this.liveState = true;
-    }
-    /**
-     * Mark a channel as offline. Also updates liveState if appropriate.
-     *
-     * @param {module:channel/core.Channel} channel - Channel to mark offline.
-     * @returns {undefined}
-     */
-    setChannelOffline(channel) {
-        this._updateChannel(channel);
-        this._emitToList("setOffline", channel.id);
-    }
-
-    /**
-     * Mark a channel as in a distinct state that is not online or offline.
-     *
-     * @param {module:channel/core.Channel} channel - Channel to give a distinct
-     *                                                state to.
-     * @returns {undefined}
-     */
-    setChannelDistinct(channel) {
-        this._updateChannel(channel);
-        this._emitToList("setDistinct", channel.id);
-    }
 
     /**
      * Set the available providers.
@@ -451,15 +414,12 @@ class ListView extends EventTarget {
      * @returns {undefined}
      */
     onChannelChanged(channel) {
-        if(channel.live.state > 0 && this.nonLiveDisplay === ListView.LIVE_DISTINCT) {
-            this.setChannelDistinct(channel);
+        if((this.nonLiveDisplay !== ListView.LIVE_DISTINCT && channel.live.isLive(LiveState.TOWARD_LIVE)) || (this.nonLiveDisplay === ListView.LIVE_DISTINCT && channel.live.isLive(LiveState.TOWARD_OFFLINE))) {
+            this.liveState = true;
         }
-        else if(channel.live.isLive()) {
-            this.setChannelLive(channel);
-        }
-        else {
-            this.setChannelOffline(channel);
-        }
+
+        this._updateChannel(channel);
+        this._emitToList("updateChannel", channel.id);
     }
 
     setFeatured(channels, type, q = null) {
