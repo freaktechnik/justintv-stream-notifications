@@ -122,16 +122,6 @@ nav {
     vertical-align: middle;
 }
 
-.compact .tabcontent li a > img,
-.default .tabcontent li a > img,
-.tabcontent:not(.live) li a > img,
-.compact .tabcontent li .title,
-.tabcontent:not(.live) .hide-offline,
-aside {
-    display: none !important;
-    visibility: hidden;
-}
-
 .extras aside {
     display: block !important;
     visibility: visible;
@@ -143,11 +133,6 @@ aside {
     height: 0.9em;
     width: 0.9em;
     fill: currentColor;
-}
-
-.redirecting {
-    display: none;
-    visibility: hidden;
 }
 
 .redirecting .redirectors {
@@ -186,12 +171,6 @@ aside {
     height: 1em;
     width: 1em;
     filter: none;
-}
-
-.tabcontent .redirecting .redirectors li a > img,
-.tabcontent .redirecting .redirectors li a > div > *:not(img) {
-    display: none;
-    visibility: hidden;
 }
 
 .nonlive .redirecting {

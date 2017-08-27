@@ -10,16 +10,24 @@ import middlewareFactory from './middleware';
 import '../content/shared.css';
 import './list.css';
 
+// Set up all the state stuff
 const port = new Port("list", true),
     store = createStore(reducers, undefined, applyMiddleware(middlewareFactory(port))),
     list = new ReadChannelList();
 
-render(
-    <Provider store={ store }>
-        <Popup/>
-    </Provider>,
-    document.getElementById("root")
-);
+port.send("ready");
+list.addEventListener("ready", () => {
+    list.getChannelsByType().then((channels) => {
+        store.dispatch({
+            type: "addChannels",
+            payload: channels
+        });
+    });
+}, {
+    passive: true,
+    once: true,
+    capture: false
+});
 
 port.addEventListener("message", ({ detail: event }) => {
     if(event.command === "addChannels") {
@@ -49,16 +57,11 @@ port.addEventListener("message", ({ detail: event }) => {
     capture: false
 });
 
-port.send("ready");
-list.addEventListener("ready", () => {
-    list.getChannelsByType().then((channels) => {
-        store.dispatch({
-            type: "addChannels",
-            payload: channels
-        });
-    });
-}, {
-    passive: true,
-    once: true,
-    capture: false
-});
+// Actually show something
+
+render(
+    <Provider store={ store }>
+        <Popup/>
+    </Provider>,
+    document.getElementById("root")
+);

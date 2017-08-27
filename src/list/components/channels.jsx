@@ -62,7 +62,7 @@ const Redirecting = (props) => {
         return ( <CompactChannel { ...ch } key={ ch.uname }/> );
     });
     return ( <span className="redirecting">
-        <ul className="reidrectors">
+        <ul className="redirectors inline-list">
             { channels }
         </ul>
         →
@@ -89,7 +89,7 @@ const InnerChannel = (props) => {
     return ( <div>
         <Avatar image={ props.image } size={ 30 }/>
         { redirecting }
-        <span className="rebroadcast hide-offline" hidden={ props.liveState !== LiveState.REBROADCAST }>
+        <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
             <Icon type="loop"/>
         </span>
         <span className="name">{ props.uname }</span>
@@ -113,7 +113,7 @@ const Channel = (props) => {
     }
     return ( <li title={ props.uname } className={ props.type }>
         { thumbnail }
-        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState }/>
+        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors }/>
     </li> );
 };
 Channel.propTypes = {
@@ -207,25 +207,36 @@ Channels.propTypes = {
     theme: PropTypes.string
 };
 
-const filterChannels = (channels, query) => {
+const filterChannels = (channels, query, providers) => {
     if(query) {
-        const queries = query.split(" ");
+        const queries = query.toLowerCase().split(" ");
         return channels.filter((ch) => {
+            const tempChannel = [
+                providers[ch.type].name.toLowerCase(),
+                ch.uname.toLowerCase(),
+            ];
+            if(ch.title) {
+                tempChannel.push(ch.title.toLowerCase());
+            }
+            if(ch.category) {
+                tempChannel.push(ch.category.toLowerCase());
+            }
+
             return queries.every((q) => {
-                return ch.provider === q || ch.uname === q || ch.title === q || (ch.extras && (ch.extras.viewers === q || ch.extras.category === 1));
+                return tempChannel.some((t) => t.includes(q)) || ch.viewers === q;
             });
         });
     }
     return channels;
 };
 
-const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
+const getChannelList = (channels, type, nonLiveDisplay) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
     for(const channel of channels) {
-        if(channel.live.state === LiveState.LIVE && type !== 2) {
-            shownChannels.push(formatChannel(channel));
+        if(channel.live.state === LiveState.LIVE && type === 0) {
+            shownChannels.push(channel);
         }
         else if(channel.live.state === LiveState.REDIRECT) {
             if("id" in channel.live.alternateChannel) {
@@ -236,10 +247,10 @@ const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
             }
         }
         else if(channel.live.state === LiveState.REBROADCAST && type === nonLiveDisplay) {
-            shownChannels.push(formatChannel(channel));
+            shownChannels.push(channel);
         }
         else if(channel.live.state === LiveState.OFFLINE && type === 2) {
-            shownChannels.push(formatChannel(channel));
+            shownChannels.push(channel);
         }
     }
 
@@ -247,27 +258,33 @@ const getChannelList = (channels, type, nonLiveDisplay, formatChannel) => {
         //TODO format the redirects.
         return shownChannels.concat(internalRedirects, externalRedirects);
     }
-    else if(type === nonLiveDisplay) {
+    else {
         for(const redirecting of internalRedirects) {
-            const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
-            if(!target.redirectors) {
-                target.redirectors = [ formatChannel(redirecting) ];
-            }
-            else {
-                target.redirectors.push(formatChannel(redirecting));
+            if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type === 0) || redirecting.live.alternateChannel.live.state === LiveState.REDIRECT) {
+                const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
+                if(!target) {
+                    console.warn("Somehow", redirecting, "still has no target");
+                }
+                else if(!target.redirectors) {
+                    target.redirectors = [ redirecting ];
+                }
+                else {
+                    target.redirectors.push(redirecting);
+                }
             }
         }
-
+    }
+    if(type === nonLiveDisplay) {
         const externals = [];
         for(const redirecting of externalRedirects) {
             const target = externals.find((ch) => ch.login === redirecting.live.alternateChannel.login && ch.type === redirecting.live.alternateChannel.type);
             if(!target) {
                 const external = redirecting.live.alternateChannel;
-                external.redirectors = [ formatChannel(redirecting) ];
+                external.redirectors = [ redirecting ];
                 externals.push(external);
             }
             else {
-                target.redirectors.push(formatChannel(redirecting));
+                target.redirectors.push(redirecting);
             }
         }
         return shownChannels.concat(externals);
@@ -308,12 +325,19 @@ const formatChannel = (channel, providers, type, extras = true, style = "default
         formattedChannel.external = true;
         formattedChannel.id = channel.login + "|" + channel.type;
     }
+    if(channel.redirectors) {
+        formattedChannel.redirectors = channel.redirectors.map((ch) => ({
+            uname: ch.uname,
+            image: ch.image
+        }));
+        delete channel.redirectors;
+    }
     return formattedChannel;
 };
 
-const sortChannels = (channels, type) => {
+const sortChannels = (channels, type, formatChannel) => {
     if(type !== 0) {
-        return channels.sort((a, b) => a.uname.localeCompare(b.uname.localeCompare));
+        return channels.sort((a, b) => a.uname.localeCompare(b.uname.localeCompare)).map(formatChannel);
     }
     else {
         return channels.sort((a, b) => {
@@ -326,17 +350,17 @@ const sortChannels = (channels, type) => {
             else {
                 return a.uname.localeCompare(b.uname.localeCompare);
             }
-        });
+        }).map(formatChannel);
     }
 };
 
 const getVisibleChannels = (state) => {
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style);
     if(state.ui.tab !== 3) {
-        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay, saltedFormatChannel), state.ui.query));
+        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel);
     }
     else {
-        return sortChannels(state.featured.map(saltedFormatChannel));
+        return sortChannels(state.featured, state.settings.nonLiveDisplay, saltedFormatChannel);
     }
 };
 
@@ -351,7 +375,7 @@ const mapStateToProps = (state) => {
         providers: state.providers,
         loading: state.ui.loading,
         currentProvider: state.ui.currentProvider,
-        searching: state.ui.search && state.ui.query.length,
+        searching: state.ui.search && !!state.ui.query.length,
         theme: state.settings.theme
     };
 };

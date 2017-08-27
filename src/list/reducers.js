@@ -36,6 +36,7 @@ const THEMES = [
         }
     },
     channels = (state = [], event) => {
+        //TODO somehow channels are duplicating
         switch(event.type) {
         case "addChannels":
             return state.concat(event.payload);
