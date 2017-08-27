@@ -208,6 +208,7 @@ Channels.propTypes = {
 };
 
 const filterChannels = (channels, query, providers) => {
+    query = query.trim();
     if(query) {
         const queries = query.toLowerCase().split(" ");
         return channels.filter((ch) => {
