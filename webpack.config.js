@@ -69,13 +69,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            process: {
-                env: {
-                    NODE_ENV: '""'
-                }
-            }
-        }),
 		new ExtractTextPlugin({
             filename: "[name]/style.css"
         }),
@@ -131,6 +124,10 @@ module.exports = {
     ],
     externals: {
         underscore: '_',
-        'event-target-shim': 'eventTargetShim'
+        'event-target-shim': 'eventTargetShim',
+        'react': 'React',
+        'react-dom': 'ReactDOM',
+        'react-redux': 'ReactRedux',
+        'redux': 'Redux'
     }
 };

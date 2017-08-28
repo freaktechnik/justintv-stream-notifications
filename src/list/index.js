@@ -5,22 +5,6 @@
         }
         currentMenuTarget = null;
     },
-    openChannel = (channelId, e) => {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        port.send("open", channelId);
-        window.close();
-    },
-    openUrl = (url, e) => {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        port.send("openUrl", url);
-        window.close();
-    },
     contextMenuListener = (e) => {
         currentMenuTarget = e.currentTarget;
         const isOffline = e.currentTarget.parentNode.id == "offline";
@@ -34,15 +18,6 @@
             login: currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length)
         });
         currentMenuTarget = null;
-    },
-    forwardEvent = (name, event) => {
-        if(event) {
-            event.preventDefault();
-        }
-        port.send(name);
-        if(name == "configure") {
-            window.close();
-        }
     },
     afterCopy = (success, details) => {
         if(success) {
