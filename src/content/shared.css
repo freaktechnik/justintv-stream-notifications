@@ -90,7 +90,8 @@ body {
 .topbar a[aria-pressed="true"],
 .topbar .tabstrip button.current,
 .topbar button:hover,
-.topbar button:active {
+.topbar button:active,
+.topbar button[aria-pressed="true"] {
     background: var(--accent-light-bg);
     color: var(--accent-light-text);
 }

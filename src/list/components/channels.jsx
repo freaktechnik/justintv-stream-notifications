@@ -7,9 +7,9 @@ import Icon from './icon.jsx';
 const _ = browser.i18n.getMessage;
 
 const Extra = (props) => {
-    return ( <span className={ `${props.type}Wrapper hide-offline` }>
+    return ( <li className={ `${props.type}Wrapper hide-offline` }>
         <Icon type={ Extra.ICONS[props.type] }/>&nbsp;<span className={ props.type }>{ props.value }</span>
-    </span> );
+    </li> );
 };
 Extra.ICONS = Object.freeze({
     "viewers": "eye",
@@ -30,7 +30,7 @@ const Extras = (props) => {
         extras.push(<Extra type="category" value={ props.category }/>);
     }
     extras.push(<Extra type="provider" value={ props.provider }/>);
-    return ( <aside>{ extras }</aside> );
+    return ( <aside><ul className="inline-list">{ extras }</ul></aside> );
 };
 Extras.propTypes = {
     viewers: PropTypes.number,
@@ -76,7 +76,8 @@ Redirecting.propTypes = {
 const InnerChannel = (props) => {
     let extras,
         redirecting,
-        title;
+        title,
+        className = '';
     if(props.extras) {
         extras = <Extras { ...props.extras }/>;
     }
@@ -86,8 +87,11 @@ const InnerChannel = (props) => {
     if(props.title && props.liveState !== LiveState.OFFLINE) {
         title = ( <span className="title"><br/>{ props.title }</span> );
     }
-    return ( <div>
-        <Avatar image={ props.image } size={ 30 }/>
+    if(props.imageSize !== 30) {
+        className = 'compact';
+    }
+    return ( <div className={ className }>
+        <Avatar image={ props.image } size={ props.imageSize }/>
         { redirecting }
         <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
             <Icon type="loop"/>
@@ -103,7 +107,8 @@ InnerChannel.propTypes = {
     uname: PropTypes.string.isRequired,
     title: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
-    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes))
+    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)),
+    imageSize: PropTypes.numbers
 };
 
 const Channel = (props) => {
@@ -111,9 +116,9 @@ const Channel = (props) => {
     if(props.thumbnail) {
         thumbnail.push(<img src={ props.thumbnail }/>);
     }
-    return ( <li title={ props.uname } className={ props.type }>
+    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` }>
         { thumbnail }
-        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors }/>
+        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize }/>
     </li> );
 };
 Channel.propTypes = {
@@ -124,7 +129,9 @@ Channel.propTypes = {
     type: PropTypes.string.isRequired,
     thumbnail: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
-    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes))
+    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)),
+    imageSize: PropTypes.number,
+    external: PropTypes.bool
 };
 
 const ProviderSelector = (props) => {
@@ -149,7 +156,7 @@ ProviderSelector.propTypes = {
 
 const ChannelList = (props) => {
     const channels = props.channels.map((ch) => ( <Channel { ...ch } key={ ch.id }/> ));
-    return ( <ul className="tabcontent" role="tabpanel">
+    return ( <ul role="tabpanel">
         { channels }
     </ul> );
 };
@@ -162,7 +169,7 @@ const Channels = (props) => {
     if(props.type === 3) {
         select = <ProviderSelector providers={ props.providers } currentProvider={ props.currentProvider } onProvider={ props.onProvider }/>;
         if(props.loading) {
-            return ( <div className={ props.theme }>
+            return ( <div>
                 { select }
                 <div>{ _('panel_loading') }</div>
             </div> );
@@ -170,23 +177,22 @@ const Channels = (props) => {
     }
     if(!props.channels.length) {
         if(props.searching && props.type !== 3) {
-            return ( <div className={ props.theme }>{ _('panel_no_results') }</div> );
+            return ( <div className="tabcontent">{ _('panel_no_results') }</div> );
         }
         else if(props.type === 0) {
-            return ( <div className={ props.theme }>{ _('panel_nothing_live') }</div> );
+            return ( <div className="tabcontent">{ _('panel_nothing_live') }</div> );
         }
         else if(props.type === 2) {
-            return ( <div className={ props.theme }>{ _('panel_nothing') }</div> );
+            return ( <div className="tabcontent">{ _('panel_nothing') }</div> );
         }
         else if(props.type === 3) {
-            return ( <div className={ props.theme }>
+            return ( <div className="tabcontent">
                 { select }
                 <div>{ _('panel_no_results') }</div>
             </div> );
         }
     }
-    //TODO explore panel also has provider dropdown
-    return ( <div className={ props.theme }>
+    return ( <div className={ `type${props.type} tabcontent` }>
         { select }
         <ChannelList channels={ props.channels }/>
     </div> );
@@ -203,8 +209,7 @@ Channels.propTypes = {
     providers: PropTypes.objectOf(PropTypes.object).isRequired,
     currentProvider: PropTypes.string,
     onProvider: PropTypes.func.isRequired,
-    searching: PropTypes.bool,
-    theme: PropTypes.string
+    searching: PropTypes.bool
 };
 
 const filterChannels = (channels, query, providers) => {
@@ -224,7 +229,7 @@ const filterChannels = (channels, query, providers) => {
             }
 
             return queries.every((q) => {
-                return tempChannel.some((t) => t.includes(q)) || ch.viewers === q;
+                return tempChannel.some((t) => t.includes(q)) || ch.viewers === q || (ch.redirectors && ch.redirectors.some((r) => r.uname.toLowerCase().includes(q)));
             });
         });
     }
@@ -293,13 +298,17 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
     return shownChannels;
 };
 
-const formatChannel = (channel, providers, type, extras = true, style = "default") => {
+const formatChannel = (channel, providers, type, extras = false, style = "default") => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
         image: channel.image,
         liveState: channel.live.state,
+        imageSize: 30
     };
+    if(style === "compact") {
+        formattedChannel.imageSize = 12;
+    }
     if(extras) {
         formattedChannel.extras = {
             category: channel.category,
@@ -313,7 +322,7 @@ const formatChannel = (channel, providers, type, extras = true, style = "default
         }
         formattedChannel.title = channel.title;
     }
-    else if(formattedChannel.extras) {
+    else if(formattedChannel.extras && type === 2) {
         delete formattedChannel.viewers;
         delete formattedChannel.category;
     }
@@ -376,8 +385,7 @@ const mapStateToProps = (state) => {
         providers: state.providers,
         loading: state.ui.loading,
         currentProvider: state.ui.currentProvider,
-        searching: state.ui.search && !!state.ui.query.length,
-        theme: state.settings.theme
+        searching: state.ui.search && !!state.ui.query.length
     };
 };
 const mapDispatchToProps = (dispatch) => {

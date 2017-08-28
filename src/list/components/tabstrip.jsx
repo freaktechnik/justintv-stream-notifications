@@ -56,29 +56,37 @@ SearchField.propTypes = {
 
 const Tool = (props) => {
     return ( <li>
-        <button title={ _(`${props.title}.title`) } onClick={ props.onClick }>
+        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }>
             <Icon type={ props.icon } className={ props.className }/>
         </button>
     </li> );
+};
+Tool.defaultProps = {
+    active: false
 };
 Tool.propTypes = {
     onClick: PropTypes.func,
     title: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    active: PropTypes.bool
 };
 
 const Tools = (props) => {
     //TODO refresh context menu
     return ( <ul className="toolbar inline-list right" role="toolbar">
-        <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") }/>
+        <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") } active={ props.searching }/>
         <Tool title="panel_refresh" icon="reload" onClick={ props.onToolClick("refresh") } className={ props.queuePaused ? "" : "running" }/>
         <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("configure") }/>
     </ul> );
 };
+Tools.defaultProps = {
+    searching: false
+};
 Tools.propTypes = {
     onToolClick: PropTypes.func.isRequired,
-    queuePaused: PropTypes.bool
+    queuePaused: PropTypes.bool,
+    searching: PropTypes.bool
 };
 
 const Toolbar = (props) => {
@@ -89,9 +97,9 @@ const Toolbar = (props) => {
     return ( <nav>
         <div className="topbar">
             <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect }/>
-            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused }/>
-            { searchField }
+            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch }/>
         </div>
+        { searchField }
     </nav> );
 };
 Toolbar.defaultProps = {

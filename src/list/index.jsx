@@ -15,6 +15,10 @@ const port = new Port("list", true),
     store = createStore(reducers, undefined, applyMiddleware(middlewareFactory(port))),
     list = new ReadChannelList();
 
+store.subscribe(() => {
+    document.body.className = store.getState().settings.theme;
+});
+
 port.send("ready");
 list.addEventListener("ready", () => {
     list.getChannelsByType().then((channels) => {
@@ -28,7 +32,6 @@ list.addEventListener("ready", () => {
     once: true,
     capture: false
 });
-
 port.addEventListener("message", ({ detail: event }) => {
     if(event.command === "addChannels") {
         Promise.all(event.payload.map((id) => list.getChannel(id))).then((channels) => {

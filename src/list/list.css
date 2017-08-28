@@ -38,6 +38,15 @@ nav {
     width: 100%;
 }
 
+.searchField {
+    display: block;
+}
+
+.exploreprovider {
+    display: sticky;
+    top: 0;
+}
+
 .toolbar button.running {
     cursor: progress;
 }
@@ -49,83 +58,68 @@ nav {
     color: var(--inverted-text);
 }
 
-.tabcontent li {
+.tabcontent > ul > li {
     padding: 0;
     margin: 0;
     list-style: none;
-}
-
-.tabcontent li a,
-.tabcontent li a:link,
-.tabcontent li a:hover,
-.tabcontent li a:active,
-.tabcontent li a:visited {
-    text-decoration: none;
     cursor: context-menu;
     display: block;
 }
 
-.tabcontent li a,
-.tabcontent li a:link,
-.tabcontent li a:visited {
-    color: var(--inverted-text);
-}
-
-.compact .tabcontent li a,
-.default .tabcontent li a,
-.thumbnail .tabcontent:not(.live) li a,
-.thumbnail .live li div,
+.tabcontent > ul > li div,
 .tabcontent > span {
     padding: 0.3em;
 }
 
-.tabcontent li div img {
+.tabcontent > ul > li div img {
     margin-right: 0.3em;
     float: left;
 }
 
-.compact .tabcontent li a {
+.tabcontent > ul > li div {
     min-height: 1em;
 }
 
-.compact .tabcontent li div img {
+.tabcontent > ul > li div.compcat img {
     vertical-align: text-bottom;
     width: 1em;
     height: 1em;
 }
 
-.default .tabcontent li a,
-.thumbnail .tabcontent li a {
+.tabcontent > ul > li div:not(.compact) {
     min-height: 30px;
 }
 
-.thumbnail .live li a > img {
+.tabcontent > ul > li > img {
     width: 100%;
     display: block;
 }
 
-.thumbnail .live li {
+.tabcontent > ul > li.thumbnail {
     position: relative;
     width: 100%;
 }
 
-.thumbnail .live li div {
+.tabcontent > ul > li.thumbnail div {
     position: absolute;
     width: calc(100% - 0.6em);
     bottom: 0;
 }
 
-.default .tabcontent li div img,
-.thumbnail .tabcontent li div img {
+.tabcontent > ul > li div:not(.compact) > img {
     width: 30px;
     height: 30px;
     vertical-align: middle;
 }
 
-.extras aside {
+.tabcontent aside {
     display: block !important;
     visibility: visible;
     opacity: 0.7;
+}
+
+.tabcontent aside li:not(:last-child) {
+    padding-right: 0.3em;
 }
 
 .icon {
@@ -137,30 +131,23 @@ nav {
 
 .redirecting .redirectors {
     display: inline-block;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
 }
 
 .tabcontent .redirecting .redirectors li {
-    display: inline-block;
     height: 1em;
     width: 1em;
     margin: 0;
     vertical-align: baseline;
     padding: 0 0.1em;
+    min-height: 1em;
+    display: inline-block;
 }
 
 .tabcontent .redirecting .redirectors li:first-child {
     padding-left: 0;
 }
 
-.tabcontent .redirecting .redirectors li a {
-    min-height: 1em;
-    padding: 0;
-}
-
-.tabcontent .redirecting .redirectors li a > div {
+.tabcontent .redirecting .redirectors li > div {
     background: none;
     position: static;
     width: 1em;
@@ -173,58 +160,54 @@ nav {
     filter: none;
 }
 
-.nonlive .redirecting {
-    display: inline;
-    visibility: visible;
-}
-
-.live:not([data-tab="4"]) .nonlive div > img {
+.type0 .nonlive div > img,
+.tabcontent:not(.type3) .external div > img {
     filter: grayscale(100%);
 }
 
 /* Type specific styles */
 
-.tabcontent a {
+.tabcontent > ul > li {
     --channel-text-color: var(--inverted-text);
     --channel-bg-color-r: 255;
     --channel-bg-color-g: 255;
     --channel-bg-color-b: 255;
 }
 
-.thumbnail .live a div {
+.thumbnail div {
     background: rgba(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b), 0.7);
     color: var(--channel-text-color);
 }
 
-.tabcontent a:hover,
-.thumbnail li a:hover div {
+.tabcontent > ul > li:hover,
+.thumbnail:hover div {
     background: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
     color: var(--channel-text-color) !important;
 }
 
-.twitch a {
+.tabcontent > ul > .twitch {
     --channel-bg-color-r: 117;
     --channel-bg-color-g: 80;
     --channel-bg-color-b: 186;
     --channel-text-color: white;
 }
 
-.hitbox a {
+.tabcontent > ul > .hitbox {
     --channel-bg-color-r: 255;
     --channel-bg-color-g: 255;
     --channel-bg-color-b: 255;
     --channel-text-color: #133c65;
 }
 
-.ustream a {
+.tabcontent > ul > .ustream {
     --channel-text-color: #303030;
     --channel-bg-color-r: 250;
     --channel-bg-color-g: 250;
     --channel-bg-color-b: 250;
 }
 
-.ustream a:hover,
-.thumbnail .ustream a:hover div {
+.tabcontent > ul > .ustream:hover,
+.thumbnail.ustream:hover div {
     background:
         linear-gradient(
             to bottom,
@@ -233,26 +216,26 @@ nav {
         ) !important;
 }
 
-.youtube a {
+.tabcontent > ul > .youtube {
     --channel-bg-color-r: 204;
     --channel-bg-color-g: 24;
     --channel-bg-color-b: 30;
     --channel-text-color: white;
 }
 
-.youtube a:hover,
-.thumbnail .youtube a:hover div {
+.tabcontent > ul > .youtube:hover,
+.thumbnail.youtube:hover div {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.livestream a {
+.tabcontent > ul > .livestream {
     --channel-text-color: white;
     --channel-bg-color-r: 59;
     --channel-bg-color-g: 59;
     --channel-bg-color-b: 59;
 }
 
-.thumbnail .live .livestream a div {
+.thumbnail.livestream div {
     background:
         linear-gradient(
             to bottom,
@@ -264,8 +247,8 @@ nav {
         );
 }
 
-.livestream a:hover,
-.thumbnail .livestream a:hover div {
+.tabcontent > ul > .livestream:hover,
+.thumbnail.livestream:hover div {
     background:
         linear-gradient(
             to bottom,
@@ -278,43 +261,43 @@ nav {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
-.mlg a {
+.tabcontent > ul > .mlg {
     --channel-bg-color-r: 60;
     --channel-bg-color-g: 125;
     --channel-bg-color-b: 230;
     --channel-text-color: white;
 }
 
-.beam a {
+.tabcontent > ul > .beam {
     --channel-bg-color-r: 17;
     --channel-bg-color-g: 19;
     --channel-bg-color-b: 27;
     --channel-text-color: white;
 }
 
-.picarto a {
+.tabcontent > ul > .picarto {
     --channel-bg-color-r: 37;
     --channel-bg-color-g: 49;
     --channel-bg-color-b: 63;
     --channel-text-color: white;
 }
 
-.newlivestream a {
+.tabcontent > ul > .newlivestream {
     --channel-text-color: #cf202e;
 }
 
-.streamup a {
+.tabcontent > ul > .streamup {
     --channel-text-color: rgb(85, 98, 255);
 }
 
-.douyutv a {
+.tabcontent > ul > .douyutv {
     --channel-bg-color-r: 255;
     --channel-bg-color-g: 119;
     --channel-bg-color-b: 0;
     --channel-text-color: white;
 }
 
-.dailymotion a {
+.tabcontent > ul > .dailymotion {
     --channel-bg-color-r: 0;
     --channel-bg-color-g: 102;
     --channel-bg-color-b: 220;

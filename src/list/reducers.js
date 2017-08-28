@@ -100,7 +100,7 @@ const THEMES = [
         theme,
         style,
         nonLiveDisplay: simpleReducer("setNonLiveDisplay", 0),
-        extras: simpleReducer("extras"),
+        extras: simpleReducer("setExtras"),
         queue,
     }),
     ui = combineReducers({
