@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent("pause"), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent("resume"), false);
 
+    //TODO keyboard navigation of channel list
     document.addEventListener("keypress", (e) => {
         if(!e.altKey && !e.shiftKey && !e.metaKey) {
             if(e.ctrlKey) {

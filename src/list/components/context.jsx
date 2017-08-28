@@ -16,14 +16,21 @@ ContextItem.propTypes = {
 
 const ContextList = (props) => {
     return (
-        <dialog className="context-panel">
-            <h1>{ props.title }</h1>
+        <dialog className="context-panel" open>
+            <header>
+                <button title={ _("context_back") } onClick={ props.onClose }>{ "<" }</button>
+                <h1>{ props.title }</h1>
+            </header>
             <ul>
                 { props.children }
             </ul>
         </dialog>
     );
 };
+ContextList.propTypes = {
+    title: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired
+}
 
 /**
  * < | Channel Name
@@ -50,12 +57,12 @@ const ContextPanel = (props) => {
         else {
             items.push(<ContextItem label="context_remove" key="remove" onClick={ () => props.onRemove(props.id) }/>);
             items.push(<ContextItem label="context_refresh" onClick={ () => props.onRefresh(props.id) }/>);
-            if(pros.liveState === LiveState.LIVE) {
+            if(props.liveState === LiveState.LIVE) {
                 items.push(<ContextItem label="context_open" onClick={ () => props.onArchive(props.id) }/>);
             }
         }
     }
-    return ( <ContextList title={ props.uname }>
+    return ( <ContextList title={ props.uname } onClose={ props.onClose }>
         <ContextItem label="openChannel"/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({
@@ -77,12 +84,13 @@ ContextPanel.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]).isRequired,
-    providerEnabled: PropTypes.bool
+    providerEnabled: PropTypes.bool,
     onOpen: PropTypes.func,
     onChat: PropTypes.func,
     onAdd: PropTypes.func,
     onCopy: PropTypes.func,
-    onRemove: PropTypes.func
+    onRemove: PropTypes.func,
+    onClose: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -133,11 +141,19 @@ const mapDispatchToProps = (dispatch) => {
                 command: "refresh",
                 payload: id
             });
+            dispatch({
+                type: "setContextChannel",
+                payload: null
+            });
         },
         onCopy(payload) {
             dispatch({
                 type: "copy",
                 payload
+            });
+            dispatch({
+                type: "setContextChannel",
+                payload: null
             });
         },
         onAdd(id) {
@@ -149,11 +165,25 @@ const mapDispatchToProps = (dispatch) => {
                     type
                 }
             });
+            dispatch({
+                type: "setContextChannel",
+                payload: null
+            });
         },
         onRemove(id) {
             dispatch({
                 command: "remove",
                 payload: id
+            });
+            dispatch({
+                type: "setContextChannel",
+                payload: null
+            });
+        },
+        onClose() {
+            dispatch({
+                type: "setContextChannel",
+                payload: null
             });
         }
     }

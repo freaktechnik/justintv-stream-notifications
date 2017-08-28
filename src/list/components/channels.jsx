@@ -130,7 +130,7 @@ const Channel = (props) => {
     if(props.thumbnail) {
         thumbnail.push(<img src={ props.thumbnail }/>);
     }
-    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick } onContextmenu={ props.onContextmenu }>
+    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick } onContextMenu={ props.onContextMenu } tabIndex={ 0 }>
         { thumbnail }
         <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize } onRedirectorClick={ props.onRedirectorClick }/>
     </li> );
@@ -149,7 +149,7 @@ Channel.propTypes = {
     url: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     onRedirectorClick: PropTypes.func.isRequired,
-    onContextmenu: PropTypes.func.isRequired
+    onContextMenu: PropTypes.func.isRequired
 };
 
 const ProviderSelector = (props) => {
@@ -192,11 +192,11 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
             const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id),
-                onContextmenu = (e) => {
+                onContextMenu = (e) => {
                     e.preventDefault()
                     props.onContext(ch);
                 };
-            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextmenu={ onContextmenu } key={ ch.id }/> );
+            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } key={ ch.id }/> );
         });
         return ( <ul role="tabpanel">
             { channels }
@@ -309,7 +309,6 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
     }
 
     if(type === 2 && nonLiveDisplay === 2) {
-        //TODO format the redirects.
         return shownChannels.concat(internalRedirects, externalRedirects);
     }
     else {

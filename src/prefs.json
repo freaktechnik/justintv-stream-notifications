@@ -39,7 +39,7 @@
     },
     "panel_nonlive": {
         "type": "radio",
-        "value": "1",
+        "value": "0",
         "options": [
             {
                 "value": "0",

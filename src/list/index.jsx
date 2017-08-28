@@ -2,6 +2,7 @@ import 'file-loader?name=vendor/[name].[ext]!react/dist/react.min.js';
 import 'file-loader?name=vendor/[name].[ext]!redux/dist/redux.min.js';
 import 'file-loader?name=vendor/[name].[ext]!react-dom/dist/react-dom.min.js';
 import 'file-loader?name=vendor/[name].[ext]!react-redux/dist/react-redux.min.js';
+import 'file-loader?name=vendor/[name].[ext]!prop-types/prop-types.min.js';
 
 import React from 'react';
 import { render } from 'react-dom';

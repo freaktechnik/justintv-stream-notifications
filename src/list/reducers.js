@@ -110,7 +110,7 @@ const THEMES = [
         search,
         loading,
         currentProvider: simpleReducer("setProvider", 'twitch'),
-        contextChannel: simpleReducer("setContextChannel", undefined)
+        contextChannel: simpleReducer("setContextChannel", null)
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

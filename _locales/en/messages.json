@@ -514,5 +514,17 @@
                 "example": "Eisenhower"
             }
         }
+    },
+    "context_back": {
+        "message": "Back",
+        "description": "Tooltip for closing the context panel in the popup"
+    },
+    "openChannel": {
+        "message": "Open Channel",
+        "description": "Label for context panel action that corresponds to clicking on the channel"
+    },
+    "context_remove": {
+        "message": "Remove Channel",
+        "description": "Context panel action to remove a channel"
     }
 }
