@@ -43,18 +43,14 @@
         "options": [
             {
                 "value": "0",
-                "label": "Live"
-            },
-            {
-                "value": "1",
                 "label": "Livebottom"
             },
             {
-                "value": "2",
+                "value": "1",
                 "label": "Distinct"
             },
             {
-                "value": "3",
+                "value": "2",
                 "label": "Offline"
             }
         ]

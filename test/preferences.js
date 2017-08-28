@@ -1,7 +1,7 @@
 import test from 'ava';
-import prefs from '../../src/preferences';
-import defaults from '../../src/prefs.json';
-import { when } from '../../src/utils';
+import prefs from '../src/preferences';
+import defaults from '../src/prefs.json';
+import { when } from '../src/utils';
 
 const SINGLE_PREF = 'copy_pattern';
 

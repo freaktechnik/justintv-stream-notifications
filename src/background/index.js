@@ -188,6 +188,12 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
     }
     else if(reason == 'update') {
         Tour.onUpdate();
+        // Update to 3.5.0:
+        prefs.get('panel_nonlive').then((value) => {
+            if(value > 0) {
+                prefs.set('panel_nonlive', value - 1);
+            }
+        });
     }
 });
 
