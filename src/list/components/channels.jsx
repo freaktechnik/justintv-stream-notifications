@@ -48,18 +48,29 @@ Avatar.propTypes = {
 };
 
 export const CompactChannel = (props) => {
-    return ( <li title={ props.uname }>
+    return ( <li title={ props.uname } onClick={ props.onClick }>
         <Avatar image={ props.image } size={ 14 }/>
     </li> );
 };
 CompactChannel.propTypes = {
     uname: PropTypes.string.isRequired,
-    image: PropTypes.objectOf(PropTypes.string).isRequired
+    image: PropTypes.objectOf(PropTypes.string).isRequired,
+    onClick: PropTypes.func.isRequired
 };
+const redirectorsShape = PropTypes.arrayOf(PropTypes.shape({
+    uname: PropTypes.string.isRequired,
+    image: PropTypes.objectOf(PropTypes.string).isRequired,
+    id: PropTypes.number.isRequired
+}));
 
 const Redirecting = (props) => {
     const channels = props.channels.map((ch) => {
-        return ( <CompactChannel { ...ch } key={ ch.uname }/> );
+        const onClick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            props.onRedirectorClick(ch.id);
+        };
+        return ( <CompactChannel { ...ch } onClick={ onClick } key={ ch.uname }/> );
     });
     return ( <span className="redirecting">
         <ul className="redirectors inline-list">
@@ -69,7 +80,8 @@ const Redirecting = (props) => {
     </span> );
 };
 Redirecting.propTypes = {
-    channels: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)).isRequired
+    channels: redirectorsShape.isRequired,
+    onRedirectorClick: PropTypes.func.isRequired
 };
 
 //TODO size of avatar changes when compact
@@ -82,7 +94,7 @@ const InnerChannel = (props) => {
         extras = <Extras { ...props.extras }/>;
     }
     if(props.redirectors) {
-        redirecting = <Redirecting channels={ props.redirectors }/>;
+        redirecting = <Redirecting channels={ props.redirectors } onRedirectorClick={ props.onRedirectorClick }/>;
     }
     if(props.title && props.liveState !== LiveState.OFFLINE) {
         title = ( <span className="title"><br/>{ props.title }</span> );
@@ -107,8 +119,9 @@ InnerChannel.propTypes = {
     uname: PropTypes.string.isRequired,
     title: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
-    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)),
-    imageSize: PropTypes.number
+    redirectors: redirectorsShape,
+    imageSize: PropTypes.number,
+    onRedirectorClick: PropTypes.func.isRequired
 };
 
 const Channel = (props) => {
@@ -116,9 +129,9 @@ const Channel = (props) => {
     if(props.thumbnail) {
         thumbnail.push(<img src={ props.thumbnail }/>);
     }
-    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` }>
+    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick }>
         { thumbnail }
-        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize }/>
+        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize } onRedirectorClick={ props.onRedirectorClick }/>
     </li> );
 };
 Channel.propTypes = {
@@ -129,9 +142,12 @@ Channel.propTypes = {
     type: PropTypes.string.isRequired,
     thumbnail: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
-    redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)),
+    redirectors: redirectorsShape,
     imageSize: PropTypes.number,
-    external: PropTypes.bool
+    external: PropTypes.bool,
+    url: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
+    onRedirectorClick: PropTypes.func.isRequired
 };
 
 const ProviderSelector = (props) => {
@@ -154,14 +170,36 @@ ProviderSelector.propTypes = {
     onProvider: PropTypes.func.isRequired
 };
 
-const ChannelList = (props) => {
-    const channels = props.channels.map((ch) => ( <Channel { ...ch } key={ ch.id }/> ));
-    return ( <ul role="tabpanel">
-        { channels }
-    </ul> );
-};
+const channelsShape = PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string
+        ]).isRequired,
+        image: PropTypes.objectOf(PropTypes.string).isRequired,
+        liveState: PropTypes.oneOf(Object.values(LiveState)).isRequired,
+        uname: PropTypes.string.isRequired,
+        title: PropTypes.string,
+        type: PropTypes.string.isRequired,
+        thumbnail: PropTypes.string,
+        extras: PropTypes.shape(Extras.propTypes),
+        redirectors: redirectorsShape,
+        imageSize: PropTypes.number,
+        external: PropTypes.bool,
+        url: PropTypes.string,
+    })),
+    ChannelList = (props) => {
+        const channels = props.channels.map((ch) => {
+            const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id);
+            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } key={ ch.id }/> );
+        });
+        return ( <ul role="tabpanel">
+            { channels }
+        </ul> );
+    };
 ChannelList.propTypes = {
-    channels: PropTypes.arrayOf(PropTypes.shape(Channel.propTypes)).isRequired
+    channels: channelsShape.isRequired,
+    onChannel: PropTypes.func.isRequired,
+    onExternalChannel: PropTypes.func.isRequired
 };
 
 const Channels = (props) => {
@@ -194,7 +232,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels }/>
+        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -203,13 +241,15 @@ Channels.defaultProps = {
     theme: 'light'
 };
 Channels.propTypes = {
-    channels: PropTypes.arrayOf(PropTypes.shape(Channel.propTypes)).isRequired,
+    channels: channelsShape.isRequired,
     type: PropTypes.oneOf([ 0, 1, 2, 3 ]).isRequired,
     loading: PropTypes.bool,
     providers: PropTypes.objectOf(PropTypes.object).isRequired,
     currentProvider: PropTypes.string,
     onProvider: PropTypes.func.isRequired,
-    searching: PropTypes.bool
+    searching: PropTypes.bool,
+    onChannel: PropTypes.func.isRequired,
+    onExternalChannel: PropTypes.func.isRequired
 };
 
 const filterChannels = (channels, query, providers) => {
@@ -334,11 +374,13 @@ const formatChannel = (channel, providers, type, extras = false, style = "defaul
     else {
         formattedChannel.external = true;
         formattedChannel.id = channel.login + "|" + channel.type;
+        formattedChannel.url = channel.url[0];
     }
     if(channel.redirectors) {
         formattedChannel.redirectors = channel.redirectors.map((ch) => ({
             uname: ch.uname,
-            image: ch.image
+            image: ch.image,
+            id: ch.id
         }));
         delete channel.redirectors;
     }
@@ -396,6 +438,20 @@ const mapDispatchToProps = (dispatch) => {
                 payload: event.target.value,
                 command: "explore"
             });
+        },
+        onChannel(channelId) {
+            dispatch({
+                command: "open",
+                payload: channelId
+            });
+            window.close();
+        },
+        onExternalChannel(url) {
+            dispatch({
+                command: "openUrl",
+                payload: url
+            });
+            window.close();
         }
     };
 };
