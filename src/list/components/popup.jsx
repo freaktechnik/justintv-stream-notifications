@@ -5,7 +5,7 @@ import Channels from './channels.jsx';
 
 const Popup = () => {
     let contextMenu;
-    /*if(false) {
+    /*if(state.ui.contextChannel) {
         contextMenu = <Context/>;
     }*/
     return ( <main className="tabbed">

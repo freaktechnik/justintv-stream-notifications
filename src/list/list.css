@@ -47,10 +47,6 @@ nav {
     top: 0;
 }
 
-.toolbar button.running {
-    cursor: progress;
-}
-
 .tabcontent {
     padding: 0;
     margin: 0;

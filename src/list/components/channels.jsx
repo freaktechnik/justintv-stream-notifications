@@ -210,7 +210,7 @@ const Channels = (props) => {
     if(props.type === 3) {
         select = <ProviderSelector providers={ props.providers } currentProvider={ props.currentProvider } onProvider={ props.onProvider }/>;
         if(props.loading) {
-            return ( <div>
+            return ( <div className="loading tabcontent">
                 { select }
                 <div>{ _('panel_loading') }</div>
             </div> );

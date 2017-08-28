@@ -56,8 +56,8 @@ SearchField.propTypes = {
 
 const Tool = (props) => {
     return ( <li>
-        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }>
-            <Icon type={ props.icon } className={ props.className }/>
+        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }  className={ props.className }>
+            <Icon type={ props.icon }/>
         </button>
     </li> );
 };
@@ -76,7 +76,7 @@ const Tools = (props) => {
     //TODO refresh context menu
     return ( <ul className="toolbar inline-list right" role="toolbar">
         <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") } active={ props.searching }/>
-        <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "" : "running" }/>
+        <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "" : "loading" }/>
         <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("configure") }/>
     </ul> );
 };
