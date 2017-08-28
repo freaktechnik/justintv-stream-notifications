@@ -7,10 +7,6 @@
 // Set up port commmunication listeners
 port.addEventListener("message", async ({ detail: event }) => {
     switch(event.command) {
-    case "queuePaused":
-        toggleQueueContextItems(event.payload);
-        document.getElementById("refreshButton").classList.toggle("running", !event.payload);
-        break;
     // Queue autorefresh is enabled/disabled in the settings
     case "queueStatus": {
         const button = document.getElementById("refreshButton");
@@ -20,8 +16,6 @@ port.addEventListener("message", async ({ detail: event }) => {
         else {
             button.removeAttribute("contextmenu");
         }
-
-        button.classList.toggle("running", event.payload);
         break;
     }
     default:
