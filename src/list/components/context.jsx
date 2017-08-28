@@ -7,10 +7,14 @@ import { connect } from 'react-redux';
 const _ = browser.i18n.getMessage;
 
 const ContextItem = (props) => {
-    return ( <li><button onClick={ props.onClick }>{ _(props.label) }</button></li> );
+    return ( <li><button onClick={ props.onClick }>{ _(props.label, props.params) }</button></li> );
+};
+ContextItem.defaultProps = {
+    params: []
 };
 ContextItem.propTypes = {
     label: PropTypes.string.isRequired,
+    params: PropTypes.arrayOf(PropTypes.string),
     onClick: PropTypes.func
 };
 
@@ -32,6 +36,11 @@ ContextList.propTypes = {
     onClose: PropTypes.func.isRequired
 }
 
+const redirectorsShape = PropTypes.arrayOf(PropTypes.shape({
+    uname: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired
+}));
+
 /**
  * < | Channel Name
  * --------------------
@@ -47,6 +56,14 @@ ContextList.propTypes = {
 const ContextPanel = (props) => {
     //TODO redirectors
     const items = [];
+    if(props.redirectors && props.redirectors.length) {
+        for(const r of props.redirectors) {
+            items.push(<ContextItem label="context_redirector" params={ [ r.uname ]} onClick={ () => props.onOpen({
+                external: false,
+                id: r.id
+            }) }/>);
+        }
+    }
     if(props.hasChat && props.liveState !== LiveState.OFFLINE) {
         items.push(<ContextItem label="context_chat" key="chat" onClick={ () => props.onChat(props) }/>);
     }
@@ -55,11 +72,11 @@ const ContextPanel = (props) => {
             items.push(<ContextItem label="context_add" key="add" onCLick={ () => props.onAdd(props.id) }/>);
         }
         else {
-            items.push(<ContextItem label="context_remove" key="remove" onClick={ () => props.onRemove(props.id) }/>);
-            items.push(<ContextItem label="context_refresh" onClick={ () => props.onRefresh(props.id) }/>);
             if(props.liveState === LiveState.LIVE) {
                 items.push(<ContextItem label="context_open" onClick={ () => props.onArchive(props.id) }/>);
             }
+            items.push(<ContextItem label="context_remove" key="remove" onClick={ () => props.onRemove(props.id) }/>);
+            items.push(<ContextItem label="context_refresh" onClick={ () => props.onRefresh(props.id) }/>);
         }
     }
     return ( <ContextList title={ props.uname } onClose={ props.onClose }>
@@ -78,7 +95,7 @@ ContextPanel.propTypes = {
     uname: PropTypes.string.isRequired,
     external: PropTypes.bool.isRequired,
     liveState: PropTypes.oneOf(Object.keys(LiveState)),
-    redirectors: PropTypes.shape(CompactChannel.propType),
+    redirectors: redirectorsShape,
     hasChat: PropTypes.bool.isRequired,
     id: PropTypes.oneOfType([
         PropTypes.string,

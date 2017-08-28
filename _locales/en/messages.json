@@ -534,5 +534,15 @@
     "rebroadcast_title_pattern_description": {
         "message": "Comma separated of list that titles start with to make a stream count as rebroadcast. Each string is checked against a lower-case version of the title. Each pattern is also checked against the title wrapped in angle brackets.",
         "description": "Description for the rebroadcast title pattern setting"
+    },
+    "context_redirector": {
+        "message": "Open $CHANNEL$",
+        "description": "Context panel item to open a redirector.",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     }
 }
