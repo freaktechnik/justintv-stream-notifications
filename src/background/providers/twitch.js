@@ -43,6 +43,7 @@ function getChannelFromJSON(jsonChannel) {
     const ret = new Channel(jsonChannel.name, type);
     ret.uname = jsonChannel.display_name;
     ret.url.push(jsonChannel.url);
+    ret.url.push(`https://go.twitch.tv/${jsonChannel.name}`);
     ret.archiveUrl = jsonChannel.url + archiveURL;
     ret.chatUrl = jsonChannel.url + chatURL;
     ret.image = getImageObj(jsonChannel.logo ? jsonChannel.logo : defaultAvatar);
