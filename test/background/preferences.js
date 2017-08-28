@@ -1,5 +1,5 @@
 import test from 'ava';
-import prefs from '../../src/background/preferences';
+import prefs from '../../src/preferences';
 import defaults from '../../src/prefs.json';
 import { when } from '../../src/utils';
 

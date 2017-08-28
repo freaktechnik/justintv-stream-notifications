@@ -1,5 +1,6 @@
 import { formatChannel, getExternalID } from './utils';
 import LiveState from '../live-state.json';
+import { copy } from '../content/utils';
 
 export default (port) => ({ getState, dispatch }) => (next) => (action) => {
     const state = getState();
@@ -84,7 +85,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             });
         }
         // Started redirecting to the contextChannel
-        else if(updatedChannel.live.state === LiveState.REDIRECTING && state.contextChanel.id === updatedChannel.state.alternateChannel.id && state.contextChannel.redirectors.every((r) => r.id !== updatedChannel.id)) {
+        else if(updatedChannel.live.state === LiveState.REDIRECT && state.contextChanel.id === updatedChannel.state.alternateChannel.id && state.contextChannel.redirectors.every((r) => r.id !== updatedChannel.id)) {
             state.contextChanel.redirectors.push({
                 uname: updatedChannel.uname,
                 image: updatedChannel.image,
@@ -124,6 +125,15 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
                 });
             }
         }
+    }
+    else if(action.type === "copy") {
+        if(copy(state.settings.copyPattern.replace("{URL}", action.payload.url))) {
+            dispatch({
+                command: "copied",
+                payload: action.payload.uname
+            });
+        }
+        return;
     }
 
     if(action.type) {

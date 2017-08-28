@@ -13,7 +13,7 @@ import '../../_locales/uk_UA/messages.json';
 // Load module deps
 import { selectOrOpenTab } from "./channel/utils";
 import ChannelController from "./channel/controller";
-import prefs from './preferences';
+import prefs from '../preferences';
 import LiveState from './channel/live-state';
 import ListView from './list';
 import * as qs from './queue/service';
@@ -32,17 +32,10 @@ const qsPause = () => qs.pause(),
     list = new ListView(),
     usedPrefs = {
         "theme": [
-            list.setTheme.bind(list),
             controller.setTheme.bind(controller)
         ],
         "panel_nonlive": [
             list.setNonLiveDisplay.bind(list)
-        ],
-        "panel_extras": [
-            list.setExtrasVisibility.bind(list)
-        ],
-        "panel_style": [
-            list.setStyle.bind(list)
         ],
         "updateInterval": [
             (interval) => list.setQueueStatus(interval !== 0)
@@ -109,27 +102,8 @@ list.addEventListener("open", ({ detail }) => {
 });
 list.addEventListener("pause", qsPause);
 list.addEventListener("resume", qsResume);
-list.addEventListener("copy", async ({ detail }) => {
-    let copy;
-    if(Array.isArray(detail)) {
-        // login + type
-        copy = await controller.copyableChannelURL(...detail);
-    }
-    else {
-        // Channel ID
-        copy = await controller.copyableChannelURL(detail);
-    }
-    list.copyChannelURL(copy, Array.isArray(detail));
-});
 list.addEventListener("copied", async ({ detail }) => {
-    let channel;
-    if(Array.isArray(detail)) {
-        channel = await controller.getExternalChannel(...detail);
-    }
-    else {
-        channel = await controller.getChannel(detail);
-    }
-    notifier.notifyCopied(channel.uname);
+    notifier.notifyCopied(detail);
 });
 
 // Wire things up

@@ -1,4 +1,4 @@
-import prefs from './preferences';
+import prefs from '../preferences';
 
 const BASE_URL = "http://streamnotifier.ch",
     Tour = {

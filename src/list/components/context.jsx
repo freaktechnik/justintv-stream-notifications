@@ -58,7 +58,10 @@ const ContextPanel = (props) => {
     return ( <ContextList title={ props.uname }>
         <ContextItem label="openChannel"/>
         { items }
-        <ContextItem label="context_copy" onClick={ () => props.onCopy(props.url) }/>
+        <ContextItem label="context_copy" onClick={ () => props.onCopy({
+            url: props.url,
+            uname: props.uname
+        }) }/>
     </ContextList> );
 };
 ContextPanel.defaultProps = {
@@ -131,8 +134,11 @@ const mapDispatchToProps = (dispatch) => {
                 payload: id
             });
         },
-        onCopy(id) {
-
+        onCopy(payload) {
+            dispatch({
+                type: "copy",
+                payload
+            });
         },
         onAdd(id) {
             const [ login, type ] = id.split("|");

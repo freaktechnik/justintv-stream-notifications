@@ -10,7 +10,7 @@
  */
 // setup event handling
 import { emit } from "../utils";
-import prefs from "./preferences";
+import prefs from "../preferences";
 import LiveState from "./channel/live-state";
 import providers from './providers';
 import EventTarget from 'event-target-shim';
@@ -151,7 +151,6 @@ class ListView extends EventTarget {
                 emit(this, "open", event.payload, "archive");
                 break;
             case "refresh":
-            case "copy":
             case "copied":
             case "remove":
                 emit(this, event.command, event.payload);
@@ -169,9 +168,6 @@ class ListView extends EventTarget {
             case "ready":
                 this.ready = true;
                 this.setNonLiveDisplay();
-                this.setStyle();
-                this.setExtrasVisibility();
-                this.setTheme();
                 this.setQueueStatus();
                 this.setProviders();
                 break;
@@ -187,21 +183,22 @@ class ListView extends EventTarget {
                             () => this.setFeatured([], event.payload));
                 }
                 break;
-            case "copyexternal":
-                emit(this, "copy", event.payload.login, event.payload.type);
-                break;
             default:
                 // Nothing to do here.
             }
         }, {
-            passive: true
+            passive: true,
+            capture: false
         });
 
         prefs.addEventListener("change", ({ detail: event }) => {
             if(event.pref == "panel_badge") {
                 this.updateBadge();
             }
-        }, { passive: true, capture: false });
+        }, {
+            passive: true,
+            capture: false
+        });
     }
 
     _emitToList(event, data) {
@@ -304,28 +301,6 @@ class ListView extends EventTarget {
     }
 
     /**
-     * Set the style of the list.
-     *
-     * @param {module:list~Style} style - Style to set.
-     * @returns {undefined}
-     */
-    setStyle(style = this._style) {
-        this._style = style;
-        this._emitToList("setStyle", style);
-    }
-
-    /**
-     * Set the visibility of the extras.
-     *
-     * @param {boolean} visible - Visibility of extras.
-     * @returns {undefined}
-     */
-    setExtrasVisibility(visible = this._extras) {
-        this._extras = visible;
-        this._emitToList("setExtras", visible);
-    }
-
-    /**
      * Set the display type for non-live content.
      *
      * @param {module:list~NonLiveDisplay} style - Display mode of non-live content.
@@ -397,17 +372,6 @@ class ListView extends EventTarget {
     }
 
     /**
-     * Set the theme.
-     *
-     * @param {number} [theme] - Theme type.
-     * @returns {undefined}
-     */
-    setTheme(theme = this._theme) {
-        this._theme = theme;
-        this._emitToList("theme", theme);
-    }
-
-    /**
      * Something with the channel changed. Performs appropriate actions based on the
      * state of the channel. Updates liveState if appropriate.
      *
@@ -425,11 +389,6 @@ class ListView extends EventTarget {
 
     setFeatured(channels, type, q = null) {
         this._emitToList("setFeatured", { channels, type, q });
-    }
-
-    copyChannelURL(string, external = false) {
-        const command = external ? "copyexternal" : "copy";
-        this.port.reply(command, string);
     }
 }
 

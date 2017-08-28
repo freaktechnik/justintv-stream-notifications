@@ -11,7 +11,7 @@ import { emit, invokeOnce } from "../../utils";
 import ParentalControls from "../parental-controls";
 import { flatten, partial, debounce } from "underscore";
 import * as debugDump from "./dump";
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
@@ -624,27 +624,5 @@ export default class ChannelController extends EventTarget {
             throw new Error("Specified type is not known");
         }
         return providers[type].updateChannel(login);
-    }
-
-    /**
-     * Copies the stream URL of the given channel to the clipboard.
-     *
-     * @param {number|string} id - ID or login.
-     * @param {string} [type] - Type if not an ID is given.
-     * @returns {undefined}
-     */
-    async copyableChannelURL(id, type) {
-        let channel;
-        if(type) {
-            channel = await this.getExternalChannel(id, type);
-        }
-        else {
-            channel = await this._list.getChannel(id);
-        }
-
-        const url = channel.live.alternateURL ? channel.live.alternateURL : channel.url[0],
-            pattern = await prefs.get("copy_pattern");
-
-        return pattern.replace("{URL}", url);
     }
 }

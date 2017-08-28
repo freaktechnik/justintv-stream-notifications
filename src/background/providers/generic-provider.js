@@ -6,7 +6,7 @@
  * @module providers/generic-provider
  * @requires module:queue/service
  */
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
 import EventTarget from 'event-target-shim';

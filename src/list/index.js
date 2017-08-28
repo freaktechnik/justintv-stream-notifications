@@ -1,9 +1,3 @@
-    afterCopy = (success, details) => {
-        if(success) {
-            port.send("copied", details);
-        }
-    };
-
 // Set up port commmunication listeners
 port.addEventListener("message", async ({ detail: event }) => {
     switch(event.command) {
@@ -25,24 +19,6 @@ port.addEventListener("message", async ({ detail: event }) => {
 
 // Set up DOM listeners and all that.
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("contextCopy").addEventListener("click", () => {
-        const id = getChannelIdFromId(currentMenuTarget.id);
-        port.request("copy", id)
-            .then(copy)
-            .then((s) => afterCopy(s, id));
-        currentMenuTarget = null;
-    }, false);
-    document.getElementById("contextExploreCopy").addEventListener("click", () => {
-        const type = currentMenuTarget.className,
-            login = currentMenuTarget.id.substring(EXPLORE_ID_PREFIX.length);
-        port.request("copyexternal", {
-            type,
-            login
-        })
-            .then(copy)
-            .then((s) => afterCopy(s, [ login, type ]));
-        currentMenuTarget = null;
-    }, false);
     document.getElementById("pauseAutorefresh").addEventListener("click", () => forwardEvent("pause"), false);
     document.getElementById("resumeAutorefresh").addEventListener("click", () => forwardEvent("resume"), false);
 

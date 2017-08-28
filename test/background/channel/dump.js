@@ -6,7 +6,7 @@
 import test from 'ava';
 import * as dump from "../../../src/background/channel/dump";
 import { getUser, getChannel } from "../../helpers/channel-user";
-import prefs from "../../../src/background/preferences";
+import prefs from "../../../src/preferences";
 
 const CHANNELS_FIXTURE = [
         getChannel()

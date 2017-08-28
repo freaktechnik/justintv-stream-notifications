@@ -192,7 +192,10 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
             const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id),
-                onContextmenu = () => props.onContext(ch);
+                onContextmenu = (e) => {
+                    e.preventDefault()
+                    props.onContext(ch);
+                };
             return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextmenu={ onContextmenu } key={ ch.id }/> );
         });
         return ( <ul role="tabpanel">

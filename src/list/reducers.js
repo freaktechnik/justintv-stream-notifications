@@ -102,6 +102,7 @@ const THEMES = [
         nonLiveDisplay: simpleReducer("setNonLiveDisplay", 0),
         extras: simpleReducer("setExtras"),
         queue,
+        copyPattern: simpleReducer("setCopyPattern", '')
     }),
     ui = combineReducers({
         tab: simpleReducer("setTab", 0),

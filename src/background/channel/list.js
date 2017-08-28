@@ -8,7 +8,7 @@
  */
 // setup event handling
 import { emit } from "../../utils";
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import { Channel } from "./core";
 import LiveState from "../../live-state";
 import ReadChannelList from './read-list';

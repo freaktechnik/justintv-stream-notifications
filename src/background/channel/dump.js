@@ -6,7 +6,7 @@
  * @license MPL-2.0
  * @module channel/dump
  */
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import { Channel, User } from "./core";
 
 export const PREFS_MAPPING = Object.freeze({

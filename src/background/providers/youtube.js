@@ -5,7 +5,7 @@
  * @module providers/youtube
  */
 import { emit } from "../../utils";
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import querystring from "../querystring";
 import { memoize } from "underscore";
 import { Channel, User } from '../channel/core';

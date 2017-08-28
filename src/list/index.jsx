@@ -12,8 +12,16 @@ import Popup from './components/popup.jsx';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
 import middlewareFactory from './middleware';
+import prefs from '../preferences';
 import '../content/shared.css';
 import './list.css';
+
+const PREFS_MAP = {
+    copy_pattern: "setCopyPattern",
+    theme: "theme",
+    panel_extras: "setExtras",
+    panel_style: "setStyle"
+};
 
 // Set up all the state stuff
 const port = new Port("list", true),
@@ -25,6 +33,15 @@ store.subscribe(() => {
 });
 
 port.send("ready");
+const prefsKeys = Object.keys(PREFS_MAP);
+prefs.get(prefsKeys).then((values) => {
+    for(const i in values) {
+        store.dispatch({
+            type: PREFS_MAP[prefsKeys[i]],
+            payload: values[i]
+        });
+    }
+});
 list.addEventListener("ready", () => {
     list.getChannelsByType().then((channels) => {
         store.dispatch({
@@ -58,6 +75,17 @@ port.addEventListener("message", ({ detail: event }) => {
         store.dispatch({
             type: event.command,
             payload: event.payload
+        });
+    }
+}, {
+    passive: true,
+    capture: false
+});
+prefs.addEventListener("change", ({ detail: { pref, value }}) => {
+    if(pref in PREFS_MAP) {
+        store.dispatch({
+            command: PREFS_MAP[pref],
+            payload: value
         });
     }
 }, {

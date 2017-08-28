@@ -10,7 +10,7 @@
 
 //TODO pre-calculate Response.json()?
 import UpdateQueue from "./update";
-import prefs from "../preferences";
+import prefs from "../../preferences";
 
 const queue = new UpdateQueue(),
     services = {},

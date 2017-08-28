@@ -1,7 +1,7 @@
-import { emit } from "../utils";
+import { emit } from "./utils";
 import EventTarget from 'event-target-shim';
-import prefInfo from '../prefs.json';
-import { format } from '../format-pref';
+import prefInfo from './prefs.json';
+import { format } from './format-pref';
 
 const getDefaultValue = (pref) => {
         if(pref in prefInfo) {

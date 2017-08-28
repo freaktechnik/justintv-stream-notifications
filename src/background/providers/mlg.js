@@ -32,7 +32,7 @@ There are also the actions to follow and unfollow a channel, but I am not sure h
 */
 import { emit } from "../../utils";
 import { Channel } from '../channel/core';
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import GenericProvider from "./generic-provider";
 import LiveState from "../channel/live-state";
 

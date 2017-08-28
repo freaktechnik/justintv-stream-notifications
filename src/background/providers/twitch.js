@@ -7,7 +7,7 @@
  */
 //TODO properly wait for clientID
 import { emit, filterAsync } from "../../utils";
-import prefs from "../preferences";
+import prefs from "../../preferences";
 import querystring from "../querystring";
 import LiveState from "../channel/live-state";
 import { Channel, User } from '../channel/core';
