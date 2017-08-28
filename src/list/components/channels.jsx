@@ -108,7 +108,7 @@ InnerChannel.propTypes = {
     title: PropTypes.string,
     extras: PropTypes.shape(Extras.propTypes),
     redirectors: PropTypes.arrayOf(PropTypes.shape(CompactChannel.propTypes)),
-    imageSize: PropTypes.numbers
+    imageSize: PropTypes.number
 };
 
 const Channel = (props) => {

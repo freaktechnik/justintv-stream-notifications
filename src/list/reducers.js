@@ -77,7 +77,7 @@ const THEMES = [
         case "search":
             return event.payload;
         case "toggleSearch":
-            if(state !== "") {
+            if(state.length) {
                 return "";
             }
         default:
