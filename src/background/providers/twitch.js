@@ -301,7 +301,7 @@ class Twitch extends GenericProvider {
         return ret;
     }
     async getFeaturedChannels() {
-        const data = await this._qs.queueRequest(baseURL + "/streams/featured", headers);
+        const data = await this._qs.queueRequest(`${baseURL}/streams/featured?boradcaster_language=${browser.i18n.getUILanguage().substr(0, 2)}`, headers);
         if(data.parsedJSON && "featured" in data.parsedJSON && data.parsedJSON.featured.length) {
             let chans = data.parsedJSON.featured;
             if(await not(this._mature())) {

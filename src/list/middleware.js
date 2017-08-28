@@ -53,7 +53,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             payload: action.payload.channels
         };
     }
-    else if(action.type === "toggleSearch" && state.ui.search) {
+    else if(action.type === "toggleSearch" && state.ui.search && state.ui.query.length) {
         port.send("explore", state.ui.currentProvider);
         dispatch({
             type: "loading"
