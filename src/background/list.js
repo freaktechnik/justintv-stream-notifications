@@ -17,6 +17,7 @@ import EventTarget from 'event-target-shim';
 import Port from '../port';
 import serializedProviders from "./providers/serialized";
 import { errorStateManager } from './error-state';
+import { formatChannels } from './channel/utils';
 
 /**
  * Should open the ChannelsManager.
@@ -173,13 +174,15 @@ class ListView extends EventTarget {
                 break;
             case "search":
                 providers[event.payload.type].search(event.payload.query)
-                    .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload.type, event.payload.query),
+                    .then((channels) => formatChannels(channels, true))
+                    .then((channels) => this.setFeatured(channels, event.payload.type, event.payload.query),
                         () => this.setFeatured([], event.payload.type, event.payload.query));
                 break;
             case "explore":
                 if(event.payload) {
                     providers[event.payload].getFeaturedChannels()
-                        .then((channels) => this.setFeatured(channels.map((c) => c.serialize()), event.payload),
+                        .then((channels) => formatChannels(channels, true))
+                        .then((channels) => this.setFeatured(channels, event.payload),
                             () => this.setFeatured([], event.payload));
                 }
                 break;

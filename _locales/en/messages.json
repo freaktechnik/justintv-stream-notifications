@@ -526,5 +526,13 @@
     "context_remove": {
         "message": "Remove Channel",
         "description": "Context panel action to remove a channel"
+    },
+    "rebroadcast_title_pattern_title": {
+        "message": "Rebroadcast title patterns",
+        "description": "Title for the rebroadcast title pattern setting"
+    },
+    "rebroadcast_title_pattern_description": {
+        "message": "Comma separated of list that titles start with to make a stream count as rebroadcast. Each string is checked against a lower-case version of the title. Each pattern is also checked against the title wrapped in angle brackets.",
+        "description": "Description for the rebroadcast title pattern setting"
     }
 }

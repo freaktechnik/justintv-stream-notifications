@@ -63,6 +63,10 @@
         "message": "Ancien Livestream",
         "description": "Provider name for the original livestream.com"
     },
+    "context_back": {
+        "message": "Back",
+        "description": "Tooltip for closing the context panel in the popup"
+    },
     "providerhitbox": {
         "message": "Smashcast",
         "description": "Provider name for smashcast.tv (formerly hitbox.tv/azubu.tv)"
@@ -251,6 +255,10 @@
         "message": "DouyuTV",
         "description": "Provider for douyutv.com"
     },
+    "context_remove": {
+        "message": "Remove Channel",
+        "description": "Context panel action to remove a channel"
+    },
     "titleChangeNotification_title": {
         "message": "Afficher une notification lorsqu'un stream change de titre",
         "description": "Title of the title change notifications setting in the preferences"
@@ -338,6 +346,10 @@
     "restore_failed": {
         "message": "Malheureusement la tentative de Live Stream Notifier pour restaurer sa base de données à échoué. Le seul correctif connu est de réinitialiser le profil.",
         "description": "Error while trying to read the DB, no actions from within the extension will work."
+    },
+    "openChannel": {
+        "message": "Open Channel",
+        "description": "Label for context panel action that corresponds to clicking on the channel"
     },
     "cm_tab_channels": {
         "message": "Chaînes",

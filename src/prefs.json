@@ -136,5 +136,10 @@
         "type": "bool",
         "value": true,
         "hidden": true
+    },
+    "rebroadcast_title_pattern": {
+        "type": "string",
+        "value": "rerun,rediff,rebroadcast,replay,recap",
+        "hidden": true
     }
 }

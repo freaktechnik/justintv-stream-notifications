@@ -15,6 +15,7 @@ import prefs from "../../preferences";
 import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
+import { formatChannel, formatChannels } from './utils';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded
@@ -270,18 +271,20 @@ export default class ChannelController extends EventTarget {
         this._eventSink.addEventListener("updateduser", ({ detail }) => {
             this._list.setUser(detail);
         });
-        this._eventSink.addEventListener("newchannels", ({ detail: channels }) => {
-            channels = filterInapropriateChannels(channels);
+        this._eventSink.addEventListener("newchannels", async ({ detail: channels }) => {
+            channels = await formatChannels(filterInapropriateChannels(channels));
             if(channels.length > 0) {
                 this._list.addChannels(channels);
             }
         });
         this._eventSink.addEventListener("updatedchannels", ({ detail: channels }) => {
             if(Array.isArray(channels)) {
-                channels.forEach((channel) => this._list.setChannel(channel).catch(() => this._list.addChannel(channel)));
+                formatChannels(channels).then((formattedChannels) => {
+                    formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => this._list.addChannel(channel)));
+                });
             }
             else {
-                this._list.setChannel(channels).catch(() => this._list.addChannel(channels));
+                this._list.setChannel(this._formatChannel(channels)).catch(() => this._list.addChannel(channels));
             }
         });
 
@@ -324,6 +327,12 @@ export default class ChannelController extends EventTarget {
         }
     }
     /**
+     * @inherits {module:channel/utils.formatChannel}
+     */
+    async _formatChannel(channel) {
+        return formatChannel(channel);
+    }
+    /**
      * Get the details of a channel and store them in the ChannelList.
      *
      * @param {string} name - Username of the channel to add.
@@ -338,16 +347,17 @@ export default class ChannelController extends EventTarget {
         if(type in providers && providers[type].enabled) {
             const channel = await providers[type].getChannelDetails(name);
             if(ParentalControls.enabled && channel.mature) {
-                throw "Not allowed to add this channel";
+                throw new Error("Not allowed to add this channel");
             }
 
             await this._ensureQueueReady();
+            const formattedChannel = await this._formatChannel(channel);
 
             if(canceled()) {
-                throw "Canceled";
+                throw new Error("Canceled");
             }
 
-            return this._list.addChannel(channel);
+            return this._list.addChannel(formattedChannel);
         }
         else {
             throw "Provider is disabled";
@@ -368,6 +378,7 @@ export default class ChannelController extends EventTarget {
         }
 
         channel = await providers[channel.type].updateChannel(channel.login);
+        channel = await this._formatChannel(channel);
         return this._list.setChannel(channel);
     }
     /**
@@ -396,9 +407,13 @@ export default class ChannelController extends EventTarget {
             }
 
             if(Array.isArray(channels)) {
-                return Promise.all(channels.map(this._list.setChannel.bind(this._list)));
+                const formattedChannels = await formatChannels(channels);
+                return Promise.all(formattedChannels.map((c) => {
+                    return this._list.setChannel(c);
+                }));
             }
             else {
+                channels = await this._formatChannel(channels);
                 return this._list.setChannel(channels);
             }
         }
@@ -461,13 +476,11 @@ export default class ChannelController extends EventTarget {
                 throw "Canceled";
             }
 
-            if(ParentalControls.enabled) {
-                channels = channels.filter((c) => !c.mature);
-            }
+            channels = await formatChannels(filterInapropriateChannels(channels));
 
             const [ u ] = await Promise.all([
                 this._list.addUser(user),
-                this._list.addChannels(filterInapropriateChannels(channels))
+                this._list.addChannels(channels)
             ]);
             return u;
         }
@@ -483,10 +496,11 @@ export default class ChannelController extends EventTarget {
      */
     async _updateUser(user) {
         const [ updatedUser, channels ] = await providers[user.type].getUserFavorites(user.login),
+            filterdChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
             [ finalUser ] = await Promise.all([
                 this._list.setUser(updatedUser),
                 // Can't just call this.addUser(user.login, user.type) because of this.
-                this._list.addChannels(filterInapropriateChannels(filterExistingFavs(user, channels)))
+                this._list.addChannels(filteredChannels)
             ]);
         return finalUser;
     }
