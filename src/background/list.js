@@ -153,6 +153,7 @@ class ListView extends EventTarget {
             case "refresh":
             case "copy":
             case "copied":
+            case "remove":
                 emit(this, event.command, event.payload);
                 break;
             case "configure":

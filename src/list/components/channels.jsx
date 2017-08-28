@@ -129,7 +129,7 @@ const Channel = (props) => {
     if(props.thumbnail) {
         thumbnail.push(<img src={ props.thumbnail }/>);
     }
-    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick }>
+    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick } onContextmenu={ props.onContextmenu }>
         { thumbnail }
         <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize } onRedirectorClick={ props.onRedirectorClick }/>
     </li> );
@@ -147,7 +147,8 @@ Channel.propTypes = {
     external: PropTypes.bool,
     url: PropTypes.string,
     onClick: PropTypes.func.isRequired,
-    onRedirectorClick: PropTypes.func.isRequired
+    onRedirectorClick: PropTypes.func.isRequired,
+    onContextmenu: PropTypes.func.isRequired
 };
 
 const ProviderSelector = (props) => {
@@ -189,8 +190,9 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
-            const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id);
-            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } key={ ch.id }/> );
+            const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id),
+                onContextmenu = () => props.onContext(ch);
+            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextmenu={ onContextmenu } key={ ch.id }/> );
         });
         return ( <ul role="tabpanel">
             { channels }
@@ -199,7 +201,8 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
 ChannelList.propTypes = {
     channels: channelsShape.isRequired,
     onChannel: PropTypes.func.isRequired,
-    onExternalChannel: PropTypes.func.isRequired
+    onExternalChannel: PropTypes.func.isRequired,
+    onContext: PropTypes.func.isRequired
 };
 
 const Channels = (props) => {
@@ -232,7 +235,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel }/>
+        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel } onContext={ props.onContext }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -249,7 +252,8 @@ Channels.propTypes = {
     onProvider: PropTypes.func.isRequired,
     searching: PropTypes.bool,
     onChannel: PropTypes.func.isRequired,
-    onExternalChannel: PropTypes.func.isRequired
+    onExternalChannel: PropTypes.func.isRequired,
+    onContext: PropTypes.func.isRequired
 };
 
 const filterChannels = (channels, query, providers) => {
@@ -344,7 +348,9 @@ const formatChannel = (channel, providers, type, extras = false, style = "defaul
         type: channel.type,
         image: channel.image,
         liveState: channel.live.state,
-        imageSize: 30
+        imageSize: 30,
+        hasChat: false,
+        providerEnabled: providers[channel.type].enabled
     };
     if(style === "compact") {
         formattedChannel.imageSize = 12;
@@ -375,6 +381,7 @@ const formatChannel = (channel, providers, type, extras = false, style = "defaul
         formattedChannel.external = true;
         formattedChannel.id = channel.login + "|" + channel.type;
         formattedChannel.url = channel.url[0];
+        formattedChannel.chatUrl = channel.chatUrl;
     }
     if(channel.redirectors) {
         formattedChannel.redirectors = channel.redirectors.map((ch) => ({
@@ -383,6 +390,9 @@ const formatChannel = (channel, providers, type, extras = false, style = "defaul
             id: ch.id
         }));
         delete channel.redirectors;
+    }
+    if(channel.chatUrl) {
+        formattedChannel.hasChat = true;
     }
     return formattedChannel;
 };
@@ -452,6 +462,12 @@ const mapDispatchToProps = (dispatch) => {
                 payload: url
             });
             window.close();
+        },
+        onContext(channel) {
+            dispatch({
+                type: "setContextChannel",
+                payload: channel
+            });
         }
     };
 };

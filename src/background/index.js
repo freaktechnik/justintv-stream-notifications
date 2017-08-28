@@ -75,6 +75,9 @@ list.addEventListener("opencm", () => controller.showManager());
 list.addEventListener("addchannel", ({ detail: [ login, type ] }) => {
     controller.addChannel(login, type);
 });
+list.addEventListener("remove", ({ detail: channelId }) => {
+    controller.removeChannel(channelId);
+});
 list.addEventListener("refresh", ({ detail: channelId }) => {
     if(channelId) {
         controller.updateChannel(channelId);
