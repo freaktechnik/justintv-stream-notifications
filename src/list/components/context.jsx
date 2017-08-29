@@ -41,7 +41,7 @@ const redirectorsShape = PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired
 }));
 
-/**
+/*
  * < | Channel Name
  * --------------------
  * Open Channel
@@ -54,7 +54,6 @@ const redirectorsShape = PropTypes.arrayOf(PropTypes.shape({
  * Copy URL
  */
 const ContextPanel = (props) => {
-    //TODO redirectors
     const items = [];
     if(props.redirectors && props.redirectors.length) {
         for(const r of props.redirectors) {
