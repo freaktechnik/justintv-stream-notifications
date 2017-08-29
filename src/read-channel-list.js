@@ -16,7 +16,7 @@ import EventTarget from 'event-target-shim';
  * @const {number}
  * @default 2
  */
-const VERSION = 2,
+const VERSION = 3,
     /**
      * Database name.
      *
@@ -108,7 +108,7 @@ export default class ReadChannelList extends EventTarget {
             request.onupgradeneeded = (e) => {
                 this.db = e.target.result;
 
-                if(e.oldVersion != 1) {
+                if(e.oldVersion != 1 && e.oldVersion != 2) {
                     const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true }),
                         channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
                     users.createIndex("typename", [ "type", "login" ], { unique: true });
@@ -117,6 +117,29 @@ export default class ReadChannelList extends EventTarget {
                     channels.createIndex("typename", [ "type", "login" ], { unique: true });
                     channels.createIndex("type", "type", { unique: false });
                     //channels.createIndex("id", "id", { unique: true });
+                }
+                else if(e.oldVersion === 2) {
+                    const channels = e.target.transaction.objectStore("channels"),
+                        request = channels.openCursor();
+                    request.onsuccess = (event) => {
+                        const cursor = event.target.result;
+                        if(cursor) {
+                            const channel = cursor.value;
+                            if(channel.live.alternateUsername || channel.live.alternateURL) {
+                                channel.live.state = -1;
+                            }
+                            if(channel.live.alternateUsername) {
+                                delete channel.live.alternateUsername;
+                            }
+                            if(channel.live.alternateURL) {
+                                delete channel.live.alternateURL;
+                            }
+                            const r = cursor.update(channel);
+                            r.onerror = reject;
+                            cursor.continue();
+                        }
+                    };
+                    request.onerror = reject;
                 }
             };
 
