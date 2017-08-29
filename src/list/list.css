@@ -325,7 +325,8 @@ nav {
 .context-panel button:hover,
 .context-panel button:active,
 .context-panel button:focus {
-    background: #ccc;
+    background: var(--accent-light-bg);
+    color: var(--accent-light-text);
 }
 
 .context-panel header button,
