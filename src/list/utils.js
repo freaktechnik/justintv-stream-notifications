@@ -31,8 +31,8 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         formattedChannel.title = channel.title;
     }
     else if(formattedChannel.extras && type === 2) {
-        delete formattedChannel.viewers;
-        delete formattedChannel.category;
+        delete formattedChannel.extras.viewers;
+        delete formattedChannel.extras.category;
     }
 
     if("id" in channel) {
