@@ -50,17 +50,17 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onResume() {
             dispatch(Object.assign({
-                payload: "resume"
+                command: "resume"
             }, closeAction));
         },
         onPause() {
             dispatch(Object.assign({
-                payload: "pause"
+                command: "pause"
             }, closeAction));
         },
         onRefresh() {
             dispatch({
-                payload: "refresh",
+                command: "refresh",
                 type: "loading"
             });
             dispatch(closeAction);

@@ -127,7 +127,7 @@ const mapStateToProps = (state) => {
         showNonlive: state.settings.nonLiveDisplay === 1,
         query: state.ui.query,
         showSearch: state.ui.search,
-        queuePaused: state.settings.queue.paused
+        queuePaused: state.settings.queue.paused || !state.settings.queue.status
     };
 };
 const mapDispatchToProps = (dispatch) => {

@@ -135,6 +135,7 @@ class ListView extends EventTarget {
         super();
 
         this._liveState = false;
+        this._queuePaused = false;
         this.live = new Set();
         this.nonlive = new Set();
 
@@ -170,6 +171,7 @@ class ListView extends EventTarget {
                 this.ready = true;
                 this.setNonLiveDisplay();
                 this.setQueueStatus();
+                this.setQueuePaused();
                 this.setProviders();
                 break;
             case "search":
@@ -370,7 +372,8 @@ class ListView extends EventTarget {
      * @param {boolean} paused - If queue is paused.
      * @returns {undefined}
      */
-    setQueuePaused(paused) {
+    setQueuePaused(paused = this._queuePaused) {
+        this._queuePaused = paused;
         this._emitToList("queuePaused", paused);
     }
 
