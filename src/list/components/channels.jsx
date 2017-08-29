@@ -50,7 +50,7 @@ Avatar.propTypes = {
 
 export const CompactChannel = (props) => {
     return ( <li title={ props.uname } onClick={ props.onClick }>
-        <Avatar image={ props.image } size={ 14 }/>
+        <Avatar image={ props.image } size={ 12 }/>
     </li> );
 };
 CompactChannel.propTypes = {
