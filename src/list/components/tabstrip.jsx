@@ -23,6 +23,7 @@ Tab.propTypes = {
 };
 
 const TabStrip = (props) => {
+    //TODO switch tabs with arrow keys
     let nonlive;
     if(props.showNonlive) {
         nonlive = <Tab title="panel_tab_nonlive" onClick={ ()=> props.onTabSelect(1) } active={ props.active === 1 }/>;

@@ -20,6 +20,7 @@ class ContextItem extends React.Component {
     }
 
     render() {
+        //TODO access keys?
         return ( <li>
             <button onClick={ this.props.onClick }>
                 { _(this.props.label, this.props.params) }

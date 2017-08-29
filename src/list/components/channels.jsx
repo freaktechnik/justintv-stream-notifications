@@ -211,6 +211,7 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         url: PropTypes.string,
     })),
     ChannelList = (props) => {
+        //TODO switch channels with arrow keys
         const channels = props.channels.map((ch) => {
             const onClick = ch.external ? (e) => {
                     e.preventDefault();
