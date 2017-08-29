@@ -12,6 +12,7 @@ import { memoize } from "underscore";
 import { PaginationHelper, promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
+import LiveState from '../channel/live-state';
 
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
@@ -33,7 +34,12 @@ function getChannelFromJSON(jsonChannel) {
     ret.viewers = jsonChannel.viewersCurrent;
     // this is the actual thumbnail and not just the default channel thumbnail thing.
     //ret.thumbnail = "https://thumbs.beam.pro/channel/" + jsonChannel.id + ".big.jpg";
-    ret.thumbnail = jsonChannel.thumbnail.url;
+    if(jsonChannel.thumbnail) {
+        ret.thumbnail = jsonChannel.thumbnail.url;
+    }
+    else {
+        ret.thumbnail = "https://thumbs.mixer.com/channel/" + jsonChannel.id + ".big.jpg";
+    }
     ret.url.push("https://mixer.com/" + jsonChannel.token);
     ret.archiveUrl = "https://mixer.com/" + jsonChannel.token;
     ret.chatUrl = chatURL + jsonChannel.token;
@@ -64,7 +70,7 @@ class Beam extends GenericProvider {
     constructor(type) {
         super(type);
         this._getUserIdFromUsername = memoize((username) => {
-            return this._qs.queueRequest(baseURL + "users/search?query=" + username).then((response) => {
+            return this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`).then((response) => {
                 if(response.ok && response.parsedJSON) {
                     return response.parsedJSON.find((val) => val.username == username).id;
                 }
@@ -72,6 +78,19 @@ class Beam extends GenericProvider {
             });
         });
     }
+
+    async _getHostee(channelId) {
+        return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
+            console.log(response);
+            if(response.ok && response.status !== 404 && response.parsedJSON) {
+                return getChannelFromJSON(response.parsedJSON);
+            }
+            else {
+                return null;
+            }
+        });
+    }
+
     async getUserFavorites(username) {
         const userid = await this._getUserIdFromUsername(username),
             user = await this._qs.queueRequest(baseURL + "users/" + userid);
@@ -156,21 +175,34 @@ class Beam extends GenericProvider {
             }
         });
     }
-    getChannelDetails(channelname) {
-        return this._qs.queueRequest(baseURL + "channels/" + channelname).then((response) => {
-            if(response.parsedJSON) {
-                return getChannelFromJSON(response.parsedJSON);
+    async getChannelDetails(channelname) {
+        const response = await this._qs.queueRequest(baseURL + "channels/" + channelname);
+        if(response.parsedJSON) {
+            const channel = getChannelFromJSON(response.parsedJSON);
+            if(channel.live.state === LiveState.OFFLINE) {
+                const hostedChannel = await this._getHostee(response.parsedJSON.id);
+                if(hostedChannel !== null) {
+                    channel.live.redirectTo(hostedChannel);
+                }
             }
-            else {
-                throw new Error("Error getting the details for the beam channel " + channelname);
-            }
-        });
+            return channel;
+        }
+        throw new Error("Error getting the details for the beam channel " + channelname);
     }
     updateRequest(channels) {
         const urls = channels.map((channel) => `${baseURL}channels/${channel.login}`);
         this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
             if(data.parsedJSON) {
                 const channel = getChannelFromJSON(data.parsedJSON);
+
+                if(channel.live.state === LiveState.OFFLINE) {
+                    return this._getHostee(data.parsedJSON.id).then((hostedChannel) => {
+                        if(hostedChannel !== null) {
+                            channel.live.redirectTo(hostedChannel);
+                        }
+                        emit(this, "updatedchannels", channel);
+                    });
+                }
                 emit(this, "updatedchannels", channel);
             }
         });
