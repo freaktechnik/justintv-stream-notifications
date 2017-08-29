@@ -130,6 +130,7 @@ module.exports = {
         'react-dom': 'ReactDOM',
         'react-redux': 'ReactRedux',
         'redux': 'Redux',
-        'prop-types': 'PropTypes'
+        'prop-types': 'PropTypes',
+        'react-key-handler': 'ReactKeyHandler'
     }
 };

@@ -3,6 +3,7 @@ import 'file-loader?name=vendor/[name].[ext]!redux/dist/redux.min.js';
 import 'file-loader?name=vendor/[name].[ext]!react-dom/dist/react-dom.min.js';
 import 'file-loader?name=vendor/[name].[ext]!react-redux/dist/react-redux.min.js';
 import 'file-loader?name=vendor/[name].[ext]!prop-types/prop-types.min.js';
+import 'file-loader?name=vendor/react-key-handler.[ext]!react-key-handler/dist/index.js';
 
 import React from 'react';
 import { render } from 'react-dom';

@@ -1,36 +1,61 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import KeyHandler, { KEYDOWN } from 'react-key-handler';
 
 const _ = browser.i18n.getMessage;
 
-const ContextItem = (props) => {
-    return ( <li><button onClick={ props.onClick }>{ _(props.label, props.params) }</button></li> );
-};
-ContextItem.defaultProps = {
-    params: []
-};
-ContextItem.propTypes = {
-    label: PropTypes.string.isRequired,
-    params: PropTypes.arrayOf(PropTypes.string),
-    onClick: PropTypes.func
-};
+class ContextItem extends React.Component {
+    static get defaultProps() {
+        return {
+            params: []
+        };
+    }
 
-const ContextList = (props) => {
-    return (
-        <dialog className="context-panel" open>
-            <header>
-                <button title={ _("context_back") } onClick={ props.onClose }>{ "<" }</button>
-                <h1>{ props.title }</h1>
-            </header>
-            <ul>
-                { props.children }
-            </ul>
-        </dialog>
-    );
-};
-ContextList.propTypes = {
-    title: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired
+    static get propTypes() {
+        return {
+            label: PropTypes.string.isRequired,
+            params: PropTypes.arrayOf(PropTypes.string),
+            onClick: PropTypes.func
+        };
+    }
+
+    render() {
+        return ( <li>
+            <button onClick={ this.props.onClick }>
+                { _(this.props.label, this.props.params) }
+            </button>
+        </li> );
+    }
+}
+
+class ContextList extends React.Component {
+    static get propTypes() {
+        return {
+            title: PropTypes.string.isRequired,
+            onClose: PropTypes.func.isRequired
+        };
+    }
+
+    componentDidMount() {
+        if(this.dialog) {
+            this.dialog.focus();
+        }
+    }
+
+    render() {
+        //TODO make esc close the panel
+        return (
+            <dialog className="context-panel" open ref={ (e) => this.dialog = e } tabIndex={ 0 }>
+                <header>
+                    <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
+                    <h1>{ this.props.title }</h1>
+                </header>
+                <ul>
+                    { this.props.children }
+                </ul>
+            </dialog>
+        );
+    }
 }
 
 const closeAction = {

@@ -49,7 +49,11 @@ Avatar.propTypes = {
 };
 
 export const CompactChannel = (props) => {
-    return ( <li title={ props.uname } onClick={ props.onClick }>
+    return ( <li title={ props.uname } onClick={ props.onClick } tabIndex={ 0 } onKeyUp={ (e) => {
+        if(e.key === ' ' || e.key === 'Enter') {
+            props.onClick(e);
+        }
+    } }>
         <Avatar image={ props.image } size={ 12 }/>
     </li> );
 };
@@ -127,10 +131,26 @@ InnerChannel.propTypes = {
 
 const Channel = (props) => {
     const thumbnail = [];
+    let className = props.type;
     if(props.thumbnail) {
         thumbnail.push(<img src={ props.thumbnail }/>);
+        className += ' thumbnail';
     }
-    return ( <li title={ props.uname } className={ `${props.type} ${props.thumbnail ? 'thumbnail' : ''} ${props.external ? 'external' : ''} ${ props.liveState > LiveState.LIVE ? 'nonlive' : '' }` } onClick={ props.onClick } onContextMenu={ props.onContextMenu } tabIndex={ 0 }>
+    if(props.external) {
+        className += ' external';
+    }
+    if(props.liveState > LiveState.LIVE) {
+        className += ' nonlive';
+    }
+    //TODO can I use onCopy to trigger the copy action?
+    return ( <li title={ props.uname } className={ className } onClick={ props.onClick } onContextMenu={ props.onContextMenu } tabIndex={ 0 } onKeyUp={ (e) => {
+        if(e.key === ' ' || e.key === 'Enter') {
+            props.onClick(e);
+        }
+    } } onCopy={ () => props.onCopy({
+        url: props.url,
+        uname: props.uname
+    }) }>
         { thumbnail }
         <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize } onRedirectorClick={ props.onRedirectorClick }/>
     </li> );
@@ -149,7 +169,8 @@ Channel.propTypes = {
     url: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     onRedirectorClick: PropTypes.func.isRequired,
-    onContextMenu: PropTypes.func.isRequired
+    onContextMenu: PropTypes.func.isRequired,
+    onCopy: PropTypes.func.isRequired
 };
 
 const ProviderSelector = (props) => {
@@ -191,12 +212,21 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
-            const onClick = ch.external ? () => props.onExternalChannel(ch.url) : () => props.onChannel(ch.id),
+            const onClick = ch.external ? (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onExternalChannel(ch.url);
+                } : (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onChannel(ch.id);
+                },
                 onContextMenu = (e) => {
-                    e.preventDefault()
+                    e.preventDefault();
+                    e.stopPropagation();
                     props.onContext(ch);
                 };
-            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } key={ ch.id }/> );
+            return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } onCopy={ props.onCopy } key={ ch.id }/> );
         });
         return ( <ul role="tabpanel">
             { channels }
@@ -206,7 +236,8 @@ ChannelList.propTypes = {
     channels: channelsShape.isRequired,
     onChannel: PropTypes.func.isRequired,
     onExternalChannel: PropTypes.func.isRequired,
-    onContext: PropTypes.func.isRequired
+    onContext: PropTypes.func.isRequired,
+    onCopy: PropTypes.func.isRequired
 };
 
 const Channels = (props) => {
@@ -239,7 +270,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel } onContext={ props.onContext }/>
+        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel } onContext={ props.onContext } onCopy={ props.onCopy }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -257,7 +288,8 @@ Channels.propTypes = {
     searching: PropTypes.bool,
     onChannel: PropTypes.func.isRequired,
     onExternalChannel: PropTypes.func.isRequired,
-    onContext: PropTypes.func.isRequired
+    onContext: PropTypes.func.isRequired,
+    onCopy: PropTypes.func.isRequired
 };
 
 const filterChannels = (channels, query, providers) => {
@@ -419,7 +451,13 @@ const mapDispatchToProps = (dispatch) => {
                 type: "setContextChannel",
                 payload: channel
             });
-        }
+        },
+        onCopy(payload) {
+            dispatch({
+                type: "copy",
+                payload
+            });
+        },
     };
 };
 

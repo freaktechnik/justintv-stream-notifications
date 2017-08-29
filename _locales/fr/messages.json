@@ -132,7 +132,7 @@
         "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
     "context_queue_title": {
-        "message": "Queue",
+        "message": "File d'attente",
         "description": "Title of the queue context panel."
     },
     "panel_badge_title": {
@@ -184,7 +184,7 @@
         "description": "Title of the update interval setting in the preferences"
     },
     "context_refresh_all": {
-        "message": "Refresh All Channels",
+        "message": "Rafraîchir toutes les chaînes",
         "description": "Context panel item to refresh all items"
     },
     "offlineNotification_title": {
