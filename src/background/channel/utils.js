@@ -53,7 +53,7 @@ const getRebroadcastTitlePatterns = async () => {
         patterns.push(`[${pattern}]`);
     });
     return patterns;
-}
+};
 
 /**
  * Changes the live state of channels that appear to be rebroadcasting based
@@ -103,4 +103,4 @@ export const formatChannels = async (channels, serialize = false) => {
     const patterns = await getRebroadcastTitlePatterns(),
         cb = serialize ? (c) => formatChannel(c, patterns).then((ch) => ch.serialize()) : (c) => formatChannel(c, patterns);
     return Promise.all(channels.map(cb));
-}
+};

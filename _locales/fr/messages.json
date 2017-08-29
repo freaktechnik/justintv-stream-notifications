@@ -47,6 +47,10 @@
         "message": "Clé de l'API YouTube",
         "description": "Title of the YouTube API key setting in the preferences"
     },
+    "context_redirector": {
+        "message": "Ouvrir $CHANNEL$",
+        "description": "Context panel item to open a redirector."
+    },
     "advancedOptions": {
         "message": "Options avancées",
         "description": "Advanced extension preferences collapsed message"
@@ -64,7 +68,7 @@
         "description": "Provider name for the original livestream.com"
     },
     "context_back": {
-        "message": "Back",
+        "message": "Retour",
         "description": "Tooltip for closing the context panel in the popup"
     },
     "providerhitbox": {
@@ -127,13 +131,25 @@
         "message": "Ajouter",
         "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
+    "context_queue_title": {
+        "message": "Queue",
+        "description": "Title of the queue context panel."
+    },
     "panel_badge_title": {
         "message": "Afficher un compteur",
         "description": "Title of the panel badge setting in the preferences"
     },
+    "rebroadcast_title_pattern_title": {
+        "message": "Modèles de titre de rediffusion",
+        "description": "Title for the rebroadcast title pattern setting"
+    },
     "manageChannels_label": {
         "message": "Ouvrir le gestionnaire de chaînes",
         "description": "Label of the button to open the channel manager from the preferences"
+    },
+    "rebroadcast_title_pattern_description": {
+        "message": "Comma separated list of strings that titles start with to make a stream count as rebroadcast. Each string is checked against a lower-case version of the title. Each pattern is also checked against the title wrapped in angle brackets.",
+        "description": "Description for the rebroadcast title pattern setting"
     },
     "panel_style_options.Minimal": {
         "message": "Minimal",
@@ -166,6 +182,10 @@
     "updateInterval_title": {
         "message": "Intervalle de mise à jour",
         "description": "Title of the update interval setting in the preferences"
+    },
+    "context_refresh_all": {
+        "message": "Refresh All Channels",
+        "description": "Context panel item to refresh all items"
     },
     "offlineNotification_title": {
         "message": "Afficher une notification lorsqu'un stream est hors ligne",
@@ -256,7 +276,7 @@
         "description": "Provider for douyutv.com"
     },
     "context_remove": {
-        "message": "Remove Channel",
+        "message": "Supprimer la chaîne",
         "description": "Context panel action to remove a channel"
     },
     "titleChangeNotification_title": {
@@ -348,7 +368,7 @@
         "description": "Error while trying to read the DB, no actions from within the extension will work."
     },
     "openChannel": {
-        "message": "Open Channel",
+        "message": "Ouvrir la chaîne",
         "description": "Label for context panel action that corresponds to clicking on the channel"
     },
     "cm_tab_channels": {

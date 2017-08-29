@@ -544,5 +544,13 @@
                 "example": "ec0ke"
             }
         }
+    },
+    "context_refresh_all": {
+        "message": "Refresh All Channels",
+        "description": "Context panel item to refresh all items"
+    },
+    "context_queue_title": {
+        "message": "Queue",
+        "description": "Title of the queue context panel."
     }
 }

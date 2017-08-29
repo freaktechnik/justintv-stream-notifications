@@ -329,7 +329,7 @@ export default class ChannelController extends EventTarget {
         }
     }
     /**
-     * @inherits {module:channel/utils.formatChannel}
+     * @inheritdoc {module:channel/utils.formatChannel}
      */
     async _formatChannel(channel) {
         return formatChannel(channel);
@@ -498,7 +498,7 @@ export default class ChannelController extends EventTarget {
      */
     async _updateUser(user) {
         const [ updatedUser, channels ] = await providers[user.type].getUserFavorites(user.login),
-            filterdChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
+            filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
             [ finalUser ] = await Promise.all([
                 this._list.setUser(updatedUser),
                 // Can't just call this.addUser(user.login, user.type) because of this.

@@ -47,6 +47,10 @@
         "message": "YouTube API Schlüssel",
         "description": "Title of the YouTube API key setting in the preferences"
     },
+    "context_redirector": {
+        "message": "$CHANNEL$ öffnen",
+        "description": "Context panel item to open a redirector."
+    },
     "advancedOptions": {
         "message": "Erweiterte Einstellungen",
         "description": "Advanced extension preferences collapsed message"
@@ -127,13 +131,25 @@
         "message": "Für gespeicherte Anmeldedaten auf unterstützten Seiten werden die gefolgten Kanäle automatisch hinzugefügt",
         "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
+    "context_queue_title": {
+        "message": "Queue",
+        "description": "Title of the queue context panel."
+    },
     "panel_badge_title": {
         "message": "Zeige Live-Zähler",
         "description": "Title of the panel badge setting in the preferences"
     },
+    "rebroadcast_title_pattern_title": {
+        "message": "Wiederausstrahlungstitelmuster",
+        "description": "Title for the rebroadcast title pattern setting"
+    },
     "manageChannels_label": {
         "message": "Kanalverwaltung öffnen",
         "description": "Label of the button to open the channel manager from the preferences"
+    },
+    "rebroadcast_title_pattern_description": {
+        "message": "Komma-getrennte Liste von Stichwörtern, die einen Streamtitel als Wiederausstrahlung identifizieren. Jedes Stichwort wird mit der klein geschriebenen Version des Titels von Anfang des Titels verglichen. Jedes Stichwort wird auch in eckigen Klammern geprüft.",
+        "description": "Description for the rebroadcast title pattern setting"
     },
     "panel_style_options.Minimal": {
         "message": "Minimal",
@@ -166,6 +182,10 @@
     "updateInterval_title": {
         "message": "Aktualisierungsabstand",
         "description": "Title of the update interval setting in the preferences"
+    },
+    "context_refresh_all": {
+        "message": "Refresh All Channels",
+        "description": "Context panel item to refresh all items"
     },
     "offlineNotification_title": {
         "message": "Benachrichtigen, wenn ein Stream offline geht",

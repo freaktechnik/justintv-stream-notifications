@@ -92,6 +92,26 @@ const THEMES = [
             return state;
         }
     },
+    contextChannel = (state = null, event) => {
+        switch(event.type) {
+        case "setContextChannel":
+            return event.payload;
+        case "closeContext":
+            return null;
+        default:
+            return state;
+        }
+    },
+    queueContext = (state = false, event) => {
+        switch(event.type) {
+        case "openQueueContext":
+            return true;
+        case "closeContext":
+            return false;
+        default:
+            return state;
+        }
+    },
     queue = combineReducers({
         status: simpleReducer("queueStatus", true),
         paused: simpleReducer("queuePaused")
@@ -110,7 +130,8 @@ const THEMES = [
         search,
         loading,
         currentProvider: simpleReducer("setProvider", 'twitch'),
-        contextChannel: simpleReducer("setContextChannel", null)
+        contextChannel,
+        queueContext
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

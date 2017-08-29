@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const Popup = (props) => {
     let contextMenu;
     if(props.showContextMenu) {
-        contextMenu = <Context/>;
+        contextMenu = <Context type={ props.contextMenuType }/>;
     }
     return ( <main className="tabbed">
         <TabStrip/>
@@ -20,12 +20,22 @@ Popup.defaultProps = {
     showContextMenu: false
 };
 Popup.propTypes = {
-    showContextMenu: PropTypes.bool
+    showContextMenu: PropTypes.bool,
+    contextMenuType: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
+    let contextMenuType;
+    if(state.ui.contextChannel) {
+        contextMenuType = 'channel';
+    }
+    else if(state.ui.queueContext) {
+        contextMenuType = 'queue';
+    }
+
     return {
-        showContextMenu: !!state.ui.contextChannel
+        showContextMenu: !!contextMenuType,
+        contextMenuType
     };
 };
 

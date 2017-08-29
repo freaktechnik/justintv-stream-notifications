@@ -56,7 +56,7 @@ SearchField.propTypes = {
 
 const Tool = (props) => {
     return ( <li>
-        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }  className={ props.className }>
+        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }  className={ props.className } onContextMenu={ props.onContextMenu }>
             <Icon type={ props.icon }/>
         </button>
     </li> );
@@ -69,14 +69,14 @@ Tool.propTypes = {
     title: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     className: PropTypes.string,
-    active: PropTypes.bool
+    active: PropTypes.bool,
+    onContextMenu: PropTypes.func
 };
 
 const Tools = (props) => {
-    //TODO refresh context menu
     return ( <ul className="toolbar inline-list right" role="toolbar">
         <Tool title="panel_search" icon="magnifying-glass" onClick={ () => props.onToolClick("toggleSearch") } active={ props.searching }/>
-        <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "" : "loading" }/>
+        <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "" : "loading" } onContextMenu={ props.onRefreshContextMenu }/>
         <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("configure") }/>
     </ul> );
 };
@@ -86,7 +86,8 @@ Tools.defaultProps = {
 Tools.propTypes = {
     onToolClick: PropTypes.func.isRequired,
     queuePaused: PropTypes.bool,
-    searching: PropTypes.bool
+    searching: PropTypes.bool,
+    onRefreshContextMenu: PropTypes.func.isRequired
 };
 
 const Toolbar = (props) => {
@@ -97,7 +98,7 @@ const Toolbar = (props) => {
     return ( <nav>
         <div className="topbar">
             <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect }/>
-            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch }/>
+            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch } onRefreshContextMenu={ props.onRefreshContextMenu }/>
         </div>
         { searchField }
     </nav> );
@@ -116,7 +117,8 @@ Toolbar.propTypes = {
     query: PropTypes.string,
     showSearch: PropTypes.bool,
     queuePaused: PropTypes.bool,
-    onSearch: PropTypes.func.isRequired
+    onSearch: PropTypes.func.isRequired,
+    onRefreshContextMenu: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -157,6 +159,13 @@ const mapDispatchToProps = (dispatch) => {
             dispatch({
                 type: "search",
                 payload: event.target.value
+            });
+        },
+        onRefreshContextMenu(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dispatch({
+                type: "openQueueContext"
             });
         }
     };

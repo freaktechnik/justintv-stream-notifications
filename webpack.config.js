@@ -23,7 +23,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: path.resolve(__dirname, './node_modules'),
                 loader: 'babel-loader',
                 options: {
                     babelrc: false,
@@ -59,6 +59,7 @@ module.exports = {
             {
                 test: /\.jsx$/,
                 loader: 'babel-loader',
+                include: path.resolve(__dirname, './src/list'),
                 options: {
                     babelrc: false,
                     presets: [
