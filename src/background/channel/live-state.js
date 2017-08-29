@@ -25,7 +25,7 @@ import LiveStateConst from '../../live-state.json';
  * @typedef {number} LiveStateInterpretation
  */
 
-const IGNORED_PROPERTIES = [ "state", "isLive" ],
+const IGNORED_PROPERTIES = [ "state", "isLive", "alternateUsername", "alternateURL" ],
     OFFLINE = LiveStateConst.OFFLINE,
     LIVE = LiveStateConst.LIVE,
     REDIRECT = LiveStateConst.REDIRECT,
