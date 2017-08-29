@@ -27,13 +27,12 @@ For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.
 
 ## Build it yourslef
 
-To build this extension you need npm, which will install grunt and jpm. Open a command line and type
+To build this extension you need npm, which will install webpack and web-ext. Open a command line and type
 ```
-npm install -g grunt-cli
-npm install
-grunt build
+npm i
+npm run build
 ```
-to build an in Firefox installable .xpi file.
+to build an in about:debugging loadable .xpi file. You can use `npm start` to launch Firefox with the extension pre-installed.
 
 ## License
 
