@@ -207,10 +207,6 @@
         "message": "Max Requests per Batch",
         "description": "Title of the request batch size setting in the preferences"
     },
-    "panel_nonlive_options.Live": {
-        "message": "Live",
-        "description": "Live option of the non-live treatment setting in the preferences"
-    },
     "errorState1": {
         "message": "Recoverable error with Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"

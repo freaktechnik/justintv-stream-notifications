@@ -10,8 +10,6 @@ import test from 'ava';
 import ChannelController from "../../../src/background/channel/controller";
 import providers from "../../../src/background/providers";
 import { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
-import prefs from '../../../src/prefs.json';
-import { getChannel } from '../../helpers/channel-user';
 
 const TESTUSER = {
     name: "freaktechnik",
@@ -292,53 +290,6 @@ test('getExternalChannel', async (t) => {
     t.is(channel.login, TESTUSER.name);
     t.is(channel.type, TESTUSER.type);
     t.false('id' in channel);
-});
-
-test('copyableChannelURL throws with unknown type for external channel', async (t) => {
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    return t.throws(cc.copyableChannelURL('foo', 'bar'));
-});
-
-test('copyableChannelURL for external channel', async (t) => {
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    const string = await cc.copyableChannelURL(TESTUSER.name, TESTUSER.type);
-
-    t.false(string.includes('{URL}'));
-    t.is(string, prefs.copy_pattern.value.replace('{URL}', `http://www.twitch.tv/${TESTUSER.name}`));
-});
-
-test.serial('copyableChannelURL for channel from list', async (t) => {
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    const channel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
-
-    const string = await cc.copyableChannelURL(channel.id);
-
-    t.false(string.includes('{URL}'));
-    t.is(string, prefs.copy_pattern.value.replace('{URL}', channel.url[0]));
-
-    await cc.removeChannel(channel.id);
-});
-
-test.serial('copyableChannelURL for redirecting channel from list', async (t) => {
-    const cc = new ChannelController();
-    await cc._ensureQueueReady();
-
-    const channel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
-    channel.live.redirectTo(getChannel());
-    await cc._list.setChannel(channel);
-
-    const string = await cc.copyableChannelURL(channel.id);
-
-    t.false(string.includes('{URL}'));
-    t.is(string, prefs.copy_pattern.value.replace('{URL}', channel.live.alternateURL));
-
-    await cc.removeChannel(channel.id);
 });
 
 let oldQS;

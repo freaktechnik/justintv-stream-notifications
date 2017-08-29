@@ -768,7 +768,7 @@
         "https://tmi.twitch.tv/hosts?include_logins=1&host=0": {
             "hosts": []
         },
-        "https://api.twitch.tv/kraken/streams/featured": {
+        "https://api.twitch.tv/kraken/streams/featured?broadcaster_language=en": {
             "featured": [
                 {
                     "stream": {

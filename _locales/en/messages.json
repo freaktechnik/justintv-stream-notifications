@@ -369,10 +369,6 @@
         "message": "Non-live streams include things like hosted channels or rebroadcasts.",
         "description": "Description of the non-live treatment setting in the preferences"
     },
-    "panel_nonlive_options.Live": {
-        "message": "Live",
-        "description": "Live option of the non-live treatment setting in the preferences"
-    },
     "panel_nonlive_options.Livebottom": {
         "message": "Live but sort to bottom",
         "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"

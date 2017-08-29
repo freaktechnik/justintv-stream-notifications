@@ -293,6 +293,9 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
             shownChannels.push(channel);
         }
         else if(channel.live.state === LiveState.REDIRECT) {
+            if(!channel.live.alternateChannel) {
+                console.warn("this shouldn't be here", channel);
+            }
             if("id" in channel.live.alternateChannel) {
                 internalRedirects.push(channel);
             }
