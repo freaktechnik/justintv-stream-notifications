@@ -284,7 +284,7 @@ export default class ChannelController extends EventTarget {
                 });
             }
             else {
-                this._formatChannl(channels).then((ch) => {
+                this._formatChannel(channels).then((ch) => {
                     this._list.setChannel(ch).catch(() => this._list.addChannel(ch));
                 });
             }
