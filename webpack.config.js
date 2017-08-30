@@ -7,7 +7,6 @@ const path = require("path");
 const defaultLanguage = manifest.default_locale;
 
 module.exports = {
-    devtool: 'source-map',
     entry: {
         background: "./src/background/index.js",
         "popup/list": "./src/list/index.jsx",

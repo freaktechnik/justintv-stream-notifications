@@ -408,7 +408,7 @@ test.serial('remove users with favorite', async (t) => {
     user.favorites = [ channel.login ];
     user = await t.context.list.addUser(user);
 
-    const users = await t.context.list.removeUsersWithFavorite(channel.id);
+    const users = await t.context.list.removeUsersWithFavorite(channel);
     t.is(users.length, 1);
     t.is(users[0].id, user.id, "User has been deleted");
 });

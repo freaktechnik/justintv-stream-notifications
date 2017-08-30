@@ -1298,13 +1298,13 @@
         }
     },
     "beam": {
-        "https://mixer.com/api/v1/users/search?query=test": [
+        "https://mixer.com/api/v1/users/search?where=username:eq:test": [
             {
                 "username": "test",
                 "id": 0
             }
         ],
-        "https://mixer.com/api/v1/users/search?query=live": [
+        "https://mixer.com/api/v1/users/search?where=username:eq:live": [
             {
                 "username": "live",
                 "id": 1

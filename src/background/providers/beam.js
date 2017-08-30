@@ -81,7 +81,6 @@ class Beam extends GenericProvider {
 
     async _getHostee(channelId) {
         return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
-            console.log(response);
             if(response.ok && response.status !== 404 && response.parsedJSON) {
                 return getChannelFromJSON(response.parsedJSON);
             }

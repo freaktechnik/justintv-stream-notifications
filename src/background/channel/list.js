@@ -98,23 +98,14 @@ export default class ChannelList extends ReadChannelList {
                 store = transaction.objectStore("channels"),
                 minDate = Date.now() - cacheTime, //now - 10 min
                 req = store.index("typename").openCursor();
-
-            req.onsuccess = (event) => {
-                const cursor = event.target.result;
-
-                if(cursor) {
-                    this.idCache.set(cursor.value.type + cursor.value.login, cursor.value.id);
-                    if(cursor.value.lastModified < minDate) {
-                        cursor.value.live.state = LiveState.OFFLINE;
-                        cursor.update(cursor.value);
-                    }
-                    cursor.continue();
+            return this._waitForCursor(req, (cursor) => {
+                this.idCache.set(cursor.value.type + cursor.value.login, cursor.value.id);
+                if(cursor.value.lastModified < minDate) {
+                    cursor.value.live.state = LiveState.OFFLINE;
+                    cursor.update(cursor.value);
                 }
-                else {
-                    emit(this, "ready");
-                }
-            };
-        }).catch((error) => {
+            });
+        }).then(() => emit(this, "ready")).catch((error) => {
             if(typeof error === "object" && error instanceof FixListError) {
                 return this.clear().catch((e) => {
                     console.error("Couldn't delete the DB");
@@ -141,19 +132,14 @@ export default class ChannelList extends ReadChannelList {
             throw "Channel already exists";
         }
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels", "readwrite"),
-                store = transaction.objectStore("channels"),
-                req = store.add(channel.serialize());
-
-            req.onsuccess = () => {
-                channel.id = req.result;
-                this.idCache.set(channel.type + channel.login, channel.id);
-                emit(this, "channelsadded", [ channel ]);
-                resolve(channel);
-            };
-            req.onerror = reject;
-        });
+        const transaction = this.db.transaction("channels", "readwrite"),
+            store = transaction.objectStore("channels"),
+            req = store.add(channel.serialize());
+        await this._waitForRequest(req);
+        channel.id = req.result;
+        this.idCache.set(channel.type + channel.login, channel.id);
+        emit(this, "channelsadded", [ channel ]);
+        return channel;
     }
 
     /**
@@ -178,27 +164,27 @@ export default class ChannelList extends ReadChannelList {
                         store = transaction.objectStore("channels"),
                         index = store.index("typename"),
                         addedChannels = [];
-                    channels.forEach((channel, i) => {
+                    channels.forEach(async (channel, i) => {
                         const ireq = index.get([ channel.type, channel.login ]);
-                        ireq.onsuccess = () => {
-                            if(!ireq.result) {
-                                channel.lastModified = Date.now();
-                                const req = store.add(channel.serialize());
-                                req.onsuccess = () => {
-                                    channels[i].id = req.result;
-                                    this.idCache.set(channel.type + channel.login, req.result);
-                                    addedChannels.push(channels[i]);
-                                };
-                                /* istanbul ignore next */
-                                req.onerror = () => {
-                                    console.error(req.error);
-                                };
+                        await this._waitForRequest(ireq);
+                        if(!ireq.result) {
+                            channel.lastModified = Date.now();
+                            const req = store.add(channel.serialize());
+                            try {
+                                await this._waitForRequest(req);
                             }
-                            else {
-                                console.warn("Channel " + channel.login + " has already been added");
+                            catch(e) {
+                                console.error(e);
+                                return;
                             }
-                        };
-                    }, this);
+                            channels[i].id = req.result;
+                            this.idCache.set(channel.type + channel.login, req.result);
+                            addedChannels.push(channels[i]);
+                        }
+                        else {
+                            console.warn("Channel " + channel.login + " has already been added");
+                        }
+                    });
                     transaction.oncomplete = () => {
                         if(addedChannels.length > 0) {
                             emit(this, "channelsadded", addedChannels);
@@ -223,18 +209,13 @@ export default class ChannelList extends ReadChannelList {
             throw "User already exists";
         }
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users", "readwrite"),
-                store = transaction.objectStore("users"),
-                req = store.add(user.serialize());
-
-            req.onsuccess = () => {
-                user.id = req.result;
-                resolve(user);
-                emit(this, "useradded", user);
-            };
-            req.onerror = reject;
-        });
+        const transaction = this.db.transaction("users", "readwrite"),
+            store = transaction.objectStore("users"),
+            req = store.add(user.serialize());
+        await this._waitForRequest(req);
+        user.id = req.result;
+        emit(this, "useradded", user);
+        return user;
     }
 
     /**
@@ -248,23 +229,17 @@ export default class ChannelList extends ReadChannelList {
         if(!("id" in channel)) {
             channel.id = await this.getChannelId(channel.login, channel.type);
         }
+        const transaction = this.db.transaction("channels", "readwrite"),
+            store = transaction.objectStore("channels");
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels", "readwrite"),
-                store = transaction.objectStore("channels");
+        channel.lastModified = Date.now();
 
-            channel.lastModified = Date.now();
-
-            const req = store.put(channel.serialize());
-
-            req.onsuccess = () => {
-                this.idCache.set(channel.type + channel.login, req.result);
-                channel.id = req.result; //TODO was there a reason to fetch the channel here?
-                resolve(channel);
-                emit(this, "channelupdated", channel);
-            };
-            req.onerror = reject;
-        });
+        const req = store.put(channel.serialize());
+        await this._waitForRequest(req);
+        this.idCache.set(channel.type + channel.login, req.result);
+        channel.id = req.result; //TODO was there a reason to fetch the channel here?
+        emit(this, "channelupdated", channel);
+        return channel;
     }
 
     /**
@@ -279,18 +254,13 @@ export default class ChannelList extends ReadChannelList {
         if(!("id" in user)) {
             user.id = await this.getUserId(user.login, user.type);
         }
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users", "readwrite"),
-                store = transaction.objectStore("users"),
-                req = store.put(user.serialize());
-
-            req.onsuccess = () => {
-                user.id = req.result;
-                emit(this, "userupdated", user);
-                resolve(user);
-            };
-            req.onerror = reject;
-        });
+        const transaction = this.db.transaction("users", "readwrite"),
+            store = transaction.objectStore("users"),
+            req = store.put(user.serialize());
+        await this._waitForRequest(req);
+        user.id = req.result;
+        emit(this, "userupdated", user);
+        return user;
     }
 
     /**
@@ -309,23 +279,15 @@ export default class ChannelList extends ReadChannelList {
         }
 
         emit(this, "beforechanneldeleted", id);
-        const channel = await this.getChannel(id);
+        const channel = await this.getChannel(id),
+            transaction = this.db.transaction("channels", "readwrite"),
+            store = transaction.objectStore("channels");
         await Promise.all([
-            this.removeUsersWithFavorite(id),
-            new Promise((resolve, reject) => {
-                const transaction = this.db.transaction("channels", "readwrite"),
-                    store = transaction.objectStore("channels"),
-                    req = store.delete(id);
-
-                req.onsuccess = () => {
-                    this.idCache.delete(channel.type + channel.login);
-                    resolve(channel);
-                    emit(this, "channeldeleted", channel);
-                };
-                req.onerror = reject;
-            })
+            this.removeUsersWithFavorite(channel),
+            this._waitForRequest(store.delete(id))
         ]);
-
+        this.idCache.delete(channel.type + channel.login);
+        emit(this, "channeldeleted", channel);
         return channel;
     }
 
@@ -338,30 +300,24 @@ export default class ChannelList extends ReadChannelList {
      * @returns {module:channel/core.User} Resolves to the removed user.
      */
     async removeUser(id, type) {
-        const user = await this.getUser(id, type);
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users", "readwrite"),
-                store = transaction.objectStore("users"),
-                req = store.delete(user.id);
-
-            req.onsuccess = () => {
-                resolve(user);
-                emit(this, "userdeleted", user);
-            };
-            req.onerror = reject;
-        });
+        const user = await this.getUser(id, type),
+            transaction = this.db.transaction("users", "readwrite"),
+            store = transaction.objectStore("users"),
+            req = store.delete(user.id);
+        await this._waitForRequest(req);
+        emit(this, "userdeleted", user);
+        return user;
     }
 
     /**
      * Remove all users that have the given channel as favorite.
      *
-     * @param {number} channelId - ID of the channel that users have favorited.
+     * @param {module:channel/core.Channel} channel - Channel that users have favorited.
      * @fires module:channel/list.ChannelList#userdeleted
      * @returns {Array.<module:channel/core.User>} List of users that were removed.
      */
-    async removeUsersWithFavorite(channelId) {
-        const channel = await this.getChannel(channelId),
-            users = await this.getUsersByFavorite(channel);
+    async removeUsersWithFavorite(channel) {
+        const users = await this.getUsersByFavorite(channel);
         return Promise.all(users.map((user) => {
             return this.removeUser(user.id);
         }));
@@ -402,16 +358,10 @@ export default class ChannelList extends ReadChannelList {
             const transaction = this.db.transaction([ "channels", "users" ], "readwrite"),
                 channels = transaction.objectStore("channels"),
                 users = transaction.objectStore("users"),
-                chanPromise = new Promise((resolve, reject) => {
-                    const chanReq = channels.clear();
-                    chanReq.onerror = reject;
-                    chanReq.onsuccess = resolve;
-                }),
-                usrPromise = new Promise((resolve, reject) => {
-                    const usrReq = users.clear();
-                    usrReq.onerror = reject;
-                    usrReq.onsuccess = resolve;
-                });
+                chanReq = channels.clear(),
+                chanPromise = this._waitForRequest(chanReq),
+                usrReq = users.clear(),
+                usrPromise = this._waitForRequest(usrReq);
             return Promise.all([ chanPromise, usrPromise ]).then(() => done(false));
         }
         else {

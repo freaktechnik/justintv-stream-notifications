@@ -82,6 +82,61 @@ export default class ReadChannelList extends EventTarget {
     }
 
     /**
+     * Handle indexedDB requests as promise.
+     *
+     * @private
+     * @async
+     * @param {external:IDBRequest} request - Request to wait for.
+     * @returns {?} Whatever the request's success param is.
+     * @throws Error when the request fails.
+     */
+    _waitForRequest(request) {
+        return new Promise((resolve, reject) => {
+            request.onsuccess = resolve;
+            request.onerror = reject;
+        });
+    }
+
+    /**
+     * @callback CursorIterator
+     * @param {external:IDBCursor} cursor
+     * @returns {Promise?} Can return a promise. When a promise is returned,
+     * the iteration is continued after the promise resolves, else it is
+     * immediately continued.
+     */
+
+    /**
+     * Sibling of _waitForRequest for cursor requests. Iterates over a cursor
+     * and then resolves.
+     *
+     * @private
+     * @async
+     * @param {external:IDBCursorRequest} request - Request to iterate with.
+     * @param {module:read-channel-list~CursorIterator} callback - Callback for each iteration.
+     * @returns When the iteration is finished.
+     * @throws When the iteration is aborted due to an error.
+     */
+    _waitForCursor(request, callback) {
+        return new Promise((resolve, reject) => {
+            request.onsuccess = (event) => {
+                if(event.target.result) {
+                    const r = callback(event.target.result);
+                    if(r && typeof r === "object" && "then" in r) {
+                        r.then(() => event.target.result.continue());
+                    }
+                    else {
+                        event.target.result.continue();
+                    }
+                }
+                else {
+                    resolve();
+                }
+            };
+            request.onerror = reject;
+        });
+    }
+
+    /**
      * Opens the DB, initializes the schema if it's a new DB or sets channels
      * offline that were online and have last been updated a certain time ago.
      *
@@ -121,25 +176,20 @@ export default class ReadChannelList extends EventTarget {
                 else if(e.oldVersion === 2) {
                     const channels = e.target.transaction.objectStore("channels"),
                         request = channels.openCursor();
-                    request.onsuccess = (event) => {
-                        const cursor = event.target.result;
-                        if(cursor) {
-                            const channel = cursor.value;
-                            if(channel.live.alternateUsername || channel.live.alternateURL) {
-                                channel.live.state = -1;
-                            }
-                            if(channel.live.alternateUsername) {
-                                delete channel.live.alternateUsername;
-                            }
-                            if(channel.live.alternateURL) {
-                                delete channel.live.alternateURL;
-                            }
-                            const r = cursor.update(channel);
-                            r.onerror = reject;
-                            cursor.continue();
+                    this._waitForCursor(request, (cursor) => {
+                        const channel = cursor.value;
+                        if(channel.live.alternateUsername || channel.live.alternateURL) {
+                            channel.live.state = -1;
                         }
-                    };
-                    request.onerror = reject;
+                        if(channel.live.alternateUsername) {
+                            delete channel.live.alternateUsername;
+                        }
+                        if(channel.live.alternateURL) {
+                            delete channel.live.alternateURL;
+                        }
+                        const r = cursor.update(channel);
+                        this._waitForRequest(r).catch(reject);
+                    });
                 }
             };
 
@@ -192,26 +242,21 @@ export default class ReadChannelList extends EventTarget {
      * @returns {number} The ID of the channel if it exists.
      */
     getChannelId(name, type) {
-        return new Promise((resolve, reject) => {
-            if(this.idCache.has(type + name)) {
-                resolve(this.idCache.get(type + name));
-            }
-            else {
-                const transaction = this.db.transaction("channels"),
-                    index = transaction.objectStore("channels").index("typename"),
-                    req = index.get([ type, name ]);
-                req.onsuccess = () => {
-                    if(req.result) {
-                        this.idCache.set(type + name, req.result.id);
-                        resolve(req.result.id);
-                    }
-                    else {
-                        reject(new Error("Could not fetch channel for the given info"));
-                    }
-                };
-                req.onerror = reject;
-            }
-        });
+        if(this.idCache.has(type + name)) {
+            return Promise.resolve(this.idCache.get(type + name));
+        }
+        else {
+            const transaction = this.db.transaction("channels"),
+                index = transaction.objectStore("channels").index("typename"),
+                req = index.get([ type, name ]);
+            return this._waitForRequest(req).then(() => {
+                if(req.result) {
+                    this.idCache.set(type + name, req.result.id);
+                    return req.result.id;
+                }
+                throw new Error("Could not fetch channel for the given info");
+            });
+        }
     }
 
     /**
@@ -223,19 +268,14 @@ export default class ReadChannelList extends EventTarget {
      * @returns {number} The ID of the user (if it exsits).
      */
     getUserId(name, type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                index = transaction.objectStore("users").index("typename"),
-                req = index.get([ type, name ]);
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(req.result.id);
-                }
-                else {
-                    reject(new Error("Could not find any result for the given user info"));
-                }
-            };
-            req.onerror = reject;
+        const transaction = this.db.transaction("users"),
+            index = transaction.objectStore("users").index("typename"),
+            req = index.get([ type, name ]);
+        return this._waitForRequest(req).then(() => {
+            if(req.result) {
+                return req.result.id;
+            }
+            throw new Error("Could not find any result for the given user info");
         });
     }
 
@@ -256,21 +296,14 @@ export default class ReadChannelList extends EventTarget {
             throw new Error("No ID specified");
         }
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels"),
-                store = transaction.objectStore("channels"),
-                req = store.get(id);
-
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(req.result);
-                }
-                else {
-                    reject(new Error("No result for the given ID"));
-                }
-            };
-            req.onerror = reject;
-        });
+        const transaction = this.db.transaction("channels"),
+            store = transaction.objectStore("channels"),
+            req = store.get(id);
+        await this._waitForRequest(req);
+        if(req.result) {
+            return req.result;
+        }
+        throw new Error("No result for the given ID");
     }
 
     /**
@@ -291,21 +324,14 @@ export default class ReadChannelList extends EventTarget {
             throw new Error("No ID specified");
         }
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                store = transaction.objectStore("users"),
-                req = store.get(id);
-
-            req.onsuccess = () => {
-                if(req.result) {
-                    resolve(req.result);
-                }
-                else {
-                    reject(new Error("Could not fetch specified user"));
-                }
-            };
-            req.onerror = reject;
-        });
+        const transaction = this.db.transaction("users"),
+            store = transaction.objectStore("users"),
+            req = store.get(id);
+        await this._waitForRequest(req);
+        if(req.result) {
+            return req.result;
+        }
+        throw new Error("Could not fetch specified user");
     }
 
     /**
@@ -341,44 +367,22 @@ export default class ReadChannelList extends EventTarget {
      * @returns {Array.<Object>} Array of all channels for
      *          the given type. May be empty.
      */
-    getChannelsByType(type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("channels"),
-                store = transaction.objectStore("channels"),
-                retchans = [];
-
-            transaction.onerror = reject;
-
-            if(!type) {
-                store.index("typename").openCursor().onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retchans.push(cursor.value);
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retchans);
-                    }
-                };
-            }
-            else {
-                const keyRange = IDBKeyRange.only(type),
-                    index = store.index("type");
-
-                index.openCursor(keyRange).onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retchans.push(cursor.value);
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retchans);
-                    }
-                };
-            }
+    async getChannelsByType(type) {
+        const transaction = this.db.transaction("channels"),
+            store = transaction.objectStore("channels"),
+            retchans = [];
+        let request;
+        if(!type) {
+            request = store.index("typename").openCursor();
+        }
+        else {
+            const keyRange = IDBKeyRange.only(type);
+            request = store.index("type").openCursor(keyRange);
+        }
+        await this._waitForCursor(request, (cursor) => {
+            retchans.push(cursor.value);
         });
+        return retchans;
     }
 
     /**
@@ -390,44 +394,24 @@ export default class ReadChannelList extends EventTarget {
      * @returns {Array.<Object>} Array of users for the given
      *          type. May be empty.
      */
-    getUsersByType(type) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction("users"),
-                store = transaction.objectStore("users"),
-                retusrs = [];
+    async getUsersByType(type) {
+        const transaction = this.db.transaction("users"),
+            store = transaction.objectStore("users"),
+            retusrs = [];
 
-            transaction.onerror = reject;
-
-            if(!type) {
-                store.index("typename").openCursor().onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retusrs.push(cursor.value);
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retusrs);
-                    }
-                };
-            }
-            else {
-                const keyRange = IDBKeyRange.only(type),
-                    index = store.index("type");
-
-                index.openCursor(keyRange).onsuccess = (event) => {
-                    const cursor = event.target.result;
-
-                    if(cursor) {
-                        retusrs.push(cursor.value);
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(retusrs);
-                    }
-                };
-            }
+        let request;
+        if(!type) {
+            request = store.index("typename").openCursor();
+        }
+        else {
+            const keyRange = IDBKeyRange.only(type),
+                index = store.index("type");
+            request = index.openCursor(keyRange);
+        }
+        await this._waitForCursor(request, (cursor) => {
+            retusrs.push(cursor.value);
         });
+        return retusrs;
     }
 
     /**
