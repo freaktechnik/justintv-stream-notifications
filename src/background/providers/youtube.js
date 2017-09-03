@@ -108,10 +108,10 @@ class YouTube extends GenericProvider {
                     return this._qs.queueRequest(url);
                 },
                 getPageNumber(page, pageSize, data) {
-                    return data.parsedJSON.nextPageToken;
+                    return '&pageToken=' + data.parsedJSON.nextPageToken;
                 },
                 fetchNextPage(data) {
-                    return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
+                    return data.parsedJSON && data.parsedJSON.items && "nextPageToken" in data.parsedJSON;
                 },
                 getItems(data) {
                     if(data.parsedJSON && data.parsedJSON.items) {
@@ -122,7 +122,6 @@ class YouTube extends GenericProvider {
                     }
                 }
             });
-
             if(subscriptions.length) {
                 ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
 
@@ -208,7 +207,7 @@ class YouTube extends GenericProvider {
                         return this._qs.queueRequest(url);
                     },
                     getPageNumber(page, pageSize, data) {
-                        return data.parsedJSON.nextPageToken;
+                        return "&pageToken=" + data.parsedJSON.nextPageToken;
                     },
                     fetchNextPage(data) {
                         return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;

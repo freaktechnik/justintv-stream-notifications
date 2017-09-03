@@ -36,7 +36,7 @@
         "description": "Notification when a channel changes a non-live state"
     },
     "copyNotification": {
-        "message": "Copier l'URL du stream de $CHANNEL$ dans le presse-papiers",
+        "message": "Copie de l'URL du stream de $CHANNEL$ dans le presse-papiers",
         "description": "Notification content after the URL of a stream was copied from the panel context menu"
     },
     "panel_style_title": {
@@ -84,7 +84,7 @@
         "description": "Description of the panel badge setting in the preferences"
     },
     "extensionDescription": {
-        "message": "Recevez une notification, chaque fois qu'un streamer que vous suivez commence à diffuser. Ce module dispose d'un contrôle avancé sur les chaînes qu'elle surveille et d'un panneau pour un accès rapide à ces chaînes. ",
+        "message": "Recevez une notification, chaque fois qu'un streamer que vous suivez commence à diffuser. Ce module dispose d'un contrôle avancé sur les chaînes qu'il surveille et d'un panneau pour un accès rapide à ces chaînes.",
         "description": "Description of the extension"
     },
     "pref_value_hidden": {
@@ -148,7 +148,7 @@
         "description": "Label of the button to open the channel manager from the preferences"
     },
     "rebroadcast_title_pattern_description": {
-        "message": "Comma separated list of strings that titles start with to make a stream count as rebroadcast. Each string is checked against a lower-case version of the title. Each pattern is also checked against the title wrapped in angle brackets.",
+        "message": "Liste séparée par des virgules des chaînes par lesquelles les titres commencent pour qu'un stream soit compté comme une rediffusion. Chaque chaîne est vérifiée contre une version minuscule du titre. Chaque modèle est également vérifié contre le titre inscrit entre des crochets.",
         "description": "Description for the rebroadcast title pattern setting"
     },
     "panel_style_options.Minimal": {
@@ -448,7 +448,7 @@
         "description": "Label of the optional non-live tab in the panel"
     },
     "nonliveNotificationStateRedirect": {
-        "message": "rediriger vers $CHANNEL$",
+        "message": "en train de rediriger vers $CHANNEL$",
         "description": "Redirecting state for nonliveNotification"
     },
     "context_copy": {
