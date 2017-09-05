@@ -12,14 +12,12 @@ import { Channel, User } from "./core";
 export const PREFS_MAPPING = Object.freeze({
     queue: Object.freeze({
         interval: "updateInterval",
-        ratio: "queue_ratio",
-        maxAmount: "queue_maxRequestBatchSize",
+        requests: "queue_concurrentRequests",
         maxRetries: "queueservice_maxRetries"
     }),
     panel: Object.freeze({
         style: "panel_style",
         extras: "panel_extras",
-        width: "panel_minWidth",
         badge: "panel_badge"
     }),
     misc: Object.freeze({

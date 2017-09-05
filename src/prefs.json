@@ -90,11 +90,6 @@
         "value": 4,
         "hidden": true
     },
-    "panel_minWidth": {
-        "type": "integer",
-        "value": 320,
-        "hidden": true
-    },
     "twitch_clientId": {
         "type": "string",
         "value": "1owsrolvxz8khldqe6puadzd8bldq34",

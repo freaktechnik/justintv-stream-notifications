@@ -425,10 +425,6 @@
         "message": "A tab with information about new features is opened when the extension is updated.",
         "description": "Description of the update tab setting in the preferences"
     },
-    "panel_minWidth_title": {
-        "message": "Minimum Panel width",
-        "description": "Title of the panel minimum width setting in the preferences"
-    },
     "twitch_clientId_title": {
         "message": "Twitch Client ID",
         "description": "Title of the Twitch Client ID setting in the preferences"

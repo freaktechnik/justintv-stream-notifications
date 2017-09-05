@@ -33,7 +33,8 @@ const type = "twitch",
         return ret;
     },
     dedupe = (a, b) => {
-        return a.filter((c) => b.every((d) => c.id !== d.id));
+        const ids = b.map((c) => c.id);
+        return a.filter((c) => !ids.includes(c.id));
     };
 prefs.get('twitch_clientId').then((id) => {
     headers['Client-ID'] = id;
@@ -198,14 +199,14 @@ class Twitch extends GenericProvider {
 
                         let oldChan;
                         try {
-                            oldChan = await this._list.getChannel(cho.login);
+                            oldChan = await this._list.getChannelByName(cho.login);
                         }
                         catch(e) {
                             if(oldChan === undefined) {
                                 for(const i of idOfChannel.entries()) {
                                     if(i[1] == obj.channel._id) {
                                         try {
-                                            oldChan = await this._list.getChannel(i[0]);
+                                            oldChan = await this._list.getChannelByName(i[0]);
                                             idOfChannel.set(cho.login, obj.channel_id);
                                             idOfChannel.delete(i[0]);
                                             break;
@@ -218,21 +219,23 @@ class Twitch extends GenericProvider {
                             }
                         }
                         if(oldChan !== undefined) {
+                            console.log("found old chan for", cho.login);
                             cho.id = oldChan.id;
+                        }
+                        else {
+                            console.warn("Old chan not found for", cho.login);
                         }
                         return cho;
                     }));
-                    const [ liveChans, oldChans ] = await Promise.all([
-                        filterAsync(channels, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING)),
-                        this._list.getChannels()
-                    ]);
-                    if(liveChans.length) {
-                        emit(this, "updatedchannels", liveChans);
+                    const oldChans = await this._list.getChannels();
+                    if(channels.length) {
+                        emit(this, "updatedchannels", channels);
                     }
-                    if(liveChans.length != oldChans.length) {
-                        //TODO this isn't filtering properly
+                    if(channels.length != oldChans.length) {
                         const offlineChans = dedupe(oldChans, channels),
-                            chans = await this._getHostedChannels(offlineChans, liveChans);
+                            chans = await this._getHostedChannels(offlineChans, channels);
+
+                        console.log(offlineChans.filter((c) => channels.some((d) => d.id === c.id)), dedupe(offlineChans, channels));
                         emit(this, "updatedchannels", chans);
                     }
                 }
@@ -315,13 +318,10 @@ class Twitch extends GenericProvider {
                     });
                 }
             }));
-
-        const liveChans = await filterAsync(ret, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING));
-
-        if(liveChans.length != channels.length) {
+        if(ret.length != channels.length) {
             const offlineChans = dedupe(channels, ret),
-                offChans = await this._getHostedChannels(offlineChans, liveChans);
-            ret = liveChans.concat(offChans);
+                offChans = await this._getHostedChannels(offlineChans, ret);
+            ret = ret.concat(offChans);
         }
 
         return ret;
@@ -391,13 +391,13 @@ class Twitch extends GenericProvider {
             let channelIds = await Promise.all(channels.map((channel) => this._getChannelId(channel)));
             channelIds = channelIds.filter((id) => id !== null);
 
-            const existingChans = Array.isArray(liveChans) ? channels.concat(liveChans) : channels,
-                data = await this._qs.queueRequest("https://tmi.twitch.tv/hosts?" + querystring.stringify({
-                    "include_logins": 1,
-                    host: channelIds.join(",")
-                }), headers);
+            const data = await this._qs.queueRequest("https://tmi.twitch.tv/hosts?" + querystring.stringify({
+                "include_logins": 1,
+                host: channelIds.join(",")
+            }), headers);
 
             if(data.parsedJSON && "hosts" in data.parsedJSON && data.parsedJSON.hosts.length) {
+                const existingChans = Array.isArray(liveChans) ? channels.concat(liveChans) : channels;
                 // Check each hosted channel for his status
                 return Promise.all(data.parsedJSON.hosts.map(async (hosting) => {
                     let chan = channels.find((ch) => ch.login === hosting.host_login);
