@@ -4,7 +4,6 @@
  *
  * Hitbox provider
  */
-import { emit } from "../../utils";
 import { Channel, User } from '../channel/core';
 import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
@@ -106,9 +105,8 @@ class Hitbox extends GenericProvider {
             const users = await this._list.getUsers();
             return users.map((user) => `${baseURL}/user/${user.login}`);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            priority: this._qs.LOW_PRIORITY,
             onComplete: async (data) => {
                 if(data.ok && data.parsedJSON) {
                     const user = await this._list.getUserByName(data.parsedJSON.user_name);
@@ -135,26 +133,26 @@ class Hitbox extends GenericProvider {
                     });
                     const newChannels = follows.filter((follow) => user.favorites.every((fav) => fav != follow.user_name));
                     user.favorites = follows.map((follow) => follow.user_name);
-                    emit(this, "updateduser", user);
                     const channels = await this._getChannels(newChannels.map((follow) => follow.user_name));
-                    emit(this, "newchannels", channels);
+                    return [ user, channels ];
                 }
+                return [];
             }
-        });
+        };
     }
     updateRequest() {
         const getURLs = async () =>{
             const channels = await this._list.getChannels();
             return channels.map((channel) => `${baseURL}/media/live/${channel.login}`);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            onComplete: (data) => {
+            onComplete: async (data) => {
                 if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
-                    emit(this, "updatedchannels", getChannelFromJson(data.parsedJSON.livestream[0]));
+                    return getChannelFromJson(data.parsedJSON.livestream[0]);
                 }
             }
-        });
+        };
     }
     async search(query) {
         const data = await this._qs.queueRequest(baseURL + "/media/live/list?" + querystring.stringify({

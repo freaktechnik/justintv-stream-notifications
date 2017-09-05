@@ -4,7 +4,6 @@
  * @license MPL-2.0
  * @module providers/picarto
  */
-import { emit } from "../../utils";
 import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 
@@ -47,15 +46,14 @@ class Picarto extends GenericProvider {
             const channels = await this._list.getChannels();
             return channels.map((channel) => `${baseURL}/channel/${channel.login}?key=${apiKey}`);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            onComplete: (page) => {
+            onComplete: async (page) => {
                 if(page.ok) {
-                    const channel = getChannelFromJSON(page.parsedJSON);
-                    emit(this, "updatedchannels", channel);
+                    return getChannelFromJSON(page.parsedJSON);
                 }
             }
-        });
+        };
     }
 }
 

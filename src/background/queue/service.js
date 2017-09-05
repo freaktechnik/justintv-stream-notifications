@@ -18,8 +18,16 @@ const queue = new UpdateQueue(),
 
 /**
  * @callback updateRequestCallback
- * @param {external:sdk/request~Response} data
+ * @param {module:queue~Response} data
  * @param {string} url
+ */
+/**
+ * @typedef {Object} UpdateReuqest
+ * @property {module:providers/generic-provider~GetURLs} getURLs
+ * @property {module:queue/service~updateRequestCallback} onComplete
+ * @property {module:queue/service~QueuePriority} [priority=QueueService.HIGH_PRIORITY]
+ * @property {Object} [headers={}]
+ * @property {module:queue/service~requeue} [requeue=defaultRequeue]
  */
 
 /**
@@ -88,7 +96,7 @@ class QueueService {
                                 resolve(this.queueRequest(url, headers, requeue, true, ++attempt));
                             }
                             else {
-                                reject("Too many attempts");
+                                reject(new Error("Too many attempts"));
                             }
                         });
                     }
@@ -126,7 +134,7 @@ class QueueService {
      * Queue a new reocurring update request of the given priority. Removes all
      * existing update requests of this priority.
      *
-     * @param {Object} config - Configuration.
+     * @param {module:queue/service~UpdateReuqest} config - Configuration.
      * @returns {undefined}
      */
     queueUpdateRequest({ getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue }) {

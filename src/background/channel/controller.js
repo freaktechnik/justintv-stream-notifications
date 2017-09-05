@@ -235,7 +235,7 @@ export default class ChannelController extends EventTarget {
             else {
                 this._formatChannel(channels)
                     .then((ch) => this._list.setChannel(ch))
-                    .catch(() => console.warn("Updated a removed channel", channel.login));
+                    .catch(() => console.warn("Updated a removed channel", channels.login));
             }
         });
     }

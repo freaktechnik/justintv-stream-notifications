@@ -8,12 +8,23 @@ import EventTarget from 'event-target-shim';
 import prefs from '../../preferences';
 
 /**
- * @typedef {Object} external:sdk/request.RequestOptions
- * @see {@link https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/request#Request%28options%29}
+ * @typedef {external:Response} Response
+ * @property {Object} parsedJSON - Parsed JSON response.
  */
 
 /**
- * @typedef {external:sdk/request.RequestOptions} RequestInfo
+ * @callback OnComplete
+ * @param {module:queue~Response} response
+ */
+/**
+ * @typedef {Object} Request
+ * @property {string} url
+ * @property {Object} [headers]
+ * @property {module:queue~OnComplete} onComplete
+ * @property {function} [onError]
+ */
+/**
+ * @typedef {module:queue~Request} RequestInfo
  * @property {number} id
  */
 /**
@@ -31,26 +42,31 @@ export default class RequestQueue extends EventTarget {
     lastID = -1;
     /**
      * RequestQueue Object.
-     *
-     * @constructs
      */
     constructor() {
         super();
         /**
-         * @type {array.<module:queue~RequestInfo>}
+         * @type {Array.<module:queue~RequestInfo>}
          * @protected
          */
         this.queue = [];
+        /**
+         * @type {Array.<function>}
+         * @protected
+         */
         this.workers = new Set();
     }
 
+    /**
+     * @type {Promise.<number>}
+     */
     get workerCount() {
         return prefs.get('queue_concurrentRequests');
     }
     /**
      * Add a request to the queue.
      *
-     * @param {external:sdk/request.RequestOptions} requestOptions - Options for
+     * @param {module:queue~Request} requestOptions - Options for
      *                                                              the request.
      * @returns {number} ID of the added request.
      */
@@ -60,10 +76,20 @@ export default class RequestQueue extends EventTarget {
         return this.lastID;
     }
 
+    /**
+     * Gets the next request to fetch and removes it from the queue.
+     *
+     * @returns {module:queue~RequestInfo} Request to fetch.
+     */
     getNextRequest() {
         return this.queue.shift();
     }
 
+    /**
+     * Loads the next request. Calls the handlers on the request info.
+     *
+     * @returns {undefined}
+     */
     async getRequest() {
         const request = this.getNextRequest();
         try {
@@ -83,10 +109,22 @@ export default class RequestQueue extends EventTarget {
         }
     }
 
+    /**
+     * Remove reference to a stoped worker.
+     *
+     * @param {Function} worker - Worker to forget.
+     * @returns {undefined}
+     */
     stopWorker(worker) {
         this.workers.delete(worker);
     }
 
+    /**
+     * Returns the worker implmentation.
+     *
+     * @returns {Function} Worker that works on the queue until it is drained,
+     *          then it removes itself.
+     */
     getWorker() {
         const worker = () => {
             if(this.queue.length) {
@@ -99,6 +137,11 @@ export default class RequestQueue extends EventTarget {
         return worker;
     }
 
+    /**
+     * Starts a worker, if there is space in the pool.
+     *
+     * @returns {undefined}
+     */
     async startWorker() {
         if(this.workers.size < await this.workerCount) {
             const worker = this.getWorker();
@@ -107,6 +150,11 @@ export default class RequestQueue extends EventTarget {
         }
     }
 
+    /**
+     * Starts as many worker as needed, but a maximum of the given pool size.
+     *
+     * @returns {undefined}
+     */
     async startAllWorkers() {
         const count = Math.min((await this.workerCount), this.queue.length);
         for(let i = 0; i < count; ++i) {

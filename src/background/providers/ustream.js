@@ -2,7 +2,6 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-import { emit } from "../../utils";
 import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 
@@ -94,14 +93,14 @@ class Ustream extends GenericProvider {
             const channels = await this._list.getChannels();
             return channels.map((channel) => `${baseURL}channels/${channel.login}.json`);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            onComplete: (data) => {
+            onComplete: async (data) => {
                 if(data.parsedJSON && data.parsedJSON.channel) {
-                    emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.channel));
+                    return getChannelFromJSON(data.parsedJSON.channel);
                 }
             }
-        });
+        };
     }
     updateChannel(channelname) {
         return this._qs.queueRequest(baseURL + 'channels/' + channelname + ".json").then((data) => {

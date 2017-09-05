@@ -6,7 +6,6 @@
  * @module providers/beam
  * @todo checkout socket based events
  */
-import { emit } from "../../utils";
 import { Channel, User } from '../channel/core';
 import { memoize } from "underscore";
 import { promisedPaginationHelper } from '../pagination-helper';
@@ -135,9 +134,8 @@ class Beam extends GenericProvider {
             return Promise.all(users.map((user) => this._getUserIdFromUsername(user.login).then((id) => `${baseURL}users/${id}`)));
         };
 
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            priority: this._qs.LOW_PRIORITY,
             onComplete: async (data, url) => {
                 if(data.parsedJSON) {
                     const ch = new User(data.parsedJSON.username, this._type);
@@ -163,15 +161,15 @@ class Beam extends GenericProvider {
                         getItems: (data) => data.parsedJSON || []
                     });
                     ch.favorites = follows.map((sub) => sub.token);
-                    emit(this, "updateduser", ch);
 
                     const channels = await Promise.all(follows.filter((sub) => {
                         return !oldUser.favorites.includes(sub.token);
                     }).map((sub) => this.getChannelDetails(sub.token)));
-                    emit(this, "newchannels", channels);
+                    return [ ch, channels ];
                 }
+                return [];
             }
-        });
+        };
     }
     async getChannelDetails(channelname) {
         const response = await this._qs.queueRequest(baseURL + "channels/" + channelname);
@@ -192,24 +190,20 @@ class Beam extends GenericProvider {
             const channels = await this._list.getChannels();
             return channels.map((channel) => `${baseURL}channels/${channel.login}`);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            onComplete: (data) => {
+            onComplete: async (data) => {
                 if(data.parsedJSON) {
                     const channel = getChannelFromJSON(data.parsedJSON);
 
                     if(channel.live.state === LiveState.OFFLINE) {
-                        return this._getHostee(data.parsedJSON.id).then((hostedChannel) => {
-                            if(hostedChannel !== null) {
-                                channel.live.redirectTo(hostedChannel);
-                            }
-                            emit(this, "updatedchannels", channel);
-                        });
+                        const hostedChannel = await this._getHostee(data.parsedJSON.id);
+                        channel.live.redirectTo(hostedChannel);
                     }
-                    emit(this, "updatedchannels", channel);
+                    return channel;
                 }
             }
-        });
+        };
     }
     async getFeaturedChannels() {
         const data = await this._qs.queueRequest(baseURL + "channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1");

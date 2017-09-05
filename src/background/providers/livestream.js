@@ -4,7 +4,6 @@
  * @license MPL-2.0
  * @module providers/livestream
  */
-import { emit } from "../../utils";
 import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 
@@ -54,7 +53,7 @@ class Livestream extends GenericProvider {
             const channels = await this._list.getChannels();
             return channels.map((channel) => getChannelAPIUrl(channel.login) + "livestatus.json");
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
             onComplete: async (data, url) => {
                 if(data.parsedJSON && data.parsedJSON.channel) {
@@ -66,10 +65,10 @@ class Livestream extends GenericProvider {
                     if(thumbnailInfo.parsedJSON && "channel" in thumbnailInfo.parsedJSON && thumbnailInfo.parsedJSON.channel.item.length) {
                         channel.thumbnail = thumbnailInfo.parsedJSON.channel.item[0].thumbnail["@url"];
                     }
-                    emit(this, "updatedchannels", channel);
+                    return channel;
                 }
             }
-        });
+        };
     }
 }
 

@@ -3,10 +3,8 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/twitch
- * @todo investigate delayed title updates
+ * @todo properly wait for clientID
  */
-//TODO properly wait for clientID
-import { emit, filterAsync } from "../../utils";
 import prefs from "../../preferences";
 import querystring from "../querystring";
 import LiveState from "../channel/live-state";
@@ -119,9 +117,8 @@ class Twitch extends GenericProvider {
             return users.map((user) => `${baseURL}/users/${user.login}`);
         };
 
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            priority: this._qs.LOW_PRIORITY,
             headers,
             onComplete: async (data) => {
                 if(data.parsedJSON && !data.parsedJSON.error) {
@@ -145,13 +142,14 @@ class Twitch extends GenericProvider {
                             }
                         }
                     });
-                    emit(this, "newchannels", follows.filter((c) => !user.favorites.includes(c.login)));
+                    const newChannels = follows.filter((c) => !user.favorites.includes(c.login));
 
                     user.favorites = follows.map((c) => c.login);
-                    emit(this, "updateduser", user);
+                    return [ user, newChannels ];
                 }
+                return [];
             }
-        });
+        };
     }
     updateRequest() {
         const getURLs = async () => {
@@ -162,7 +160,7 @@ class Twitch extends GenericProvider {
             }
             return channels;
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
             headers,
             onComplete: async (firstPage, url) => {
@@ -219,28 +217,23 @@ class Twitch extends GenericProvider {
                             }
                         }
                         if(oldChan !== undefined) {
-                            console.log("found old chan for", cho.login);
                             cho.id = oldChan.id;
                         }
                         else {
-                            console.warn("Old chan not found for", cho.login);
+                            console.warn("Old channel not found for", cho.login);
                         }
                         return cho;
                     }));
                     const oldChans = await this._list.getChannels();
-                    if(channels.length) {
-                        emit(this, "updatedchannels", channels);
-                    }
                     if(channels.length != oldChans.length) {
                         const offlineChans = dedupe(oldChans, channels),
                             chans = await this._getHostedChannels(offlineChans, channels);
-
-                        console.log(offlineChans.filter((c) => channels.some((d) => d.id === c.id)), dedupe(offlineChans, channels));
-                        emit(this, "updatedchannels", chans);
+                        return chans.concat(channels);
                     }
+                    return channels;
                 }
             }
-        });
+        };
     }
     async updateChannel(channelname, ignoreHosted = false) {
         const [ data, channel ] = await Promise.all([

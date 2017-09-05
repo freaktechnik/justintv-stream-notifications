@@ -12,6 +12,7 @@ import * as qs from "../queue/service";
 import EventTarget from 'event-target-shim';
 import ProviderChannelList from '../channel/provider-list';
 import ChannelList from '../channel/list';
+import { emit } from '../../utils';
 
 const _ = browser.i18n.getMessage,
     methodNotSupported = (type, method) => Promise.reject(new Error(type + "." + method + " is not supported")),
@@ -39,6 +40,37 @@ const _ = browser.i18n.getMessage,
 /**
  * @event module:providers/generic-provider.GenericProvider#updatedchannels
  * @type {Array.<module:channel/core.Channel>|module:channel/core.Channel}
+ */
+/**
+ * @callback GetURLs
+ * @async
+ * @returns {Array.<string>} Array of URLs to fetch.
+ */
+/**
+ * @callback UpdateOnComplete
+ * @async
+ * @param {module:queue~Response} data - Request results.
+ * @param {string} url
+ * @returns {Array.<module:channel/core.Channel>} Channels that were updated.
+ */
+/**
+ * @typedef {Object} UpdateRequestConfig
+ * @property {module:providers/generic-provider~GetURLs} getURLs - Returns a promise that resolves to the URLs to fetch.
+ * @property {module:providers/generic-provider~UpdateOnComplete} onComplete - Returns the update channels from the request result.
+ * @property {Object} [headers={}] - Headers to send with the request.
+ */
+/**
+ * @callback FavsOnComplete
+ * @async
+ * @param {module:queue~Response} data - Request results.
+ * @param {string} url
+ * @returns {Array.<module:channel/core.User, Array.<module:channel/core.Channel>>} Updated user and new channels.
+ */
+/**
+ * @typedef {Object} FavsRequestConfig
+ * @property {module:providers/generic-provider~GetURLs} getURLs - Returns a promise that resolves to the URLs to fetch.
+ * @property {module:providers/generic-provider~FavsOnComplete} onComplete - Returns the update channels from the request result.
+ * @property {Object} [headers={}] - Headers to send with the request.
  */
 
 /**
@@ -167,26 +199,26 @@ export default class GenericProvider extends EventTarget {
         this._list.addEventListener("ready", () =>{
             this._list.getChannels().then((channels) => {
                 if(channels.length) {
-                    this.updateRequest();
+                    this._queueUpdateRequest();
                 }
             }).catch((e) => console.error("Error intializing channels for", type, e));
             if(this.supports.credentials) {
                 this._list.getUsers().then((users) => {
                     if(users.length) {
-                        this.updateFavsRequest();
+                        this._queueFavsRequest();
                     }
                 }).catch((e) => console.error("Error intializing users for", type, e));
             }
         });
         this._list.addEventListener("channelsadded", () => {
             if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
-                this.updateRequest();
+                this._queueUpdateRequest();
             }
         });
         if(this.supports.credentials) {
             this._list.addEventListener("useradded", () => {
                 if(!this._qs.hasUpdateRequest(this._qs.LOW_PRIORITY)) {
-                    this.updateFavsRequest();
+                    this._queueFavsRequest();
                 }
             });
         }
@@ -254,6 +286,52 @@ export default class GenericProvider extends EventTarget {
     toString() {
         return this.name;
     }
+
+    /**
+     * @private
+     * @fires module:providers/generic-provider.GenericProvider#updatedchannels
+     */
+    _queueUpdateRequest() {
+        const config = this.updateRequest();
+        this._qs.queueUpdateRequest({
+            getURLs: config.getURLs,
+            onComplete: (...args) => {
+                return config.onComplete(...args).then((channels) => {
+                    if(channels) {
+                        emit(this, "updatedchannels", channels);
+                    }
+                    return channels;
+                });
+            },
+            priority: this._qs.HIGH_PRIORITY,
+            headers: "headers" in config ? config.headers : {}
+        });
+    }
+
+    /**
+     * @private
+     * @fires module:providers/generic-provider.GenericProvider#updateduser
+     * @fires module:providers/generic-provider.GenericProvider#newchannels
+     */
+    _queueFavsRequest() {
+        const config = this.updateFavsRequest();
+        this._qs.queueUpdateRequest({
+            getURLs: config.getURLs,
+            onComplete: (...args) => {
+                return config.onComplete(...args).then(([ user, channels ]) => {
+                    if(user) {
+                        emit(this, "updateduser", user);
+                        if(channels.length) {
+                            emit(this, "newchannels", channels);
+                        }
+                    }
+                });
+            },
+            priority: this._qs.LOW_PRIORITY,
+            headers: "headers" in config ? config.headers : {}
+        });
+    }
+
     /**
      * Frozen
      *
@@ -311,10 +389,11 @@ export default class GenericProvider extends EventTarget {
      * @fires module:providers/generic-provider.GenericProvider#updateduser
      * @fires module:providers/generic-provider.GenericProvider#newchannels
      * @abstract
-     * @returns {undefined}
+     * @returns {Array.<module:channel/core.User, Array.<module:channel/core.Channel>>} Updated user and new channels.
+     * @async
      */
     updateFavsRequest() {
-        throw new Error(this.name + ".updateFavsRequest is not supported.");
+        return methodNotSupported(this.name, "updateFavsRequest");
     }
     /**
      * Unqueues the reocurring update request for updating the favorite
@@ -331,10 +410,11 @@ export default class GenericProvider extends EventTarget {
      *
      * @fires module:providers/generic-provider.GenericProvider#updatedchannels
      * @abstract
-     * @returns {undefined}
+     * @returns {Array.<module:channel/core.Channel>}
+     * @async
      */
     updateRequest() {
-        throw new Error(this.name + ".updateRequest is not supported.");
+        return methodNotSupported(this.name, "updateRequest");
     }
     /**
      * Unqueues the reocurring update request for updating the live status of

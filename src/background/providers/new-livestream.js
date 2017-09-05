@@ -4,7 +4,6 @@
  * @license MPL-2.0
  * @module providers/new-livestream
  */
-import { emit } from "../../utils";
 import { Channel, User } from "../channel/core";
 import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
@@ -103,9 +102,8 @@ class NewLivestream extends GenericProvider {
             const users = await this._list.getUsers();
             return users.map((user) => baseURL + user.login);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            priority: this._qs.LOW_PRIORITY,
             onComplete: async (user) => {
                 if(user.parsedJSON && "id" in user.parsedJSON) {
                     const usr = await this._list.getUserByName(user.parsedJSON.short_name || user.parsedJSON.id);
@@ -141,29 +139,27 @@ class NewLivestream extends GenericProvider {
                     if(newChannels.length > 0) {
                         usr.favorites = channels.map((channel) => channel.login);
                     }
-                    emit(this, "updateduser", usr);
-                    emit(this, "newchannels", newChannels);
+                    return [ usr, newChannels ];
                 }
+                return [];
             }
-        });
+        };
     }
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
             return channels.map((channel) => baseURL + channel.login);
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            onComplete: (data) => {
+            onComplete: async (data) => {
                 if(data.parsedJSON && "id" in data.parsedJSON) {
                     const channel = getChannelFromJSON(data.parsedJSON);
 
-                    this._getChannelStatus(data.parsedJSON, channel).then((channel) =>{
-                        emit(this, "updatedchannels", channel);
-                    });
+                    return this._getChannelStatus(data.parsedJSON, channel);
                 }
             }
-        });
+        };
     }
     async updateChannel(channelname) {
         const data = await this._qs.queueRequest(baseURL + channelname);

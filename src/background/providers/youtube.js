@@ -4,7 +4,6 @@
  * @license MPL-2.0
  * @module providers/youtube
  */
-import { emit } from "../../utils";
 import prefs from "../../preferences";
 import querystring from "../querystring";
 import { memoize } from "underscore";
@@ -186,9 +185,8 @@ class YouTube extends GenericProvider {
                 });
             });
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
-            priority: this._qs.LOW_PRIORITY,
             onComplete: async (data) => {
                 if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
                     const ch = new User(data.parsedJSON.items[0].id, this._type),
@@ -230,8 +228,7 @@ class YouTube extends GenericProvider {
                         const oldUser = await this._list.getUserByName(ch.login);
                         ch.id = oldUser.id;
                         ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
-                        emit(this, "updateduser", ch);
-                        emit(this, "newchannels", subscriptions.filter((follow) => {
+                        const newChannels = subscriptions.filter((follow) => {
                             return !oldUser.favorites.includes(follow.snippet.resourceId.channelId);
                         }).map((sub) => {
                             const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
@@ -243,15 +240,18 @@ class YouTube extends GenericProvider {
                             };
                             ret.uname = sub.snippet.title;
                             return ret;
-                        }));
+                        });
+
+                        return [ ch, newChannels ];
                     }
                     else {
                         /** @todo Sometimes needs oAuth for some reason, I guess privacy settings. */
                         console.warn("Can't get favorites for youtube user " + ch.uname + " without oAuth as somebody with reading rights of this user's subs.");
                     }
                 }
+                return [];
             }
-        });
+        };
     }
     async updateRequest() {
         const getURLs = async () => {
@@ -269,7 +269,7 @@ class YouTube extends GenericProvider {
                 });
             });
         };
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
             onComplete: async (data, url) => {
                 const channelLogin = url.match(/channelId=([\w-]+)?&/)[1],
@@ -300,7 +300,7 @@ class YouTube extends GenericProvider {
                             channel.category = category;
                             return channel;
                         }));
-                        emit(this, "updatedchannels", channels);
+                        return channels;
                     }
                     else {
                         throw new Error("Could not find the given stream");
@@ -309,10 +309,10 @@ class YouTube extends GenericProvider {
                 else {
                     channel.live.setLive(false);
                     channel.url = [ "https://youtube.com/channel/" + channel.login ];
-                    emit(this, "updatedchannels", channel);
+                    return channel;
                 }
             }
-        });
+        };
     }
     async updateChannel(channellogin) {
         const [ ch, response ] = await Promise.all([

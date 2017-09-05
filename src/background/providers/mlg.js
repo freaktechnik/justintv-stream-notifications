@@ -30,7 +30,6 @@ https://accounts.majorleaguegaming.com/follows/retrieve returns all the channel 
 There are also the actions to follow and unfollow a channel, but I am not sure how they work, as I don't care.
 
 */
-import { emit } from "../../utils";
 import { Channel } from '../channel/core';
 import prefs from "../../preferences";
 import GenericProvider from "./generic-provider";
@@ -110,7 +109,7 @@ class MLG extends GenericProvider {
         throw new Error("Couldn't get the channel details for " + channelname + " for " + this.name);
     }
     updateRequest() {
-        this._qs.queueUpdateRequest({
+        return {
             getURLs: async () => {
                 const channels = await this._list.getChannels();
                 if(channels.length) {
@@ -137,10 +136,10 @@ class MLG extends GenericProvider {
                         }
                         return channel;
                     }));
-                    emit(this, "updatedchannels", chans);
+                    return chans;
                 }
             }
-        });
+        };
     }
     async updateChannel(channelname) {
         const [ data, info ] = await Promise.all([

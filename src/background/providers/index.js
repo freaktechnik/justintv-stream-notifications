@@ -4,6 +4,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers
+ * @todo only initialize the providers that have items in the list.
  */
 
 import twitch from "./twitch";

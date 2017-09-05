@@ -5,7 +5,6 @@
  * @license MPL-2.0
  * @module providers/dailymotion
  */
-import { emit } from "../../utils";
 import GenericProvider from "./generic-provider";
 import { Channel, User } from "../channel/core";
 import { promisedPaginationHelper } from "../pagination-helper";
@@ -127,7 +126,7 @@ class Dailymotion extends GenericProvider {
         });
     }
     updateFavsRequest() {
-        this._qs.queueUpdateRequest({
+        return {
             getURLs: async () => {
                 const users = await this._list.getUsers();
                 if(!users.length) {
@@ -141,7 +140,6 @@ class Dailymotion extends GenericProvider {
                 });
                 return [ `${baseUrl}users?${params}` ];
             },
-            priority: this._qs.LOW_PRIORITY,
             onComplete: async (firstPage, url) => {
                 if(firstPage.ok && firstPage.parsedJSON && firstPage.parsedJSON.list) {
                     const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more;
@@ -172,14 +170,14 @@ class Dailymotion extends GenericProvider {
                             this._getFavs(user.login)
                         ]);
                         user.favorites = channels.map((ch) => ch.login);
-                        emit(this, "updateduser", user);
 
                         const newChannels = channels.filter((ch) => !oldUser.favorites.includes(ch.login));
-                        emit(this, "newchannels", newChannels);
+                        return [ user, newChannels ];
                     }));
                 }
+                return [];
             }
-        });
+        };
     }
     updateRequest() {
         this._qs.queueUpdateRequest({
@@ -220,8 +218,7 @@ class Dailymotion extends GenericProvider {
                     }
                     channels = channels.map((v) => getChannelFromJSON(v));
 
-                    channels = await Promise.all(channels.map((ch) => this._getStreamDetailsForChannel(ch)));
-                    emit(this, "updatedchannels", channels);
+                    return Promise.all(channels.map((ch) => this._getStreamDetailsForChannel(ch)));
                 }
             }
         });

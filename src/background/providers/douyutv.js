@@ -6,7 +6,6 @@
  * @module providers/douyutv
  * @todo support adding by url slug name
  */
-import { emit } from "../../utils";
 import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 import md5 from 'md5';
@@ -52,9 +51,9 @@ class Douyutv extends GenericProvider {
         const getURLs = () => this._list.getChannels().then((channels) => channels.map((ch) => baseURL + signAPI("room/", ch.login)));
         this._qs.queueUpdateRequest({
             getURLs,
-            onComplete: (data) => {
+            onComplete: async (data) => {
                 if(data.parsedJSON && data.parsedJSON.error === 0) {
-                    emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.data));
+                    return getChannelFromJSON(data.parsedJSON.data);
                 }
             }
         });
