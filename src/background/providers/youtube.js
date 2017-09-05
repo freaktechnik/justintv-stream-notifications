@@ -253,7 +253,7 @@ class YouTube extends GenericProvider {
             }
         };
     }
-    async updateRequest() {
+    updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
             const key = await apiKey;

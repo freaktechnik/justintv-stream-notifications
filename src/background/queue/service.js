@@ -57,10 +57,19 @@ class QueueService {
         return priority + "PriorityRequestListener";
     }
 
+    /**
+     * @private
+     * @param {module:queue-service~QueuePriority} priority - Priority of the alarm.
+     * @returns {string} Name of the alarm for the priority.
+     */
     getAlarmName(priority) {
         return this.type + priority;
     }
 
+    /**
+     * @type {Promise.<number>} ms to wait between requests.
+     * @readonly
+     */
     get interval() {
         return prefs.get('updateInterval').then((i) => i * 1000);
     }
@@ -163,7 +172,8 @@ class QueueService {
             }
         };
         browser.alarms.onAlarm.addListener(this[requestListener]);
-        this.interval.then((interval) => {
+        this[requestListener]({ name: alarmName });
+        return this.interval.then((interval) => {
             browser.alarms.create(alarmName, {
                 when: Date.now() + interval
             });

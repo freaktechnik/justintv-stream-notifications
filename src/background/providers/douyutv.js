@@ -49,14 +49,14 @@ class Douyutv extends GenericProvider {
     }
     updateRequest() {
         const getURLs = () => this._list.getChannels().then((channels) => channels.map((ch) => baseURL + signAPI("room/", ch.login)));
-        this._qs.queueUpdateRequest({
+        return {
             getURLs,
             onComplete: async (data) => {
                 if(data.parsedJSON && data.parsedJSON.error === 0) {
                     return getChannelFromJSON(data.parsedJSON.data);
                 }
             }
-        });
+        };
     }
 }
 

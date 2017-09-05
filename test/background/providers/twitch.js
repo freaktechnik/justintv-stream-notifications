@@ -8,7 +8,6 @@
 import test from 'ava';
 import providers from "../../../src/background/providers";
 import { getMockAPIQS } from "../../helpers/providers/mock-qs";
-import { when } from "../../../src/utils";
 import { getChannel } from "../../helpers/channel-user";
 import LiveState from "../../../src/background/channel/live-state";
 
@@ -74,6 +73,8 @@ test("Twitch Live Redirects", async (t) => {
     t.is(ret[0].id, 15);
 });
 
+test.todo("need to mock the result by the provider list");
+/* TODO
 test("Twitch Update Redirects", async (t) => {
     await provider._getChannelId({
         login: 'mlg_live'
@@ -82,7 +83,7 @@ test("Twitch Update Redirects", async (t) => {
     const prom = when(provider, "updatedchannels");
     const channel = getChannel('mlg_live', 'twitch', 15);
     channel.uname = "MLG";
-    provider.updateRequest([
+    provider._updateRequest([
         channel
     ]);
     const { detail: ret } = await prom;
@@ -92,5 +93,6 @@ test("Twitch Update Redirects", async (t) => {
     t.true(await ret[0].live.isLive(LiveState.TOWARD_LIVE), "Returned channel is live");
     t.is(ret[0].id, 15, "Returned channel still has its ID");
 });
+*/
 
 test.todo("Vodcasts");

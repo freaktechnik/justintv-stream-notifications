@@ -234,6 +234,8 @@ test.serial("Close closed db", async (t) => {
     await t.notThrows(t.context.list.close());
 });
 
+test.todo("event filtering");
+
 test.before(setupDB);
 
 test.serial.beforeEach(async (t) => {

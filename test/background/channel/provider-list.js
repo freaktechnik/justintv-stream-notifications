@@ -179,3 +179,5 @@ test("getUsersByType with type is equal to getUsers", async (t) => {
     const users = await t.context.list.getUsers();
     t.deepEqual(byType, users);
 });
+
+test.todo("event filtering");

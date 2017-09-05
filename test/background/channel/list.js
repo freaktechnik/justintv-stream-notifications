@@ -490,6 +490,8 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     await t.notThrows(t.context.list.openDB("channellist"));
 });
 
+test.todo("event forwarding");
+
 test.serial.beforeEach(async (t) => {
     const channels = [
         getChannel('foo', 'extra'),

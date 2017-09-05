@@ -79,12 +79,17 @@ const getMockAPIQS = (originalQS, type, active = true) => {
         unqueueUpdateRequest() {
             // nothing to do here.
         },
-        queueUpdateRequest(urls, priority, callback) {
+        queueUpdateRequest({ getURLs, onComplete }) {
             if(active) {
-                urls.forEach((url) => {
-                    callback(getRequest(type, url), url);
+                getURLs().then((urls) => {
+                    urls.forEach((url) => {
+                        onComplete(getRequest(type, url), url);
+                    });
                 });
             }
+        },
+        hasUpdateRequest() {
+            return false;
         },
         HIGH_PRIORITY: originalQS.HIGH_PRIORITY,
         LOW_PRIORITY: originalQS.LOW_PRIORITY
@@ -124,12 +129,17 @@ const getMockQS = (originalQS, ignoreQR = false) => {
         unqueueUpdateRequest(priority) {
             resolvePromise(priority);
         },
-        queueUpdateRequest(urls, priority, callback) {
-            resolvePromise({
-                urls,
-                priority,
-                callback
+        queueUpdateRequest({ getURLs, priority, onComplete }) {
+            getURLs().then((urls) => {
+                resolvePromise({
+                    urls,
+                    priority: priority,
+                    callback: onComplete
+                });
             });
+        },
+        hasUpdateRequest() {
+            return false;
         },
         promise,
         HIGH_PRIORITY: originalQS.HIGH_PRIORITY,

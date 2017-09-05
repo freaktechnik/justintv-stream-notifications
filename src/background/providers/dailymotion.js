@@ -180,7 +180,7 @@ class Dailymotion extends GenericProvider {
         };
     }
     updateRequest() {
-        this._qs.queueUpdateRequest({
+        return {
             getURLs: async () => {
                 const channels = await this._list.getChannels();
                 if(!channels.length) {
@@ -221,7 +221,7 @@ class Dailymotion extends GenericProvider {
                     return Promise.all(channels.map((ch) => this._getStreamDetailsForChannel(ch)));
                 }
             }
-        });
+        };
     }
     updateChannel(username) {
         return this.getChannelDetails(username).then((channel) => {

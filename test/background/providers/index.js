@@ -8,7 +8,6 @@ import GenericProvider from "../../../src/background/providers/generic-provider"
 import { getChannel, getUser } from "../../helpers/channel-user";
 import { Channel, User } from "../../../src/background/channel/core";
 import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
-import { when } from "../../../src/utils";
 import LiveState from "../../../src/live-state.json";
 
 test.afterEach(() => {
@@ -98,11 +97,23 @@ const testRequests = async (t, p) => {
     t.is(typeof prom, "string");
 
     if(provider.enabled && !IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-        provider._setQs(getMockQS(originalQS, true));
-        provider.updateRequest(channels);
-        prom = await provider._qs.promise;
-        t.is(prom.priority, originalQS.HIGH_PRIORITY);
-        t.true(Array.isArray(prom.urls));
+        const requestConfig = provider.updateRequest();
+        t.true("getURLs" in requestConfig);
+        t.true("onComplete" in requestConfig);
+        t.is(typeof requestConfig.getURLs, "function");
+        t.is(typeof requestConfig.onComplete, "function");
+        const urls = requestConfig.getURLs();
+        t.true("then" in urls);
+        urls.catch(console.warn);
+        const complete = requestConfig.onComplete({});
+        t.true("then" in urls);
+        complete.catch(console.warn);
+
+        if("headers" in requestConfig) {
+            t.is(typeof requestConfig.headers, "object");
+        }
+        t.false("priority" in requestConfig);
+        t.false("requeue" in requestConfig);
 
         provider._setQs(getMockQS(originalQS));
         provider.removeRequest();
@@ -117,11 +128,23 @@ const testRequests = async (t, p) => {
         t.is(typeof prom, "string");
 
         if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-            provider._setQs(getMockQS(originalQS, true));
-            provider.updateFavsRequest(users);
-            prom = await provider._qs.promise;
-            t.is(prom.priority, originalQS.LOW_PRIORITY);
-            t.true(Array.isArray(prom.urls));
+            const requestConfig = provider.updateFavsRequest(users);
+            t.true("getURLs" in requestConfig);
+            t.true("onComplete" in requestConfig);
+            t.is(typeof requestConfig.getURLs, "function");
+            t.is(typeof requestConfig.onComplete, "function");
+            const urls = requestConfig.getURLs();
+            t.true("then" in urls);
+            urls.catch(console.warn);
+            const complete = requestConfig.onComplete({});
+            t.true("then" in urls);
+            complete.catch(console.warn);
+
+            if("headers" in requestConfig) {
+                t.is(typeof requestConfig.headers, "object");
+            }
+            t.false("priority" in requestConfig);
+            t.false("requeue" in requestConfig);
 
             provider._setQs(getMockQS(originalQS));
             provider.removeFavsRequest();
@@ -150,7 +173,7 @@ const testRequests = async (t, p) => {
 const testMockAPI = async (t, p) => {
     const provider = providers[p],
         originalQS = provider._qs;
-    let prom, ret, live;
+    let ret, live;
 
     provider._setQs(getMockAPIQS(originalQS, p));
 
@@ -189,7 +212,7 @@ const testMockAPI = async (t, p) => {
         t.is(await chan.live.isLive(LiveState.TOWARD_OFFLINE), chan.uname === "live", "Channel " + chan.uname + " is live if it's the live channel, else it's offline after an update of multiple channels together");
     }));
 
-    if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+    /*TODO if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
         prom = when(provider, "updatedchannels");
         provider.updateRequest(ret);
         ret = await prom;
@@ -203,7 +226,7 @@ const testMockAPI = async (t, p) => {
         t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", "Update request correctly set live state of " + ret.uname);
 
         provider.removeRequest();
-    }
+    }*/
 
     if(provider.supports.favorites) {
         ret = await provider.getUserFavorites("test");
@@ -215,7 +238,7 @@ const testMockAPI = async (t, p) => {
         t.is(ret[0].type, p, "returned user has the correct type");
         ret[1].forEach((ch) => t.is(ch.type, p, "Each returned channel has the correct type"));
 
-        if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+        /*TODO if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
             prom = when(provider, "updateduser");
             provider.updateFavsRequest([ ret[0] ]);
             ret = await prom;
@@ -224,10 +247,8 @@ const testMockAPI = async (t, p) => {
             t.is(ret.type, p, "updateduser has the correct type");
             t.is(ret.uname, "test", "updateduser is called test");
 
-            //TODO test newchannels event?
-
             provider.removeFavsRequest();
-        }
+        } */
     }
 
     if(provider.supports.featured) {
@@ -327,3 +348,7 @@ test("GenericProvider", async (t) => {
     await t.throws(genericProvider.getFeaturedChannels(), Error, "cannot getFeaturedChannels");
     await t.throws(genericProvider.search(), Error, "cannot search");
 });
+
+test.todo("generic provider queueUpdateRequest");
+test.todo("generic provider queueFavsRequest");
+test.todo("generic provider intializes update requests from list");

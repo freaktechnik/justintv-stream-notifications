@@ -82,6 +82,15 @@ export default class ReadChannelList extends EventTarget {
     }
 
     /**
+     * @param {string} event - Name of the event that is to be fired.
+     * @param {?} payload - Data coming with the event.
+     * @returns {boolean} Whether the event should be emitted onto this list instance.
+     */
+    filterEvents(event, payload) { // eslint-disable-line no-unused-vars
+        return event !== "ready" && event !== "close";
+    }
+
+    /**
      * Handle indexedDB requests as promise.
      *
      * @private
@@ -113,7 +122,7 @@ export default class ReadChannelList extends EventTarget {
      * @async
      * @param {external:IDBCursorRequest} request - Request to iterate with.
      * @param {module:read-channel-list~CursorIterator} callback - Callback for each iteration.
-     * @returns When the iteration is finished.
+     * @returns {undefined} When the iteration is finished.
      * @throws When the iteration is aborted due to an error.
      */
     _waitForCursor(request, callback) {

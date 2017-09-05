@@ -13,7 +13,7 @@ export default class ProviderChannelList extends ReadChannelList {
         else if(event === "useradded" || event === "userupdated" || event === "channelupdated" || event === "beforechanneldeleted" || event === "userdeleted") {
             return payload.type === this.type;
         }
-        return true;
+        return super.filterEvents(event, payload);
     }
 
     getChannelId(name) {
