@@ -230,6 +230,7 @@ class Twitch extends GenericProvider {
                         emit(this, "updatedchannels", liveChans);
                     }
                     if(liveChans.length != oldChans.length) {
+                        //TODO this isn't filtering properly
                         const offlineChans = dedupe(oldChans, channels),
                             chans = await this._getHostedChannels(offlineChans, liveChans);
                         emit(this, "updatedchannels", chans);

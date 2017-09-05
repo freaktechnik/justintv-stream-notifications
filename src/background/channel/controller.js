@@ -229,13 +229,13 @@ export default class ChannelController extends EventTarget {
         this._eventSink.addEventListener("updatedchannels", ({ detail: channels }) => {
             if(Array.isArray(channels)) {
                 formatChannels(channels).then((formattedChannels) => {
-                    formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => this._list.addChannel(channel)));
+                    formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => console.warn("Updated a removed channel", channel.login)));
                 });
             }
             else {
-                this._formatChannel(channels).then((ch) => {
-                    this._list.setChannel(ch).catch(() => this._list.addChannel(ch));
-                });
+                this._formatChannel(channels)
+                    .then((ch) => this._list.setChannel(ch))
+                    .catch(() => console.warn("Updated a removed channel", channel.login));
             }
         });
     }

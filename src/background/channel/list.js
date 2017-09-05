@@ -176,7 +176,7 @@ export default class ChannelList extends ReadChannelList {
      * @fires module:channel/list.ChannelList#channelsadded
      * @returns {Array.<module:channel/core.Channel>} Added channels with their ID set.
      */
-    async addChannels(channels) {
+    addChannels(channels) {
         if(channels instanceof Channel) {
             return this.addChannel(channels).then((channel) => [ channel ]);
         }
@@ -208,15 +208,17 @@ export default class ChannelList extends ReadChannelList {
                         }
                     };
                 });
-                transaction.oncomplete = () => {
-                    if(addedChannels.length > 0) {
-                        this._emit("channelsadded", addedChannels);
-                    }
-                    return addedChannels;
-                };
+                return new Promise((resolve) => {
+                    transaction.oncomplete = () => {
+                        if(addedChannels.length > 0) {
+                            this._emit("channelsadded", addedChannels);
+                        }
+                        resolve(addedChannels);
+                    };
+                });
             }
         }
-        return [];
+        return Promise.resolve([]);
     }
 
     /**
