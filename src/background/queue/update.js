@@ -38,12 +38,10 @@ export default class UpdateQueue extends PauseableQueue {
     /**
      * Fetch multiple requests from the top of the queue.
      *
-     * @param {number} index - Index of the request to fetch.
-     * @fires module:queue/update.UpdateQueue#allpriorizedloaded
      * @returns {undefined}
      */
     getNextRequest() {
-        if(this.containsPriorized {
+        if(this.containsPriorized) {
             return this.getFirstPriorized();
         }
         return super.getNextRequest();
@@ -58,9 +56,9 @@ export default class UpdateQueue extends PauseableQueue {
         this.queue = this.queue.filter((req) => {
             if(!request && req.priorize) {
                 request = req;
-                return true;
+                return false;
             }
-            return false;
+            return true;
         });
         return request;
     }

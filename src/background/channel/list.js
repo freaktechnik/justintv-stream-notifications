@@ -78,12 +78,14 @@ export default class ChannelList extends ReadChannelList {
      */
     constructor() {
         super();
-        this.registerList(this);
+        ChannelList.registerList(this);
     }
 
     _emit(event, payload) {
         for(const target of eventTargets.values()) {
-            emit(target, event, payload);
+            if(!("filterEvents" in target) || target.filterEvents(event, payload)) {
+                emit(target, event, payload);
+            }
         }
     }
 
@@ -172,10 +174,9 @@ export default class ChannelList extends ReadChannelList {
      *
      * @param {Array.<module:channel/core.Channel>} channels - The channels to add.
      * @fires module:channel/list.ChannelList#channelsadded
-     * @async
      * @returns {Array.<module:channel/core.Channel>} Added channels with their ID set.
      */
-    addChannels(channels) {
+    async addChannels(channels) {
         if(channels instanceof Channel) {
             return this.addChannel(channels).then((channel) => [ channel ]);
         }
@@ -184,42 +185,38 @@ export default class ChannelList extends ReadChannelList {
                 return this.addChannel(channels[0]).then((channel) => [ channel ]);
             }
             else if(channels.length > 1) {
-                return new Promise((resolve) => {
-                    const transaction = this.db.transaction("channels", "readwrite"),
-                        store = transaction.objectStore("channels"),
-                        index = store.index("typename"),
-                        addedChannels = [];
-                    channels.forEach(async (channel, i) => {
-                        const ireq = index.get([ channel.type, channel.login ]);
-                        await this._waitForRequest(ireq);
+                const transaction = this.db.transaction("channels", "readwrite"),
+                    store = transaction.objectStore("channels"),
+                    index = store.index("typename"),
+                    addedChannels = [];
+                // Can't use promises here, because that closes the transaction.
+                channels.forEach((channel, i) => {
+                    const ireq = index.get([ channel.type, channel.login ]);
+                    ireq.onsuccess = () => {
                         if(!ireq.result) {
                             channel.lastModified = Date.now();
                             const req = store.add(channel.serialize());
-                            try {
-                                await this._waitForRequest(req);
-                            }
-                            catch(e) {
-                                console.error(e);
-                                return;
-                            }
-                            channels[i].id = req.result;
-                            this.idCache.set(channel.type + channel.login, req.result);
-                            addedChannels.push(channels[i]);
+                            req.onerror = console.error;
+                            req.onsuccess = () => {
+                                channels[i].id = req.result;
+                                this.idCache.set(channel.type + channel.login, req.result);
+                                addedChannels.push(channels[i]);
+                            };
                         }
                         else {
                             console.warn("Channel " + channel.login + " has already been added");
                         }
-                    });
-                    transaction.oncomplete = () => {
-                        if(addedChannels.length > 0) {
-                            this._emit("channelsadded", addedChannels);
-                        }
-                        resolve(addedChannels);
                     };
                 });
+                transaction.oncomplete = () => {
+                    if(addedChannels.length > 0) {
+                        this._emit("channelsadded", addedChannels);
+                    }
+                    return addedChannels;
+                };
             }
         }
-        return Promise.resolve([]);
+        return [];
     }
 
     /**

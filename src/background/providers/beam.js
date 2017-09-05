@@ -9,7 +9,7 @@
 import { emit } from "../../utils";
 import { Channel, User } from '../channel/core';
 import { memoize } from "underscore";
-import { PaginationHelper, promisedPaginationHelper } from '../pagination-helper';
+import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
 import LiveState from '../channel/live-state';
@@ -133,7 +133,7 @@ class Beam extends GenericProvider {
         const getURLs = async () => {
             const users = await this._list.getUsers();
             return Promise.all(users.map((user) => this._getUserIdFromUsername(user.login).then((id) => `${baseURL}users/${id}`)));
-        });
+        };
 
         this._qs.queueUpdateRequest({
             getURLs,
@@ -190,8 +190,8 @@ class Beam extends GenericProvider {
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => `${baseURL}channels/${channel.login}`))
-        });
+            return channels.map((channel) => `${baseURL}channels/${channel.login}`);
+        };
         this._qs.queueUpdateRequest({
             getURLs,
             onComplete: (data) => {

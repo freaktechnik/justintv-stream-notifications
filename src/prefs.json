@@ -1,7 +1,7 @@
 {
     "updateInterval": {
         "type": "integer",
-        "value": 30
+        "value": 60
     },
     "onlineNotification": {
         "type": "bool",

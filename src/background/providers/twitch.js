@@ -11,7 +11,7 @@ import prefs from "../../preferences";
 import querystring from "../querystring";
 import LiveState from "../channel/live-state";
 import { Channel, User } from '../channel/core';
-import { promisedPaginationHelper, PaginationHelper } from '../pagination-helper';
+import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
 
@@ -185,7 +185,7 @@ class Twitch extends GenericProvider {
                         });
                         channels = channels.concat(otherChannels);
                     }
-                    channels = await Promise.all(streams.map(async (obj) => {
+                    channels = await Promise.all(channels.map(async (obj) => {
                         const cho = getChannelFromJSON(obj.channel);
                         cho.viewers = obj.viewers;
                         cho.thumbnail = obj.preview.medium;
@@ -219,7 +219,6 @@ class Twitch extends GenericProvider {
                         }
                         if(oldChan !== undefined) {
                             cho.id = oldChan.id;
-                            oldChan.live = cho.live;
                         }
                         return cho;
                     }));
@@ -235,6 +234,9 @@ class Twitch extends GenericProvider {
                             chans = await this._getHostedChannels(offlineChans, liveChans);
                         emit(this, "updatedchannels", chans);
                     }
+                }
+            }
+        });
     }
     async updateChannel(channelname, ignoreHosted = false) {
         const [ data, channel ] = await Promise.all([

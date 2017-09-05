@@ -127,25 +127,8 @@ export default class ChannelController extends EventTarget {
             prefs.open();
         });
 
-        /*
-         * These are a bunch of helpers for onChanneldelted. The comment there
-         * explains more or less what's going on.
-         */
-        const deletedTypes = new Map(),
-            // We only want the afterchannelsdeleted event to fire after all channels are gone.
-            debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
-            deleteCallback = (type) => {
-                this._list.getChannelsByType(type).then((channels) => {
-                    if(channels.length > 0 && providers[type].enabled) {
-                        providers[type].updateRequest(channels);
-                    }
-                    else {
-                        providers[type].removeRequest();
-                    }
-                    deletedTypes.delete(type);
-                    debouncedEvent();
-                });
-            };
+        // We only want the afterchannelsdeleted event to fire after all channels are gone.
+        const debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500);
         /**
          * @type module:channel/list.ChannelList
          * @private
@@ -159,24 +142,11 @@ export default class ChannelController extends EventTarget {
             this._queue.length = 0;
         });
         this._list.addEventListener("channelsadded", ({ detail: channels }) => {
-            // Assume we always only get an array of channels with the same type.
-            if(providers[channels[0].type].enabled) {
-                this._list.getChannelsByType(channels[0].type).then((chans) => {
-                    providers[chans[0].type].updateRequest(chans);
-                });
-            }
-
             channels.forEach((chan) => this._manager.onChannelAdded(chan));
 
             emit(this, "channelsadded", channels);
         });
         this._list.addEventListener("useradded", ({ detail: user }) => {
-            if(providers[user.type].supports.favorites) {
-                this._list.getUsersByType(user.type).then((users) => {
-                    providers[user.type].updateFavsRequest(users);
-                });
-            }
-
             this._manager.onUserAdded(user);
         });
         this._list.addEventListener("beforechanneldeleted", ({ detail }) => {
@@ -205,32 +175,11 @@ export default class ChannelController extends EventTarget {
              * comments, explaining stuff, check out the background/utils module,
              * where invokeOnce is kind of explained.
              */
-            if(!deletedTypes.has(channel.type)) {
-                deletedTypes.set(channel.type, partial(deleteCallback, channel.type));
-            }
-            invokeOnce(channel.id, deletedTypes.get(channel.type));
+            invokeOnce(channel.id, debouncedEvent);
 
             this._manager.onChannelRemoved(channel.id);
 
             emit(this, "channeldeleted", channel.id);
-        });
-        this._list.addEventListener("userdeleted", ({ detail: user }) => {
-            /* not doing the same mass deletion stuff as for channels, as I
-               assume there are less users and it'd mess up the queue's pausing,
-               if a user is removed because a channel was deleted.
-             */
-            if(providers[user.type].supports.favorites) {
-                this._list.getUsersByType(user.type).then((users) => {
-                    if(users.length > 0) {
-                        providers[user.type].updateFavsRequest(users);
-                    }
-                    else {
-                        providers[user.type].removeFavsRequest();
-                    }
-                });
-            }
-
-            this._manager.onUserRemoved(user.id);
         });
         this._list.addEventListener("channelupdated", ({ detail: channel }) => {
             this._manager.onChannelUpdated(channel);
@@ -289,26 +238,6 @@ export default class ChannelController extends EventTarget {
                 });
             }
         });
-
-        const channelsCb = (channels) => {
-                if(channels.length) {
-                    providers[channels[0].type].updateRequest(channels);
-                }
-            },
-            usersCb = (users) => {
-                if(users.length) {
-                    providers[users[0].type].updateFavsRequest(users);
-                }
-            };
-
-        for(const p in providers) {
-            if(providers[p].enabled) {
-                this.getChannelsByType(p).then(channelsCb);
-                if(providers[p].supports.favorites) {
-                    this.getUsersByType(p).then(usersCb);
-                }
-            }
-        }
     }
     /**
      * Returns a promise that resolves as soon as the ChannelList is ready.

@@ -25,7 +25,6 @@ import { errorStateManager } from './error-state';
 
 const qsPause = () => qs.pause(),
     qsResume = () => qs.resume(),
-    S_TO_MS_FACTOR = 1000,
     // Init things
     notifier = new Notifier(),
     controller = new ChannelController(),

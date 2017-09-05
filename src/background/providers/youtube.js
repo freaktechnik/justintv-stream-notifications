@@ -93,7 +93,6 @@ class YouTube extends GenericProvider {
                     maxResults: 50,
                     key: await apiKey
                 };
-            let page = 0;
             ch.image = {
                 "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
                 "240": data.parsedJSON.items[0].snippet.thumbnails.high.url

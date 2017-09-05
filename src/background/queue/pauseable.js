@@ -53,17 +53,15 @@ export default class PauseableQueue extends RequestQueue {
         this.clear();
     }
     getWorker() {
-        return () => {
+        const worker = () => {
             if(this.queue.length && !this.paused) {
                 return this.getRequest().then(worker);
             }
             else {
-                this.workers.remove(worker);
-                if(!this.workingOnQueue) {
-                    emit(this, "pause");
-                }
+                this.stopWorker(worker);
             }
         };
+        return worker;
     }
     /**
      * Temporarily halt execution of the queue.

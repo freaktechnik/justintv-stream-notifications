@@ -150,8 +150,9 @@ class Hitbox extends GenericProvider {
         this._qs.queueUpdateRequest({
             getURLs,
             onComplete: (data) => {
-            if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
-                emit(this, "updatedchannels", getChannelFromJson(data.parsedJSON.livestream[0]));
+                if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
+                    emit(this, "updatedchannels", getChannelFromJson(data.parsedJSON.livestream[0]));
+                }
             }
         });
     }

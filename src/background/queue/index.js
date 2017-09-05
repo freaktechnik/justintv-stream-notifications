@@ -74,25 +74,29 @@ export default class RequestQueue extends EventTarget {
             const jsonClone = response.clone();
             const json = await jsonClone.json();
             response.parsedJSON = json;
+            request.onComplete(response);
         }
         catch(e) {
             if("onError" in request) {
                 request.onError(e);
             }
-            return;
         }
-        request.onComplete(response);
+    }
+
+    stopWorker(worker) {
+        this.workers.delete(worker);
     }
 
     getWorker() {
-        return () => {
+        const worker = () => {
             if(this.queue.length) {
                 return this.getRequest().then(worker);
             }
             else {
-                this.workers.remove(worker);
+                this.stopWorker(worker);
             }
         };
+        return worker;
     }
 
     async startWorker() {
@@ -103,9 +107,9 @@ export default class RequestQueue extends EventTarget {
         }
     }
 
-    startAllWorkers() {
-        const count = Math.min(await this.workerCount, this.queue.length);
-        for(const i = 0; i < count; ++i) {
+    async startAllWorkers() {
+        const count = Math.min((await this.workerCount), this.queue.length);
+        for(let i = 0; i < count; ++i) {
             this.startWorker();
         }
     }

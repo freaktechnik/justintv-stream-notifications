@@ -139,7 +139,7 @@ class Dailymotion extends GenericProvider {
                     fields: USER_FIELDS,
                     limit: 100
                 });
-                return  [ `${baseUrl}users?${params}` ];
+                return [ `${baseUrl}users?${params}` ];
             },
             priority: this._qs.LOW_PRIORITY,
             onComplete: async (firstPage, url) => {
@@ -167,15 +167,15 @@ class Dailymotion extends GenericProvider {
                     data = data.map((d) => getChannelFromJSON(d, true));
 
                     await Promise.all(data.map(async (user) => {
-                        const [ oldUser, cahnnels = await Promise.all([
+                        const [ oldUser, channels ] = await Promise.all([
                             this._list.getUserByName(user.login),
                             this._getFavs(user.login)
                         ]);
                         user.favorites = channels.map((ch) => ch.login);
                         emit(this, "updateduser", user);
 
-                        channels = channels.filter((ch) => !oldUser.favorites.includes(ch.login));
-                        emit(this, "newchannels", channels);
+                        const newChannels = channels.filter((ch) => !oldUser.favorites.includes(ch.login));
+                        emit(this, "newchannels", newChannels);
                     }));
                 }
             }
@@ -200,9 +200,9 @@ class Dailymotion extends GenericProvider {
                 if(result.ok && result.parsedJSON && result.parsedJSON.list) {
                     const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more;
                     let channels = result.parsedJSON.list;
-                    if(fetchNextPage(request)) {
+                    if(fetchNextPage(result)) {
                         const otherChannels = await promisedPaginationHelper({
-                            url: url  + "&page=",
+                            url: url + "&page=",
                             initialPage: 2,
                             pageSize: 1,
                             request: (url) => this._qs.queueRequest(url),

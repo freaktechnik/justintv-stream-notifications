@@ -425,14 +425,6 @@
         "message": "A tab with information about new features is opened when the extension is updated.",
         "description": "Description of the update tab setting in the preferences"
     },
-    "queue_ratio_title": {
-        "message": "Queue Request Treshhold",
-        "description": "Title of the queue ratio setting in the preferences"
-    },
-    "queue_maxRequestBatchSize_title": {
-        "message": "Max Requests per Batch",
-        "description": "Title of the request batch size setting in the preferences"
-    },
     "panel_minWidth_title": {
         "message": "Minimum Panel width",
         "description": "Title of the panel minimum width setting in the preferences"
@@ -548,5 +540,9 @@
     "context_queue_title": {
         "message": "Queue",
         "description": "Title of the queue context panel."
+    },
+    "queue_concurrentRequests_title": {
+        "message": "Concurrent request count",
+        "description": "Title of the concurrent request count setting."
     }
 }

@@ -54,7 +54,7 @@ class QueueService {
     }
 
     get interval() {
-        return prefs.get('updateInterval');
+        return prefs.get('updateInterval').then((i) => i * 1000);
     }
 
     /**
@@ -72,12 +72,13 @@ class QueueService {
      *                                                 to send.
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determines if the request should be re-run.
+     * @param {boolean} [priorized=true] - If the request should be priorized.
      * @param {number} [attempt=0] - Counter to avoid requeuing infinitely.
      * @returns {Promise} A promise resolving with the Request response.
      */
     queueRequest(url, headers = {}, requeue = defaultRequeue, priorized = true, attempt = 0) {
         return new Promise((resolve, reject) => {
-            const id = queue.addRequest({
+            queue.addRequest({
                 url,
                 headers: new Headers(headers),
                 onComplete: (data) => {
@@ -114,8 +115,10 @@ class QueueService {
             this.unqueueUpdateRequest(QueueService.LOW_PRIORITY);
         }
         else {
-            browser.alarms.onAlarm.removeListeners(this[this.getRequestProperty(priority)]);
+            const requestListener = this.getRequestProperty(priority);
+            browser.alarms.onAlarm.removeListener(this[requestListener]);
             browser.alarms.clear(this.getAlarmName(priority));
+            this[requestListener] = undefined;
             //TODO should also remove requests that were already queued and pending.
         }
     }
@@ -123,21 +126,13 @@ class QueueService {
      * Queue a new reocurring update request of the given priority. Removes all
      * existing update requests of this priority.
      *
-     * @param {Array.<string>} urls - An array of URLs to call.
-     * @param {module:queue/service~QueuePriority} priority - Priority to queue
-     *                                                        the request as.
-     * @param {module:queue/service~updateRequestCallback} callback - Called
-     *                                           whenever a request is done (for
-     *                                           each provided URL).
-     * @param {Object.<string,string>} [rawHeaders={}] - An object with header-value
-     *                                                pairs to send with the
-     *                                                request.
-     * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
-     *                             - Determinines if a request should be re-run.
+     * @param {Object} config - Configuration.
      * @returns {undefined}
      */
-    queueUpdateRequest({ getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue) {
-        this.unqueueUpdateRequest(priority);
+    queueUpdateRequest({ getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue }) {
+        if(this.hasUpdateRequest(priority)) {
+            this.unqueueUpdateRequest(priority);
+        }
 
         const alarmName = this.getAlarmName(priority);
         const requestListener = this.getRequestProperty(priority);
@@ -150,21 +145,25 @@ class QueueService {
                     return;
                 }
                 const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => {
-                    onComplete(result, url);
-                });
+                    return onComplete(result, url);
+                }).catch((e) => console.error("Error during", priority, "update request for", this.type, ":", e)));
                 await Promise.all(promises);
-                const interval = await this.interval();
+                const interval = await this.interval;
                 browser.alarms.create(alarmName, {
-                    when: Date.now() + interval * 1000
+                    when: Date.now() + interval
                 });
             }
         };
         browser.alarms.onAlarm.addListener(this[requestListener]);
-        this.interval().then((interval) => {
+        this.interval.then((interval) => {
             browser.alarms.create(alarmName, {
-                when: Date.now() + interval * 1000
+                when: Date.now() + interval
             });
-        })
+        });
+    }
+
+    hasUpdateRequest(priority) {
+        return this[this.getRequestProperty(priority)] !== undefined;
     }
 }
 
