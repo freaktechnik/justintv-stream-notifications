@@ -8,18 +8,12 @@
  * @requires module:queue/update
  */
 
-//TODO pre-calculate Response.json()?
 import UpdateQueue from "./update";
 import prefs from "../../preferences";
 
 const queue = new UpdateQueue(),
     services = {},
-    defaultRequeue = (response) => !response.ok && response.status !== 404 && response.status !== 420,
-    completeCallback = (requeue, callback, url, data) => {
-        if(!requeue(data)) {
-            callback(data, url);
-        }
-    };
+    defaultRequeue = (response) => !response.ok && response.status !== 404 && response.status !== 420;
 
 
 /**
@@ -37,21 +31,10 @@ const queue = new UpdateQueue(),
 class QueueService {
     static HIGH_PRIORITY = "high";
     static LOW_PRIORITY = "low";
-    /**
-     * @private
-     * @type {Array}
-     */
-    highPriorityRequestIds = [];
-    /**
-     * @private
-     * @type {Array}
-     */
-    lowPriorityRequestIds = [];
     HIGH_PRIORITY = QueueService.HIGH_PRIORITY;
     LOW_PRIORITY = QueueService.LOW_PRIORITY;
-    constructor() {
-        this.highPriorityRequestIds = [];
-        this.lowPriorityRequestIds = [];
+    constructor(type) {
+        this.type = type;
     }
 
     /**
@@ -63,7 +46,15 @@ class QueueService {
      * @returns {Array} Array of request IDs.
      */
     getRequestProperty(priority) {
-        return this[priority + "PriorityRequestIds"];
+        return priority + "PriorityRequestListener";
+    }
+
+    getAlarmName(priority) {
+        return this.type + priority;
+    }
+
+    get interval() {
+        return prefs.get('updateInterval');
     }
 
     /**
@@ -84,7 +75,7 @@ class QueueService {
      * @param {number} [attempt=0] - Counter to avoid requeuing infinitely.
      * @returns {Promise} A promise resolving with the Request response.
      */
-    queueRequest(url, headers = {}, requeue = defaultRequeue, attempt = 0) {
+    queueRequest(url, headers = {}, requeue = defaultRequeue, priorized = true, attempt = 0) {
         return new Promise((resolve, reject) => {
             const id = queue.addRequest({
                 url,
@@ -93,7 +84,7 @@ class QueueService {
                     if(requeue(data)) {
                         prefs.get("queueservice_maxRetries").then((maxRetries) => {
                             if(attempt < maxRetries) {
-                                resolve(this.queueRequest(url, headers, requeue, ++attempt));
+                                resolve(this.queueRequest(url, headers, requeue, true, ++attempt));
                             }
                             else {
                                 reject("Too many attempts");
@@ -105,11 +96,7 @@ class QueueService {
                     }
                 },
                 onError: reject
-            }, false, true);
-
-            if(attempt === 0 && navigator.onLine) {
-                queue.getRequestById(id);
-            }
+            }, priorized);
         });
     }
 
@@ -127,12 +114,9 @@ class QueueService {
             this.unqueueUpdateRequest(QueueService.LOW_PRIORITY);
         }
         else {
-            if(this.getRequestProperty(priority).length > 0) {
-                this.getRequestProperty(priority).forEach((reqId) => {
-                    queue.removeRequest(reqId);
-                });
-                this.getRequestProperty(priority).length = 0;
-            }
+            browser.alarms.onAlarm.removeListeners(this[this.getRequestProperty(priority)]);
+            browser.alarms.clear(this.getAlarmName(priority));
+            //TODO should also remove requests that were already queued and pending.
         }
     }
     /**
@@ -152,22 +136,35 @@ class QueueService {
      *                             - Determinines if a request should be re-run.
      * @returns {undefined}
      */
-    queueUpdateRequest(urls, priority, callback, rawHeaders = {}, requeue = defaultRequeue) {
+    queueUpdateRequest({ getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue) {
         this.unqueueUpdateRequest(priority);
-        const requests = this.getRequestProperty(priority),
-            skips = priority == QueueService.LOW_PRIORITY ? 4 : 0,
-            headers = new Headers(rawHeaders);
 
-        requests.push(...urls.map((url) => queue.addRequest(
-            {
-                url,
-                headers,
-                onComplete: completeCallback.bind(null, requeue, callback, url)
-            },
-            true,
-            false,
-            skips
-        )));
+        const alarmName = this.getAlarmName(priority);
+        const requestListener = this.getRequestProperty(priority);
+
+        this[requestListener] = async (alarm) => {
+            if(alarm.name === alarmName) {
+                const urls = await getURLs();
+                if(!urls.length) {
+                    this.unqueueUpdateRequest(priority);
+                    return;
+                }
+                const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => {
+                    onComplete(result, url);
+                });
+                await Promise.all(promises);
+                const interval = await this.interval();
+                browser.alarms.create(alarmName, {
+                    when: Date.now() + interval * 1000
+                });
+            }
+        };
+        browser.alarms.onAlarm.addListener(this[requestListener]);
+        this.interval().then((interval) => {
+            browser.alarms.create(alarmName, {
+                when: Date.now() + interval * 1000
+            });
+        })
     }
 }
 
@@ -179,31 +176,9 @@ class QueueService {
  */
 export const getServiceForProvider = (providerName) => {
     if(!services.hasOwnProperty(providerName)) {
-        services[providerName] = new QueueService();
+        services[providerName] = new QueueService(providerName);
     }
     return services[providerName];
-};
-
-/**
- * Set the internal queue refresh properties.
- *
- * @param {module:queue/pauseable~QueueOptions} options - Queue options.
- * @returns {undefined}
- */
-export const setOptions = (options) => {
-    queue.autoFetch(options.interval,
-        options.amount,
-        options.maxSize);
-};
-
-/**
- * Change the interval of the internal queue.
- *
- * @param {number} interval - Refresh interval in milliseconds.
- * @returns {undefined}
- */
-export const updateOptions = (interval) => {
-    queue.autoFetch(interval);
 };
 
 /**
@@ -226,12 +201,6 @@ export const resume = () => {
 
 /**
  * @typedef {Object} QueueServiceListener
- * @property {function} containsPriorized - Callback for the
- * {@link module:queue/update.UpdateQueue#event:queuepriorized} event of the
- * internal queue.
- * @property {function} priorizedLoaded - Callback for the
- * {@link module:queue/update.UpdateQueue#event:allpriorizedloaded} event of the
- * internal queue.
  * @property {function} paused
  * @property {function} resumed
  */
@@ -242,13 +211,7 @@ export const resume = () => {
  * @param {module:queue/service~QueueServiceListener} listeners - Listeners to add.
  * @returns {undefined}
  */
-export const addListeners = ({ containsPriorized, priorizedLoaded, paused, resumed }) => {
-    if(containsPriorized) {
-        queue.addEventListener("queuepriorized", containsPriorized);
-    }
-    if(priorizedLoaded) {
-        queue.addEventListener("allpriorizedloaded", priorizedLoaded);
-    }
+export const addListeners = ({ paused, resumed }) => {
     if(paused) {
         queue.addEventListener("pause", paused);
     }
@@ -264,13 +227,7 @@ export const addListeners = ({ containsPriorized, priorizedLoaded, paused, resum
  *        remove.
  * @returns {undefined}
  */
-export const removeListeners = ({ containsPriorized, priorizedLoaded, paused, resumed }) => {
-    if(containsPriorized) {
-        queue.removeEventListener("queuepriorized", containsPriorized);
-    }
-    if(priorizedLoaded) {
-        queue.removeEventListener("allpriorizedloaded", priorizedLoaded);
-    }
+export const removeListeners = ({ paused, resumed }) => {
     if(paused) {
         queue.removeEventListener("pause", paused);
     }

@@ -48,11 +48,14 @@ class Douyutv extends GenericProvider {
             }
         });
     }
-    updateRequest(channels) {
-        const urls = channels.map((ch) => baseURL + signAPI("room/", ch.login));
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
-            if(data.parsedJSON && data.parsedJSON.error === 0) {
-                emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.data));
+    updateRequest() {
+        const getURLs = () => this._list.getChannels().then((channels) => channels.map((ch) => baseURL + signAPI("room/", ch.login)));
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (data) => {
+                if(data.parsedJSON && data.parsedJSON.error === 0) {
+                    emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.data));
+                }
             }
         });
     }

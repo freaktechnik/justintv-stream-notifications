@@ -85,14 +85,9 @@
         "type": "bool",
         "value": true
     },
-    "queue_ratio": {
+    "queue_concurrentRequests": {
         "type": "integer",
-        "value": 2,
-        "hidden": true
-    },
-    "queue_maxRequestBatchSize": {
-        "type": "integer",
-        "value": 8,
+        "value": 4,
         "hidden": true
     },
     "panel_minWidth": {

@@ -31,3 +31,5 @@ test.serial("Get no Category", async (t) => {
 
     youtube._setQs(oldQS);
 });
+
+test.todo("Pagination of subscriptions");

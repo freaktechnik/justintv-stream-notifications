@@ -42,12 +42,18 @@ class Picarto extends GenericProvider {
                 }
             });
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => `${baseURL}/channel/${channel.login}?key=${apiKey}`);
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (page) => {
-            if(page.ok) {
-                const channel = getChannelFromJSON(page.parsedJSON);
-                emit(this, "updatedchannels", channel);
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => `${baseURL}/channel/${channel.login}?key=${apiKey}`);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (page) => {
+                if(page.ok) {
+                    const channel = getChannelFromJSON(page.parsedJSON);
+                    emit(this, "updatedchannels", channel);
+                }
             }
         });
     }

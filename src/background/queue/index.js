@@ -5,6 +5,7 @@
  * @module queue
  */
 import EventTarget from 'event-target-shim';
+import prefs from '../../preferences';
 
 /**
  * @typedef {Object} external:sdk/request.RequestOptions
@@ -21,13 +22,6 @@ import EventTarget from 'event-target-shim';
  */
 export default class RequestQueue extends EventTarget {
     /**
-     * ID of the queue interval.
-     *
-     * @type {number?}
-     * @private
-     */
-    _alarmName = "main-queue";
-    /**
      * Last ID assigned to a request.
      *
      * @type {number}
@@ -35,16 +29,6 @@ export default class RequestQueue extends EventTarget {
      * @protected
      */
     lastID = -1;
-    /**
-     * Time interval between fetched requests.
-     *
-     * @type {number}
-     * @default 0
-     * @readonly
-     */
-    interval = 0;
-    amount = 0.5;
-    maxSize = 10;
     /**
      * RequestQueue Object.
      *
@@ -57,13 +41,11 @@ export default class RequestQueue extends EventTarget {
          * @protected
          */
         this.queue = [];
+        this.workers = new Set();
+    }
 
-        browser.alarms.onAlarm.addListener((alarm) => {
-            if(alarm.name == this._alarmName) {
-                const size = Math.max(1, Math.min(this.queue.length * this.amount, this.maxSize));
-                this.getRequestBatch(size);
-            }
-        });
+    get workerCount() {
+        return prefs.get('queue_concurrentRequests');
     }
     /**
      * Add a request to the queue.
@@ -73,83 +55,58 @@ export default class RequestQueue extends EventTarget {
      * @returns {number} ID of the added request.
      */
     addRequest(requestOptions) {
-        this.queue.push(Object.assign({ id: ++this.lastID, method: "GET" }, requestOptions));
+        this.queue.push(Object.assign({ id: ++this.lastID }, requestOptions));
+        this.startWorker();
         return this.lastID;
     }
-    /**
-     * Fetch the request with the given index in the queue.
-     *
-     * @param {number} index - Index of the request to fetch.
-     * @returns {undefined}
-     */
-    getRequest(index) {
-        const spec = this.queue.splice(index, 1)[0];
-        fetch(spec.url, {
-            headers: spec.headers,
-            redirect: "follow"
-        }).then((response) => {
-            const jsonClone = response.clone();
-            return jsonClone.json().then((json) => {
-                response.parsedJSON = json;
-                spec.onComplete(response);
-            }, () => {
-                spec.onComplete(response);
+
+    getNextRequest() {
+        return this.queue.shift();
+    }
+
+    async getRequest() {
+        const request = this.getNextRequest();
+        try {
+            const response = await fetch(request.url, {
+                headers: request.headers,
+                redirect: "follow"
             });
-        }, (error) => {
-            console.error(error);
-            if(spec.onError) {
-                spec.onError(error);
+            const jsonClone = response.clone();
+            const json = await jsonClone.json();
+            response.parsedJSON = json;
+        }
+        catch(e) {
+            if("onError" in request) {
+                request.onError(e);
+            }
+            return;
+        }
+        request.onComplete(response);
+    }
+
+    getWorker() {
+        return () => {
+            if(this.queue.length) {
+                return this.getRequest().then(worker);
             }
             else {
-                throw error;
+                this.workers.remove(worker);
             }
-        });
-        return spec;
+        };
     }
-    /**
-     * Fetch the request with the given ID.
-     *
-     * @param {number|string} query - ID or URL of the request to fetch.
-     * @returns {undefined}
-     */
-    getRequestById(query) {
-        return this.getRequest(this.getRequestIndex(query));
-    }
-    /**
-     * Fetch multiple requests from the top of the queue.
-     *
-     * @param {number} [batchSize=this.queue.length] - Number of requests to get.
-     * @returns {undefined}
-     */
-    getRequestBatch(batchSize = this.queue.length) {
-        if(batchSize > this.queue.length) {
-            batchSize = this.queue.length;
-        }
 
-        for(let i = 0; i < batchSize; i++) {
-            this.getRequest(0);
+    async startWorker() {
+        if(this.workers.size < await this.workerCount) {
+            const worker = this.getWorker();
+            this.workers.add(worker);
+            worker();
         }
     }
-    /**
-     * Set up an interval to fetch a certain amount of requests periodically.
-     * Can also be used to change the interval.
-     *
-     * @param {number} interval - Interval in milliseconds.
-     * @param {number} amount - A percentage of requests to get per batch.
-     * @param {number} maxSize - The max number of requests to get per batch.
-     * @returns {undefined}
-     */
-    async autoFetch(interval, amount, maxSize) {
-        this.interval = interval;
-        this.amount = amount;
-        this.maxSize = maxSize;
-        if(this.workingOnQueue()) {
-            await browser.alarms.clear(this._alarmName);
-        }
-        if(interval > 0) {
-            browser.alarms.create(this._alarmName, {
-                periodInMinutes: interval / 60000
-            });
+
+    startAllWorkers() {
+        const count = Math.min(await this.workerCount, this.queue.length);
+        for(const i = 0; i < count; ++i) {
+            this.startWorker();
         }
     }
     /**
@@ -158,10 +115,6 @@ export default class RequestQueue extends EventTarget {
      * @returns {undefined}
      */
     clear() {
-        if(this.workingOnQueue()) {
-            browser.alarms.clear(this._alarmName);
-        }
-        this.interval = 0;
         if(this.queue.length > 0) {
             this.queue.length = 0;
         }
@@ -194,10 +147,10 @@ export default class RequestQueue extends EventTarget {
     /**
      * Check if the queue is currently peridoically fetching requests.
      *
-     * @returns {boolean} Whether there is an interval set up.
+     * @type {boolean}
      */
-    workingOnQueue() {
-        return this.interval !== 0;
+    get workingOnQueue() {
+        return this.workers.size > 0;
     }
     /**
      * Remove a request from the queue.

@@ -174,85 +174,91 @@ class YouTube extends GenericProvider {
             return this._getChannelById(username);
         }
     }
-    async updateFavsRequest(users) {
-        const urls = await Promise.all(users.map(async (user) => {
-            return baseURL + "channels?" + querystring.stringify(
-                {
+    updateFavsRequest() {
+        const getURLs = async () => {
+            const users = await this._list.getUsers();
+            const key = await apiKey;
+            return users.map((user) => {
+                return baseURL + "channels?" + querystring.stringify({
                     part: "id,snippet",
                     id: user.login,
                     fields: "items(id,snippet/title,snippet/thumbnails)",
-                    key: await apiKey
+                    key
                 });
-        }));
-        this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, async (data) => {
-            if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
-                const ch = new User(data.parsedJSON.items[0].id, this._type),
-                    subsOptions = {
-                        part: "snippet",
-                        channelId: data.parsedJSON.items[0].id,
-                        maxResults: 50,
-                        key: await apiKey
-                    };
-                let page = 0;
-                ch.image = {
-                    "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                    "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                };
-                ch.uname = data.parsedJSON.items[0].snippet.title;
-                const subscriptions = await promisedPaginationHelper({
-                    url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
-                    pageSize: subsOptions.maxResults,
-                    initialPage: "",
-                    request: (url) => {
-                        return this._qs.queueRequest(url);
-                    },
-                    getPageNumber(page, pageSize, data) {
-                        return "&pageToken=" + data.parsedJSON.nextPageToken;
-                    },
-                    fetchNextPage(data) {
-                        return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
-                    },
-                    getItems(data) {
-                        if(data.parsedJSON && data.parsedJSON.items) {
-                            return data.parsedJSON.items;
-                        }
-                        else {
-                            return [];
-                        }
-                    }
-                });
-                if(subscriptions.length) {
-                    const oldUser = users.find((usr) => usr.login === ch.login);
-                    ch.id = oldUser.id;
-                    ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
-                    emit(this, "updateduser", ch);
-                    emit(this, "newchannels", subscriptions.filter((follow) => {
-                        return !oldUser.favorites.some((fav) => fav === follow.snippet.resourceId.channelId);
-                    }).map((sub) => {
-                        const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
-                        ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
-                        ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
-                        ret.image = {
-                            "88": sub.snippet.thumbnails.default.url,
-                            "240": sub.snippet.thumbnails.high.url
+            });
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            priority: this._qs.LOW_PRIORITY,
+            onComplete: async (data) => {
+                if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
+                    const ch = new User(data.parsedJSON.items[0].id, this._type),
+                        subsOptions = {
+                            part: "snippet",
+                            channelId: data.parsedJSON.items[0].id,
+                            maxResults: 50,
+                            key: await apiKey
                         };
-                        ret.uname = sub.snippet.title;
-                        return ret;
-                    }));
-
-                    oldUser.favorites = ch.favorites;
-                }
-                else {
-                    /** @todo Sometimes needs oAuth for some reason, I guess privacy settings. */
-                    console.warn("Can't get favorites for youtube user " + ch.uname + " without oAuth as somebody with reading rights of this user's subs.");
+                    let page = 0;
+                    ch.image = {
+                        "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                        "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+                    };
+                    ch.uname = data.parsedJSON.items[0].snippet.title;
+                    const subscriptions = await promisedPaginationHelper({
+                        url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
+                        pageSize: subsOptions.maxResults,
+                        initialPage: "",
+                        request: (url) => {
+                            return this._qs.queueRequest(url);
+                        },
+                        getPageNumber(page, pageSize, data) {
+                            return "&pageToken=" + data.parsedJSON.nextPageToken;
+                        },
+                        fetchNextPage(data) {
+                            return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
+                        },
+                        getItems(data) {
+                            if(data.parsedJSON && data.parsedJSON.items) {
+                                return data.parsedJSON.items;
+                            }
+                            else {
+                                return [];
+                            }
+                        }
+                    });
+                    if(subscriptions.length) {
+                        const oldUser = await this._list.getUserByName(ch.login);
+                        ch.id = oldUser.id;
+                        ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
+                        emit(this, "updateduser", ch);
+                        emit(this, "newchannels", subscriptions.filter((follow) => {
+                            return !oldUser.favorites.includes(follow.snippet.resourceId.channelId);
+                        }).map((sub) => {
+                            const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
+                            ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
+                            ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
+                            ret.image = {
+                                "88": sub.snippet.thumbnails.default.url,
+                                "240": sub.snippet.thumbnails.high.url
+                            };
+                            ret.uname = sub.snippet.title;
+                            return ret;
+                        }));
+                    }
+                    else {
+                        /** @todo Sometimes needs oAuth for some reason, I guess privacy settings. */
+                        console.warn("Can't get favorites for youtube user " + ch.uname + " without oAuth as somebody with reading rights of this user's subs.");
+                    }
                 }
             }
         });
     }
-    async updateRequest(channels) {
-        let offlineCount = 0;
-        const ids = [],
-            urls = await Promise.all(channels.map(async (channel) => {
+    async updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            const key = await apiKey;
+            return channels.map(async (channel) => {
                 return baseURL + "search?" + querystring.stringify({
                     part: "id",
                     channelId: channel.login,
@@ -260,21 +266,28 @@ class YouTube extends GenericProvider {
                     maxResults: 1,
                     eventType: "live",
                     type: "video",
-                    key: await apiKey
+                    key
                 });
-            })),
-            getLiveStreams = async (ids) => {
-                const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify({
-                    part: "id, snippet, liveStreamingDetails",
-                    id: ids,
-                    fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
-                    key: await apiKey,
-                    hl: getLocale()
-                }));
-                if(videos.parsedJSON && videos.parsedJSON.items) {
-                    return Promise.all(videos.parsedJSON.items.map((video) => {
-                        return this._getCategory(video.snippet.categoryId).then((category) => {
-                            const channel = channels.find((channel) => channel.login == video.snippet.channelId);
+            });
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: async (data, url) => {
+                const channelLogin = url.match(/channelId=([\w-]+)?&/)[1],
+                    channel = await this._list.getChannelByName(channelLogin);
+                if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
+                    //TODO could reduce requests by batching them with mutliple IDs. Debounce?
+                    const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify({
+                        part: "id, snippet, liveStreamingDetails",
+                        id: data.parsedJSON.items[0].id.videoId,
+                        fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
+                        key: await apiKey,
+                        hl: getLocale()
+                    }));
+                    if(videos.parsedJSON && videos.parsedJSON.items) {
+                        const channels = await Promise.all(videos.parsedJSON.items.map(async (video) => {
+                            const category = await this._getCategory(video.snippet.categoryId);
+                            const channel = await this._list.getChannelByName(video.snippet.channelId);
                             channel.live.setLive(true);
                             channel.url = [
                                 "https://youtube.com/watch?v=" + video.id,
@@ -287,42 +300,18 @@ class YouTube extends GenericProvider {
                             channel.viewers = video.liveStreamingDetails.concurrentViewers;
                             channel.category = category;
                             return channel;
-                        });
-                    }));
+                        }));
+                        emit(this, "updatedchannels", channels);
+                    }
+                    else {
+                        throw new Error("Could not find the given stream");
+                    }
                 }
                 else {
-                    throw new Error("Could not find the given stream");
+                    channel.live.setLive(false);
+                    channel.url = [ "https://youtube.com/channel/" + channel.login ];
+                    emit(this, "updatedchannels", channel);
                 }
-            },
-            done = (id) => {
-                if(id) {
-                    ids.push(id);
-                }
-                else {
-                    offlineCount++;
-                }
-                if(ids.length + offlineCount == channels.length) {
-                    getLiveStreams(ids.join(",")).then((chans) => {
-                        emit(this, "updatedchannels", chans);
-                    });
-                    ids.length = 0;
-                    offlineCount = 0;
-                }
-            };
-
-        //TODO there should be a way to do this with a generator.
-
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data, url) => {
-            const channelLogin = url.match(/channelId=([\w-]+)?&/)[1],
-                channel = channels.find((channel) => channelLogin == channel.login);
-            if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
-                done(data.parsedJSON.items[0].id.videoId);
-            }
-            else {
-                channel.live.setLive(false);
-                channel.url = [ "https://youtube.com/channel/" + channel.login ];
-                emit(this, "updatedchannels", channel);
-                done();
             }
         });
     }

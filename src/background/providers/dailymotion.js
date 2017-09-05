@@ -8,7 +8,7 @@
 import { emit } from "../../utils";
 import GenericProvider from "./generic-provider";
 import { Channel, User } from "../channel/core";
-import { promisedPaginationHelper, PaginationHelper } from "../pagination-helper";
+import { promisedPaginationHelper } from "../pagination-helper";
 import qs from "../querystring";
 
 const type = "dailymotion",
@@ -126,85 +126,103 @@ class Dailymotion extends GenericProvider {
             }
         });
     }
-    updateFavsRequest(users) {
-        new PaginationHelper({
-            url: baseUrl + "users?" + qs.stringify({
-                ids: users.map((ch) => ch.login).join(","),
-                fields: USER_FIELDS,
-                limit: 100
-            }) + "&page=",
-            initialPage: 1,
-            pageSize: 1,
-            request: (url, callback, initial) => {
-                if(initial) {
-                    this._qs.queueUpdateRequest([ url ], this._qs.LOW_PRIORITY, callback);
+    updateFavsRequest() {
+        this._qs.queueUpdateRequest({
+            getURLs: async () => {
+                const users = await this._list.getUsers();
+                if(!users.length) {
+                    return users;
                 }
-                else {
-                    return this._qs.queueRequest(url);
-                }
+                const ids = users.map((ch) => ch.login).join(",");
+                const params = qs.stringify({
+                    ids,
+                    fields: USER_FIELDS,
+                    limit: 100
+                });
+                return  [ `${baseUrl}users?${params}` ];
             },
-            fetchNextPage(data) {
-                return data.parsedJSON && data.parsedJSON.has_more;
-            },
-            getItems(data) {
-                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
-                    return data.parsedJSON.list;
-                }
-                else {
-                    return [];
-                }
-            },
-            onComplete: (data) => {
-                data = data.map((d) => getChannelFromJSON(d, true));
+            priority: this._qs.LOW_PRIORITY,
+            onComplete: async (firstPage, url) => {
+                if(firstPage.ok && firstPage.parsedJSON && firstPage.parsedJSON.list) {
+                    const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more;
+                    let data = firstPage.parsedJSON.list;
+                    if(fetchNextPage(firstPage)) {
+                        const otherPages = await promisedPaginationHelper({
+                            url: url + "&page=",
+                            initialPage: 2,
+                            pageSize: 1,
+                            request: (url) => this._qs.queueRequest(url),
+                            fetchNextPage: fetchNextPage,
+                            getItems(data) {
+                                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
+                                    return data.parsedJSON.list;
+                                }
+                                else {
+                                    return [];
+                                }
+                            }
+                        });
+                        data = data.concat(otherPages);
+                    }
+                    data = data.map((d) => getChannelFromJSON(d, true));
 
-                data.forEach((user) => {
-                    const oldUser = users.find((u) => u.login == user.login);
-                    this._getFavs(user.login).then((channels) => {
+                    await Promise.all(data.map(async (user) => {
+                        const [ oldUser, cahnnels = await Promise.all([
+                            this._list.getUserByName(user.login),
+                            this._getFavs(user.login)
+                        ]);
                         user.favorites = channels.map((ch) => ch.login);
                         emit(this, "updateduser", user);
 
-                        channels = channels.filter((ch) => !oldUser.favorites.some((c) => c == ch.login));
+                        channels = channels.filter((ch) => !oldUser.favorites.includes(ch.login));
                         emit(this, "newchannels", channels);
-
-                        oldUser.favorites = user.favorites;
-                    });
-                });
+                    }));
+                }
             }
         });
     }
-    updateRequest(channels) {
-        new PaginationHelper({
-            url: baseUrl + "users?" + qs.stringify({
-                ids: channels.map((ch) => ch.login).join(","),
-                fields: USER_FIELDS,
-                limit: 100
-            }) + "&page=",
-            initialPage: 1,
-            pageSize: 1,
-            request: (url, callback, initial) => {
-                if(initial) {
-                    this._qs.queueUpdateRequest([ url ], this._qs.HIGH_PRIORITY, callback);
+    updateRequest() {
+        this._qs.queueUpdateRequest({
+            getURLs: async () => {
+                const channels = await this._list.getChannels();
+                if(!channels.length) {
+                    return channels;
                 }
-                else {
-                    return this._qs.queueRequest(url);
-                }
+                const ids = channels.map((ch) => ch.login).join(",");
+                const props = qs.stringify({
+                    ids,
+                    fields: USER_FIELDS,
+                    limit: 100
+                });
+                return [ `${baseUrl}users?${props}` ];
             },
-            fetchNextPage(data) {
-                return data.parsedJSON && data.parsedJSON.has_more;
-            },
-            getItems(data) {
-                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
-                    return data.parsedJSON.list;
-                }
-                else {
-                    return [];
-                }
-            },
-            onComplete: (data) => {
-                data = data.map((v) => getChannelFromJSON(v));
+            onComplete: async (result, url) => {
+                if(result.ok && result.parsedJSON && result.parsedJSON.list) {
+                    const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more;
+                    let channels = result.parsedJSON.list;
+                    if(fetchNextPage(request)) {
+                        const otherChannels = await promisedPaginationHelper({
+                            url: url  + "&page=",
+                            initialPage: 2,
+                            pageSize: 1,
+                            request: (url) => this._qs.queueRequest(url),
+                            fetchNextPage,
+                            getItems(data) {
+                                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
+                                    return data.parsedJSON.list;
+                                }
+                                else {
+                                    return [];
+                                }
+                            }
+                        });
+                        channels = channels.concat(otherChannels);
+                    }
+                    channels = channels.map((v) => getChannelFromJSON(v));
 
-                Promise.all(data.map((ch) => this._getStreamDetailsForChannel(ch)))
-                    .then((channels) => emit(this, "updatedchannels", channels));
+                    channels = await Promise.all(channels.map((ch) => this._getStreamDetailsForChannel(ch)));
+                    emit(this, "updatedchannels", channels);
+                }
             }
         });
     }

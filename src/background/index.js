@@ -132,22 +132,6 @@ controller.addEventListener("beforechanneldeleted", qsPause);
 //TODO do counting instead of relying on randomness being in our favor ;)
 controller.addEventListener("afterchanneldeleted", qsResume);
 
-prefs.get([
-    "updateInterval",
-    "queue_ratio",
-    "queue_maxRequestBatchSize"
-]).then(([
-    interval,
-    ratio,
-    batchSize
-]) => {
-    qs.setOptions({
-        interval: S_TO_MS_FACTOR * interval,
-        amount: 1 / ratio,
-        maxSize: batchSize
-    });
-});
-
 qs.addListeners({
     paused: () => list.setQueuePaused(true),
     resumed: () => list.setQueuePaused(false)
@@ -160,10 +144,6 @@ prefs.get(upKeys).then((values) => {
 });
 
 prefs.addEventListener("change", ({ detail: { pref, value } }) => {
-    if(pref == "updateInterval") {
-        const interval = parseInt(value, 10);
-        qs.updateOptions(S_TO_MS_FACTOR * interval);
-    }
     if(pref in usedPrefs) {
         applyValue(pref, value);
     }

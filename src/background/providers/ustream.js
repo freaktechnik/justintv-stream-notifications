@@ -89,11 +89,17 @@ class Ustream extends GenericProvider {
             throw new Error("Error getting channel details for channel " + channelname);
         }
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => baseURL + "channels/" + channel.login + ".json");
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
-            if(data.parsedJSON && data.parsedJSON.channel) {
-                emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.channel));
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => `${baseURL}channels/${channel.login}.json`);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (data) => {
+                if(data.parsedJSON && data.parsedJSON.channel) {
+                    emit(this, "updatedchannels", getChannelFromJSON(data.parsedJSON.channel));
+                }
             }
         });
     }

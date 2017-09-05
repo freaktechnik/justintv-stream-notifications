@@ -98,58 +98,70 @@ class NewLivestream extends GenericProvider {
             }
         });
     }
-    updateFavsRequest(users) {
-        const urls = users.map((user) => baseURL + user.login);
-        this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (user) => {
-            if(user.parsedJSON && "id" in user.parsedJSON) {
-                const usr = users.find((u) => u.login == user.parsedJSON.id || u.login == user.parsedJSON.short_name);
-                usr.uname = user.parsedJSON.full_name;
-                usr.image = {
-                    [user.parsedJSON.picture.width]: user.parsedJSON.picture.url,
-                    "170": user.parsedJSON.picture.small_url,
-                    "50": user.parsedJSON.picture.thumb_url
-                };
-                promisedPaginationHelper({
-                    url: baseURL + user.parsedJSON.id + "/following?maxItems=50&page=",
-                    pageSize: 50,
-                    request: (url) => {
-                        return this._qs.queueRequest(url);
-                    },
-                    fetchNextPage(data) {
-                        return data.parsedJSON && data.parsedJSON.total > this.result.length;
-                    },
-                    getItems(data) {
-                        if(data.parsedJSON && "data" in data.parsedJSON) {
-                            return data.parsedJSON.data;
+    updateFavsRequest() {
+        const getURLs = async () => {
+            const users = await this._list.getUsers();
+            return users.map((user) => baseURL + user.login);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            priority: this._qs.LOW_PRIORITY,
+            onComplete: async (user) => {
+                if(user.parsedJSON && "id" in user.parsedJSON) {
+                    const usr = await this._list.getUserByName(user.parsedJSON.short_name || user.parsedJSON.id);
+                    usr.uname = user.parsedJSON.full_name;
+                    usr.image = {
+                        [user.parsedJSON.picture.width]: user.parsedJSON.picture.url,
+                        "170": user.parsedJSON.picture.small_url,
+                        "50": user.parsedJSON.picture.thumb_url
+                    };
+                    const follows = await promisedPaginationHelper({
+                        url: baseURL + user.parsedJSON.id + "/following?maxItems=50&page=",
+                        pageSize: 50,
+                        request: (url) => {
+                            return this._qs.queueRequest(url);
+                        },
+                        fetchNextPage(data) {
+                            return data.parsedJSON && data.parsedJSON.total > this.result.length;
+                        },
+                        getItems(data) {
+                            if(data.parsedJSON && "data" in data.parsedJSON) {
+                                return data.parsedJSON.data;
+                            }
+                            else {
+                                return [];
+                            }
+                        },
+                        getPageNumber(page) {
+                            return page + 1;
                         }
-                        else {
-                            return [];
-                        }
-                    },
-                    getPageNumber(page) {
-                        return page + 1;
-                    }
-                }).then((follows) => {
+                    });
                     const channels = follows.map((follow) => getChannelFromJSON(follow)),
-                        newChannels = channels.filter((channel) => usr.favorites.some((ch) => ch.login == channel.login));
+                        newChannels = channels.filter((channel) => !usr.favorites.includes(channel.login));
                     if(newChannels.length > 0) {
                         usr.favorites = channels.map((channel) => channel.login);
                     }
                     emit(this, "updateduser", usr);
                     emit(this, "newchannels", newChannels);
-                });
+                }
             }
         });
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => baseURL + channel.login);
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
-            if(data.parsedJSON && "id" in data.parsedJSON) {
-                const channel = getChannelFromJSON(data.parsedJSON);
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => baseURL + channel.login);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (data) => {
+                if(data.parsedJSON && "id" in data.parsedJSON) {
+                    const channel = getChannelFromJSON(data.parsedJSON);
 
-                this._getChannelStatus(data.parsedJSON, channel).then((channel) =>{
-                    emit(this, "updatedchannels", channel);
-                });
+                    this._getChannelStatus(data.parsedJSON, channel).then((channel) =>{
+                        emit(this, "updatedchannels", channel);
+                    });
+                }
             }
         });
     }

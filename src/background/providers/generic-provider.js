@@ -10,6 +10,8 @@ import prefs from "../../preferences";
 import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
 import EventTarget from 'event-target-shim';
+import ProviderChannelList from '../channel/provider-list';
+import ChannelList from '../channel/list';
 
 const _ = browser.i18n.getMessage,
     methodNotSupported = (type, method) => Promise.reject(new Error(type + "." + method + " is not supported")),
@@ -19,6 +21,11 @@ const _ = browser.i18n.getMessage,
             queues.set(provider, qs.getServiceForProvider(provider._type));
         }
         return queues.get(provider);
+    },
+    listFor = (provider) => {
+        const list = new ProviderChannelList(provider);
+        ChannelList.registerList(list);
+        return list;
     };
 
 /**
@@ -157,6 +164,17 @@ export default class GenericProvider extends EventTarget {
          * @protected
          */
         this._type = type;
+        this._list.getChannels().then((channels) => {
+            if(channels.length) {
+                this.updateFavsRequest();
+            }
+        });
+        this._list.getUsers().then((users) => {
+            if(users.length) {
+                this.updateFavsRequest();
+            }
+        });
+        //TODO re-add requests and remove them on list events?
     }
     /**
      * An instance of the QueueService for this provider.
@@ -171,6 +189,13 @@ export default class GenericProvider extends EventTarget {
     // For testing.
     _setQs(val) {
         queues.set(this, val);
+    }
+
+    get _list() {
+        if(!this._plist) {
+            this._plist = listFor(this._type);
+        }
+        return this._plist;
     }
     /**
      * Indicates if exploring features should hold mature results. Respects
@@ -268,14 +293,12 @@ export default class GenericProvider extends EventTarget {
      * Queues a reocurring update request for updating the favorite channels
      * of the users.
      *
-     * @param {Array.<module:channel/core.User>} users - Users to update the
-     *                                                   favorites of.
      * @fires module:providers/generic-provider.GenericProvider#updateduser
      * @fires module:providers/generic-provider.GenericProvider#newchannels
      * @abstract
      * @returns {undefined}
      */
-    updateFavsRequest(users) {
+    updateFavsRequest() {
         throw new Error(this.name + ".updateFavsRequest is not supported.");
     }
     /**
@@ -291,13 +314,11 @@ export default class GenericProvider extends EventTarget {
      * Queues a reocurring update request for updating the live status of all
      * channels for this provider.
      *
-     * @param {Array.<module:channel/core.Channel>} channels - The Channel
-     *                                                        objects to update.
      * @fires module:providers/generic-provider.GenericProvider#updatedchannels
      * @abstract
      * @returns {undefined}
      */
-    updateRequest(channels) {
+    updateRequest() {
         throw new Error(this.name + ".updateRequest is not supported.");
     }
     /**

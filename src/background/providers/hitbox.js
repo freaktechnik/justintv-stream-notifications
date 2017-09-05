@@ -101,45 +101,55 @@ class Hitbox extends GenericProvider {
             }
         });
     }
-    updateFavsRequest(users) {
-        const urls = users.map((user) => baseURL + '/user/' + user.login);
-        this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (data) => {
-            if(data.ok && data.parsedJSON) {
-                const user = users.find((user) => user.login == data.parsedJSON.user_name);
-                user.image = {
-                    "200": cdnURL + data.parsedJSON.user_logo,
-                    "50": cdnURL + data.parsedJSON.user_logo_small
-                };
+    updateFavsRequest() {
+        const getURLs = async () => {
+            const users = await this._list.getUsers();
+            return users.map((user) => `${baseURL}/user/${user.login}`);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            priority: this._qs.LOW_PRIORITY,
+            onComplete: async (data) => {
+                if(data.ok && data.parsedJSON) {
+                    const user = await this._list.getUserByName(data.parsedJSON.user_name);
+                    user.image = {
+                        "200": cdnURL + data.parsedJSON.user_logo,
+                        "50": cdnURL + data.parsedJSON.user_logo_small
+                    };
 
-                promisedPaginationHelper({
-                    url: baseURL + '/following/user?user_name=' + user.login + '&limit=' + pageSize + '&offset=',
-                    pageSize,
-                    request: (url) => this._qs.queueRequest(url),
-                    fetchNextPage(data, pageSize) {
-                        return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
-                    },
-                    getItems(data) {
-                        if(data.parsedJSON && "following" in data.parsedJSON) {
-                            return data.parsedJSON.following;
+                    const follows = await promisedPaginationHelper({
+                        url: baseURL + '/following/user?user_name=' + user.login + '&limit=' + pageSize + '&offset=',
+                        pageSize,
+                        request: (url) => this._qs.queueRequest(url),
+                        fetchNextPage(data, pageSize) {
+                            return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
+                        },
+                        getItems(data) {
+                            if(data.parsedJSON && "following" in data.parsedJSON) {
+                                return data.parsedJSON.following;
+                            }
+                            else {
+                                return [];
+                            }
                         }
-                        else {
-                            return [];
-                        }
-                    }
-                }).then((follows) => {
+                    });
                     const newChannels = follows.filter((follow) => user.favorites.every((fav) => fav != follow.user_name));
                     user.favorites = follows.map((follow) => follow.user_name);
                     emit(this, "updateduser", user);
-                    return this._getChannels(newChannels.map((follow) => follow.user_name));
-                }).then((channels) => {
+                    const channels = await this._getChannels(newChannels.map((follow) => follow.user_name));
                     emit(this, "newchannels", channels);
-                });
+                }
             }
         });
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => baseURL + '/media/live/' + channel.login);
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
+    updateRequest() {
+        const getURLs = async () =>{
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => `${baseURL}/media/live/${channel.login}`);
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (data) => {
             if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
                 emit(this, "updatedchannels", getChannelFromJson(data.parsedJSON.livestream[0]));
             }

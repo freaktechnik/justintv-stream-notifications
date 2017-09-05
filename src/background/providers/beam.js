@@ -129,48 +129,47 @@ class Beam extends GenericProvider {
             throw new Error(`Could not get favorites for user ${username} on ${this.name}`);
         }
     }
-    async updateFavsRequest(users) {
-        const urls = await Promise.all(
-            users.map((user) => this._getUserIdFromUsername(user.login)
-                .then((id) => baseURL + "users/" + id))
-        );
+    async updateFavsRequest() {
+        const getURLs = async () => {
+            const users = await this._list.getUsers();
+            return Promise.all(users.map((user) => this._getUserIdFromUsername(user.login).then((id) => `${baseURL}users/${id}`)));
+        });
 
-        this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (data, url) => {
-            if(data.parsedJSON) {
-                const ch = new User(data.parsedJSON.username, this._type);
-                if("avatars" in data.parsedJSON) {
-                    ch.image = getImageFromAvatars(data.parsedJSON.avatars);
-                }
-                else {
-                    ch.image = getImageFromUserID(data.parsedJSON.id);
-                }
-
-                const oldUser = users.find((usr) => usr.login === ch.login);
-                ch.id = oldUser.id;
-
-                new PaginationHelper({
-                    url: url + "/follows?limit=" + pageSize + "&page=",
-                    pageSize,
-                    initialPage: 0,
-                    request: (url) => this._qs.queueRequest(url),
-                    getPageNumber: (page) => page + 1,
-                    fetchNextPage(data, pageSize) {
-                        return data.parsedJSON && data.parsedJSON.length == pageSize;
-                    },
-                    getItems: (data) => data.parsedJSON || [],
-                    onComplete: (follows) => {
-                        ch.favorites = follows.map((sub) => sub.token);
-                        emit(this, "updateduser", ch);
-
-                        Promise.all(follows.filter((sub) => {
-                            return oldUser.favorites.every((fav) => fav !== sub.token);
-                        }).map((sub) => this.getChannelDetails(sub.token)))
-                            .then((channels) => {
-                                emit(this, "newchannels", channels);
-                                oldUser.favorites = ch.favorites;
-                            });
+        this._qs.queueUpdateRequest({
+            getURLs,
+            priority: this._qs.LOW_PRIORITY,
+            onComplete: async (data, url) => {
+                if(data.parsedJSON) {
+                    const ch = new User(data.parsedJSON.username, this._type);
+                    if("avatars" in data.parsedJSON) {
+                        ch.image = getImageFromAvatars(data.parsedJSON.avatars);
                     }
-                });
+                    else {
+                        ch.image = getImageFromUserID(data.parsedJSON.id);
+                    }
+
+                    const oldUser = await this._list.getUserByName(ch.login);
+                    ch.id = oldUser.id;
+
+                    const follows = await promisedPaginationHelper({
+                        url: `${url}/follows?limit=${pageSize}&page=`,
+                        pageSize,
+                        initialPage: 0,
+                        request: (url) => this._qs.queueRequest(url),
+                        getPageNumber: (page) => page + 1,
+                        fetchNextPage(data, pageSize) {
+                            return data.parsedJSON && data.parsedJSON.length == pageSize;
+                        },
+                        getItems: (data) => data.parsedJSON || []
+                    });
+                    ch.favorites = follows.map((sub) => sub.token);
+                    emit(this, "updateduser", ch);
+
+                    const channels = await Promise.all(follows.filter((sub) => {
+                        return !oldUser.favorites.includes(sub.token);
+                    }).map((sub) => this.getChannelDetails(sub.token)));
+                    emit(this, "newchannels", channels);
+                }
             }
         });
     }
@@ -188,21 +187,27 @@ class Beam extends GenericProvider {
         }
         throw new Error("Error getting the details for the beam channel " + channelname);
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => `${baseURL}channels/${channel.login}`);
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data) => {
-            if(data.parsedJSON) {
-                const channel = getChannelFromJSON(data.parsedJSON);
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => `${baseURL}channels/${channel.login}`))
+        });
+        this._qs.queueUpdateRequest({
+            getURLs,
+            onComplete: (data) => {
+                if(data.parsedJSON) {
+                    const channel = getChannelFromJSON(data.parsedJSON);
 
-                if(channel.live.state === LiveState.OFFLINE) {
-                    return this._getHostee(data.parsedJSON.id).then((hostedChannel) => {
-                        if(hostedChannel !== null) {
-                            channel.live.redirectTo(hostedChannel);
-                        }
-                        emit(this, "updatedchannels", channel);
-                    });
+                    if(channel.live.state === LiveState.OFFLINE) {
+                        return this._getHostee(data.parsedJSON.id).then((hostedChannel) => {
+                            if(hostedChannel !== null) {
+                                channel.live.redirectTo(hostedChannel);
+                            }
+                            emit(this, "updatedchannels", channel);
+                        });
+                    }
+                    emit(this, "updatedchannels", channel);
                 }
-                emit(this, "updatedchannels", channel);
             }
         });
     }

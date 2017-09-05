@@ -65,6 +65,8 @@ import SerializedReadChannelList from '../../read-channel-list';
  * @event module:channel/list.ChannelList#unfixableerror
  */
 
+const eventTargets = new Set();
+
 /**
  * @class module:channel/list.ChannelList
  * @extends external:EventTarget
@@ -76,6 +78,29 @@ export default class ChannelList extends ReadChannelList {
      */
     constructor() {
         super();
+        this.registerList(this);
+    }
+
+    _emit(event, payload) {
+        for(const target of eventTargets.values()) {
+            emit(target, event, payload);
+        }
+    }
+
+    /**
+     * @param {module:channel/read-list.ReadChannelList} list - List to add events to.
+     */
+    static registerList(list) {
+        if(list instanceof ReadChannelList) {
+            eventTargets.add(list);
+        }
+    }
+
+    /**
+     * @param {module:channel/read-list.ReadChannelList} list - List to stop emitting events on.
+     */
+    static unregisterList(list) {
+        eventTargets.delete(list);
     }
 
     /**
@@ -138,7 +163,7 @@ export default class ChannelList extends ReadChannelList {
         await this._waitForRequest(req);
         channel.id = req.result;
         this.idCache.set(channel.type + channel.login, channel.id);
-        emit(this, "channelsadded", [ channel ]);
+        this._emit("channelsadded", [ channel ]);
         return channel;
     }
 
@@ -187,7 +212,7 @@ export default class ChannelList extends ReadChannelList {
                     });
                     transaction.oncomplete = () => {
                         if(addedChannels.length > 0) {
-                            emit(this, "channelsadded", addedChannels);
+                            this._emit("channelsadded", addedChannels);
                         }
                         resolve(addedChannels);
                     };
@@ -214,7 +239,7 @@ export default class ChannelList extends ReadChannelList {
             req = store.add(user.serialize());
         await this._waitForRequest(req);
         user.id = req.result;
-        emit(this, "useradded", user);
+        this._emit("useradded", user);
         return user;
     }
 
@@ -238,7 +263,7 @@ export default class ChannelList extends ReadChannelList {
         await this._waitForRequest(req);
         this.idCache.set(channel.type + channel.login, req.result);
         channel.id = req.result; //TODO was there a reason to fetch the channel here?
-        emit(this, "channelupdated", channel);
+        this._emit("channelupdated", channel);
         return channel;
     }
 
@@ -259,7 +284,7 @@ export default class ChannelList extends ReadChannelList {
             req = store.put(user.serialize());
         await this._waitForRequest(req);
         user.id = req.result;
-        emit(this, "userupdated", user);
+        this._emit("userupdated", user);
         return user;
     }
 
@@ -278,7 +303,7 @@ export default class ChannelList extends ReadChannelList {
             id = await this.getChannelId(id, type);
         }
 
-        emit(this, "beforechanneldeleted", id);
+        this._emit("beforechanneldeleted", id);
         const channel = await this.getChannel(id),
             transaction = this.db.transaction("channels", "readwrite"),
             store = transaction.objectStore("channels");
@@ -287,7 +312,7 @@ export default class ChannelList extends ReadChannelList {
             this._waitForRequest(store.delete(id))
         ]);
         this.idCache.delete(channel.type + channel.login);
-        emit(this, "channeldeleted", channel);
+        this._emit("channeldeleted", channel);
         return channel;
     }
 
@@ -305,7 +330,7 @@ export default class ChannelList extends ReadChannelList {
             store = transaction.objectStore("users"),
             req = store.delete(user.id);
         await this._waitForRequest(req);
-        emit(this, "userdeleted", user);
+        this._emit("userdeleted", user);
         return user;
     }
 

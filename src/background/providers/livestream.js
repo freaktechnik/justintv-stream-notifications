@@ -49,20 +49,25 @@ class Livestream extends GenericProvider {
             throw new Error("Error getting details for the Livestream channel " + username);
         }
     }
-    updateRequest(channels) {
-        const urls = channels.map((channel) => getChannelAPIUrl(channel.login) + "livestatus.json");
-        this._qs.queueUpdateRequest(urls, this._qs.HIGH_PRIORITY, (data, url) => {
-            if(data.parsedJSON && data.parsedJSON.channel) {
-                const requestLogin = url.match(/http:\/\/x([a-zA-Z0-9-]+)x\./)[1].replace("-", "_"),
-                    channel = channels.find((channel) => requestLogin == channel.login);
-                channel.live.setLive(data.parsedJSON.channel.isLive);
-                channel.viewers = data.parsedJSON.channel.currentViewerCount;
-                this._qs.queueRequest(getChannelAPIUrl(channel.login) + "latestclips.json?maxresults=1").then((data) => {
-                    if(data.parsedJSON && "channel" in data.parsedJSON && data.parsedJSON.channel.item.length) {
-                        channel.thumbnail = data.parsedJSON.channel.item[0].thumbnail["@url"];
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            return channels.map((channel) => getChannelAPIUrl(channel.login) + "livestatus.json");
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            async onComplete: (data, url) => {
+                if(data.parsedJSON && data.parsedJSON.channel) {
+                    const requestLogin = url.match(/http:\/\/x([a-zA-Z0-9-]+)x\./)[1].replace("-", "_"),
+                        channel = await this._list.getChannelByName(channel.login);
+                    channel.live.setLive(data.parsedJSON.channel.isLive);
+                    channel.viewers = data.parsedJSON.channel.currentViewerCount;
+                    const thumbnailInfo = await this._qs.queueRequest(getChannelAPIUrl(channel.login) + "latestclips.json?maxresults=1");
+                    if(thumbnailInfo.parsedJSON && "channel" in thumbnailInfo.parsedJSON && thumbnailInfo.parsedJSON.channel.item.length) {
+                        channel.thumbnail = thumbnailInfo.parsedJSON.channel.item[0].thumbnail["@url"];
                     }
                     emit(this, "updatedchannels", channel);
-                });
+                }
             }
         });
     }

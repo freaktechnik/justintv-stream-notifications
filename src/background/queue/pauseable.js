@@ -28,11 +28,6 @@ import { emit } from "../../utils";
  */
 export default class PauseableQueue extends RequestQueue {
     /**
-     * @type {boolean}
-     * @default false
-     */
-    _configured = false;
-    /**
      * Pauseable queue, pauses based on the network status.
      *
      * @constructs
@@ -40,12 +35,7 @@ export default class PauseableQueue extends RequestQueue {
      */
     constructor() {
         super();
-
-        /**
-         * @type {module:queue/pauseable~QueueOptions?}
-         * @private
-         */
-        this._queueState = {};
+        this.paused = false;
 
         this._listeners = {
             offline: this.pause.bind(this),
@@ -62,33 +52,18 @@ export default class PauseableQueue extends RequestQueue {
         }
         this.clear();
     }
-
-    /**
-     * @type {boolean}
-     * @default false
-     * @readonly
-     */
-    get paused() {
-        return this.interval === 0;
-    }
-    /**
-     * @override
-     */
-    autoFetch(interval, amount = this._queueState.amount, maxSize = this._queueState.maxSize) {
-        if(interval > 0) {
-            this._queueState = {
-                interval,
-                amount,
-                maxSize
-            };
-            this._configured = true;
-        }
-        if(navigator.onLine || interval === 0) {
-            super.autoFetch(interval, amount, maxSize);
-        }
-        else {
-            this.pause();
-        }
+    getWorker() {
+        return () => {
+            if(this.queue.length && !this.paused) {
+                return this.getRequest().then(worker);
+            }
+            else {
+                this.workers.remove(worker);
+                if(!this.workingOnQueue) {
+                    emit(this, "pause");
+                }
+            }
+        };
     }
     /**
      * Temporarily halt execution of the queue.
@@ -97,8 +72,8 @@ export default class PauseableQueue extends RequestQueue {
      * @returns {undefined}
      */
     pause() {
-        if(this._configured && !this.paused) {
-            this.autoFetch(0);
+        if(!this.paused) {
+            this.paused = true;
             emit(this, "pause");
         }
     }
@@ -109,8 +84,11 @@ export default class PauseableQueue extends RequestQueue {
      * @returns {undefined}
      */
     resume() {
-        if(this._configured) {
-            this.autoFetch(this._queueState.interval);
+        if(this.paused) {
+            this.paused = false;
+            if(this.queue.length) {
+                this.startAllWorkers();
+            }
             emit(this, "resume");
         }
     }

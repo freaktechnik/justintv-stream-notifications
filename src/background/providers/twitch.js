@@ -112,62 +112,80 @@ class Twitch extends GenericProvider {
             }
         });
     }
-    updateFavsRequest(users) {
-        const urls = users.map((user) => baseURL + '/users/' + user.login);
+    updateFavsRequest() {
+        const getURLs = async () => {
+            const users = await this._list.getUsers();
+            return users.map((user) => `${baseURL}/users/${user.login}`);
+        };
 
-        this._qs.queueUpdateRequest(urls, this._qs.LOW_PRIORITY, (data) => {
-            if(data.parsedJSON && !data.parsedJSON.error) {
-                const user = users.find((user) => user.login == data.parsedJSON.name);
-                user.uname = data.parsedJSON.display_name;
-                user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
+        this._qs.queueUpdateRequest({
+            getURLs,
+            priority: this._qs.LOW_PRIORITY,
+            headers,
+            onComplete: async (data) => {
+                if(data.parsedJSON && !data.parsedJSON.error) {
+                    const user = await this._list.getUserByName(data.parsedJSON.name);
+                    user.uname = data.parsedJSON.display_name;
+                    user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
 
-                new PaginationHelper({
-                    url: baseURL + '/users/' + user.login + '/follows/channels?limit=' + itemsPerPage + '&offset=',
-                    pageSize: itemsPerPage,
-                    request: (url) => {
-                        return this._qs.queueRequest(url, headers);
-                    },
-                    fetchNextPage(data) {
-                        return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
-                    },
-                    getItems(data) {
-                        if(data.parsedJSON && "follows" in data.parsedJSON) {
-                            return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                    const follows = await promisedPaginationHelper({
+                        url: `${baseURL}/users/${user.login}/follows/channels?limit=${itemsPerPage}&offset=`,
+                        pageSize: itemsPerPage,
+                        request: (url) => this._qs.queueRequest(url, headers),
+                        fetchNextPage(data) {
+                            return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
+                        },
+                        getItems(data) {
+                            if(data.parsedJSON && "follows" in data.parsedJSON) {
+                                return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                            }
+                            else {
+                                return [];
+                            }
                         }
-                        else {
-                            return [];
-                        }
-                    },
-                    onComplete: (follows) => {
-                        emit(this, "newchannels", follows.filter((c) => user.favorites.every((name) => name !== c.login)));
+                    });
+                    emit(this, "newchannels", follows.filter((c) => !user.favorites.includes(c.login)));
 
-                        user.favorites = follows.map((c) => c.login);
-                        emit(this, "updateduser", user);
-                    }
-                });
+                    user.favorites = follows.map((c) => c.login);
+                    emit(this, "updateduser", user);
+                }
             }
-        }, headers);
+        });
     }
-    updateRequest(channels) {
-        const channelsString = channels.map((c) => c.login).join(",");
-        new PaginationHelper({
-            url: baseURL + "/streams?channel=" + channelsString + "&stream_type=live&limit=" + itemsPerPage + "&offset=",
-            pageSize: itemsPerPage,
-            request: (url, callback, initial) => {
-                if(initial) {
-                    this._qs.queueUpdateRequest([ url ], this._qs.HIGH_PRIORITY, callback, headers);
-                }
-                else {
-                    return this._qs.queueRequest(url, headers);
-                }
-            },
-            fetchNextPage(data, pageSize) {
-                return data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize;
-            },
-            getItems: (data) => {
-                if(data.parsedJSON && "streams" in data.parsedJSON) {
-                    const streams = data.parsedJSON.streams;
-                    return streams.map((obj) => {
+    updateRequest() {
+        const getURLs = async () => {
+            const channels = await this._list.getChannels();
+            if(channels.length) {
+                const channelsString = channels.map((c) => c.login).join(",");
+                return [ `${baseURL}/streams?channel=${channelsString}&stream_type=live&limit=${itemsPerPage}` ];
+            }
+            return channels;
+        };
+        this._qs.queueUpdateRequest({
+            getURLs,
+            headers,
+            onComplete: async (firstPage, url) => {
+                if(firstPage.parsedJSON && "streams" in firstPage.parsedJSON) {
+                    const fetchNextPage = (data, pageSize) => data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize;
+                    let channels = firstPage.parsedJSON.streams;
+                    if(fetchNextPage(firstPage, itemsPerPage)) {
+                        const otherChannels = await promisedPaginationHelper({
+                            url: url + "&offset=",
+                            pageSize: itemsPerPage,
+                            request: (url) => this._qs.queueRequest(url, headers),
+                            fetchNextPage,
+                            getItems: (data) => {
+                                if(data.parsedJSON && "streams" in data.parsedJSON) {
+                                    return data.parsedJSON.streams;
+                                }
+                                else {
+                                    return [];
+                                }
+                            }
+                        });
+                        channels = channels.concat(otherChannels);
+                    }
+                    channels = await Promise.all(streams.map(async (obj) => {
                         const cho = getChannelFromJSON(obj.channel);
                         cho.viewers = obj.viewers;
                         cho.thumbnail = obj.preview.medium;
@@ -178,14 +196,23 @@ class Twitch extends GenericProvider {
                             cho.live.setLive(true);
                         }
 
-                        let oldChan = channels.find((ch) => cho.login == ch.login);
-                        if(oldChan === undefined) {
-                            const findChan = (chan, ch) => ch.login == chan;
-                            for(const i of idOfChannel.entries()) {
-                                if(i[1] == obj.channel._id) {
-                                    oldChan = channels.find(findChan.bind(null, i[0]));
-                                    if(oldChan !== undefined) {
-                                        break;
+                        let oldChan;
+                        try {
+                            oldChan = await this._list.getChannel(cho.login);
+                        }
+                        catch(e) {
+                            if(oldChan === undefined) {
+                                for(const i of idOfChannel.entries()) {
+                                    if(i[1] == obj.channel._id) {
+                                        try {
+                                            oldChan = await this._list.getChannel(i[0]);
+                                            idOfChannel.set(cho.login, obj.channel_id);
+                                            idOfChannel.delete(i[0]);
+                                            break;
+                                        }
+                                        catch(e) {
+                                            // ignore, no result
+                                        }
                                     }
                                 }
                             }
@@ -195,24 +222,19 @@ class Twitch extends GenericProvider {
                             oldChan.live = cho.live;
                         }
                         return cho;
-                    });
-                }
-                else {
-                    return [];
-                }
-            },
-            onComplete: async (data) => {
-                const liveChans = await filterAsync(data, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING));
-                if(liveChans.length) {
-                    emit(this, "updatedchannels", liveChans);
-                }
-                if(liveChans.length != channels.length) {
-                    const offlineChans = dedupe(channels, data),
-                        chans = await this._getHostedChannels(offlineChans, liveChans);
-                    emit(this, "updatedchannels", chans);
-                }
-            }
-        });
+                    }));
+                    const [ liveChans, oldChans ] = await Promise.all([
+                        filterAsync(channels, (cho) => cho.live.isLive(LiveState.TOWARD_BROADCASTING)),
+                        this._list.getChannels()
+                    ]);
+                    if(liveChans.length) {
+                        emit(this, "updatedchannels", liveChans);
+                    }
+                    if(liveChans.length != oldChans.length) {
+                        const offlineChans = dedupe(oldChans, channels),
+                            chans = await this._getHostedChannels(offlineChans, liveChans);
+                        emit(this, "updatedchannels", chans);
+                    }
     }
     async updateChannel(channelname, ignoreHosted = false) {
         const [ data, channel ] = await Promise.all([

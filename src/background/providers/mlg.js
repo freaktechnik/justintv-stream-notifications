@@ -109,26 +109,36 @@ class MLG extends GenericProvider {
         }
         throw new Error("Couldn't get the channel details for " + channelname + " for " + this.name);
     }
-    updateRequest(channels) {
-        this._qs.queueUpdateRequest([ baseURL + "all" ], this._qs.HIGH_PRIORITY, async (data) => {
-            const info = await this._qs.queueRequest(infoURL + infoArgs);
+    updateRequest() {
+        this._qs.queueUpdateRequest({
+            getURLs: async () => {
+                const channels = await this._list.getChannels();
+                if(channels.length) {
+                    return [ baseURL + "all" ];
+                }
+                return channels;
+            },
+            onComplete: async (data) => {
+                const info = await this._qs.queueRequest(infoURL + infoArgs);
 
-            if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
-                let chans = data.parsedJSON.data.items.filter((status) => {
-                    return channels.some((channel) => status.stream_name == channel.login);
-                });
+                if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
+                    const channels = await this._list.getChannels();
+                    let chans = data.parsedJSON.data.items.filter((status) => {
+                        return channels.some((channel) => status.stream_name == channel.login);
+                    });
 
-                chans = await Promise.all(chans.map(async (status) => {
-                    const channel = await this._getChannelFromJSON(info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id));
-                    if(status.status == 2) {
-                        channel.live = new LiveState(LiveState.REBROADCAST);
-                    }
-                    else {
-                        channel.live.setLive(await isLive(status.status));
-                    }
-                    return channel;
-                }));
-                emit(this, "updatedchannels", chans);
+                    chans = await Promise.all(chans.map(async (status) => {
+                        const channel = await this._getChannelFromJSON(info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id));
+                        if(status.status == 2) {
+                            channel.live = new LiveState(LiveState.REBROADCAST);
+                        }
+                        else {
+                            channel.live.setLive(await isLive(status.status));
+                        }
+                        return channel;
+                    }));
+                    emit(this, "updatedchannels", chans);
+                }
             }
         });
     }
