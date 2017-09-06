@@ -97,9 +97,15 @@ export default class RequestQueue extends EventTarget {
                 headers: request.headers,
                 redirect: "follow"
             });
-            const jsonClone = response.clone();
-            const json = await jsonClone.json();
-            response.parsedJSON = json;
+            // Can't do mime type detection here because some APIs don't feel the need to declare that.
+            try {
+                const jsonClone = response.clone();
+                const json = await jsonClone.json();
+                response.parsedJSON = json;
+            }
+            catch(e) {
+                // response isn't json.
+            }
             request.onComplete(response);
         }
         catch(e) {

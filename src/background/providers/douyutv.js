@@ -36,6 +36,7 @@ const type = "douyutv",
 
 class Douyutv extends GenericProvider {
     authURL = [ "http://www.douyutv.com" ];
+    _enabled = false;
 
     getChannelDetails(username) {
         return this._qs.queueRequest(baseURL + signAPI("room/", username)).then((data) => {
