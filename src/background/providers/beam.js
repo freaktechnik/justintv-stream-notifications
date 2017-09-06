@@ -198,7 +198,9 @@ class Beam extends GenericProvider {
 
                     if(channel.live.state === LiveState.OFFLINE) {
                         const hostedChannel = await this._getHostee(data.parsedJSON.id);
-                        channel.live.redirectTo(hostedChannel);
+                        if(hostedChannel !== null) {
+                            channel.live.redirectTo(hostedChannel);
+                        }
                     }
                     return channel;
                 }

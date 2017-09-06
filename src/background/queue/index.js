@@ -143,7 +143,7 @@ export default class RequestQueue extends EventTarget {
      * @returns {undefined}
      */
     async startWorker() {
-        if(this.workers.size < await this.workerCount) {
+        if(this.workers.size < (await this.workerCount)) {
             const worker = this.getWorker();
             this.workers.add(worker);
             worker();

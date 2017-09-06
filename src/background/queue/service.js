@@ -163,7 +163,7 @@ class QueueService {
                 }
                 const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => {
                     return onComplete(result, url);
-                }).catch((e) => console.error("Error during", priority, "update request for", this.type, ":", e)));
+                }).catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
                 await Promise.all(promises);
                 const interval = await this.interval;
                 browser.alarms.create(alarmName, {

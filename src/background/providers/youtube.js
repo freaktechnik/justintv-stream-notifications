@@ -257,7 +257,7 @@ class YouTube extends GenericProvider {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
             const key = await apiKey;
-            return channels.map(async (channel) => {
+            return channels.map((channel) => {
                 return baseURL + "search?" + querystring.stringify({
                     part: "id",
                     channelId: channel.login,
