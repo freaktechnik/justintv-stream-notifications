@@ -103,7 +103,8 @@ class PortWrapper extends EventTarget {
      * @async
      * @param {string} command - Command to send.
      * @param {?} [payload] - Payload to send along with the request.
-     * @throws {?} With the other side's' error.
+     * @throws {?} With the other side's error.
+     * @throws {PortGoneError} If the port disconnects before a reply arrives.
      * @returns {?} Response from the other side.
      */
     request(command, payload) {
@@ -190,7 +191,8 @@ export default class Port extends PortWrapper {
      * @param {string} command - Command to send.
      * @param {?} [payload] - Payload to send along with the request.
      * @throws {NoPortError} If no port is connected.
-     * @throws {?} With the other side's' error.
+     * @throws {PortGoneError} If the port disconnects while waiting for a reply.
+     * @throws {?} With the other side's error.
      * @returns {?} Response from the other side.
      */
     request(command, payload) {

@@ -151,8 +151,9 @@ class QueueService {
             this.unqueueUpdateRequest(priority);
         }
 
-        const alarmName = this.getAlarmName(priority);
-        const requestListener = this.getRequestProperty(priority);
+        const alarmName = this.getAlarmName(priority),
+            requestListener = this.getRequestProperty(priority),
+            intervalModifier = priority === QueueService.HIGH_PRIORITY ? 1 : 4;
 
         this[requestListener] = async (alarm) => {
             if(alarm.name === alarmName) {
@@ -167,7 +168,7 @@ class QueueService {
                 await Promise.all(promises);
                 const interval = await this.interval;
                 browser.alarms.create(alarmName, {
-                    when: Date.now() + interval
+                    when: Date.now() + (interval * intervalModifier)
                 });
             }
         };
@@ -175,7 +176,7 @@ class QueueService {
         this[requestListener]({ name: alarmName });
         return this.interval.then((interval) => {
             browser.alarms.create(alarmName, {
-                when: Date.now() + interval
+                when: Date.now() + (interval * intervalModifier)
             });
         });
     }
