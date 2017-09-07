@@ -132,12 +132,12 @@ class Dailymotion extends GenericProvider {
                 if(!users.length) {
                     return users;
                 }
-                const ids = users.map((ch) => ch.login).join(",");
-                const params = qs.stringify({
-                    ids,
-                    fields: USER_FIELDS,
-                    limit: 100
-                });
+                const ids = users.map((ch) => ch.login).join(","),
+                    params = qs.stringify({
+                        ids,
+                        fields: USER_FIELDS,
+                        limit: 100
+                    });
                 return [ `${baseUrl}users?${params}` ];
             },
             onComplete: async (firstPage, url) => {
@@ -150,7 +150,7 @@ class Dailymotion extends GenericProvider {
                             initialPage: 2,
                             pageSize: 1,
                             request: (url) => this._qs.queueRequest(url),
-                            fetchNextPage: fetchNextPage,
+                            fetchNextPage,
                             getItems(data) {
                                 if(data.ok && data.parsedJSON && data.parsedJSON.list) {
                                     return data.parsedJSON.list;

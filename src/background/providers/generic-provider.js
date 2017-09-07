@@ -290,6 +290,7 @@ export default class GenericProvider extends EventTarget {
     /**
      * @private
      * @fires module:providers/generic-provider.GenericProvider#updatedchannels
+     * @returns {undefined}
      */
     _queueUpdateRequest() {
         const config = this.updateRequest();
@@ -312,6 +313,7 @@ export default class GenericProvider extends EventTarget {
      * @private
      * @fires module:providers/generic-provider.GenericProvider#updateduser
      * @fires module:providers/generic-provider.GenericProvider#newchannels
+     * @returns {undefined}
      */
     _queueFavsRequest() {
         const config = this.updateFavsRequest();
@@ -410,7 +412,7 @@ export default class GenericProvider extends EventTarget {
      *
      * @fires module:providers/generic-provider.GenericProvider#updatedchannels
      * @abstract
-     * @returns {Array.<module:channel/core.Channel>}
+     * @returns {Array.<module:channel/core.Channel>} Updated channels.
      * @async
      */
     updateRequest() {

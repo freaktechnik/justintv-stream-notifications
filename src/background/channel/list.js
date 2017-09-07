@@ -92,6 +92,7 @@ export default class ChannelList extends ReadChannelList {
 
     /**
      * @param {module:channel/read-list.ReadChannelList} list - List to add events to.
+     * @returns {undefined}
      */
     static registerList(list) {
         if(list instanceof ReadChannelList) {
@@ -101,6 +102,7 @@ export default class ChannelList extends ReadChannelList {
 
     /**
      * @param {module:channel/read-list.ReadChannelList} list - List to stop emitting events on.
+     * @returns {undefined}
      */
     static unregisterList(list) {
         eventTargets.delete(list);

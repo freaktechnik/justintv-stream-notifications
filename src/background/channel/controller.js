@@ -185,8 +185,8 @@ export default class ChannelController extends EventTarget {
         });
         this._list.addEventListener("unfixableerror", ({ detail: e }) => {
             let message,
-                actions = [],
                 actionsListener;
+            const actions = [];
             if(e instanceof CantOpenListError) {
                 message = browser.i18n.getMessage("cookies_disabled");
                 actions.push(browser.i18n.getMessage("enable_cookies"));
@@ -195,7 +195,7 @@ export default class ChannelController extends EventTarget {
             else {
                 message = browser.i18n.getMessage("restore_failed");
                 actions.push(browser.i18n.getMessage("restore_action"));
-                actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL })
+                actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
             }
             const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
             es.addEventListener("action", actionsListener);

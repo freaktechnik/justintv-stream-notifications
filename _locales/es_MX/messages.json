@@ -251,6 +251,10 @@
         "message": "New Livestream",
         "description": "Provider name for the new livestream.com"
     },
+    "cookies_disabled": {
+        "message": "Could not read your channel list, because cookies are disabled for the extension",
+        "description": "Error message shown, when cookies are not enabled for the extension and it thus can't open the database."
+    },
     "cm_remove.title": {
         "message": "Remove the selected item(s).",
         "description": "Tooltip of the button to remove the selected users or channels"
@@ -302,6 +306,10 @@
     "cm_autoAdd": {
         "message": "Auto add",
         "description": "Button to automatically add all users the user has credentials stored for"
+    },
+    "enable_cookies": {
+        "message": "Help me fix this",
+        "description": "Button label to resolve the cookies problem. Links to a website with a guide."
     },
     "panel_nonlive_title": {
         "message": "Treat non-live streams as",
