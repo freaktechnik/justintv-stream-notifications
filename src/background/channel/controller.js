@@ -7,7 +7,7 @@ import providers from "../providers";
 import ChannelsManager from "./manager";
 import ChannelList from "./list";
 import EventSink from '../providers/events';
-import { emit, invokeOnce } from "../../utils";
+import { emit } from "../../utils";
 import ParentalControls from "../parental-controls";
 import { flatten, partial, debounce } from "underscore";
 import * as debugDump from "./dump";
@@ -16,6 +16,7 @@ import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
 import { formatChannel, formatChannels } from './utils';
+import { CantOpenListError } from '../../read-channel-list';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded
@@ -31,6 +32,7 @@ import { formatChannel, formatChannels } from './utils';
  */
 
 const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-reset-add-ons-and-settings",
+    ACCEPT_COOKIES_URL = "http://streamnotifier.ch/help/accept-cookies",
     /**
      * Filters mature channels if parental controls are activated.
      *
@@ -181,11 +183,22 @@ export default class ChannelController extends EventTarget {
                 });
             }
         });
-        this._list.addEventListener("unfixableerror", () => {
-            const es = new ErrorState(browser.i18n.getMessage("restore_failed"), ErrorState.UNRECOVERABLE, [
-                browser.i18n.getMessage("restore_action")
-            ]);
-            es.addEventListener("action", () => browser.tabs.create({ url: REFRESH_PROFILE_URL }));
+        this._list.addEventListener("unfixableerror", ({ detail: e }) => {
+            let message,
+                actions = [],
+                actionsListener;
+            if(e instanceof CantOpenListError) {
+                message = browser.i18n.getMessage("cookies_disabled");
+                actions.push(browser.i18n.getMessage("enable_cookies"));
+                actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
+            }
+            else {
+                message = browser.i18n.getMessage("restore_failed");
+                actions.push(browser.i18n.getMessage("restore_action"));
+                actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL })
+            }
+            const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
+            es.addEventListener("action", actionsListener);
         });
         // Provider update events
 

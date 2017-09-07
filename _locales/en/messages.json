@@ -540,5 +540,13 @@
     "queue_concurrentRequests_title": {
         "message": "Concurrent request count",
         "description": "Title of the concurrent request count setting."
+    },
+    "cookies_disabled": {
+        "message": "Could not read your channel list, because cookies are disabled for the extension",
+        "description": "Error message shown, when cookies are not enabled for the extension and it thus can't open the database."
+    },
+    "enable_cookies": {
+        "message": "Help me fix this",
+        "description": "Button label to resolve the cookies problem. Links to a website with a guide."
     }
 }

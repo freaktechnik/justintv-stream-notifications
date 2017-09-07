@@ -42,6 +42,12 @@ export class FixListError extends Error {
     }
 }
 
+export class CantOpenListError extends Error {
+    constructor() {
+        super("Can not open list due to security settings");
+    }
+}
+
 /**
  * @class module:read-channel-list.ReadChannelList
  * @extends external:EventTarget
@@ -168,7 +174,15 @@ export default class ReadChannelList extends EventTarget {
 
         this._openingDB = new Promise((resolve, reject) => {
             // Try to open the DB
-            const request = window.indexedDB.open(name, VERSION);
+            let request;
+            try {
+                request = window.indexedDB.open(name, VERSION);
+            }
+            catch(e) {
+                reject(new CantOpenListError());
+                return;
+            }
+
             request.onupgradeneeded = (e) => {
                 this.db = e.target.result;
 

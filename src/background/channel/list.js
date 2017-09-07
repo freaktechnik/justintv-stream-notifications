@@ -12,7 +12,7 @@ import prefs from "../../preferences";
 import { Channel } from "./core";
 import LiveState from "../../live-state";
 import ReadChannelList from './read-list';
-import { FixListError } from '../../read-channel-list';
+import { FixListError, CantOpenListError } from '../../read-channel-list';
 import SerializedReadChannelList from '../../read-channel-list';
 
 /**
@@ -63,6 +63,7 @@ import SerializedReadChannelList from '../../read-channel-list';
  * The database could not be repaired.
  *
  * @event module:channel/list.ChannelList#unfixableerror
+ * @type {Error}
  */
 
 const eventTargets = new Set();
@@ -133,12 +134,17 @@ export default class ChannelList extends ReadChannelList {
                 }
             });
         }).then(() => emit(this, "ready")).catch((error) => {
-            if(typeof error === "object" && error instanceof FixListError) {
-                return this.clear().catch((e) => {
-                    console.error("Couldn't delete the DB");
-                    emit(this, "unfixableerror");
-                    throw e;
-                });
+            if(typeof error === "object") {
+                if(error instanceof FixListError) {
+                    return this.clear().catch((e) => {
+                        console.error("Couldn't delete the DB");
+                        emit(this, "unfixableerror", error);
+                        throw e;
+                    });
+                }
+                else if(error instanceof CantOpenListError) {
+                    emit(this, "unfixableerror", error);
+                }
             }
             throw error;
         });
