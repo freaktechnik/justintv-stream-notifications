@@ -5,28 +5,7 @@
  */
 import test from "ava";
 import sinon from "sinon";
-import { invokeOnce, when, emit, pipe } from "../src/utils";
-
-test("invokeOnce", async (t) => {
-    let id = 0;
-    const cbk = sinon.spy(() => {
-            t.is(id, 2);
-            return Promise.resolve();
-        }),
-        firstCbk = invokeOnce(id++, cbk),
-        secondCbk = invokeOnce(id++, cbk),
-        thirdCbk = invokeOnce(id, cbk);
-
-    t.is(typeof firstCbk, "function");
-    t.is(typeof secondCbk, "function");
-    t.is(typeof thirdCbk, "function");
-
-    firstCbk();
-    secondCbk();
-    await thirdCbk();
-
-    t.true(cbk.calledOnce);
-});
+import { when, emit, pipe } from "../src/utils";
 
 test('when addEventListener', async (t) => {
     const mockEmitter = new EventTarget();
@@ -113,8 +92,6 @@ test('emit event instance', (t) => {
 
     t.false(e);
 });
-
-test.todo('filterAsync');
 
 test('pipe', (t) => {
     const source = {
