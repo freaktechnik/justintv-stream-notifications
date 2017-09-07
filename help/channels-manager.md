@@ -4,13 +4,13 @@
   layout: page
 ---
 ## Adding a singe channel
- - Click the <samp>Add...</samp> button on the left end of the toolbar
+ - Click the <samp>Add…</samp> button on the left end of the toolbar
  - Select <samp>Channel</samp> in the popup
  - Enter the channel's username in the <samp>Username</samp> textfield
  - Click <samp>Ok</samp>
 
 ## Adding the channels a user follows
- - Click the <samp>Add...</samp> button on the left end of the toolbar
+ - Click the <samp>Add…</samp> button on the left end of the toolbar
  - Select <samp>User</samp> in the popup
  - Enter the user's username in the <samp>Username</samp> textfield
  - Hit <samp>Ok</samp>
@@ -27,7 +27,7 @@ If you can change the settings of the user you want to add the subscriptions of 
 
 Live Stream Notifier should now be able to fetch this account's subscriptions.
 
-## What's the "username" for...
+## What's the "username" for…
 
 ### Azubu
 The username, however it is case sensitive.
@@ -96,4 +96,3 @@ You can select multiple items in the channels or users list with the <kbd class=
 
 ## Find a certain item
 The channel manager's filter field, which is located to the right of the toolbar buttons. It can alternatively be focused by pressing <kbd><kbd>Ctrl</kbd> + <kbd>F</kbd></kbd>. It will filter out any items in the current tab that do not contain the filter in their display name or provider type. A space separates a filter, so filtering with "twitch b" will only display Twitch channels that contain a b in their name. However "twitch t" will display all twitch channels, since "Twitch" contains at least one t.
-
