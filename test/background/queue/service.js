@@ -82,36 +82,32 @@ test.serial("Update Request queue", async (t) => {
         onComplete: endCbk
     });
 
-    spinQueue(service.getAlarmName(service.HIGH_PRIORITY));
     await endCbk.promise;
 
     t.true(cbk.calledOnce);
     t.true(endCbk.calledOnce);
 
+    endCbk.setupPromise();
+
+    spinQueue(service.getAlarmName(service.HIGH_PRIORITY));
+    await endCbk.promise;
+
+    t.true(cbk.calledTwice);
+    t.true(endCbk.calledTwice);
+
     service.unqueueUpdateRequest();
 });
 
-test.serial.failing("Requeue", async (t) => {
+test("Requeue", async (t) => {
     const service = QueueService.getServiceForProvider("test");
+    const maxRetries = prefs.queueservice_maxRetries.value;
     const cbk = promiseSpy(() => {
-        //return prefs.queueservice_maxRetries.value > cbk.callCount;
-        return false;
+        return maxRetries > cbk.callCount;
     });
 
-    const p = service.queueRequest("http://localhost", {}, cbk);
+    await service.queueRequest("http://localhost", {}, cbk);
 
-    //clock.tick((prefs.queueservice_maxRetries.value + 2) * 70);
-    for(let i = 1; cbk.lastCall.returned || i == 1; ++i) {
-        spinQueue();
-        await cbk.promise;
-        // have to wait for browser.storage.local.get("queueservice_maxRetries")
-        cbk.setupPromise();
-
-        t.is(cbk.callCount, i);
-    }
-    await p;
-
-    t.is(cbk.callCount, prefs.queueservice_maxRetries.value + 1);
+    t.is(cbk.callCount, maxRetries);
 });
 
 test("Queue Service", (t) => {
@@ -181,6 +177,8 @@ test.serial("Queue Pause Resume", (t) => {
 
     t.true(listenerPause.calledTwice);
     t.true(listenerResume.calledOnce);
+
+    QueueService.resume();
 });
 
 test.todo("service.hasUpdateRequest");
