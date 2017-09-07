@@ -58,14 +58,20 @@ function getStreamTypeParam(delim = "&") {
 }
 
 class Twitch extends GenericProvider {
-    authURL = [
-        "http://www.twitch.tv",
-        "https://secure.twitch.tv",
-        "https://passport.twitch.tv"
-    ];
-    _supportsFavorites = true;
-    _supportsCredentials = true;
-    _supportsFeatured = true;
+    constructor(type) {
+        super(type);
+
+        this.authURL = [
+            "http://www.twitch.tv",
+            "https://secure.twitch.tv",
+            "https://passport.twitch.tv"
+        ];
+        this._supportsFavorites = true;
+        this._supportsCredentials = true;
+        this._supportsFeatured = true;
+
+        this.initialize();
+    }
 
     async getUserFavorites(username) {
         const data = await this._qs.queueRequest(baseURL + '/users/' + username, headers);

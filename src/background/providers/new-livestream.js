@@ -25,8 +25,14 @@ const type = "newlivestream",
     };
 
 class NewLivestream extends GenericProvider {
-    authURL = [ "https://livestream.com" ];
-    _supportsFavorites = true;
+    constructor(type) {
+        super(type);
+
+        this.authURL = [ "https://livestream.com" ];
+        this._supportsFavorites = true;
+
+        this.initialize();
+    }
 
     async _getChannelStatus(json, channel) {
         // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.

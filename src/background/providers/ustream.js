@@ -57,7 +57,13 @@ function getChannelFromJSON(jsonChannel) {
 }
 
 class Ustream extends GenericProvider {
-    authURL = [ "http://ustream.tv" ];
+    constructor(type) {
+        super(type);
+
+        this.authURL = [ "http://ustream.tv" ];
+
+        this.initialize();
+    }
 
     async getChannelDetails(channelname) {
         let data = await this._qs.queueRequest("http://www.ustream.tv/" + channelname),

@@ -19,9 +19,6 @@ const type = "youtube",
     };
 
 class YouTube extends GenericProvider {
-    authURL = [ "https://accounts.google.com" ];
-    _supportsFavorites = true;
-    _supportsFeatured = true;
     constructor(type) {
         super(type);
         /**
@@ -47,6 +44,12 @@ class YouTube extends GenericProvider {
                 return '';
             }
         }, (id) => id + "|" + getLocale());
+
+        this.authURL = [ "https://accounts.google.com" ];
+        this._supportsFavorites = true;
+        this._supportsFeatured = true;
+
+        this.initialize();
     }
 
     async _getChannelById(channelId) {

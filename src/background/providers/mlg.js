@@ -63,6 +63,11 @@ function isLive(status) {
 let games = [];
 
 class MLG extends GenericProvider {
+    constructor(type) {
+        super(type);
+        this.initialize();
+    }
+
     async _getGame(id) {
         const game = games.find((g) => g.id == id);
         if(!game) {

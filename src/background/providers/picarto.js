@@ -28,7 +28,13 @@ function getChannelFromJSON(jsonChan) {
 }
 
 class Picarto extends GenericProvider {
-    authURL = [ "https://picarto.tv" ];
+    constructor(type) {
+        super(type);
+
+        this.authURL = [ "https://picarto.tv" ];
+
+        this.initialize();
+    }
 
     getChannelDetails(channelname) {
         return this._qs.queueRequest(`${baseURL}/channel/${channelname.toLowerCase()}?key=${apiKey}`)

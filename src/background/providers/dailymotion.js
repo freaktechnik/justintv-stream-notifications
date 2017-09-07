@@ -34,8 +34,14 @@ const type = "dailymotion",
     };
 
 class Dailymotion extends GenericProvider {
-    _supportsFavorites = true;
-    _supportsFeatured = true;
+    constructor(type) {
+        super(type);
+
+        this._supportsFavorites = true;
+        this._supportsFeatured = true;
+
+        this.initialize();
+    }
 
     _getChannelByID(id, doUser = false) {
         return this._qs.queueRequest(baseUrl + "user/" + id + "?" + qs.stringify({

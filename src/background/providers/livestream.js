@@ -15,10 +15,16 @@ function getChannelAPIUrl(channellogin) {
 }
 
 class Livestream extends GenericProvider {
-    authURL = [
-        "http://original.livestream.com",
-        "https://secure.livestream.com"
-    ];
+    constructor(type) {
+        super(type);
+
+        this.authURL = [
+            "http://original.livestream.com",
+            "https://secure.livestream.com"
+        ];
+
+        this.initialize();
+    }
 
     async getChannelDetails(username) {
         const ch = new Channel(username.toLowerCase(), this._type),

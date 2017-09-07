@@ -37,10 +37,16 @@ function getChannelFromJson(json) {
 }
 
 class Hitbox extends GenericProvider {
-    authURL = [ "https://www.smashcast.tv" ];
-    _supportsFavorites = true;
-    _supportsCredentials = true;
-    _supportsFeatured = true;
+    constructor(type) {
+        super(type);
+
+        this.authURL = [ "https://www.smashcast.tv" ];
+        this._supportsFavorites = true;
+        this._supportsCredentials = true;
+        this._supportsFeatured = true;
+
+        this.initialize();
+    }
 
     _getChannels(channels) {
         return Promise.all(channels.map((channel) => {

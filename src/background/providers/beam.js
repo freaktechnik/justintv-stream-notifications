@@ -61,11 +61,6 @@ function getImageFromAvatars(avatars) {
 }
 
 class Beam extends GenericProvider {
-    authURL = [ "https://mixer.com", "https://beam.pro" ];
-    _supportsFavorites = true;
-    _supportsCredentials = true;
-    _supportsFeatured = true;
-
     constructor(type) {
         super(type);
         this._getUserIdFromUsername = memoize((username) => {
@@ -76,6 +71,13 @@ class Beam extends GenericProvider {
                 throw new Error(`Could not find user for ${username}`);
             });
         });
+
+        this.authURL = [ "https://mixer.com", "https://beam.pro" ];
+        this._supportsFavorites = true;
+        this._supportsCredentials = true;
+        this._supportsFeatured = true;
+
+        this.initialize();
     }
 
     async _getHostee(channelId) {

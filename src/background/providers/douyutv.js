@@ -35,8 +35,15 @@ const type = "douyutv",
     };
 
 class Douyutv extends GenericProvider {
-    authURL = [ "http://www.douyutv.com" ];
-    _enabled = false;
+
+    constructor(type) {
+        super(type);
+
+        this._enabled = false;
+        this.authURL = [ "http://www.douyutv.com" ];
+
+        this.initialize();
+    }
 
     getChannelDetails(username) {
         return this._qs.queueRequest(baseURL + signAPI("room/", username)).then((data) => {

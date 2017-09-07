@@ -196,19 +196,29 @@ export default class GenericProvider extends EventTarget {
          * @protected
          */
         this._type = type;
+    }
+
+    /**
+     * Initialize the provider after construction. This is primarily a workaround
+     * to classes not having a prototype and only defining properties in their
+     * constructor.
+     *
+     * @returns {undefined}
+     */
+    initialize() {
         if(this.enabled) {
             this._list.addEventListener("ready", () =>{
                 this._list.getChannels().then((channels) => {
                     if(channels.length) {
                         this._queueUpdateRequest();
                     }
-                }).catch((e) => console.error("Error intializing channels for", type, e));
+                }).catch((e) => console.error("Error intializing channels for", this._type, e));
                 if(this.supports.credentials) {
                     this._list.getUsers().then((users) => {
                         if(users.length) {
                             this._queueFavsRequest();
                         }
-                    }).catch((e) => console.error("Error intializing users for", type, e));
+                    }).catch((e) => console.error("Error intializing users for", this._type, e));
                 }
             });
             this._list.addEventListener("channelsadded", () => {
