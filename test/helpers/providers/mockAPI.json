@@ -375,7 +375,7 @@
         }
     },
     "newlivestream": {
-        "http://livestream.com/api/accounts/test": {
+        "https://livestream.com/api/accounts/test": {
             "id": 0,
             "short_name": "test",
             "full_name": "test",
@@ -393,7 +393,7 @@
                 "data": null
             }
         },
-        "http://livestream.com/api/accounts/0": {
+        "https://livestream.com/api/accounts/0": {
             "id": 0,
             "short_name": "test",
             "full_name": "test",
@@ -411,7 +411,7 @@
                 "data": null
             }
         },
-        "http://livestream.com/api/accounts/live": {
+        "https://livestream.com/api/accounts/live": {
             "id": 1,
             "short_name": "live",
             "full_name": "live",
@@ -436,11 +436,11 @@
                 "data": []
             }
         },
-        "http://livestream.com/api/accounts/1/events/0/stream_info": {
+        "https://livestream.com/api/accounts/1/events/0/stream_info": {
             "is_live": true,
             "thumbnail_url": ""
         },
-        "http://livestream.com/api/accounts/0/following?maxITems=50&page=0": {
+        "https://livestream.com/api/accounts/0/following?maxITems=50&page=0": {
             "total": 1,
             "data": [
                 {
