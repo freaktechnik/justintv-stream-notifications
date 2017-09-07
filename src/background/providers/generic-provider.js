@@ -207,20 +207,18 @@ export default class GenericProvider extends EventTarget {
      */
     initialize() {
         if(this.enabled) {
-            this._list.addEventListener("ready", () =>{
-                this._list.getChannels().then((channels) => {
-                    if(channels.length) {
-                        this._queueUpdateRequest();
-                    }
-                }).catch((e) => console.error("Error intializing channels for", this._type, e));
-                if(this.supports.credentials) {
-                    this._list.getUsers().then((users) => {
-                        if(users.length) {
-                            this._queueFavsRequest();
-                        }
-                    }).catch((e) => console.error("Error intializing users for", this._type, e));
+            this._list.getChannels().then((channels) => {
+                if(channels.length) {
+                    this._queueUpdateRequest();
                 }
-            });
+            }).catch((e) => console.error("Error intializing channels for", this._type, e));
+            if(this.supports.credentials) {
+                this._list.getUsers().then((users) => {
+                    if(users.length) {
+                        this._queueFavsRequest();
+                    }
+                }).catch((e) => console.error("Error intializing users for", this._type, e));
+            }
             this._list.addEventListener("channelsadded", () => {
                 if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
                     this._queueUpdateRequest();

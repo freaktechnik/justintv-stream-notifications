@@ -18,7 +18,6 @@ const TESTUSER = {
 
 const testProviderCredentials = async (t, p) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     let res, prom;
     if(providers[p].supports.credentials) {
@@ -53,9 +52,8 @@ for(const p in providers) {
 }
 
 // needs to be serial when not failing
-test.failing("Credentials", async (t) => {
+test.serial.failing("Credentials", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     const prom = cc.autoAddUsers();
 
@@ -68,14 +66,12 @@ test.failing("Credentials", async (t) => {
 
 test("Add User", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     await t.throws(cc.addUser("test", "test"));
 });
 
 test.serial("User Methods", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     const user = await cc.addUser(TESTUSER.name, TESTUSER.type);
 
@@ -122,7 +118,6 @@ test.serial("User Methods", async (t) => {
 
 test.serial("Remove User", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     const user = await cc.addUser(TESTUSER.name, TESTUSER.type);
 
@@ -136,14 +131,12 @@ test.serial("Remove User", async (t) => {
 
 test("AddChannel", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     await t.throws(cc.addChannel("test", "test"));
 });
 
 test.serial("CancelAddChannel", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     await t.throws(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
 
@@ -158,7 +151,6 @@ test.serial("CancelAddChannel", async (t) => {
 
 test.serial("Channel Methods", async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     let channel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
 
@@ -211,22 +203,6 @@ test.serial("Channel Methods", async (t) => {
     t.is(channels.length, 0, "All channels were removed");
 });
 
-
-test.serial("Queue", async (t) => {
-    const cc = new ChannelController();
-
-    // Reset queue stuff
-    cc._queue.length = 0;
-    cc._ready = false;
-
-    cc._ensureQueueReady();
-    t.is(cc._queue.length, 1);
-
-    cc._ready = true;
-    await cc._ensureQueueReady();
-    t.is(cc._queue.length, 1);
-});
-
 test.serial("Open Manager", async (t) => {
     const cc = new ChannelController();
 
@@ -250,7 +226,6 @@ test("Disabled Provider", async (t) => {
 
     if(p) {
         const cc = new ChannelController();
-        await cc._ensureQueueReady();
 
         await t.throws(cc.addChannel(TESTUSER.name, p));
 
@@ -274,16 +249,14 @@ test("Disabled Provider", async (t) => {
     }
 });
 
-test('getExternalChannel throws with unknown type', async (t) => {
+test('getExternalChannel throws with unknown type', (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     return t.throws(cc.getExternalChannel('foo', 'bar'));
 });
 
 test('getExternalChannel', async (t) => {
     const cc = new ChannelController();
-    await cc._ensureQueueReady();
 
     const channel = await cc.getExternalChannel(TESTUSER.name, TESTUSER.type);
 

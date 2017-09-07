@@ -9,7 +9,7 @@ import ChannelList from "./list";
 import EventSink from '../providers/events';
 import { emit } from "../../utils";
 import ParentalControls from "../parental-controls";
-import { flatten, partial, debounce } from "underscore";
+import { flatten, debounce } from "underscore";
 import * as debugDump from "./dump";
 import prefs from "../../preferences";
 import * as logins from "../logins";
@@ -78,11 +78,6 @@ export default class ChannelController extends EventTarget {
      */
     constructor() {
         super();
-        /**
-         * @type {Array.<function>}
-         * @private
-         */
-        this._queue = [];
 
         const managerError = (e, name, type, itemType, canceled = () => false) => {
                 console.error("loading", itemType, ":", name, type, "an error occured");
@@ -136,13 +131,6 @@ export default class ChannelController extends EventTarget {
          * @private
          */
         this._list = new ChannelList();
-        this._list.addEventListener("ready", () => {
-            this._ready = true;
-
-            // Resolve all the queued up promises.
-            this._queue.forEach((r) => r());
-            this._queue.length = 0;
-        });
         this._list.addEventListener("channelsadded", ({ detail: channels }) => {
             channels.forEach((chan) => this._manager.onChannelAdded(chan));
 
@@ -230,24 +218,6 @@ export default class ChannelController extends EventTarget {
         });
     }
     /**
-     * Returns a promise that resolves as soon as the ChannelList is ready.
-     * Another method in this module that makes magic happen...
-     * The promise is resolved with all the arguments this method was called.
-     *
-     * @param {?} args - Arguments to the callback.
-     * @async
-     * @private
-     * @returns {undefined}
-     */
-    _ensureQueueReady(...args) {
-        if(!this._ready) {
-            return new Promise((resolve) => this._queue.push(partial(resolve, ...args)));
-        }
-        else {
-            return Promise.resolve(args);
-        }
-    }
-    /**
      * @inheritdoc {module:channel/utils.formatChannel}
      */
     async _formatChannel(channel) {
@@ -271,7 +241,6 @@ export default class ChannelController extends EventTarget {
                 throw new Error("Not allowed to add this channel");
             }
 
-            await this._ensureQueueReady();
             const formattedChannel = await this._formatChannel(channel);
 
             if(canceled()) {
@@ -292,7 +261,6 @@ export default class ChannelController extends EventTarget {
      *          null if the provider is disabled.
      */
     async updateChannel(channelId) {
-        await this._ensureQueueReady();
         let channel = await this._list.getChannel(channelId);
         if(!providers[channel.type].enabled) {
             return null;
@@ -320,7 +288,6 @@ export default class ChannelController extends EventTarget {
             );
         }
         else if(providers[provider].enabled) {
-            await this._ensureQueueReady();
             let channels = await this._list.getChannelsByType(provider);
 
             if(channels.length) {
@@ -350,8 +317,7 @@ export default class ChannelController extends EventTarget {
      * @async
      */
     getChannel(channelId) {
-        return this._ensureQueueReady()
-            .then(() => this._list.getChannel(channelId));
+        return this._list.getChannel(channelId);
     }
     /**
      * Get multiple channels by provider.
@@ -363,8 +329,7 @@ export default class ChannelController extends EventTarget {
      * @async
      */
     getChannelsByType(provider = null) {
-        return this._ensureQueueReady()
-            .then(() => this._list.getChannelsByType(provider));
+        return this._list.getChannelsByType(provider);
     }
     /**
      * Remove a channel from the ChannelList.
@@ -374,8 +339,7 @@ export default class ChannelController extends EventTarget {
      * @async
      */
     removeChannel(channelId) {
-        return this._ensureQueueReady()
-            .then(() => this._list.removeChannel(channelId));
+        return this._list.removeChannel(channelId);
     }
     /**
      * Add a user and its favorites.
@@ -391,7 +355,6 @@ export default class ChannelController extends EventTarget {
     async addUser(username, type, canceled = () => false) {
         if(type in providers && providers[type].supports.favorites) {
             let [ user, channels ] = await providers[type].getUserFavorites(username);
-            await this._ensureQueueReady();
 
             if(canceled()) {
                 throw "Canceled";
@@ -433,7 +396,6 @@ export default class ChannelController extends EventTarget {
      * @returns {Array.<module:channel/core.User>} Updated user instances.
      */
     async updateUser(userId) {
-        await this._ensureQueueReady();
         let users;
         if(userId) {
             users = [ (await this._list.getUser(userId)) ];
@@ -457,8 +419,7 @@ export default class ChannelController extends EventTarget {
      * @async
      */
     getUsersByType(provider = null) {
-        return this._ensureQueueReady()
-            .then(() => this._list.getUsersByType(provider));
+        return this._list.getUsersByType(provider);
     }
     /**
      * Remove a user from the ChannelList and optionally remove the channels it
@@ -470,7 +431,6 @@ export default class ChannelController extends EventTarget {
      * @returns {module:channel/core.User} Removed user instance.
      */
     async removeUser(userId, removeFavorites = false) {
-        await this._ensureQueueReady();
         let p = Promise.resolve();
         if(removeFavorites) {
             p = this._list.removeChannelsByUserFavorites(userId);
@@ -542,7 +502,7 @@ export default class ChannelController extends EventTarget {
      * @returns {undefined}
      */
     setTheme(theme) {
-        this._ensureQueueReady().then(() => this._manager.setTheme(theme));
+        this._ready.then(() => this._manager.setTheme(theme));
     }
 
     /**

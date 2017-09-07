@@ -48,6 +48,12 @@ export class CantOpenListError extends Error {
     }
 }
 
+export class ListClosedError extends Error {
+    constructor() {
+        super("List is not open at the moment");
+    }
+}
+
 /**
  * @class module:read-channel-list.ReadChannelList
  * @extends external:EventTarget
@@ -84,7 +90,7 @@ export default class ReadChannelList extends EventTarget {
 
         this.idCache = new Map();
 
-        this.openDB(NAME);
+        this.openDB(ReadChannelList.name);
     }
 
     /**
@@ -151,28 +157,8 @@ export default class ReadChannelList extends EventTarget {
         });
     }
 
-    /**
-     * Opens the DB, initializes the schema if it's a new DB or sets channels
-     * offline that were online and have last been updated a certain time ago.
-     *
-     * @param {string} [name=ReadChannelList.name] - Name of the DB to open.
-     * @param {boolean} [dontTry=false] - Don't try to fix the DB.
-     * @async
-     * @fires module:read-channel-list.ReadChannelList#ready
-     * @returns {undefined} The DB is ready.
-     * @throws Could not open the DB. Has a boolean that is true when a clear
-     *         should be tried.
-     */
-    openDB(name = ReadChannelList.name, dontTry = false) {
-        // Quick path if DB is already opened.
-        if(this.db) {
-            return Promise.resolve();
-        }
-        else if(this._openingDB !== null) {
-            return this._openingDB;
-        }
-
-        this._openingDB = new Promise((resolve, reject) => {
+    _doOpen(name, dontTry) {
+        return new Promise((resolve, reject) => {
             // Try to open the DB
             let request;
             try {
@@ -221,14 +207,15 @@ export default class ReadChannelList extends EventTarget {
                 this.db = e.target.result;
 
                 this.db.addEventListener("close", () => {
+                    delete this.db;
                     emit(this, "close");
                 }, {
                     passive: true,
-                    capture: false
+                    capture: false,
+                    once: true
                 });
 
                 resolve();
-                emit(this, "ready");
             };
 
             /* istanbul ignore next */
@@ -247,8 +234,33 @@ export default class ReadChannelList extends EventTarget {
                 }
             };
         });
+    }
+
+    /**
+     * Opens the DB, initializes the schema if it's a new DB or sets channels
+     * offline that were online and have last been updated a certain time ago.
+     *
+     * @param {string} [name=ReadChannelList.name] - Name of the DB to open.
+     * @param {boolean} [dontTry=false] - Don't try to fix the DB.
+     * @async
+     * @fires module:read-channel-list.ReadChannelList#ready
+     * @returns {undefined} The DB is ready.
+     * @throws Could not open the DB. Has a boolean that is true when a clear
+     *         should be tried.
+     */
+    openDB(name = ReadChannelList.name, dontTry = false) {
+        // Quick path if DB is already opened.
+        if(this._openingDB !== null) {
+            return this._openingDB;
+        }
+        else if(this.db) {
+            return Promise.resolve();
+        }
+
+        this._openingDB = this._doOpen(name, dontTry);
         // Clear it once the promise is done.
         this._openingDB.then(() => {
+            emit(this, "ready");
             this._openingDB = null;
         }, () => {
             this._openingDB = null;
@@ -256,15 +268,27 @@ export default class ReadChannelList extends EventTarget {
         return this._openingDB;
     }
 
+    get _ready() {
+        if(this._openingDB !== null) {
+            return this._openingDB;
+        }
+        else if(this.db) {
+            return Promise.resolve();
+        }
+        else {
+            return Promise.reject(new ListClosedError());
+        }
+    }
+
     /**
      * Gets the ID of a channel, if it is in the ChannelList.
      *
      * @param {string} name - Login of the channel.
      * @param {string} type - Type of the channel.
-     * @async
      * @returns {number} The ID of the channel if it exists.
      */
-    getChannelId(name, type) {
+    async getChannelId(name, type) {
+        await this._ready;
         if(this.idCache.has(type + name)) {
             return Promise.resolve(this.idCache.get(type + name));
         }
@@ -287,10 +311,10 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} name - Login of the user.
      * @param {string} type - Type of the user.
-     * @async
      * @returns {number} The ID of the user (if it exsits).
      */
-    getUserId(name, type) {
+    async getUserId(name, type) {
+        await this._ready;
         const transaction = this.db.transaction("users"),
             index = transaction.objectStore("users").index("typename"),
             req = index.get([ type, name ]);
@@ -312,6 +336,7 @@ export default class ReadChannelList extends EventTarget {
      * @throws The channel doesn't exist or no arguments passed.
      */
     async getChannel(id, type) {
+        await this._ready;
         if(type) {
             id = await this.getChannelId(id, type);
         }
@@ -339,6 +364,7 @@ export default class ReadChannelList extends EventTarget {
      * @throws The user doesn't exist or no arguments passed.
      */
     async getUser(id, type) {
+        await this._ready;
         if(type) {
             id = await this.getUserId(id, type);
         }
@@ -386,11 +412,11 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - Type all the channels should have. If left out,
      *                             all channels are returned.
-     * @async
      * @returns {Array.<Object>} Array of all channels for
      *          the given type. May be empty.
      */
     async getChannelsByType(type) {
+        await this._ready;
         const transaction = this.db.transaction("channels"),
             store = transaction.objectStore("channels"),
             retchans = [];
@@ -413,11 +439,11 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - The type all returned users should have. If left
      *                             out all users are returned.
-     * @async
      * @returns {Array.<Object>} Array of users for the given
      *          type. May be empty.
      */
     async getUsersByType(type) {
+        await this._ready;
         const transaction = this.db.transaction("users"),
             store = transaction.objectStore("users"),
             retusrs = [];

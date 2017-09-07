@@ -21,7 +21,6 @@ const setupDB = async () => {
             getUser('bar', 'extra')
         ];
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
     await list.addChannels(channels);
     await Promise.all(users.map((u) => list.addUser(u)));
     await list.close();
@@ -67,7 +66,6 @@ test.serial('get user id', async (t) => {
 
 test.serial('get users by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
     const user1 = await list.addUser(getUser()),
         user2 = await list.addUser(getUser('test2'));
 
@@ -92,7 +90,6 @@ test.serial('get users by favorite', async (t) => {
     const chan = getChannel("test_chan"),
         user = getUser();
     user.favorites = [ chan.login ];
-    await list.openDB("Channellist");
     const { id: userId } = await list.addUser(user);
 
     const users = await t.context.list.getUsersByFavorite(chan);
@@ -159,7 +156,6 @@ test.serial('user exists', async (t) => {
 
 test.serial('get channels by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
     const channel = await list.addChannel(getChannel());
     const secondChannel = await list.addChannel(getChannel("foo"));
 
@@ -244,7 +240,6 @@ test.serial.beforeEach(async (t) => {
         t.context.extraChannels = 4;
         t.context.extraUsers = 2;
     }
-    await t.context.list.openDB(ReadChannelList.name);
     t.context.referenceChannel = await t.context.list.getChannelId('foo', 'extra');
     t.context.referenceUser = await t.context.list.getUserId('foo', 'extra');
 });
@@ -255,7 +250,7 @@ test.serial.afterEach.always((t) => {
 
 test.after.always(async () => {
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
+    await list._ready;
     await list.clear();
     return list.close();
 });
