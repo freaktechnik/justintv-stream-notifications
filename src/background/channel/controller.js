@@ -153,33 +153,10 @@ export default class ChannelController extends EventTarget {
             emit(this, "beforechanneldeleted", detail);
         });
         this._list.addEventListener("channeldeleted", ({ detail: channel }) => {
-            /*
-             * Yeah, this is a bit confusing, but that's why there are
-             * comments explaining it. So sometimes multiple channels get
-             * deleted at once - the channels manager supports multi-selects
-             * But they aren't of the same type. So what we want to do, is
-             * call the unqueueRequest() for each provider exactly once.
-             * To do so, we have to make sure, it only gets called for the
-             * last deleted channel of a type. invokeOnce makes sure only
-             * when the last "invoker" of invokeOnce is calling it, the
-             * method gets executed. Since we have multiple types, there is
-             * a map, storing the callback invokeOnce calls for each type.
-             * And that's all there is to it. Just to reduce requeueing
-             * stuff. Now why should only the last one get invoked?
-             * Because getChannelsByType is async, and in the worst case,
-             * the one without channels to return returns first, which means
-             * an update requests with channels that were deleted would be
-             * queued, which would lead to them being readded to the list.
-             * So this is all totally needed, especially the length of this
-             * very comment is crucial to the operation. For more long
-             * comments, explaining stuff, check out the background/utils module,
-             * where invokeOnce is kind of explained.
-             */
-            invokeOnce(channel.id, debouncedEvent);
-
             this._manager.onChannelRemoved(channel.id);
 
             emit(this, "channeldeleted", channel.id);
+            debouncedEvent();
         });
         this._list.addEventListener("channelupdated", ({ detail: channel }) => {
             this._manager.onChannelUpdated(channel);

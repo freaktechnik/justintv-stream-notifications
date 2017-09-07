@@ -9,7 +9,7 @@ import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
 
 const type = "newlivestream",
-    baseURL = "http://livestream.com/api/accounts/",
+    baseURL = "https://livestream.com/api/accounts/",
     getChannelFromJSON = (json) => {
         const chan = new Channel(json.short_name || json.id, type);
         chan.uname = json.full_name;
@@ -19,13 +19,13 @@ const type = "newlivestream",
             "50": json.picture.thumb_url
         };
         chan.category = json.category_name;
-        chan.archiveUrl = "http://livestream.com/" + chan.login;
-        chan.chatUrl = "http://livestream.com/" + chan.login;
+        chan.archiveUrl = "https://livestream.com/" + chan.login;
+        chan.chatUrl = "https://livestream.com/" + chan.login;
         return chan;
     };
 
 class NewLivestream extends GenericProvider {
-    authURL = [ "http://livestream.com" ];
+    authURL = [ "https://livestream.com" ];
     _supportsFavorites = true;
 
     async _getChannelStatus(json, channel) {
@@ -36,7 +36,7 @@ class NewLivestream extends GenericProvider {
         if(event) {
             channel.title = event.full_name;
             channel.viewers = event.viewer_count;
-            channel.url.push("http://livestream.com/" + channel.login + "/events/" + event.id);
+            channel.url.push("https://livestream.com/" + channel.login + "/events/" + event.id);
             const info = await this._qs.queueRequest(baseURL + json.id + "/events/" + event.id + "/stream_info");
 
             if(info.parsedJSON && !("message" in info.parsedJSON)) {

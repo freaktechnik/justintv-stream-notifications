@@ -3,10 +3,6 @@
         "message": "Benutzer",
         "description": "Label of the tab that contains all users in the channel manager"
     },
-    "panel_minWidth_title": {
-        "message": "Minimale Panelbreite",
-        "description": "Title of the panel minimum width setting in the preferences"
-    },
     "cm_add": {
         "message": "Hinzufügen…",
         "description": "Label on button that opens a dialog to add a channel or user."
@@ -203,10 +199,6 @@
         "message": "Live Stream Notifier konnte die gespeicherten Kanäle nicht lesen. Leider mussten alle Kanäle und Benutzer entfernt werden.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
-    "queue_maxRequestBatchSize_title": {
-        "message": "Maximale Anfragezahl pro Aktualisierungsdurchlauf",
-        "description": "Title of the request batch size setting in the preferences"
-    },
     "errorState1": {
         "message": "Behebbarer Fehler in Live Stream Benachrichtigungen",
         "description": "Error title when a recoverable error is blocking the extension"
@@ -375,10 +367,6 @@
         "message": "Nich jugendfreie Inhalte erlauben",
         "description": "Title of the mature setting in the preferences"
     },
-    "queue_ratio_title": {
-        "message": "Anfragenanteil pro Aktualisierungsdurchgang",
-        "description": "Title of the queue ratio setting in the preferences"
-    },
     "panel_nothing_live": {
         "message": "Niemand ist live.",
         "description": "Message in the live tab when no channel is live"
@@ -426,6 +414,10 @@
     "errorState2": {
         "message": "Kritischer Fehler in Live Stream Benachrichtigungen",
         "description": "Error title when an unrecoverable error is blocking the extension"
+    },
+    "queue_concurrentRequests_title": {
+        "message": "Anzahl gleichzeitiger Checks",
+        "description": "Title of the concurrent request count setting."
     },
     "cm_filter.placeholder": {
         "message": "Suchbegriff…",

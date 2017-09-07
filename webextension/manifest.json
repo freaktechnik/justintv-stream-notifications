@@ -11,7 +11,7 @@
     },
     "homepage_url": "http://streamnotifier.ch",
     "author": "freaktechnik",
-    "version": "3.5.0pre06",
+    "version": "3.5.0",
     "icons": {
         "48": "assets/images/icon.svg",
         "64": "assets/images/icon.svg"
@@ -37,7 +37,7 @@
         "alarms",
         "clipboardWrite",
         "https://www.googleapis.com/youtube/v3/*",
-        "http://livestream.com/api/*",
+        "https://livestream.com/api/*",
         "https://api.twitch.tv/api/*",
         "https://tmi.twitch.tv/*",
         "https://ptvappapi.picarto.tv/*",

@@ -3,10 +3,6 @@
         "message": "Users",
         "description": "Label of the tab that contains all users in the channel manager"
     },
-    "panel_minWidth_title": {
-        "message": "Minimum Panel width",
-        "description": "Title of the panel minimum width setting in the preferences"
-    },
     "cm_add": {
         "message": "Add…",
         "description": "Label on button that opens a dialog to add a channel or user."
@@ -203,10 +199,6 @@
         "message": "Live Stream Notifier could not read the saved channels. To restore the extension, all channels and users have been removed.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
-    "queue_maxRequestBatchSize_title": {
-        "message": "Max Requests per Batch",
-        "description": "Title of the request batch size setting in the preferences"
-    },
     "errorState1": {
         "message": "Recoverable error with Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"
@@ -375,10 +367,6 @@
         "message": "Allow mature content",
         "description": "Title of the mature setting in the preferences"
     },
-    "queue_ratio_title": {
-        "message": "Queue Request Treshhold",
-        "description": "Title of the queue ratio setting in the preferences"
-    },
     "panel_nothing_live": {
         "message": "Nobody in your list is live.",
         "description": "Message in the live tab when no channel is live"
@@ -426,6 +414,10 @@
     "errorState2": {
         "message": "Critical error with Live Stream Notifier",
         "description": "Error title when an unrecoverable error is blocking the extension"
+    },
+    "queue_concurrentRequests_title": {
+        "message": "Concurrent request count",
+        "description": "Title of the concurrent request count setting."
     },
     "cm_filter.placeholder": {
         "message": "Filter…",

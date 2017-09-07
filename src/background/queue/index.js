@@ -99,8 +99,8 @@ export default class RequestQueue extends EventTarget {
             });
             // Can't do mime type detection here because some APIs don't feel the need to declare that.
             try {
-                const jsonClone = response.clone();
-                const json = await jsonClone.json();
+                const jsonClone = response.clone(),
+                    json = await jsonClone.json();
                 response.parsedJSON = json;
             }
             catch(e) {
@@ -111,6 +111,9 @@ export default class RequestQueue extends EventTarget {
         catch(e) {
             if("onError" in request) {
                 request.onError(e);
+            }
+            else {
+                console.warn(e);
             }
         }
     }

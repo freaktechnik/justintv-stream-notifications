@@ -129,7 +129,7 @@ controller.addEventListener("channeldeleted", ({ detail: channelId }) => {
 
 controller.addEventListener("beforechanneldeleted", qsPause);
 //TODO do counting instead of relying on randomness being in our favor ;)
-controller.addEventListener("afterchanneldeleted", qsResume);
+controller.addEventListener("afterchannelsdeleted", qsResume);
 
 qs.addListeners({
     paused: () => list.setQueuePaused(true),

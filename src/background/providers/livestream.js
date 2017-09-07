@@ -16,7 +16,7 @@ function getChannelAPIUrl(channellogin) {
 
 class Livestream extends GenericProvider {
     authURL = [
-        "http://new.livestream.com",
+        "http://original.livestream.com",
         "https://secure.livestream.com"
     ];
 

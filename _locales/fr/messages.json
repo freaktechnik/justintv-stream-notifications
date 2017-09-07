@@ -3,10 +3,6 @@
         "message": "Utilisateur",
         "description": "Label of the tab that contains all users in the channel manager"
     },
-    "panel_minWidth_title": {
-        "message": "Largeur maximum du panneau",
-        "description": "Title of the panel minimum width setting in the preferences"
-    },
     "cm_add": {
         "message": "Ajouter…",
         "description": "Label on button that opens a dialog to add a channel or user."
@@ -203,10 +199,6 @@
         "message": "Live Stream Notifier n'a pas pu lire les chaînes enregistrées. Pour restaurer le module, toutes les chaînes et les utilisateurs ont été supprimés.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
-    "queue_maxRequestBatchSize_title": {
-        "message": "Nombre maximal de demandes par groupe",
-        "description": "Title of the request batch size setting in the preferences"
-    },
     "errorState1": {
         "message": "Erreur restaurable avec Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"
@@ -375,10 +367,6 @@
         "message": "Autoriser le contenu explicite",
         "description": "Title of the mature setting in the preferences"
     },
-    "queue_ratio_title": {
-        "message": "Seuil de demande de file d'attente",
-        "description": "Title of the queue ratio setting in the preferences"
-    },
     "panel_nothing_live": {
         "message": "Personne dans votre liste n'est en ligne",
         "description": "Message in the live tab when no channel is live"
@@ -426,6 +414,10 @@
     "errorState2": {
         "message": "Erreur critique avec Live Stream Notifier",
         "description": "Error title when an unrecoverable error is blocking the extension"
+    },
+    "queue_concurrentRequests_title": {
+        "message": "Concurrent request count",
+        "description": "Title of the concurrent request count setting."
     },
     "cm_filter.placeholder": {
         "message": "Filtrer…",
