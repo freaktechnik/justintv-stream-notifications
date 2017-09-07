@@ -137,7 +137,7 @@ test("tabchange event", async (t) => {
 
         t.is(parseInt(tab.getAttribute("data-tab"), 10), index);
     };
-    testTabIndex.title = (title, index) => `${title} for index ${index}`;
+    testTabIndex.title = (title, i, index) => `${title} for index ${index}`;
     const tabbed = getTabbed(4);
     const instance = new Tabbed(tabbed);
 
