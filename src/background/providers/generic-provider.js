@@ -196,31 +196,33 @@ export default class GenericProvider extends EventTarget {
          * @protected
          */
         this._type = type;
-        this._list.addEventListener("ready", () =>{
-            this._list.getChannels().then((channels) => {
-                if(channels.length) {
-                    this._queueUpdateRequest();
-                }
-            }).catch((e) => console.error("Error intializing channels for", type, e));
-            if(this.supports.credentials) {
-                this._list.getUsers().then((users) => {
-                    if(users.length) {
-                        this._queueFavsRequest();
+        if(this.enabled) {
+            this._list.addEventListener("ready", () =>{
+                this._list.getChannels().then((channels) => {
+                    if(channels.length) {
+                        this._queueUpdateRequest();
                     }
-                }).catch((e) => console.error("Error intializing users for", type, e));
-            }
-        });
-        this._list.addEventListener("channelsadded", () => {
-            if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
-                this._queueUpdateRequest();
-            }
-        });
-        if(this.supports.credentials) {
-            this._list.addEventListener("useradded", () => {
-                if(!this._qs.hasUpdateRequest(this._qs.LOW_PRIORITY)) {
-                    this._queueFavsRequest();
+                }).catch((e) => console.error("Error intializing channels for", type, e));
+                if(this.supports.credentials) {
+                    this._list.getUsers().then((users) => {
+                        if(users.length) {
+                            this._queueFavsRequest();
+                        }
+                    }).catch((e) => console.error("Error intializing users for", type, e));
                 }
             });
+            this._list.addEventListener("channelsadded", () => {
+                if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
+                    this._queueUpdateRequest();
+                }
+            });
+            if(this.supports.credentials) {
+                this._list.addEventListener("useradded", () => {
+                    if(!this._qs.hasUpdateRequest(this._qs.LOW_PRIORITY)) {
+                        this._queueFavsRequest();
+                    }
+                });
+            }
         }
     }
     /**
