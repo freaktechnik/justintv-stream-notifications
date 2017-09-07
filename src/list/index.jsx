@@ -44,17 +44,11 @@ prefs.get(prefsKeys).then((values) => {
         });
     }
 });
-list.addEventListener("ready", () => {
-    list.getChannelsByType().then((channels) => {
-        store.dispatch({
-            type: "addChannels",
-            payload: channels
-        });
+list.getChannelsByType().then((channels) => {
+    store.dispatch({
+        type: "addChannels",
+        payload: channels
     });
-}, {
-    passive: true,
-    once: true,
-    capture: false
 });
 port.addEventListener("message", ({ detail: event }) => {
     if(event.command === "addChannels") {
