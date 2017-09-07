@@ -133,7 +133,7 @@ const getMockQS = (originalQS, ignoreQR = false) => {
             getURLs().then((urls) => {
                 resolvePromise({
                     urls,
-                    priority: priority,
+                    priority,
                     callback: onComplete
                 });
             });
