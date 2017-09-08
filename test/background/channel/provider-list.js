@@ -20,10 +20,8 @@ test.before(async () => {
             getUser('bar', NOT_PROVIDER)
         ];
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
     await list.addChannels(channels);
     await Promise.all(users.map((u) => list.addUser(u)));
-    await list.close();
 });
 
 test.beforeEach(async (t) => {
@@ -31,20 +29,16 @@ test.beforeEach(async (t) => {
         t.context.list = new ProviderChannelList(PROVIDER);
         t.context.extraChannels = 2;
         t.context.extraUsers = 1;
-        await t.context.list.openDB(ReadChannelList.name);
         t.context.referenceChannel = await t.context.list.getChannelByName('foo', PROVIDER);
         t.context.referenceUser = await t.context.list.getUserByName('foo', PROVIDER);
         const allList = new ReadChannelList();
-        await allList.openDB(ReadChannelList.name);
         t.context.notUser = await allList.getUser('bar', NOT_PROVIDER);
         t.context.notChannel = await allList.getChannel('lorem', NOT_PROVIDER);
-        await allList.close();
     }
 });
 
 test.after.always(async () => {
     const list = new ChannelList();
-    await list.openDB(ReadChannelList.name);
     await list.clear();
     return list.close();
 });

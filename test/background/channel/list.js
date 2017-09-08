@@ -9,6 +9,7 @@ import { User, Channel } from '../../../src/background/channel/core';
 import { getUser, getChannel } from "../../helpers/channel-user";
 import { when } from "../../../src/utils";
 import prefs from '../../../src/prefs.json';
+import DatabaseManager from '../../../src/database-manager';
 
 test.serial('get invalid users', (t) => {
     return Promise.all([
@@ -165,8 +166,7 @@ test.serial('clear channellist', async (t) => {
 
 test.serial('clear without db', async (t) => {
     // emulate DB never initialized
-    t.context.list.db.close();
-    delete t.context.list.db;
+    await t.context.list.close();
 
     const result = await t.context.list.clear();
 
@@ -189,8 +189,7 @@ test.serial('clear event', async (t) => {
     t.is(r, result, 'Promise and event hold same soft-clear flag');
     t.false(result, "DB was soft cleared");
 
-    t.context.list.db.close();
-    delete t.context.list.db;
+    await t.context.list.close();
 
     p = when(t.context.list, "clear");
     r = await t.context.list.clear();
@@ -424,7 +423,7 @@ test.serial('remove channels by user favorites', async (t) => {
     t.is(channels[0].id, channel.id);
 });
 
-test.serial('channel offline setting', (t) => {
+test.serial('channel offline setting', async (t) => {
     const rawChannel = getChannel();
     rawChannel.live.setLive(true);
     const channel = rawChannel.serialize();
@@ -433,19 +432,12 @@ test.serial('channel offline setting', (t) => {
         store = transaction.objectStore("channels"),
         req = store.add(channel);
 
-    return new Promise((resolve, reject) => {
-        req.onsuccess = () => {
-            resolve(t.context.list.close().then(() => t.context.list.openDB("channellist"))
-                .then(() => {
-                    return t.context.list.getChannel(channel.login, channel.type);
-                }).then((channel) => {
-                    return channel.live.isLive();
-                }).then((isLive) => {
-                    t.false(isLive);
-                }));
-        };
-        req.onerror = reject;
-    });
+    await DatabaseManager._waitForRequest(req);
+    await t.context.list.close();
+    await DatabaseManager.open();
+    const ch = await t.context.list.getChannel(channel.login, channel.type);
+    const isLive = await ch.live.isLive();
+    t.false(isLive);
 });
 
 test.serial('set channel with new login', async (t) => {
@@ -454,14 +446,6 @@ test.serial('set channel with new login', async (t) => {
         newChannel = await t.context.list.setChannel(sameChannel);
     t.is(newChannel.id, channel.id);
     t.is(newChannel.login, sameChannel.login);
-});
-
-test.serial('opening open list', async (t) => {
-    t.not(t.context.list.db, null);
-
-    await t.context.list.openDB("channellist");
-
-    t.not(t.context.list.db, null);
 });
 
 test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
@@ -487,7 +471,7 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     });
     db.close();
 
-    await t.notThrows(t.context.list.openDB("channellist"));
+    await t.notThrows(DatabaseManager.open("channellist"));
 });
 
 test.todo("event forwarding");
@@ -509,11 +493,10 @@ test.serial.beforeEach(async (t) => {
     t.context.extraChannels = channels.length;
     t.context.extraUsers = users.length;
 
-    await t.context.list.openDB("channellist");
     await t.context.list.addChannels(channels);
     return Promise.all(users.map((u) => t.context.list.addUser(u)));
 });
 test.serial.afterEach.always(async (t) => {
+    await DatabaseManager.open();
     await t.context.list.clear();
-    return t.context.list.close();
 });

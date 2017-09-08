@@ -11,7 +11,6 @@ import ParentalControls from "../parental-controls";
 import * as qs from "../queue/service";
 import EventTarget from 'event-target-shim';
 import ProviderChannelList from '../channel/provider-list';
-import ChannelList from '../channel/list';
 import { emit } from '../../utils';
 
 const _ = browser.i18n.getMessage,
@@ -24,9 +23,7 @@ const _ = browser.i18n.getMessage,
         return queues.get(provider);
     },
     listFor = (provider) => {
-        const list = new ProviderChannelList(provider);
-        ChannelList.registerList(list);
-        return list;
+        return new ProviderChannelList(provider);
     };
 
 /**
