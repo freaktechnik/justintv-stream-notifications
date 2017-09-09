@@ -37,7 +37,7 @@ const ChannelContextPanel = (props) => {
     }
     if(props.providerEnabled) {
         if(props.external) {
-            items.push(<ContextItem label="context_add" key="add" onCLick={ () => props.onAdd(props.id) }/>);
+            items.push(<ContextItem label="context_add" key="add" onClick={ () => props.onAdd(props.id) }/>);
         }
         else {
             if(props.liveState === LiveState.LIVE) {
@@ -48,7 +48,11 @@ const ChannelContextPanel = (props) => {
         }
     }
     return ( <ContextList title={ props.uname } onClose={ props.onClose }>
-        <ContextItem label="openChannel"/>
+        <ContextItem label="openChannel" onClick={ () => props.onOpen({
+	    url: props.url,
+	    id: props.id,
+	    external: props.external
+	}) }/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({
             url: props.url,
