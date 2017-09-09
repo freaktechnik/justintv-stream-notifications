@@ -161,7 +161,7 @@ class ListView extends EventTarget {
                 emit(this, "opencm");
                 break;
             case "add":
-                emit(this, "addchannel", event.payload.type, event.payload.login);
+                emit(this, "addchannel", event.payload.login, event.payload.type);
                 break;
             case "pause":
             case "resume":
