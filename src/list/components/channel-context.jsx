@@ -48,11 +48,7 @@ const ChannelContextPanel = (props) => {
         }
     }
     return ( <ContextList title={ props.uname } onClose={ props.onClose }>
-        <ContextItem label="openChannel" onClick={ () => props.onOpen({
-	    url: props.url,
-	    id: props.id,
-	    external: props.external
-	}) }/>
+        <ContextItem label="openChannel" onClick={ () => props.onOpen(props) }/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({
             url: props.url,
@@ -79,7 +75,11 @@ ChannelContextPanel.propTypes = {
     onAdd: PropTypes.func,
     onCopy: PropTypes.func,
     onRemove: PropTypes.func,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onArchive: PropTypes.func,
+    onRefresh: PropTypes.func,
+    url: PropTypes.string,
+    chatUrl: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
