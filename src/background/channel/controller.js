@@ -16,7 +16,7 @@ import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
 import { formatChannel, formatChannels } from './utils';
-import { CantOpenListError } from '../../read-channel-list';
+import { CantOpenListError } from '../../database-manager';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded

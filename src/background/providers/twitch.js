@@ -242,12 +242,13 @@ class Twitch extends GenericProvider {
         };
     }
     async updateChannel(channelname, ignoreHosted = false) {
-        const [ data, channel ] = await Promise.all([
-            getStreamTypeParam("?").then((p) => this._qs.queueRequest(baseURL + '/streams/' + channelname + p, headers)),
-            this.getChannelDetails(channelname)
-        ]);
+        const typeParam = await getStreamTypeParam("?"),
+            data = await this._qs.queueRequest(baseURL + '/streams/' + channelname + typeParam, headers);
 
+        let channel;
         if(data.parsedJSON && data.parsedJSON.stream !== null) {
+            idOfChannel.set(data.parsedJSON.stream.channel.name, data.parsedJSON.stream.channel._id);
+            channel = getChannelFromJSON(data.parsedJSON.stream.channel);
             channel.viewers = data.parsedJSON.stream.viewers;
             channel.thumbnail = data.parsedJSON.stream.preview.medium;
             if(data.parsedJSON.stream.stream_type === "watch_party") {
@@ -256,6 +257,9 @@ class Twitch extends GenericProvider {
             else {
                 channel.live.setLive(true);
             }
+        }
+        else {
+            channel = await this.getChannelDetails(channelname);
         }
 
         if((await channel.live.isLive(LiveState.TOWARD_LIVE)) || ignoreHosted) {
