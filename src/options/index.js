@@ -135,12 +135,8 @@ class OptionsPage {
             document.getElementById(pref)[valueSetter] = value;
         }
         else if(reset) {
-            if(prefType === "string" || prefType === "integer") {
-                document.getElementById(pref).value = '';
-            }
-            else if(prefType === "bool" || prefType === "radio") {
-                document.getElementById(pref)[prefType] = value;
-            }
+            // The default is hidden, which is only possible for text & numbers.
+            document.getElementById(pref).value = '';
         }
     }
     loadValues(withDefaults = false) {
