@@ -140,7 +140,7 @@ export default class ChannelsManager extends EventTarget {
                 emit(this, "removechannel", message.payload);
                 break;
             case "removeuser":
-                emit(this, "removeuser", message.payload.userId, message.payload.removeFavorites);
+                emit(this, "removeuser", message.payload.userId, message.payload.removeFollows);
                 break;
             case "updatefavorites":
             case "updatechannel":

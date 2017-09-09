@@ -103,7 +103,7 @@ export default class ChannelController extends EventTarget {
         this._manager.addEventListener("adduser", ({ detail: [ username, type, canceled ] }) => this.addUser(username, type, canceled)
             .then(() => this._manager._deleteCancelingValue("user", type, username),
                 (e) => managerError(e, username, type, "user", canceled)));
-        this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(detail));
+        this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(...detail));
         this._manager.addEventListener("updatefavorites", ({ detail }) => this.updateUser(detail)
             .catch(managerDoneLoading));
         this._manager.addEventListener("autoadd", () => this.autoAddUsers().catch(managerDoneLoading));
@@ -167,6 +167,9 @@ export default class ChannelController extends EventTarget {
         });
         this._list.addEventListener("userupdated", ({ detail }) => {
             this._manager.onUserUpdated(detail);
+        });
+        this._list.addEventListener("userdeleted", ({ detail: user }) => {
+            this._manager.onUserRemoved(user.id);
         });
         this._list.addEventListener("clear", ({ detail: hard }) => {
             if(hard) {

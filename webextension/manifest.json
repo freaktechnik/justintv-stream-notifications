@@ -36,6 +36,7 @@
         "storage",
         "alarms",
         "clipboardWrite",
+        "downloads",
         "https://www.googleapis.com/youtube/v3/*",
         "https://livestream.com/api/*",
         "https://api.twitch.tv/api/*",

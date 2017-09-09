@@ -548,5 +548,13 @@
     "enable_cookies": {
         "message": "Help me fix this",
         "description": "Button label to resolve the cookies problem. Links to a website with a guide."
+    },
+    "export": {
+        "message": "Export configuration",
+        "description": "Button label to export the preferences and channel list."
+    },
+    "import": {
+        "message": "Import configuration",
+        "description": "Button label to import preferences and channel list"
     }
 }

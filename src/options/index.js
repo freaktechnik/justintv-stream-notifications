@@ -1,8 +1,10 @@
 import prefs from '../prefs.json';
+import preferences from '../preferences';
 import { format } from '../format-pref';
 import '../content/l10n';
 import { toggle } from '../content/utils';
 import errorStateWidget from '../content/error-state';
+import saveExport from '../export';
 import './options.css';
 import '../content/shared.css';
 
@@ -54,9 +56,7 @@ class OptionsPage {
     }
 
     savePref(id) {
-        return browser.storage.local.set({
-            [id]: this.getValue(id)
-        });
+        return preferences.set(id, this.getValue(id));
     }
     storeValues() {
         const values = {};
@@ -98,6 +98,40 @@ class OptionsPage {
             passive: false,
             capture: true
         });
+
+        document.getElementById("import").addEventListener("click", () => {
+            document.getElementById("fileImport").click();
+        }, {
+            passive: true,
+            capture: false
+        });
+
+        document.getElementById("export").addEventListener("click", () => {
+            saveExport();
+        }, {
+            passive: true,
+            capture: false
+        });
+
+        document.getElementById("fileImport").addEventListener("input", (e) => {
+            browser.runtime.sendMessage({
+                command: "import",
+                payload: e.target.files[0]
+            });
+        }, {
+            passive: true,
+            capture: false
+        });
+
+        // This also triggers with changes that the user made, not only import.
+        preferences.addEventListener("change", ({ detail: { pref, value } }) => {
+            this.loadValue(pref, value);
+        });
+    }
+    loadValue(pref, value) {
+        if(!prefs[pref].hideDefault || prefs[pref].value !== value) {
+            document.getElementById(pref)[OptionsPage.VALUE_PROPERTY[prefs[pref].type]] = value;
+        }
     }
     loadValues(withDefaults = false) {
         let request;
@@ -117,9 +151,7 @@ class OptionsPage {
         }
         return browser.storage.local.get(request).then((stored) => {
             for(const p in stored) {
-                if(!prefs[p].hideDefault || prefs[p].value !== stored[p]) {
-                    document.getElementById(p)[OptionsPage.VALUE_PROPERTY[prefs[p].type]] = stored[p];
-                }
+                this.loadValue(p, stored[p]);
             }
         });
     }

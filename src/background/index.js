@@ -22,6 +22,7 @@ import prefInfo from '../prefs.json';
 import Tour from './tour';
 import ParentalControls from './parental-controls';
 import { errorStateManager } from './error-state';
+import importFile from './import';
 
 const qsPause = () => qs.pause(),
     qsResume = () => qs.resume(),
@@ -158,6 +159,9 @@ browser.runtime.onMessage.addListener((message) => {
     }
     else if(message === "pcStatus") {
         return Promise.resolve(ParentalControls.enabled);
+    }
+    else if(message.command === "import") {
+        return importFile(message.payload, controller);
     }
 });
 

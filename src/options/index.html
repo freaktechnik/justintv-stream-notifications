@@ -11,14 +11,19 @@
         <meta charset="utf-8">
         <link rel="help" href="http://streamnotifier.ch/help/panel" hreflang="en" type="text/html">
         <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">
+
+        <script type="application/javascript" src="../vendor/event-target-shim.min.js"></script>
     </head>
     <body>
         <main class="panel">
             <div id="errorStates">
             </div>
+            <input type="file" id="fileImport" accept=".sne" hidden>
             <div class="topbar">
                 <button id="manageChannels"<%= translateElement('manageChannels_label') %></button>
                 <button id="reset"<%= translateElement('resetOptions') %></button>
+                <button id="export"<%= translateElement('export') %></button>
+                <button id="import"<%= translateElement('import') %></button>
             </div>
             <% var visiblePrefs = [],
                 hiddenPrefs = [];
@@ -104,6 +109,6 @@
         </main>
         <footer>
             <a href="http://streamnotifier.ch/privacy">Privacy Policy</a>
-        </footer>
+        </footer>"
     </body>
 </html>
