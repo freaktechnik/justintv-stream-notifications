@@ -16,7 +16,7 @@ import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
 import { formatChannel, formatChannels } from './utils';
-import { CantOpenListError } from '../../read-channel-list';
+import { CantOpenListError } from '../../database-manager';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded
@@ -65,12 +65,6 @@ const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-rese
  * @extends external:EventTarget
  */
 export default class ChannelController extends EventTarget {
-    /**
-     * @type {boolean}
-     * @private
-     */
-    _ready = false;
-
     /**
      * @fires module:channel/controller.ChannelController#channelsadded
      * @fires module:channel/controller.ChannelController#channeldeleted
@@ -125,12 +119,30 @@ export default class ChannelController extends EventTarget {
         });
 
         // We only want the afterchannelsdeleted event to fire after all channels are gone.
-        const debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500);
+        const debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
+            listError = (e) => {
+                let message,
+                    actionsListener;
+                const actions = [];
+                if(e instanceof CantOpenListError) {
+                    message = browser.i18n.getMessage("cookies_disabled");
+                    actions.push(browser.i18n.getMessage("enable_cookies"));
+                    actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
+                }
+                else {
+                    message = browser.i18n.getMessage("restore_failed");
+                    actions.push(browser.i18n.getMessage("restore_action"));
+                    actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
+                }
+                const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
+                es.addEventListener("action", actionsListener);
+            };
         /**
          * @type module:channel/list.ChannelList
          * @private
          */
         this._list = new ChannelList();
+        this._list._ready.catch(listError);
         this._list.addEventListener("channelsadded", ({ detail: channels }) => {
             channels.forEach((chan) => this._manager.onChannelAdded(chan));
 
@@ -170,23 +182,6 @@ export default class ChannelController extends EventTarget {
                     capture: false
                 });
             }
-        });
-        this._list.addEventListener("unfixableerror", ({ detail: e }) => {
-            let message,
-                actionsListener;
-            const actions = [];
-            if(e instanceof CantOpenListError) {
-                message = browser.i18n.getMessage("cookies_disabled");
-                actions.push(browser.i18n.getMessage("enable_cookies"));
-                actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
-            }
-            else {
-                message = browser.i18n.getMessage("restore_failed");
-                actions.push(browser.i18n.getMessage("restore_action"));
-                actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
-            }
-            const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
-            es.addEventListener("action", actionsListener);
         });
         // Provider update events
 
@@ -502,7 +497,7 @@ export default class ChannelController extends EventTarget {
      * @returns {undefined}
      */
     setTheme(theme) {
-        this._ready.then(() => this._manager.setTheme(theme));
+        this._manager.setTheme(theme);
     }
 
     /**

@@ -7,7 +7,7 @@ import test from 'ava';
 import ChannelList from '../src/background/channel/list';
 import ReadChannelList from '../src/read-channel-list';
 import { getUser, getChannel } from "./helpers/channel-user";
-import { FixListError } from '../src/read-channel-list';
+import DatabaseManager, { FixListError } from '../src/database-manager';
 
 const setupDB = async () => {
     const channels = [
@@ -23,7 +23,6 @@ const setupDB = async () => {
     const list = new ChannelList();
     await list.addChannels(channels);
     await Promise.all(users.map((u) => list.addUser(u)));
-    await list.close();
 };
 
 test("Static properties", (t) => {
@@ -77,7 +76,6 @@ test.serial('get users by type', async (t) => {
 
     await list.removeUser(user1.id);
     await list.removeUser(user2.id);
-    await list.close();
 });
 
 test.serial('get all users', async (t) => {
@@ -97,7 +95,6 @@ test.serial('get users by favorite', async (t) => {
     t.is(users[0].favorites[0], chan.login, "User has test_chan as favorite");
 
     await list.removeUser(userId);
-    await list.close();
 });
 
 test.serial('get channel', async (t) => {
@@ -167,7 +164,6 @@ test.serial('get channels by type', async (t) => {
 
     await list.removeChannel(channel.id);
     await list.removeChannel(secondChannel.id);
-    await list.close();
 });
 
 test.serial('get all channels', async (t) => {
@@ -186,14 +182,6 @@ test.serial('get channels by user favorites', async (t) => {
     channels.forEach((channel) => {
         t.true(referenceUser.favorites.find((fav) => fav === channel.login) !== undefined);
     });
-});
-
-test.serial('opening open list', async (t) => {
-    t.not(t.context.list.db, null);
-
-    await t.context.list.openDB(ReadChannelList.name);
-
-    t.not(t.context.list.db, null);
 });
 
 test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
@@ -219,15 +207,9 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     });
     await db.close();
 
-    await t.notThrows(t.context.list.openDB(ReadChannelList.name));
+    await t.notThrows(DatabaseManager.open(ReadChannelList.name));
     await t.context.list.close();
     await setupDB();
-});
-
-test.serial("Close closed db", async (t) => {
-    await t.context.list.close();
-
-    await t.notThrows(t.context.list.close());
 });
 
 test.todo("event filtering");
@@ -244,13 +226,8 @@ test.serial.beforeEach(async (t) => {
     t.context.referenceUser = await t.context.list.getUserId('foo', 'extra');
 });
 
-test.serial.afterEach.always((t) => {
-    return t.context.list.close();
-});
-
 test.after.always(async () => {
     const list = new ChannelList();
-    await list._ready;
     await list.clear();
     return list.close();
 });

@@ -105,7 +105,7 @@ const testRequests = async (t, p) => {
         const urls = requestConfig.getURLs();
         t.true("then" in urls);
         urls.catch(console.warn);
-        const complete = requestConfig.onComplete({});
+        const complete = requestConfig.onComplete({}, '');
         t.true("then" in urls);
         complete.catch(console.warn);
 

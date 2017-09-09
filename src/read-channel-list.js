@@ -6,53 +6,9 @@
  * @module read-channel-list
  * @todo Unify Errors that other lists might re-use.
  */
-// setup event handling
-import { emit } from "./utils";
+import { when } from "./utils";
+import DatabaseManager, { ListClosedError } from './database-manager';
 import EventTarget from 'event-target-shim';
-
-/**
- * IndexedDB version.
- *
- * @const {number}
- * @default 2
- */
-const VERSION = 3,
-    /**
-     * Database name.
-     *
-     * @const {string}
-     * @default "channellist"
-     */
-    NAME = "channellist";
-
-/**
- * The ChannelList is ready to be used.
- *
- * @event module:read-channel-list.ReadChannelList#ready
- */
-/**
- * The ChannelList's DB connection was closed.
- *
- * @event module:read-channel-list.ReadChannelList#close
- */
-
-export class FixListError extends Error {
-    constructor() {
-        super("Could not open list, please fix");
-    }
-}
-
-export class CantOpenListError extends Error {
-    constructor() {
-        super("Can not open list due to security settings");
-    }
-}
-
-export class ListClosedError extends Error {
-    constructor() {
-        super("List is not open at the moment");
-    }
-}
 
 /**
  * @class module:read-channel-list.ReadChannelList
@@ -67,39 +23,30 @@ export default class ReadChannelList extends EventTarget {
      * @default "channellist"
      */
     static get name() {
-        return NAME;
+        return DatabaseManager.name;
     }
     /**
-     * Reference to the DB
-     *
-     * @type {IndexedDB?}
-     */
-    db = null;
-    /**
-     * Holds a promise until the DB is being opened.
-     *
-     * @type {Promise?}
-     */
-    _openingDB = null;
-    /**
+     * @param {boolean} [passivelyOpen=false] - If this DB should not open the DB
+     * explicitly.
      * @constructs
      * @fires module:read-channel-list.ReadChannelList#ready
      */
-    constructor() {
+    constructor(passivelyOpen = false) {
         super();
 
-        this.idCache = new Map();
+        DatabaseManager.registerList(this);
 
-        this.openDB(ReadChannelList.name);
+        if(!passivelyOpen) {
+            DatabaseManager.open();
+        }
     }
 
-    /**
-     * @param {string} event - Name of the event that is to be fired.
-     * @param {?} payload - Data coming with the event.
-     * @returns {boolean} Whether the event should be emitted onto this list instance.
-     */
-    filterEvents(event, payload) { // eslint-disable-line no-unused-vars
-        return event !== "ready" && event !== "close";
+    get idCache() {
+        return DatabaseManager.idCache;
+    }
+
+    get error() {
+        return DatabaseManager.error;
     }
 
     /**
@@ -112,10 +59,7 @@ export default class ReadChannelList extends EventTarget {
      * @throws Error when the request fails.
      */
     _waitForRequest(request) {
-        return new Promise((resolve, reject) => {
-            request.onsuccess = resolve;
-            request.onerror = reject;
-        });
+        return DatabaseManager._waitForRequest(request);
     }
 
     /**
@@ -157,127 +101,21 @@ export default class ReadChannelList extends EventTarget {
         });
     }
 
-    _doOpen(name, dontTry) {
-        return new Promise((resolve, reject) => {
-            // Try to open the DB
-            let request;
-            try {
-                request = window.indexedDB.open(name, VERSION);
-            }
-            catch(e) {
-                reject(new CantOpenListError());
-                return;
-            }
-
-            request.onupgradeneeded = (e) => {
-                this.db = e.target.result;
-
-                if(e.oldVersion != 1 && e.oldVersion != 2) {
-                    const users = this.db.createObjectStore("users", { keyPath: "id", autoIncrement: true }),
-                        channels = this.db.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-                    users.createIndex("typename", [ "type", "login" ], { unique: true });
-                    users.createIndex("type", "type", { unique: false });
-                    //users.createIndex("id", "id", { unique: true });
-                    channels.createIndex("typename", [ "type", "login" ], { unique: true });
-                    channels.createIndex("type", "type", { unique: false });
-                    //channels.createIndex("id", "id", { unique: true });
-                }
-                else if(e.oldVersion === 2) {
-                    const channels = e.target.transaction.objectStore("channels"),
-                        request = channels.openCursor();
-                    this._waitForCursor(request, (cursor) => {
-                        const channel = cursor.value;
-                        if(channel.live.alternateUsername || channel.live.alternateURL) {
-                            channel.live.state = -1;
-                        }
-                        if(channel.live.alternateUsername) {
-                            delete channel.live.alternateUsername;
-                        }
-                        if(channel.live.alternateURL) {
-                            delete channel.live.alternateURL;
-                        }
-                        const r = cursor.update(channel);
-                        this._waitForRequest(r).catch(reject);
-                    });
-                }
-            };
-
-            // DB is ready
-            request.onsuccess = (e) => {
-                this.db = e.target.result;
-
-                this.db.addEventListener("close", () => {
-                    delete this.db;
-                    emit(this, "close");
-                }, {
-                    passive: true,
-                    capture: false,
-                    once: true
-                });
-
-                resolve();
-            };
-
-            /* istanbul ignore next */
-            request.onerror = () => {
-                console.error(request.error);
-                if(!dontTry) {
-                    if(this.db) {
-                        this.db.close();
-                        delete this.db;
-                    }
-                    console.error("Couldn't delete the DB");
-                    reject(new FixListError(request.error));
-                }
-                else {
-                    reject(request.error);
-                }
-            };
-        });
+    filterEvents() {
+        return true;
     }
 
-    /**
-     * Opens the DB, initializes the schema if it's a new DB or sets channels
-     * offline that were online and have last been updated a certain time ago.
-     *
-     * @param {string} [name=ReadChannelList.name] - Name of the DB to open.
-     * @param {boolean} [dontTry=false] - Don't try to fix the DB.
-     * @async
-     * @fires module:read-channel-list.ReadChannelList#ready
-     * @returns {undefined} The DB is ready.
-     * @throws Could not open the DB. Has a boolean that is true when a clear
-     *         should be tried.
-     */
-    openDB(name = ReadChannelList.name, dontTry = false) {
-        // Quick path if DB is already opened.
-        if(this._openingDB !== null) {
-            return this._openingDB;
-        }
-        else if(this.db) {
-            return Promise.resolve();
-        }
-
-        this._openingDB = this._doOpen(name, dontTry);
-        // Clear it once the promise is done.
-        this._openingDB.then(() => {
-            emit(this, "ready");
-            this._openingDB = null;
-        }, () => {
-            this._openingDB = null;
-        });
-        return this._openingDB;
+    get db() {
+        return DatabaseManager.db;
     }
 
     get _ready() {
-        if(this._openingDB !== null) {
-            return this._openingDB;
-        }
-        else if(this.db) {
-            return Promise.resolve();
-        }
-        else {
-            return Promise.reject(new ListClosedError());
-        }
+        return DatabaseManager.ready.catch((e) => {
+            if(e instanceof ListClosedError) {
+                return when(this, "ready");
+            }
+            throw e;
+        });
     }
 
     /**
@@ -500,15 +338,6 @@ export default class ReadChannelList extends EventTarget {
      * @fires module:read-channel-list.ReadChannelList#close
      */
     close() {
-        return new Promise((resolve) => {
-            if(this.db) {
-                this.db.close();
-                this.db = null;
-                resolve();
-            }
-            else {
-                resolve();
-            }
-        });
+        return DatabaseManager.close();
     }
 }

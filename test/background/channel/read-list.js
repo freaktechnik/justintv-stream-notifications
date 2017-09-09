@@ -8,7 +8,7 @@ import ChannelList from '../../../src/background/channel/list';
 import ReadChannelList from '../../../src/background/channel/read-list';
 import { User, Channel } from '../../../src/background/channel/core';
 import { getUser, getChannel } from "../../helpers/channel-user";
-import { FixListError } from '../../../src/read-channel-list';
+import { FixListError } from '../../../src/database-manager';
 import RCL from '../../../src/read-channel-list';
 
 const setupDB = async () => {
@@ -23,10 +23,8 @@ const setupDB = async () => {
             getUser('bar', 'extra')
         ];
     const list = new ChannelList();
-    await list.openDB(RCL.name);
     await list.addChannels(channels);
     await Promise.all(users.map((u) => list.addUser(u)));
-    await list.close();
 };
 
 test("Static properties", (t) => {
@@ -71,7 +69,6 @@ test.serial('get user id', async (t) => {
 
 test.serial('get users by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
     const user1 = await list.addUser(getUser()),
         user2 = await list.addUser(getUser('test2'));
 
@@ -84,7 +81,6 @@ test.serial('get users by type', async (t) => {
 
     await list.removeUser(user1.id);
     await list.removeUser(user2.id);
-    await list.close();
 });
 
 test.serial('get all users', async (t) => {
@@ -100,7 +96,6 @@ test.serial('get users by favorite', async (t) => {
     const chan = getChannel("test_chan"),
         user = getUser();
     user.favorites = [ chan.login ];
-    await list.openDB("Channellist");
     const { id: userId } = await list.addUser(user);
 
     const users = await t.context.list.getUsersByFavorite(chan);
@@ -109,7 +104,6 @@ test.serial('get users by favorite', async (t) => {
     t.is(users[0].favorites[0], chan.login, "User has test_chan as favorite");
 
     await list.removeUser(userId);
-    await list.close();
 });
 
 test.serial('get channel', async (t) => {
@@ -185,7 +179,6 @@ test.serial('live status live', async (t) => {
     const list = new ChannelList();
     const channel = getChannel();
     channel.live.setLive(true);
-    await list.openDB(RCL.name);
     const { id: channelId } = await list.addChannel(channel);
 
     let liveStatus = await t.context.list.liveStatus(null);
@@ -198,12 +191,10 @@ test.serial('live status live', async (t) => {
     t.false(liveStatus);
 
     await list.removeChannel(channelId);
-    await list.close();
 });
 
 test.serial('get channels by type', async (t) => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
     const channel = await list.addChannel(getChannel());
     const secondChannel = await list.addChannel(getChannel("foo"));
 
@@ -216,7 +207,6 @@ test.serial('get channels by type', async (t) => {
 
     await list.removeChannel(channel.id);
     await list.removeChannel(secondChannel.id);
-    await list.close();
 });
 
 test.serial('get all channels', async (t) => {
@@ -240,48 +230,6 @@ test.serial('get channels by user favorites', async (t) => {
     });
 });
 
-test.serial('opening open list', async (t) => {
-    t.not(t.context.list.db, null);
-
-    await t.context.list.openDB(RCL.name);
-
-    t.not(t.context.list.db, null);
-});
-
-test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
-    await t.context.list.close();
-    await new Promise((resolve, reject) => {
-        const request = indexedDB.deleteDatabase(RCL.name);
-        request.onerror = reject;
-        request.onsuccess = resolve;
-    });
-
-    const request = indexedDB.open(RCL.name, 1);
-    request.onupgradeneeded = (e) => {
-        const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-        users.createIndex("typename", [ "type", "login" ], { unique: true });
-        users.createIndex("type", "type", { unique: false });
-        const channels = e.target.result.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-        channels.createIndex("typename", [ "type", "login" ], { unique: true });
-        channels.createIndex("type", "type", { unique: false });
-    };
-    const { target: { result: db } } = await new Promise((resolve, reject) => {
-        request.onsuccess = resolve;
-        request.onerror = reject;
-    });
-    await db.close();
-
-    await t.notThrows(t.context.list.openDB(RCL.name));
-    await t.context.list.close();
-    await setupDB();
-});
-
-test.serial("Close closed db", async (t) => {
-    await t.context.list.close();
-
-    await t.notThrows(t.context.list.close());
-});
-
 test.before(setupDB);
 
 test.serial.beforeEach(async (t) => {
@@ -290,18 +238,12 @@ test.serial.beforeEach(async (t) => {
         t.context.extraChannels = 4;
         t.context.extraUsers = 2;
     }
-    await t.context.list.openDB(RCL.name);
     t.context.referenceChannel = await t.context.list.getChannelId('foo', 'extra');
     t.context.referenceUser = await t.context.list.getUserId('foo', 'extra');
 });
 
-test.serial.afterEach.always((t) => {
-    return t.context.list.close();
-});
-
 test.after.always(async () => {
     const list = new ChannelList();
-    await list.openDB(RCL.name);
     await list.clear();
     return list.close();
 });

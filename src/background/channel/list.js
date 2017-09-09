@@ -7,13 +7,11 @@
  * @requires module:channel/core
  */
 // setup event handling
-import { emit } from "../../utils";
 import prefs from "../../preferences";
 import { Channel } from "./core";
 import LiveState from "../../live-state";
 import ReadChannelList from './read-list';
-import { FixListError, CantOpenListError } from '../../read-channel-list';
-import SerializedReadChannelList from '../../read-channel-list';
+import DatabaseManager, { FixListError } from '../../database-manager';
 
 /**
  * Whenever one or more channels are added to the ChannelList this event is
@@ -62,11 +60,9 @@ import SerializedReadChannelList from '../../read-channel-list';
 /**
  * The database could not be repaired.
  *
- * @event module:channel/list.ChannelList#unfixableerror
+ * @event module:channel/list.ChannelList#error
  * @type {Error}
  */
-
-const eventTargets = new Set();
 
 /**
  * @class module:channel/list.ChannelList
@@ -78,74 +74,36 @@ export default class ChannelList extends ReadChannelList {
      * @fires module:channel/list.ReadChannelList#ready
      */
     constructor() {
-        super();
-        ChannelList.registerList(this);
-    }
-
-    _emit(event, payload) {
-        for(const target of eventTargets.values()) {
-            if(!("filterEvents" in target) || target.filterEvents(event, payload)) {
-                emit(target, event, payload);
-            }
-        }
-    }
-
-    /**
-     * @param {module:channel/read-list.ReadChannelList} list - List to add events to.
-     * @returns {undefined}
-     */
-    static registerList(list) {
-        if(list instanceof ReadChannelList) {
-            eventTargets.add(list);
-        }
-    }
-
-    /**
-     * @param {module:channel/read-list.ReadChannelList} list - List to stop emitting events on.
-     * @returns {undefined}
-     */
-    static unregisterList(list) {
-        eventTargets.delete(list);
-    }
-
-    async _doOpen(name, dontTry = false) {
-        try {
-            await super._doOpen(name, dontTry);
-        }
-        catch(error) {
-            if(typeof error === "object") {
-                if(error instanceof FixListError) {
-                    try {
-                        await this.clear();
-                    }
-                    catch(e) {
-                        console.error("Couldn't delete the DB");
-                        emit(this, "unfixableerror", error);
-                        throw e;
-                    }
+        DatabaseManager.registerErrorHandler(async (error) => {
+            if(typeof error === "object" && error instanceof FixListError) {
+                try {
+                    await this.clear();
                 }
-                else if(error instanceof CantOpenListError) {
-                    emit(this, "unfixableerror", error);
+                catch(e) {
+                    console.error("Couldn't delete the DB");
+                    DatabaseManager.emit("error", error);
+                    throw e;
                 }
             }
-            else {
-                throw error;
-            }
-        }
-
-        // Set all channels to offline, that haven't been updated in a certain time.
-        const cacheTime = await prefs.get("channellist_cacheTime"),
-            transaction = this.db.transaction("channels", "readwrite"),
-            store = transaction.objectStore("channels"),
-            minDate = Date.now() - cacheTime, //now - 10 min
-            req = store.index("typename").openCursor();
-        await this._waitForCursor(req, (cursor) => {
-            this.idCache.set(cursor.value.type + cursor.value.login, cursor.value.id);
-            if(cursor.value.lastModified < minDate) {
-                cursor.value.live.state = LiveState.OFFLINE;
-                cursor.update(cursor.value);
-            }
+            throw error;
         });
+        DatabaseManager.registerSuccessHanlder(async (db) => {
+            // Set all channels to offline, that haven't been updated in a certain time.
+            const cacheTime = await prefs.get("channellist_cacheTime"),
+                transaction = db.transaction("channels", "readwrite"),
+                store = transaction.objectStore("channels"),
+                minDate = Date.now() - cacheTime, //now - 10 min
+                req = store.index("typename").openCursor();
+            await this._waitForCursor(req, (cursor) => {
+                this.idCache.set(cursor.value.type + cursor.value.login, cursor.value.id);
+                if(cursor.value.lastModified < minDate) {
+                    cursor.value.live.state = LiveState.OFFLINE;
+                    cursor.update(cursor.value);
+                }
+            });
+        });
+
+        super();
     }
 
     /**
@@ -170,7 +128,7 @@ export default class ChannelList extends ReadChannelList {
         await this._waitForRequest(req);
         channel.id = req.result;
         this.idCache.set(channel.type + channel.login, channel.id);
-        this._emit("channelsadded", [ channel ]);
+        DatabaseManager.emit("channelsadded", [ channel ]);
         return channel;
     }
 
@@ -217,7 +175,7 @@ export default class ChannelList extends ReadChannelList {
                 return new Promise((resolve) => {
                     transaction.oncomplete = () => {
                         if(addedChannels.length > 0) {
-                            this._emit("channelsadded", addedChannels);
+                            DatabaseManager.emit("channelsadded", addedChannels);
                         }
                         resolve(addedChannels);
                     };
@@ -245,7 +203,7 @@ export default class ChannelList extends ReadChannelList {
             req = store.add(user.serialize());
         await this._waitForRequest(req);
         user.id = req.result;
-        this._emit("useradded", user);
+        DatabaseManager.emit("useradded", user);
         return user;
     }
 
@@ -270,7 +228,7 @@ export default class ChannelList extends ReadChannelList {
         await this._waitForRequest(req);
         this.idCache.set(channel.type + channel.login, req.result);
         channel.id = req.result; //TODO was there a reason to fetch the channel here?
-        this._emit("channelupdated", channel);
+        DatabaseManager.emit("channelupdated", channel);
         return channel;
     }
 
@@ -292,7 +250,7 @@ export default class ChannelList extends ReadChannelList {
             req = store.put(user.serialize());
         await this._waitForRequest(req);
         user.id = req.result;
-        this._emit("userupdated", user);
+        DatabaseManager.emit("userupdated", user);
         return user;
     }
 
@@ -312,7 +270,7 @@ export default class ChannelList extends ReadChannelList {
             id = await this.getChannelId(id, type);
         }
 
-        this._emit("beforechanneldeleted", id);
+        DatabaseManager.emit("beforechanneldeleted", id);
         const channel = await this.getChannel(id),
             transaction = this.db.transaction("channels", "readwrite"),
             store = transaction.objectStore("channels");
@@ -321,7 +279,7 @@ export default class ChannelList extends ReadChannelList {
             this._waitForRequest(store.delete(id))
         ]);
         this.idCache.delete(channel.type + channel.login);
-        this._emit("channeldeleted", channel);
+        DatabaseManager.emit("channeldeleted", channel);
         return channel;
     }
 
@@ -340,7 +298,7 @@ export default class ChannelList extends ReadChannelList {
             store = transaction.objectStore("users"),
             req = store.delete(user.id);
         await this._waitForRequest(req);
-        this._emit("userdeleted", user);
+        DatabaseManager.emit("userdeleted", user);
         return user;
     }
 
@@ -383,7 +341,7 @@ export default class ChannelList extends ReadChannelList {
      * @returns {boolean} If true the DB was deleted.
      */
     async clear() {
-        if(this.db) {
+        if(this.db !== null) {
             const transaction = this.db.transaction([ "channels", "users" ], "readwrite"),
                 channels = transaction.objectStore("channels"),
                 users = transaction.objectStore("users"),
@@ -392,7 +350,7 @@ export default class ChannelList extends ReadChannelList {
                 usrReq = users.clear(),
                 usrPromise = this._waitForRequest(usrReq);
             await Promise.all([ chanPromise, usrPromise ]);
-            emit(this, "clear", false);
+            DatabaseManager.emit("clear", false);
             return false;
         }
         /*
@@ -400,15 +358,8 @@ export default class ChannelList extends ReadChannelList {
          * to be done in order to slowly erase the whole DB from the disk, just
          * to reinitialize it afterward.
          */
-        const request = window.indexedDB.deleteDatabase(SerializedReadChannelList.name);
-        /* istanbul ignore next */
-        request.onblocked = () => console.warn("Deleting database was blocked");
-
-        // Reopen the DB after it's been cleared. Don't try to fix it, if it
-        // doesn't want to open.
-        await this._waitForRequest(request);
-        emit(this, "clear", true);
-        await this.openDB(SerializedReadChannelList.name, true);
+        await DatabaseManager.delete();
+        await DatabaseManager.open(this.name, true);
         return true;
     }
 }

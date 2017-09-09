@@ -2,7 +2,7 @@ import ReadChannelList from "./read-list";
 
 export default class ProviderChannelList extends ReadChannelList {
     constructor(type) {
-        super();
+        super(true);
         this.type = type;
     }
 
