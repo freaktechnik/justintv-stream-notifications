@@ -15,16 +15,16 @@ const QueueContextPanel = (props) => {
     let queueItem;
     if(props.queueEnabled) {
         if(props.paused) {
-            queueItem = <ContextItem label="context_resume" onClick={ props.onResume }/>
+            queueItem = <ContextItem label="context_resume" onClick={ props.onResume }/>;
         }
         else {
-            queueItem = <ContextItem label="context_pause" onClick={ props.onPause }/>
+            queueItem = <ContextItem label="context_pause" onClick={ props.onPause }/>;
         }
     }
     return ( <ContextList title={ _('context_queue_title') } onClose={ props.onClose }>
         <ContextItem label="context_refresh_all" onClick={ props.onRefresh }/>
         { queueItem }
-    </ContextList> )
+    </ContextList> );
 };
 QueueContextPanel.defaultProps = {
     queueEnabled: false,

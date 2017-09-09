@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import KeyHandler, { KEYDOWN } from 'react-key-handler';
 
 const _ = browser.i18n.getMessage;
 
@@ -33,7 +32,8 @@ class ContextList extends React.Component {
     static get propTypes() {
         return {
             title: PropTypes.string.isRequired,
-            onClose: PropTypes.func.isRequired
+            onClose: PropTypes.func.isRequired,
+            children: PropTypes.node.isRequired
         };
     }
 
@@ -46,7 +46,9 @@ class ContextList extends React.Component {
     render() {
         //TODO make esc close the panel
         return (
-            <dialog className="context-panel" open ref={ (e) => this.dialog = e } tabIndex={ 0 }>
+            <dialog className="context-panel" open ref={ (e) => {
+                this.dialog = e;
+            } } tabIndex={ 0 }>
                 <header>
                     <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>

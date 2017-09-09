@@ -19,14 +19,14 @@ import '../content/shared.css';
 import './list.css';
 
 const PREFS_MAP = {
-    copy_pattern: "setCopyPattern",
-    theme: "theme",
-    panel_extras: "setExtras",
-    panel_style: "setStyle"
-};
-
-// Set up all the state stuff
-const port = new Port("list", true),
+        'copy_pattern': "setCopyPattern",
+        theme: "theme",
+        'panel_extras': "setExtras",
+        'panel_style': "setStyle"
+    },
+    prefsKeys = Object.keys(PREFS_MAP),
+    // Set up all the state stuff
+    port = new Port("list", true),
     store = createStore(reducers, undefined, applyMiddleware(middlewareFactory(port))),
     list = new ReadChannelList();
 
@@ -35,7 +35,6 @@ store.subscribe(() => {
 });
 
 port.send("ready");
-const prefsKeys = Object.keys(PREFS_MAP);
 prefs.get(prefsKeys).then((values) => {
     for(const i in values) {
         store.dispatch({
@@ -77,7 +76,7 @@ port.addEventListener("message", ({ detail: event }) => {
     passive: true,
     capture: false
 });
-prefs.addEventListener("change", ({ detail: { pref, value }}) => {
+prefs.addEventListener("change", ({ detail: { pref, value } }) => {
     if(pref in PREFS_MAP) {
         store.dispatch({
             command: PREFS_MAP[pref],

@@ -5,10 +5,13 @@
         }
     },
     "rules": {
-        "no-fallthrough": 0
+        "no-fallthrough": 0,
+        "one-var": 0
     },
     "plugins": [
         "react"
     ],
-    "extends": [ "plugin:react/recommended" ]
+    "extends": [
+        "plugin:react/recommended"
+    ]
 }

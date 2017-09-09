@@ -42,7 +42,7 @@
     "eslint": "^4.2.0",
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-freaktechnik": "^2.4.0",
-    "eslint-plugin-react": "^7.2.0",
+    "eslint-plugin-react": "^7.3.0",
     "eslint-plugin-xss": "^0.1.8",
     "extract-text-webpack-plugin": "^3.0.0",
     "fake-indexeddb": "^2.0.0",
@@ -63,10 +63,10 @@
   "scripts": {
     "test": "npm run lint && nyc ava",
     "coverage": "nyc report && codecov",
-    "lint": "npm run lint-js && npm run lint-css && npm run lint-webext",
-    "lint-js": "eslint test/ src/",
-    "lint-webext": "webpack --hide-modules && web-ext lint -s webextension/",
-    "lint-css": "stylelint \"src/**/*.css\"",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:webext",
+    "lint:js": "eslint test/ src/ --ext js,jsx",
+    "lint:webext": "webpack --hide-modules && web-ext lint -s webextension/",
+    "lint:css": "stylelint \"src/**/*.css\"",
     "build": "webpack && npm run fix-i18n && web-ext build -s webextension/",
     "start": "webpack && npm run fix-i18n && web-ext run -s webextension/",
     "fix-i18n": "node ./scripts/fix-i18n-placeholders.js"

@@ -58,7 +58,7 @@ SearchField.propTypes = {
 
 const Tool = (props) => {
     return ( <li>
-        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" }  className={ props.className } onContextMenu={ props.onContextMenu }>
+        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" } className={ props.className } onContextMenu={ props.onContextMenu }>
             <Icon type={ props.icon }/>
         </button>
     </li> );

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
 import ChannelContextPanel from './channel-context.jsx';
 import QueueContextPanel from './queue-context.jsx';
 
@@ -11,6 +10,7 @@ const ContextPanel = (props) => {
     else if(props.type === 'channel') {
         return ( <ChannelContextPanel/> );
     }
+    return [];
 };
 ContextPanel.propTypes = {
     type: PropTypes.oneOf([

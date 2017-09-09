@@ -1,4 +1,3 @@
-import { CompactChannel } from './channels.jsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import LiveState from '../../live-state.json';
@@ -160,7 +159,7 @@ const mapDispatchToProps = (dispatch) => {
         onClose() {
             dispatch(closeAction);
         }
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelContextPanel);
