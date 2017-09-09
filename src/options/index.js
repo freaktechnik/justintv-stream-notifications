@@ -125,12 +125,22 @@ class OptionsPage {
 
         // This also triggers with changes that the user made, not only import.
         preferences.addEventListener("change", ({ detail: { pref, value } }) => {
-            this.loadValue(pref, value);
+            this.loadValue(pref, value, true);
         });
     }
-    loadValue(pref, value) {
+    loadValue(pref, value, reset = false) {
+        const prefType = prefs[pref].type,
+            valueSetter = OptionsPage.VALUE_PROPERTY[prefType];
         if(!prefs[pref].hideDefault || prefs[pref].value !== value) {
-            document.getElementById(pref)[OptionsPage.VALUE_PROPERTY[prefs[pref].type]] = value;
+            document.getElementById(pref)[valueSetter] = value;
+        }
+        else if(reset) {
+            if(prefType === "string" || prefType === "integer") {
+                document.getElementById(pref).value = '';
+            }
+            else if(prefType === "bool" || prefType === "radio") {
+                document.getElementById(pref)[prefType] = value;
+            }
         }
     }
     loadValues(withDefaults = false) {
