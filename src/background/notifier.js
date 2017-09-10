@@ -145,22 +145,21 @@ export default class Notifier extends EventTarget {
      */
     async sendNotification(channel) {
         // Mute notifications for the current tab
-        const [ tab, showNotifications ] = await Promise.all([
+        const [ tab, showNotifications, liveInterpretation ] = await Promise.all([
             browser.tabs.query({
                 active: true,
                 currentWindow: true,
                 url: channel.url
             }),
-            this.showNotifications()
+            this.showNotifications(),
+            this._getLiveInterpretation()
         ]);
-
-        const liveInterpretation = await this._getLiveInterpretation();
         if(showNotifications && !tab.length) {
             let title = null;
             if((await and(channel.live.isLive(LiveState.TOWARD_OFFLINE), this.onlineNotifications())) && this._channelStateChanged(channel)) {
                 title = _("onlineNotification", channel.toString());
             }
-            else if((await and(channel.live.isLive(liveInterpretation), this.titleNotifications(), or(channel.live.state === LiveState.LIVE, this.nonliveNotifications()))) && !this._channelStateChanged(channel) && this.channelTitles.get(channel.id) != channel.title) {
+            else if((await and(channel.live.isLive(liveInterpretation), this.titleNotifications(), or(channel.live.state === LiveState.LIVE, this.nonliveNotifications()))) && !this._channelStateChanged(channel) && this.channelTitles.has(channel.id) && this.channelTitles.get(channel.id) != channel.title) {
                 if(channel.live.state !== LiveState.REDIRECT) {
                     title = _("updateNotification", channel.toString());
                 }
