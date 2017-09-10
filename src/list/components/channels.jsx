@@ -401,7 +401,7 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
 
 const sortChannels = (channels, type, formatChannel) => {
     if(type !== 0) {
-        return channels.sort((a, b) => a.uname.localeCompare(b.uname.localeCompare)).map(formatChannel);
+        return channels.sort((a, b) => a.uname.localeCompare(b.uname)).map(formatChannel);
     }
     else {
         return channels.sort((a, b) => {
@@ -412,7 +412,7 @@ const sortChannels = (channels, type, formatChannel) => {
                 return -1;
             }
             else {
-                return a.uname.localeCompare(b.uname.localeCompare);
+                return a.uname.localeCompare(b.uname);
             }
         }).map(formatChannel);
     }
