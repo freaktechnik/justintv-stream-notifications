@@ -400,11 +400,12 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
 };
 
 const sortChannels = (channels, type, formatChannel) => {
+    let sorter;
     if(type !== 0) {
-        return channels.sort((a, b) => a.uname.localeCompare(b.uname)).map(formatChannel);
+        sorter = (a, b) => a.uname.localeCompare(b.uname);
     }
     else {
-        return channels.sort((a, b) => {
+        sorter = (a, b) => {
             if(a.live.state > LiveState.LIVE && b.live.state <= LiveState.LIVE) {
                 return 1;
             }
@@ -414,8 +415,9 @@ const sortChannels = (channels, type, formatChannel) => {
             else {
                 return a.uname.localeCompare(b.uname);
             }
-        }).map(formatChannel);
+        };
     }
+    return channels.sort(sorter).map(formatChannel);
 };
 
 const mergeFeatured = (featured, channels) => {
