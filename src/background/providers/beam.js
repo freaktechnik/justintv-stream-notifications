@@ -12,6 +12,7 @@ import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
 import LiveState from '../channel/live-state';
+import { filterExistingFavs } from '../channel/utils';
 
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
@@ -164,10 +165,9 @@ class Beam extends GenericProvider {
                     });
                     ch.favorites = follows.map((sub) => sub.token);
 
-                    const channels = await Promise.all(follows.filter((sub) => {
-                        return !oldUser.favorites.includes(sub.token);
-                    }).map((sub) => this.getChannelDetails(sub.token)));
-                    return [ ch, channels ];
+                    const channels = await Promise.all(follows.map((sub) => this.getChannelDetails(sub.token))),
+                        newChannels = filterExistingFavs(oldUser, channels);
+                    return [ ch, newChannels ];
                 }
                 return [];
             }

@@ -9,6 +9,7 @@ import GenericProvider from "./generic-provider";
 import { Channel, User } from "../channel/core";
 import { promisedPaginationHelper } from "../pagination-helper";
 import qs from "../querystring";
+import { filterExistingFavs } from '../channel/utils';
 
 const type = "dailymotion",
     baseUrl = "https://api.dailymotion.com/",
@@ -177,7 +178,7 @@ class Dailymotion extends GenericProvider {
                         ]);
                         user.favorites = channels.map((ch) => ch.login);
 
-                        const newChannels = channels.filter((ch) => !oldUser.favorites.includes(ch.login));
+                        const newChannels = filterExistingFavs(oldUser, channels);
                         return [ user, newChannels ];
                     }));
                 }

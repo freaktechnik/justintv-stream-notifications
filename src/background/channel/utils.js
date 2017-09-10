@@ -30,7 +30,7 @@ export async function selectOrOpenTab(channel, what) {
         toCheck = channel.url;
 
         if(what === "livestreamer") {
-            throw "Not supported";
+            throw new Error("Not supported");
         }
     }
 
@@ -47,12 +47,9 @@ export async function selectOrOpenTab(channel, what) {
 }
 
 const getRebroadcastTitlePatterns = async () => {
-    const patternstr = await prefs.get('rebroadcast_title_pattern');
-    const patterns = patternstr.split(",");
-    patterns.forEach((pattern) => {
-        patterns.push(`[${pattern}]`);
-    });
-    return patterns;
+    const patternstr = await prefs.get('rebroadcast_title_pattern'),
+        patterns = patternstr.toLowerCase().split(",");
+    return patterns.concat(patterns.map((pattern) => `[${pattern}]`));
 };
 
 /**
@@ -103,4 +100,15 @@ export const formatChannels = async (channels, serialize = false) => {
     const patterns = await getRebroadcastTitlePatterns(),
         cb = serialize ? (c) => formatChannel(c, patterns).then((ch) => ch.serialize()) : (c) => formatChannel(c, patterns);
     return Promise.all(channels.map(cb));
+};
+
+/**
+ * Filter channels to exclude existing favorites.
+ *
+ * @param {module:channel/core.User} user - User whose favs should be excluded.
+ * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
+ * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
+ */
+export const filterExistingFavs = (user, channels) => {
+    return channels.filter((ch) => !user.favorites.includes(ch.login));
 };

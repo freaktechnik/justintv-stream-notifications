@@ -9,6 +9,7 @@ import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
 import querystring from "../querystring";
 import { not } from '../logic';
+import { filterExistingFavs } from '../channel/utils';
 
 const type = "hitbox",
     archiveURL = "/videos",
@@ -137,9 +138,9 @@ class Hitbox extends GenericProvider {
                             }
                         }
                     });
-                    const newChannels = follows.filter((follow) => user.favorites.every((fav) => fav != follow.user_name));
+                    const channels = await this._getChannels(follows.map((follow) => follow.user_name)),
+                        newChannels = filterExistingFavs(user, channels);
                     user.favorites = follows.map((follow) => follow.user_name);
-                    const channels = await this._getChannels(newChannels.map((follow) => follow.user_name));
                     return [ user, channels ];
                 }
                 return [];

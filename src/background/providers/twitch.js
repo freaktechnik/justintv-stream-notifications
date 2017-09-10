@@ -12,6 +12,7 @@ import { Channel, User } from '../channel/core';
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
+import { filterExistingFavs } from '../channel/utils';
 
 const type = "twitch",
     archiveURL = "/videos/all",
@@ -148,7 +149,7 @@ class Twitch extends GenericProvider {
                             }
                         }
                     });
-                    const newChannels = follows.filter((c) => !user.favorites.includes(c.login));
+                    const newChannels = filterExistingFavs(user, follows);
 
                     user.favorites = follows.map((c) => c.login);
                     return [ user, newChannels ];

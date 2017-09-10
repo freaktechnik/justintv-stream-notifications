@@ -15,7 +15,7 @@ import prefs from "../../preferences";
 import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
-import { formatChannel, formatChannels } from './utils';
+import { formatChannel, formatChannels, filterExistingFavs } from './utils';
 import { CantOpenListError } from '../../database-manager';
 
 /**
@@ -47,16 +47,6 @@ const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-rese
         else {
             return channels;
         }
-    },
-    /**
-     * Filter channels to exclude existing favorites.
-     *
-     * @param {module:channel/core.User} user - User whose favs should be excluded.
-     * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
-     * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
-     */
-    filterExistingFavs = (user, channels) => {
-        return channels.filter((ch) => !user.favorites.includes(ch.login));
     };
 
 /**

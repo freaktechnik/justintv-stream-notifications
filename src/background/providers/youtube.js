@@ -10,6 +10,7 @@ import { memoize } from "underscore";
 import { Channel, User } from '../channel/core';
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
+import { filterExistingFavs } from '../channel/utils';
 
 const type = "youtube",
     apiKey = prefs.get('youtube_apiKey'),
@@ -231,9 +232,7 @@ class YouTube extends GenericProvider {
                         const oldUser = await this._list.getUserByName(ch.login);
                         ch.id = oldUser.id;
                         ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
-                        const newChannels = subscriptions.filter((follow) => {
-                            return !oldUser.favorites.includes(follow.snippet.resourceId.channelId);
-                        }).map((sub) => {
+                        const newChannels = filterExistingFavs(oldUser, subscriptions.map((sub) => {
                             const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
                             ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
                             ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
@@ -243,7 +242,7 @@ class YouTube extends GenericProvider {
                             };
                             ret.uname = sub.snippet.title;
                             return ret;
-                        });
+                        }));
 
                         return [ ch, newChannels ];
                     }
