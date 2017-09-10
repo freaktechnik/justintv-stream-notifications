@@ -90,7 +90,6 @@ Redirecting.propTypes = {
     onRedirectorClick: PropTypes.func.isRequired
 };
 
-//TODO size of avatar changes when compact
 const InnerChannel = (props) => {
     let extras,
         redirecting,
@@ -166,7 +165,6 @@ class Channel extends NavigateableItem {
             className += ' nonlive';
         }
         this.props.children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
-        //TODO can I use onCopy to trigger the copy action?
         const element = super.render();
         return React.cloneElement(element, {
             title: this.props.uname,
@@ -227,7 +225,6 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         url: PropTypes.string,
     })),
     ChannelList = (props) => {
-        //TODO switch channels with arrow keys
         const channels = props.channels.map((ch) => {
             const onClick = ch.external ? (e) => {
                     e.preventDefault();
@@ -444,7 +441,6 @@ const getVisibleChannels = (state) => {
 };
 
 const mapStateToProps = (state) => {
-    //TODO explore panel
     return {
         channels: getVisibleChannels(state),
         extras: state.settings.extras,

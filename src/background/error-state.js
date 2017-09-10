@@ -2,8 +2,6 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module error-state
- * @todo Show warnings in options page and potentially the manager.
- * @todo detach List instead of checking for error states to exist in it.
  */
 
 import EventTarget from 'event-target-shim';
@@ -158,7 +156,6 @@ export default class ErrorState extends EventTarget {
                 text: ""
             });
             ErrorState.replacePanel(ErrorState.oldPopupURL);
-            //TODO icon & title back to normal
         }
         // Don't care about any other state downgrade, since unrecoverable errors
         // shouldn't be recovered at runtime.

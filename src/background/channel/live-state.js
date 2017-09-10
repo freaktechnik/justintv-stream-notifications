@@ -4,7 +4,6 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module channel/live-state
- * @todo Replace alternate properties with a serialized channel (to avoid require loops)
  */
 import { omit } from "lodash";
 import prefs from "../../preferences";

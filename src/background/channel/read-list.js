@@ -5,9 +5,6 @@
  * @license MPL-2.0
  * @module channel/list
  * @requires module:channel/core
- * @todo should fire close when the db is closed by event.
- * @todo move out of background
- * @todo Unify Errors that other lists might re-use.
  */
 import ReadChannelList from '../../read-channel-list';
 import { Channel, User } from "./core";

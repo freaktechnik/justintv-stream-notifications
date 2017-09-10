@@ -6,7 +6,6 @@
  * @module list
  * @requires module:channel/utils
  * @requires module:list/firefox
- * @todo need to know badge stuff when constructed, not when popup opened (i.e rewrite that now with the list having its own db connection to load).
  */
 // setup event handling
 import { emit } from "../utils";

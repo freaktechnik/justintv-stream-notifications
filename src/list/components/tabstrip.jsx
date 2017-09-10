@@ -62,7 +62,6 @@ class TabStrip extends NavigateableList {
     }
 
     render() {
-        //TODO switch tabs with arrow keys
         this.props.children = [
             (<Tab title="panel_tab_live" onClick={ () => this.props.onTabSelect(0) } active={ this.props.active === 0 } key="0"/>)
         ];
