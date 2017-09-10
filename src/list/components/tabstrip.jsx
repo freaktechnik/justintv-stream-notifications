@@ -3,47 +3,81 @@ import PropTypes from 'prop-types';
 import Icon from './icon.jsx';
 import { connect } from 'react-redux';
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
+import { NavigateableList, NavigateableItem } from './navigateable-list.jsx';
+
+//TODO space or enter should focus tab panel.
 
 const _ = browser.i18n.getMessage;
 
-const Tab = (props) => {
-    let className;
-    if(props.active) {
-        className = "current";
+class Tab extends NavigateableItem {
+    static get defaultProps() {
+        return {
+            active: false
+        };
     }
-    return ( <li role="presentation"><button role="tab" onClick={ props.onClick } className={ className }>{ _(props.title) }</button></li> );
-};
-Tab.defaultProps = {
-    active: false
-};
-Tab.propTypes = {
-    title: PropTypes.string.isRequired,
-    onClick: PropTypes.func,
-    active: PropTypes.bool
-};
 
-const TabStrip = (props) => {
-    //TODO switch tabs with arrow keys
-    let nonlive;
-    if(props.showNonlive) {
-        nonlive = <Tab title="panel_tab_nonlive" onClick={ ()=> props.onTabSelect(1) } active={ props.active === 1 }/>;
+    static get propTypes() {
+        return {
+            title: PropTypes.string.isRequired,
+            onClick: PropTypes.func,
+            active: PropTypes.bool,
+            onFocusChange: PropTypes.func.isRequired
+        };
     }
-    return ( <ul className="tabstrip inline-list" role="tablist">
-        <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(0) } active={ props.active === 0 }/>
-        { nonlive }
-        <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(2) } active={ props.active === 2 }/>
-        <Tab title="panel_tab_explore" onClick={ () => props.onTabSelect(3) } active={ props.active === 3 }/>
-    </ul> );
-};
-TabStrip.defaultProps = {
-    active: 0,
-    showNonlive: false
-};
-TabStrip.propTypes = {
-    active: PropTypes.number,
-    showNonlive: PropTypes.bool,
-    onTabSelect: PropTypes.func.isRequired
-};
+
+    get focusedItem() {
+        return this.button;
+    }
+
+    render() {
+        let className;
+        if(this.props.active) {
+            className = "current";
+        }
+        this.props.children = ( <button role="tab" onClick={ this.props.onClick } onFocus={ this.props.onClick } className={ className } ref={ (e) => {
+            this.button = e;
+        } } tabIndex={ -1 }>{ _(this.props.title) }</button> );
+        const element = super.render();
+        return React.cloneElement(element, {
+            role: 'presentation',
+            tabIndex: -1
+        });
+    }
+}
+
+class TabStrip extends NavigateableList {
+    static get defaultProps() {
+        return {
+            active: 0,
+            showNonlive: false
+        };
+    }
+
+    static get propTypes() {
+        return {
+            active: PropTypes.number,
+            showNonlive: PropTypes.bool,
+            onTabSelect: PropTypes.func.isRequired
+        };
+    }
+
+    render() {
+        //TODO switch tabs with arrow keys
+        this.props.children = [
+            (<Tab title="panel_tab_live" onClick={ () => this.props.onTabSelect(0) } active={ this.props.active === 0 } key="0"/>)
+        ];
+        if(this.props.showNonlive) {
+            this.props.children.push(<Tab title="panel_tab_nonlive" onClick={ ()=> this.props.onTabSelect(1) } active={ this.props.active === 1 } key="1"/>);
+        }
+        this.props.children.push(<Tab title="panel_tab_offline" onClick={ () => this.props.onTabSelect(2) } active={ this.props.active === 2 } key="2"/>);
+        this.props.children.push(<Tab title="panel_tab_explore" onClick={ () => this.props.onTabSelect(3) } active={ this.props.active === 3 } key="3"/>);
+        const element = super.render();
+        return React.cloneElement(element, {
+            className: "tabstrip inline-list",
+            role: "tablist"
+        });
+    }
+}
 
 const SearchField = (props) => {
     return ( <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/> );

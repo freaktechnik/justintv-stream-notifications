@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { NavigateableItem, NavigateableList } from './navigateable-list.jsx';
 
 const _ = browser.i18n.getMessage;
 
-class ContextItem extends React.Component {
+class ContextItem extends NavigateableItem {
     static get defaultProps() {
         return {
             params: []
@@ -14,17 +15,26 @@ class ContextItem extends React.Component {
         return {
             label: PropTypes.string.isRequired,
             params: PropTypes.arrayOf(PropTypes.string),
-            onClick: PropTypes.func
+            onClick: PropTypes.func,
+            onFocusChange: PropTypes.func.isRequired
         };
     }
 
+    get focusedItem() {
+        return this.button;
+    }
+
     render() {
-        //TODO access keys?
-        return ( <li>
-            <button onClick={ this.props.onClick }>
+        this.props.children = [
+            <button onClick={ this.props.onClick } key="a" ref={ (e) => {
+                this.button = e;
+            } }>
                 { _(this.props.label, this.props.params) }
             </button>
-        </li> );
+        ];
+        return React.cloneElement(super.render(), {
+            tabIndex: -1
+        });
     }
 }
 
@@ -60,9 +70,9 @@ class ContextList extends React.Component {
                     <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
-                <ul>
+                <NavigateableList>
                     { this.props.children }
-                </ul>
+                </NavigateableList>
             </dialog>
         );
     }

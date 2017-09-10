@@ -4,6 +4,8 @@ import LiveState from '../../live-state.json';
 import { connect } from 'react-redux';
 import { ContextList, ContextItem, closeAction } from './context-list.jsx';
 
+//TODO closing the context panel should focus the item it was opened for.
+
 const redirectorsShape = PropTypes.arrayOf(PropTypes.shape({
     uname: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired

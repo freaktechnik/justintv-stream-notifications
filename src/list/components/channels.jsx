@@ -4,6 +4,7 @@ import LiveState from '../../live-state.json';
 import { connect } from 'react-redux';
 import Icon from './icon.jsx';
 import { formatChannel } from '../utils';
+import { NavigateableItem, NavigateableList } from './navigateable-list.jsx';
 
 const _ = browser.i18n.getMessage;
 
@@ -129,49 +130,64 @@ InnerChannel.propTypes = {
     onRedirectorClick: PropTypes.func.isRequired
 };
 
-const Channel = (props) => {
-    const thumbnail = [];
-    let className = props.type;
-    if(props.thumbnail) {
-        thumbnail.push(<img src={ props.thumbnail }/>);
-        className += ' thumbnail';
+class Channel extends NavigateableItem {
+    static get propTypes() {
+        return {
+            image: PropTypes.objectOf(PropTypes.string).isRequired,
+            liveState: PropTypes.oneOf(Object.values(LiveState)).isRequired,
+            uname: PropTypes.string.isRequired,
+            title: PropTypes.string,
+            type: PropTypes.string.isRequired,
+            thumbnail: PropTypes.string,
+            extras: PropTypes.shape(Extras.propTypes),
+            redirectors: redirectorsShape,
+            imageSize: PropTypes.number,
+            external: PropTypes.bool,
+            url: PropTypes.string,
+            onClick: PropTypes.func.isRequired,
+            onRedirectorClick: PropTypes.func.isRequired,
+            onContextMenu: PropTypes.func.isRequired,
+            onCopy: PropTypes.func.isRequired,
+            onFocusChange: PropTypes.func.isRequired
+        };
     }
-    if(props.external) {
-        className += ' external';
-    }
-    if(props.liveState > LiveState.LIVE) {
-        className += ' nonlive';
-    }
-    //TODO can I use onCopy to trigger the copy action?
-    return ( <li title={ props.uname } className={ className } onClick={ props.onClick } onContextMenu={ props.onContextMenu } tabIndex={ 0 } onKeyUp={ (e) => {
-        if(e.key === ' ' || e.key === 'Enter') {
-            props.onClick(e);
+
+    render() {
+        this.props.children = [];
+        let className = this.props.type;
+        if(this.props.thumbnail) {
+            this.props.children.push(<img src={ this.props.thumbnail } key="thumb"/>);
+            className += ' thumbnail';
         }
-    } } onCopy={ () => props.onCopy({
-        url: props.url,
-        uname: props.uname
-    }) }>
-        { thumbnail }
-        <InnerChannel image={ props.image } uname={ props.uname } title={ props.title } extras={ props.extras } liveState={ props.liveState } redirectors={ props.redirectors } imageSize={ props.imageSize } onRedirectorClick={ props.onRedirectorClick }/>
-    </li> );
-};
-Channel.propTypes = {
-    image: PropTypes.objectOf(PropTypes.string).isRequired,
-    liveState: PropTypes.oneOf(Object.values(LiveState)).isRequired,
-    uname: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    type: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string,
-    extras: PropTypes.shape(Extras.propTypes),
-    redirectors: redirectorsShape,
-    imageSize: PropTypes.number,
-    external: PropTypes.bool,
-    url: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
-    onRedirectorClick: PropTypes.func.isRequired,
-    onContextMenu: PropTypes.func.isRequired,
-    onCopy: PropTypes.func.isRequired
-};
+        if(this.props.external) {
+            className += ' external';
+        }
+        if(this.props.liveState > LiveState.LIVE) {
+            className += ' nonlive';
+        }
+        this.props.children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
+        //TODO can I use onCopy to trigger the copy action?
+        const element = super.render();
+        return React.cloneElement(element, {
+            title: this.props.uname,
+            className,
+            onClick: this.props.onClick,
+            onContextMenu: this.props.onContextMenu,
+            onKeyUp: (e) => {
+                if(e.key === ' ' || e.key === 'Enter') {
+                    this.props.onClick(e);
+                }
+                else {
+                    this.handleKey(e);
+                }
+            },
+            onCopy: () => this.props.onCopy({
+                url: this.props.url,
+                uname: this.props.uname
+            })
+        });
+    }
+}
 
 const ProviderSelector = (props) => {
     const options = [];
@@ -229,9 +245,12 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
                 };
             return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } onCopy={ props.onCopy } key={ ch.id }/> );
         });
-        return ( <ul role="tabpanel">
+        const element = ( <NavigateableList>
             { channels }
-        </ul> );
+        </NavigateableList> );
+        return React.cloneElement(element, {
+            role: "tabpanel"
+        });
     };
 ChannelList.propTypes = {
     channels: channelsShape.isRequired,
