@@ -66,8 +66,12 @@ class OptionsPage {
         return browser.storage.local.set(values);
     }
     attachListeners() {
+        const recentlySaved = new Set();
         for(const p in prefs) {
-            document.getElementById(p).addEventListener(OptionsPage.EVENT_TYPES[prefs[p].type], this.savePref.bind(this, p, prefs[p].type), {
+            document.getElementById(p).addEventListener(OptionsPage.EVENT_TYPES[prefs[p].type], () => {
+                recentlySaved.add(p);
+                this.savePref(p);
+            }, {
                 capture: false,
                 passive: true
             });
@@ -125,7 +129,12 @@ class OptionsPage {
 
         // This also triggers with changes that the user made, not only import.
         preferences.addEventListener("change", ({ detail: { pref, value } }) => {
-            this.loadValue(pref, value, true);
+            if(recentlySaved.has(pref)) {
+                recentlySaved.delete(pref);
+            }
+            else {
+                this.loadValue(pref, value, true);
+            }
         });
     }
     loadValue(pref, value, reset = false) {
