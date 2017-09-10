@@ -52,6 +52,15 @@ const getRebroadcastTitlePatterns = async () => {
     return patterns.concat(patterns.map((pattern) => `[${pattern}]`));
 };
 
+const cleanTitle = (title) => {
+    return title.trim().toLowerCase();
+};
+
+const titleIsRebroadcast = (title, patterns) => {
+    const lowerCaseTitle = cleanTitle(title);
+    return patterns.some((p) => lowerCaseTitle.startsWith(p));
+};
+
 /**
  * Changes the live state of channels that appear to be rebroadcasting based
  * on their title. Modifies the original channel object.
@@ -70,17 +79,15 @@ export const formatChannel = async (channel, patterns) => {
         if(!patterns) {
             patterns = await getRebroadcastTitlePatterns();
         }
-        const lowerCaseTitle = channel.title.toLowerCase();
-        if(patterns.some((p) => lowerCaseTitle.startsWith(p))) {
+        if(titleIsRebroadcast(channel.title, patterns)) {
             channel.live = new LiveState(LiveState.REBROADCAST);
         }
     }
-    if(channel.live.alternateChannel && channel.live.alternateChannel.live.state === LiveState.REDIRECT) {
+    if(channel.live.alternateChannel && channel.live.alternateChannel.live.state === LiveState.REDIRECT && channel.live.alternateChannel.title) {
         if(!patterns) {
             patterns = await getRebroadcastTitlePatterns();
         }
-        const lowerCaseTitle = channel.live.alternateChannel.title.toLowerCase();
-        if(patterns.some((p) => lowerCaseTitle.startsWith(p))) {
+        if(titleIsRebroadcast(channel.live.alternateChannel.title, patterns)) {
             channel.live.alternateChannel.live.state = LiveState.REBROADCAST;
         }
     }

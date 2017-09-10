@@ -206,7 +206,7 @@ export default class ChannelController extends EventTarget {
     /**
      * @inheritdoc {module:channel/utils.formatChannel}
      */
-    async _formatChannel(channel) {
+    _formatChannel(channel) {
         return formatChannel(channel);
     }
     /**
