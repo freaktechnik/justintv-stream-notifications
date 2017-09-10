@@ -406,6 +406,9 @@ const mergeFeatured = (featured, channels) => {
         if(internalChannel) {
             channel.id = internalChannel.id;
         }
+        else {
+            delete channel.id;
+        }
     }
     return featured;
 };
