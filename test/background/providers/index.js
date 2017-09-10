@@ -11,7 +11,7 @@ import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from
 import LiveState from "../../../src/live-state.json";
 
 test.afterEach(() => {
-    providers.beam._getUserIdFromUsername.cache = {};
+    providers.beam._getUserIdFromUsername.cache.clear();
 });
 
 const checkAuthUrls = (provider) => provider.authURL.every((url) => new URL(url));
@@ -277,7 +277,9 @@ const testMock = async (t, p) => {
     await testRequests(t, p);
     //TODO not the nicest solution, since afterEach has to be called manually.
     if(apiEndpoints.includes(p)) {
-        providers.beam._getUserIdFromUsername.cache = {};
+        if(p === "beam") {
+            providers[p]._getUserIdFromUsername.cache.clear();
+        }
         await testMockAPI(t, p);
     }
 };
