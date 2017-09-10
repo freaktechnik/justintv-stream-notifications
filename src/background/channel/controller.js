@@ -7,7 +7,7 @@ import providers from "../providers";
 import ChannelsManager from "./manager";
 import ChannelList from "./list";
 import EventSink from '../providers/events';
-import { emit } from "../../utils";
+import { emit, pipe } from "../../utils";
 import ParentalControls from "../parental-controls";
 import { flatten, debounce } from "underscore";
 import * as debugDump from "./dump";
@@ -141,9 +141,7 @@ export default class ChannelController extends EventTarget {
         this._list.addEventListener("useradded", ({ detail: user }) => {
             this._manager.onUserAdded(user);
         });
-        this._list.addEventListener("beforechanneldeleted", ({ detail }) => {
-            emit(this, "beforechanneldeleted", detail);
-        });
+        pipe(this._list, "beforechanneldeleted", this);
         this._list.addEventListener("channeldeleted", ({ detail: channel }) => {
             this._manager.onChannelRemoved(channel.id);
 
