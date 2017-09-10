@@ -4,12 +4,9 @@
  * Licensed under the MPLv2
  */
 
-body {
-    padding: 0;
-    margin: 0;
+:root {
     font-family: sans-serif;
     line-height: 1.2em;
-    -moz-user-select: none;
 
     --accent-dark-bg: #2c24c5;
     --accent-dark-text: white;
@@ -20,6 +17,13 @@ body {
     --inverted-separator: var(--accent-dark-bg);
     --warn: #fc9b0a;
     --error: #d51e1e;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 .dark {
