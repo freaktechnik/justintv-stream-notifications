@@ -5,9 +5,6 @@
  */
 
 :root {
-    font-family: sans-serif;
-    line-height: 1.2em;
-
     --accent-dark-bg: #2c24c5;
     --accent-dark-text: white;
     --accent-light-bg: #497dfe;
@@ -24,6 +21,8 @@ body {
     margin: 0;
     -moz-user-select: none;
     user-select: none;
+    line-height: 1.2em;
+    font-family: sans-serif;
 }
 
 .dark {
