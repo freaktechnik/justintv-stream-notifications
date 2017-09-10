@@ -154,8 +154,8 @@ export default class Notifier extends EventTarget {
             this.showNotifications()
         ]);
 
+        const liveInterpretation = await this._getLiveInterpretation();
         if(showNotifications && !tab.length) {
-            const liveInterpretation = await this._getLiveInterpretation();
             let title = null;
             if((await and(channel.live.isLive(LiveState.TOWARD_OFFLINE), this.onlineNotifications())) && this._channelStateChanged(channel)) {
                 title = _("onlineNotification", channel.toString());
@@ -192,7 +192,7 @@ export default class Notifier extends EventTarget {
             }
         }
 
-        if(await channel.live.isLive()) {
+        if(await channel.live.isLive(liveInterpretation)) {
             this.channelTitles.set(channel.id, channel.title);
         }
         else {
