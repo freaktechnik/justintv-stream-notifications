@@ -141,7 +141,7 @@ class Hitbox extends GenericProvider {
                     const channels = await this._getChannels(follows.map((follow) => follow.user_name)),
                         newChannels = filterExistingFavs(user, channels);
                     user.favorites = follows.map((follow) => follow.user_name);
-                    return [ user, channels ];
+                    return [ user, newChannels ];
                 }
                 return [];
             }
