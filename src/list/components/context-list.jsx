@@ -33,14 +33,21 @@ class ContextList extends React.Component {
         return {
             title: PropTypes.string.isRequired,
             onClose: PropTypes.func.isRequired,
-            children: PropTypes.node.isRequired
+            children: PropTypes.node.isRequired,
         };
     }
 
     componentDidMount() {
         if(this.dialog) {
             this.dialog.focus();
+            document.documentElement.style.height = `${this.dialog.scrollHeight}px`;
+            document.documentElement.style.overflow = "hidden";
         }
+    }
+
+    componentWillUnmount() {
+        document.documentElement.style.height = "auto";
+        document.documentElement.style.overflow = "unset";
     }
 
     render() {
