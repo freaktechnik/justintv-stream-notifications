@@ -400,13 +400,24 @@ const sortChannels = (channels, type, formatChannel) => {
     }
 };
 
+const mergeFeatured = (featured, channels) => {
+    for(const channel of featured) {
+        const internalChannel = channels.find((ch) => ch.login === channel.login && ch.type === channel.type);
+        if(internalChannel) {
+            channel.id = internalChannel.id;
+        }
+    }
+    return featured;
+};
+
 const getVisibleChannels = (state) => {
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style);
     if(state.ui.tab !== 3) {
         return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel);
     }
     else {
-        return sortChannels(state.featured, state.settings.nonLiveDisplay, saltedFormatChannel);
+        const channels = mergeFeatured(state.featured, state.channels);
+        return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel);
     }
 };
 
