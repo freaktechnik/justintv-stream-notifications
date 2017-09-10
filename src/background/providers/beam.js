@@ -7,7 +7,7 @@
  * @todo checkout socket based events
  */
 import { Channel, User } from '../channel/core';
-import { memoize } from "underscore";
+import { memoize } from "lodash";
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';

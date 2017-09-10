@@ -6,7 +6,7 @@
  */
 import prefs from "../../preferences";
 import querystring from "../querystring";
-import { memoize } from "underscore";
+import { memoize } from "lodash";
 import { Channel, User } from '../channel/core';
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";

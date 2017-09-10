@@ -1,5 +1,5 @@
 // Load vendor deps
-import 'file-loader?name=vendor/[name].[ext]!underscore/underscore-min.js';
+import 'file-loader?name=vendor/[name].[ext]!lodash/lodash.min.js';
 import 'file-loader?name=vendor/[name].[ext]!event-target-shim/dist/event-target-shim.min.js';
 // l10n
 import '../../_locales/de/messages.json';

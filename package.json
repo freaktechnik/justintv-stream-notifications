@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "event-target-shim": "^2.0.0",
+    "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "open-iconic": "^1.1.1",
     "prop-types": "^15.5.10",
@@ -23,8 +24,7 @@
     "react-dom": "^15.6.1",
     "react-key-handler": "^1.0.0",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "underscore": "^1.8.3"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "ajv": "^5.2.2",

@@ -5,7 +5,7 @@
  * @license MPL-2.0
  * @module channel/core
  */
-import { omit } from "underscore";
+import { omit } from "lodash";
 import LiveState from "./live-state";
 
 const ITEM_ARGS = [ "login", "type", "id", "live" ];

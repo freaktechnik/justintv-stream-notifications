@@ -6,7 +6,7 @@
  * @module channel/live-state
  * @todo Replace alternate properties with a serialized channel (to avoid require loops)
  */
-import { omit } from "underscore";
+import { omit } from "lodash";
 import prefs from "../../preferences";
 import LiveStateConst from '../../live-state.json';
 

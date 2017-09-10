@@ -123,12 +123,12 @@ module.exports = {
         })
     ],
     externals: {
-        underscore: '_',
+        lodash: '_',
         'event-target-shim': 'eventTargetShim',
-        'react': 'React',
+        react: 'React',
         'react-dom': 'ReactDOM',
         'react-redux': 'ReactRedux',
-        'redux': 'Redux',
+        redux: 'Redux',
         'prop-types': 'PropTypes',
         'react-key-handler': 'ReactKeyHandler'
     }
