@@ -123,6 +123,10 @@
         "message": "en rediffusion",
         "description": "Rebroadcasting state for nonliveNotification"
     },
+    "import": {
+        "message": "Import configuration",
+        "description": "Button label to import preferences and channel list"
+    },
     "cm_autoAdd.title": {
         "message": "Ajouter",
         "description": "Tooltip for the auto add button (cm_autoAdd)."
@@ -450,6 +454,10 @@
     "nonliveNotificationStateRedirect": {
         "message": "en train de rediriger vers $CHANNEL$",
         "description": "Redirecting state for nonliveNotification"
+    },
+    "export": {
+        "message": "Export configuration",
+        "description": "Button label to export the preferences and channel list."
     },
     "context_copy": {
         "message": "Copier l'URL du stream",

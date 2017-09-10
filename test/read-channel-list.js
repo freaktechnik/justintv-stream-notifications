@@ -7,7 +7,8 @@ import test from 'ava';
 import ChannelList from '../src/background/channel/list';
 import ReadChannelList from '../src/read-channel-list';
 import { getUser, getChannel } from "./helpers/channel-user";
-import DatabaseManager, { FixListError } from '../src/database-manager';
+import DatabaseManager from '../src/database-manager';
+import sinon from 'sinon';
 
 const setupDB = async () => {
     const channels = [
@@ -30,10 +31,6 @@ test("Static properties", (t) => {
     t.is(typeof ReadChannelList.name, "string");
 });
 
-test("FixListError", (t) => {
-    const fle = new FixListError();
-    t.true(fle instanceof Error);
-});
 
 test.serial('get invalid users', (t) => {
     return Promise.all([
@@ -212,7 +209,18 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     await setupDB();
 });
 
-test.todo("event filtering");
+test("event filtering", (t) => {
+    t.true(t.context.list.filterEvents());
+});
+
+test('_waitForCursor error', async (t) => {
+    const request = {};
+    const cbk = sinon.spy();
+    const p = t.context.list._waitForCursor(request, cbk);
+
+    request.onerror(new Error());
+    await t.throws(p);
+});
 
 test.before(setupDB);
 

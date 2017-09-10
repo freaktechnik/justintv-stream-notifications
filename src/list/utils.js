@@ -35,7 +35,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         delete formattedChannel.extras.viewers;
         delete formattedChannel.extras.category;
     }
-    if(channel.live.state !== LiveState.OFFLINE && channel.title) {
+    if(channel.live.state !== LiveState.OFFLINE && type !== 2 && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;
     }
 

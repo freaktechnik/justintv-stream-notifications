@@ -123,6 +123,10 @@
         "message": "strahlt einen alten Stream wieder aus",
         "description": "Rebroadcasting state for nonliveNotification"
     },
+    "import": {
+        "message": "Konfiguration importieren",
+        "description": "Button label to import preferences and channel list"
+    },
     "cm_autoAdd.title": {
         "message": "Für gespeicherte Anmeldedaten auf unterstützten Seiten werden die gefolgten Kanäle automatisch hinzugefügt",
         "description": "Tooltip for the auto add button (cm_autoAdd)."
@@ -450,6 +454,10 @@
     "nonliveNotificationStateRedirect": {
         "message": "leitet nun zu $CHANNEL$ weiter",
         "description": "Redirecting state for nonliveNotification"
+    },
+    "export": {
+        "message": "Konfiguration exportieren",
+        "description": "Button label to export the preferences and channel list."
     },
     "context_copy": {
         "message": "Stream URL kopieren",
