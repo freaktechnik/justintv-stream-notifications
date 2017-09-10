@@ -147,7 +147,8 @@ class Channel extends NavigateableItem {
             onRedirectorClick: PropTypes.func.isRequired,
             onContextMenu: PropTypes.func.isRequired,
             onCopy: PropTypes.func.isRequired,
-            onFocusChange: PropTypes.func.isRequired
+            onFocusChange: PropTypes.func.isRequired,
+            tooltip: PropTypes.string.isRequired
         };
     }
 
@@ -167,7 +168,7 @@ class Channel extends NavigateableItem {
         this.props.children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
         const element = super.render();
         return React.cloneElement(element, {
-            title: this.props.uname,
+            title: this.props.tooltip,
             className,
             onClick: this.props.onClick,
             onContextMenu: this.props.onContextMenu,
@@ -223,6 +224,7 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         imageSize: PropTypes.number,
         external: PropTypes.bool,
         url: PropTypes.string,
+        tooltip: PropTypes.string.isRequired
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
