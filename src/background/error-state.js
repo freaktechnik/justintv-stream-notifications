@@ -239,7 +239,7 @@ export default class ErrorState extends EventTarget {
             ]);
             if(this.actions.length) {
                 browser.runtime.onMessage.removeListener(this.runtimeListener);
-                browser.notifications.onClicked.addListener(this.notificationListener);
+                browser.notifications.onClicked.removeListener(this.notificationListener);
             }
         }
         else {

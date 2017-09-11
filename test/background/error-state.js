@@ -1,5 +1,6 @@
 import test from 'ava';
 import ErrorState from '../../src/background/error-state';
+import { when } from '../../src/utils';
 
 test.beforeEach(() => {
     browser.storage.local.get.withArgs('errorStates').resolves({
@@ -69,4 +70,32 @@ test('resolve unresolvable state', (t) => {
     return t.throws(es.resolve());
 });
 
-test.todo('action events');
+test('action events', async (t) => {
+    const es = new ErrorState('foo', ErrorState.RECOVERABLE, [
+        'test'
+    ]);
+
+    let p = when(es, 'action');
+
+    browser.notifications.onClicked.dispatch('copy');
+    browser.notifications.onClicked.dispatch(ErrorState.NOTIFICATION_ID + es.id);
+
+    const { detail: id } = await p;
+    t.is(id, 0);
+
+    p = when(es, 'action');
+
+    browser.runtime.onMessage.dispatch({
+        command: 'errorState-action',
+        id: es.id,
+        action: 42
+    });
+
+    const { detail: id2 } = await p;
+    t.is(id2, 42);
+
+    await es.resolve();
+
+    t.is(browser.runtime.onMessage._listeners.length, 0);
+    t.is(browser.notifications.onClicked._listeners.length, 0);
+});
