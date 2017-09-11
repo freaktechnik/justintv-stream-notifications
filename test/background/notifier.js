@@ -9,6 +9,7 @@ import LiveState from '../../src/background/channel/live-state';
 import Notifier from '../../src/background/notifier';
 import defaultPrefs from '../../src/prefs.json';
 import { when } from '../../src/utils';
+import sinon from 'sinon';
 
 const PREFS = {
         live: 'onlineNotification',
@@ -25,8 +26,8 @@ const PREFS = {
             });
         }
     },
-    getChannelFromFixture = (p) => {
-        const chan = getChannel(p.username);
+    getChannelFromFixture = (p, id) => {
+        const chan = getChannel(p.username || id, 'test', id);
         chan.title = p.title;
         chan.live = LiveState.deserialize(p.live);
         return chan;
@@ -36,13 +37,16 @@ const PREFS = {
         browser.storage.local.get.callsFake((props) => Promise.resolve(props));
     };
 
+let id = 0;
 const testNotifierNotifications = async (t, f) => {
     const n = new Notifier();
     applyPrefs(f.prefs);
-    await Promise.all(f.initial.map((c) => n.sendNotification(getChannelFromFixture(c))));
+    await Promise.all(f.initial.map((c) => n.sendNotification(getChannelFromFixture(c, id))));
 
     browser.notifications.create.reset();
-    await Promise.all(f.updated.map((c) => n.sendNotification(getChannelFromFixture(c))));
+    await Promise.all(f.updated.map((c) => n.sendNotification(getChannelFromFixture(c, id))));
+
+    ++id;
 
     //TODO check if the correct notification is shown
     if(f.expected != "none") {
@@ -200,7 +204,7 @@ test.serial("Mute Notification", async (t) => {
     t.true(browser.notifications.create.notCalled, "No notifications were shown");
 });
 
-test("Click Listener", async (t) => {
+test.serial("Click Listener", async (t) => {
     const notifier = new Notifier(),
         channel = getChannel('test', 'test', 1);
 
@@ -209,6 +213,17 @@ test("Click Listener", async (t) => {
     browser.notifications.onClicked.dispatch("cn" + channel.id);
     const { detail: channelId } = await p;
     t.is(channelId, channel.id);
+});
+
+test.serial("Click listener not triggered", (t) => {
+    const notifier = new Notifier(),
+        cbk = sinon.spy();
+
+    notifier.addEventListener("click", cbk);
+
+    browser.notifications.onClicked.dispatch("copy");
+
+    t.true(cbk.notCalled);
 });
 
 test.beforeEach(() => {
@@ -525,7 +540,7 @@ const fixture = [
     },
     {
         prefs: {
-            live: false,
+            live: true,
             nonlive: true,
             offline: false,
             title: false
@@ -637,6 +652,56 @@ const fixture = [
             }
         ],
         expected: "live"
+    },
+    {
+        pref: {
+            live: true,
+            offline: true,
+            title: true,
+            nonlive: false
+        },
+        initial: [
+            {
+                title: "foo",
+                live: {
+                    state: LiveState.REBROADCAST
+                }
+            }
+        ],
+        updated: [
+            {
+                title: "foo",
+                live: {
+                    state: LiveState.REBROADCAST
+                }
+            }
+        ],
+        expected: "none"
+    },
+    {
+        pref: {
+            live: true,
+            offline: false,
+            title: true,
+            nonlive: true
+        },
+        initial: [
+            {
+                title: "foo",
+                live: {
+                    state: LiveState.REBROADCAST
+                }
+            }
+        ],
+        updated: [
+            {
+                title: "foo",
+                live: {
+                    state: LiveState.REBROADCAST
+                }
+            }
+        ],
+        expected: "none"
     }
 ];
 for(const f of fixture) {
