@@ -3,9 +3,10 @@
  * Licensed under MPL 2.0
  */
 import test from "ava";
-import { selectOrOpenTab } from '../../../src/background/channel/utils';
-import { getChannel } from "../../helpers/channel-user";
+import { selectOrOpenTab, formatChannel, filterExistingFavs } from '../../../src/background/channel/utils';
+import { getChannel, getUser } from "../../helpers/channel-user";
 import { setup } from "../../helpers/default-behavior";
+import LiveState from '../../../src/live-state.json';
 
 const setupAndRun = (args, tabId) => {
     const tabs = [];
@@ -91,4 +92,87 @@ test.serial('open chat', async (t) => {
     t.is(browser.tabs.query.lastCall.args[0].url[0], channel.chatUrl);
     t.true(browser.tabs.create.calledOnce);
     t.is(browser.tabs.create.lastCall.args[0].url, channel.chatUrl, "Tab was opened with the url for the chat");
+});
+
+test('does not support livestreamer', (t) => {
+    const channel = getChannel();
+    channel.live.setLive(true);
+
+    return t.throws(selectOrOpenTab(channel, 'livestreamer'), Error, 'Not supported');
+});
+
+test('formatChannel without channel', (t) => {
+    return t.throws(formatChannel('test'), TypeError, 'Invalid channel provided');
+});
+
+test('formatChannel with patterns', async (t) => {
+    const channel = getChannel();
+    channel.title = 'test title';
+    channel.live.setLive(true);
+    const formattedChannel = await formatChannel(channel, [
+        'test'
+    ]);
+    t.is(formattedChannel.live.state, LiveState.REBROADCAST);
+});
+
+test('formatChannel with patterns that does not match', async (t) => {
+    const channel = getChannel();
+    channel.title = 'test title';
+    channel.live.setLive(true);
+    const formattedChannel = await formatChannel(channel, [
+        'foo'
+    ]);
+    t.is(formattedChannel.live.state, LiveState.LIVE);
+});
+
+test('formatChannel with default patterns that match with brackets', async (t) => {
+    const channel = getChannel();
+    channel.title = '[REBROADCAST] title';
+    channel.live.setLive(true);
+    const formattedChannel = await formatChannel(channel);
+    t.is(formattedChannel.live.state, LiveState.REBROADCAST);
+});
+
+test('formatChannel with patterns for alternateChannel', async (t) => {
+    const channel = getChannel();
+    channel.title = 'test title';
+    channel.live.redirectTo(channel);
+    const formattedChannel = await formatChannel(channel, [
+        'test'
+    ]);
+    t.is(formattedChannel.live.state, LiveState.REDIRECT);
+    t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
+});
+
+test('formatChannel with patterns for alternateChannel that do not match', async (t) => {
+    const channel = getChannel();
+    channel.title = 'test title';
+    channel.live.redirectTo(channel);
+    const formattedChannel = await formatChannel(channel, [
+        'foo'
+    ]);
+    t.is(formattedChannel.live.state, LiveState.REDIRECT);
+    t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REDIRECT);
+});
+
+test('formatChannel with default patterns for alternateChannel', async (t) => {
+    const channel = getChannel();
+    channel.title = ' [Rerun] title ';
+    channel.live.redirectTo(channel);
+    const formattedChannel = await formatChannel(channel);
+    t.is(formattedChannel.live.state, LiveState.REDIRECT);
+    t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
+});
+
+test.todo('formatChannels without serialization');
+test.todo('formatChannels with serialization');
+
+test('filterExistingFavs', (t) => {
+    const channels = [ getChannel() ],
+        user = getUser();
+    user.favorites = channels.map((c) => c.login);
+    channels.push(getChannel('foo'));
+
+    const notExistingFavs = filterExistingFavs(user, channels);
+    t.is(notExistingFavs.length, 1);
 });
