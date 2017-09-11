@@ -6,6 +6,7 @@
 import test from "ava";
 import LiveState from "../../../src/background/channel/live-state";
 import prefs from '../../../src/prefs.json';
+import { getChannel } from '../../helpers/channel-user';
 
 test('exports', (t) => {
     t.true("deserialize" in LiveState, "deserialize is in LiveState");
@@ -102,6 +103,7 @@ const testStates = async (t, testState) => {
     t.is(await state.isLive(LiveState.TOWARD_LIVE), testState[LiveState.TOWARD_LIVE], "correctly treated TOWARD_LIVE");
     t.is(await state.isLive(LiveState.TOWARD_OFFLINE), testState[LiveState.TOWARD_OFFLINE], "correctly treated TOWARD_OFFLINE");
     t.is(await state.isLive(LiveState.TOWARD_BROADCASTING), testState[LiveState.TOWARD_BROADCASTING], "correctly treated TOWARD_BROADCASTING");
+    t.is(await state.isLive("asdf"), false);
 };
 testStates.title = (title, state) => `${title} for ${state.name}`;
 
@@ -139,4 +141,22 @@ test('setLive', (t) => {
 
     state.setLive(false);
     t.is(state.state, LiveState.OFFLINE, "Setting a live state offline makes it offline");
+});
+
+test('redirectTo', (t) => {
+    const state = new LiveState(),
+        channel = getChannel();
+    state.redirectTo(channel);
+
+    t.is(state.state, LiveState.REDIRECT);
+    t.deepEqual(state.alternateChannel, channel.serialize());
+    t.is(state.alternateUsername, channel.uname);
+    t.is(state.alternateURL, channel.url[0]);
+});
+
+test('alternate properties', (t) => {
+    const state = new LiveState();
+    t.is(state.alternateChannel, undefined);
+    t.is(state.alternateUsername, '');
+    t.is(state.alternateURL, '');
 });
