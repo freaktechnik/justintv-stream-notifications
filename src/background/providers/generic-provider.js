@@ -22,8 +22,12 @@ const _ = browser.i18n.getMessage,
         }
         return queues.get(provider);
     },
+    plists = new WeakMap(),
     listFor = (provider) => {
-        return new ProviderChannelList(provider);
+        if(!plists.has(provider)) {
+            plists.set(provider, new ProviderChannelList(provider._type));
+        }
+        return plists.get(provider);
     };
 
 /**
@@ -246,10 +250,7 @@ export default class GenericProvider extends EventTarget {
     }
 
     get _list() {
-        if(!this._plist) {
-            this._plist = listFor(this._type);
-        }
-        return this._plist;
+        return listFor(this);
     }
     /**
      * Indicates if exploring features should hold mature results. Respects
@@ -329,7 +330,14 @@ export default class GenericProvider extends EventTarget {
             onComplete: (...args) => {
                 return config.onComplete(...args).then(([ user, channels ]) => {
                     if(user) {
-                        emit(this, "updateduser", user);
+                        if(Array.isArray(user)) {
+                            for(const u of user) {
+                                emit(this, 'updateduser', u);
+                            }
+                        }
+                        else {
+                            emit(this, "updateduser", user);
+                        }
                         if(channels.length) {
                             emit(this, "newchannels", channels);
                         }

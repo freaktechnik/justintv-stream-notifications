@@ -114,7 +114,59 @@
                 }
             ]
         },
+        "https://api.dailymotion.com/users?ids=test_id%2Clive_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                },
+                {
+                    "screenname": "live",
+                    "url": "",
+                    "id": "live_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
         "https://api.dailymotion.com/users?ids=test_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+            "has_more": false,
+            "list": [
+                {
+                    "screenname": "test",
+                    "url": "",
+                    "id": "test_id",
+                    "avatar_25_url": "",
+                    "avatar_60_url": "",
+                    "avatar_80_url": "",
+                    "avatar_120_url": "",
+                    "avatar_190_url": "",
+                    "avatar_240_url": "",
+                    "avatar_360_url": "",
+                    "avatar_480_url": "",
+                    "avatar_720_url": ""
+                }
+            ]
+        },
+        "https://api.dailymotion.com/users?ids=test_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100": {
             "has_more": false,
             "list": [
                 {
@@ -675,6 +727,28 @@
             ]
         },
         "https://api.twitch.tv/kraken/streams?channel=test,live&stream_type=live&limit=100&offset=0": {
+            "streams": [
+                {
+                    "viewers": 0,
+                    "preview": {
+                        "medium": ""
+                    },
+                    "is_playlist": false,
+                    "stream_type": "live",
+                    "channel": {
+                         "display_name": "live",
+                         "game": "",
+                         "_id": 1,
+                         "name": "live",
+                         "status": "",
+                         "mature": false,
+                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                         "url": "http://www.twitch.tv/live"
+                    }
+                }
+            ]
+        },
+        "https://api.twitch.tv/kraken/streams?channel=test,live&stream_type=live&limit=100": {
             "streams": [
                 {
                     "viewers": 0,

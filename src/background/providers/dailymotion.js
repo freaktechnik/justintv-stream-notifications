@@ -149,7 +149,9 @@ class Dailymotion extends GenericProvider {
             },
             onComplete: async (firstPage, url) => {
                 if(firstPage.ok && firstPage.parsedJSON && firstPage.parsedJSON.list) {
-                    const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more;
+                    const fetchNextPage = (data) => data.parsedJSON && data.parsedJSON.has_more,
+                        users = [],
+                        channels = [];
                     let data = firstPage.parsedJSON.list;
                     if(fetchNextPage(firstPage)) {
                         const otherPages = await promisedPaginationHelper({
@@ -177,10 +179,11 @@ class Dailymotion extends GenericProvider {
                             this._getFavs(user.login)
                         ]);
                         user.favorites = channels.map((ch) => ch.login);
+                        users.push(user);
 
-                        const newChannels = filterExistingFavs(oldUser, channels);
-                        return [ user, newChannels ];
+                        channels.push(filterExistingFavs(oldUser, channels));
                     }));
+                    return [ users, channels ];
                 }
                 return [];
             }
