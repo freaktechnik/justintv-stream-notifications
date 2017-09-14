@@ -220,6 +220,7 @@ const testMockAPI = async (t, p) => {
             t.is(typeof spec.headers, 'object');
         }
         const urls = await spec.getURLs();
+        t.true(Array.isArray(urls));
         for(const url of urls) {
             const res = await provider._qs.queueRequest(url);
             let ret = await spec.onComplete(res, url);
@@ -234,6 +235,10 @@ const testMockAPI = async (t, p) => {
         for(const chan of ret) {
             await list.removeChannel(chan.login, chan.type);
         }
+
+        const noUrls = await spec.getURLs();
+        t.true(Array.isArray(noUrls));
+        t.is(noUrls.length, 0);
     }
 
     if(provider.supports.favorites) {
@@ -253,6 +258,7 @@ const testMockAPI = async (t, p) => {
                 t.is(typeof spec.headers, 'object');
             }
             const urls = await spec.getURLs();
+            t.true(Array.isArray(urls));
             for(const url of urls) {
                 const result = await provider._qs.queueRequest(url);
                 let [ ret, channels ] = await spec.onComplete(result);
@@ -271,6 +277,10 @@ const testMockAPI = async (t, p) => {
             }
 
             await list.removeUser(ret[0].login, ret[0].type);
+
+            const noUrls = await spec.getURLs();
+            t.true(Array.isArray(noUrls));
+            t.is(noUrls.length, 0);
         }
     }
 
