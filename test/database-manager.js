@@ -4,6 +4,13 @@
  */
 import test from 'ava';
 import DatabaseManager, { FixListError, CantOpenListError, ListClosedError } from '../src/database-manager';
+import sinon from 'sinon';
+
+test.afterEach.always(async () => {
+    await DatabaseManager.close();
+    DatabaseManager.loading = null;
+    DatabaseManager.error = null;
+});
 
 test.serial('opening open list', async (t) => {
     await DatabaseManager.open();
@@ -16,8 +23,6 @@ test.serial('opening open list', async (t) => {
 });
 
 test.serial("Close closed db", async (t) => {
-    await DatabaseManager.close();
-
     await t.notThrows(DatabaseManager.close());
 
     await DatabaseManager.open();
@@ -38,4 +43,119 @@ test("ListClosedError", (t) => {
     t.true(fle instanceof Error);
 });
 
-test.todo("database manager");
+test.serial('Cant open list', async (t) => {
+    const open = window.indexedDB.open;
+    window.indexedDB.open = () => {
+        throw new Error();
+    };
+
+    const error = await t.throws(DatabaseManager.open());
+    t.is(DatabaseManager.error, error);
+
+    window.indexedDB.open = open;
+});
+
+test.serial('registration list', (t) => {
+    const list = 'foo';
+    const list2 = 'bar';
+    const db = {
+        close: sinon.spy()
+    };
+    DatabaseManager.db = db;
+
+    DatabaseManager.registerList(list);
+    DatabaseManager.registerList(list2);
+
+    t.is(DatabaseManager.lists.size, 2);
+
+    DatabaseManager.unregisterList(list2);
+
+    t.is(DatabaseManager.lists.size, 1);
+    t.true(db.close.notCalled);
+
+    DatabaseManager.unregisterList(list);
+
+    t.is(DatabaseManager.lists.size, 0);
+    t.true(db.close.calledOnce);
+    t.is(DatabaseManager.db, null);
+    t.is(DatabaseManager.loading, null);
+});
+
+test.serial('close list', async (t) => {
+    const db = {
+        close: sinon.spy()
+    };
+    DatabaseManager.db = db;
+    const oldEmit = DatabaseManager.emit;
+    DatabaseManager.emit = sinon.spy();
+
+    await DatabaseManager.close();
+
+    t.true(db.close.calledOnce);
+    t.is(DatabaseManager.db, null);
+    t.is(DatabaseManager.loading, null);
+    t.true(DatabaseManager.emit.calledOnce);
+    t.is(DatabaseManager.emit.lastCall.args[0], 'close');
+
+    await DatabaseManager.close();
+
+    t.true(DatabaseManager.emit.calledOnce);
+
+    DatabaseManager.emit = oldEmit;
+});
+
+test.serial('open list error', async (t) => {
+    let onerror;
+    const open = window.indexedDB.open;
+    window.indexedDB.open = () => {
+        return {
+            set onerror(val) {
+                onerror = val;
+            }
+        };
+    };
+
+    const p = DatabaseManager.open();
+
+    onerror(new Error());
+
+    const error = await t.throws(p, FixListError);
+
+    t.is(DatabaseManager.db, null);
+    t.is(DatabaseManager.error, error);
+
+    window.indexedDB.open = open;
+});
+
+test.serial('open list error without trying', async (t) => {
+    let onerror;
+    const open = window.indexedDB.open;
+    window.indexedDB.open = () => {
+        return {
+            set onerror(val) {
+                onerror = val;
+            },
+            error: new Error()
+        };
+    };
+
+    const p = DatabaseManager.open(DatabaseManager.name, true);
+
+    onerror(new Error());
+
+    const error = await t.throws(p, Error);
+
+    t.is(DatabaseManager.db, null);
+    t.is(DatabaseManager.error, error);
+
+    window.indexedDB.open = open;
+});
+
+test.todo('close event - fake idb doesnt allow close events');
+test.todo('normal open');
+test.todo('register open handler');
+test.todo('register error handler');
+test.todo('database upgrade fails');
+test.todo('emit');
+test.todo('database upgrade');
+test.todo('idCache');
