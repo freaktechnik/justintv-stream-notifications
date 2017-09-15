@@ -232,6 +232,15 @@ const testMockAPI = async (t, p) => {
             t.is(ret.type, p, "updateRequest event holds a channel with corect type");
             t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", "Update request correctly set live state of " + ret.uname);
         }
+
+        const errorRet = await spec.onComplete({}, urls[0]);
+        if(!errorRet) {
+            t.is(errorRet, undefined);
+        }
+        else {
+            t.true(errorRet instanceof Channel);
+        }
+
         for(const chan of ret) {
             await list.removeChannel(chan.login, chan.type);
         }
@@ -275,6 +284,10 @@ const testMockAPI = async (t, p) => {
                     }
                 }
             }
+
+            const errorRet = await spec.onComplete({}, urls[0]);
+            t.true(Array.isArray(errorRet));
+            t.is(errorRet.length, 0);
 
             await list.removeUser(ret[0].login, ret[0].type);
 

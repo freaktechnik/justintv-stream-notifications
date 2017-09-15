@@ -274,8 +274,6 @@ class YouTube extends GenericProvider {
         return {
             getURLs,
             onComplete: async (data, url) => {
-                const channelLogin = url.match(/channelId=([\w-]+)?&/)[1],
-                    channel = await this._list.getChannelByName(channelLogin);
                 if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
                     //TODO could reduce requests by batching them with mutliple IDs. Debounce?
                     const videos = await this._qs.queueRequest(baseURL + "videos?" + querystring.stringify({
@@ -309,6 +307,8 @@ class YouTube extends GenericProvider {
                     }
                 }
                 else {
+                    const channelLogin = url.match(/channelId=([\w-]+)?&/)[1],
+                        channel = await this._list.getChannelByName(channelLogin);
                     channel.live.setLive(false);
                     channel.url = [ "https://youtube.com/channel/" + channel.login ];
                     return channel;
