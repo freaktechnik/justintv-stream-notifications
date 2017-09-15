@@ -4,11 +4,11 @@
  */
 import test from "ava";
 import providers from "../../../src/background/providers";
-import GenericProvider from "../../../src/background/providers/generic-provider";
 import { getChannel, getUser } from "../../helpers/channel-user";
 import { Channel, User } from "../../../src/background/channel/core";
 import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
 import LiveState from "../../../src/live-state.json";
+import ChannelList from '../../../src/background/channel/list';
 
 test.afterEach(() => {
     providers.beam._getUserIdFromUsername.cache.clear();
@@ -170,6 +170,7 @@ const testRequests = async (t, p) => {
     provider._setQs(originalQS);
 };
 
+const list = new ChannelList();
 const testMockAPI = async (t, p) => {
     const provider = providers[p],
         originalQS = provider._qs;
@@ -212,21 +213,42 @@ const testMockAPI = async (t, p) => {
         t.is(await chan.live.isLive(LiveState.TOWARD_OFFLINE), chan.uname === "live", "Channel " + chan.uname + " is live if it's the live channel, else it's offline after an update of multiple channels together");
     }));
 
-    /*TODO if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-        prom = when(provider, "updatedchannels");
-        provider.updateRequest(ret);
-        ret = await prom;
-        ret = ret.detail;
-        if(Array.isArray(ret)) {
-            t.true(ret.length > 0, "There is mor than one item in the updated channels");
-            ret = ret[0];
+    if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+        await list.addChannels(ret);
+        const spec = provider.updateRequest();
+        if("headers" in spec) {
+            t.is(typeof spec.headers, 'object');
         }
-        t.true(ret instanceof Channel, "updateRequest event holds a channel");
-        t.is(ret.type, p, "updateRequest event holds a channel with corect type");
-        t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", "Update request correctly set live state of " + ret.uname);
+        const urls = await spec.getURLs();
+        t.true(Array.isArray(urls));
+        for(const url of urls) {
+            const res = await provider._qs.queueRequest(url);
+            let ret = await spec.onComplete(res, url);
+            if(Array.isArray(ret)) {
+                t.true(ret.length > 0, "There is mor than one item in the updated channels");
+                ret = ret[0];
+            }
+            t.true(ret instanceof Channel, "updateRequest holds a channel");
+            t.is(ret.type, p, "updateRequest event holds a channel with corect type");
+            t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", "Update request correctly set live state of " + ret.uname);
+        }
 
-        provider.removeRequest();
-    }*/
+        const errorRet = await spec.onComplete({}, urls[0]);
+        if(!errorRet) {
+            t.is(errorRet, undefined);
+        }
+        else {
+            t.true(errorRet instanceof Channel);
+        }
+
+        for(const chan of ret) {
+            await list.removeChannel(chan.login, chan.type);
+        }
+
+        const noUrls = await spec.getURLs();
+        t.true(Array.isArray(noUrls));
+        t.is(noUrls.length, 0);
+    }
 
     if(provider.supports.favorites) {
         ret = await provider.getUserFavorites("test");
@@ -238,17 +260,41 @@ const testMockAPI = async (t, p) => {
         t.is(ret[0].type, p, "returned user has the correct type");
         ret[1].forEach((ch) => t.is(ch.type, p, "Each returned channel has the correct type"));
 
-        /*TODO if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-            prom = when(provider, "updateduser");
-            provider.updateFavsRequest([ ret[0] ]);
-            ret = await prom;
-            ret = ret.detail;
-            t.true(ret instanceof User, "updateduser is a user");
-            t.is(ret.type, p, "updateduser has the correct type");
-            t.is(ret.uname, "test", "updateduser is called test");
+        if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
+            await list.addUser(ret[0]);
+            const spec = provider.updateFavsRequest();
+            if("headers" in spec) {
+                t.is(typeof spec.headers, 'object');
+            }
+            const urls = await spec.getURLs();
+            t.true(Array.isArray(urls));
+            for(const url of urls) {
+                const result = await provider._qs.queueRequest(url);
+                let [ ret, channels ] = await spec.onComplete(result);
+                if(Array.isArray(ret)) {
+                    ret = ret[0];
+                }
+                t.true(ret instanceof User, "updateduser is a user");
+                t.is(ret.type, p, "updateduser has the correct type");
+                t.is(ret.uname, "test", "updateduser is called test");
+                t.true(Array.isArray(channels));
+                if(channels.length) {
+                    for(const channel of channels) {
+                        t.true(channel instanceof Channel);
+                    }
+                }
+            }
 
-            provider.removeFavsRequest();
-        } */
+            const errorRet = await spec.onComplete({}, urls[0]);
+            t.true(Array.isArray(errorRet));
+            t.is(errorRet.length, 0);
+
+            await list.removeUser(ret[0].login, ret[0].type);
+
+            const noUrls = await spec.getURLs();
+            t.true(Array.isArray(noUrls));
+            t.is(noUrls.length, 0);
+        }
     }
 
     if(provider.supports.featured) {
@@ -291,7 +337,8 @@ const macros = [
 ];
 
 for(const p in providers) {
-    test(macros, p);
+    //TODO something about the db transactions breaks if this isn't serial :(
+    test.serial(macros, p);
     if(!providers[p].supports.favorites) {
         test(testNotSupportsFavorites, p);
     }
@@ -302,55 +349,3 @@ for(const p in providers) {
         test(testNotSupportsFeatured, p);
     }
 }
-
-test("GenericProvider", async (t) => {
-    const genericProvider = new GenericProvider("test");
-    t.is(genericProvider._type, "test");
-
-    const maturePromise = genericProvider._mature();
-    t.is(await maturePromise, true);
-
-    t.is(genericProvider.name, "providertest");
-    t.is(genericProvider.toString(), genericProvider.name);
-    t.is(genericProvider.enabled, genericProvider._enabled);
-    t.true("supports" in genericProvider);
-    t.is(genericProvider._supportsFavorites, genericProvider.supports.favorites);
-    t.is(genericProvider._supportsCredentials, genericProvider.supports.credentials);
-    t.is(genericProvider._supportsFeatured, genericProvider.supports.featured);
-    genericProvider._enabled = false;
-    t.is(genericProvider.supports.favorites, genericProvider.enabled);
-    t.is(genericProvider.supports.credentials, genericProvider.enabled);
-    t.is(genericProvider.supports.featured, genericProvider.enabled);
-    t.true(Array.isArray(genericProvider.authURL));
-    t.is(genericProvider.authURL.length, 0);
-    await t.throws(genericProvider.getUserFavorites(), Error, "cannot getUserFavorites");
-    await t.throws(genericProvider.getChannelDetails(), Error, "cannot getChannelDetails");
-    t.throws(genericProvider.updateFavsRequest, Error, "cannot updateFavsRequest");
-    t.throws(genericProvider.updateRequest, Error, "cannot updateReq");
-    await t.throws(genericProvider.updateChannel(), Error, "cannot updateChannel");
-    await t.throws(genericProvider.updateChannels([ { login: "asdf" } ]), Error, "cannot updateChannels");
-
-    // Test forwards
-    let name = await new Promise((resolve) => {
-        genericProvider.getChannelDetails = resolve;
-        genericProvider.updateChannel("test");
-    });
-    t.is(name, "test", "updateChannel gets forwarded to getChannelDetails");
-
-    name = await new Promise((resolve) => {
-        genericProvider.updateChannel = resolve;
-        genericProvider.updateChannels([
-            {
-                login: "test"
-            }
-        ]);
-    });
-    t.is(name, "test", "updateChannels forwards to updateChannel");
-
-    await t.throws(genericProvider.getFeaturedChannels(), Error, "cannot getFeaturedChannels");
-    await t.throws(genericProvider.search(), Error, "cannot search");
-});
-
-test.todo("generic provider queueUpdateRequest");
-test.todo("generic provider queueFavsRequest");
-test.todo("generic provider intializes update requests from list");

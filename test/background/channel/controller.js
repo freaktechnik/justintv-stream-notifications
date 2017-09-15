@@ -10,6 +10,7 @@ import test from 'ava';
 import ChannelController from "../../../src/background/channel/controller";
 import providers from "../../../src/background/providers";
 import { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
+import sinon from 'sinon';
 
 const TESTUSER = {
     name: "freaktechnik",
@@ -263,6 +264,17 @@ test('getExternalChannel', async (t) => {
     t.is(channel.login, TESTUSER.name);
     t.is(channel.type, TESTUSER.type);
     t.false('id' in channel);
+});
+
+test('set theme', (t) => {
+    const cc = new ChannelController();
+    cc._manager = {
+        setTheme: sinon.spy()
+    };
+
+    cc.setTheme('foo');
+    t.true(cc._manager.setTheme.calledOnce);
+    t.is(cc._manager.setTheme.lastCall.args[0], 'foo');
 });
 
 let oldQS;

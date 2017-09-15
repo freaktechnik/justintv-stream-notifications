@@ -154,31 +154,34 @@ export default class ChannelList extends ReadChannelList {
                     index = store.index("typename"),
                     addedChannels = [];
                 // Can't use promises here, because that closes the transaction.
-                channels.forEach((channel, i) => {
+                for(const channel of channels) {
                     const ireq = index.get([ channel.type, channel.login ]);
                     ireq.onsuccess = () => {
                         if(!ireq.result) {
                             channel.lastModified = Date.now();
                             const req = store.add(channel.serialize());
-                            req.onerror = console.error;
+                            req.onerror = () => {
+                                console.error(req.error);
+                            };
                             req.onsuccess = () => {
-                                channels[i].id = req.result;
+                                channel.id = req.result;
                                 this.idCache.set(channel.type + channel.login, req.result);
-                                addedChannels.push(channels[i]);
+                                addedChannels.push(channel);
                             };
                         }
                         else {
                             console.warn("Channel " + channel.login + " has already been added");
                         }
                     };
-                });
-                return new Promise((resolve) => {
+                }
+                return new Promise((resolve, reject) => {
                     transaction.oncomplete = () => {
                         if(addedChannels.length > 0) {
                             DatabaseManager.emit("channelsadded", addedChannels);
                         }
                         resolve(addedChannels);
                     };
+                    transaction.onabort = () => reject(new Error('Transaction aborted'));
                 });
             }
         }

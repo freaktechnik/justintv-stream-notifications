@@ -176,6 +176,7 @@ const DatabaseManager = {
                     for(const handler of this.successHandlers) {
                         await handler(this.db);
                     }
+                    this.error = null;
                     this.emit("ready");
                 }).catch(async () => {
                     if(dontTry) {
