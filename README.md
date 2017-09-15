@@ -40,4 +40,5 @@ For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.
 
 ### Contributors
 | ![](https://avatars3.githubusercontent.com/u/7942850?v=4&s=150) | ![](https://avatars3.githubusercontent.com/u/640949?v=4&s=150) | ![](https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=150&d=identicon) |
+| - | - | - |
 | [maekclena](https://github.com/maekclena) | [freaktechnik](https://github.com/freaktechnik) | [wolstrom](https://www.transifex.com/user/profile/wolstrom/) |
