@@ -251,3 +251,176 @@ test.serial("Additional Manager to Primary", async (t) => {
     await spr;
     t.is(cm.tabID, 'manager2', "Reloading makes secondary primary tab");
 });
+
+const loadingEvent = (t, event) => {
+    const cm = new ChannelsManager();
+    const port = getManagerPort();
+    browser.runtime.onConnect.dispatch(port);
+
+    port.onMessage.dispatch({
+        command: event
+    });
+
+    t.true(cm.loading);
+};
+loadingEvent.title = (title, event) => `${title} ${event}`;
+[
+    'updatefavorites',
+    'updatechannel',
+    'autoadd'
+].forEach((e) => test('loading triggered by', loadingEvent, e));
+
+test('cancel event', (t) => {
+    const cm = new ChannelsManager();
+    const port = getManagerPort();
+    browser.runtime.onConnect.dispatch(port);
+
+    port.onMessage.dispatch({
+        command: 'cancel',
+        payload: [
+            'foo',
+            'bar'
+        ]
+    });
+
+    t.false(cm.loading);
+    t.true(cm.cancelingValues.get('foobar'));
+});
+
+const forwardingEvents = async (t, info) => {
+    const cm = new ChannelsManager();
+    const port = getManagerPort();
+    browser.runtime.onConnect.dispatch(port);
+
+    const p = when(cm, info.outEvent);
+    port.onMessage.dispatch({
+        command: info.inEvent,
+        payload: info.payload
+    });
+
+    const { detail: forwarded } = await p;
+    if(Array.isArray(info.sent)) {
+        for(const i in info.sent) {
+            t.is(forwarded[i], info.sent[i]);
+        }
+    }
+    else {
+        t.is(forwarded, info.sent);
+    }
+};
+forwardingEvents.title = (title, info) => `${title} ${info.inEvent} to ${info.outEvent}`;
+
+const cancelEvent = async (t, info) => {
+    const cm = new ChannelsManager();
+    const port = getManagerPort();
+    browser.runtime.onConnect.dispatch(port);
+
+    const p = when(cm, info.outEvent);
+    port.onMessage.dispatch({
+        command: info.inEvent,
+        payload: info.payload
+    });
+
+    const { detail: forwarded } = await p;
+    t.is(typeof forwarded[2], "function");
+
+    t.false(forwarded[2]());
+
+    const cancelType = info.outEvent === 'adduser' ? 'user' : 'channel';
+
+    port.onMessage.dispatch({
+        command: 'cancel',
+        payload: [
+            cancelType,
+            forwarded[1],
+            forwarded[0]
+        ]
+    });
+
+    t.true(forwarded[2]());
+};
+cancelEvent.title = (title, info) => `${title} ${info.outEvent}`;
+
+const eventForwardFixture = [
+    {
+        inEvent: 'adduser',
+        payload: {
+            username: 'foo',
+            type: 'bar'
+        },
+        outEvent: 'adduser',
+        sent: [
+            'foo',
+            'bar'
+        ]
+    },
+    {
+        inEvent: 'addchannel',
+        payload: {
+            username: 'foo',
+            type: 'bar'
+        },
+        outEvent: 'addchannel',
+        sent: [
+            'foo',
+            'bar'
+        ]
+    },
+    {
+        inEvent: 'removechannel',
+        payload: 'foo',
+        outEvent: 'removechannel',
+        sent: 'foo'
+    },
+    {
+        inEvent: 'removeuser',
+        payload: {
+            userId: 'foo',
+            removeFollows: false
+        },
+        outEvent: 'removeuser',
+        sent: [
+            'foo',
+            false
+        ]
+    },
+    {
+        inEvent: 'updatefavorites',
+        payload: 'foo',
+        outEvent: 'updatefavorites',
+        sent: 'foo'
+    },
+    {
+        inEvent: 'updatechannel',
+        payload: 'foo',
+        outEvent: 'updatechannel',
+        sent: 'foo'
+    },
+    {
+        inEvent: 'autoadd',
+        payload: 'foo',
+        outEvent: 'autoadd',
+        sent: 'foo'
+    },
+    {
+        inEvent: 'debugdump',
+        outEvent: 'debugdump',
+        sent: undefined
+    },
+    {
+        inEvent: 'showoptions',
+        outEvent: 'showoptions',
+        sent: undefined
+    }
+];
+const cancelableEvents = [
+    'adduser',
+    'addchannel'
+];
+
+for(const info of eventForwardFixture) {
+    if(cancelableEvents.includes(info.inEvent)) {
+        test('canceling', cancelEvent, info);
+    }
+    test('forwards', forwardingEvents, info);
+}
