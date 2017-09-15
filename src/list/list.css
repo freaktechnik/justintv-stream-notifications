@@ -14,7 +14,7 @@ main,
 html,
 body,
 :root {
-    min-width: -moz-min-content;
+    min-width: -moz-fit-content;
 }
 
 section > div {
