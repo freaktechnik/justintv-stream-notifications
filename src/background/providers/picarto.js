@@ -8,22 +8,24 @@ import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 
 const type = "picarto",
-    baseURL = 'https://ptvappapi.picarto.tv',
-    apiKey = '03e26294-b793-11e5-9a41-005056984bd4';
+    baseURL = 'https://api.picarto.tv/v1/',
+    requeue = (resp) => !resp.ok && (resp.status > 499 || resp.status < 400);
 
 function getChannelFromJSON(jsonChan) {
-    const ret = new Channel(jsonChan.channel.toLowerCase(), type);
-    ret.uname = jsonChan.channel;
-    ret.image = { 101: jsonChan.avatar_url };
-    ret.thumbnail = jsonChan.thumbnail_url;
-    ret.url.push("https://picarto.tv/" + ret.login);
-    ret.archiveUrl = "https://picarto.tv/" + ret.login;
-    ret.chatUrl = "https://picarto.tv/chatpopout/" + ret.login;
-    ret.live.setLive(jsonChan.is_online);
-    ret.mature = jsonChan.is_nsfw;
-    ret.viewers = jsonChan.current_viewers;
-    ret.title = jsonChan.channel_title;
-    ret.category = jsonChan.is_multistream ? browser.i18n.getMessage("providerPicartoMultistream") : jsonChan.content_type;
+    const ret = new Channel(jsonChan.name.toLowerCase(), type);
+    ret.uname = jsonChan.name;
+    ret.image = {
+        100: `https://picarto.tv/user_data/usrimg/${jsonChan.name}/dsdefault.jpg`
+    };
+    ret.thumbnail = `https://thumb-us1.picarto.tv/thumbnail/${jsonChan.name}.jpg`;
+    ret.url.push("https://picarto.tv/" + ret.uname);
+    ret.archiveUrl = "https://picarto.tv/" + ret.uname;
+    ret.chatUrl = `https://picarto.tv/chatpopout/${ret.uname}/public`;
+    ret.live.setLive(jsonChan.online);
+    ret.mature = jsonChan.adult;
+    ret.viewers = jsonChan.viewers;
+    ret.title = jsonChan.title;
+    ret.category = jsonChan.category;
     return ret;
 }
 
@@ -32,25 +34,24 @@ class Picarto extends GenericProvider {
         super(type);
 
         this.authURL = [ "https://picarto.tv" ];
+        this._supportsFeatured = true;
 
         this.initialize();
     }
 
     getChannelDetails(channelname) {
-        return this._qs.queueRequest(`${baseURL}/channel/${channelname.toLowerCase()}?key=${apiKey}`)
+        return this._qs.queueRequest(`${baseURL}channel/name/${channelname.toLowerCase()}`, {}, requeue)
             .then((resp) => {
                 if(resp.ok) {
                     return getChannelFromJSON(resp.parsedJSON);
                 }
-                else {
-                    throw new Error(`Channel ${channelname} does not exist for ${this.name}`);
-                }
+                throw new Error(`Channel ${channelname} does not exist for ${this.name}`);
             });
     }
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => `${baseURL}/channel/${channel.login}?key=${apiKey}`);
+            return channels.map((channel) => `${baseURL}channel/name/${channel.login}`);
         };
         return {
             getURLs,
@@ -60,6 +61,22 @@ class Picarto extends GenericProvider {
                 }
             }
         };
+    }
+    async search(query) {
+        const adult = await this._mature(),
+            res = await this._qs.queueRequest(`${baseURL}online?adult=${adult.toString()}&gaming=true`, {}, requeue);
+        if(!res.ok) {
+            throw new Error(`Could not search for ${query} on ${this.name}`);
+        }
+        const channels = res.parsedJSON.map((c) => {
+            c.online = true;
+            return getChannelFromJSON(c);
+        });
+        if(query) {
+            query = query.toLowerCase();
+            return channels.filter((c) => c.uname.toLowerCase().includes(query) || c.title.toLowerCase().includes(query) || c.category.toLowerCase().includes(query));
+        }
+        return channels;
     }
 }
 
