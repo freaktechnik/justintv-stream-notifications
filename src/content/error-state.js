@@ -42,16 +42,17 @@ class ErrorStateView {
         browser.storage.onChanged.addListener((changes, areaName) => {
             if(areaName === "local" && "errorStates" in changes) {
                 for(const e of changes.errorStates.newValue) {
-                    if(changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
+                    if(!changes.errorStates.oldValue.length || changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
                         this.addError(e);
                     }
                 }
 
                 for(const e of changes.errorStates.oldValue) {
-                    if(changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
-                        this.removeError(e);
+                    if(!changes.errorStates.newValue.length || changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
+                        this.removeError(e.id);
                     }
                 }
+                this.updateTitle();
             }
         });
 
