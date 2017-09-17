@@ -10,7 +10,7 @@
     display: block;
 }
 
-input,
+input:not([type="checkbox"]),
 select {
     vertical-align: top;
     display: inline-block;

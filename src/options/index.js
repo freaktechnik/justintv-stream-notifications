@@ -132,7 +132,7 @@ class OptionsPage {
             if(recentlySaved.has(pref)) {
                 recentlySaved.delete(pref);
             }
-            else {
+            else if(pref in prefs) {
                 this.loadValue(pref, value, true);
             }
         });
