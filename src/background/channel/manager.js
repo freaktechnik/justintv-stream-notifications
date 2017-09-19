@@ -86,7 +86,6 @@ export default class ChannelsManager extends EventTarget {
     port = null;
     tabID = null;
     /**
-     * @constructs
      * @fires module:channel/manager.ChannelsManager#addchannel
      * @fires module:channel/manager.ChannelsManager#removechannel
      * @fires module:channel/manager.ChannelsManager#updatechannel
