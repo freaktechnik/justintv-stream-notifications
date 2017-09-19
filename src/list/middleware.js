@@ -27,7 +27,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
     else if(action.command) {
         port.send(action.command, action.payload);
     }
-    // State changes that trigger a backend command
+    // State changes that trigger a backend command (i.e. everything that's wrong with this app)
     else if(action.type === "setTab") {
         // This has to be aborted, else the loading state is set when payload === 3
         if(state.ui.tab === action.payload) {
@@ -146,6 +146,8 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
         }
         return;
     }
+
+    // Finally your default middleware end and no more ugly hacks.
 
     if(action.type) {
         return next(action);
