@@ -164,17 +164,11 @@ nav {
     padding-left: 0;
 }
 
-.tabcontent .redirecting .redirectors li > div {
-    background: none;
-    position: static;
-    width: 1em;
-    padding: 0;
-}
-
-.tabcontent .redirecting .redirectors li div > img {
-    height: 1em;
-    width: 1em;
+.tabcontent .redirecting .redirectors li > img {
+    height: var(--small-avatar);
+    width: var(--small-avatar);
     filter: none;
+    vertical-align: baseline;
 }
 
 .type0 .nonlive div > img,
