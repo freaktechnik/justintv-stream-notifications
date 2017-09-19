@@ -29,6 +29,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
     }
     // State changes that trigger a backend command
     else if(action.type === "setTab") {
+        // This has to be aborted, else the loading state is set when payload === 3
         if(state.ui.tab === action.payload) {
             return;
         }
