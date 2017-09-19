@@ -88,6 +88,8 @@ prefs.addEventListener("change", ({ detail: { pref, value } }) => {
     capture: false
 });
 
+document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().replace("_", "-"));
+
 // Actually show something
 
 render(

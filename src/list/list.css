@@ -182,7 +182,8 @@ nav {
     filter: grayscale(100%);
 }
 
-.title {
+.title,
+.categoryWrapper {
     hyphens: auto;
 }
 
