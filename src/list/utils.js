@@ -13,7 +13,8 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         imageSize: 30,
         hasChat: false,
         providerEnabled: providers[channel.type].enabled,
-        tooltip: channel.uname
+        tooltip: channel.uname,
+        url: channel.url[0]
     };
     if(style === "compact") {
         formattedChannel.imageSize = 12;
@@ -46,7 +47,6 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     else {
         formattedChannel.external = true;
         formattedChannel.id = getExternalID(channel);
-        formattedChannel.url = channel.url[0];
         formattedChannel.chatUrl = channel.chatUrl;
     }
     if(channel.redirectors) {
