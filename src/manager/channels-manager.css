@@ -100,7 +100,7 @@ main {
     color: var(--accent-light-text);
 }
 
-.selectableItemsList > option:hover:not(:last-child) {
+.selectableItemsList > option:hover {
     border-bottom: 1px solid var(--inverted-separator);
 }
 
