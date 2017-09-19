@@ -52,7 +52,8 @@ const channelFormats = [
             tooltip: 'foo - "ipsum"',
             title: 'ipsum',
             id: 7,
-            external: false
+            external: false,
+            url: 'https://example.com'
         }
     },
     {
@@ -91,7 +92,8 @@ const channelFormats = [
                 category: 'baz',
                 viewers: 1,
                 provider: 'Test'
-            }
+            },
+            url: 'https://example.com'
         }
     },
     {
@@ -126,7 +128,8 @@ const channelFormats = [
             external: false,
             extras: {
                 provider: 'Twitch'
-            }
+            },
+            url: 'https://example.com'
         }
     },
     {
@@ -158,7 +161,8 @@ const channelFormats = [
             providerEnabled: false,
             tooltip: 'foo',
             id: 5,
-            external: false
+            external: false,
+            url: 'https://example.com'
         }
     },
     {
@@ -190,7 +194,8 @@ const channelFormats = [
             providerEnabled: false,
             tooltip: 'foo',
             id: 5,
-            external: false
+            external: false,
+            url: 'https://example.com'
         }
     },
     {
@@ -259,7 +264,8 @@ const channelFormats = [
             title: 'ipsum',
             id: 7,
             external: false,
-            thumbnail: 'lorem'
+            thumbnail: 'lorem',
+            url: 'https://example.com'
         }
     },
     {
@@ -308,7 +314,8 @@ const channelFormats = [
                     image: 'b',
                     id: 'c'
                 }
-            ]
+            ],
+            url: 'https://example.com'
         }
     }
 ];
