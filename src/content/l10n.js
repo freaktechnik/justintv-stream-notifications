@@ -9,7 +9,18 @@
  */
 
 function translateElementAttributes(element) {
-    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder', 'abbr', 'content', 'download', 'srcdoc', 'value' ],
+    const attrList = [
+            'abbr',
+            'alt',
+            'content',
+            'download',
+            'label',
+            'placeholder',
+            'srcdoc',
+            'style',
+            'title',
+            'value'
+        ],
         ariaAttrMap = {
             'aria-label': 'ariaLabel',
             'aria-value-text': 'ariaValueText',
