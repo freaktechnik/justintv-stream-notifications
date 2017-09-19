@@ -26,6 +26,14 @@ const attrMap = {
             string += ` data-l10n-attrs="${attrs.join(',')}"`;
         }
 
+        if(noContent && attrs.length === 0) {
+            // This shouldn't be hit, but you never know.
+            string += '" translate="no"';
+        }
+        else if(noContent) {
+            string += ' data-l10n-nocontent';
+        }
+
         string += ` data-l10n-id="${id}">`;
 
         if(!noContent) {
