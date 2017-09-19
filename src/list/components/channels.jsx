@@ -109,13 +109,15 @@ const InnerChannel = (props) => {
     }
     return ( <div className={ className }>
         <Avatar image={ props.image } size={ props.imageSize }/>
-        { redirecting }
-        <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
-            <Icon type="loop"/>
-        </span>
-        <span className="name">{ props.uname }</span>
-        { title }
-        { extras }
+        <div className="align-right">
+            { redirecting }
+            <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
+                <Icon type="loop"/>
+            </span>
+            <span className="name">{ props.uname }</span>
+            { title }
+            { extras }
+        </div>
     </div> );
 };
 InnerChannel.propTypes = {

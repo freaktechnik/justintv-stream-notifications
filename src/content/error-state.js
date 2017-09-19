@@ -36,6 +36,7 @@ class ErrorStateView {
             for(const es of errorStates) {
                 this.addError(es);
             }
+            this.updateTitle();
             hook.appendChild(this.root);
         });
 
@@ -65,7 +66,7 @@ class ErrorStateView {
 
         if(gravity != this.currentGravity) {
             if(gravity === 0) {
-                this.root.shidden = true;
+                this.root.hidden = true;
             }
             else {
                 this.root.hidden = false;
@@ -114,8 +115,6 @@ class ErrorStateView {
             root.appendChild(buttons);
         }
         this.list.appendChild(root);
-
-        this.updateTitle();
     }
 
     removeError(id) {
