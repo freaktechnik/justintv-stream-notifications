@@ -231,10 +231,6 @@
         "message": "Ustream",
         "description": "Provider name for ustream.tv"
     },
-    "providerPicartoMultistream": {
-        "message": "Multistream",
-        "description": "A multistream stream on Picarto.TV"
-    },
     "panel_style_options.Normal": {
         "message": "Normal",
         "description": "Label of the normal option of the panel item style setting in the preferences"

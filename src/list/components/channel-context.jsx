@@ -79,7 +79,7 @@ ChannelContextPanel.propTypes = {
     onClose: PropTypes.func.isRequired,
     onArchive: PropTypes.func,
     onRefresh: PropTypes.func,
-    url: PropTypes.string,
+    url: PropTypes.string.isRequired,
     chatUrl: PropTypes.string
 };
 

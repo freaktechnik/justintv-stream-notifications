@@ -101,10 +101,6 @@
             }
         }
     },
-    "providerPicartoMultistream": {
-        "message": "Multistream",
-        "description": "A multistream stream on Picarto.TV"
-    },
     "providerbeam": {
         "message": "Mixer",
         "description": "Provider name of Mixer (formerly beam.pro)"

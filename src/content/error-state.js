@@ -36,22 +36,24 @@ class ErrorStateView {
             for(const es of errorStates) {
                 this.addError(es);
             }
+            this.updateTitle();
             hook.appendChild(this.root);
         });
 
         browser.storage.onChanged.addListener((changes, areaName) => {
             if(areaName === "local" && "errorStates" in changes) {
                 for(const e of changes.errorStates.newValue) {
-                    if(changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
+                    if(!changes.errorStates.oldValue.length || changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
                         this.addError(e);
                     }
                 }
 
                 for(const e of changes.errorStates.oldValue) {
-                    if(changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
-                        this.removeError(e);
+                    if(!changes.errorStates.newValue.length || changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
+                        this.removeError(e.id);
                     }
                 }
+                this.updateTitle();
             }
         });
 
@@ -64,7 +66,7 @@ class ErrorStateView {
 
         if(gravity != this.currentGravity) {
             if(gravity === 0) {
-                this.root.shidden = true;
+                this.root.hidden = true;
             }
             else {
                 this.root.hidden = false;
@@ -113,8 +115,6 @@ class ErrorStateView {
             root.appendChild(buttons);
         }
         this.list.appendChild(root);
-
-        this.updateTitle();
     }
 
     removeError(id) {

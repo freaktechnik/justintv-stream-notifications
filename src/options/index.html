@@ -43,7 +43,11 @@
                     for(const o of pref.options) {
                         options += `<option${o.value==pref.value?" selected":""} value="${o.value}"${translateElement(pref.id+"_options."+o.label)}</option>`;
                     }
-                    input = `<select id="${pref.id}">${options}</select>`;
+                    input = `<select class="browser-style" id="${pref.id}">${options}</select>`;
+                }
+                else if(pref.type == "bool") {
+                    const checked = pref.value ? ' checked' : '';
+                    input = `<div class="browser-style"><input type="checkbox"${checked} id="${pref.id}"><label for="${pref.id}"></label></div>`;
                 }
                 else {
                     const props = {
@@ -56,12 +60,6 @@
                         }
                         else {
                             props.placeholder = translateElement("pref_value_hidden", undefined, true);
-                        }
-                    }
-                    else if(pref.type == "bool") {
-                        props.type = "checkbox";
-                        if(pref.value) {
-                            props.checked = pref.value;
                         }
                     }
                     else if(pref.type == "integer") {
@@ -85,8 +83,8 @@
                 catch(e) {
                     description = '';
                 }
-                return `<div class="panel-formElements-item">
-    <div class="label"><label for="${pref.id}"${translateElement(pref.id+"_title")}</label>${description}</div>
+                return `<div class="panel-formElements-item browser-style">
+    <div class="label"><label class="browser-style-label" for="${pref.id}"${translateElement(pref.id+"_title")}</label>${description}</div>
     ${input}
 </div>`;
             } %>

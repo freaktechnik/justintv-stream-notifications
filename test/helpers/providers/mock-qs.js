@@ -155,6 +155,6 @@ const endpoints = Object.keys(mockAPIEnpoints);
  *
  * @type {Array.<string>}
  */
-const IGNORE_QSUPDATE_PROVIDERS = [ "picarto", "beam" ];
+const IGNORE_QSUPDATE_PROVIDERS = [ "beam" ];
 
 export { getMockQS, getMockAPIQS, endpoints as apiEndpoints, IGNORE_QSUPDATE_PROVIDERS };

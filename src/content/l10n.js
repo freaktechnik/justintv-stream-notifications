@@ -9,7 +9,18 @@
  */
 
 function translateElementAttributes(element) {
-    const attrList = [ 'title', 'accesskey', 'alt', 'label', 'placeholder', 'abbr', 'content', 'download', 'srcdoc', 'value' ],
+    const attrList = [
+            'abbr',
+            'alt',
+            'content',
+            'download',
+            'label',
+            'placeholder',
+            'srcdoc',
+            'style',
+            'title',
+            'value'
+        ],
         ariaAttrMap = {
             'aria-label': 'ariaLabel',
             'aria-value-text': 'ariaValueText',
@@ -35,21 +46,38 @@ function translateElementAttributes(element) {
     }
 }
 
+const C_TRANSLATE_VALUES = [
+    'yes',
+    'no'
+];
+function getTranslateState(element) {
+    if(element === document.documentElement) {
+        return "yes";
+    }
+    else if(element.hasAttribute("translate") && C_TRANSLATE_VALUES.includes(element.getAttribute("translate"))) {
+        return element.getAttribute("translate");
+    }
+    return getTranslateState(element.parentNode);
+}
+
 function translateElement(element = document) {
     // Set the language attribute of the document.
-    document.querySelector("html").setAttribute("lang", browser.i18n.getUILanguage().substr(0, 2));
-    //TODO follow the translate attribute's instructions (yes/no/inherit)
+    if(element === document) {
+        document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().replace("_", "-"));
+    }
     // Get all children that are marked as being translateable.
-    const children = element.querySelectorAll('*[data-l10n-id]');
+    const children = element.querySelectorAll('*[data-l10n-id]:not([translate="no"])');
     for(const child of children) {
-        if(!child.dataset.l10nNocontent) {
-            const data = browser.i18n.getMessage(child.dataset.l10nId);
-            if(data && data != "??") {
-                child.textContent = data;
+        if(getTranslateState(child) !== "no") {
+            if(!child.dataset.l10nNocontent) {
+                const data = browser.i18n.getMessage(child.dataset.l10nId);
+                if(data && data != "??") {
+                    child.textContent = data;
+                }
             }
-        }
-        if(child.dataset.l10nAttrs) {
-            translateElementAttributes(child);
+            if(child.dataset.l10nAttrs) {
+                translateElementAttributes(child);
+            }
         }
     }
 }

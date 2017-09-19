@@ -109,13 +109,15 @@ const InnerChannel = (props) => {
     }
     return ( <div className={ className }>
         <Avatar image={ props.image } size={ props.imageSize }/>
-        { redirecting }
-        <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
-            <Icon type="loop"/>
-        </span>
-        <span className="name">{ props.uname }</span>
-        { title }
-        { extras }
+        <div className="align-right">
+            { redirecting }
+            <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
+                <Icon type="loop"/>
+            </span>
+            <span className="name">{ props.uname }</span>
+            { title }
+            { extras }
+        </div>
     </div> );
 };
 InnerChannel.propTypes = {
@@ -142,7 +144,7 @@ class Channel extends NavigateableItem {
             redirectors: redirectorsShape,
             imageSize: PropTypes.number,
             external: PropTypes.bool,
-            url: PropTypes.string,
+            url: PropTypes.string.isRequired,
             onClick: PropTypes.func.isRequired,
             onRedirectorClick: PropTypes.func.isRequired,
             onContextMenu: PropTypes.func.isRequired,
@@ -223,7 +225,7 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         redirectors: redirectorsShape,
         imageSize: PropTypes.number,
         external: PropTypes.bool,
-        url: PropTypes.string,
+        url: PropTypes.string.isRequired,
         tooltip: PropTypes.string.isRequired
     })),
     ChannelList = (props) => {

@@ -43,7 +43,7 @@ body {
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
 }
 
 .inline-list > li {
@@ -52,6 +52,9 @@ body {
 
 .right {
     text-align: right;
+    justify-content: end;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 [hidden] {
@@ -65,7 +68,6 @@ body {
 .topbar {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     background: var(--accent-dark-bg);
 }
 

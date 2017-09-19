@@ -1824,27 +1824,65 @@
         }
     },
     "picarto": {
-        "https://ptvappapi.picarto.tv/channel/test?key=03e26294-b793-11e5-9a41-005056984bd4": {
-            "channel": "test",
-            "channel_title": "",
-            "avatar_url": "",
-            "thumbnail_url": "",
-            "is_online": false,
-            "is_multistream": false,
-            "current_viewers": 0,
-            "is_nsfw": false,
-            "content_type": ""
+        "https://api.picarto.tv/v1/channel/name/test": {
+            "user_id": 0,
+            "name": "test",
+            "title": "",
+            "online": false,
+            "multistream": [],
+            "viewers": 0,
+            "adult": false,
+            "category": ""
         },
-        "https://ptvappapi.picarto.tv/channel/live?key=03e26294-b793-11e5-9a41-005056984bd4": {
-            "channel": "live",
-            "channel_title": "",
-            "avatar_url": "",
-            "thumbnail_url": "",
-            "is_online": true,
-            "is_multistream": false,
-            "current_viewers": 0,
-            "is_nsfw": false,
-            "content_type": ""
-        }
+        "https://api.picarto.tv/v1/channel/id/0": {
+            "user_id": 0,
+            "name": "test",
+            "title": "",
+            "online": false,
+            "multistream": [],
+            "viewers": 0,
+            "adult": false,
+            "category": ""
+        },
+        "https://api.picarto.tv/v1/channel/name/live": {
+            "user_id": 1,
+            "name": "live",
+            "title": "",
+            "online": true,
+            "multistream": [],
+            "viewers": 0,
+            "adult": false,
+            "category": ""
+        },
+        "https://api.picarto.tv/v1/channel/id/1": {
+            "user_id": 1,
+            "name": "live",
+            "title": "",
+            "online": true,
+            "multistream": [],
+            "viewers": 0,
+            "adult": false,
+            "category": ""
+        },
+        "https://api.picarto.tv/v1/online?adult=true&gaming=true": [
+            {
+                "user_id": 2,
+                "name": "featured",
+                "title": "",
+                "multistream": false,
+                "viewers": 1,
+                "adult": false,
+                "category": ""
+            },
+            {
+                "user_id": 0,
+                "name": "test",
+                "title": "",
+                "multistream": false,
+                "viewers": 0,
+                "adult": false,
+                "category": ""
+            }
+        ]
     }
 }

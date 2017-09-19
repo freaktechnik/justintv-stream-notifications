@@ -22,9 +22,6 @@ List of supported providers with some explanation on what they are can be found 
 
 [![addons.mozilla.org/](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-gh-readme)
 
-## Contribute
-For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
-
 ## Build it yourslef
 
 To build this extension you need npm, which will install webpack and web-ext. Open a command line and type
@@ -37,3 +34,11 @@ to build an in about:debugging loadable .xpi file. You can use `npm start` to la
 ## License
 
 See [LICENSE](LICENSE).
+
+## Contribute
+For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+
+### Contributors
+| ![](https://avatars3.githubusercontent.com/u/7942850?v=4&s=150) | ![](https://avatars3.githubusercontent.com/u/640949?v=4&s=150) | ![](https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=150&d=identicon) |
+| - | - | - |
+| [maekclena](https://github.com/maekclena) | [freaktechnik](https://github.com/freaktechnik) | [wolstrom](https://www.transifex.com/user/profile/wolstrom/) |
