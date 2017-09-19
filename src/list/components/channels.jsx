@@ -142,7 +142,7 @@ class Channel extends NavigateableItem {
             redirectors: redirectorsShape,
             imageSize: PropTypes.number,
             external: PropTypes.bool,
-            url: PropTypes.string,
+            url: PropTypes.string.isRequired,
             onClick: PropTypes.func.isRequired,
             onRedirectorClick: PropTypes.func.isRequired,
             onContextMenu: PropTypes.func.isRequired,
@@ -223,7 +223,7 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         redirectors: redirectorsShape,
         imageSize: PropTypes.number,
         external: PropTypes.bool,
-        url: PropTypes.string,
+        url: PropTypes.string.isRequired,
         tooltip: PropTypes.string.isRequired
     })),
     ChannelList = (props) => {
