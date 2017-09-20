@@ -42,7 +42,8 @@ const filters = [
             }
         }
         return false;
-    };
+    },
+    list = new ReadChannelList();
 
 tabbed._tabbed = new Tabbed(tabbed);
 document.getElementById("searchField").addEventListener("input", listener);
@@ -411,7 +412,6 @@ document.getElementById("options").addEventListener("click", (e) => {
     port.send("showoptions");
 }, false);
 
-const list = new ReadChannelList();
 list.getChannelsByType().then((channels) => {
     channels.forEach(addChannel);
 });

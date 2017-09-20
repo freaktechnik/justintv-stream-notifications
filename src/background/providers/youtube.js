@@ -95,36 +95,35 @@ class YouTube extends GenericProvider {
                     channelId: data.parsedJSON.items[0].id,
                     maxResults: 50,
                     key: await apiKey
-                };
-            ch.image = {
-                "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-            };
-            ch.uname = data.parsedJSON.items[0].snippet.title;
-
-            const subscriptions = await promisedPaginationHelper({
-                url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
-                pageSize: subsOptions.maxResults,
-                initialPage: "",
-                request: (url) => {
-                    return this._qs.queueRequest(url);
                 },
-                getPageNumber(page, pageSize, data) {
-                    return '&pageToken=' + data.parsedJSON.nextPageToken;
-                },
-                fetchNextPage(data) {
-                    return data.parsedJSON && data.parsedJSON.items && "nextPageToken" in data.parsedJSON;
-                },
-                getItems(data) {
-                    if(data.parsedJSON && data.parsedJSON.items) {
-                        return data.parsedJSON.items;
+                subscriptions = await promisedPaginationHelper({
+                    url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
+                    pageSize: subsOptions.maxResults,
+                    initialPage: "",
+                    request: (url) => {
+                        return this._qs.queueRequest(url);
+                    },
+                    getPageNumber(page, pageSize, data) {
+                        return '&pageToken=' + data.parsedJSON.nextPageToken;
+                    },
+                    fetchNextPage(data) {
+                        return data.parsedJSON && data.parsedJSON.items && "nextPageToken" in data.parsedJSON;
+                    },
+                    getItems(data) {
+                        if(data.parsedJSON && data.parsedJSON.items) {
+                            return data.parsedJSON.items;
+                        }
+                        else {
+                            return [];
+                        }
                     }
-                    else {
-                        return [];
-                    }
-                }
-            });
+                });
             if(subscriptions.length) {
+                ch.image = {
+                    "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                    "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+                };
+                ch.uname = data.parsedJSON.items[0].snippet.title;
                 ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
 
                 const channels = subscriptions.map((sub) => {
@@ -178,8 +177,8 @@ class YouTube extends GenericProvider {
     }
     updateFavsRequest() {
         const getURLs = async () => {
-            const users = await this._list.getUsers();
-            const key = await apiKey;
+            const users = await this._list.getUsers(),
+                key = await apiKey;
             return users.map((user) => {
                 return baseURL + "channels?" + querystring.stringify({
                     part: "id,snippet",
@@ -193,56 +192,56 @@ class YouTube extends GenericProvider {
             getURLs,
             onComplete: async (data) => {
                 if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
+                    let page = 0;
                     const ch = new User(data.parsedJSON.items[0].id, this._type),
                         subsOptions = {
                             part: "snippet",
                             channelId: data.parsedJSON.items[0].id,
                             maxResults: 50,
                             key: await apiKey
-                        };
-                    let page = 0;
-                    ch.image = {
-                        "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
-                        "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
-                    };
-                    ch.uname = data.parsedJSON.items[0].snippet.title;
-                    const subscriptions = await promisedPaginationHelper({
-                        url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
-                        pageSize: subsOptions.maxResults,
-                        initialPage: "",
-                        request: (url) => {
-                            return this._qs.queueRequest(url);
                         },
-                        getPageNumber(page, pageSize, data) {
-                            return "&pageToken=" + data.parsedJSON.nextPageToken;
-                        },
-                        fetchNextPage(data) {
-                            return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
-                        },
-                        getItems(data) {
-                            if(data.parsedJSON && data.parsedJSON.items) {
-                                return data.parsedJSON.items;
+                        subscriptions = await promisedPaginationHelper({
+                            url: baseURL + "subscriptions?" + querystring.stringify(subsOptions),
+                            pageSize: subsOptions.maxResults,
+                            initialPage: "",
+                            request: (url) => {
+                                return this._qs.queueRequest(url);
+                            },
+                            getPageNumber(page, pageSize, data) {
+                                return "&pageToken=" + data.parsedJSON.nextPageToken;
+                            },
+                            fetchNextPage(data) {
+                                return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
+                            },
+                            getItems(data) {
+                                if(data.parsedJSON && data.parsedJSON.items) {
+                                    return data.parsedJSON.items;
+                                }
+                                else {
+                                    return [];
+                                }
                             }
-                            else {
-                                return [];
-                            }
-                        }
-                    });
+                        });
                     if(subscriptions.length) {
-                        const oldUser = await this._list.getUserByName(ch.login);
+                        const oldUser = await this._list.getUserByName(ch.login),
+                            newChannels = filterExistingFavs(oldUser, subscriptions.map((sub) => {
+                                const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
+                                ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
+                                ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
+                                ret.image = {
+                                    "88": sub.snippet.thumbnails.default.url,
+                                    "240": sub.snippet.thumbnails.high.url
+                                };
+                                ret.uname = sub.snippet.title;
+                                return ret;
+                            }));
+                        ch.image = {
+                            "88": data.parsedJSON.items[0].snippet.thumbnails.default.url,
+                            "240": data.parsedJSON.items[0].snippet.thumbnails.high.url
+                        };
+                        ch.uname = data.parsedJSON.items[0].snippet.title;
                         ch.id = oldUser.id;
                         ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
-                        const newChannels = filterExistingFavs(oldUser, subscriptions.map((sub) => {
-                            const ret = new Channel(sub.snippet.resourceId.channelId, this._type);
-                            ret.archiveUrl = "https://youtube.com/channel/" + ch.login + "/videos";
-                            ret.chatUrl = "https://youtube.com/channel/" + ch.login + "/discussion";
-                            ret.image = {
-                                "88": sub.snippet.thumbnails.default.url,
-                                "240": sub.snippet.thumbnails.high.url
-                            };
-                            ret.uname = sub.snippet.title;
-                            return ret;
-                        }));
 
                         return [ ch, newChannels ];
                     }
@@ -257,8 +256,8 @@ class YouTube extends GenericProvider {
     }
     updateRequest() {
         const getURLs = async () => {
-            const channels = await this._list.getChannels();
-            const key = await apiKey;
+            const channels = await this._list.getChannels(),
+                key = await apiKey;
             return channels.map((channel) => {
                 return baseURL + "search?" + querystring.stringify({
                     part: "id",
@@ -285,8 +284,8 @@ class YouTube extends GenericProvider {
                     }));
                     if(videos.parsedJSON && videos.parsedJSON.items) {
                         const channels = await Promise.all(videos.parsedJSON.items.map(async (video) => {
-                            const category = await this._getCategory(video.snippet.categoryId);
-                            const channel = await this._list.getChannelByName(video.snippet.channelId);
+                            const category = await this._getCategory(video.snippet.categoryId),
+                                channel = await this._list.getChannelByName(video.snippet.channelId);
                             channel.live.setLive(true);
                             channel.url = [
                                 "https://youtube.com/watch?v=" + video.id,

@@ -179,8 +179,8 @@ class MLG extends GenericProvider {
                 return channels.some((channel) => status.stream_name == channel.login);
             });
             return Promise.all(followedChannels.map(async (status) => {
-                const id = info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id);
-                const channel = await this._getChannelFromJSON(id);
+                const id = info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id),
+                    channel = await this._getChannelFromJSON(id);
                 if(status.status == 2) {
                     channel.live = new LiveState(LiveState.REBROADCAST);
                 }

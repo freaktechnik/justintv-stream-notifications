@@ -66,7 +66,8 @@ class OptionsPage {
         return browser.storage.local.set(values);
     }
     attachListeners() {
-        const recentlySaved = new Set();
+        const recentlySaved = new Set(),
+            boundStoreValues = this.storeValues.bind(this);
         for(const p in prefs) {
             document.getElementById(p).addEventListener(OptionsPage.EVENT_TYPES[prefs[p].type], () => {
                 recentlySaved.add(p);
@@ -90,8 +91,6 @@ class OptionsPage {
             passive: true,
             capture: false
         });
-
-        const boundStoreValues = this.storeValues.bind(this);
 
         document.getElementById("submitform").addEventListener("submit", boundStoreValues, {
             passive: true,

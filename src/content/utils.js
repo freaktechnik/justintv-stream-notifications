@@ -56,7 +56,7 @@ export function copy(string) {
     input.value = string;
     document.body.appendChild(input);
     input.select();
-    const result = document.execCommand("copy");
+    const result = document.execCommand("copy"); // eslint-disable-line one-var
     input.remove();
     return result;
 }

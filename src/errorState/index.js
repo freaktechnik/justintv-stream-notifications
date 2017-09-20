@@ -14,11 +14,10 @@ const list = document.getElementById("errors"),
         return gravity === 1 ? "recoverable" : "unrecoverable";
     },
     addErrorState = (errorState) => {
-        const root = document.createElement("li");
+        const root = document.createElement("li"),
+            message = document.createElement("p");
         root.classList.add(getClassForGravity(errorState.gravity));
         root.id = "es" + errorState.id;
-
-        const message = document.createElement("p");
         message.textContent = errorState.message;
 
         root.appendChild(message);
@@ -28,8 +27,8 @@ const list = document.getElementById("errors"),
             buttons.classList.add("buttons");
 
             for(const actionId in errorState.actions) {
-                const action = errorState.actions[actionId];
-                const button = document.createElement("button");
+                const action = errorState.actions[actionId],
+                    button = document.createElement("button");
                 button.textContent = action;
                 button.value = action;
                 button.addEventListener("click", sendAction.bind(null, errorState.id, actionId), {

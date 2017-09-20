@@ -110,7 +110,7 @@ export default class ChannelList extends ReadChannelList {
      * Add a channel to the list.
      *
      * @param {module:channel/core.Channel} channel - The channel to add.
-     * @throws {string} If the channel is already in the list.
+     * @throws {Error} If the channel is already in the list.
      * @fires module:channel/list.ChannelList#channelsadded
      * @returns {module:channel/core.Channel} Added channel with the ID set.
      */
@@ -119,7 +119,7 @@ export default class ChannelList extends ReadChannelList {
         channel.lastModified = Date.now();
 
         if(await this.channelExists(channel.login, channel.type)) {
-            throw "Channel already exists";
+            throw new Error("Channel already exists");
         }
 
         const transaction = this.db.transaction("channels", "readwrite"),
@@ -194,11 +194,12 @@ export default class ChannelList extends ReadChannelList {
      * @param {module:channel/core.User} user - The channel to add.
      * @fires module:channel/list.ChannelList#useradded
      * @returns {module:channel/core.User} The newly added User with ID.
+     * @throws {Error} if the user already exists.
      */
     async addUser(user) {
         await this._ready;
         if(await this.userExists(user.login, user.type)) {
-            throw "User already exists";
+            throw new Error("User already exists");
         }
 
         const transaction = this.db.transaction("users", "readwrite"),

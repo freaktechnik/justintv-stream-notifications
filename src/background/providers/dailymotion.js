@@ -196,12 +196,12 @@ class Dailymotion extends GenericProvider {
                 if(!channels.length) {
                     return channels;
                 }
-                const ids = channels.map((ch) => ch.login).join(",");
-                const props = qs.stringify({
-                    ids,
-                    fields: USER_FIELDS,
-                    limit: 100
-                });
+                const ids = channels.map((ch) => ch.login).join(","),
+                    props = qs.stringify({
+                        ids,
+                        fields: USER_FIELDS,
+                        limit: 100
+                    });
                 return [ `${baseUrl}users?${props}` ];
             },
             onComplete: async (result, url) => {

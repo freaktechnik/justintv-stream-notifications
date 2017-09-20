@@ -129,28 +129,27 @@ class Twitch extends GenericProvider {
             headers,
             onComplete: async (data) => {
                 if(data.parsedJSON && !data.parsedJSON.error) {
-                    const user = await this._list.getUserByName(data.parsedJSON.name);
+                    const user = await this._list.getUserByName(data.parsedJSON.name),
+                        follows = await promisedPaginationHelper({
+                            url: `${baseURL}/users/${user.login}/follows/channels?limit=${itemsPerPage}&offset=`,
+                            pageSize: itemsPerPage,
+                            request: (url) => this._qs.queueRequest(url, headers),
+                            fetchNextPage(data) {
+                                return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
+                            },
+                            getItems(data) {
+                                if(data.parsedJSON && "follows" in data.parsedJSON) {
+                                    return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                                }
+                                else {
+                                    return [];
+                                }
+                            }
+                        }),
+                        newChannels = filterExistingFavs(user, follows);
+
                     user.uname = data.parsedJSON.display_name;
                     user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
-
-                    const follows = await promisedPaginationHelper({
-                        url: `${baseURL}/users/${user.login}/follows/channels?limit=${itemsPerPage}&offset=`,
-                        pageSize: itemsPerPage,
-                        request: (url) => this._qs.queueRequest(url, headers),
-                        fetchNextPage(data) {
-                            return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
-                        },
-                        getItems(data) {
-                            if(data.parsedJSON && "follows" in data.parsedJSON) {
-                                return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
-                            }
-                            else {
-                                return [];
-                            }
-                        }
-                    });
-                    const newChannels = filterExistingFavs(user, follows);
-
                     user.favorites = follows.map((c) => c.login);
                     return [ user, newChannels ];
                 }
@@ -172,7 +171,8 @@ class Twitch extends GenericProvider {
             headers,
             onComplete: async (firstPage, url) => {
                 if(firstPage.parsedJSON && "streams" in firstPage.parsedJSON) {
-                    const fetchNextPage = (data, pageSize) => data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize;
+                    const fetchNextPage = (data, pageSize) => data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize,
+                        oldChans = await this._list.getChannels();
                     let channels = firstPage.parsedJSON.streams;
                     if(fetchNextPage(firstPage, itemsPerPage)) {
                         const otherChannels = await promisedPaginationHelper({
@@ -231,7 +231,6 @@ class Twitch extends GenericProvider {
                         }
                         return cho;
                     }));
-                    const oldChans = await this._list.getChannels();
                     if(channels.length != oldChans.length) {
                         const offlineChans = dedupe(oldChans, channels),
                             chans = await this._getHostedChannels(offlineChans, channels);

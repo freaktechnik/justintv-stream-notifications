@@ -78,6 +78,25 @@ export default class ChannelController extends EventTarget {
             },
             managerDoneLoading = () => {
                 this._manager.loading = false;
+            },
+            // We only want the afterchannelsdeleted event to fire after all channels are gone.
+            debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
+            listError = (e) => {
+                let message,
+                    actionsListener;
+                const actions = [];
+                if(e instanceof CantOpenListError) {
+                    message = browser.i18n.getMessage("cookies_disabled");
+                    actions.push(browser.i18n.getMessage("enable_cookies"));
+                    actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
+                }
+                else {
+                    message = browser.i18n.getMessage("restore_failed");
+                    actions.push(browser.i18n.getMessage("restore_action"));
+                    actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
+                }
+                const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
+                es.addEventListener("action", actionsListener);
             };
         /**
          * @type module:channel/manager.ChannelsManager
@@ -108,25 +127,6 @@ export default class ChannelController extends EventTarget {
             prefs.open();
         });
 
-        // We only want the afterchannelsdeleted event to fire after all channels are gone.
-        const debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
-            listError = (e) => {
-                let message,
-                    actionsListener;
-                const actions = [];
-                if(e instanceof CantOpenListError) {
-                    message = browser.i18n.getMessage("cookies_disabled");
-                    actions.push(browser.i18n.getMessage("enable_cookies"));
-                    actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
-                }
-                else {
-                    message = browser.i18n.getMessage("restore_failed");
-                    actions.push(browser.i18n.getMessage("restore_action"));
-                    actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
-                }
-                const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
-                es.addEventListener("action", actionsListener);
-            };
         /**
          * @type module:channel/list.ChannelList
          * @private
@@ -236,7 +236,7 @@ export default class ChannelController extends EventTarget {
             return this._list.addChannel(formattedChannel);
         }
         else {
-            throw "Provider is disabled";
+            throw new Error("Provider is disabled");
         }
     }
     /**
@@ -343,7 +343,7 @@ export default class ChannelController extends EventTarget {
             let [ user, channels ] = await providers[type].getUserFavorites(username);
 
             if(canceled()) {
-                throw "Canceled";
+                throw new Error("Canceled");
             }
 
             channels = await formatChannels(filterInapropriateChannels(channels));

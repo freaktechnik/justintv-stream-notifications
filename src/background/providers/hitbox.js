@@ -116,31 +116,32 @@ class Hitbox extends GenericProvider {
             getURLs,
             onComplete: async (data) => {
                 if(data.ok && data.parsedJSON) {
-                    const user = await this._list.getUserByName(data.parsedJSON.user_name);
+                    const [ user, follows ] = await Promise.all([
+                            this._list.getUserByName(data.parsedJSON.user_name),
+                            promisedPaginationHelper({
+                                url: baseURL + '/following/user?user_name=' + data.parsedJSON.user_name + '&limit=' + pageSize + '&offset=',
+                                pageSize,
+                                request: (url) => this._qs.queueRequest(url),
+                                fetchNextPage(data, pageSize) {
+                                    return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
+                                },
+                                getItems(data) {
+                                    if(data.parsedJSON && "following" in data.parsedJSON) {
+                                        return data.parsedJSON.following;
+                                    }
+                                    else {
+                                        return [];
+                                    }
+                                }
+                            })
+                        ]),
+                        channels = await this._getChannels(follows.map((follow) => follow.user_name)),
+                        newChannels = filterExistingFavs(user, channels);
+                    user.favorites = follows.map((follow) => follow.user_name);
                     user.image = {
                         "200": cdnURL + data.parsedJSON.user_logo,
                         "50": cdnURL + data.parsedJSON.user_logo_small
                     };
-
-                    const follows = await promisedPaginationHelper({
-                        url: baseURL + '/following/user?user_name=' + user.login + '&limit=' + pageSize + '&offset=',
-                        pageSize,
-                        request: (url) => this._qs.queueRequest(url),
-                        fetchNextPage(data, pageSize) {
-                            return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
-                        },
-                        getItems(data) {
-                            if(data.parsedJSON && "following" in data.parsedJSON) {
-                                return data.parsedJSON.following;
-                            }
-                            else {
-                                return [];
-                            }
-                        }
-                    });
-                    const channels = await this._getChannels(follows.map((follow) => follow.user_name)),
-                        newChannels = filterExistingFavs(user, channels);
-                    user.favorites = follows.map((follow) => follow.user_name);
                     return [ user, newChannels ];
                 }
                 return [];

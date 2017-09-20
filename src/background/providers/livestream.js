@@ -64,10 +64,10 @@ class Livestream extends GenericProvider {
             onComplete: async (data, url) => {
                 if(data.parsedJSON && data.parsedJSON.channel) {
                     const requestLogin = url.match(/http:\/\/x([a-zA-Z0-9-]+)x\./)[1].replace("-", "_"),
-                        channel = await this._list.getChannelByName(requestLogin);
+                        channel = await this._list.getChannelByName(requestLogin),
+                        thumbnailInfo = await this._qs.queueRequest(getChannelAPIUrl(channel.login) + "latestclips.json?maxresults=1");
                     channel.live.setLive(data.parsedJSON.channel.isLive);
                     channel.viewers = data.parsedJSON.channel.currentViewerCount;
-                    const thumbnailInfo = await this._qs.queueRequest(getChannelAPIUrl(channel.login) + "latestclips.json?maxresults=1");
                     if(thumbnailInfo.parsedJSON && "channel" in thumbnailInfo.parsedJSON && thumbnailInfo.parsedJSON.channel.item.length) {
                         channel.thumbnail = thumbnailInfo.parsedJSON.channel.item[0].thumbnail["@url"];
                     }

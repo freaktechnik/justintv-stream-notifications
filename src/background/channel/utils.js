@@ -47,19 +47,17 @@ export async function selectOrOpenTab(channel, what) {
 }
 
 const getRebroadcastTitlePatterns = async () => {
-    const patternstr = await prefs.get('rebroadcast_title_pattern'),
-        patterns = patternstr.toLowerCase().split(",");
-    return patterns.concat(patterns.map((pattern) => `[${pattern}]`));
-};
-
-const cleanTitle = (title) => {
-    return title.trim().toLowerCase();
-};
-
-const titleIsRebroadcast = (title, patterns) => {
-    const lowerCaseTitle = cleanTitle(title);
-    return patterns.some((p) => lowerCaseTitle.startsWith(p));
-};
+        const patternstr = await prefs.get('rebroadcast_title_pattern'),
+            patterns = patternstr.toLowerCase().split(",");
+        return patterns.concat(patterns.map((pattern) => `[${pattern}]`));
+    },
+    cleanTitle = (title) => {
+        return title.trim().toLowerCase();
+    },
+    titleIsRebroadcast = (title, patterns) => {
+        const lowerCaseTitle = cleanTitle(title);
+        return patterns.some((p) => lowerCaseTitle.startsWith(p));
+    };
 
 /**
  * Changes the live state of channels that appear to be rebroadcasting based

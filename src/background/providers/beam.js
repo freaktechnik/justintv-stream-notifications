@@ -97,33 +97,32 @@ class Beam extends GenericProvider {
             user = await this._qs.queueRequest(baseURL + "users/" + userid);
 
         if(user.parsedJSON) {
-            const ch = new User(user.parsedJSON.username, this._type);
+            const ch = new User(user.parsedJSON.username, this._type),
+                subscriptions = await promisedPaginationHelper({
+                    url: baseURL + "users/" + userid + "/follows?limit=" + pageSize + "&page=",
+                    pageSize,
+                    initialPage: 0,
+                    request: (url) => this._qs.queueRequest(url),
+                    getPageNumber(page) {
+                        return ++page;
+                    },
+                    fetchNextPage(data, pageSize) {
+                        return data.parsedJSON && data.parsedJSON.length == pageSize;
+                    },
+                    getItems(data) {
+                        return data.parsedJSON || [];
+                    }
+                }),
+                channels = await Promise.all(subscriptions.map((sub) => this.getChannelDetails(sub.token)));
+
+            ch.favorites = subscriptions.map((sub) => sub.token);
+
             if("avatars" in user.parsedJSON) {
                 ch.image = getImageFromAvatars(user.parsedJSON.avatars);
             }
             else {
                 ch.image = getImageFromUserID(user.parsedJSON.id);
             }
-
-            const subscriptions = await promisedPaginationHelper({
-                url: baseURL + "users/" + userid + "/follows?limit=" + pageSize + "&page=",
-                pageSize,
-                initialPage: 0,
-                request: (url) => this._qs.queueRequest(url),
-                getPageNumber(page) {
-                    return ++page;
-                },
-                fetchNextPage(data, pageSize) {
-                    return data.parsedJSON && data.parsedJSON.length == pageSize;
-                },
-                getItems(data) {
-                    return data.parsedJSON || [];
-                }
-            });
-
-            ch.favorites = subscriptions.map((sub) => sub.token);
-
-            const channels = await Promise.all(subscriptions.map((sub) => this.getChannelDetails(sub.token)));
 
             return [ ch, channels ];
         }
@@ -141,32 +140,32 @@ class Beam extends GenericProvider {
             getURLs,
             onComplete: async (data, url) => {
                 if(data.parsedJSON) {
-                    const ch = new User(data.parsedJSON.username, this._type);
+                    const ch = new User(data.parsedJSON.username, this._type),
+                        [ oldUser, follows ] = await Promise.all([
+                            this._list.getUserByName(ch.login),
+                            promisedPaginationHelper({
+                                url: `${url}/follows?limit=${pageSize}&page=`,
+                                pageSize,
+                                initialPage: 0,
+                                request: (url) => this._qs.queueRequest(url),
+                                getPageNumber: (page) => page + 1,
+                                fetchNextPage(data, pageSize) {
+                                    return data.parsedJSON && data.parsedJSON.length == pageSize;
+                                },
+                                getItems: (data) => data.parsedJSON || []
+                            })
+                        ]),
+                        channels = await Promise.all(follows.map((sub) => this.getChannelDetails(sub.token))),
+                        newChannels = filterExistingFavs(oldUser, channels);
+                    ch.favorites = follows.map((sub) => sub.token);
+                    ch.id = oldUser.id;
+
                     if("avatars" in data.parsedJSON) {
                         ch.image = getImageFromAvatars(data.parsedJSON.avatars);
                     }
                     else {
                         ch.image = getImageFromUserID(data.parsedJSON.id);
                     }
-
-                    const oldUser = await this._list.getUserByName(ch.login);
-                    ch.id = oldUser.id;
-
-                    const follows = await promisedPaginationHelper({
-                        url: `${url}/follows?limit=${pageSize}&page=`,
-                        pageSize,
-                        initialPage: 0,
-                        request: (url) => this._qs.queueRequest(url),
-                        getPageNumber: (page) => page + 1,
-                        fetchNextPage(data, pageSize) {
-                            return data.parsedJSON && data.parsedJSON.length == pageSize;
-                        },
-                        getItems: (data) => data.parsedJSON || []
-                    });
-                    ch.favorites = follows.map((sub) => sub.token);
-
-                    const channels = await Promise.all(follows.map((sub) => this.getChannelDetails(sub.token))),
-                        newChannels = filterExistingFavs(oldUser, channels);
                     return [ ch, newChannels ];
                 }
                 return [];
