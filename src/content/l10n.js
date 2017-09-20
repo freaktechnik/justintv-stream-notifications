@@ -51,13 +51,14 @@ const C_TRANSLATE_VALUES = [
     'no'
 ];
 function getTranslateState(element) {
-    if(element === document.documentElement) {
-        return "yes";
-    }
-    else if(element.hasAttribute("translate") && C_TRANSLATE_VALUES.includes(element.getAttribute("translate"))) {
+    if(element.hasAttribute("translate") && C_TRANSLATE_VALUES.includes(element.getAttribute("translate"))) {
         return element.getAttribute("translate");
     }
-    return getTranslateState(element.parentNode);
+    const closestTranslate = element.closest('[translate]:not([translate="inherit"])');
+    if(closestTranslate) {
+        return closestTranslate.getAttribute("translate");
+    }
+    return "yes";
 }
 
 function translateElement(element = document) {
