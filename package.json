@@ -40,7 +40,7 @@
     "element-dataset": "^2.2.6",
     "eslint": "^4.7.1",
     "eslint-plugin-babel": "^4.0.1",
-    "eslint-plugin-freaktechnik": "^2.4.0",
+    "eslint-plugin-freaktechnik": "^2.5.1",
     "eslint-plugin-react": "^7.3.0",
     "eslint-plugin-xss": "^0.1.8",
     "extract-text-webpack-plugin": "^3.0.0",
