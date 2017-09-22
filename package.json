@@ -60,7 +60,8 @@
     "webpack": "^3.6.0"
   },
   "scripts": {
-    "test": "npm run lint && nyc ava",
+    "test:ava": "NODE_ENV=test nyc ava",
+    "test": "npm run lint && npm run test:ava",
     "coverage": "nyc report && codecov",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:webext",
     "lint:js": "eslint test/ src/ --ext js,jsx",
@@ -90,6 +91,9 @@
     "reporter": [
       "lcov",
       "text"
+    ],
+    "extension": [
+      ".jsx"
     ]
   },
   "stylelint": {
