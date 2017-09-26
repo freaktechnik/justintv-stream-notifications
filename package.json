@@ -50,7 +50,7 @@
     "html-webpack-plugin": "^2.29.0",
     "mz": "^2.7.0",
     "nyc": "^11.2.1",
-    "sinon": "^3.3.0",
+    "sinon": "^4.0.0",
     "sinon-chrome": "^2.2.0",
     "style-loader": "^0.18.2",
     "stylelint": "^8.1.1",
