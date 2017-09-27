@@ -49,10 +49,10 @@ main {
     background-color: var(--inverted-bg);
 }
 
-.actionbar button:link,
-.actionbar button:hover,
-.actionbar button:active,
-.actionbar button:visited,
+.actionbar a:link,
+.actionbar a:hover,
+.actionbar a:active,
+.actionbar a:visited,
 .actionbar button {
     color: var(--inverted-text);
     background-color: var(--inverted-bg);
