@@ -8,11 +8,12 @@ import { show, hide } from './utils';
 const SELECTED_CLASS = "current";
 
 class Tabbed {
-    constructor(el) {
+    constructor(el, elType = 'a') {
         this.root = el;
+        this.tabType = elType;
 
         const tabContents = this.root.querySelectorAll(".tabcontent"),
-            tabs = this.root.querySelectorAll(".tabstrip a"),
+            tabs = this.root.querySelectorAll(`.tabstrip ${this.tabType}`),
             clickListener = (evt) => {
                 evt.preventDefault();
                 this.select(parseInt(evt.currentTarget.dataset.tab, 10));
@@ -39,17 +40,17 @@ class Tabbed {
             tab.addEventListener("keypress", keyListener);
         }
 
-        if(this.root.querySelectorAll(`.tabstrip a.${SELECTED_CLASS}`).length === 0 && this.length > 0) {
+        if(this.root.querySelectorAll(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`).length === 0 && this.length > 0) {
             this.select(1);
         }
         else {
-            this.select(parseInt(this.root.querySelector(`.tabstrip a.${SELECTED_CLASS}`).dataset.tab, 10));
+            this.select(parseInt(this.root.querySelector(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`).dataset.tab, 10));
         }
     }
 
     select(index) {
         if(index <= this.length && index > 0) {
-            const prevTab = this.root.querySelector(`.tabstrip a.${SELECTED_CLASS}`),
+            const prevTab = this.root.querySelector(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`),
                 tab = this.getTabByIndex(index),
                 evObj = new CustomEvent("tabchanged", { detail: index });
             if(prevTab) {
@@ -70,7 +71,7 @@ class Tabbed {
     }
 
     getTabByIndex(index) {
-        const tab = this.root.querySelector(`.tabstrip a[data-tab="${index}"]`);
+        const tab = this.root.querySelector(`.tabstrip ${this.tabType}[data-tab="${index}"]`);
         if(tab) {
             return tab;
         }

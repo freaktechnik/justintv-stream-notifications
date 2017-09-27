@@ -45,7 +45,7 @@ const filters = [
     },
     list = new ReadChannelList();
 
-tabbed._tabbed = new Tabbed(tabbed);
+tabbed._tabbed = new Tabbed(tabbed, 'button');
 document.getElementById("searchField").addEventListener("input", listener);
 tabbed.addEventListener("tabchanged", listener);
 channels.addEventListener("itemadded", () => {

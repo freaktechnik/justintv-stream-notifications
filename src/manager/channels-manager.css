@@ -13,7 +13,8 @@ main {
     width: 100%;
 }
 
-.topbar a {
+.topbar a,
+.topbar button {
     padding: 1em;
 }
 
@@ -48,10 +49,10 @@ main {
     background-color: var(--inverted-bg);
 }
 
-.actionbar a.button:link,
-.actionbar a.button:hover,
-.actionbar a.button:active,
-.actionbar a.button:visited,
+.actionbar button:link,
+.actionbar button:hover,
+.actionbar button:active,
+.actionbar button:visited,
 .actionbar button {
     color: var(--inverted-text);
     background-color: var(--inverted-bg);
