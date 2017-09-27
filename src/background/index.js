@@ -165,8 +165,8 @@ browser.runtime.onMessage.addListener((message) => {
     }
 });
 
-browser.runtime.onInstalled.addListener(({ reason }) => {
-    if(reason == 'install') {
+browser.runtime.onInstalled.addListener(({ reason, temporary = false }) => {
+    if(reason == 'install' && !temporary) {
         Tour.onInstalled();
     }
     else if(reason == 'update') {
