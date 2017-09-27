@@ -6,9 +6,6 @@ import '../../_locales/de/messages.json';
 import '../../_locales/en/messages.json';
 import '../../_locales/es_MX/messages.json';
 import '../../_locales/fr/messages.json';
-import '../../_locales/hr/messages.json';
-import '../../_locales/ru/messages.json';
-import '../../_locales/uk_UA/messages.json';
 
 // Load module deps
 import { selectOrOpenTab } from "./channel/utils";
