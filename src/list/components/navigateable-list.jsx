@@ -102,7 +102,7 @@ export class NavigateableList extends React.Component {
             });
         });
         return (
-            <ul onKeyUp={ (e) => this.handleKey(e) } tabIndex={ 0 } ref={ (e) => {
+            <ul onKeyUp={ (e) => this.handleKey(e) } className="scrollable" tabIndex={ 0 } ref={ (e) => {
                 this.list = e;
             } }>
                 { mappedChildren }

@@ -7,7 +7,7 @@
     --big-avatar: 30px;
     --small-avatar: 1em;
     --avatar-size: var(--big-avatar);
-    --topbard-height: 2.2em;
+    --topbar-height: 2.2em;
 }
 
 body {
@@ -39,8 +39,6 @@ a {
 }
 
 nav {
-    position: sticky;
-    top: 0;
     z-index: 10;
     min-width: -moz-max-content;
 }
@@ -60,9 +58,9 @@ nav {
     display: block;
 }
 
-.exploreprovider {
-    position: sticky;
-    top: var(--topbar-height);
+.scrollable {
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .tabcontent {
