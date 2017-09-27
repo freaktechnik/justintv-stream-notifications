@@ -8,7 +8,7 @@
  */
 import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
-import md5 from 'md5';
+//import md5 from 'md5';
 
 const type = "douyutv",
     baseURL = "http://www.douyutv.com/api/v1/",
@@ -30,7 +30,7 @@ const type = "douyutv",
     },
     signAPI = (endpoint, id) => {
         const argument = endpoint + id + "?aid=android&client_sys=android&time=" + Date.now(),
-            sign = md5(argument + '1231');
+            sign = argument; //md5(argument + '1231');
         return argument + "&auth=" + sign;
     };
 
