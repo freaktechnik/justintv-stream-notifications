@@ -17,7 +17,7 @@
         "64": "assets/images/icon.svg"
     },
     "browser_action": {
-        "browser_style": false,
+        "browser_style": true,
         "default_icon": "assets/images/offline.svg",
         "default_popup": "popup/list/index.html",
         "default_title": "__MSG_listTooltipOffline__"

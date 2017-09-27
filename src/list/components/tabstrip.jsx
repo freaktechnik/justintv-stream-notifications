@@ -79,7 +79,9 @@ class TabStrip extends NavigateableList {
 }
 
 const SearchField = (props) => {
-    return ( <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/> );
+    return ( <div className="browser-style">
+        <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/>
+    </div> );
 };
 SearchField.defaultProps = {
     value: ""

@@ -199,7 +199,7 @@ const ProviderSelector = (props) => {
         }
     }
     return (
-        <select className="exploreprovider" value={ props.currentProvider } onChange={ props.onProvider }>
+        <select className="exploreprovider browser-style" value={ props.currentProvider } onChange={ props.onProvider }>
             { options }
         </select>
     );

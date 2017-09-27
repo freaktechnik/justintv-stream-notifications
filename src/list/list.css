@@ -52,14 +52,19 @@ nav {
 .searchField,
 .exploreprovider {
     width: 100%;
+    max-height: var(--topbar-height);
 }
 
 .searchField {
     display: block;
 }
 
+.browser-style {
+    margin-bottom: 0 !important;
+}
+
 .scrollable {
-    max-height: 500px;
+    max-height: calc(600px - 3 * var(--topbar-height));
     overflow-y: auto;
 }
 
