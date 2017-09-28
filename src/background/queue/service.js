@@ -106,14 +106,16 @@ class QueueService {
                 headers: new Headers(headers),
                 onComplete: (data) => {
                     if(requeue(data)) {
-                        prefs.get("queueservice_maxRetries").then((maxRetries) => {
-                            if(attempt < maxRetries) {
-                                resolve(this.queueRequest(url, headers, requeue, true, ++attempt));
-                            }
-                            else {
-                                throw new Error("Too many attempts");
-                            }
-                        }).catch(reject);
+                        prefs.get("queueservice_maxRetries")
+                            .then((maxRetries) => {
+                                if(attempt < maxRetries) {
+                                    resolve(this.queueRequest(url, headers, requeue, true, ++attempt));
+                                }
+                                else {
+                                    throw new Error("Too many attempts");
+                                }
+                            })
+                            .catch(reject);
                     }
                     else {
                         resolve(data);

@@ -40,6 +40,7 @@
     "eslint": "^4.7.1",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-babel": "^4.0.1",
+    "eslint-plugin-compat": "^1.0.4",
     "eslint-plugin-freaktechnik": "^3.0.10",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-react": "^7.3.0",
@@ -55,6 +56,7 @@
     "style-loader": "^0.18.2",
     "stylelint": "^8.1.1",
     "stylelint-config-standard": "^17.0.0",
+    "stylelint-no-unsupported-browser-features": "^1.0.0",
     "transifex-loader": "^4.0.1",
     "web-ext": "^2.0.0",
     "webpack": "^3.6.0"
@@ -98,9 +100,25 @@
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
+    "plugins": [
+      "stylelint-no-unsupported-browser-features"
+    ],
     "rules": {
       "indentation": 4,
-      "color-named": "always-where-possible"
+      "color-named": "always-where-possible",
+      "plugin/no-unsupported-browser-features": [
+        true,
+        {
+          "severity": "warning",
+          "ignore": [
+            "css3-cusrsors"
+          ]
+        }
+      ]
     }
-  }
+  },
+  "browserslist": [
+    "last 1 Firefox versions",
+    "last 1 FirefoxAndroid versions"
+  ]
 }
