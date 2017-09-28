@@ -35,36 +35,42 @@ store.subscribe(() => {
 });
 
 port.send("ready");
-prefs.get(prefsKeys).then((values) => {
-    for(const i in values) {
+Promise.all([
+    prefs.get(prefsKeys).then((values) => {
+        for(const i in values) {
+            store.dispatch({
+                type: PREFS_MAP[prefsKeys[i]],
+                payload: values[i]
+            });
+        }
+    }),
+    list.getChannelsByType().then((channels) => {
         store.dispatch({
-            type: PREFS_MAP[prefsKeys[i]],
-            payload: values[i]
+            type: "addChannels",
+            payload: channels
         });
-    }
-});
-list.getChannelsByType().then((channels) => {
-    store.dispatch({
-        type: "addChannels",
-        payload: channels
-    });
-});
+    })
+]).catch(console.error);
 port.addEventListener("message", ({ detail: event }) => {
     if(event.command === "addChannels") {
-        Promise.all(event.payload.map((id) => list.getChannel(id))).then((channels) => {
-            store.dispatch({
-                type: "addChannels",
-                payload: channels
-            });
-        });
+        Promise.all(event.payload.map((id) => list.getChannel(id)))
+            .then((channels) => {
+                store.dispatch({
+                    type: "addChannels",
+                    payload: channels
+                });
+            })
+            .catch(console.error);
     }
     else if(event.command === "updateChannel") {
-        list.getChannel(event.payload).then((channel) => {
-            store.dispatch({
-                type: "updateChannel",
-                payload: channel
-            });
-        });
+        list.getChannel(event.payload)
+            .then((channel) => {
+                store.dispatch({
+                    type: "updateChannel",
+                    payload: channel
+                });
+            })
+            .catch(console.error);
     }
     else {
         store.dispatch({
@@ -76,7 +82,9 @@ port.addEventListener("message", ({ detail: event }) => {
     passive: true,
     capture: false
 });
-prefs.addEventListener("change", ({ detail: { pref, value } }) => {
+prefs.addEventListener("change", ({ detail: {
+    pref, value
+} }) => {
     if(pref in PREFS_MAP) {
         store.dispatch({
             command: PREFS_MAP[pref],

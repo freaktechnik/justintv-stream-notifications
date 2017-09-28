@@ -32,13 +32,11 @@ test("Static properties", (t) => {
 });
 
 
-test.serial('get invalid users', (t) => {
-    return Promise.all([
-        t.throws(t.context.list.getUser(), Error, 'Missing ID'),
-        t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
-        t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
-    ]);
-});
+test.serial('get invalid users', (t) => Promise.all([
+    t.throws(t.context.list.getUser(), Error, 'Missing ID'),
+    t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
+    t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+]));
 
 test.serial('get user by login and type', async (t) => {
     const referenceUser = await t.context.list.getUser(t.context.referenceUser),
@@ -108,13 +106,11 @@ test.serial('get channel by id', async (t) => {
     t.is(t.context.referenceChannel, channel.id);
 });
 
-test.serial('get invalid channel', (t) => {
-    return Promise.all([
-        t.throws(t.context.list.getChannel(), Error, 'No ID'),
-        t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-        t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
-    ]);
-});
+test.serial('get invalid channel', (t) => Promise.all([
+    t.throws(t.context.list.getChannel(), Error, 'No ID'),
+    t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+    t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+]));
 
 test.serial('get channel id', async (t) => {
     const referenceChannel = await t.context.list.getChannel(t.context.referenceChannel),
@@ -191,11 +187,23 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
 
     const request = indexedDB.open(ReadChannelList.name, 1);
     request.onupgradeneeded = (e) => {
-        const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-        users.createIndex("typename", [ "type", "login" ], { unique: true });
+        const users = e.target.result.createObjectStore("users", {
+            keyPath: "id",
+            autoIncrement: true
+        });
+        users.createIndex("typename", [
+            "type",
+            "login"
+        ], { unique: true });
         users.createIndex("type", "type", { unique: false });
-        const channels = e.target.result.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-        channels.createIndex("typename", [ "type", "login" ], { unique: true });
+        const channels = e.target.result.createObjectStore("channels", {
+            keyPath: "id",
+            autoIncrement: true
+        });
+        channels.createIndex("typename", [
+            "type",
+            "login"
+        ], { unique: true });
         channels.createIndex("type", "type", { unique: false });
     };
     const { target: { result: db } } = await new Promise((resolve, reject) => {

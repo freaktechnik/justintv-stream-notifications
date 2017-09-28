@@ -64,6 +64,8 @@ import DatabaseManager, { FixListError } from '../../database-manager';
  * @type {Error}
  */
 
+const ONE_ITEM = 1;
+
 /**
  * @class module:channel/list.ChannelList
  * @extends external:EventTarget
@@ -144,10 +146,10 @@ export default class ChannelList extends ReadChannelList {
             return this.addChannel(channels).then((channel) => [ channel ]);
         }
         else if(Array.isArray(channels)) {
-            if(channels.length == 1) {
-                return this.addChannel(channels[0]).then((channel) => [ channel ]);
+            if(channels.length === ONE_ITEM) {
+                return this.addChannel(channels.pop()).then((channel) => [ channel ]);
             }
-            else if(channels.length > 1) {
+            else if(channels.length > ONE_ITEM) {
                 await this._ready;
                 const transaction = this.db.transaction("channels", "readwrite"),
                     store = transaction.objectStore("channels"),
@@ -155,7 +157,10 @@ export default class ChannelList extends ReadChannelList {
                     addedChannels = [];
                 // Can't use promises here, because that closes the transaction.
                 for(const channel of channels) {
-                    const ireq = index.get([ channel.type, channel.login ]);
+                    const ireq = index.get([
+                        channel.type,
+                        channel.login
+                    ]);
                     ireq.onsuccess = () => {
                         if(!ireq.result) {
                             channel.lastModified = Date.now();
@@ -170,13 +175,13 @@ export default class ChannelList extends ReadChannelList {
                             };
                         }
                         else {
-                            console.warn("Channel " + channel.login + " has already been added");
+                            console.warn(`Channel ${channel.login} has already been added`);
                         }
                     };
                 }
                 return new Promise((resolve, reject) => {
                     transaction.oncomplete = () => {
-                        if(addedChannels.length > 0) {
+                        if(addedChannels.length) {
                             DatabaseManager.emit("channelsadded", addedChannels);
                         }
                         resolve(addedChannels);
@@ -315,9 +320,7 @@ export default class ChannelList extends ReadChannelList {
      */
     async removeUsersWithFavorite(channel) {
         const users = await this.getUsersByFavorite(channel);
-        return Promise.all(users.map((user) => {
-            return this.removeUser(user.id);
-        }));
+        return Promise.all(users.map((user) => this.removeUser(user.id)));
     }
 
     /**
@@ -331,9 +334,7 @@ export default class ChannelList extends ReadChannelList {
     async removeChannelsByUserFavorites(userId) {
         const user = await this.getUser(userId),
             channels = await this.getChannelsByUserFavorites(user);
-        return Promise.all(channels.map((channel) => {
-            return this.removeChannel(channel.id);
-        }));
+        return Promise.all(channels.map((channel) => this.removeChannel(channel.id)));
     }
 
     /**
@@ -346,14 +347,20 @@ export default class ChannelList extends ReadChannelList {
      */
     async clear() {
         if(this.db !== null) {
-            const transaction = this.db.transaction([ "channels", "users" ], "readwrite"),
+            const transaction = this.db.transaction([
+                    "channels",
+                    "users"
+                ], "readwrite"),
                 channels = transaction.objectStore("channels"),
                 users = transaction.objectStore("users"),
                 chanReq = channels.clear(),
                 chanPromise = this._waitForRequest(chanReq),
                 usrReq = users.clear(),
                 usrPromise = this._waitForRequest(usrReq);
-            await Promise.all([ chanPromise, usrPromise ]);
+            await Promise.all([
+                chanPromise,
+                usrPromise
+            ]);
             DatabaseManager.emit("clear", false);
             return false;
         }

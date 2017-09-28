@@ -107,13 +107,11 @@ test.serial('close list', async (t) => {
 test.serial('open list error', async (t) => {
     let onerror;
     const open = window.indexedDB.open;
-    window.indexedDB.open = () => {
-        return {
-            set onerror(val) {
-                onerror = val;
-            }
-        };
-    };
+    window.indexedDB.open = () => ({
+        set onerror(val) {
+            onerror = val;
+        }
+    });
 
     const p = DatabaseManager.open();
 
@@ -130,14 +128,12 @@ test.serial('open list error', async (t) => {
 test.serial('open list error without trying', async (t) => {
     let onerror;
     const open = window.indexedDB.open;
-    window.indexedDB.open = () => {
-        return {
-            set onerror(val) {
-                onerror = val;
-            },
-            error: new Error()
-        };
-    };
+    window.indexedDB.open = () => ({
+        set onerror(val) {
+            onerror = val;
+        },
+        error: new Error()
+    });
 
     const p = DatabaseManager.open(DatabaseManager.name, true);
 

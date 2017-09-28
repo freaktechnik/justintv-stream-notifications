@@ -18,7 +18,13 @@ const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
     baseURL = 'https://mixer.com/api/v1/',
     pageSize = 50,
-    SIZES = [ '50', '70', '150', '300' ],
+    SIZES = [
+        '50',
+        '70',
+        '150',
+        '300'
+    ],
+    NOT_FOUND = 404,
     getImageFromUserID = (id) => {
         const image = {};
         SIZES.forEach((s) => {
@@ -38,10 +44,10 @@ function getChannelFromJSON(jsonChannel) {
         ret.thumbnail = jsonChannel.thumbnail.url;
     }
     else {
-        ret.thumbnail = "https://thumbs.mixer.com/channel/" + jsonChannel.id + ".big.jpg";
+        ret.thumbnail = `https://thumbs.mixer.com/channel/${jsonChannel.id}.big.jpg`;
     }
-    ret.url.push("https://mixer.com/" + jsonChannel.token);
-    ret.archiveUrl = "https://mixer.com/" + jsonChannel.token;
+    ret.url.push(`https://mixer.com/${jsonChannel.token}`);
+    ret.archiveUrl = `https://mixer.com/${jsonChannel.token}`;
     ret.chatUrl = chatURL + jsonChannel.token;
     ret.mature = jsonChannel.audience === "18+";
     ret.image = getImageFromUserID(jsonChannel.user.id);
@@ -55,7 +61,7 @@ function getImageFromAvatars(avatars) {
     const image = {};
     if(Array.isArray(avatars) && avatars.length) {
         for(const avatar of avatars) {
-            image[avatar.meta.size.split("x")[0]] = avatar.url;
+            image[avatar.meta.size.split("x").shift()] = avatar.url;
         }
     }
     return image;
@@ -64,16 +70,17 @@ function getImageFromAvatars(avatars) {
 class Beam extends GenericProvider {
     constructor(type) {
         super(type);
-        this._getUserIdFromUsername = memoize((username) => {
-            return this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`).then((response) => {
-                if(response.ok && response.parsedJSON) {
-                    return response.parsedJSON.find((val) => val.username == username).id;
-                }
-                throw new Error(`Could not find user for ${username}`);
-            });
-        });
+        this._getUserIdFromUsername = memoize((username) => this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`).then((response) => {
+            if(response.ok && response.parsedJSON) {
+                return response.parsedJSON.find((val) => val.username == username).id;
+            }
+            throw new Error(`Could not find user for ${username}`);
+        }));
 
-        this.authURL = [ "https://mixer.com", "https://beam.pro" ];
+        this.authURL = [
+            "https://mixer.com",
+            "https://beam.pro"
+        ];
         this._supportsFavorites = true;
         this._supportsCredentials = true;
         this._supportsFeatured = true;
@@ -83,23 +90,22 @@ class Beam extends GenericProvider {
 
     async _getHostee(channelId) {
         return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
-            if(response.ok && response.status !== 404 && response.parsedJSON) {
+            if(response.ok && response.status !== NOT_FOUND && response.parsedJSON) {
                 return getChannelFromJSON(response.parsedJSON);
             }
-            else {
-                return null;
-            }
+
+            return null;
         });
     }
 
     async getUserFavorites(username) {
         const userid = await this._getUserIdFromUsername(username),
-            user = await this._qs.queueRequest(baseURL + "users/" + userid);
+            user = await this._qs.queueRequest(`${baseURL}users/${userid}`);
 
         if(user.parsedJSON) {
             const ch = new User(user.parsedJSON.username, this._type),
                 subscriptions = await promisedPaginationHelper({
-                    url: baseURL + "users/" + userid + "/follows?limit=" + pageSize + "&page=",
+                    url: `${baseURL}users/${userid}/follows?limit=${pageSize}&page=`,
                     pageSize,
                     initialPage: 0,
                     request: (url) => this._qs.queueRequest(url),
@@ -124,11 +130,13 @@ class Beam extends GenericProvider {
                 ch.image = getImageFromUserID(user.parsedJSON.id);
             }
 
-            return [ ch, channels ];
+            return [
+                ch,
+                channels
+            ];
         }
-        else {
-            throw new Error(`Could not get favorites for user ${username} on ${this.name}`);
-        }
+
+        throw new Error(`Could not get favorites for user ${username} on ${this.name}`);
     }
     async updateFavsRequest() {
         const getURLs = async () => {
@@ -141,18 +149,21 @@ class Beam extends GenericProvider {
             onComplete: async (data, url) => {
                 if(data.parsedJSON) {
                     const ch = new User(data.parsedJSON.username, this._type),
-                        [ oldUser, follows ] = await Promise.all([
+                        [
+                            oldUser,
+                            follows
+                        ] = await Promise.all([
                             this._list.getUserByName(ch.login),
                             promisedPaginationHelper({
                                 url: `${url}/follows?limit=${pageSize}&page=`,
                                 pageSize,
                                 initialPage: 0,
-                                request: (url) => this._qs.queueRequest(url),
-                                getPageNumber: (page) => page + 1,
-                                fetchNextPage(data, pageSize) {
-                                    return data.parsedJSON && data.parsedJSON.length == pageSize;
+                                request: (pageURL) => this._qs.queueRequest(pageURL),
+                                getPageNumber: (page) => ++page,
+                                fetchNextPage(pageData, pageSize) {
+                                    return pageData.parsedJSON && pageData.parsedJSON.length == pageSize;
                                 },
-                                getItems: (data) => data.parsedJSON || []
+                                getItems: (pageData) => pageData.parsedJSON || []
                             })
                         ]),
                         channels = await Promise.all(follows.map((sub) => this.getChannelDetails(sub.token))),
@@ -166,14 +177,17 @@ class Beam extends GenericProvider {
                     else {
                         ch.image = getImageFromUserID(data.parsedJSON.id);
                     }
-                    return [ ch, newChannels ];
+                    return [
+                        ch,
+                        newChannels
+                    ];
                 }
                 return [];
             }
         };
     }
     async getChannelDetails(channelname) {
-        const response = await this._qs.queueRequest(baseURL + "channels/" + channelname);
+        const response = await this._qs.queueRequest(`${baseURL}channels/${channelname}`);
         if(response.parsedJSON) {
             const channel = getChannelFromJSON(response.parsedJSON);
             if(channel.live.state === LiveState.OFFLINE) {
@@ -184,7 +198,7 @@ class Beam extends GenericProvider {
             }
             return channel;
         }
-        throw new Error("Error getting the details for the beam channel " + channelname);
+        throw new Error(`Error getting the details for the beam channel ${channelname}`);
     }
     updateRequest() {
         const getURLs = async () => {
@@ -209,7 +223,7 @@ class Beam extends GenericProvider {
         };
     }
     async getFeaturedChannels() {
-        const data = await this._qs.queueRequest(baseURL + "channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1");
+        const data = await this._qs.queueRequest(`${baseURL}channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1`);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {
@@ -218,12 +232,11 @@ class Beam extends GenericProvider {
 
             return chans.map((chan) => getChannelFromJSON(chan));
         }
-        else {
-            throw new Error("Didn't find any featured channels for " + this.name);
-        }
+
+        throw new Error(`Didn't find any featured channels for ${this.name}`);
     }
     async search(query) {
-        const data = await this._qs.queueRequest(baseURL + "channels?where=online.eq.1%2Ctoken.eq." + query);
+        const data = await this._qs.queueRequest(`${baseURL}channels?where=online.eq.1%2Ctoken.eq.${query}`);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {
@@ -232,9 +245,8 @@ class Beam extends GenericProvider {
 
             return chans.map((chan) => getChannelFromJSON(chan));
         }
-        else {
-            throw new Error("No results for " + query + " on " + this.name);
-        }
+
+        throw new Error(`No results for ${query} on ${this.name}`);
     }
 }
 

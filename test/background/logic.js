@@ -2,13 +2,37 @@ import test from 'ava';
 import { and, or, not } from '../../src/background/logic';
 
 const CASES = [
-    [ true, true ],
-    [ false, false ],
-    [ true, false ],
-    [ false, true ],
-    [ true, true, true ],
-    [ true, true, false ],
-    [ false, false, false ]
+    [
+        true,
+        true
+    ],
+    [
+        false,
+        false
+    ],
+    [
+        true,
+        false
+    ],
+    [
+        false,
+        true
+    ],
+    [
+        true,
+        true,
+        true
+    ],
+    [
+        true,
+        true,
+        false
+    ],
+    [
+        false,
+        false,
+        false
+    ]
 ];
 
 const andTest = async (t, args) => {
@@ -49,14 +73,8 @@ test('not', async (t) => {
     t.false(await not(tp));
 });
 
-test('and reject', (t) => {
-    return t.throws(and(Promise.resolve(true), Promise.reject(new Error())), Error);
-});
+test('and reject', (t) => t.throws(and(Promise.resolve(true), Promise.reject(new Error())), Error));
 
-test('or reject', (t) => {
-    return t.throws(or(Promise.resolve(false), Promise.reject(new Error())), Error);
-});
+test('or reject', (t) => t.throws(or(Promise.resolve(false), Promise.reject(new Error())), Error));
 
-test('not reject', (t) => {
-    return t.throws(not(Promise.reject(new Error())), Error);
-});
+test('not reject', (t) => t.throws(not(Promise.reject(new Error())), Error));

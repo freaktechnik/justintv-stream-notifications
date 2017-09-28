@@ -41,11 +41,11 @@ export default class ReadChannelList extends EventTarget {
         }
     }
 
-    get idCache() {
+    get idCache() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.idCache;
     }
 
-    get error() {
+    get error() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.error;
     }
 
@@ -58,7 +58,7 @@ export default class ReadChannelList extends EventTarget {
      * @returns {?} Whatever the request's success param is.
      * @throws Error when the request fails.
      */
-    _waitForRequest(request) {
+    _waitForRequest(request) { // eslint-disable-line class-methods-use-this
         return DatabaseManager._waitForRequest(request);
     }
 
@@ -81,13 +81,13 @@ export default class ReadChannelList extends EventTarget {
      * @returns {undefined} When the iteration is finished.
      * @throws When the iteration is aborted due to an error.
      */
-    _waitForCursor(request, callback) {
-        return new Promise((resolve, reject) => {
+    _waitForCursor(request, callback) { // eslint-disable-line class-methods-use-this
+        return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
             request.onsuccess = (event) => {
                 if(event.target.result) {
                     const r = callback(event.target.result);
                     if(r && typeof r === "object" && "then" in r) {
-                        r.then(() => event.target.result.continue());
+                        r.then(() => event.target.result.continue()).catch(reject);
                     }
                     else {
                         event.target.result.continue();
@@ -101,11 +101,11 @@ export default class ReadChannelList extends EventTarget {
         });
     }
 
-    filterEvents() {
+    filterEvents() { // eslint-disable-line class-methods-use-this
         return true;
     }
 
-    get db() {
+    get db() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.db;
     }
 
@@ -130,18 +130,20 @@ export default class ReadChannelList extends EventTarget {
         if(this.idCache.has(type + name)) {
             return Promise.resolve(this.idCache.get(type + name));
         }
-        else {
-            const transaction = this.db.transaction("channels"),
-                index = transaction.objectStore("channels").index("typename"),
-                req = index.get([ type, name ]);
-            return this._waitForRequest(req).then(() => {
-                if(req.result) {
-                    this.idCache.set(type + name, req.result.id);
-                    return req.result.id;
-                }
-                throw new Error("Could not fetch channel for the given info");
-            });
-        }
+
+        const transaction = this.db.transaction("channels"),
+            index = transaction.objectStore("channels").index("typename"),
+            req = index.get([
+                type,
+                name
+            ]);
+        return this._waitForRequest(req).then(() => {
+            if(req.result) {
+                this.idCache.set(type + name, req.result.id);
+                return req.result.id;
+            }
+            throw new Error("Could not fetch channel for the given info");
+        });
     }
 
     /**
@@ -155,7 +157,10 @@ export default class ReadChannelList extends EventTarget {
         await this._ready;
         const transaction = this.db.transaction("users"),
             index = transaction.objectStore("users").index("typename"),
-            req = index.get([ type, name ]);
+            req = index.get([
+                type,
+                name
+            ]);
         return this._waitForRequest(req).then(() => {
             if(req.result) {
                 return req.result.id;
@@ -311,9 +316,7 @@ export default class ReadChannelList extends EventTarget {
      */
     async getUsersByFavorite(channel) {
         const users = await this.getUsersByType(channel.type);
-        return users.filter((user) => {
-            return user.favorites.indexOf(channel.login) !== -1;
-        });
+        return users.filter((user) => user.favorites.includes(channel.login));
     }
 
     /**
@@ -325,9 +328,7 @@ export default class ReadChannelList extends EventTarget {
      */
     async getChannelsByUserFavorites(user) {
         const channels = await this.getChannelsByType(user.type);
-        return channels.filter((channel) => {
-            return user.favorites.some((channame) => channame == channel.login);
-        });
+        return channels.filter((channel) => user.favorites.some((channame) => channame == channel.login));
     }
 
     /**
@@ -337,7 +338,7 @@ export default class ReadChannelList extends EventTarget {
      * @returns {undefined} DB is being deleted, or may already be deleted.
      * @fires module:read-channel-list.ReadChannelList#close
      */
-    close() {
+    close() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.close();
     }
 }

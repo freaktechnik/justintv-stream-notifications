@@ -64,9 +64,7 @@ test("Twitch Hosting Redirects", async (t) => {
 test("Twitch Live Redirects", async (t) => {
     const channel = getChannel('mlg_live', 'twitch', 15);
     channel.uname = "MLG";
-    const ret = await provider.updateChannels([
-        channel
-    ]);
+    const ret = await provider.updateChannels([ channel ]);
     t.is(ret.length, 1);
     t.is(ret[0].login, 'mlg');
     t.true(await ret[0].live.isLive(LiveState.TOWARD_LIVE));

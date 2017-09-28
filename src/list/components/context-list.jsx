@@ -25,13 +25,11 @@ class ContextItem extends NavigateableItem {
     }
 
     render() {
-        this.props.children = [
-            <button onClick={ this.props.onClick } key="a" ref={ (e) => {
-                this.button = e;
-            } }>
-                { _(this.props.label, this.props.params) }
-            </button>
-        ];
+        this.props.children = [ <button onClick={ this.props.onClick } key="a" ref={ (e) => {
+            this.button = e;
+        } }>
+            { _(this.props.label, this.props.params) }
+        </button> ];
         return React.cloneElement(super.render(), {
             tabIndex: -1
         });
@@ -43,7 +41,7 @@ class ContextList extends React.Component {
         return {
             title: PropTypes.string.isRequired,
             onClose: PropTypes.func.isRequired,
-            children: PropTypes.node.isRequired,
+            children: PropTypes.node.isRequired
         };
     }
 

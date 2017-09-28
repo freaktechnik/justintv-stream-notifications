@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars,eslint-comments/disable-enable-pair */
 /**
  * A generic provider class
  * @author Martin Giger
@@ -14,7 +14,7 @@ import ProviderChannelList from '../channel/provider-list';
 import { emit } from '../../utils';
 
 const _ = browser.i18n.getMessage,
-    methodNotSupported = (type, method) => Promise.reject(new Error(type + "." + method + " is not supported")),
+    methodNotSupported = (type, method) => Promise.reject(new Error(`${type}.${method} is not supported`)),
     queues = new WeakMap(),
     queueFor = (provider) => {
         if(!queues.has(provider)) {
@@ -77,7 +77,7 @@ const _ = browser.i18n.getMessage,
 /**
  * @extends external:Error
  */
-class ProviderError extends Error {
+/*class ProviderError extends Error {
     constructor(code) {
         let message;
         switch(code) {
@@ -90,14 +90,14 @@ class ProviderError extends Error {
         this.code = code;
         this.name = "ProviderError";
     }
-}
+}*/
 
 /**
  * @class
  * @extends module:disposable-target.Disposable
  */
 export default class GenericProvider extends EventTarget {
-    static get NETWORK_ERROR() {
+    /*static get NETWORK_ERROR() {
         return new ProviderError(0);
     }
     static get API_ERROR() {
@@ -133,7 +133,7 @@ export default class GenericProvider extends EventTarget {
         default:
             return this.NETWORK_ERROR;
         }
-    }
+    }*/
 
     /**
      * Internal property if the provider can get the favorites of a user.
@@ -208,17 +208,21 @@ export default class GenericProvider extends EventTarget {
      */
     initialize() {
         if(this.enabled) {
-            this._list.getChannels().then((channels) => {
-                if(channels.length) {
-                    this._queueUpdateRequest();
-                }
-            }).catch((e) => console.error("Error intializing channels for", this._type, e));
-            if(this.supports.credentials) {
-                this._list.getUsers().then((users) => {
-                    if(users.length) {
-                        this._queueFavsRequest();
+            this._list.getChannels()
+                .then((channels) => {
+                    if(channels.length) {
+                        this._queueUpdateRequest();
                     }
-                }).catch((e) => console.error("Error intializing users for", this._type, e));
+                })
+                .catch((e) => console.error("Error intializing channels for", this._type, e));
+            if(this.supports.credentials) {
+                this._list.getUsers()
+                    .then((users) => {
+                        if(users.length) {
+                            this._queueFavsRequest();
+                        }
+                    })
+                    .catch((e) => console.error("Error intializing users for", this._type, e));
             }
             this._list.addEventListener("channelsadded", () => {
                 if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
@@ -285,7 +289,7 @@ export default class GenericProvider extends EventTarget {
      * @readonly
      */
     get name() {
-        return _("provider" + this._type);
+        return _(`provider${this._type}`);
     }
     /**
      * @returns {string} Localized name of the provider.
@@ -304,14 +308,12 @@ export default class GenericProvider extends EventTarget {
         const config = this.updateRequest();
         this._qs.queueUpdateRequest({
             getURLs: config.getURLs,
-            onComplete: (...args) => {
-                return config.onComplete(...args).then((channels) => {
-                    if(channels) {
-                        emit(this, "updatedchannels", channels);
-                    }
-                    return channels;
-                });
-            },
+            onComplete: (...args) => config.onComplete(...args).then((channels) => {
+                if(channels) {
+                    emit(this, "updatedchannels", channels);
+                }
+                return channels;
+            }),
             priority: this._qs.HIGH_PRIORITY,
             headers: "headers" in config ? config.headers : {}
         });
@@ -327,23 +329,24 @@ export default class GenericProvider extends EventTarget {
         const config = this.updateFavsRequest();
         this._qs.queueUpdateRequest({
             getURLs: config.getURLs,
-            onComplete: (...args) => {
-                return config.onComplete(...args).then(([ user, channels ]) => {
-                    if(user) {
-                        if(Array.isArray(user)) {
-                            for(const u of user) {
-                                emit(this, 'updateduser', u);
-                            }
-                        }
-                        else {
-                            emit(this, "updateduser", user);
-                        }
-                        if(channels.length) {
-                            emit(this, "newchannels", channels);
+            onComplete: (...args) => config.onComplete(...args).then(([
+                user,
+                channels
+            ]) => {
+                if(user) {
+                    if(Array.isArray(user)) {
+                        for(const u of user) {
+                            emit(this, 'updateduser', u);
                         }
                     }
-                });
-            },
+                    else {
+                        emit(this, "updateduser", user);
+                    }
+                    if(channels.length) {
+                        emit(this, "newchannels", channels);
+                    }
+                }
+            }),
             priority: this._qs.LOW_PRIORITY,
             headers: "headers" in config ? config.headers : {}
         });

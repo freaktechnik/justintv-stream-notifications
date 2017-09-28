@@ -39,36 +39,32 @@ QueueContextPanel.propTypes = {
     onClose: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-    return {
-        queueEnabled: state.settings.queue.status,
-        paused: state.settings.queue.paused
-    };
-};
+const mapStateToProps = (state) => ({
+    queueEnabled: state.settings.queue.status,
+    paused: state.settings.queue.paused
+});
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onResume() {
-            dispatch(Object.assign({
-                command: "resume"
-            }, closeAction));
-        },
-        onPause() {
-            dispatch(Object.assign({
-                command: "pause"
-            }, closeAction));
-        },
-        onRefresh() {
-            dispatch({
-                command: "refresh",
-                type: "loading"
-            });
-            dispatch(closeAction);
-        },
-        onClose() {
-            dispatch(closeAction);
-        }
-    };
-};
+const mapDispatchToProps = (dispatch) => ({
+    onResume() {
+        dispatch(Object.assign({
+            command: "resume"
+        }, closeAction));
+    },
+    onPause() {
+        dispatch(Object.assign({
+            command: "pause"
+        }, closeAction));
+    },
+    onRefresh() {
+        dispatch({
+            command: "refresh",
+            type: "loading"
+        });
+        dispatch(closeAction);
+    },
+    onClose() {
+        dispatch(closeAction);
+    }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(QueueContextPanel);

@@ -138,7 +138,7 @@ PaginationHelper.prototype.getPage = function(initial = false) {
         ret = this.request(this.url + this.page, cbk, initial);
 
     if(typeof (ret) == "object" && "then" in ret) {
-        ret.then(cbk);
+        ret.then(cbk).catch(console.error);
     }
 };
 
@@ -152,12 +152,10 @@ PaginationHelper.prototype.getPage = function(initial = false) {
  * @returns {undefined} The PaginationHelper is done.
  * @alias module:pagination-helper.promisedPaginationHelper
  */
-const promisedPaginationHelper = (options) => {
-    return new Promise((resolve) => {
-        options.onComplete = resolve;
+const promisedPaginationHelper = (options) => new Promise((resolve) => {
+    options.onComplete = resolve;
 
-        new PaginationHelper(options);
-    });
-};
+    new PaginationHelper(options);
+});
 
 export { promisedPaginationHelper, PaginationHelper };

@@ -27,6 +27,8 @@ import prefs from '../../preferences';
  * @typedef {module:queue~Request} RequestInfo
  * @property {number} id
  */
+
+const NO_ID = -1;
 /**
  * @class module:queue.RequestQueue
  * @extends external:EventTarget
@@ -39,7 +41,7 @@ export default class RequestQueue extends EventTarget {
      * @default -1
      * @protected
      */
-    lastID = -1;
+    lastID = NO_ID;
     /**
      * RequestQueue Object.
      */
@@ -139,9 +141,8 @@ export default class RequestQueue extends EventTarget {
             if(this.queue.length) {
                 return this.getRequest().then(worker);
             }
-            else {
-                this.stopWorker(worker);
-            }
+
+            this.stopWorker(worker);
         };
         return worker;
     }
@@ -176,7 +177,7 @@ export default class RequestQueue extends EventTarget {
      * @returns {undefined}
      */
     clear() {
-        if(this.queue.length > 0) {
+        if(this.queue.length) {
             this.queue.length = 0;
         }
     }
@@ -187,7 +188,7 @@ export default class RequestQueue extends EventTarget {
      * @returns {boolean} Wether the request is still queued.
      */
     requestQueued(query) {
-        return this.getRequestIndex(query) > -1;
+        return this.getRequestIndex(query) > NO_ID;
     }
     /**
      * Get the index of a request.
@@ -203,7 +204,7 @@ export default class RequestQueue extends EventTarget {
         else if(typeof query === 'number') {
             return this.queue.findIndex((req) => req.id === query);
         }
-        return -1;
+        return NO_ID;
     }
     /**
      * Check if the queue is currently peridoically fetching requests.
@@ -211,7 +212,7 @@ export default class RequestQueue extends EventTarget {
      * @type {boolean}
      */
     get workingOnQueue() {
-        return this.workers.size > 0;
+        return !!this.workers.size;
     }
     /**
      * Remove a request from the queue.
@@ -221,7 +222,8 @@ export default class RequestQueue extends EventTarget {
      */
     removeRequest(query) {
         if(this.requestQueued(query)) {
-            this.queue.splice(this.getRequestIndex(query), 1);
+            const ONE_ITEM = 1;
+            this.queue.splice(this.getRequestIndex(query), ONE_ITEM);
             return true;
         }
         return false;

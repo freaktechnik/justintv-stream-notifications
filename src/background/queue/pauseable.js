@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-param */
 /**
  * @author Martin Giger
  * @license MPL-2.0
@@ -57,9 +56,8 @@ export default class PauseableQueue extends RequestQueue {
             if(this.queue.length && !this.paused) {
                 return this.getRequest().then(worker);
             }
-            else {
-                this.stopWorker(worker);
-            }
+
+            this.stopWorker(worker);
         };
         return worker;
     }

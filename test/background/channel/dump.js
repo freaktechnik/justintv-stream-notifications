@@ -8,12 +8,8 @@ import * as dump from "../../../src/background/channel/dump";
 import { getUser, getChannel } from "../../helpers/channel-user";
 import prefs from "../../../src/preferences";
 
-const CHANNELS_FIXTURE = [
-        getChannel()
-    ],
-    USERS_FIXTURE = [
-        getUser()
-    ];
+const CHANNELS_FIXTURE = [ getChannel() ],
+    USERS_FIXTURE = [ getUser() ];
 
 test("Dump creation", async (t) => {
     const dumpData = await dump.create(CHANNELS_FIXTURE, USERS_FIXTURE);

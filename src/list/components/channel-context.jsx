@@ -83,85 +83,84 @@ ChannelContextPanel.propTypes = {
     chatUrl: PropTypes.string
 };
 
-const mapStateToProps = (state) => {
-    return state.ui.contextChannel;
-};
+const mapStateToProps = (state) => state.ui.contextChannel;
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onOpen(channel) {
-            if(channel.external) {
-                dispatch({
-                    command: "openUrl",
-                    payload: channel.url
-                });
-            }
-            else {
-                dispatch({
-                    command: "open",
-                    payload: channel.id
-                });
-            }
-            window.close();
-        },
-        onArchive(id) {
+const mapDispatchToProps = (dispatch) => ({
+    onOpen(channel) {
+        if(channel.external) {
             dispatch({
-                command: "openArchive",
-                payload: id
+                command: "openUrl",
+                payload: channel.url
             });
-            window.close();
-        },
-        onChat(channel) {
-            if(channel.external) {
-                dispatch({
-                    command: "openUrl",
-                    payload: channel.chatUrl
-                });
-            }
-            else {
-                dispatch({
-                    command: "openChat",
-                    payload: channel.id
-                });
-            }
-            window.close();
-        },
-        onRefresh(id) {
-            dispatch({
-                command: "refresh",
-                payload: id
-            });
-            dispatch(closeAction);
-        },
-        onCopy(payload) {
-            dispatch({
-                type: "copy",
-                payload
-            });
-            dispatch(closeAction);
-        },
-        onAdd(id) {
-            const [ login, type ] = id.split("|");
-            dispatch({
-                command: "add",
-                payload: {
-                    login,
-                    type
-                }
-            });
-            dispatch(closeAction);
-        },
-        onRemove(id) {
-            dispatch({
-                command: "remove",
-                payload: id
-            });
-            dispatch(closeAction);
-        },
-        onClose() {
-            dispatch(closeAction);
         }
-    };
-};
+        else {
+            dispatch({
+                command: "open",
+                payload: channel.id
+            });
+        }
+        window.close();
+    },
+    onArchive(id) {
+        dispatch({
+            command: "openArchive",
+            payload: id
+        });
+        window.close();
+    },
+    onChat(channel) {
+        if(channel.external) {
+            dispatch({
+                command: "openUrl",
+                payload: channel.chatUrl
+            });
+        }
+        else {
+            dispatch({
+                command: "openChat",
+                payload: channel.id
+            });
+        }
+        window.close();
+    },
+    onRefresh(id) {
+        dispatch({
+            command: "refresh",
+            payload: id
+        });
+        dispatch(closeAction);
+    },
+    onCopy(payload) {
+        dispatch({
+            type: "copy",
+            payload
+        });
+        dispatch(closeAction);
+    },
+    onAdd(id) {
+        const [
+            login,
+            type
+        ] = id.split("|");
+        dispatch({
+            command: "add",
+            payload: {
+                login,
+                type
+            }
+        });
+        dispatch(closeAction);
+    },
+    onRemove(id) {
+        dispatch({
+            command: "remove",
+            payload: id
+        });
+        dispatch(closeAction);
+    },
+    onClose() {
+        dispatch(closeAction);
+    }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelContextPanel);

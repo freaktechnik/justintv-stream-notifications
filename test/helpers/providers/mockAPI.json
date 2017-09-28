@@ -770,29 +770,7 @@
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams?channel=live,test&stream_type=live&limit=100&offset=0": {
-            "streams": [
-                {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "steam_type": "live",
-                    "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
-                    }
-                }
-            ]
-        },
-        "https://api.twitch.tv/kraken/streams?channel=test,live&stream_type=live&limit=100&offset=0": {
+        "https://api.twitch.tv/kraken/streams?channel=live,test&stream_type=live&limit=100": {
             "streams": [
                 {
                     "viewers": 0,
@@ -1026,7 +1004,7 @@
                 "followed":"https://api.twitch.tv/kraken/streams/followed"
             }
         },
-        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=live&limit=100&offset=0": {
+        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=live&limit=100": {
             "streams": [
                 {
                     "channel": {
@@ -1144,7 +1122,7 @@
             "streams": [],
             "total": 0
         },
-        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100&offset=0": {
+        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100": {
             "streams": [],
             "total": 0
         },

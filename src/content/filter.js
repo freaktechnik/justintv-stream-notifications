@@ -5,8 +5,6 @@
  */
 import { show, hide } from './utils';
 
-/* eslint-disable no-unused-vars */
-
 /**
  * @typedef {Object} Rule
  * @property {string} [attribute="textContent"] - The attribute this rule checks,
@@ -57,24 +55,21 @@ export function matches(node, query, rules) {
     query = query.toLowerCase();
     let target = node;
     const queries = query.split(" ");
-    return queries.every((q) => {
-        return rules.some((rule) => {
-            rule.attribute = rule.attribute || "textContent";
-            if(rule.subtarget) {
-                target = node.querySelector(rule.subtarget);
-            }
-            else {
-                target = node;
-            }
+    return queries.every((q) => rules.some((rule) => {
+        rule.attribute = rule.attribute || "textContent";
+        if(rule.subtarget) {
+            target = node.querySelector(rule.subtarget);
+        }
+        else {
+            target = node;
+        }
 
-            if(rule.attribute == "class") {
-                return checkClasses(target, q);
-            }
-            else {
-                return target[rule.attribute].toLowerCase().includes(q);
-            }
-        });
-    });
+        if(rule.attribute == "class") {
+            return checkClasses(target, q);
+        }
+
+        return target[rule.attribute].toLowerCase().includes(q);
+    }));
 }
 
 /**

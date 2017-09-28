@@ -7,10 +7,9 @@ const getDefaultValue = (pref) => {
         if(pref in prefInfo) {
             return prefInfo[pref].value;
         }
-        else {
-            console.error("No default value for", pref);
-            return false;
-        }
+
+        console.error("No default value for", pref);
+        return false;
     },
     AREA = "local";
 
@@ -50,13 +49,10 @@ class Preferences extends EventTarget {
         }
         return browser.storage[AREA].get(request).then((value) => {
             if(Array.isArray(pref)) {
-                return pref.map((p) => {
-                    return value[p];
-                });
+                return pref.map((p) => value[p]);
             }
-            else {
-                return value[pref];
-            }
+
+            return value[pref];
         });
     }
 

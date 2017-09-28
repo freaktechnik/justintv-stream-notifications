@@ -68,7 +68,14 @@ import { formatChannels } from './channel/utils';
 
 const LIVE_ICONS = "assets/images/icon.svg",
     OFFLINE_ICONS = "assets/images/offline.svg",
-    _ = browser.i18n.getMessage;
+    _ = browser.i18n.getMessage,
+    STYLE_COMPACT = 0,
+    STYLE_NORMAL = 1,
+    STYLE_THUMBNAIL = 2,
+    LIVE_BOTTOM = 0,
+    DISTINCT = 1,
+    OFFLINE = 2,
+    EMPTY = 0;
 
 /**
  * @class module:list.ListView
@@ -79,44 +86,37 @@ class ListView extends EventTarget {
      * @const {module:list~Style}
      * @default 0
      */
-    static STYLE_COMPACT = 0;
+    static STYLE_COMPACT = STYLE_COMPACT;
     /**
      * @const {module:list~Style}
      * @default 1
      */
-    static STYLE_NORMAL = 1;
+    static STYLE_NORMAL = STYLE_NORMAL;
     /**
      * @const {module:list~Style}
      * @default 2
      */
-    static STYLE_THUMBNAIL = 2;
+    static STYLE_THUMBNAIL = STYLE_THUMBNAIL;
 
-    /**
-     * Display non-live channels as live.
-     *
-     * @const {module:list~NonLiveDisplay}
-     * @default 0
-     */
-    static LIVE = 0;
     /**
      * Display non-live channels as live but sort them to the bottom if possible.
      * @const {module:list~NonLiveDisplay}
      * @default 1
      */
-    static LIVE_BOTTOM = 1;
+    static LIVE_BOTTOM = LIVE_BOTTOM;
     /**
      * Display non-live channels in their own category.
-     * @const {module:list~NonLiveDisplay
+     * @const {module:list~NonLiveDisplay}
      * @default 2
      */
-    static DISTINCT = 2;
+    static DISTINCT = DISTINCT;
     /**
      * Display non-live channels as offline (ignore their liveness). This is handled
      * directly in this module, so the channel gets passed as going offline.
      * @const {module:list~NonLiveDisplay}
      * @default 3
      */
-    static OFFLINE = 3;
+    static OFFLINE = OFFLINE;
 
     ready = false;
     /**
@@ -176,15 +176,15 @@ class ListView extends EventTarget {
             case "search":
                 providers[event.payload.type].search(event.payload.query)
                     .then((channels) => formatChannels(channels, true))
-                    .then((channels) => this.setFeatured(channels, event.payload.type, event.payload.query),
-                        () => this.setFeatured([], event.payload.type, event.payload.query));
+                    .then((channels) => this.setFeatured(channels, event.payload.type, event.payload.query))
+                    .catch(() => this.setFeatured([], event.payload.type, event.payload.query));
                 break;
             case "explore":
                 if(event.payload) {
                     providers[event.payload].getFeaturedChannels()
                         .then((channels) => formatChannels(channels, true))
-                        .then((channels) => this.setFeatured(channels, event.payload),
-                            () => this.setFeatured([], event.payload));
+                        .then((channels) => this.setFeatured(channels, event.payload))
+                        .catch(() => this.setFeatured([], event.payload));
                 }
                 break;
             default:
@@ -215,8 +215,8 @@ class ListView extends EventTarget {
 
     async updateBadge() {
         if(!(await errorStateManager.IN_ERROR_STATE)) {
-            const size = this.live.size + (this.countNonlive ? this.nonlive.size : 0);
-            if(size > 0) {
+            const size = this.live.size + (this.countNonlive ? this.nonlive.size : EMPTY);
+            if(size > EMPTY) {
                 if(await prefs.get("panel_badge")) {
                     browser.browserAction.setBadgeText({
                         text: size.toString()
@@ -282,7 +282,7 @@ class ListView extends EventTarget {
             this.nonlive.delete(channelId);
         }
 
-        if(this.live.size === 0 && (!this.countNonlive || this.nonlive.size === 0)) {
+        if(this.live.size === EMPTY && (!this.countNonlive || this.nonlive.size === EMPTY)) {
             this.liveState = false;
         }
     }
@@ -313,7 +313,7 @@ class ListView extends EventTarget {
     setNonLiveDisplay(style = this.nonLiveDisplay) {
         this.nonLiveDisplay = style;
         this.updateBadge();
-        if(this.nonlive.size > 0 && this.live.size === 0 && style < 2) {
+        if(this.nonlive.size > EMPTY && this.live.size === EMPTY && style < ListView.OFFLINE) {
             this.liveState = true;
         }
 
@@ -393,7 +393,11 @@ class ListView extends EventTarget {
     }
 
     setFeatured(channels, type, q = null) {
-        this._emitToList("setFeatured", { channels, type, q });
+        this._emitToList("setFeatured", {
+            channels,
+            type,
+            q
+        });
     }
 }
 

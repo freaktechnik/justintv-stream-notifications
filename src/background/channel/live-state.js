@@ -24,19 +24,23 @@ import LiveStateConst from '../../live-state.json';
  * @typedef {number} LiveStateInterpretation
  */
 
-const IGNORED_PROPERTIES = [ "state", "isLive", "alternateUsername", "alternateURL" ],
-    OFFLINE = LiveStateConst.OFFLINE,
-    LIVE = LiveStateConst.LIVE,
-    REDIRECT = LiveStateConst.REDIRECT,
-    REBROADCAST = LiveStateConst.REBROADCAST,
-    TOWARD_LIVE = LiveStateConst.TOWARD_LIVE,
-    TOWARD_OFFLINE = LiveStateConst.TOWARD_OFFLINE,
-    TOWARD_BROADCASTING = LiveStateConst.TOWARD_BROADCASTING,
-    getDefaultInterpretation = () => {
-        return prefs.get("panel_nonlive").then((value) => {
-            return parseInt(value, 10) < 3 ? TOWARD_LIVE : TOWARD_OFFLINE;
-        });
-    };
+const IGNORED_PROPERTIES = [
+        "state",
+        "isLive",
+        "alternateUsername",
+        "alternateURL"
+    ],
+    {
+        OFFLINE,
+        LIVE,
+        REDIRECT,
+        REBROADCAST,
+        TOWARD_LIVE,
+        TOWARD_OFFLINE,
+        TOWARD_BROADCASTING
+    } = LiveStateConst,
+    NONLIVE_OFFLINE = 2,
+    getDefaultInterpretation = () => prefs.get("panel_nonlive").then((value) => value < NONLIVE_OFFLINE ? TOWARD_LIVE : TOWARD_OFFLINE);
 
 /**
  * Used to describe the exact state of a stream. Sometimes streams are marked
@@ -220,7 +224,8 @@ class LiveState {
 
     get alternateURL() {
         if(this.alternateChannel) {
-            return this.alternateChannel.url[0];
+            const FIRST_ELEMENT = 0;
+            return this.alternateChannel.url[FIRST_ELEMENT];
         }
         return "";
     }

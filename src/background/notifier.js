@@ -26,6 +26,9 @@ const _ = browser.i18n.getMessage,
  * @extends external:EventTarget
  */
 export default class Notifier extends EventTarget {
+    static get PREFIX() {
+        return "cn";
+    }
     /**
      * @constructs
      */
@@ -45,8 +48,8 @@ export default class Notifier extends EventTarget {
          */
         this.channelStates = new Map();
         browser.notifications.onClicked.addListener((id) => {
-            if(id.startsWith("cn")) {
-                emit(this, "click", parseInt(id.substr(2), 10));
+            if(id.startsWith(Notifier.PREFIX)) {
+                emit(this, "click", parseInt(id.substr(Notifier.PREFIX.length), 10));
             }
         });
     }
@@ -129,9 +132,8 @@ export default class Notifier extends EventTarget {
         if(await this.nonliveNotifications()) {
             return LiveState.TOWARD_LIVE;
         }
-        else {
-            return LiveState.TOWARD_OFFLINE;
-        }
+
+        return LiveState.TOWARD_OFFLINE;
     }
     /**
      * Show a notification to the user, if the channel isn't in the currently
@@ -145,7 +147,11 @@ export default class Notifier extends EventTarget {
      */
     async sendNotification(channel) {
         // Mute notifications for the current tab
-        const [ tab, showNotifications, liveInterpretation ] = await Promise.all([
+        const [
+            tab,
+            showNotifications,
+            liveInterpretation
+        ] = await Promise.all([
             browser.tabs.query({
                 active: true,
                 currentWindow: true,
@@ -174,7 +180,7 @@ export default class Notifier extends EventTarget {
                 const stateName = LiveState.REDIRECT === channel.live.state ? "Redirect" : "Rebroadcast";
                 title = _("nonliveNotification", [
                     channel.toString(),
-                    _("nonliveNotificationState" + stateName, channel.live.alternateUsername)
+                    _(`nonliveNotificationState${stateName}`, channel.live.alternateUsername)
                 ]);
             }
 
@@ -186,7 +192,7 @@ export default class Notifier extends EventTarget {
                     iconUrl: channel.getBestImageForSize(NOTIFICATION_ICON_SIZE)
                 };
 
-                browser.notifications.create(`cn${channel.id}`, opts);
+                browser.notifications.create(Notifier.PREFIX + channel.id, opts);
                 browser.runtime.sendMessage("@notification-sound", "new-notification");
             }
         }

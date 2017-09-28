@@ -1,8 +1,11 @@
 import { formatChannel, getExternalID } from './utils';
 import LiveState from '../live-state.json';
 import { copy } from '../content/utils';
+import { LIVE_TAB, EXTRAS_TAB } from './constants/tabs.json';
 
-export default (port) => ({ getState, dispatch }) => (next) => (action) => {
+export default (port) => ({
+    getState, dispatch
+}) => (next) => (action) => {
     const state = getState();
 
     // State based redirects of backend commands
@@ -12,7 +15,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             query: state.ui.query
         });
     }
-    else if(action.command === "refresh" && state.ui.tab === 3) {
+    else if(action.command === "refresh" && state.ui.tab === EXTRAS_TAB) {
         if(state.ui.search && state.ui.query.length) {
             port.send("search", {
                 type: state.ui.currentProvider,
@@ -33,7 +36,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
         if(state.ui.tab === action.payload) {
             return;
         }
-        else if(action.payload === 3) {
+        else if(action.payload === EXTRAS_TAB) {
             if(!state.ui.search || !state.ui.query.length) {
                 port.send("explore", state.ui.currentProvider);
             }
@@ -45,7 +48,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             }
         }
     }
-    else if(action.type === "search" && state.ui.tab === 3) {
+    else if(action.type === "search" && state.ui.tab === EXTRAS_TAB) {
         if(action.payload.length) {
             port.send("search", {
                 type: state.ui.currentProvider,
@@ -68,7 +71,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             payload: action.payload.channels
         };
     }
-    else if(action.type === "toggleSearch" && state.ui.search && state.ui.query.length && state.ui.tab === 3) {
+    else if(action.type === "toggleSearch" && state.ui.search && state.ui.query.length && state.ui.tab === EXTRAS_TAB) {
         port.send("explore", state.ui.currentProvider);
         dispatch({
             type: "loading"
@@ -92,7 +95,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
             updatedChannel.redirectors = state.contextChannel.redirectors;
             dispatch({
                 type: "setContextChannel",
-                payload: formatChannel(updatedChannel, state.providers, 0, state.settings.extras, "compact")
+                payload: formatChannel(updatedChannel, state.providers, LIVE_TAB, state.settings.extras, "compact")
             });
         }
         // Started redirecting to the contextChannel
@@ -110,9 +113,7 @@ export default (port) => ({ getState, dispatch }) => (next) => (action) => {
         else if(state.contextChannel.redirectors.some((r) => r.id === updatedChannel.id)) {
             // Stopped redirecting to the contextChannel
             if(!updatedChannel.state.alternateChannel || updatedChannel.state.alternateChannel.id !== state.contextChannel.id) {
-                state.contextChannel.redirectors = state.contextChannel.redirectors.filter((r) => {
-                    return r.id !== updatedChannel.id;
-                });
+                state.contextChannel.redirectors = state.contextChannel.redirectors.filter((r) => r.id !== updatedChannel.id);
                 dispatch({
                     type: "setContextChannel",
                     payload: state.contextChannel

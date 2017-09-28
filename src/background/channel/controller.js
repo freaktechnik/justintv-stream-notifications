@@ -44,10 +44,11 @@ const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-rese
         if(ParentalControls.enabled) {
             return channels.filter((c) => !c.mature);
         }
-        else {
-            return channels;
-        }
-    };
+
+        return channels;
+    },
+    DEBOUNCE_INTERVAL = 500,
+    DUMP_INDENT = 2;
 
 /**
  * Controller for all the channel stuff. Handles getting info from providers
@@ -80,7 +81,7 @@ export default class ChannelController extends EventTarget {
                 this._manager.loading = false;
             },
             // We only want the afterchannelsdeleted event to fire after all channels are gone.
-            debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), 500),
+            debouncedEvent = debounce(() => emit(this, "afterchannelsdeleted"), DEBOUNCE_INTERVAL),
             listError = (e) => {
                 let message,
                     actionsListener;
@@ -103,13 +104,21 @@ export default class ChannelController extends EventTarget {
          * @private
          */
         this._manager = new ChannelsManager();
-        this._manager.addEventListener("addchannel", ({ detail: [ name, type, canceled ] }) => this.addChannel(name, type, canceled)
+        this._manager.addEventListener("addchannel", ({ detail: [
+            name,
+            type,
+            canceled
+        ] }) => this.addChannel(name, type, canceled)
             .then(() => this._manager._deleteCancelingValue("channel", type, name),
                 (e) => managerError(e, name, type, "channel", canceled)));
         this._manager.addEventListener("removechannel", ({ detail }) => this.removeChannel(detail));
         this._manager.addEventListener("updatechannel", ({ detail }) => this.updateChannel(detail)
             .catch(managerDoneLoading));
-        this._manager.addEventListener("adduser", ({ detail: [ username, type, canceled ] }) => this.addUser(username, type, canceled)
+        this._manager.addEventListener("adduser", ({ detail: [
+            username,
+            type,
+            canceled
+        ] }) => this.addUser(username, type, canceled)
             .then(() => this._manager._deleteCancelingValue("user", type, username),
                 (e) => managerError(e, username, type, "user", canceled)));
         this._manager.addEventListener("removeuser", ({ detail }) => this.removeUser(...detail));
@@ -120,8 +129,13 @@ export default class ChannelController extends EventTarget {
             Promise.all([
                 this.getChannelsByType(),
                 this.getUsersByType()
-            ]).then(([ channels, users ]) => debugDump.create(channels, users))
-                .then((dump) => this._manager.copyDump(JSON.stringify(dump, undefined, 2)));
+            ])
+                .then(([
+                    channels,
+                    users
+                ]) => debugDump.create(channels, users))
+                .then((dump) => this._manager.copyDump(JSON.stringify(dump, undefined, DUMP_INDENT)))
+                .catch(console.error);
         });
         this._manager.addEventListener("showoptions", () => {
             prefs.open();
@@ -161,9 +175,7 @@ export default class ChannelController extends EventTarget {
         });
         this._list.addEventListener("clear", ({ detail: hard }) => {
             if(hard) {
-                const es = new ErrorState(browser.i18n.getMessage("lost_channels"), ErrorState.RECOVERABLE, [
-                    browser.i18n.getMessage("manageChannels_label")
-                ]);
+                const es = new ErrorState(browser.i18n.getMessage("lost_channels"), ErrorState.RECOVERABLE, [ browser.i18n.getMessage("manageChannels_label") ]);
                 es.addEventListener("action", async () => {
                     await this.showManager();
                     es.resolve();
@@ -186,15 +198,17 @@ export default class ChannelController extends EventTarget {
         });
         this._eventSink.addEventListener("newchannels", async ({ detail: channels }) => {
             channels = await formatChannels(filterInapropriateChannels(channels));
-            if(channels.length > 0) {
+            if(channels.length) {
                 this._list.addChannels(channels);
             }
         });
         this._eventSink.addEventListener("updatedchannels", ({ detail: channels }) => {
             if(Array.isArray(channels)) {
-                formatChannels(channels).then((formattedChannels) => {
-                    formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => console.warn("Updated a removed channel", channel.login)));
-                });
+                formatChannels(channels)
+                    .then((formattedChannels) => {
+                        formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => console.warn("Updated a removed channel", channel.login)));
+                    })
+                    .catch(console.error);
             }
             else {
                 this._formatChannel(channels)
@@ -235,9 +249,8 @@ export default class ChannelController extends EventTarget {
 
             return this._list.addChannel(formattedChannel);
         }
-        else {
-            throw new Error("Provider is disabled");
-        }
+
+        throw new Error("Provider is disabled");
     }
     /**
      * Update a channel and store it in the ChannelList.
@@ -282,18 +295,14 @@ export default class ChannelController extends EventTarget {
 
             if(Array.isArray(channels)) {
                 const formattedChannels = await formatChannels(channels);
-                return Promise.all(formattedChannels.map((c) => {
-                    return this._list.setChannel(c);
-                }));
+                return Promise.all(formattedChannels.map((c) => this._list.setChannel(c)));
             }
-            else {
-                channels = await this._formatChannel(channels);
-                return this._list.setChannel(channels);
-            }
+
+            channels = await this._formatChannel(channels);
+            return this._list.setChannel(channels);
         }
-        else {
-            return [];
-        }
+
+        return [];
     }
     /**
      * Get a channel.
@@ -340,7 +349,10 @@ export default class ChannelController extends EventTarget {
      */
     async addUser(username, type, canceled = () => false) {
         if(type in providers && providers[type].supports.favorites) {
-            let [ user, channels ] = await providers[type].getUserFavorites(username);
+            let [
+                user,
+                channels
+            ] = await providers[type].getUserFavorites(username);
 
             if(canceled()) {
                 throw new Error("Canceled");
@@ -354,9 +366,8 @@ export default class ChannelController extends EventTarget {
             ]);
             return u;
         }
-        else {
-            throw new Error("Can't add users for provider " + type);
-        }
+
+        throw new Error(`Can't add users for provider ${type}`);
     }
     /**
      * @private
@@ -365,7 +376,10 @@ export default class ChannelController extends EventTarget {
      * @returns {module:channel/core.User} Updated user.
      */
     async _updateUser(user) {
-        const [ updatedUser, channels ] = await providers[user.type].getUserFavorites(user.login),
+        const [
+                updatedUser,
+                channels
+            ] = await providers[user.type].getUserFavorites(user.login),
             filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
             [ finalUser ] = await Promise.all([
                 this._list.setUser(updatedUser),
@@ -421,7 +435,10 @@ export default class ChannelController extends EventTarget {
         if(removeFavorites) {
             p = this._list.removeChannelsByUserFavorites(userId);
         }
-        const [ u ] = await Promise.all([ this._list.removeUser(userId), p ]);
+        const [ u ] = await Promise.all([
+            this._list.removeUser(userId),
+            p
+        ]);
         return u;
     }
     /**
@@ -432,9 +449,7 @@ export default class ChannelController extends EventTarget {
      * @returns {Array.<module:channel/core.User>} Added user instances.
      */
     _addFoundCredentials(provider, credentials) {
-        return Promise.all(credentials.filter((credential) => credential.username).map((credential) => {
-            return this.addUser(credential.username, provider);
-        }));
+        return Promise.all(credentials.filter((credential) => credential.username).map((credential) => this.addUser(credential.username, provider)));
     }
     /**
      * @private
@@ -467,9 +482,8 @@ export default class ChannelController extends EventTarget {
             return Promise.all(providers[provider].authURL.map(this._findUsersByURL.bind(this, provider)))
                 .then(flatten);
         }
-        else {
-            return Promise.reject(new Error(`Provider ${provider} does not support auto adding users`));
-        }
+
+        return Promise.reject(new Error(`Provider ${provider} does not support auto adding users`));
     }
     /**
      * Opens or focueses a tab with the manager.

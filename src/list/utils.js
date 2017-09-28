@@ -1,8 +1,13 @@
 import LiveState from '../live-state.json';
 
-export const getExternalID = (channel) => {
-    return channel.login + "|" + channel.type;
-};
+const FIRST_URL = 0,
+    OFFLINE_TYPE = 2,
+    SMALL_IMAGE = 12,
+    LARGE_IMAGE = 30;
+
+export { SMALL_IMAGE, LARGE_IMAGE };
+
+export const getExternalID = (channel) => `${channel.login}|${channel.type}`;
 
 export const formatChannel = (channel, providers, type, extras = false, style = "default") => {
     const formattedChannel = {
@@ -10,14 +15,14 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         type: channel.type,
         image: channel.image,
         liveState: channel.live.state,
-        imageSize: 30,
+        imageSize: LARGE_IMAGE,
         hasChat: false,
         providerEnabled: providers[channel.type].enabled,
         tooltip: channel.uname,
-        url: channel.url[0]
+        url: channel.url[FIRST_URL]
     };
     if(style === "compact") {
-        formattedChannel.imageSize = 12;
+        formattedChannel.imageSize = SMALL_IMAGE;
     }
     if(extras) {
         formattedChannel.extras = {
@@ -26,17 +31,17 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
             provider: providers[channel.type].name
         };
     }
-    if(channel.live.state !== LiveState.OFFLINE && type !== 2 && style !== "compact") {
+    if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && style !== "compact") {
         if(style === "thumbnail") {
             formattedChannel.thumbnail = channel.thumbnail;
         }
         formattedChannel.title = channel.title;
     }
-    else if(formattedChannel.extras && type === 2) {
+    else if(formattedChannel.extras && type === OFFLINE_TYPE) {
         delete formattedChannel.extras.viewers;
         delete formattedChannel.extras.category;
     }
-    if(channel.live.state !== LiveState.OFFLINE && type !== 2 && channel.title) {
+    if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;
     }
 

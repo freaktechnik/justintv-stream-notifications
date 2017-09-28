@@ -287,14 +287,12 @@ const channelFormats = [
             chatUrl: 'https://example.com/chat',
             url: [ 'https://example.com' ],
             login: 'foo',
-            redirectors: [
-                {
-                    uname: 'a',
-                    image: 'b',
-                    id: 'c',
-                    login: 'd'
-                }
-            ]
+            redirectors: [ {
+                uname: 'a',
+                image: 'b',
+                id: 'c',
+                login: 'd'
+            } ]
         },
         formattedChannel: {
             uname: 'foo',
@@ -308,13 +306,11 @@ const channelFormats = [
             title: 'ipsum',
             id: 7,
             external: false,
-            redirectors: [
-                {
-                    uname: 'a',
-                    image: 'b',
-                    id: 'c'
-                }
-            ],
+            redirectors: [ {
+                uname: 'a',
+                image: 'b',
+                id: 'c'
+            } ],
             url: 'https://example.com'
         }
     }

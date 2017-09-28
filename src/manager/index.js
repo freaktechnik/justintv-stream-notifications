@@ -10,12 +10,18 @@ import { filter } from '../content/filter';
 import Port from '../port';
 import Tabbed from '../content/tabbed';
 import ReadChannelList from '../read-channel-list';
+import prefs from '../prefs.json';
 import '../content/l10n';
 import './channels-manager.css';
 import '../content/shared.css';
 
 let providers;
-const filters = [
+const CHANNELS_TAB = 1,
+    USERS_TAB = 2,
+    CHANNEL_PREFIX = "channel",
+    USER_PREFIX = "user",
+    DARK_THEME = parseInt(prefs.theme.options.find((o) => o.label === "Dark").value, 10),
+    filters = [
         {
             subtarget: "span"
         },
@@ -64,11 +70,11 @@ function hideError() {
 }
 
 function hasChannel(channelId) {
-    return !!channels.querySelector("#channel" + channelId);
+    return !!channels.querySelector(`#channel${channelId}`);
 }
 
 function hasUser(userId) {
-    return !!users.querySelector("#user" + userId);
+    return !!users.querySelector(`#user${userId}`);
 }
 
 function checkChannel() {
@@ -85,12 +91,12 @@ function getSelectedItemIds() {
     const items = [];
     if(users.hasAttribute("hidden")) {
         for(let i = 0; i < channels.selectedOptions.length; ++i) {
-            items.push(parseInt(channels.selectedOptions[i].id.substring(7), 10));
+            items.push(parseInt(channels.selectedOptions[i].id.substring(CHANNEL_PREFIX.length), 10));
         }
     }
     else {
         for(let i = 0; i < users.selectedOptions.length; ++i) {
-            items.push(parseInt(users.selectedOptions[i].id.substring(4), 10));
+            items.push(parseInt(users.selectedOptions[i].id.substring(CHANNEL_PREFIX.length), 10));
         }
     }
     return items;
@@ -134,14 +140,14 @@ function resetDialogForms() {
 }
 
 function showOptions() {
-    const options = document.querySelector("#providerDropdown").options;
+    const { options } = document.querySelector("#providerDropdown");
     for(let i = 0; i < options.length; ++i) {
         options[i].disabled = !providers[options[i].value].enabled;
     }
 }
 
 function hideOptions() {
-    const options = document.querySelector("#providerDropdown").options;
+    const { options } = document.querySelector("#providerDropdown");
     for(let i = 0; i < options.length; ++i) {
         if(!providers[options[i].value].supports.favorites) {
             options[i].disabled = true;
@@ -194,8 +200,9 @@ function addChannel(channel) {
             evObj = new CustomEvent("itemadded", { detail: channelNode });
         image.sizes = "50px";
         image.srcset = Object.keys(channel.image)
-            .map((s) => `${channel.image[s]} ${s}w`).join(",");
-        channelNode.id = "channel" + channel.id;
+            .map((s) => `${channel.image[s]} ${s}w`)
+            .join(",");
+        channelNode.id = `${CHANNEL_PREFIX}${channel.id}`;
         small.appendChild(type);
         span.appendChild(title);
         channelNode.appendChild(image);
@@ -218,8 +225,9 @@ function addUser(user) {
             evObj = new CustomEvent("itemadded", { detail: userNode });
         image.sizes = "50w";
         image.srcset = Object.keys(user.image)
-            .map((s) => user.image[s] + " " + s + "w").join(",");
-        userNode.id = "user" + user.id;
+            .map((s) => `${user.image[s]} ${s}w`)
+            .join(",");
+        userNode.id = `${USER_PREFIX}${user.id}`;
         small.appendChild(type);
         span.appendChild(title);
         userNode.appendChild(image);
@@ -232,33 +240,35 @@ function addUser(user) {
 
 function updateChannel(channel) {
     if(hasChannel(channel.id)) {
-        const channelNode = channels.querySelector("#channel" + channel.id),
+        const channelNode = channels.querySelector(`#channel${channel.id}`),
             span = channelNode.querySelector("span");
         channelNode.querySelector("img").srcset = Object.keys(channel.image)
-            .map((s) => channel.image[s] + " " + s + "w").join(",");
+            .map((s) => `${channel.image[s]} ${s}w`)
+            .join(",");
         span.replaceChild(document.createTextNode(getChannelUname(channel)), span.firstChild);
     }
 }
 
 function updateUser(user) {
     if(hasUser(user.id)) {
-        const userNode = users.querySelector("#user" + user.id),
+        const userNode = users.querySelector(`#user${user.id}`),
             span = userNode.querySelector("span");
         userNode.querySelector("img").srcset = Object.keys(user.image)
-            .map((s) => user.image[s] + " " + s + "w").join(",");
+            .map((s) => `${user.image[s]} ${s}w`)
+            .join(",");
         span.replaceChild(document.createTextNode(user.uname), span.firstChild);
     }
 }
 
 function removeChannel(channelId) {
     if(hasChannel(channelId)) {
-        document.getElementById("channel" + channelId).remove();
+        document.getElementById(`channel${channelId}`).remove();
     }
 }
 
 function removeUser(userId) {
     if(hasUser(userId)) {
-        document.getElementById("user" + userId).remove();
+        document.getElementById(`user${userId}`).remove();
     }
 }
 
@@ -268,7 +278,7 @@ function showError(msg) {
     popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
 }
 
-if(tabbed.querySelector("a.current") && tabbed.querySelector("a.current").dataset.tab == 1) {
+if(tabbed.querySelector("a.current") && tabbed.querySelector("a.current").dataset.tab == CHANNELS_TAB) {
     hide(document.querySelector("#autoAdd").parentNode);
     checkChannel();
 }
@@ -281,15 +291,15 @@ document.addEventListener("keypress", (evt) => {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
         if(evt.key == "a" && evt.ctrlKey) {
             evt.preventDefault();
-            let list;
+            let listEl;
             if(users.hasAttribute("hidden")) {
-                list = channels;
+                listEl = channels;
             }
             else {
-                list = users;
+                listEl = users;
             }
 
-            const items = list.querySelectorAll("option:not([hidden])");
+            const items = listEl.querySelectorAll("option:not([hidden])");
             for(let i = 0; i < items.length; ++i) {
                 items[i].selected = true;
             }
@@ -305,25 +315,23 @@ document.addEventListener("keypress", (evt) => {
             window.open(document.querySelector("[rel='help']").href);
         }
     }
-    else {
-        if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
-            hideDialog();
-            resetDialogForms();
-            evt.preventDefault();
-        }
-        else if(evt.key == "f" && evt.ctrlKey) {
-            evt.preventDefault();
-        }
+    else if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
+        hideDialog();
+        resetDialogForms();
+        evt.preventDefault();
+    }
+    else if(evt.key == "f" && evt.ctrlKey) {
+        evt.preventDefault();
     }
 }, true);
 
 tabbed.addEventListener("tabchanged", (evt) => {
-    if(evt.detail == 1) {
+    if(evt.detail == CHANNELS_TAB) {
         hide(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "channels");
         checkChannel();
     }
-    else if(evt.detail == 2) {
+    else if(evt.detail == USERS_TAB) {
         //show(document.querySelector("#autoAdd").parentNode);
         document.querySelector(".toolbar").setAttribute("aria-controls", "users");
         checkUser();
@@ -345,11 +353,13 @@ document.querySelector("#removeItem").addEventListener("click", (e) => {
 document.querySelector("a[rel='help']").addEventListener("click", (e) => {
     if(e.shiftKey) {
         e.preventDefault();
-        port.request("debugdump").then((dump) => {
-            if(!copy(dump)) {
-                console.warn("Could not copy debug dump", JSON.parse(dump));
-            }
-        });
+        port.request("debugdump")
+            .then((dump) => {
+                if(!copy(dump)) {
+                    console.warn("Could not copy debug dump", JSON.parse(dump));
+                }
+            })
+            .catch(console.error);
     }
 });
 
@@ -391,7 +401,7 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
     const field = popup.querySelector("#channelNameField");
     hideError();
     show(popup.querySelector("#loadingWrapper"));
-    if(field.value.length > 0) {
+    if(field.value.length) {
         if(popup.querySelector("#channelRadio").checked) {
             port.send("addchannel", {
                 username: field.value,
@@ -412,12 +422,14 @@ document.getElementById("options").addEventListener("click", (e) => {
     port.send("showoptions");
 }, false);
 
-list.getChannelsByType().then((channels) => {
-    channels.forEach(addChannel);
-});
-list.getUsersByType().then((users) => {
-    users.forEach(addUser);
-});
+Promise.all([
+    list.getChannelsByType().then((channelsObj) => {
+        channelsObj.forEach(addChannel);
+    }),
+    list.getUsersByType().then((usersObj) => {
+        usersObj.forEach(addUser);
+    })
+]).catch(console.error);
 
 // Add-on communication backend
 
@@ -495,7 +507,7 @@ port.addEventListener("message", async ({ detail: message }) => {
         break;
     }
     case "theme":
-        document.body.classList.toggle("dark", message.payload === 1);
+        document.body.classList.toggle("dark", message.payload === DARK_THEME);
         break;
     default:
         // Do nothing

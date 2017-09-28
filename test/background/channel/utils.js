@@ -75,7 +75,10 @@ test.serial('force open archive', async (t) => {
     const channel = getChannel();
     channel.live.setLive(true);
 
-    await setupAndRun([ channel, "archive" ]);
+    await setupAndRun([
+        channel,
+        "archive"
+    ]);
 
     t.true(browser.tabs.query.calledOnce);
     t.is(browser.tabs.query.lastCall.args[0].url[0], channel.archiveUrl);
@@ -86,7 +89,10 @@ test.serial('force open archive', async (t) => {
 test.serial('open chat', async (t) => {
     const channel = getChannel();
 
-    await setupAndRun([ channel, "chat" ]);
+    await setupAndRun([
+        channel,
+        "chat"
+    ]);
 
     t.true(browser.tabs.query.calledOnce);
     t.is(browser.tabs.query.lastCall.args[0].url[0], channel.chatUrl);
@@ -101,17 +107,13 @@ test('does not support livestreamer', (t) => {
     return t.throws(selectOrOpenTab(channel, 'livestreamer'), Error, 'Not supported');
 });
 
-test('formatChannel without channel', (t) => {
-    return t.throws(formatChannel('test'), TypeError, 'Invalid channel provided');
-});
+test('formatChannel without channel', (t) => t.throws(formatChannel('test'), TypeError, 'Invalid channel provided'));
 
 test('formatChannel with patterns', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.setLive(true);
-    const formattedChannel = await formatChannel(channel, [
-        'test'
-    ]);
+    const formattedChannel = await formatChannel(channel, [ 'test' ]);
     t.is(formattedChannel.live.state, LiveState.REBROADCAST);
 });
 
@@ -119,9 +121,7 @@ test('formatChannel with patterns that does not match', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.setLive(true);
-    const formattedChannel = await formatChannel(channel, [
-        'foo'
-    ]);
+    const formattedChannel = await formatChannel(channel, [ 'foo' ]);
     t.is(formattedChannel.live.state, LiveState.LIVE);
 });
 
@@ -137,9 +137,7 @@ test('formatChannel with patterns for alternateChannel', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.redirectTo(channel);
-    const formattedChannel = await formatChannel(channel, [
-        'test'
-    ]);
+    const formattedChannel = await formatChannel(channel, [ 'test' ]);
     t.is(formattedChannel.live.state, LiveState.REDIRECT);
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
 });
@@ -148,9 +146,7 @@ test('formatChannel with patterns for alternateChannel that do not match', async
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.redirectTo(channel);
-    const formattedChannel = await formatChannel(channel, [
-        'foo'
-    ]);
+    const formattedChannel = await formatChannel(channel, [ 'foo' ]);
     t.is(formattedChannel.live.state, LiveState.REDIRECT);
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REDIRECT);
 });

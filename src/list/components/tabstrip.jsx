@@ -4,10 +4,13 @@ import Icon from './icon.jsx';
 import { connect } from 'react-redux';
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import { NavigateableList, NavigateableItem } from './navigateable-list.jsx';
+import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from '../constants/tabs.json';
+import prefs from '../../prefs.json';
 
 //TODO space or enter should focus tab panel.
 
-const _ = browser.i18n.getMessage;
+const _ = browser.i18n.getMessage,
+    DISPLAY_NONLIVE = parseInt(prefs.panel_nonlive.options.find((o) => o.label === "Distinct").value, 10);
 
 class Tab extends NavigateableItem {
     static get defaultProps() {
@@ -62,14 +65,12 @@ class TabStrip extends NavigateableList {
     }
 
     render() {
-        this.props.children = [
-            (<Tab title="panel_tab_live" onClick={ () => this.props.onTabSelect(0) } active={ this.props.active === 0 } key="0"/>)
-        ];
+        this.props.children = [ (<Tab title="panel_tab_live" onClick={ () => this.props.onTabSelect(LIVE_TAB) } active={ this.props.active === LIVE_TAB } key={ LIVE_TAB }/>) ];
         if(this.props.showNonlive) {
-            this.props.children.push(<Tab title="panel_tab_nonlive" onClick={ ()=> this.props.onTabSelect(1) } active={ this.props.active === 1 } key="1"/>);
+            this.props.children.push(<Tab title="panel_tab_nonlive" onClick={ () => this.props.onTabSelect(NONLIVE_TAB) } active={ this.props.active === NONLIVE_TAB } key={ NONLIVE_TAB }/>);
         }
-        this.props.children.push(<Tab title="panel_tab_offline" onClick={ () => this.props.onTabSelect(2) } active={ this.props.active === 2 } key="2"/>);
-        this.props.children.push(<Tab title="panel_tab_explore" onClick={ () => this.props.onTabSelect(3) } active={ this.props.active === 3 } key="3"/>);
+        this.props.children.push(<Tab title="panel_tab_offline" onClick={ () => this.props.onTabSelect(OFFLINE_TAB) } active={ this.props.active === OFFLINE_TAB } key={ OFFLINE_TAB }/>);
+        this.props.children.push(<Tab title="panel_tab_explore" onClick={ () => this.props.onTabSelect(EXTRAS_TAB) } active={ this.props.active === EXTRAS_TAB } key={ EXTRAS_TAB }/>);
         const element = super.render();
         return React.cloneElement(element, {
             className: "tabstrip inline-list",
@@ -78,11 +79,9 @@ class TabStrip extends NavigateableList {
     }
 }
 
-const SearchField = (props) => {
-    return ( <div className="browser-style">
-        <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/>
-    </div> );
-};
+const SearchField = (props) => ( <div className="browser-style">
+    <input className="searchField" type="search" value={ props.value } placeholder={ _('cm_filter.placeholder') } onChange={ props.onSearch }/>
+</div> );
 SearchField.defaultProps = {
     value: ""
 };
@@ -91,13 +90,11 @@ SearchField.propTypes = {
     onSearch: PropTypes.func.isRequired
 };
 
-const Tool = (props) => {
-    return ( <li>
-        <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" } className={ props.className } onContextMenu={ props.onContextMenu }>
-            <Icon type={ props.icon }/>
-        </button>
-    </li> );
-};
+const Tool = (props) => ( <li>
+    <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" } className={ props.className } onContextMenu={ props.onContextMenu }>
+        <Icon type={ props.icon }/>
+    </button>
+</li> );
 Tool.defaultProps = {
     active: false
 };
@@ -110,9 +107,9 @@ Tool.propTypes = {
     onContextMenu: PropTypes.func
 };
 
-const Tools = (props) => {
+const Tools = (props) =>
     //TODO CTRL+F and CTRL+R get captured hard by Firefox, no idea how to get around that.
-    return ( <ul className="toolbar inline-list right" role="toolbar">
+    ( <ul className="toolbar inline-list right" role="toolbar">
         <KeyHandler keyValue="F5" keyEventName={ KEYPRESS } onKeyHandle={ (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -122,7 +119,6 @@ const Tools = (props) => {
         <Tool title="panel_refresh" icon="reload" onClick={ () => props.onToolClick("refresh") } className={ props.queuePaused ? "" : "loading" } onContextMenu={ props.onRefreshContextMenu }/>
         <Tool title="panel_manage" icon="wrench" onClick={ () => props.onToolClick("configure") }/>
     </ul> );
-};
 Tools.defaultProps = {
     searching: false
 };
@@ -147,10 +143,10 @@ const Toolbar = (props) => {
     </nav> );
 };
 Toolbar.defaultProps = {
-    activeTab: 0,
+    activeTab: LIVE_TAB,
     showNonlive: false,
     query: "",
-    showSearch: false,
+    showSearch: false
 };
 Toolbar.propTypes = {
     activeTab: PropTypes.number,
@@ -164,54 +160,53 @@ Toolbar.propTypes = {
     onRefreshContextMenu: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-    return {
-        activeTab: state.ui.tab,
-        showNonlive: state.settings.nonLiveDisplay === 1,
-        query: state.ui.query,
-        showSearch: state.ui.search,
-        queuePaused: state.settings.queue.paused || !state.settings.queue.status
-    };
-};
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onTabSelect(index) {
-            dispatch({ type: "setTab", payload: index });
-        },
-        onToolClick(tool) {
-            //TODO actually, most of this handler shouldn't be in here, there should just be dispatching here
-            if(tool === "toggleSearch") {
-                dispatch({ type: "toggleSearch" });
-            }
-            else if(tool === "refresh") {
-                dispatch({
-                    type: "loading",
-                    command: "refresh"
-                });
-            }
-            else {
-                dispatch({
-                    command: tool
-                });
-                if(tool === "configure") {
-                    window.close();
-                }
-            }
-        },
-        onSearch(event) {
+const mapStateToProps = (state) => ({
+    activeTab: state.ui.tab,
+    showNonlive: state.settings.nonLiveDisplay === DISPLAY_NONLIVE,
+    query: state.ui.query,
+    showSearch: state.ui.search,
+    queuePaused: state.settings.queue.paused || !state.settings.queue.status
+});
+const mapDispatchToProps = (dispatch) => ({
+    onTabSelect(index) {
+        dispatch({
+            type: "setTab",
+            payload: index
+        });
+    },
+    onToolClick(tool) {
+        //TODO actually, most of this handler shouldn't be in here, there should just be dispatching here
+        if(tool === "toggleSearch") {
+            dispatch({ type: "toggleSearch" });
+        }
+        else if(tool === "refresh") {
             dispatch({
-                type: "search",
-                payload: event.target.value
-            });
-        },
-        onRefreshContextMenu(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            dispatch({
-                type: "openQueueContext"
+                type: "loading",
+                command: "refresh"
             });
         }
-    };
-};
+        else {
+            dispatch({
+                command: tool
+            });
+            if(tool === "configure") {
+                window.close();
+            }
+        }
+    },
+    onSearch(event) {
+        dispatch({
+            type: "search",
+            payload: event.target.value
+        });
+    },
+    onRefreshContextMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch({
+            type: "openQueueContext"
+        });
+    }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);

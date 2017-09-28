@@ -192,11 +192,9 @@ test.serial("Mute Notification", async (t) => {
         channel = getChannel('test', 'test', 1);
     channel.live.setLive(true);
 
-    browser.tabs.query.resolves([
-        {
-            url: "https://example.com"
-        }
-    ]);
+    browser.tabs.query.resolves([ {
+        url: "https://example.com"
+    } ]);
 
     await notifier.sendNotification(channel);
 
@@ -210,7 +208,7 @@ test.serial("Click Listener", async (t) => {
 
     const p = when(notifier, 'click');
 
-    browser.notifications.onClicked.dispatch("cn" + channel.id);
+    browser.notifications.onClicked.dispatch(`cn${channel.id}`);
     const { detail: channelId } = await p;
     t.is(channelId, channel.id);
 });
@@ -240,14 +238,12 @@ const fixture = [
             title: false
         },
         initial: [],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "live"
     },
     {
@@ -258,14 +254,12 @@ const fixture = [
             title: false
         },
         initial: [],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -275,22 +269,18 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "live"
     },
     {
@@ -300,22 +290,18 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -325,22 +311,18 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.LIVE
-                }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -350,22 +332,18 @@ const fixture = [
             offline: false,
             title: true
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.LIVE
-                }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "title"
     },
     {
@@ -375,22 +353,18 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -400,22 +374,18 @@ const fixture = [
             offline: true,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
+        } ],
         expected: "offline"
     },
     {
@@ -426,14 +396,12 @@ const fixture = [
             title: false
         },
         initial: [],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -444,14 +412,12 @@ const fixture = [
             title: false
         },
         initial: [],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
-                }
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -461,25 +427,21 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
+            }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
-                }
-            }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -489,25 +451,21 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
+            }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
-                }
-            }
-        ],
+        } ],
         expected: "nonlive"
     },
     {
@@ -517,25 +475,21 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
+            }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
-                }
-            }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -545,25 +499,21 @@ const fixture = [
             offline: false,
             title: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.OFFLINE
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.OFFLINE
+            }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
-                }
-            }
-        ],
+        } ],
         expected: "nonlive"
     },
     {
@@ -573,28 +523,24 @@ const fixture = [
             offline: false,
             title: true
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
+        } ],
         expected: "title"
     },
     {
@@ -604,28 +550,24 @@ const fixture = [
             offline: false,
             title: true
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "foo"
-                    }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "foo"
                 }
             }
-        ],
-        updated: [
-            {
-                title: "bar",
-                live: {
-                    state: LiveState.REDIRECT,
-                    alternateChannel: {
-                        uname: "bar"
-                    }
+        } ],
+        updated: [ {
+            title: "bar",
+            live: {
+                state: LiveState.REDIRECT,
+                alternateChannel: {
+                    uname: "bar"
                 }
             }
-        ],
+        } ],
         expected: "nonlive"
     },
     {
@@ -635,22 +577,18 @@ const fixture = [
             offline: false,
             title: true
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REBROADCAST
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REBROADCAST
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.LIVE
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.LIVE
             }
-        ],
+        } ],
         expected: "live"
     },
     {
@@ -660,22 +598,18 @@ const fixture = [
             title: true,
             nonlive: false
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REBROADCAST
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REBROADCAST
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REBROADCAST
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REBROADCAST
             }
-        ],
+        } ],
         expected: "none"
     },
     {
@@ -685,22 +619,18 @@ const fixture = [
             title: true,
             nonlive: true
         },
-        initial: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REBROADCAST
-                }
+        initial: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REBROADCAST
             }
-        ],
-        updated: [
-            {
-                title: "foo",
-                live: {
-                    state: LiveState.REBROADCAST
-                }
+        } ],
+        updated: [ {
+            title: "foo",
+            live: {
+                state: LiveState.REBROADCAST
             }
-        ],
+        } ],
         expected: "none"
     }
 ];

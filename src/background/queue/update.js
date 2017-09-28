@@ -9,18 +9,12 @@
 import PauseableQueue from "./pauseable";
 
 /**
+ * A queue with priorized and less often fetched requests.
+ *
  * @class module:queue/update.UpdateQueue
  * @extends module:queue/pauseable.PauseableQueue
  */
 export default class UpdateQueue extends PauseableQueue {
-    /**
-     * A queue with priorized and less often fetched requests.
-     *
-     * @constructs
-     */
-    constructor() {
-        super();
-    }
     /**
      * Add a request to the queue.
      *

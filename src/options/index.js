@@ -37,11 +37,14 @@ class OptionsPage {
     }
 
     setup() {
-        this.loadValues().then(this.attachListeners.bind(this));
+        this.loadValues()
+            .then((...args) => this.attachListeners(...args))
+            .catch(console.error);
 
         browser.runtime.sendMessage("pcStatus").then((status) => {
             toggle(document.getElementById("hiddenprefs"), !status);
-        });
+        })
+            .catch(console.error);
 
         errorStateWidget(document.getElementById("errorStates"));
     }
@@ -86,7 +89,9 @@ class OptionsPage {
         });
 
         document.getElementById("reset").addEventListener("click", () => {
-            browser.runtime.sendMessage("resetPrefs").then(() => this.loadValues(true));
+            browser.runtime.sendMessage("resetPrefs")
+                .then(() => this.loadValues(true))
+                .catch(console.error);
         }, {
             passive: true,
             capture: false
@@ -119,7 +124,7 @@ class OptionsPage {
         document.getElementById("fileImport").addEventListener("input", (e) => {
             browser.runtime.sendMessage({
                 command: "import",
-                payload: e.target.files[0]
+                payload: e.target.files.shift()
             });
         }, {
             passive: true,
@@ -127,7 +132,9 @@ class OptionsPage {
         });
 
         // This also triggers with changes that the user made, not only import.
-        preferences.addEventListener("change", ({ detail: { pref, value } }) => {
+        preferences.addEventListener("change", ({ detail: {
+            pref, value
+        } }) => {
             if(recentlySaved.has(pref)) {
                 recentlySaved.delete(pref);
             }

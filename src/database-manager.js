@@ -67,7 +67,7 @@ const VERSION = 3,
          * @throws Error when the request fails.
          */
         _waitForRequest(request) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
                 request.onsuccess = resolve;
                 request.onerror = reject;
             });
@@ -101,33 +101,35 @@ const VERSION = 3,
                         keyPath: "id",
                         autoIncrement: true
                     });
-                users.createIndex("typename", [ "type", "login" ], { unique: true });
+                users.createIndex("typename", [
+                    "type",
+                    "login"
+                ], { unique: true });
                 users.createIndex("type", "type", { unique: false });
-                channels.createIndex("typename", [ "type", "login" ], { unique: true });
+                channels.createIndex("typename", [
+                    "type",
+                    "login"
+                ], { unique: true });
                 channels.createIndex("type", "type", { unique: false });
             }
         },
-        errorHandlers: [
-            (e) => {
-                if(DatabaseManager.db) {
-                    DatabaseManager.db.close();
-                    DatabaseManager.db = null;
-                }
-                throw new FixListError(e);
+        errorHandlers: [ (e) => {
+            if(DatabaseManager.db) {
+                DatabaseManager.db.close();
+                DatabaseManager.db = null;
             }
-        ],
-        successHandlers: [
-            (db) => {
-                db.addEventListener("close", () => {
-                    DatabaseManager.db = null;
-                    DatabaseManager.emit("close");
-                }, {
-                    passive: true,
-                    capture: false,
-                    once: true
-                });
-            }
-        ],
+            throw new FixListError(e);
+        } ],
+        successHandlers: [ (db) => {
+            db.addEventListener("close", () => {
+                DatabaseManager.db = null;
+                DatabaseManager.emit("close");
+            }, {
+                passive: true,
+                capture: false,
+                once: true
+            });
+        } ],
         /**
          * Opens the DB, initializes the schema if it's a new DB or sets channels
          * offline that were online and have last been updated a certain time ago.
@@ -170,24 +172,26 @@ const VERSION = 3,
                         handler(e).catch(reject);
                     };
 
-                    resolve(this._waitForRequest(request).then(async (e) => {
-                        this.db = e.target.result;
-                        for(const handler of this.successHandlers) {
-                            await handler(this.db);
-                        }
-                        this.error = null;
-                        this.emit("ready");
-                    }).catch(async () => {
-                        if(dontTry) {
-                            this.db = null;
-                            throw request.error;
-                        }
-                        let currentResolve = Promise.reject(request.error);
-                        for(const handler of this.errorHandlers) {
-                            currentResolve = currentResolve.catch(handler);
-                        }
-                        return currentResolve;
-                    }));
+                    resolve(this._waitForRequest(request)
+                        .then(async (e) => {
+                            this.db = e.target.result;
+                            for(const handler of this.successHandlers) {
+                                await handler(this.db);
+                            }
+                            this.error = null;
+                            this.emit("ready");
+                        })
+                        .catch(async () => {
+                            if(dontTry) {
+                                this.db = null;
+                                throw request.error;
+                            }
+                            let currentResolve = Promise.reject(request.error);
+                            for(const handler of this.errorHandlers) {
+                                currentResolve = currentResolve.catch(handler);
+                            }
+                            return currentResolve;
+                        }));
                 });
                 this.loading = this.loading.catch((e) => {
                     this.error = e;
@@ -208,7 +212,7 @@ const VERSION = 3,
         },
         unregisterList(list) {
             this.lists.delete(list);
-            if(this.lists.size === 0) {
+            if(!this.lists.size) {
                 this.close();
             }
         },

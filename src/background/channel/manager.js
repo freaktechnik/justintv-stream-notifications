@@ -77,6 +77,8 @@ import serializedProviders from "../providers/serialized";
  * @event module:channel/manager.ChannelsManager#showoptions
  */
 
+const ONE_ITEM = 1;
+
 /**
  * @class
  * @extends external:EventTarget
@@ -118,17 +120,17 @@ export default class ChannelsManager extends EventTarget {
             case "adduser":
                 if(message.payload.username !== null) {
                     this.loading = true;
-                    this.cancelingValues.set("user" + message.payload.type + message.payload.username, false);
+                    this.cancelingValues.set(`user${message.payload.type}${message.payload.username}`, false);
                     emit(this, "adduser", message.payload.username, message.payload.type,
-                        () => this.cancelingValues.get("user" + message.payload.type + message.payload.username));
+                        () => this.cancelingValues.get(`user${message.payload.type}${message.payload.username}`));
                 }
                 break;
             case "addchannel":
                 if(message.payload.username !== null) {
                     this.loading = true;
-                    this.cancelingValues.set("channel" + message.payload.type + message.payload.username, false);
+                    this.cancelingValues.set(`channel${message.payload.type}${message.payload.username}`, false);
                     emit(this, "addchannel", message.payload.username, message.payload.type,
-                        () => this.cancelingValues.get("channel" + message.payload.type + message.payload.username));
+                        () => this.cancelingValues.get(`channel${message.payload.type}${message.payload.username}`));
                 }
                 break;
             case "cancel":
@@ -158,9 +160,9 @@ export default class ChannelsManager extends EventTarget {
             passive: true
         });
         this.port.addEventListener("duplicate", ({ detail: port }) => {
-            when(port, "ready").then(() => {
-                port.send("secondary");
-            });
+            when(port, "ready")
+                .then(() => port.send("secondary"))
+                .catch(console.error);
 
             port.addEventListener("focus", () => {
                 if(this.tabID !== null) {
@@ -214,8 +216,8 @@ export default class ChannelsManager extends EventTarget {
      * @returns {undefined}
      */
     _emitToWorker(target, ...data) {
-        if(data.length == 1) {
-            data = data[0];
+        if(data.length === ONE_ITEM) {
+            data = data.pop();
         }
         this.port.send(target, data);
     }
@@ -234,11 +236,10 @@ export default class ChannelsManager extends EventTarget {
                 return tab;
             });
         }
-        else {
-            return browser.tabs.update(this.tabID, {
-                active: true
-            });
-        }
+
+        return browser.tabs.update(this.tabID, {
+            active: true
+        });
     }
     /**
      * Add providers to the list of available providers in the manager.

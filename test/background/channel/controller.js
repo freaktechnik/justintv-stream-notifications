@@ -1,4 +1,3 @@
-/* eslint-disable new-cap, camelcase */
 /**
  * Test channel controller.
  * @author Martin Giger
@@ -25,13 +24,13 @@ const testProviderCredentials = async (t, p) => {
         prom = cc.autoAddUsers(p);
         res = await prom;
         if(p == TESTUSER.type) {
-            t.true(res.length > 0, "Found credential for " + p);
+            t.true(res.length > 0, `Found credential for ${p}`);
 
             const users = await cc.getUsersByType();
             await Promise.all(users.map((u) => cc.removeUser(u.id, true)));
         }
         else if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-            t.is(res.length, 0, "found no credentials for " + p);
+            t.is(res.length, 0, `found no credentials for ${p}`);
         }
     }
     else {

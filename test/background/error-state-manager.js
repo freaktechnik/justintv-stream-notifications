@@ -12,14 +12,12 @@ test.serial('unregister', async (t) => {
     browser.storage.local.set.resetHistory();
 
     browser.storage.local.get.withArgs("errorStates").resolves({
-        errorStates: [
-            {
-                id: 'foo',
-                gravity: 0,
-                message: 'bar',
-                actions: []
-            }
-        ]
+        errorStates: [ {
+            id: 'foo',
+            gravity: 0,
+            message: 'bar',
+            actions: []
+        } ]
     });
 
     const rv = await errorStateManager.unregister('foo');
@@ -51,14 +49,12 @@ test.serial('register', async (t) => {
 
 test.serial('in error state property', async (t) => {
     browser.storage.local.get.withArgs("errorStates").resolves({
-        errorStates: [
-            {
-                id: 'foo',
-                gravity: 0,
-                message: 'bar',
-                actions: []
-            }
-        ]
+        errorStates: [ {
+            id: 'foo',
+            gravity: 0,
+            message: 'bar',
+            actions: []
+        } ]
     });
 
     t.true(await errorStateManager.IN_ERROR_STATE);
@@ -97,11 +93,9 @@ test.serial('empty event', async (t) => {
     //TODO ensure promise is not resolved
 
     browser.storage.local.get.withArgs("errorStates").resolves({
-        errorStates: [
-            {
-                id: 'bar'
-            }
-        ]
+        errorStates: [ {
+            id: 'bar'
+        } ]
     });
 
     t.true(await errorStateManager.unregister('bar'));

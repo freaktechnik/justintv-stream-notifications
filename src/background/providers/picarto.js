@@ -9,7 +9,9 @@ import GenericProvider from "./generic-provider";
 
 const type = "picarto",
     baseURL = 'https://api.picarto.tv/v1/',
-    requeue = (resp) => !resp.ok && (resp.status > 499 || resp.status < 400);
+    SERVER_ERROR = 500,
+    REQUEST_OK = 399,
+    requeue = (resp) => !resp.ok && (resp.status >= SERVER_ERROR || resp.status < REQUEST_OK);
 
 function getChannelFromJSON(jsonChan) {
     const ret = new Channel(jsonChan.name.toLowerCase(), type);
@@ -18,8 +20,8 @@ function getChannelFromJSON(jsonChan) {
         100: `https://picarto.tv/user_data/usrimg/${jsonChan.name}/dsdefault.jpg`
     };
     ret.thumbnail = `https://thumb-us1.picarto.tv/thumbnail/${jsonChan.name}.jpg`;
-    ret.url.push("https://picarto.tv/" + ret.uname);
-    ret.archiveUrl = "https://picarto.tv/" + ret.uname;
+    ret.url.push(`https://picarto.tv/${ret.uname}`);
+    ret.archiveUrl = `https://picarto.tv/${ret.uname}`;
     ret.chatUrl = `https://picarto.tv/chatpopout/${ret.uname}/public`;
     ret.live.setLive(jsonChan.online);
     ret.mature = jsonChan.adult;

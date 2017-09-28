@@ -205,12 +205,15 @@ const testMockAPI = async (t, p) => {
     ret.id = 1;
     live.id = 2;
 
-    ret = await provider.updateChannels([ ret, live ]);
+    ret = await provider.updateChannels([
+        ret,
+        live
+    ]);
     t.is(ret.length, 2, "Both channels were updated");
     await Promise.all(ret.map(async (chan) => {
         t.true(chan instanceof Channel, "updateChannels resolves to a channel");
         t.is(chan.type, p, "updateChannels resolves to a channel with correct type");
-        t.is(await chan.live.isLive(LiveState.TOWARD_OFFLINE), chan.uname === "live", "Channel " + chan.uname + " is live if it's the live channel, else it's offline after an update of multiple channels together");
+        t.is(await chan.live.isLive(LiveState.TOWARD_OFFLINE), chan.uname === "live", `Channel ${chan.uname} is live if it's the live channel, else it's offline after an update of multiple channels together`);
     }));
 
     if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
@@ -230,7 +233,7 @@ const testMockAPI = async (t, p) => {
             }
             t.true(ret instanceof Channel, "updateRequest holds a channel");
             t.is(ret.type, p, "updateRequest event holds a channel with corect type");
-            t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", "Update request correctly set live state of " + ret.uname);
+            t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", `Update request correctly set live state of ${ret.uname}`);
         }
 
         const errorRet = await spec.onComplete({}, urls[0]);
@@ -270,7 +273,10 @@ const testMockAPI = async (t, p) => {
             t.true(Array.isArray(urls));
             for(const url of urls) {
                 const result = await provider._qs.queueRequest(url);
-                let [ ret, channels ] = await spec.onComplete(result);
+                let [
+                    ret,
+                    channels
+                ] = await spec.onComplete(result);
                 if(Array.isArray(ret)) {
                     ret = ret[0];
                 }

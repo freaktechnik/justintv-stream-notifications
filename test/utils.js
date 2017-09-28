@@ -45,9 +45,7 @@ test('when onproperty', async (t) => {
     t.is(result, 'foo bar');
 });
 
-test('when non-emitter', (t) => {
-    return t.notThrows(when({}, 'event'));
-});
+test('when non-emitter', (t) => t.notThrows(when({}, 'event')));
 
 test('emit', (t) => {
     const emitter = {
@@ -74,7 +72,10 @@ test('emit', (t) => {
     t.true(emitter.dispatchEvent.calledThrice);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof Event);
     t.true(emitter.dispatchEvent.lastCall.args[0] instanceof CustomEvent);
-    t.deepEqual(emitter.dispatchEvent.lastCall.args[0].detail, [ 'a', 'b' ]);
+    t.deepEqual(emitter.dispatchEvent.lastCall.args[0].detail, [
+        'a',
+        'b'
+    ]);
     t.true(e);
 });
 

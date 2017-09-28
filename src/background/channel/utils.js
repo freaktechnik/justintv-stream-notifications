@@ -38,12 +38,14 @@ export async function selectOrOpenTab(channel, what) {
         url: toCheck
     });
     if(tabs.length) {
-        return browser.tabs.update(tabs[0].id, {
+        const [ tab ] = tabs;
+        return browser.tabs.update(tab.id, {
             active: true
         });
     }
     // There's no tab open for the channel
-    return browser.tabs.create({ url: toCheck[0] });
+    const [ url ] = toCheck;
+    return browser.tabs.create({ url });
 }
 
 const getRebroadcastTitlePatterns = async () => {
@@ -51,9 +53,7 @@ const getRebroadcastTitlePatterns = async () => {
             patterns = patternstr.toLowerCase().split(",");
         return patterns.concat(patterns.map((pattern) => `[${pattern}]`));
     },
-    cleanTitle = (title) => {
-        return title.trim().toLowerCase();
-    },
+    cleanTitle = (title) => title.trim().toLowerCase(),
     titleIsRebroadcast = (title, patterns) => {
         const lowerCaseTitle = cleanTitle(title);
         return patterns.some((p) => lowerCaseTitle.startsWith(p));
@@ -114,6 +114,4 @@ export const formatChannels = async (channels, serialize = false) => {
  * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
  * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
  */
-export const filterExistingFavs = (user, channels) => {
-    return channels.filter((ch) => !user.favorites.includes(ch.login));
-};
+export const filterExistingFavs = (user, channels) => channels.filter((ch) => !user.favorites.includes(ch.login));

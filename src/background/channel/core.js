@@ -7,8 +7,15 @@
  */
 import { omit } from "lodash";
 import LiveState from "./live-state";
+import { capitalize } from '../../utils';
 
-const ITEM_ARGS = [ "login", "type", "id", "live" ];
+const ITEM_ARGS = [
+        "login",
+        "type",
+        "id",
+        "live"
+    ],
+    NO_VIEWERS = -1;
 
 /**
  * A generic thing.
@@ -43,9 +50,8 @@ class Item {
         if(this._uname !== "") {
             return this._uname;
         }
-        else {
-            return this.login;
-        }
+
+        return this.login;
     }
     set uname(val) {
         if(val) {
@@ -110,7 +116,7 @@ class Item {
      *          letter capitalized.
      */
     toString() {
-        return this.uname.charAt(0).toUpperCase() + this.uname.slice(1);
+        return capitalize(this.uname);
     }
     /**
      * Serialized version of {@link module:channel/core~Item}
@@ -224,7 +230,7 @@ class Channel extends Item {
      * @type {number}
      * @default -1
      */
-    viewers = -1;
+    viewers = NO_VIEWERS;
     /**
      * Thumbnail of the live broadcast. Typically displayed at a width of 320px.
      *
@@ -254,7 +260,7 @@ class Channel extends Item {
      * @readonly
      * @default Date.now()
      */
-    lastModified = 0;
+    lastModified = Date.now();
     /**
      * The category of the live broadcast if known.
      *

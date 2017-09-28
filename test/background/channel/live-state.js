@@ -55,10 +55,8 @@ test('Deserialize', (t) => {
             alternateChannel: {
                 login: "test",
                 uname: "test",
-                urls: [
-                    "https://example.com/test"
-                ]
-            },
+                urls: [ "https://example.com/test" ]
+            }
         },
         state = LiveState.deserialize(serialized);
 
@@ -122,7 +120,6 @@ const testDefaultInterpretation = async (t, i, interpretation) => {
 };
 test.defaultInterpretation = (title, i, state) => `${title} with ${i} intepreted as ${state}`;
 const expectedStates = [
-    LiveState.TOWARD_LIVE,
     LiveState.TOWARD_LIVE,
     LiveState.TOWARD_LIVE,
     LiveState.TOWARD_OFFLINE

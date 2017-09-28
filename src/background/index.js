@@ -28,15 +28,9 @@ const qsPause = () => qs.pause(),
     controller = new ChannelController(),
     list = new ListView(),
     usedPrefs = {
-        "theme": [
-            controller.setTheme.bind(controller)
-        ],
-        "panel_nonlive": [
-            list.setNonLiveDisplay.bind(list)
-        ],
-        "updateInterval": [
-            (interval) => list.setQueueStatus(interval !== 0)
-        ]
+        "theme": [ controller.setTheme.bind(controller) ],
+        "panel_nonlive": [ list.setNonLiveDisplay.bind(list) ],
+        "updateInterval": [ (interval) => list.setQueueStatus(!!interval) ]
     },
     upKeys = Object.keys(usedPrefs),
     applyValue = (p, v) => {
@@ -62,7 +56,10 @@ errorStateManager.addEventListener("empty", () => {
 });
 
 list.addEventListener("opencm", () => controller.showManager());
-list.addEventListener("addchannel", ({ detail: [ login, type ] }) => {
+list.addEventListener("addchannel", ({ detail: [
+    login,
+    type
+] }) => {
     controller.addChannel(login, type);
 });
 list.addEventListener("remove", ({ detail: channelId }) => {
@@ -79,8 +76,10 @@ list.addEventListener("refresh", ({ detail: channelId }) => {
 list.addEventListener("open", ({ detail }) => {
     let channelId, what, p;
     if(Array.isArray(detail)) {
-        channelId = detail[0];
-        what = detail[1];
+        [
+            channelId,
+            what
+        ] = detail;
     }
     else {
         channelId = detail;
@@ -95,7 +94,7 @@ list.addEventListener("open", ({ detail }) => {
         p = controller.getChannel(channelId);
     }
 
-    p.then((channel) => selectOrOpenTab(channel, what));
+    p.then((channel) => selectOrOpenTab(channel, what)).catch(console.error);
 });
 list.addEventListener("pause", qsPause);
 list.addEventListener("resume", qsResume);
@@ -138,9 +137,12 @@ prefs.get(upKeys).then((values) => {
     for(const p in usedPrefs) {
         applyValue(p, values[upKeys.indexOf(p)]);
     }
-});
+})
+    .catch(console.error);
 
-prefs.addEventListener("change", ({ detail: { pref, value } }) => {
+prefs.addEventListener("change", ({ detail: {
+    pref, value
+} }) => {
     if(pref in usedPrefs) {
         applyValue(pref, value);
     }
@@ -162,19 +164,36 @@ browser.runtime.onMessage.addListener((message) => {
     }
 });
 
-browser.runtime.onInstalled.addListener(({ reason, temporary = false }) => {
+browser.runtime.onInstalled.addListener(({
+    reason, temporary = false, previousVersion
+}) => {
     if(reason == 'install' && !temporary) {
         Tour.onInstalled();
     }
     else if(reason == 'update') {
         Tour.onUpdate();
         // Update to 3.5.0:
-        prefs.get('panel_nonlive').then((value) => {
-            if(value > 0) {
-                prefs.set('panel_nonlive', value - 1);
-            }
-        });
+        if(!previousVersion.startsWith("3.5.0")) {
+            prefs.get([
+                'panel_nonlive',
+                'updateInterval'
+            ]).then(async ([
+                panelNonlive,
+                updateInterval
+            ]) => {
+                const NONLIVE_LIVE = 0,
+                    MIN_INTERVAL = 60;
+                if(panelNonlive > NONLIVE_LIVE) {
+                    await prefs.set('panel_nonlive', --panelNonlive);
+                }
+                if(updateInterval < MIN_INTERVAL) {
+                    await prefs.set('updateInterval', MIN_INTERVAL);
+                }
+            })
+                .catch(console.error);
+        }
     }
 });
 
-controller.getChannelsByType().then((channels) => list.addChannels(channels)).catch(console.error);
+controller.getChannelsByType().then((channels) => list.addChannels(channels))
+    .catch(console.error);

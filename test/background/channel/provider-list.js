@@ -77,7 +77,9 @@ test("getUserByName", async (t) => {
 });
 
 test("userExists", async (t) => {
-    const { referenceUser, notUser } = t.context;
+    const {
+        referenceUser, notUser
+    } = t.context;
     const exists = await t.context.list.userExists(referenceUser.login);
     t.true(exists);
 
@@ -128,7 +130,9 @@ test("getChannelByName", async (t) => {
 });
 
 test("channelExists", async (t) => {
-    const { referenceChannel, notChannel } = t.context;
+    const {
+        referenceChannel, notChannel
+    } = t.context;
     const exists = await t.context.list.channelExists(referenceChannel.login);
     t.true(exists);
 

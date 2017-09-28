@@ -51,12 +51,10 @@ class PortWrapper extends EventTarget {
                 emit(this, "message", message);
             }
         });
-        this.disconnectPromise = new Promise((r, reject) => {
-            this.port.onDisconnect.addListener(() => {
-                reject(new PortGoneError());
-                this.port = undefined;
-                emit(this, "disconnect");
-            });
+        this.disconnectPromise = when(this.port, "disconnect").then(() => {
+            this.port = undefined;
+            emit(this, "disconnect");
+            throw new PortGoneError();
         });
     }
 
@@ -199,8 +197,7 @@ export default class Port extends PortWrapper {
         if(!this.port) {
             return Promise.reject(new NoPortError());
         }
-        else {
-            return super.request(command, payload);
-        }
+
+        return super.request(command, payload);
     }
 }

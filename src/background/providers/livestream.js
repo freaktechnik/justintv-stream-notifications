@@ -8,10 +8,11 @@ import { Channel } from '../channel/core';
 import GenericProvider from "./generic-provider";
 
 const type = "livestream",
-    baseURL = ".api.channel.livestream.com/2.0/";
+    baseURL = ".api.channel.livestream.com/2.0/",
+    FIRST_MATCH = 1;
 
 function getChannelAPIUrl(channellogin) {
-    return "http://x" + channellogin.replace(/_/g, "-") + "x" + baseURL;
+    return `http://x${channellogin.replace(/_/g, "-")}x${baseURL}`;
 }
 
 class Livestream extends GenericProvider {
@@ -28,9 +29,12 @@ class Livestream extends GenericProvider {
 
     async getChannelDetails(username) {
         const ch = new Channel(username.toLowerCase(), this._type),
-            [ data, response ] = await Promise.all([
-                this._qs.queueRequest(getChannelAPIUrl(ch.login) + "info.json"),
-                this._qs.queueRequest(getChannelAPIUrl(ch.login) + "latestclips.json?maxresults=1")
+            [
+                data,
+                response
+            ] = await Promise.all([
+                this._qs.queueRequest(`${getChannelAPIUrl(ch.login)}info.json`),
+                this._qs.queueRequest(`${getChannelAPIUrl(ch.login)}latestclips.json?maxresults=1`)
             ]);
 
         if(data.parsedJSON && data.parsedJSON.channel) {
@@ -42,34 +46,35 @@ class Livestream extends GenericProvider {
             ch.live.setLive(data.parsedJSON.channel.isLive);
             ch.viewers = data.parsedJSON.channel.currentViewerCount;
             ch.archiveUrl = data.parsedJSON.channel.link;
-            ch.chatUrl = data.parsedJSON.channel.link + "/chat";
+            ch.chatUrl = `${data.parsedJSON.channel.link}/chat`;
 
-            if(response.parsedJSON && response.parsedJSON.channel.item && response.parsedJSON.channel.item.length > 0) {
-                ch.thumbnail = response.parsedJSON.channel.item[0].thumbnail["@url"];
+            if(response.parsedJSON && response.parsedJSON.channel.item && response.parsedJSON.channel.item.length) {
+                const [ thumbnailDetails ] = response.parsedJSON.channel.item;
+                ch.thumbnail = thumbnailDetails.thumbnail["@url"];
             }
 
             return ch;
         }
-        else {
-            throw new Error("Error getting details for the Livestream channel " + username);
-        }
+
+        throw new Error(`Error getting details for the Livestream channel ${username}`);
     }
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => getChannelAPIUrl(channel.login) + "livestatus.json");
+            return channels.map((channel) => `${getChannelAPIUrl(channel.login)}livestatus.json`);
         };
         return {
             getURLs,
             onComplete: async (data, url) => {
                 if(data.parsedJSON && data.parsedJSON.channel) {
-                    const requestLogin = url.match(/http:\/\/x([a-zA-Z0-9-]+)x\./)[1].replace("-", "_"),
+                    const requestLogin = url.match(/http:\/\/x([a-zA-Z0-9-]+)x\./)[FIRST_MATCH].replace("-", "_"),
                         channel = await this._list.getChannelByName(requestLogin),
-                        thumbnailInfo = await this._qs.queueRequest(getChannelAPIUrl(channel.login) + "latestclips.json?maxresults=1");
+                        thumbnailInfo = await this._qs.queueRequest(`${getChannelAPIUrl(channel.login)}latestclips.json?maxresults=1`);
                     channel.live.setLive(data.parsedJSON.channel.isLive);
                     channel.viewers = data.parsedJSON.channel.currentViewerCount;
                     if(thumbnailInfo.parsedJSON && "channel" in thumbnailInfo.parsedJSON && thumbnailInfo.parsedJSON.channel.item.length) {
-                        channel.thumbnail = thumbnailInfo.parsedJSON.channel.item[0].thumbnail["@url"];
+                        const [ thumbnailDetails ] = thumbnailInfo.parsedJSON.channel.item;
+                        channel.thumbnail = thumbnailDetails.thumbnail["@url"];
                     }
                     return channel;
                 }

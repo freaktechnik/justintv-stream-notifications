@@ -13,7 +13,13 @@ import prefs from "../../preferences";
 
 const queue = new UpdateQueue(),
     services = {},
-    defaultRequeue = (response) => !response.ok && response.status !== 404 && response.status !== 420;
+    NOT_FOUND = 404,
+    GONE = 420,
+    defaultRequeue = (response) => !response.ok && response.status !== NOT_FOUND && response.status !== GONE,
+    S_TO_MS = 1000,
+    NO_ATTEMPTS = 0,
+    HIGH_PRIORITY_TIME_FACTOR = 1,
+    LOW_PRIORITY_TIME_FACTOR = 4;
 
 
 /**
@@ -54,7 +60,7 @@ class QueueService {
      * @returns {Array} Array of request IDs.
      */
     getRequestProperty(priority) {
-        return priority + "PriorityRequestListener";
+        return `${priority}PriorityRequestListener`;
     }
 
     /**
@@ -71,7 +77,7 @@ class QueueService {
      * @readonly
      */
     get interval() {
-        return prefs.get('updateInterval').then((i) => i * 1000);
+        return prefs.get('updateInterval').then((i) => i * S_TO_MS);
     }
 
     /**
@@ -93,7 +99,7 @@ class QueueService {
      * @param {number} [attempt=0] - Counter to avoid requeuing infinitely.
      * @returns {Promise} A promise resolving with the Request response.
      */
-    queueRequest(url, headers = {}, requeue = defaultRequeue, priorized = true, attempt = 0) {
+    queueRequest(url, headers = {}, requeue = defaultRequeue, priorized = true, attempt = NO_ATTEMPTS) {
         return new Promise((resolve, reject) => {
             queue.addRequest({
                 url,
@@ -105,9 +111,9 @@ class QueueService {
                                 resolve(this.queueRequest(url, headers, requeue, true, ++attempt));
                             }
                             else {
-                                reject(new Error("Too many attempts"));
+                                throw new Error("Too many attempts");
                             }
-                        });
+                        }).catch(reject);
                     }
                     else {
                         resolve(data);
@@ -146,14 +152,16 @@ class QueueService {
      * @param {module:queue/service~UpdateReuqest} config - Configuration.
      * @returns {undefined}
      */
-    queueUpdateRequest({ getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue }) {
+    queueUpdateRequest({
+        getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue
+    }) {
         if(this.hasUpdateRequest(priority)) {
             this.unqueueUpdateRequest(priority);
         }
 
         const alarmName = this.getAlarmName(priority),
             requestListener = this.getRequestProperty(priority),
-            intervalModifier = priority === QueueService.HIGH_PRIORITY ? 1 : 4;
+            intervalModifier = priority === QueueService.HIGH_PRIORITY ? HIGH_PRIORITY_TIME_FACTOR : LOW_PRIORITY_TIME_FACTOR;
 
         this[requestListener] = async (alarm) => {
             if(alarm.name === alarmName) {
@@ -162,9 +170,8 @@ class QueueService {
                     this.unqueueUpdateRequest(priority);
                     return;
                 }
-                const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => {
-                    return onComplete(result, url);
-                }).catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
+                const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => onComplete(result, url))
+                    .catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
                 await Promise.all(promises);
                 const interval = await this.interval;
                 browser.alarms.create(alarmName, {
@@ -229,7 +236,9 @@ export const resume = () => {
  * @param {module:queue/service~QueueServiceListener} listeners - Listeners to add.
  * @returns {undefined}
  */
-export const addListeners = ({ paused, resumed }) => {
+export const addListeners = ({
+    paused, resumed
+}) => {
     if(paused) {
         queue.addEventListener("pause", paused);
     }
@@ -245,7 +254,9 @@ export const addListeners = ({ paused, resumed }) => {
  *        remove.
  * @returns {undefined}
  */
-export const removeListeners = ({ paused, resumed }) => {
+export const removeListeners = ({
+    paused, resumed
+}) => {
     if(paused) {
         queue.removeEventListener("pause", paused);
     }

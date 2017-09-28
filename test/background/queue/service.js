@@ -101,9 +101,7 @@ test.serial("Update Request queue", async (t) => {
 test("Requeue", async (t) => {
     const service = QueueService.getServiceForProvider("test");
     const maxRetries = prefs.queueservice_maxRetries.value;
-    const cbk = promiseSpy(() => {
-        return maxRetries > cbk.callCount;
-    });
+    const cbk = promiseSpy(() => maxRetries > cbk.callCount);
 
     await service.queueRequest("http://localhost", {}, cbk);
 
@@ -139,7 +137,10 @@ test.serial("Update Request", (t) => {
     // Replace them
     service.queueUpdateRequest({
         getURLs() {
-            return Promise.resolve([ "http://localhost", "https://localhost" ]);
+            return Promise.resolve([
+                "http://localhost",
+                "https://localhost"
+            ]);
         },
         priority: service.HIGH_PRIORITY,
         onComplete() {

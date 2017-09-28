@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import prefs from '../prefs.json';
+import { EXTRAS_TAB, LIVE_TAB } from './constants/tabs.json';
 
 const THEMES = [
         "light",
@@ -9,17 +11,19 @@ const THEMES = [
         "default",
         "thumbnail"
     ],
-    simpleReducer = (setter, defaultValue = false) => {
-        return (state = defaultValue, event) => {
-            switch(event.type) {
-            case setter:
-                return event.payload;
-            default:
-                return state;
-            }
-        };
+    DEFAULT_THEME = parseInt(prefs.theme.value, 10),
+    DEFAULT_STYLE = parseInt(prefs.panel_style.value, 10),
+    DEFAULT_NONLIVE = parseInt(prefs.panel_nonlive.value, 10),
+    DEFAULT_TAB = LIVE_TAB,
+    simpleReducer = (setter, defaultValue = false) => (state = defaultValue, event) => {
+        switch(event.type) {
+        case setter:
+            return event.payload;
+        default:
+            return state;
+        }
     },
-    theme = (state = THEMES[0], event) => {
+    theme = (state = THEMES[DEFAULT_THEME], event) => {
         switch(event.type) {
         case "theme":
             return THEMES[event.payload];
@@ -27,7 +31,7 @@ const THEMES = [
             return state;
         }
     },
-    style = (state = STYLES[1], event) => {
+    style = (state = STYLES[DEFAULT_STYLE], event) => {
         switch(event.type) {
         case "setStyle":
             return STYLES[event.payload];
@@ -46,9 +50,8 @@ const THEMES = [
                 if(ch.id !== event.payload.id) {
                     return ch;
                 }
-                else {
-                    return event.payload;
-                }
+
+                return event.payload;
             });
         default:
             return state;
@@ -64,12 +67,11 @@ const THEMES = [
         else if(event.type === "setProvider") {
             return true;
         }
-        else if(event.type === "setTab" && event.payload === 3) {
+        else if(event.type === "setTab" && event.payload === EXTRAS_TAB) {
             return true;
         }
-        else {
-            return state;
-        }
+
+        return state;
     },
     query = (state = "", event) => {
         switch(event.type) {
@@ -118,13 +120,13 @@ const THEMES = [
     settings = combineReducers({
         theme,
         style,
-        nonLiveDisplay: simpleReducer("setNonLiveDisplay", 0),
+        nonLiveDisplay: simpleReducer("setNonLiveDisplay", DEFAULT_NONLIVE),
         extras: simpleReducer("setExtras"),
         queue,
         copyPattern: simpleReducer("setCopyPattern", '')
     }),
     ui = combineReducers({
-        tab: simpleReducer("setTab", 0),
+        tab: simpleReducer("setTab", DEFAULT_TAB),
         query,
         search,
         loading,

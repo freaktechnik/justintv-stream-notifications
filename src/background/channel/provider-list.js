@@ -29,9 +29,8 @@ export default class ProviderChannelList extends ReadChannelList {
         if(channel.type === this.type) {
             return channel;
         }
-        else {
-            throw new Error("No result for the given ID");
-        }
+
+        throw new Error("No result for the given ID");
     }
 
     getChannelByName(name) {
@@ -43,9 +42,8 @@ export default class ProviderChannelList extends ReadChannelList {
         if(user.type === this.type) {
             return user;
         }
-        else {
-            throw new Error("Could not fetch specified user");
-        }
+
+        throw new Error("Could not fetch specified user");
     }
 
     getUserByName(name) {
@@ -76,18 +74,16 @@ export default class ProviderChannelList extends ReadChannelList {
         if(channel.type === this.type) {
             return super.getUsersByFavorite(channel);
         }
-        else {
-            return Promise.reject(new Error("Type does not match"));
-        }
+
+        return Promise.reject(new Error("Type does not match"));
     }
 
     getChannelsByUserFavorites(user) {
         if(user.type === this.type) {
             return super.getChannelsByUserFavorites(user);
         }
-        else {
-            return Promise.reject(new Error("Type does not match"));
-        }
+
+        return Promise.reject(new Error("Type does not match"));
     }
 
     getChannelsByType(type) {

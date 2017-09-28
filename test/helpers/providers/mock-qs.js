@@ -36,7 +36,7 @@ const getRequest = (type, url) => {
         url = u.join("?");
     }
     else if(type == "douyutv") {
-        url = url.split("?")[0];
+        url = url.split("?").shift();
     }
 
     if(type in mockAPIEnpoints && url in mockAPIEnpoints[type]) {
@@ -53,12 +53,11 @@ const getRequest = (type, url) => {
             ok: true
         };
     }
-    else {
-        return {
-            status: 404,
-            ok: false
-        };
-    }
+
+    return {
+        status: 404,
+        ok: false
+    };
 };
 
 /**
@@ -71,30 +70,32 @@ const getRequest = (type, url) => {
  * @returns {module:queue/service.QueueService} A QS that resolves to mock
  *                                              endpoints.
  */
-const getMockAPIQS = (originalQS, type, active = true) => {
-    return {
-        queueRequest(url) {
-            return Promise.resolve(getRequest(type, url));
-        },
-        unqueueUpdateRequest() {
-            // nothing to do here.
-        },
-        queueUpdateRequest({ getURLs, onComplete }) {
-            if(active) {
-                getURLs().then((urls) => {
+const getMockAPIQS = (originalQS, type, active = true) => ({
+    queueRequest(url) {
+        return Promise.resolve(getRequest(type, url));
+    },
+    unqueueUpdateRequest() {
+        // nothing to do here.
+    },
+    queueUpdateRequest({
+        getURLs, onComplete
+    }) {
+        if(active) {
+            getURLs()
+                .then((urls) => {
                     urls.forEach((url) => {
                         onComplete(getRequest(type, url), url);
                     });
-                });
-            }
-        },
-        hasUpdateRequest() {
-            return false;
-        },
-        HIGH_PRIORITY: originalQS.HIGH_PRIORITY,
-        LOW_PRIORITY: originalQS.LOW_PRIORITY
-    };
-};
+                })
+                .catch(console.warn);
+        }
+    },
+    hasUpdateRequest() {
+        return false;
+    },
+    HIGH_PRIORITY: originalQS.HIGH_PRIORITY,
+    LOW_PRIORITY: originalQS.LOW_PRIORITY
+});
 
 /**
  * @typedef {module:queue/service.QueueService} MockQS
@@ -129,14 +130,18 @@ const getMockQS = (originalQS, ignoreQR = false) => {
         unqueueUpdateRequest(priority) {
             resolvePromise(priority);
         },
-        queueUpdateRequest({ getURLs, priority, onComplete }) {
-            getURLs().then((urls) => {
-                resolvePromise({
-                    urls,
-                    priority,
-                    callback: onComplete
-                });
-            });
+        queueUpdateRequest({
+            getURLs, priority, onComplete
+        }) {
+            getURLs()
+                .then((urls) => {
+                    resolvePromise({
+                        urls,
+                        priority,
+                        callback: onComplete
+                    });
+                })
+                .catch(console.warn);
         },
         hasUpdateRequest() {
             return false;

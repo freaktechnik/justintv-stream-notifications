@@ -50,21 +50,22 @@ class Hitbox extends GenericProvider {
     }
 
     _getChannels(channels) {
-        return Promise.all(channels.map((channel) => {
-            return this._qs.queueRequest(baseURL + '/media/live/' + channel).then((data) => {
-                if(data.ok && data.parsedJSON && "livestream" in data.parsedJSON) {
-                    return getChannelFromJson(data.parsedJSON.livestream[0]);
-                }
-                else {
-                    return null;
-                }
-            });
-        })).then((channels) => channels.filter((channel) => channel !== null));
+        return Promise.all(channels.map((channel) => this._qs.queueRequest(`${baseURL}/media/live/${channel}`).then((data) => {
+            if(data.ok && data.parsedJSON && "livestream" in data.parsedJSON) {
+                const [ rawChannel ] = data.parsedJSON.livestream;
+                return getChannelFromJson(rawChannel);
+            }
+
+            return null;
+        }))).then((resultChans) => resultChans.filter((channel) => channel !== null));
     }
     async getUserFavorites(username) {
-        const [ follows, user ] = await Promise.all([
+        const [
+            follows,
+            user
+        ] = await Promise.all([
             promisedPaginationHelper({
-                url: baseURL + '/following/user?user_name=' + username + '&limit=' + pageSize + '&offset=',
+                url: `${baseURL}/following/user?user_name=${username}&limit=${pageSize}&offset=`,
                 pageSize,
                 request: (url) => this._qs.queueRequest(url),
                 fetchNextPage(data, pageSize) {
@@ -74,12 +75,11 @@ class Hitbox extends GenericProvider {
                     if(data.parsedJSON && "following" in data.parsedJSON) {
                         return data.parsedJSON.following;
                     }
-                    else {
-                        return [];
-                    }
+
+                    return [];
                 }
             }),
-            this._qs.queueRequest(baseURL + '/user/' + username)
+            this._qs.queueRequest(`${baseURL}/user/${username}`)
         ]);
 
         if(user.ok && user.parsedJSON && user.parsedJSON.user_name !== null) {
@@ -91,20 +91,22 @@ class Hitbox extends GenericProvider {
             usr.favorites = follows.map((follow) => follow.user_name);
 
             const channels = await this._getChannels(usr.favorites);
-            return [ usr, channels ];
+            return [
+                usr,
+                channels
+            ];
         }
-        else {
-            throw new Error("Error getting info for Hitbox user " + username);
-        }
+
+        throw new Error(`Error getting info for Hitbox user ${username}`);
     }
     getChannelDetails(channelname) {
-        return this._qs.queueRequest(baseURL + '/media/live/' + channelname).then((data) => {
+        return this._qs.queueRequest(`${baseURL}/media/live/${channelname}`).then((data) => {
             if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
-                return getChannelFromJson(data.parsedJSON.livestream[0]);
+                const [ channel ] = data.parsedJSON.livestream;
+                return getChannelFromJson(channel);
             }
-            else {
-                throw new Error(`Error getting details for ${this.name} channel ${channelname}`);
-            }
+
+            throw new Error(`Error getting details for ${this.name} channel ${channelname}`);
         });
     }
     updateFavsRequest() {
@@ -116,22 +118,24 @@ class Hitbox extends GenericProvider {
             getURLs,
             onComplete: async (data) => {
                 if(data.ok && data.parsedJSON) {
-                    const [ user, follows ] = await Promise.all([
+                    const [
+                            user,
+                            follows
+                        ] = await Promise.all([
                             this._list.getUserByName(data.parsedJSON.user_name),
                             promisedPaginationHelper({
-                                url: baseURL + '/following/user?user_name=' + data.parsedJSON.user_name + '&limit=' + pageSize + '&offset=',
+                                url: `${baseURL}/following/user?user_name=${data.parsedJSON.user_name}&limit=${pageSize}&offset=`,
                                 pageSize,
                                 request: (url) => this._qs.queueRequest(url),
-                                fetchNextPage(data, pageSize) {
-                                    return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
+                                fetchNextPage(pageData, pageSize) {
+                                    return pageData.parsedJSON && "following" in pageData.parsedJSON && pageData.parsedJSON.following.length == pageSize;
                                 },
-                                getItems(data) {
-                                    if(data.parsedJSON && "following" in data.parsedJSON) {
-                                        return data.parsedJSON.following;
+                                getItems(pageData) {
+                                    if(pageData.parsedJSON && "following" in pageData.parsedJSON) {
+                                        return pageData.parsedJSON.following;
                                     }
-                                    else {
-                                        return [];
-                                    }
+
+                                    return [];
                                 }
                             })
                         ]),
@@ -142,14 +146,17 @@ class Hitbox extends GenericProvider {
                         "200": cdnURL + data.parsedJSON.user_logo,
                         "50": cdnURL + data.parsedJSON.user_logo_small
                     };
-                    return [ user, newChannels ];
+                    return [
+                        user,
+                        newChannels
+                    ];
                 }
                 return [];
             }
         };
     }
     updateRequest() {
-        const getURLs = async () =>{
+        const getURLs = async () => {
             const channels = await this._list.getChannels();
             return channels.map((channel) => `${baseURL}/media/live/${channel.login}`);
         };
@@ -157,17 +164,18 @@ class Hitbox extends GenericProvider {
             getURLs,
             onComplete: async (data) => {
                 if(data.ok && data.parsedJSON && data.parsedJSON.livestream) {
-                    return getChannelFromJson(data.parsedJSON.livestream[0]);
+                    const [ channel ] = data.parsedJSON.livestream;
+                    return getChannelFromJson(channel);
                 }
             }
         };
     }
     async search(query) {
-        const data = await this._qs.queueRequest(baseURL + "/media/live/list?" + querystring.stringify({
+        const data = await this._qs.queueRequest(`${baseURL}/media/live/list?${querystring.stringify({
             publicOnly: true,
             filter: "popular",
             search: query
-        }));
+        })}`);
         if(data.ok && data.parsedJSON && data.parsedJSON.livestream && data.parsedJSON.livestream.length) {
             let chans = data.parsedJSON.livestream;
             if(await not(this._mature())) {
@@ -176,9 +184,8 @@ class Hitbox extends GenericProvider {
 
             return chans.map((chan) => getChannelFromJson(chan));
         }
-        else {
-            throw new Error(`Couldn't find any channels for the search on ${this.name} that match ${query}`);
-        }
+
+        throw new Error(`Couldn't find any channels for the search on ${this.name} that match ${query}`);
     }
 }
 

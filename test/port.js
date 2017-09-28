@@ -1,6 +1,5 @@
 import test from 'ava';
-import Port from '../src/port';
-import { NoPortError, PortGoneError } from '../src/port';
+import Port, { NoPortError, PortGoneError } from '../src/port';
 import getPort from './helpers/port';
 import { when } from '../src/utils';
 import sinon from 'sinon';
@@ -114,7 +113,7 @@ test.serial("reply", (t) => {
 
     t.true(port.postMessage.calledOnce);
     t.deepEqual(port.postMessage.lastCall.args[0], {
-        command: "test" + Port.REPLY_SUFFIX,
+        command: `test${Port.REPLY_SUFFIX}`,
         payload: "foo bar"
     });
 });
@@ -129,7 +128,7 @@ test.serial("reply with error", (t) => {
 
     t.true(port.postMessage.calledOnce);
     t.deepEqual(port.postMessage.lastCall.args[0], {
-        command: "test" + Port.REPLY_SUFFIX,
+        command: `test${Port.REPLY_SUFFIX}`,
         error: "bar baz"
     });
 });
@@ -146,7 +145,7 @@ test.serial("request", async (t) => {
     t.is(port.postMessage.lastCall.args[0].command, "test");
 
     port.onMessage.dispatch({
-        command: "test" + Port.REPLY_SUFFIX,
+        command: `test${Port.REPLY_SUFFIX}`,
         payload: "lorem ipsum"
     });
 
@@ -198,7 +197,7 @@ test.serial("request rejected due to error", async (t) => {
     const promise = p.request("test");
 
     port.onMessage.dispatch({
-        command: "test" + Port.REPLY_SUFFIX,
+        command: `test${Port.REPLY_SUFFIX}`,
         error: "foo baz"
     });
 

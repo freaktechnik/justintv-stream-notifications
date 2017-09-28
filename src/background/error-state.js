@@ -7,7 +7,11 @@
 import EventTarget from 'event-target-shim';
 import { emit } from '../utils';
 
-const errorStatesQuery = "errorStates";
+const errorStatesQuery = "errorStates",
+    RECOVERABLE = 1,
+    UNRECOVERABLE = 2,
+    NONE = 0,
+    FIRST_ACTION = 0;
 
 /**
  * @typedef {number} ErrorType
@@ -42,7 +46,7 @@ class ErrorStateManager extends EventTarget {
         let { errorStates } = await browser.storage.local.get(errorStatesQuery);
         errorStates = errorStates.filter((e) => e.id !== id);
         await browser.storage.local.set({ errorStates });
-        if(errorStates.length === 0) {
+        if(!errorStates.length) {
             emit(this, "empty");
             return true;
         }
@@ -56,7 +60,7 @@ class ErrorStateManager extends EventTarget {
      */
     get IN_ERROR_STATE() {
         return browser.storage.local.get(errorStatesQuery)
-            .then(({ errorStates }) => errorStates.length > 0);
+            .then(({ errorStates }) => !!errorStates.length);
     }
 }
 
@@ -75,7 +79,7 @@ export default class ErrorState extends EventTarget {
      * @default 1
      */
     static get RECOVERABLE() {
-        return 1;
+        return RECOVERABLE;
     }
 
     /**
@@ -87,7 +91,7 @@ export default class ErrorState extends EventTarget {
      * @default 2
      */
     static get UNRECOVERABLE() {
-        return 2;
+        return UNRECOVERABLE;
     }
 
     static get NOTIFICATION_ID() {
@@ -102,9 +106,8 @@ export default class ErrorState extends EventTarget {
         if(gravity === ErrorState.RECOVERABLE) {
             return "assets/images/recoverable.svg";
         }
-        else {
-            return "assets/images/unrecoverable.svg";
-        }
+
+        return "assets/images/unrecoverable.svg";
     }
 
     /**
@@ -139,7 +142,9 @@ export default class ErrorState extends EventTarget {
         return oldUrl;
     }
 
-    static async register({ message, gravity, actions, id }) {
+    static async register({
+        message, gravity, actions, id
+    }) {
         await errorStateManager.register(message, gravity, actions, id);
         if(!ErrorState.currentGravity || ErrorState.currentGravity < gravity) {
             ErrorState.currentGravity = gravity;
@@ -148,10 +153,12 @@ export default class ErrorState extends EventTarget {
         }
     }
 
-    static async unregister({ gravity, id }) {
+    static async unregister({
+        gravity, id
+    }) {
         const empty = await errorStateManager.unregister(id);
         if(empty && gravity === ErrorState.RECOVERABLE) {
-            ErrorState.currentGravity = 0;
+            ErrorState.currentGravity = NONE;
             browser.browserAction.setBadgeText({
                 text: ""
             });
@@ -188,7 +195,7 @@ export default class ErrorState extends EventTarget {
             browser.runtime.onMessage.addListener(this.runtimeListener);
             this.notificationListener = (notificationId) => {
                 if(notificationId === ErrorState.NOTIFICATION_ID + this.id) {
-                    this.triggerAction(0);
+                    this.triggerAction(FIRST_ACTION);
                 }
             };
             browser.notifications.onClicked.addListener(this.notificationListener);
@@ -210,7 +217,7 @@ export default class ErrorState extends EventTarget {
             message: this.message,
             //buttons: this.actions.map((title) => ({ title })),
             priority: this.gravity,
-            iconUrl: ErrorState.getIcon(this.gravity),
+            iconUrl: ErrorState.getIcon(this.gravity)
             //sticky: true
         });
     }

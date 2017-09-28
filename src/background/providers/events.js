@@ -12,9 +12,7 @@ const USER_EVENTS = [
         "updateduser",
         "newchannels"
     ],
-    BASE_EVENTS = [
-        "updatedchannels"
-    ];
+    BASE_EVENTS = [ "updatedchannels" ];
 
 class EventSink extends EventTarget {
     constructor() {

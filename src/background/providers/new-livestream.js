@@ -19,10 +19,11 @@ const type = "newlivestream",
             "50": json.picture.thumb_url
         };
         chan.category = json.category_name;
-        chan.archiveUrl = "https://livestream.com/" + chan.login;
-        chan.chatUrl = "https://livestream.com/" + chan.login;
+        chan.archiveUrl = `https://livestream.com/${chan.login}`;
+        chan.chatUrl = `https://livestream.com/${chan.login}`;
         return chan;
-    };
+    },
+    NO_BROADCAST = -1;
 
 class NewLivestream extends GenericProvider {
     constructor(type) {
@@ -36,14 +37,14 @@ class NewLivestream extends GenericProvider {
 
     async _getChannelStatus(json, channel) {
         // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
-        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != -1)) ||
-            (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != -1));
+        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != NO_BROADCAST)) ||
+            (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != NO_BROADCAST));
 
         if(event) {
             channel.title = event.full_name;
             channel.viewers = event.viewer_count;
-            channel.url.push("https://livestream.com/" + channel.login + "/events/" + event.id);
-            const info = await this._qs.queueRequest(baseURL + json.id + "/events/" + event.id + "/stream_info");
+            channel.url.push(`https://livestream.com/${channel.login}/events/${event.id}`);
+            const info = await this._qs.queueRequest(`${baseURL + json.id}/events/${event.id}/stream_info`);
 
             if(info.parsedJSON && !("message" in info.parsedJSON)) {
                 channel.live.setLive(info.parsedJSON.is_live);
@@ -58,11 +59,9 @@ class NewLivestream extends GenericProvider {
         if(user.parsedJSON && "id" in user.parsedJSON) {
             const usr = new User(user.parsedJSON.short_name || user.parsedJSON.id, this._type),
                 follows = await promisedPaginationHelper({
-                    url: baseURL + user.parsedJSON.id + "/following?maxItems=50&page=",
+                    url: `${baseURL + user.parsedJSON.id}/following?maxItems=50&page=`,
                     pageSize: 50,
-                    request: (url) => {
-                        return this._qs.queueRequest(url);
-                    },
+                    request: (url) => this._qs.queueRequest(url),
                     fetchNextPage(data) {
                         return data.parsedJSON && data.parsedJSON.total > this.result.length;
                     },
@@ -70,12 +69,11 @@ class NewLivestream extends GenericProvider {
                         if(data.parsedJSON && "data" in data.parsedJSON) {
                             return data.parsedJSON.data;
                         }
-                        else {
-                            return [];
-                        }
+
+                        return [];
                     },
                     getPageNumber(page) {
-                        return page + 1;
+                        return ++page;
                     }
                 }),
                 channels = follows.map((follow) => getChannelFromJSON(follow));
@@ -87,20 +85,21 @@ class NewLivestream extends GenericProvider {
                 "50": user.parsedJSON.picture.thumb_url
             };
             usr.favorites = channels.map((channel) => channel.login);
-            return [ usr, channels ];
+            return [
+                usr,
+                channels
+            ];
         }
-        else {
-            throw new Error(`Couldn't get favorites for the channel ${username} on ${this.name}`);
-        }
+
+        throw new Error(`Couldn't get favorites for the channel ${username} on ${this.name}`);
     }
     getChannelDetails(channelname) {
         return this._qs.queueRequest(baseURL + channelname).then((data) => {
             if(data.parsedJSON && "id" in data.parsedJSON) {
                 return getChannelFromJSON(data.parsedJSON);
             }
-            else {
-                throw new Error(`Couldn't get details for the ${this.name} channel ${channelname}`);
-            }
+
+            throw new Error(`Couldn't get details for the ${this.name} channel ${channelname}`);
         });
     }
     updateFavsRequest() {
@@ -114,11 +113,9 @@ class NewLivestream extends GenericProvider {
                 if(user.parsedJSON && "id" in user.parsedJSON) {
                     const usr = await this._list.getUserByName(user.parsedJSON.short_name || user.parsedJSON.id),
                         follows = await promisedPaginationHelper({
-                            url: baseURL + user.parsedJSON.id + "/following?maxItems=50&page=",
+                            url: `${baseURL + user.parsedJSON.id}/following?maxItems=50&page=`,
                             pageSize: 50,
-                            request: (url) => {
-                                return this._qs.queueRequest(url);
-                            },
+                            request: (url) => this._qs.queueRequest(url),
                             fetchNextPage(data) {
                                 return data.parsedJSON && data.parsedJSON.total > this.result.length;
                             },
@@ -126,12 +123,11 @@ class NewLivestream extends GenericProvider {
                                 if(data.parsedJSON && "data" in data.parsedJSON) {
                                     return data.parsedJSON.data;
                                 }
-                                else {
-                                    return [];
-                                }
+
+                                return [];
                             },
                             getPageNumber(page) {
-                                return page + 1;
+                                return ++page;
                             }
                         }),
                         channels = follows.map((follow) => getChannelFromJSON(follow)),
@@ -143,10 +139,13 @@ class NewLivestream extends GenericProvider {
                         "170": user.parsedJSON.picture.small_url,
                         "50": user.parsedJSON.picture.thumb_url
                     };
-                    if(newChannels.length > 0) {
+                    if(newChannels.length) {
                         usr.favorites = channels.map((channel) => channel.login);
                     }
-                    return [ usr, newChannels ];
+                    return [
+                        usr,
+                        newChannels
+                    ];
                 }
                 return [];
             }
@@ -176,9 +175,8 @@ class NewLivestream extends GenericProvider {
 
             return this._getChannelStatus(data.parsedJSON, channel);
         }
-        else {
-            throw new Error("Couldn't get details for the new livestream channel " + channelname);
-        }
+
+        throw new Error(`Couldn't get details for the new livestream channel ${channelname}`);
     }
 }
 

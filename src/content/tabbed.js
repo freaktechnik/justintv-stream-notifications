@@ -5,9 +5,18 @@
 
 import { show, hide } from './utils';
 
-const SELECTED_CLASS = "current";
+const SELECTED_CLASS = "current",
+    TABINDEX = {
+        FOCUSABLE: 0,
+        DEFAULT: -1
+    },
+    FIRST_TAB = 1;
 
 class Tabbed {
+    static get FIRST_TAB() {
+        return FIRST_TAB;
+    }
+
     constructor(el, elType = 'a') {
         this.root = el;
         this.tabType = elType;
@@ -20,11 +29,11 @@ class Tabbed {
             },
             keyListener = (evt) => {
                 evt.preventDefault();
-                if(evt.key == "ArrowLeft" && this.current != 1) { // left arrow key
-                    this.select(this.current - 1);
+                if(evt.key == "ArrowLeft" && this.current != Tabbed.FIRST_TAB) { // left arrow key
+                    this.select(--this.current);
                 }
                 else if(evt.key == "ArrowRight" && this.current < this.length) { // right arrow key
-                    this.select(this.current + 1);
+                    this.select(++this.current);
                 }
             };
 
@@ -35,13 +44,13 @@ class Tabbed {
         }
 
         for(const tab of tabs) {
-            tab.setAttribute("tabindex", -1);
+            tab.setAttribute("tabindex", TABINDEX.DEFAULT);
             tab.addEventListener("click", clickListener);
             tab.addEventListener("keypress", keyListener);
         }
 
-        if(this.root.querySelectorAll(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`).length === 0 && this.length > 0) {
-            this.select(1);
+        if(!this.root.querySelectorAll(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`).length && this.length) {
+            this.select(Tabbed.FIRST_TAB);
         }
         else {
             this.select(parseInt(this.root.querySelector(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`).dataset.tab, 10));
@@ -49,14 +58,14 @@ class Tabbed {
     }
 
     select(index) {
-        if(index <= this.length && index > 0) {
+        if(index <= this.length && index >= Tabbed.FIRST_TAB) {
             const prevTab = this.root.querySelector(`.tabstrip ${this.tabType}.${SELECTED_CLASS}`),
                 tab = this.getTabByIndex(index),
                 evObj = new CustomEvent("tabchanged", { detail: index });
             if(prevTab) {
                 prevTab.removeAttribute("aria-selected");
                 prevTab.classList.remove(SELECTED_CLASS);
-                prevTab.setAttribute("tabindex", -1);
+                prevTab.setAttribute("tabindex", TABINDEX.DEFAULT);
                 hide(this.getContentByIndex(parseInt(prevTab.dataset.tab, 10)));
             }
 
@@ -64,7 +73,7 @@ class Tabbed {
             tab.focus();
             tab.setAttribute("aria-selected", "true");
             tab.classList.add(SELECTED_CLASS);
-            tab.setAttribute("tabindex", 0);
+            tab.setAttribute("tabindex", TABINDEX.FOCUSABLE);
             show(this.getContentByIndex(index));
             this.root.dispatchEvent(evObj);
         }

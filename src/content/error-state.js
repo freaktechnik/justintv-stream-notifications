@@ -2,19 +2,23 @@ import "./shared.css";
 
 //TODO update error state gravity based on add/remove and not querying the storage.
 
+const RECOVERABLE = 1,
+    UNRECOVERABLE = 2,
+    NONE = 0;
+
 class ErrorStateView {
     static get ERROR_STATE() {
         return browser.storage.local.get("errorStates")
             .then(({ errorStates }) => {
                 if(errorStates.length) {
-                    return errorStates.some((e) => e.gravity > 1) ? 2 : 1;
+                    return errorStates.some((e) => e.gravity > RECOVERABLE) ? UNRECOVERABLE : RECOVERABLE;
                 }
-                return 0;
+                return NONE;
             });
     }
 
     static getClassForGravity(gravity) {
-        return gravity === 2 ? "unrecoverable" : "recoverable";
+        return gravity === UNRECOVERABLE ? "unrecoverable" : "recoverable";
     }
 
     constructor(hook) {
@@ -22,7 +26,7 @@ class ErrorStateView {
         this.root.open = true;
         this.root.hidden = true;
         this.root.classList.add("esv");
-        this.currentGravity = 0;
+        this.currentGravity = NONE;
 
         this.title = document.createElement("summary");
 
@@ -32,13 +36,15 @@ class ErrorStateView {
 
         this.root.appendChild(this.list);
 
-        browser.storage.local.get("errorStates").then(({ errorStates }) => {
-            for(const es of errorStates) {
-                this.addError(es);
-            }
-            this.updateTitle();
-            hook.appendChild(this.root);
-        });
+        browser.storage.local.get("errorStates")
+            .then(({ errorStates }) => {
+                for(const es of errorStates) {
+                    this.addError(es);
+                }
+                this.updateTitle();
+                hook.appendChild(this.root);
+            })
+            .catch(console.error);
 
         browser.storage.onChanged.addListener((changes, areaName) => {
             if(areaName === "local" && "errorStates" in changes) {
@@ -56,7 +62,6 @@ class ErrorStateView {
                 this.updateTitle();
             }
         });
-
     }
 
     async updateTitle(gravity) {
@@ -65,12 +70,12 @@ class ErrorStateView {
         }
 
         if(gravity != this.currentGravity) {
-            if(gravity === 0) {
+            if(gravity === NONE) {
                 this.root.hidden = true;
             }
             else {
                 this.root.hidden = false;
-                this.title.textContent = browser.i18n.getMessage("errorState" + gravity);
+                this.title.textContent = browser.i18n.getMessage(`errorState${gravity}`);
                 this.title.classList.add(ErrorStateView.getClassForGravity(gravity));
             }
             this.currentGravity = gravity;
@@ -89,7 +94,7 @@ class ErrorStateView {
         const root = document.createElement("li"),
             message = document.createElement("p");
         root.classList.add(ErrorStateView.getClassForGravity(errorState.gravity));
-        root.id = "es" + errorState.id;
+        root.id = `es${errorState.id}`;
 
         message.textContent = errorState.message;
 
@@ -118,7 +123,7 @@ class ErrorStateView {
     }
 
     removeError(id) {
-        const root = document.getElementById("es" + id);
+        const root = document.getElementById(`es${id}`);
         root.remove();
     }
 }

@@ -11,12 +11,18 @@ import prefInfo from './prefs.json';
 const getChannels = async () => {
         const list = new ReadChannelList(),
             channels = await list.getChannelsByType();
-        return channels.map((c) => ({ login: c.login, type: c.type }));
+        return channels.map((c) => ({
+            login: c.login,
+            type: c.type
+        }));
     },
     getUsers = async () => {
         const list = new ReadChannelList(),
             users = await list.getUsersByType();
-        return users.map((c) => ({ login: c.login, type: c.type }));
+        return users.map((c) => ({
+            login: c.login,
+            type: c.type
+        }));
     },
     getPrefs = async () => {
         const prefNames = Object.keys(prefInfo),
@@ -31,7 +37,7 @@ const getChannels = async () => {
         const [
             channels,
             users,
-            prefs
+            prefVals
         ] = await Promise.all([
             getChannels(),
             getUsers(),
@@ -40,14 +46,12 @@ const getChannels = async () => {
         return {
             channels,
             users,
-            prefs
+            prefs: prefVals
         };
     },
-    createBlob = (object) => {
-        return new Blob([ JSON.stringify(object) ], {
-            type: 'application/json'
-        });
-    },
+    createBlob = (object) => new Blob([ JSON.stringify(object) ], {
+        type: 'application/json'
+    }),
     saveExport = async () => {
         const exported = await exportObject(),
             blob = createBlob(exported);

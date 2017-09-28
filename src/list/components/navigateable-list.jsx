@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const NEXT = 1,
+    PREV = -1,
+    FIRST = 0;
+
 export class NavigateableItem extends React.Component {
     static get propTypes() {
         return {
@@ -23,12 +27,12 @@ export class NavigateableItem extends React.Component {
 
     handleKey(event) {
         if(event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown") {
-            this.props.onFocusChange(1);
+            this.props.onFocusChange(NEXT);
             event.preventDefault();
             event.stopPropagation();
         }
         else if(event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
-            this.props.onFocusChange(-1);
+            this.props.onFocusChange(PREV);
             event.preventDefault();
             event.stopPropagation();
         }
@@ -53,7 +57,7 @@ export class NavigateableList extends React.Component {
     }
 
     focusChild(index) {
-        index = Math.max(0, Math.min(this.childrenInstances.length - 1, index));
+        index = Math.max(FIRST, Math.min(--this.childrenInstances.length, index));
         this.childrenInstances[index].focus();
     }
 
@@ -61,12 +65,12 @@ export class NavigateableList extends React.Component {
         if(!this.childrenInstances.length) {
             return;
         }
-        if(relativeIndex !== 0) {
+        if(relativeIndex !== FIRST) {
             let toFocus;
             for(const i in this.childrenInstances) {
                 if(this.childrenInstances[i].isEqualNode(document.activeElement)) {
                     toFocus = (parseInt(i, 10) + relativeIndex) % this.childrenInstances.length;
-                    if(toFocus < 0) {
+                    if(toFocus < FIRST) {
                         toFocus += this.childrenInstances.length;
                     }
                     break;
@@ -80,12 +84,12 @@ export class NavigateableList extends React.Component {
 
     handleKey(event) {
         if(event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "Home" || event.key === "PageDown") {
-            this.focusChild(0);
+            this.focusChild(FIRST);
             event.preventDefault();
             event.stopPropagation();
         }
         else if(event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "End" || event.key === "PageUp") {
-            this.focusChild(this.childrenInstances.length - 1);
+            this.focusChild(--this.childrenInstances.length);
             event.preventDefault();
             event.stopPropagation();
         }
@@ -93,14 +97,12 @@ export class NavigateableList extends React.Component {
 
     render() {
         this.childrenInstances = [];
-        const mappedChildren = React.Children.map(this.props.children, (c, index) => {
-            return React.cloneElement(c, {
-                onFocusChange: (i) => this.selectItem(i),
-                ref: (e) => {
-                    this.childrenInstances[index] = e;
-                }
-            });
-        });
+        const mappedChildren = React.Children.map(this.props.children, (c, index) => React.cloneElement(c, {
+            onFocusChange: (i) => this.selectItem(i),
+            ref: (e) => {
+                this.childrenInstances[index] = e;
+            }
+        }));
         return (
             <ul onKeyUp={ (e) => this.handleKey(e) } className="scrollable" tabIndex={ 0 } ref={ (e) => {
                 this.list = e;

@@ -5,6 +5,14 @@
  * @license MPL-2.0
  */
 
+const FIRST = 0,
+    REST = 1,
+    capitalize = (str) => str[FIRST].toUpperCase() + str.substr(REST),
+    getEventPropertyName = (event) => `on${capitalize(event)}`;
+
+export { capitalize };
+
+/* eslint-disable promise/avoid-new */
 export const when = (target, event) => {
     if(target instanceof EventTarget) {
         return new Promise((resolve) => {
@@ -14,9 +22,9 @@ export const when = (target, event) => {
             });
         });
     }
-    else if("on" + event[0].toUpperCase() + event.substr(1) in target) {
+    else if(getEventPropertyName(event) in target) {
         return new Promise((resolve) => {
-            const property = "on" + event[0].toUpperCase() + event.substr(1),
+            const property = getEventPropertyName(event),
                 listener = (e) => {
                     target[property].removeListener(listener);
                     resolve(e);
@@ -26,6 +34,7 @@ export const when = (target, event) => {
     }
     return Promise.resolve();
 };
+/* eslint-enable promise/avoid-new */
 
 /**
  * Emits an event on an EventTarget.
@@ -42,8 +51,8 @@ export const emit = (target, event, ...detail) => {
         cancelable: true
     };
     if(detail.length) {
-        if(detail.length == 1) {
-            init.detail = detail[0];
+        if(detail.length === REST) {
+            init.detail = detail.pop();
         }
         else {
             init.detail = detail;

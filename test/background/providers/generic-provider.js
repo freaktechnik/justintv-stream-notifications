@@ -37,11 +37,9 @@ test("GenericProvider", async (t) => {
 
     name = await new Promise((resolve) => {
         genericProvider.updateChannel = resolve;
-        genericProvider.updateChannels([
-            {
-                login: "test"
-            }
-        ]);
+        genericProvider.updateChannels([ {
+            login: "test"
+        } ]);
     });
     t.is(name, "test", "updateChannels forwards to updateChannel");
 

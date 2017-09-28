@@ -15,7 +15,7 @@ const attrMap = {
         }
 
         let string = '';
-        if(attrs && attrs.length > 0) {
+        if(attrs && attrs.length) {
             for(const attr of attrs) {
                 let a = attr;
                 if(attr in attrMap) {
@@ -26,7 +26,7 @@ const attrMap = {
             string += ` data-l10n-attrs="${attrs.join(',')}"`;
         }
 
-        if(noContent && attrs.length === 0) {
+        if(noContent && !attrs.length) {
             // This shouldn't be hit, but you never know.
             string += '" translate="no"';
         }
@@ -44,7 +44,7 @@ const attrMap = {
     };
 
 module.exports = (defaultLanguage) => {
-    const bundle = require("!!json-loader!../../_locales/" + defaultLanguage + "/messages.json");
+    const bundle = require(`!!json-loader!../../_locales/${defaultLanguage}/messages.json`);
 
     return translateElement.bind(null, bundle);
 };

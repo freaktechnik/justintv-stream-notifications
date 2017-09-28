@@ -40,7 +40,10 @@ const type = "mlg",
     baseURL = 'https://streamapi.majorleaguegaming.com/service/streams/',
     infoURL = 'https://www.majorleaguegaming.com/api/channels/all.js',
     gameURL = 'https://www.majorleaguegaming.com/api/games/all.js',
-    infoArgs = "?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id";
+    infoArgs = "?fields=id,slug,name,stream_name,subtitle,image_1_1,image_16_9_medium,url,bracket_url,game_id",
+    STATUS_OFFLINE = -1,
+    STATUS_REBROADCAST = 2,
+    REQUEST_OK = 200;
 
 /**
  * @enum {number}
@@ -56,7 +59,8 @@ const type = "mlg",
  * @async
  */
 function isLive(status) {
-    return prefs.get("mlg_showRebroadcasts").then((showRebroadcasts) => status != -1 && (showRebroadcasts || status != 2));
+    return prefs.get("mlg_showRebroadcasts")
+        .then((showRebroadcasts) => status != STATUS_OFFLINE && (showRebroadcasts || status != STATUS_REBROADCAST));
 }
 
 // Takes a game_id
@@ -76,9 +80,8 @@ class MLG extends GenericProvider {
                 games = data.parsedJSON.data.items;
                 return data.parsedJSON.data.items.find((g) => g.id == id).name;
             }
-            else {
-                throw new Error(data.parsedJSON ? data.parsedJSON.errors : "Could not fetch games for " + this.name);
-            }
+
+            throw new Error(data.parsedJSON ? data.parsedJSON.errors : `Could not fetch games for ${this.name}`);
         }
         else {
             return game.name;
@@ -105,35 +108,33 @@ class MLG extends GenericProvider {
     }
     async getChannelDetails(channelname) {
         const data = await this._qs.queueRequest(infoURL + infoArgs);
-        if(data.ok && data.parsedJSON.status_code == 200) {
+        if(data.ok && data.parsedJSON.status_code == REQUEST_OK) {
             const cho = data.parsedJSON.data.items.find((ch) => ch.slug.toLowerCase() == channelname.toLowerCase());
             if(cho) {
                 return this._getChannelFromJSON(cho);
             }
         }
-        throw new Error("Couldn't get the channel details for " + channelname + " for " + this.name);
+        throw new Error(`Couldn't get the channel details for ${channelname} for ${this.name}`);
     }
     updateRequest() {
         return {
             getURLs: async () => {
                 const channels = await this._list.getChannels();
                 if(channels.length) {
-                    return [ baseURL + "all" ];
+                    return [ `${baseURL}all` ];
                 }
                 return channels;
             },
             onComplete: async (data) => {
                 const info = await this._qs.queueRequest(infoURL + infoArgs);
 
-                if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
+                if(data.parsedJSON && data.parsedJSON.status_code == REQUEST_OK && info.parsedJSON && info.parsedJSON.status_code == REQUEST_OK) {
                     const channels = await this._list.getChannels();
-                    let chans = data.parsedJSON.data.items.filter((status) => {
-                        return channels.some((channel) => status.stream_name == channel.login);
-                    });
+                    let chans = data.parsedJSON.data.items.filter((status) => channels.some((channel) => status.stream_name == channel.login));
 
                     chans = await Promise.all(chans.map(async (status) => {
                         const channel = await this._getChannelFromJSON(info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id));
-                        if(status.status == 2) {
+                        if(status.status == STATUS_REBROADCAST) {
                             channel.live = new LiveState(LiveState.REBROADCAST);
                         }
                         else {
@@ -147,14 +148,17 @@ class MLG extends GenericProvider {
         };
     }
     async updateChannel(channelname) {
-        const [ data, info ] = await Promise.all([
-            this._qs.queueRequest(baseURL + 'status/' + channelname),
+        const [
+            data,
+            info
+        ] = await Promise.all([
+            this._qs.queueRequest(`${baseURL}status/${channelname}`),
             this._qs.queueRequest(infoURL + infoArgs)
         ]);
-        if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
+        if(data.parsedJSON && data.parsedJSON.status_code == REQUEST_OK && info.parsedJSON && info.parsedJSON.status_code == REQUEST_OK) {
             const id = info.parsedJSON.data.items.find((ch) => ch.id == data.parsedJSON.data.channel_id),
                 channel = await this._getChannelFromJSON(id);
-            if(data.parsedJSON.data.status == 2) {
+            if(data.parsedJSON.data.status == STATUS_REBROADCAST) {
                 channel.live = new LiveState(LiveState.REBROADCAST);
             }
             else {
@@ -164,24 +168,24 @@ class MLG extends GenericProvider {
 
             return channel;
         }
-        else {
-            throw new Error("Something went wrong when updating " + channelname);
-        }
+
+        throw new Error(`Something went wrong when updating ${channelname}`);
     }
     async updateChannels(channels) {
-        const [ data, info ] = await Promise.all([
-            this._qs.queueRequest(baseURL + "all"),
+        const [
+            data,
+            info
+        ] = await Promise.all([
+            this._qs.queueRequest(`${baseURL}all`),
             this._qs.queueRequest(infoURL + infoArgs)
         ]);
 
-        if(data.parsedJSON && data.parsedJSON.status_code == 200 && info.parsedJSON && info.parsedJSON.status_code == 200) {
-            const followedChannels = data.parsedJSON.data.items.filter((status) => {
-                return channels.some((channel) => status.stream_name == channel.login);
-            });
+        if(data.parsedJSON && data.parsedJSON.status_code == REQUEST_OK && info.parsedJSON && info.parsedJSON.status_code == REQUEST_OK) {
+            const followedChannels = data.parsedJSON.data.items.filter((status) => channels.some((channel) => status.stream_name == channel.login));
             return Promise.all(followedChannels.map(async (status) => {
                 const id = info.parsedJSON.data.items.find((ch) => ch.id == status.channel_id),
                     channel = await this._getChannelFromJSON(id);
-                if(status.status == 2) {
+                if(status.status == STATUS_REBROADCAST) {
                     channel.live = new LiveState(LiveState.REBROADCAST);
                 }
                 else {

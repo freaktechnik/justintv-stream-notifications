@@ -11,13 +11,11 @@ import { when } from "../../../src/utils";
 import prefs from '../../../src/prefs.json';
 import DatabaseManager from '../../../src/database-manager';
 
-test.serial('get invalid users', (t) => {
-    return Promise.all([
-        t.throws(t.context.list.getUser(), Error, 'Missing ID'),
-        t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
-        t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
-    ]);
-});
+test.serial('get invalid users', (t) => Promise.all([
+    t.throws(t.context.list.getUser(), Error, 'Missing ID'),
+    t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
+    t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+]));
 
 test.serial('add-remove user', async (t) => {
     const referenceUser = getUser();
@@ -221,7 +219,10 @@ test.serial('add one channel in an array with addchannels', async (t) => {
 });
 
 test.serial('add channels', async (t) => {
-    const chans = [ getChannel(), getChannel("foo") ],
+    const chans = [
+            getChannel(),
+            getChannel("foo")
+        ],
         channels = await t.context.list.addChannels(chans);
 
     t.is(channels.length, 2);
@@ -233,7 +234,10 @@ test.serial('add channels', async (t) => {
 });
 
 test.serial('add existing channels', async (t) => {
-    let channels = [ getChannel(), getChannel("lorem") ];
+    let channels = [
+        getChannel(),
+        getChannel("lorem")
+    ];
     await t.context.list.addChannels(channels);
     channels = await t.context.list.addChannels(channels);
     t.is(channels.length, 0);
@@ -263,13 +267,11 @@ test.serial('get channel by id', async (t) => {
     t.is(referenceChannel.id, channel.id);
 });
 
-test.serial('get invalid channel', (t) => {
-    return Promise.all([
-        t.throws(t.context.list.getChannel(), Error, 'No ID'),
-        t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-        t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
-    ]);
-});
+test.serial('get invalid channel', (t) => Promise.all([
+    t.throws(t.context.list.getChannel(), Error, 'No ID'),
+    t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+    t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+]));
 
 test.serial('set channel', async (t) => {
     const referenceChannel = await t.context.list.addChannel(getChannel());
@@ -427,7 +429,7 @@ test.serial('channel offline setting', async (t) => {
     const rawChannel = getChannel();
     rawChannel.live.setLive(true);
     const channel = rawChannel.serialize();
-    channel.lastModified = Date.now() - 2 * prefs.channellist_cacheTime.value;
+    channel.lastModified = Date.now() - (2 * prefs.channellist_cacheTime.value);
     const transaction = t.context.list.db.transaction("channels", "readwrite"),
         store = transaction.objectStore("channels"),
         req = store.add(channel);
@@ -458,11 +460,23 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
 
     const request = indexedDB.open("channellist", 1);
     request.onupgradeneeded = (e) => {
-        const users = e.target.result.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-        users.createIndex("typename", [ "type", "login" ], { unique: true });
+        const users = e.target.result.createObjectStore("users", {
+            keyPath: "id",
+            autoIncrement: true
+        });
+        users.createIndex("typename", [
+            "type",
+            "login"
+        ], { unique: true });
         users.createIndex("type", "type", { unique: false });
-        const channels = e.target.result.createObjectStore("channels", { keyPath: "id", autoIncrement: true });
-        channels.createIndex("typename", [ "type", "login" ], { unique: true });
+        const channels = e.target.result.createObjectStore("channels", {
+            keyPath: "id",
+            autoIncrement: true
+        });
+        channels.createIndex("typename", [
+            "type",
+            "login"
+        ], { unique: true });
         channels.createIndex("type", "type", { unique: false });
     };
     const { target: { result: db } } = await new Promise((resolve, reject) => {

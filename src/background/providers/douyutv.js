@@ -13,6 +13,7 @@ import GenericProvider from "./generic-provider";
 const type = "douyutv",
     baseURL = "http://www.douyutv.com/api/v1/",
     roomURL = "http://www.douyutv.com",
+    NO_ERROR = 0,
     getChannelFromJSON = (json) => {
         const chan = new Channel(json.room_id, type);
         chan.uname = json.room_name;
@@ -29,13 +30,12 @@ const type = "douyutv",
         return chan;
     },
     signAPI = (endpoint, id) => {
-        const argument = endpoint + id + "?aid=android&client_sys=android&time=" + Date.now(),
+        const argument = `${endpoint + id}?aid=android&client_sys=android&time=${Date.now()}`,
             sign = argument; //md5(argument + '1231');
-        return argument + "&auth=" + sign;
+        return `${argument}&auth=${sign}`;
     };
 
 class Douyutv extends GenericProvider {
-
     constructor(type) {
         super(type);
 
@@ -47,12 +47,11 @@ class Douyutv extends GenericProvider {
 
     getChannelDetails(username) {
         return this._qs.queueRequest(baseURL + signAPI("room/", username)).then((data) => {
-            if(data.parsedJSON && data.parsedJSON.error === 0) {
+            if(data.parsedJSON && data.parsedJSON.error === NO_ERROR) {
                 return getChannelFromJSON(data.parsedJSON.data);
             }
-            else {
-                throw new Error("Couldn't get room info for douyutv channel with ID " + username);
-            }
+
+            throw new Error(`Couldn't get room info for douyutv channel with ID ${username}`);
         });
     }
     updateRequest() {
@@ -60,7 +59,7 @@ class Douyutv extends GenericProvider {
         return {
             getURLs,
             onComplete: async (data) => {
-                if(data.parsedJSON && data.parsedJSON.error === 0) {
+                if(data.parsedJSON && data.parsedJSON.error === NO_ERROR) {
                     return getChannelFromJSON(data.parsedJSON.data);
                 }
             }
