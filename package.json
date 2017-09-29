@@ -111,7 +111,7 @@
         {
           "severity": "warning",
           "ignore": [
-            "css3-cusrsors"
+            "css3-cursors"
           ]
         }
       ]
