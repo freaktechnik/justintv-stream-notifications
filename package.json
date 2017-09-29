@@ -41,7 +41,7 @@
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-compat": "^1.0.4",
-    "eslint-plugin-freaktechnik": "^3.0.10",
+    "eslint-plugin-freaktechnik": "^3.0.11",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-react": "^7.3.0",
     "extract-text-webpack-plugin": "^3.0.0",
