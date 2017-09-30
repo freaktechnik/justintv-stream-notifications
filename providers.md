@@ -110,7 +110,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 ![Ustream logo](/img/ustream.png)
 -------
-[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus.
+[Ustream](http://ustream.tv) is another one of the age-old providers without any content focus. It was aquired by IBM.
 
 ### Features
 
