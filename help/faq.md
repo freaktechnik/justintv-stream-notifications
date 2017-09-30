@@ -6,7 +6,7 @@
 ---
 I've just encountered a bug!
 ----------------------------
- 1. Go to the [GitHub Issues page](http://github.com/freaktechnik/justintv-stream-notifications/issues) and report the issue.
+ 1. Go to the [GitHub Issues page](https://github.com/freaktechnik/justintv-stream-notifications/issues) and report the issue.
  2. Disable and reenable the Add-on. This should fix it in most cases.
 
 What's the difference between "non-live" and offline?
@@ -21,21 +21,13 @@ How do I go to the extension's settings?
 ----------------------------------------
 Open the Add-ons manager in Firefox. To open it, click on the menu button and then <samp>Add-ons</samp> or open a new tab and type `about:addons` in the URL-bar. Click the <samp>Preferences</samp> button in the row of this extension in the Add-ons manager and you're done.
 
-It shows hosted channels for Twitch users!
-------------------------------------------
-See the [about:config setting](/aboutconfig/) `twitch_showHosting`. The page also lists a setting to disable MLG.tv rebroadcasts being treated as the channel being live.
-
 When I add a channel, it doesn't add the channel but a lot of other channels
 ----------------------------------------------------------------------------
 See [Adding a singe channel](/help/channels-manager/#adding-a-singe-channel).
 
-I can't find a setting for something important
------------------------------------------
-If you're lucky, there is an [about:config setting](/aboutconfig/) for it.
-
 Why isn't the extension in the language my browser is in?
 ---------------------------------------------------------
-That's most likely because it hasn't been translated into it yet. You can help translating it on [Babelzilla](http://beta.babelzilla.org/projects/p/jtvn/).
+That's most likely because it hasn't been translated into it yet. You can help translating it on [Transifex](https://www.transifex.com/freaktechnik/live-stream-notifier).
 
 I want to hear a sound whenever I get a notification
 ----------------------------------------------------

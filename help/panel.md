@@ -7,7 +7,7 @@
 The panel is accessed via a button in the browser toolbar.
 
 ### The button is missing
-If the button isn't in any toolbar or the menu, it can be readded by clicking
+If the button isn't in any toolbar or the menu, it can be re-added by clicking
 on <samp>Customize</samp> in the menu. The button can then be dragged to the
 desired location.
 
@@ -49,7 +49,7 @@ settings is enabled, each live channel has an extra line of information.
 The extra infos are only shown when the specific meta information is available
 from the provider.
 
-Currently the extras include nuber of viewers and the category of the stream.
+Currently the extras include number of viewers and the category of the stream.
 
 ## Search
 When clicking on the magnifying glass icon in the top right of the panel a text

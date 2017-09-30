@@ -4,7 +4,7 @@
   layout: page
 ---
 ## What is Livestreamer?
-[Livestreamer](http://livestreamer.io) is a command-line programm that opens
+[Livestreamer](http://livestreamer.io) is a command-line program that opens
 streams with a native video player like VLC.
 
 ## How do I use Livestreamer with this extension?

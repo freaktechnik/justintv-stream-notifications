@@ -29,17 +29,11 @@ Live Stream Notifier should now be able to fetch this account's subscriptions.
 
 ## What's the "username" for…
 
-### Azubu
-The username, however it is case sensitive.
-
-### Beam.pro
-The username of the channel.
+### Dailymotion
+The channel slug (visible in the URL bar when visiting a channel).
 
 ### DouyuTV
 The number in the URL of the channel.
-
-### Hitbox
-The channel username, it's in the URL and below the stream.
 
 ### Old Livestream
 The channel username on the classic livestream service, visible in the channel's URL.
@@ -47,14 +41,17 @@ The channel username on the classic livestream service, visible in the channel's
 ### New Livestream
 The ID of a channel on the new livestream service (the normal one). The ID is the first number part in the URL to the profile: `http://livestream.com/accounts/0000000`. In this case it would be "0000000".
 
+### Mixer
+The username of the channel.
+
 ### MLG.tv
 The channel page URL without the `http://tv.majorleaguegaming.com/channel/` part.
 
 ### Picarto
 The username in the URL of the channel.
 
-### Streamup
-The username of the channel.
+### Smashcast
+The channel username, it's in the URL and below the stream.
 
 ### Twitch
 The channel username, it's in the URL and as link-text to the profile above the stream. Case doesn't matter.
@@ -63,13 +60,15 @@ The channel username, it's in the URL and as link-text to the profile above the 
 The channel page URL without the `http://ustream.tv/` part. The extension currently can't handle adding IDs directly.
 
 ### YouTube
-The channel username, which is normally the URL for the channel without the `https://youtube.com/user/` part or the ID of a channel, which is usually after `/c/` or `/channel/` in the URL. Aliases, which are redirects from `https://youtube.com/` are not supported.
+The channel username, which is normally the URL for the channel without the `https://youtube.com/` part, or the ID of a channel, which is usually after `/c/` or `/channel/` in the URL. Aliases, which are redirects from `https://youtube.com/` are not supported.
 
 ## Automatically add channels I follow
- - Switch to the <samp>Users</samp> tab at the top
+This feature is currently unavailable due to Firefox API restrictions.
+
+<!-- - Switch to the <samp>Users</samp> tab at the top
  - Click the <samp>Auto add</samp> button
 
-Note that this currently only works with Twitch and Azubu due to API restrictions with the other providers.
+Note that this currently only works with Twitch, Mixer and Smashcast due to API restrictions with the other providers.-->
 
 ## Remove a channel
  - Switch to the <samp>Channels</samp> tab at the top
