@@ -31,5 +31,10 @@ code out. I also decided to do the rebranding to "Live Stream Notifier" and the
 new icon already.
 
 From there on all the providers now listed on the [Providers](/providers) page
-were added. Many other features started to come in, once 3.0.0 was finally
-finished.
+were added. Some were already removed again, because they ceased to exist since.
+Many other features started to come in, once 3.0.0 was finally finished.
+
+For the big Firefox Quantum (57) release, all code had to be moved to the new
+WebExtension format. Which was a feat that lasted almost a year, but brought
+with itself some improvements like import and export as well as better redirect
+visualization in the panel.
