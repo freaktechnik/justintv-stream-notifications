@@ -19,6 +19,8 @@ The term "provider" is used for a streaming service like Twitch in this extensio
 
 ![DouyuTV icon](/img/douyutv.png)
 ------
+*This provider is currently unavailable*
+
 [DouyuTV](http://douyutv.com) is a chinese game streaming platform.
 
 ### Features
