@@ -129,7 +129,7 @@
     },
     "rebroadcast_title_pattern": {
         "type": "string",
-        "value": "rerun,rediff,rebroadcast,replay,recap",
+        "value": "rerun,rediff,rebroadcast,replay,recap,re-run,re-diff,re-play,re-cap,re-broadcast",
         "hidden": true
     }
 }
