@@ -21,6 +21,10 @@ const _ = browser.i18n.getMessage,
      */
     NOTIFICATION_ICON_SIZE = 100;
 
+browser.notifications.onShown.addListener(() => {
+    browser.runtime.sendMessage("@notification-sound", "new-notification");
+});
+
 /**
  * @class module:notifier.Notifier
  * @extends external:EventTarget
@@ -193,7 +197,6 @@ export default class Notifier extends EventTarget {
                 };
 
                 browser.notifications.create(Notifier.PREFIX + channel.id, opts);
-                browser.runtime.sendMessage("@notification-sound", "new-notification");
             }
         }
 

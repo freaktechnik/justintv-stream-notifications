@@ -6,7 +6,7 @@
     "applications": {
         "gecko": {
             "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-            "strict_min_version": "54.0"
+            "strict_min_version": "56.0"
         }
     },
     "homepage_url": "http://streamnotifier.ch",
