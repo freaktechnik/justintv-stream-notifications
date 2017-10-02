@@ -124,7 +124,7 @@ module.exports = {
     ],
     externals: {
         lodash: '_',
-        'event-target-shim': 'eventTargetShim',
+        'event-target-shim': 'EventTargetShim',
         react: 'React',
         'react-dom': 'ReactDOM',
         'react-redux': 'ReactRedux',

@@ -1,6 +1,6 @@
 // Load vendor deps
 import 'file-loader?name=vendor/[name].[ext]!lodash/lodash.min.js';
-import 'file-loader?name=vendor/[name].[ext]!event-target-shim/dist/event-target-shim.min.js';
+import 'file-loader?name=vendor/[name].[ext]!event-target-shim/dist/event-target-shim.umd.js';
 // l10n
 import '../../_locales/de/messages.json';
 import '../../_locales/en/messages.json';

@@ -25,7 +25,7 @@
     "background": {
         "scripts": [
             "vendor/lodash.min.js",
-            "vendor/event-target-shim.min.js",
+            "vendor/event-target-shim.umd.js",
             "common/index.js",
             "background/index.js"
         ]
