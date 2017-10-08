@@ -6,7 +6,7 @@ const fs = require("fs"),
     writefile = promisify(fs.writeFile),
     writeTXRCFromEnv = () => {
         if(process.env.TRANSIFEX_USER && process.env.TRANSIFEX_PASSWORD) {
-            const fileContent = `[https://transifex.com]
+            const fileContent = `[https://www.transifex.com]
 hostname = https://www.transifex.com
 username = ${process.env.TRANSIFEX_USER}
 password = ${process.env.TRANSIFEX_PASSWORD}
