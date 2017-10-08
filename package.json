@@ -72,7 +72,8 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "build": "webpack && npm run fix-i18n && web-ext build -s webextension/",
     "start": "webpack && npm run fix-i18n && web-ext run -s webextension/",
-    "fix-i18n": "node ./scripts/fix-i18n-placeholders.js"
+    "fix-i18n": "node ./scripts/fix-i18n-placeholders.js",
+    "ci-init": "node ./scripts/setup-travis.js"
   },
   "ava": {
     "babel": "inherit",
