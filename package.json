@@ -67,7 +67,7 @@
     "coverage": "nyc report && codecov",
     "lint": "npm run lint:js && npm run lint:json && npm run lint:css && npm run lint:webext",
     "lint:json": "eslint -c src/.eslintrc.json --ext json webextension/manifest.json",
-    "lint:js": "eslint test/ src/ --ext js,jsx,json",
+    "lint:js": "eslint test/ src/ scripts/ --ext js,jsx,json",
     "lint:webext": "webpack --hide-modules && web-ext lint -s webextension/",
     "lint:css": "stylelint \"src/**/*.css\"",
     "build": "webpack && npm run fix-i18n && web-ext build -s webextension/",
