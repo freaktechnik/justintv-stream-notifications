@@ -123,7 +123,7 @@ nav {
 
 .tabcontent > ul > li.thumbnail > div {
     position: absolute;
-    width: calc(100% - (2 * var(--trim)));
+    width: 100%;
     bottom: 0;
 }
 
@@ -194,13 +194,14 @@ nav {
 }
 
 .thumbnail > div {
-    background: rgba(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b), 0.7);
+    background-color: rgba(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b), 0.7);
     color: var(--channel-text-color);
+    transition: 0.2s 0.01s background-color;
 }
 
 .tabcontent > ul > li:hover,
 .thumbnail:hover > div {
-    background: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
+    background-color: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
     color: var(--channel-text-color) !important;
 }
 
