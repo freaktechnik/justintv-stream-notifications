@@ -56,16 +56,16 @@ browser.storage.local.get("errorStates")
     })
     .catch(console.error);
 
-browser.storage.onChanged.addListener((change, areaName) => {
-    if(areaName === "local" && "errorStates" in change.changes) {
-        for(const e of change.errorStates.newValue) {
-            if(change.changes.oldValue.every(({ id }) => id !== e.id)) {
+browser.storage.onChanged.addListener((changes, areaName) => {
+    if(areaName === "local" && "errorStates" in changes) {
+        for(const e of changes.errorStates.newValue) {
+            if(!changes.errorStates.oldValue.length || changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
                 addErrorState(e);
             }
         }
 
-        for(const e of change.errorStates.oldValue) {
-            if(change.changes.newValue.every(({ id }) => id !== e.id)) {
+        for(const e of changes.errorStates.oldValue) {
+            if(!changes.errorStates.newValue.length || changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
                 removeErrorState(e);
             }
         }
