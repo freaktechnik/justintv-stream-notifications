@@ -1,10 +1,10 @@
+import ErrorStateConsts from '../error-state.json';
 import '../content/shared.css';
 import './errorState.css';
 
 // TODO share code with the global error state info bar.
 
-const RECOVERABLE = 1,
-    list = document.getElementById("errors"),
+const list = document.getElementById("errors"),
     sendAction = (errorStateId, actionId) => {
         browser.runtime.sendMessage({
             command: 'errorState-action',
@@ -13,7 +13,7 @@ const RECOVERABLE = 1,
         });
         window.close();
     },
-    getClassForGravity = (gravity) => gravity === RECOVERABLE ? "recoverable" : "unrecoverable",
+    getClassForGravity = (gravity) => gravity === ErrorStateConsts.RECOVERABLE ? "recoverable" : "unrecoverable",
     addErrorState = (errorState) => {
         const root = document.createElement("li"),
             message = document.createElement("p");
@@ -50,23 +50,26 @@ const RECOVERABLE = 1,
         root.remove();
     };
 
-browser.storage.local.get("errorStates")
-    .then(({ errorStates }) => {
-        errorStates.forEach(addErrorState);
+browser.storage.local.get(ErrorStateConsts.STORE)
+    .then(({ [ErrorStateConsts.STORE]: values }) => {
+        values.forEach(addErrorState);
     })
     .catch(console.error);
 
 browser.storage.onChanged.addListener((changes, areaName) => {
-    if(areaName === "local" && "errorStates" in changes) {
-        for(const e of changes.errorStates.newValue) {
-            if(!changes.errorStates.oldValue.length || changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
+    if(areaName === "local" && ErrorStateConsts.STORE in changes) {
+        const errorStateChanges = changes[ErrorStateConsts.STORE];
+        for(const e of errorStateChanges.newValue) {
+            if(!errorStateChanges.oldValue.length || errorStateChanges.oldValue.every(({ id }) => id !== e.id)) {
                 addErrorState(e);
             }
         }
 
-        for(const e of changes.errorStates.oldValue) {
-            if(!changes.errorStates.newValue.length || changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
-                removeErrorState(e);
+        if(Array.isArray(errorStateChanges.oldValue)) {
+            for(const e of errorStateChanges.oldValue) {
+                if(!errorStateChanges.newValue.length || errorStateChanges.newValue.every(({ id }) => id !== e.id)) {
+                    removeErrorState(e);
+                }
             }
         }
     }

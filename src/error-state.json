@@ -1,0 +1,6 @@
+{
+    "STORE": "errorStates",
+    "RECOVERABLE": 1,
+    "UNRECOVERABLE": 2,
+    "NONE": 0
+}

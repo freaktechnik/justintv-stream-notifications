@@ -1,24 +1,21 @@
+import ErrorStateConsts from '../error-state.json';
 import "./shared.css";
 
 //TODO update error state gravity based on add/remove and not querying the storage.
 
-const RECOVERABLE = 1,
-    UNRECOVERABLE = 2,
-    NONE = 0;
-
 class ErrorStateView {
     static get ERROR_STATE() {
-        return browser.storage.local.get("errorStates")
-            .then(({ errorStates }) => {
-                if(errorStates.length) {
-                    return errorStates.some((e) => e.gravity > RECOVERABLE) ? UNRECOVERABLE : RECOVERABLE;
+        return browser.storage.local.get(ErrorStateConsts.STORE)
+            .then(({ [ErrorStateConsts.STORE]: values }) => {
+                if(Array.isArray(values) && values.length) {
+                    return values.some((e) => e.gravity > ErrorStateConsts.RECOVERABLE) ? ErrorStateConsts.UNRECOVERABLE : ErrorStateConsts.RECOVERABLE;
                 }
-                return NONE;
+                return ErrorStateConsts.NONE;
             });
     }
 
     static getClassForGravity(gravity) {
-        return gravity === UNRECOVERABLE ? "unrecoverable" : "recoverable";
+        return gravity === ErrorStateConsts.UNRECOVERABLE ? "unrecoverable" : "recoverable";
     }
 
     constructor(hook) {
@@ -26,7 +23,7 @@ class ErrorStateView {
         this.root.open = true;
         this.root.hidden = true;
         this.root.classList.add("esv");
-        this.currentGravity = NONE;
+        this.currentGravity = ErrorStateConsts.NONE;
 
         this.title = document.createElement("summary");
 
@@ -36,9 +33,9 @@ class ErrorStateView {
 
         this.root.appendChild(this.list);
 
-        browser.storage.local.get("errorStates")
-            .then(({ errorStates }) => {
-                for(const es of errorStates) {
+        browser.storage.local.get(ErrorStateConsts.STORE)
+            .then(({ [ErrorStateConsts.STORE]: values }) => {
+                for(const es of values) {
                     this.addError(es);
                 }
                 this.updateTitle();
@@ -47,16 +44,19 @@ class ErrorStateView {
             .catch(console.error);
 
         browser.storage.onChanged.addListener((changes, areaName) => {
-            if(areaName === "local" && "errorStates" in changes) {
-                for(const e of changes.errorStates.newValue) {
-                    if(!changes.errorStates.oldValue.length || changes.errorStates.oldValue.every(({ id }) => id !== e.id)) {
+            if(areaName === "local" && ErrorStateConsts.STORE in changes) {
+                const errorStateChanges = changes[ErrorStateConsts.STORE];
+                for(const e of errorStateChanges.newValue) {
+                    if(!errorStateChanges.oldValue.length || errorStateChanges.oldValue.every(({ id }) => id !== e.id)) {
                         this.addError(e);
                     }
                 }
 
-                for(const e of changes.errorStates.oldValue) {
-                    if(!changes.errorStates.newValue.length || changes.errorStates.newValue.every(({ id }) => id !== e.id)) {
-                        this.removeError(e.id);
+                if(Array.isArray(errorStateChanges.oldValue)) {
+                    for(const e of errorStateChanges.oldValue) {
+                        if(!errorStateChanges.newValue.length || errorStateChanges.newValue.every(({ id }) => id !== e.id)) {
+                            this.removeError(e.id);
+                        }
                     }
                 }
                 this.updateTitle();
@@ -70,7 +70,7 @@ class ErrorStateView {
         }
 
         if(gravity != this.currentGravity) {
-            if(gravity === NONE) {
+            if(gravity === ErrorStateConsts.NONE) {
                 this.root.hidden = true;
             }
             else {

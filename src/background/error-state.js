@@ -6,12 +6,9 @@
 
 import EventTarget from 'event-target-shim';
 import { emit } from '../utils';
+import ErrorStateConsts from '../error-state.json';
 
-const errorStatesQuery = "errorStates",
-    RECOVERABLE = 1,
-    UNRECOVERABLE = 2,
-    NONE = 0,
-    FIRST_ACTION = 0;
+const FIRST_ACTION = 0;
 
 /**
  * @typedef {number} ErrorType
@@ -27,7 +24,7 @@ class ErrorStateManager extends EventTarget {
     }
 
     async register(message, gravity, actions, id) {
-        const { errorStates } = await browser.storage.local.get(errorStatesQuery);
+        const { errorStates } = await browser.storage.local.get(ErrorStateConsts.STORE);
         errorStates.push({
             message,
             gravity,
@@ -43,7 +40,7 @@ class ErrorStateManager extends EventTarget {
      * @returns {boolean} If there are no more error states register.
      */
     async unregister(id) {
-        let { errorStates } = await browser.storage.local.get(errorStatesQuery);
+        let { errorStates } = await browser.storage.local.get(ErrorStateConsts.STORE);
         errorStates = errorStates.filter((e) => e.id !== id);
         await browser.storage.local.set({ errorStates });
         if(!errorStates.length) {
@@ -59,7 +56,7 @@ class ErrorStateManager extends EventTarget {
      * @returns {Promise.<boolean>} If there currently are any error states.
      */
     get IN_ERROR_STATE() {
-        return browser.storage.local.get(errorStatesQuery)
+        return browser.storage.local.get(ErrorStateConsts.STORE)
             .then(({ errorStates }) => !!errorStates.length);
     }
 }
@@ -79,7 +76,7 @@ export default class ErrorState extends EventTarget {
      * @default 1
      */
     static get RECOVERABLE() {
-        return RECOVERABLE;
+        return ErrorStateConsts.RECOVERABLE;
     }
 
     /**
@@ -91,7 +88,7 @@ export default class ErrorState extends EventTarget {
      * @default 2
      */
     static get UNRECOVERABLE() {
-        return UNRECOVERABLE;
+        return ErrorStateConsts.UNRECOVERABLE;
     }
 
     static get NOTIFICATION_ID() {
@@ -158,7 +155,7 @@ export default class ErrorState extends EventTarget {
     }) {
         const empty = await errorStateManager.unregister(id);
         if(empty && gravity === ErrorState.RECOVERABLE) {
-            ErrorState.currentGravity = NONE;
+            ErrorState.currentGravity = ErrorStateConsts.NONE;
             browser.browserAction.setBadgeText({
                 text: ""
             });
