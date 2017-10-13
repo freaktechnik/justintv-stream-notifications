@@ -1,6 +1,8 @@
 import '../content/shared.css';
 import './errorState.css';
 
+// TODO share code with the global error state info bar.
+
 const RECOVERABLE = 1,
     list = document.getElementById("errors"),
     sendAction = (errorStateId, actionId) => {
@@ -30,6 +32,7 @@ const RECOVERABLE = 1,
                     button = document.createElement("button");
                 button.textContent = action;
                 button.value = action;
+                button.classList.add("browser-style");
                 button.addEventListener("click", sendAction.bind(null, errorState.id, actionId), {
                     passive: true,
                     capture: false
@@ -55,13 +58,13 @@ browser.storage.local.get("errorStates")
 
 browser.storage.onChanged.addListener((change, areaName) => {
     if(areaName === "local" && "errorStates" in change.changes) {
-        for(const e of change.changes.newValue) {
+        for(const e of change.errorStates.newValue) {
             if(change.changes.oldValue.every(({ id }) => id !== e.id)) {
                 addErrorState(e);
             }
         }
 
-        for(const e of change.changes.oldValue) {
+        for(const e of change.errorStates.oldValue) {
             if(change.changes.newValue.every(({ id }) => id !== e.id)) {
                 removeErrorState(e);
             }

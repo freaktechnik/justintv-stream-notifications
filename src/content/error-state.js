@@ -107,6 +107,7 @@ class ErrorStateView {
             for(const actionId in errorState.actions) {
                 const action = errorState.actions[actionId],
                     button = document.createElement("button");
+                button.classList.add("browser-style");
                 button.textContent = action;
                 button.value = action;
                 button.addEventListener("click", () => this.sendAction(errorState.id, actionId), {
