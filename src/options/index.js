@@ -16,13 +16,13 @@ class OptionsPage {
         "bool": "change",
         "string": "blur",
         "integer": "blur"
-    }
+    };
     static VALUE_PROPERTY = {
         "radio": "value",
         "bool": "checked",
         "string": "value",
         "integer": "valueAsNumber"
-    }
+    };
 
     constructor() {
         if(document.readyState == "loading") {

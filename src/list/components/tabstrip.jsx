@@ -42,7 +42,7 @@ class Tab extends NavigateableItem {
         } } tabIndex={ -1 }>{ _(this.props.title) }</button> );
         const element = super.render();
         return React.cloneElement(element, {
-            role: 'presentation',
+            role: 'tab',
             tabIndex: -1
         });
     }

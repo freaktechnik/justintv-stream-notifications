@@ -1,17 +1,8 @@
 {
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        }
-    },
     "rules": {
-        "no-fallthrough": 0,
-        "one-var": 0
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": 0
     },
-    "plugins": [
-        "react"
-    ],
     "extends": [
-        "plugin:react/recommended"
+        "@freaktechnik/eslint-config-react"
     ]
 }

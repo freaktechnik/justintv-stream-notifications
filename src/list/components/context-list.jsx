@@ -47,9 +47,11 @@ class ContextList extends React.Component {
 
     componentDidMount() {
         if(this.dialog) {
-            this.dialog.focus();
             document.documentElement.style.height = `${this.dialog.scrollHeight}px`;
             document.documentElement.style.overflow = "hidden";
+        }
+        if(this.button) {
+            this.button.focus();
         }
     }
 
@@ -63,9 +65,11 @@ class ContextList extends React.Component {
         return (
             <dialog className="context-panel" open ref={ (e) => {
                 this.dialog = e;
-            } } tabIndex={ 0 }>
+            } }>
                 <header>
-                    <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
+                    <button title={ _("context_back") } onClick={ this.props.onClose } ref={ (e) => {
+                        this.button = e;
+                    } }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
                 <NavigateableList>

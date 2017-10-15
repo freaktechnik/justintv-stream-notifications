@@ -42,7 +42,7 @@ export class NavigateableItem extends React.Component {
         return (
             <li ref={ (e) => {
                 this.item = e;
-            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) }>
+            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) } role="row">
                 { this.props.children }
             </li>
         );
@@ -106,7 +106,7 @@ export class NavigateableList extends React.Component {
         return (
             <ul onKeyUp={ (e) => this.handleKey(e) } className="scrollable" tabIndex={ 0 } ref={ (e) => {
                 this.list = e;
-            } }>
+            } } role="listbox">
                 { mappedChildren }
             </ul>
         );

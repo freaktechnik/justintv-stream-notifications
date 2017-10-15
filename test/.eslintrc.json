@@ -6,5 +6,5 @@
     "rules": {
         "no-console": 2
     },
-    "extends": "plugin:freaktechnik/test"
+    "extends": "@freaktechnik/eslint-config-test"
 }

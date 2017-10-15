@@ -42,7 +42,7 @@ Extras.propTypes = {
 const Avatar = (props) => {
     const srcset = Object.keys(props.image).map((s) => `${props.image[s]} ${s}w`)
         .join(",");
-    return ( <img srcSet={ srcset } sizes={ `${props.size}px` } /> );
+    return ( <img srcSet={ srcset } sizes={ `${props.size}px` } alt="Avatar" /> );
 };
 Avatar.propTypes = {
     image: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -53,7 +53,7 @@ export const CompactChannel = (props) => ( <li title={ props.uname } onClick={ p
     if(e.key === ' ' || e.key === 'Enter') {
         props.onClick(e);
     }
-} }>
+} } role="link">
     <Avatar image={ props.image } size={ SMALL_IMAGE }/>
 </li> );
 CompactChannel.propTypes = {
@@ -156,7 +156,7 @@ class Channel extends NavigateableItem {
         this.props.children = [];
         let className = this.props.type;
         if(this.props.thumbnail) {
-            this.props.children.push(<img src={ this.props.thumbnail } key="thumb"/>);
+            this.props.children.push(<img src={ this.props.thumbnail } key="thumb" alt={ `Current thumbnail of ${this.props.uname}` }/>);
             className += ' thumbnail';
         }
         if(this.props.external) {
@@ -197,7 +197,7 @@ const ProviderSelector = (props) => {
         }
     }
     return (
-        <select className="exploreprovider browser-style" value={ props.currentProvider } onChange={ props.onProvider }>
+        <select className="exploreprovider browser-style" value={ props.currentProvider } onBlur={ props.onProvider }>
             { options }
         </select>
     );
@@ -402,7 +402,7 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
     return shownChannels;
 };
 
-const sortChannels = (channels, type, formatChannel) => {
+const sortChannels = (channels, type, formatChannelCbk) => {
     let sorter;
     if(type !== LIVE_TAB) {
         sorter = (a, b) => a.uname.localeCompare(b.uname);
@@ -421,7 +421,7 @@ const sortChannels = (channels, type, formatChannel) => {
             return a.uname.localeCompare(b.uname);
         };
     }
-    return channels.sort(sorter).map(formatChannel);
+    return channels.sort(sorter).map(formatChannelCbk);
 };
 
 const mergeFeatured = (featured, channels) => {

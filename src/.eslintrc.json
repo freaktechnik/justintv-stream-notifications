@@ -1,22 +1,8 @@
 {
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "env": {
-        "commonjs": true
-    },
-    "plugins": [
-        "babel",
-        "import"
-    ],
     "rules": {
-        "arrow-parens": 1,
-        "generator-star-spacing": 1,
         "typelint/typelint": 0
     },
     "settings": {
-        "import/resolver": "webpack",
         "typelint": {
             "models": {
                 "redux": {
@@ -27,8 +13,8 @@
         }
     },
     "extends": [
-        "plugin:freaktechnik/extension",
-        "plugin:import/errors",
-        "plugin:import/warnings"
+        "@freaktechnik/eslint-config-webpack",
+        "@freaktechnik/eslint-config-babel",
+        "@freaktechnik/eslint-config-extension"
     ]
 }
