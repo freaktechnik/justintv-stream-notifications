@@ -20,7 +20,7 @@ import { CantOpenListError } from '../../database-manager';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded
- * @type {Array.<module:channel/core.Channel>}
+ * @type {[module:channel/core.Channel]}
  */
 /**
  * @event module:channel/controller.ChannelController#channeldeleted
@@ -36,8 +36,8 @@ const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-rese
     /**
      * Filters mature channels if parental controls are activated.
      *
-     * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
-     * @returns {Array.<module:channel/core.Channel>} Filtered of channels marked as
+     * @param {[module:channel/core.Channel]} channels - Channels to filter.
+     * @returns {[module:channel/core.Channel]} Filtered of channels marked as
      *          mature if parental controls are activated.
      */
     filterInapropriateChannels = (channels) => {
@@ -217,12 +217,7 @@ export default class ChannelController extends EventTarget {
             }
         });
     }
-    /**
-     * @inheritdoc {module:channel/utils.formatChannel}
-     */
-    _formatChannel(channel) {
-        return formatChannel(channel);
-    }
+
     /**
      * Get the details of a channel and store them in the ChannelList.
      *
@@ -274,7 +269,7 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider=null] - Type of channels to update. All
      *                                   channels are updated if left out.
-     * @returns {Array.<module:channel/core.Channel>|module:channel/core.Channel}
+     * @returns {[module:channel/core.Channel]|module:channel/core.Channel}
      *          List of updated channel objects, if multiple were updated, else
      *          object of the updated channel.
      */
@@ -319,7 +314,7 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider=null] - Type of the channels to return. If
      *                                      left out, all channels are returned.
-     * @returns {Array.<module:channel/core.Channel>} List of channels with for
+     * @returns {[module:channel/core.Channel]} List of channels with for
      *          the given type/provider.
      * @async
      */
@@ -369,31 +364,13 @@ export default class ChannelController extends EventTarget {
 
         throw new Error(`Can't add users for provider ${type}`);
     }
-    /**
-     * @private
-     * @param {module:channel/core.User} user - User instance to update.
-     * @async
-     * @returns {module:channel/core.User} Updated user.
-     */
-    async _updateUser(user) {
-        const [
-                updatedUser,
-                channels
-            ] = await providers[user.type].getUserFavorites(user.login),
-            filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
-            [ finalUser ] = await Promise.all([
-                this._list.setUser(updatedUser),
-                // Can't just call this.addUser(user.login, user.type) because of this.
-                this._list.addChannels(filteredChannels)
-            ]);
-        return finalUser;
-    }
+
     /**
      * Update a user or all users and add any new favorites.
      *
      * @param {number} [userId] - ID of the user, if not specified updates
      *                            all users.
-     * @returns {Array.<module:channel/core.User>} Updated user instances.
+     * @returns {[module:channel/core.User]} Updated user instances.
      */
     async updateUser(userId) {
         let users;
@@ -414,7 +391,7 @@ export default class ChannelController extends EventTarget {
      *
      * @param {string} [provider=null] - Type the users should be of. If
      *                                        omitted all users are returned.
-     * @returns {Array.<module:channel/core.User>} User instances for the given
+     * @returns {[module:channel/core.User]} User instances for the given
      *          type/provider.
      * @async
      */
@@ -441,33 +418,13 @@ export default class ChannelController extends EventTarget {
         ]);
         return u;
     }
-    /**
-     * @private
-     * @async
-     * @param {string} provider - Provider/type to add credentials for.
-     * @param {Array} credentials - Resulting credentials from a search.
-     * @returns {Array.<module:channel/core.User>} Added user instances.
-     */
-    _addFoundCredentials(provider, credentials) {
-        return Promise.all(credentials.filter((credential) => credential.username).map((credential) => this.addUser(credential.username, provider)));
-    }
-    /**
-     * @private
-     * @async
-     * @param {string} provider - Provider to search for users.
-     * @param {string} url - URL to search for credentials for.
-     * @returns {Array.<module:channel/core.User>} Users found for the given url.
-     */
-    _findUsersByURL(provider, url) {
-        return logins.search({ url })
-            .then(this._addFoundCredentials.bind(this, provider));
-    }
+
     /**
      * Add users that have stored credentials.
      *
      * @param {string} [provider] - Provider to add users stored in the
      * credentials for. If not provided, all providers are searched.
-     * @returns {Array.<module:channel/core.User>} Users added based on saved
+     * @returns {[module:channel/core.User]} Users added based on saved
      *          credentials.
      * @throws If the provider does not support adding users based on credentials.
      * @async
@@ -519,5 +476,55 @@ export default class ChannelController extends EventTarget {
             throw new Error("Specified type is not known");
         }
         return providers[type].updateChannel(login);
+    }
+
+    /**
+     * @inheritdoc {module:channel/utils.formatChannel}
+     */
+    _formatChannel(channel) {
+        return formatChannel(channel);
+    }
+
+    /**
+     * @private
+     * @async
+     * @param {string} provider - Provider/type to add credentials for.
+     * @param {Array} credentials - Resulting credentials from a search.
+     * @returns {[module:channel/core.User]} Added user instances.
+     */
+    _addFoundCredentials(provider, credentials) {
+        return Promise.all(credentials.filter((credential) => credential.username).map((credential) => this.addUser(credential.username, provider)));
+    }
+
+    /**
+     * @private
+     * @async
+     * @param {string} provider - Provider to search for users.
+     * @param {string} url - URL to search for credentials for.
+     * @returns {[module:channel/core.User]} Users found for the given url.
+     */
+    _findUsersByURL(provider, url) {
+        return logins.search({ url })
+            .then(this._addFoundCredentials.bind(this, provider));
+    }
+
+    /**
+     * @private
+     * @param {module:channel/core.User} user - User instance to update.
+     * @async
+     * @returns {module:channel/core.User} Updated user.
+     */
+    async _updateUser(user) {
+        const [
+                updatedUser,
+                channels
+            ] = await providers[user.type].getUserFavorites(user.login),
+            filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
+            [ finalUser ] = await Promise.all([
+                this._list.setUser(updatedUser),
+                // Can't just call this.addUser(user.login, user.type) because of this.
+                this._list.addChannels(filteredChannels)
+            ]);
+        return finalUser;
     }
 }

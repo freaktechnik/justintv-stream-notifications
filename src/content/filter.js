@@ -21,7 +21,7 @@ import { show, hide } from './utils';
  * An array of rules, of which at least one has to match in order for the whole
  * target to be matching the query.
  *
- * @typedef {Array.<Rule>} RuleSet
+ * @typedef {[Rule]} RuleSet
  */
 
 /**

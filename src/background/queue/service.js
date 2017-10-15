@@ -45,11 +45,12 @@ const queue = new UpdateQueue(),
 class QueueService {
     static HIGH_PRIORITY = "high";
     static LOW_PRIORITY = "low";
-    HIGH_PRIORITY = QueueService.HIGH_PRIORITY;
-    LOW_PRIORITY = QueueService.LOW_PRIORITY;
     constructor(type) {
         this.type = type;
     }
+
+    HIGH_PRIORITY = QueueService.HIGH_PRIORITY;
+    LOW_PRIORITY = QueueService.LOW_PRIORITY;
 
     /**
      * Returns the request ID array for the specified priority.
@@ -91,7 +92,7 @@ class QueueService {
      * Immediately run a request to the given URL.
      *
      * @param {string} url - The URL to request.
-     * @param {Object.<string, string>} [headers={}] - An object with the headers
+     * @param {Object.<string>} [headers={}] - An object with the headers
      *                                                 to send.
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determines if the request should be re-run.

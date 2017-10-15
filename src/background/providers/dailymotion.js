@@ -54,69 +54,6 @@ class Dailymotion extends GenericProvider {
         this.initialize();
     }
 
-    _getChannelByID(id, doUser = false) {
-        return this._qs.queueRequest(`${baseUrl}user/${id}?${qs.stringify({
-            fields: USER_FIELDS
-        })}`).then((result) => {
-            if(result.ok && result.parsedJSON) {
-                if("list" in result.parsedJSON) {
-                    const [ channel ] = result.parsedJSON.list;
-                    return getChannelFromJSON(channel, doUser);
-                }
-
-                return getChannelFromJSON(result.parsedJSON, doUser);
-            }
-
-            throw new Error(`Could not get details for ${id} on ${this._type}`);
-        });
-    }
-    _getStreamDetailsForChannel(channel) {
-        return this._qs.queueRequest(`${baseUrl}user/${channel.login}/videos?${qs.stringify({
-            id: channel.login,
-            fields: "chat_embed_url,title,url,channel.name,onair,thumbnail_240_url",
-            sort: "live-audience",
-            limit: 1
-        })}`).then((response) => {
-            if(response.ok && response.parsedJSON) {
-                if(response.parsedJSON.list.length) {
-                    const [ item ] = response.parsedJSON.list;
-                    channel.chatUrl = item.chat_embed_url;
-                    channel.thumbnail = item.thumbnail_url;
-                    channel.url = [ item.url ];
-                    channel.category = item['channel.name'];
-                    channel.live.setLive(item.onair);
-                    channel.title = item.title;
-                }
-                else {
-                    channel.live.setLive(false);
-                }
-                return channel;
-            }
-
-            throw new Error(`Could not update ${channel.login} on ${this._type}`);
-        });
-    }
-    _getFavs(userId) {
-        return promisedPaginationHelper({
-            url: `${baseUrl}user/${userId}/following?${qs.stringify({
-                fields: USER_FIELDS,
-                limit: 100
-            })}&page=`,
-            pageSize: 1,
-            initialPage: 1,
-            request: (url) => this._qs.queueRequest(url),
-            fetchNextPage(data) {
-                return data.json && data.parsedJSON.has_more;
-            },
-            getItems(data) {
-                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
-                    return data.parsedJSON.list.map(getChannelFromJSON);
-                }
-
-                return [];
-            }
-        });
-    }
     async getUserFavorites(username) {
         const user = await this.getChannelDetails(username, true),
             channels = await this._getFavs(user.login);
@@ -303,6 +240,72 @@ class Dailymotion extends GenericProvider {
             }
 
             throw new Error(`Didn't find any search results channels with ${query} for ${this._type}`);
+        });
+    }
+
+    _getChannelByID(id, doUser = false) {
+        return this._qs.queueRequest(`${baseUrl}user/${id}?${qs.stringify({
+            fields: USER_FIELDS
+        })}`).then((result) => {
+            if(result.ok && result.parsedJSON) {
+                if("list" in result.parsedJSON) {
+                    const [ channel ] = result.parsedJSON.list;
+                    return getChannelFromJSON(channel, doUser);
+                }
+
+                return getChannelFromJSON(result.parsedJSON, doUser);
+            }
+
+            throw new Error(`Could not get details for ${id} on ${this._type}`);
+        });
+    }
+
+    _getStreamDetailsForChannel(channel) {
+        return this._qs.queueRequest(`${baseUrl}user/${channel.login}/videos?${qs.stringify({
+            id: channel.login,
+            fields: "chat_embed_url,title,url,channel.name,onair,thumbnail_240_url",
+            sort: "live-audience",
+            limit: 1
+        })}`).then((response) => {
+            if(response.ok && response.parsedJSON) {
+                if(response.parsedJSON.list.length) {
+                    const [ item ] = response.parsedJSON.list;
+                    channel.chatUrl = item.chat_embed_url;
+                    channel.thumbnail = item.thumbnail_url;
+                    channel.url = [ item.url ];
+                    channel.category = item['channel.name'];
+                    channel.live.setLive(item.onair);
+                    channel.title = item.title;
+                }
+                else {
+                    channel.live.setLive(false);
+                }
+                return channel;
+            }
+
+            throw new Error(`Could not update ${channel.login} on ${this._type}`);
+        });
+    }
+
+    _getFavs(userId) {
+        return promisedPaginationHelper({
+            url: `${baseUrl}user/${userId}/following?${qs.stringify({
+                fields: USER_FIELDS,
+                limit: 100
+            })}&page=`,
+            pageSize: 1,
+            initialPage: 1,
+            request: (url) => this._qs.queueRequest(url),
+            fetchNextPage(data) {
+                return data.json && data.parsedJSON.has_more;
+            },
+            getItems(data) {
+                if(data.ok && data.parsedJSON && data.parsedJSON.list) {
+                    return data.parsedJSON.list.map(getChannelFromJSON);
+                }
+
+                return [];
+            }
         });
     }
 }

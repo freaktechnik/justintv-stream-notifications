@@ -72,40 +72,6 @@ class MLG extends GenericProvider {
         this.initialize();
     }
 
-    async _getGame(id) {
-        const game = games.find((g) => g.id == id);
-        if(!game) {
-            const data = await this._qs.queueRequest(gameURL);
-            if(data.parsedJSON && data.parsedJSON.data.items && data.parsedJSON.data.items.length) {
-                games = data.parsedJSON.data.items;
-                return data.parsedJSON.data.items.find((g) => g.id == id).name;
-            }
-
-            throw new Error(data.parsedJSON ? data.parsedJSON.errors : `Could not fetch games for ${this.name}`);
-        }
-        else {
-            return game.name;
-        }
-    }
-    async _getChannelFromJSON(jsonChannel) {
-        const ret = new Channel(jsonChannel.stream_name, this._type);
-        ret.uname = jsonChannel.name;
-        ret.url.push(jsonChannel.url);
-        ret.archiveUrl = jsonChannel.bracket_url ? jsonChannel.bracket_url : jsonChannel.url;
-        ret.chatUrl = chatURL + jsonChannel.id;
-        ret.image = { "200": jsonChannel.image_1_1 };
-        ret.title = jsonChannel.subtitle;
-        ret.thumbnail = jsonChannel.image_16_9_medium;
-        try {
-            const game = await this._getGame(jsonChannel.game_id);
-            ret.category = game;
-        }
-        catch(e) {
-            // ingore
-        }
-
-        return ret;
-    }
     async getChannelDetails(channelname) {
         const data = await this._qs.queueRequest(infoURL + infoArgs);
         if(data.ok && data.parsedJSON.status_code == REQUEST_OK) {
@@ -195,6 +161,42 @@ class MLG extends GenericProvider {
             }));
         }
         throw new Error("Could not update channels");
+    }
+
+    async _getGame(id) {
+        const game = games.find((g) => g.id == id);
+        if(!game) {
+            const data = await this._qs.queueRequest(gameURL);
+            if(data.parsedJSON && data.parsedJSON.data.items && data.parsedJSON.data.items.length) {
+                games = data.parsedJSON.data.items;
+                return data.parsedJSON.data.items.find((g) => g.id == id).name;
+            }
+
+            throw new Error(data.parsedJSON ? data.parsedJSON.errors : `Could not fetch games for ${this.name}`);
+        }
+        else {
+            return game.name;
+        }
+    }
+
+    async _getChannelFromJSON(jsonChannel) {
+        const ret = new Channel(jsonChannel.stream_name, this._type);
+        ret.uname = jsonChannel.name;
+        ret.url.push(jsonChannel.url);
+        ret.archiveUrl = jsonChannel.bracket_url ? jsonChannel.bracket_url : jsonChannel.url;
+        ret.chatUrl = chatURL + jsonChannel.id;
+        ret.image = { "200": jsonChannel.image_1_1 };
+        ret.title = jsonChannel.subtitle;
+        ret.thumbnail = jsonChannel.image_16_9_medium;
+        try {
+            const game = await this._getGame(jsonChannel.game_id);
+            ret.category = game;
+        }
+        catch(e) {
+            // ingore
+        }
+
+        return ret;
     }
 }
 

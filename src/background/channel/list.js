@@ -18,7 +18,7 @@ import DatabaseManager, { FixListError } from '../../database-manager';
  * fired.
  *
  * @event module:channel/list.ChannelList#channelsadded
- * @type {Array.<module:channel/core.Channel>}
+ * @type {[module:channel/core.Channel]}
  */
 /**
  * Whenever a user is added to the ChannelList this event is fired.
@@ -137,9 +137,9 @@ export default class ChannelList extends ReadChannelList {
     /**
      * Add multiple channels to the list.
      *
-     * @param {Array.<module:channel/core.Channel>} channels - The channels to add.
+     * @param {[module:channel/core.Channel]} channels - The channels to add.
      * @fires module:channel/list.ChannelList#channelsadded
-     * @returns {Array.<module:channel/core.Channel>} Added channels with their ID set.
+     * @returns {[module:channel/core.Channel]} Added channels with their ID set.
      */
     async addChannels(channels) {
         if(channels instanceof Channel) {
@@ -316,7 +316,7 @@ export default class ChannelList extends ReadChannelList {
      *
      * @param {module:channel/core.Channel} channel - Channel that users have favorited.
      * @fires module:channel/list.ChannelList#userdeleted
-     * @returns {Array.<module:channel/core.User>} List of users that were removed.
+     * @returns {[module:channel/core.User]} List of users that were removed.
      */
     async removeUsersWithFavorite(channel) {
         const users = await this.getUsersByFavorite(channel);
@@ -329,7 +329,7 @@ export default class ChannelList extends ReadChannelList {
      * @param {number} userId - ID of the user whose favorites should be removed.
      * @fires module:channel/list.ChannelList#channeldeleted
      * @fires module:channel/list.ChannelList#beforechanneldeleted
-     * @returns {Array.<module:channel/core.Channel>} List of removed channels.
+     * @returns {[module:channel/core.Channel]} List of removed channels.
      */
     async removeChannelsByUserFavorites(userId) {
         const user = await this.getUser(userId),

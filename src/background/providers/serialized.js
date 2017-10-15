@@ -19,9 +19,9 @@ import allProviders from "./index";
 /**
  * Serializes the providers objects so they can get passed as a message.
  *
- * @param {Object.<string, module:providers/generic-provider.GenericProvider>} providers
+ * @param {Object.<module:providers/generic-provider.GenericProvider>} providers
  *                                              - Providers object to serialize.
- * @returns {Object<string, module:providers/serialized~SerializedProvider>}
+ * @returns {Object<module:providers/serialized~SerializedProvider>}
  *         Frozen Object of serialized providers by id.
  */
 const serializeProviders = (providers) => {

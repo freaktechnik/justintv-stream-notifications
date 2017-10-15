@@ -226,14 +226,14 @@ const testMockAPI = async (t, p) => {
         t.true(Array.isArray(urls));
         for(const url of urls) {
             const res = await provider._qs.queueRequest(url);
-            let ret = await spec.onComplete(res, url);
-            if(Array.isArray(ret)) {
-                t.true(ret.length > 0, "There is mor than one item in the updated channels");
-                ret = ret[0];
+            let retval = await spec.onComplete(res, url);
+            if(Array.isArray(retval)) {
+                t.true(retval.length > 0, "There is mor than one item in the updated channels");
+                [ retval ] = retval;
             }
-            t.true(ret instanceof Channel, "updateRequest holds a channel");
-            t.is(ret.type, p, "updateRequest event holds a channel with corect type");
-            t.is(await ret.live.isLive(LiveState.TOWARD_OFFLINE), ret.uname === "live", `Update request correctly set live state of ${ret.uname}`);
+            t.true(retval instanceof Channel, "updateRequest holds a channel");
+            t.is(retval.type, p, "updateRequest event holds a channel with corect type");
+            t.is(await retval.live.isLive(LiveState.TOWARD_OFFLINE), retval.uname === "live", `Update request correctly set live state of ${retval.uname}`);
         }
 
         const errorRet = await spec.onComplete({}, urls[0]);
@@ -274,15 +274,15 @@ const testMockAPI = async (t, p) => {
             for(const url of urls) {
                 const result = await provider._qs.queueRequest(url);
                 let [
-                    ret,
+                    retval,
                     channels
                 ] = await spec.onComplete(result);
-                if(Array.isArray(ret)) {
-                    ret = ret[0];
+                if(Array.isArray(retval)) {
+                    [ retval ] = retval;
                 }
-                t.true(ret instanceof User, "updateduser is a user");
-                t.is(ret.type, p, "updateduser has the correct type");
-                t.is(ret.uname, "test", "updateduser is called test");
+                t.true(retval instanceof User, "updateduser is a user");
+                t.is(retval.type, p, "updateduser has the correct type");
+                t.is(retval.uname, "test", "updateduser is called test");
                 t.true(Array.isArray(channels));
                 if(channels.length) {
                     for(const channel of channels) {

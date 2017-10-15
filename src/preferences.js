@@ -31,9 +31,9 @@ class Preferences extends EventTarget {
     /**
      * Get the values of a pref. Returns the default value if unset.
      *
-     * @param {string|Array.<string>} pref - Pref or prefs to fetch.
+     * @param {string|[string]} pref - Pref or prefs to fetch.
      * @async
-     * @returns {?|Array.<?>} Value of array of values. Returns the default value
+     * @returns {?|[?]} Value of array of values. Returns the default value
      *          for unset preferences.
      */
     get(pref) {

@@ -47,7 +47,7 @@ export default class DeserializedReadChannelList extends ReadChannelList {
      *
      * @param {string} [type] - Type all the channels should have. If left out,
      *                             all channels are returned.
-     * @returns {Array.<module:channel/core.Channel>} Array of all channels for
+     * @returns {[module:channel/core.Channel]} Array of all channels for
      *          the given type. May be empty.
      */
     async getChannelsByType(type) {
@@ -60,7 +60,7 @@ export default class DeserializedReadChannelList extends ReadChannelList {
      *
      * @param {string} [type] - The type all returned users should have. If left
      *                             out all users are returned.
-     * @returns {Array.<module:channel/core.User>} Array of users for the given
+     * @returns {[module:channel/core.User]} Array of users for the given
      *          type. May be empty.
      */
     async getUsersByType(type) {
@@ -94,7 +94,7 @@ export default class DeserializedReadChannelList extends ReadChannelList {
      *
      * @param {module:channel/core.Channel} channel - Channel to search users's
      *                                                  favorites for.
-     * @returns {Array.<module:channel/core.User>} List of users that follow the
+     * @returns {[module:channel/core.User]} List of users that follow the
      *          given channel.
      */
     async getUsersByFavorite(channel) {
@@ -106,7 +106,7 @@ export default class DeserializedReadChannelList extends ReadChannelList {
      * Get all channels that are favorited by a user.
      *
      * @param {module:channel/core.User} user - User to get the favorites of.
-     * @returns {Array.<module:channel/core.Channel>} List of channels a user
+     * @returns {[module:channel/core.Channel]} List of channels a user
      *          follows.
      */
     async getChannelsByUserFavorites(user) {

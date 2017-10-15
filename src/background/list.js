@@ -118,7 +118,6 @@ class ListView extends EventTarget {
      */
     static OFFLINE = OFFLINE;
 
-    ready = false;
     /**
      * @constructs
      * @fires module:list.ListView#opencm
@@ -205,12 +204,27 @@ class ListView extends EventTarget {
         });
     }
 
-    _emitToList(event, data) {
-        this.port.send(event, data);
-    }
+    ready = false;
 
     get countNonlive() {
         return this.nonLiveDisplay < ListView.DISTINCT;
+    }
+
+    /**
+     * Indicates the live state over all channels.
+     *
+     * @memberof module:list.ListView
+     * @type {boolean}
+     */
+    get liveState() {
+        return this._liveState;
+    }
+    set liveState(val) {
+        this._liveState = val;
+        if(!val) {
+            this.live.clear();
+            this.updateBadge();
+        }
     }
 
     async updateBadge() {
@@ -249,61 +263,6 @@ class ListView extends EventTarget {
         }
     }
 
-    _updateChannel(channel) {
-        if(channel.live.state == LiveState.OFFLINE) {
-            this._unregisterChannel(channel.id);
-        }
-        else {
-            this._registerChannel(channel);
-        }
-        this.updateBadge();
-    }
-
-    _registerChannel(channel) {
-        if(channel.live.state == LiveState.LIVE) {
-            if(this.nonlive.has(channel.id)) {
-                this.nonlive.delete(channel.id);
-            }
-            this.live.add(channel.id);
-        }
-        else {
-            if(this.live.has(channel.id)) {
-                this.live.delete(channel.id);
-            }
-            this.nonlive.add(channel.id);
-        }
-    }
-
-    _unregisterChannel(channelId) {
-        if(this.live.has(channelId)) {
-            this.live.delete(channelId);
-        }
-        else if(this.nonlive.has(channelId)) {
-            this.nonlive.delete(channelId);
-        }
-
-        if(this.live.size === EMPTY && (!this.countNonlive || this.nonlive.size === EMPTY)) {
-            this.liveState = false;
-        }
-    }
-
-    /**
-     * Indicates the live state over all channels.
-     *
-     * @memberof module:list.ListView
-     * @type {boolean}
-     */
-    get liveState() {
-        return this._liveState;
-    }
-    set liveState(val) {
-        this._liveState = val;
-        if(!val) {
-            this.live.clear();
-            this.updateBadge();
-        }
-    }
-
     /**
      * Set the display type for non-live content.
      *
@@ -323,7 +282,7 @@ class ListView extends EventTarget {
     /**
      * Add channels to the list. Updates the live state.
      *
-     * @param {Array.<module:channel/core.Channel>} channels - Channels to add.
+     * @param {[module:channel/core.Channel]} channels - Channels to add.
      * @returns {undefined}
      */
     addChannels(channels) {
@@ -398,6 +357,48 @@ class ListView extends EventTarget {
             type,
             q
         });
+    }
+
+    _emitToList(event, data) {
+        this.port.send(event, data);
+    }
+
+    _updateChannel(channel) {
+        if(channel.live.state == LiveState.OFFLINE) {
+            this._unregisterChannel(channel.id);
+        }
+        else {
+            this._registerChannel(channel);
+        }
+        this.updateBadge();
+    }
+
+    _registerChannel(channel) {
+        if(channel.live.state == LiveState.LIVE) {
+            if(this.nonlive.has(channel.id)) {
+                this.nonlive.delete(channel.id);
+            }
+            this.live.add(channel.id);
+        }
+        else {
+            if(this.live.has(channel.id)) {
+                this.live.delete(channel.id);
+            }
+            this.nonlive.add(channel.id);
+        }
+    }
+
+    _unregisterChannel(channelId) {
+        if(this.live.has(channelId)) {
+            this.live.delete(channelId);
+        }
+        else if(this.nonlive.has(channelId)) {
+            this.nonlive.delete(channelId);
+        }
+
+        if(this.live.size === EMPTY && (!this.countNonlive || this.nonlive.size === EMPTY)) {
+            this.liveState = false;
+        }
     }
 }
 

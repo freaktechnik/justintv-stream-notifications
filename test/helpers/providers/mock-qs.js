@@ -158,7 +158,7 @@ const endpoints = Object.keys(mockAPIEnpoints);
  * These are either defunct providers, or providers that don't use polling
  * (or beam, which I should switch to sockets).
  *
- * @type {Array.<string>}
+ * @type {[string]}
  */
 const IGNORE_QSUPDATE_PROVIDERS = [ "beam" ];
 

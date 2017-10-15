@@ -84,9 +84,6 @@ const ONE_ITEM = 1;
  * @extends external:EventTarget
  */
 export default class ChannelsManager extends EventTarget {
-    _loading = true;
-    port = null;
-    tabID = null;
     /**
      * @fires module:channel/manager.ChannelsManager#addchannel
      * @fires module:channel/manager.ChannelsManager#removechannel
@@ -179,6 +176,10 @@ export default class ChannelsManager extends EventTarget {
             passive: true
         });
     }
+
+    port = null;
+    tabID = null;
+
     /**
      * @type {boolean}
      * @private
@@ -197,30 +198,9 @@ export default class ChannelsManager extends EventTarget {
             }
         }
     }
-    /**
-     * Cleans up the canceling value for a request.
-     *
-     * @param {string} type - Object type (user or channel).
-     * @param {string} provider - Object provider name.
-     * @param {string} name - Object login.
-     * @returns {undefined}
-     */
-    _deleteCancelingValue(type, provider, name) {
-        this.cancelingValues.delete(type + provider + name);
-    }
-    /**
-     * Only emits to the worker if it actually exists (isn't null).
-     *
-     * @param {string} target - Name of the event to emit.
-     * @param {?} data - Data to send.
-     * @returns {undefined}
-     */
-    _emitToWorker(target, ...data) {
-        if(data.length === ONE_ITEM) {
-            data = data.pop();
-        }
-        this.port.send(target, data);
-    }
+
+    _loading = true;
+
     /**
      * Selects a manager tab, if one's already opened, else opens one.
      *
@@ -357,5 +337,30 @@ export default class ChannelsManager extends EventTarget {
 
     copyDump(dump) {
         this.port.reply("debugdump", dump);
+    }
+
+    /**
+     * Cleans up the canceling value for a request.
+     *
+     * @param {string} type - Object type (user or channel).
+     * @param {string} provider - Object provider name.
+     * @param {string} name - Object login.
+     * @returns {undefined}
+     */
+    _deleteCancelingValue(type, provider, name) {
+        this.cancelingValues.delete(type + provider + name);
+    }
+    /**
+     * Only emits to the worker if it actually exists (isn't null).
+     *
+     * @param {string} target - Name of the event to emit.
+     * @param {?} data - Data to send.
+     * @returns {undefined}
+     */
+    _emitToWorker(target, ...data) {
+        if(data.length === ONE_ITEM) {
+            data = data.pop();
+        }
+        this.port.send(target, data);
     }
 }

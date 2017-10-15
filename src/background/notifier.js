@@ -109,36 +109,7 @@ export default class Notifier extends EventTarget {
             this.nonliveNotifications()
         );
     }
-    /**
-     * Store a channel's state.
-     *
-     * @param {module:channel/core.Channel} channel - The channel to store.
-     * @returns {undefined}
-     */
-    _setChannelState(channel) {
-        this.channelStates.set(channel.id, {
-            state: channel.live.state,
-            user: channel.live.alternateUsername
-        });
-    }
-    /**
-     * Determine if the state of a channel has changed.
-     *
-     * @param {module:channel/core.Channel} channel - The channel that might
-     *                                                have changed.
-     * @returns {boolean} When true the channel state changed.
-     */
-    _channelStateChanged(channel) {
-        const oldState = this.channelStates.get(channel.id);
-        return oldState === undefined || oldState.state != channel.live.state || (channel.live.state > LiveState.LIVE && oldState.user != channel.live.alternateUsername);
-    }
-    async _getLiveInterpretation() {
-        if(await this.nonliveNotifications()) {
-            return LiveState.TOWARD_LIVE;
-        }
 
-        return LiveState.TOWARD_OFFLINE;
-    }
     /**
      * Show a notification to the user, if the channel isn't in the currently
      * active tab, the channel changed accordingly and the respective
@@ -238,5 +209,41 @@ export default class Notifier extends EventTarget {
             message: "",
             iconUrl: "assets/images/icon.svg"
         });
+    }
+
+    /**
+     * Store a channel's state.
+     *
+     * @param {module:channel/core.Channel} channel - The channel to store.
+     * @returns {undefined}
+     */
+    _setChannelState(channel) {
+        this.channelStates.set(channel.id, {
+            state: channel.live.state,
+            user: channel.live.alternateUsername
+        });
+    }
+    /**
+     * Determine if the state of a channel has changed.
+     *
+     * @param {module:channel/core.Channel} channel - The channel that might
+     *                                                have changed.
+     * @returns {boolean} When true the channel state changed.
+     */
+    _channelStateChanged(channel) {
+        const oldState = this.channelStates.get(channel.id);
+        return oldState === undefined || oldState.state != channel.live.state || (channel.live.state > LiveState.LIVE && oldState.user != channel.live.alternateUsername);
+    }
+
+    /**
+     * @returns {module:live-state~LiveStateInterpretation} Interpretation to use
+     *          to decide if a notification for live/offline should be shown.
+     */
+    async _getLiveInterpretation() {
+        if(await this.nonliveNotifications()) {
+            return LiveState.TOWARD_LIVE;
+        }
+
+        return LiveState.TOWARD_OFFLINE;
     }
 }

@@ -49,16 +49,6 @@ class Hitbox extends GenericProvider {
         this.initialize();
     }
 
-    _getChannels(channels) {
-        return Promise.all(channels.map((channel) => this._qs.queueRequest(`${baseURL}/media/live/${channel}`).then((data) => {
-            if(data.ok && data.parsedJSON && "livestream" in data.parsedJSON) {
-                const [ rawChannel ] = data.parsedJSON.livestream;
-                return getChannelFromJson(rawChannel);
-            }
-
-            return null;
-        }))).then((resultChans) => resultChans.filter((channel) => channel !== null));
-    }
     async getUserFavorites(username) {
         const [
             follows,
@@ -186,6 +176,17 @@ class Hitbox extends GenericProvider {
         }
 
         throw new Error(`Couldn't find any channels for the search on ${this.name} that match ${query}`);
+    }
+
+    _getChannels(channels) {
+        return Promise.all(channels.map((channel) => this._qs.queueRequest(`${baseURL}/media/live/${channel}`).then((data) => {
+            if(data.ok && data.parsedJSON && "livestream" in data.parsedJSON) {
+                const [ rawChannel ] = data.parsedJSON.livestream;
+                return getChannelFromJson(rawChannel);
+            }
+
+            return null;
+        }))).then((resultChans) => resultChans.filter((channel) => channel !== null));
     }
 }
 

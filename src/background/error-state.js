@@ -168,7 +168,7 @@ export default class ErrorState extends EventTarget {
     /**
      * @param {string} error - Description for a human of what the error is.
      * @param {module:error-state~ErrorType} gravity - How bad the error is.
-     * @param {Array.<string>} [actions=[]] - Ways to deal with the error or learn
+     * @param {[string]} [actions=[]] - Ways to deal with the error or learn
      *                                        more about it. First action is the
      *                                        default action for notifications.
      */

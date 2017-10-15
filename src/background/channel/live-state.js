@@ -131,6 +131,17 @@ class LiveState {
     }
 
     /**
+     * The default interpretation mode based on a user's preference.
+     *
+     * @returns {module:channel/live-state~LiveStateInterpretation} Default live
+     *          state interpretation mode as per the visibility pref.
+     * @async
+     */
+    static defaultInterpretation() {
+        return getDefaultInterpretation();
+    }
+
+    /**
      * @constructs
      * @param {module:channel/live-state~LiveStateIndicator} [state={@link module:channel/live-state.LiveState.OFFLINE}]
      *                                   - Initial state, defaulting to offline.
@@ -147,16 +158,6 @@ class LiveState {
      */
     get state() {
         return this._state;
-    }
-    /**
-     * The default interpretation mode based on a user's preference.
-     *
-     * @returns {module:channel/live-state~LiveStateInterpretation} Default live
-     *          state interpretation mode as per the visibility pref.
-     * @async
-     */
-    static defaultInterpretation() {
-        return getDefaultInterpretation();
     }
     /**
      * Serialize the LiveState.

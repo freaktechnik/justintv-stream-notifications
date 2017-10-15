@@ -44,7 +44,7 @@ test("ListClosedError", (t) => {
 });
 
 test.serial('Cant open list', async (t) => {
-    const open = window.indexedDB.open;
+    const { open } = window.indexedDB;
     window.indexedDB.open = () => {
         throw new Error();
     };
@@ -106,7 +106,7 @@ test.serial('close list', async (t) => {
 
 test.serial('open list error', async (t) => {
     let onerror;
-    const open = window.indexedDB.open;
+    const { open } = window.indexedDB;
     window.indexedDB.open = () => ({
         set onerror(val) {
             onerror = val;
@@ -127,7 +127,7 @@ test.serial('open list error', async (t) => {
 
 test.serial('open list error without trying', async (t) => {
     let onerror;
-    const open = window.indexedDB.open;
+    const { open } = window.indexedDB;
     window.indexedDB.open = () => ({
         set onerror(val) {
             onerror = val;
@@ -135,7 +135,7 @@ test.serial('open list error without trying', async (t) => {
         error: new Error()
     });
 
-    const p = DatabaseManager.open(DatabaseManager.name, true);
+    const p = DatabaseManager.open(DatabaseManager.name, true); // eslint-disable-line security/detect-non-literal-fs-filename
 
     onerror(new Error());
 

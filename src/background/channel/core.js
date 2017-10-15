@@ -22,7 +22,6 @@ const ITEM_ARGS = [
  * @class
  */
 class Item {
-    _uname = "";
     /**
      * @param {string} login - Unique login name.
      * @param {string} type - Provider name.
@@ -77,6 +76,8 @@ class Item {
     get type() {
         return this._type;
     }
+
+    _uname = "";
     //methods
     /**
      * Retuns the URL to the best image for displaying at the specified size.
@@ -176,7 +177,7 @@ class User extends Item {
 
         /**
          * The favorite channels of this user as an array of logins.
-         * @type {Array.<string>}
+         * @type {[string]}
          */
         this.favorites = [];
     }
@@ -184,7 +185,7 @@ class User extends Item {
      * Serialized version of {@link module:channel/core.User}.
      *
      * @typedef {module:channel/core~SerializedItem} SerializedUser
-     * @property {Array.<string>} favorites
+     * @property {[string]} favorites
      */
     /**
      * Serialize the user into a normal object.
@@ -217,6 +218,33 @@ class Channel extends Item {
         return Object.assign(new Channel(...ITEM_ARGS.map((a) => properties[a])), props);
     }
 
+    /**
+     * @param {string} login - Login of the channel.
+     * @param {string} type - Type/Provider of the channel.
+     * @param {number} [id] - ID of the channel.
+     * @param {module:channel/live-state~SerializedLiveState} [state] - Live state
+     *        of the channel.
+     */
+    constructor(login, type, id, state) {
+        super(login, type, id);
+
+        /**
+         * An array of URLs that will contain a player of the stream. The first one is
+         * treated as the main channel page and opened when the user clicks on the
+         * stream.
+         * @type {[string]}
+         */
+        this.url = [];
+
+        this.lastModified = Date.now();
+        if(state) {
+            this.live = LiveState.deserialize(state);
+        }
+        else {
+            this.live = new LiveState();
+        }
+    }
+    // properties
     /**
      * The title of the live broadcast.
      *
@@ -276,34 +304,6 @@ class Channel extends Item {
      * @default false
      */
     mature = false;
-
-    /**
-     * @param {string} login - Login of the channel.
-     * @param {string} type - Type/Provider of the channel.
-     * @param {number} [id] - ID of the channel.
-     * @param {module:channel/live-state~SerializedLiveState} [state] - Live state
-     *        of the channel.
-     */
-    constructor(login, type, id, state) {
-        super(login, type, id);
-
-        /**
-         * An array of URLs that will contain a player of the stream. The first one is
-         * treated as the main channel page and opened when the user clicks on the
-         * stream.
-         * @type {Array.<string>}
-         */
-        this.url = [];
-
-        this.lastModified = Date.now();
-        if(state) {
-            this.live = LiveState.deserialize(state);
-        }
-        else {
-            this.live = new LiveState();
-        }
-    }
-    // properties
     /**
      * @type {module:channel/live-state.LiveState}
      * @default null
@@ -326,7 +326,7 @@ class Channel extends Item {
      * @property {string} title
      * @property {number} viewers
      * @property {string} thumbnail
-     * @property {Array.<string>} url
+     * @property {[string]} url
      * @property {string} archiveUrl
      * @property {string} chatUrl
      * @property {number} lastModified

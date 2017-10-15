@@ -35,6 +35,23 @@ const NO_ID = -1;
  */
 export default class RequestQueue extends EventTarget {
     /**
+     * RequestQueue Object.
+     */
+    constructor() {
+        super();
+        /**
+         * @type {[module:queue~RequestInfo]}
+         * @protected
+         */
+        this.queue = [];
+        /**
+         * @type {[function]}
+         * @protected
+         */
+        this.workers = new Set();
+    }
+
+    /**
      * Last ID assigned to a request.
      *
      * @type {number}
@@ -42,22 +59,6 @@ export default class RequestQueue extends EventTarget {
      * @protected
      */
     lastID = NO_ID;
-    /**
-     * RequestQueue Object.
-     */
-    constructor() {
-        super();
-        /**
-         * @type {Array.<module:queue~RequestInfo>}
-         * @protected
-         */
-        this.queue = [];
-        /**
-         * @type {Array.<function>}
-         * @protected
-         */
-        this.workers = new Set();
-    }
 
     /**
      * @type {Promise.<number>}

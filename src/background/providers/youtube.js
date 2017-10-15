@@ -54,32 +54,6 @@ class YouTube extends GenericProvider {
         this.initialize();
     }
 
-    async _getChannelById(channelId) {
-        const data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
-            {
-                part: "snippet",
-                id: channelId,
-                fields: "items(snippet/title,snippet/thumbnails)",
-                key: await apiKey
-            })}`);
-        if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
-            const ch = new Channel(channelId, this._type),
-                [ item ] = data.parsedJSON.items;
-            ch.url.push(`https://youtube.com/channel/${ch.login}/live`);
-            ch.url.push(`https://gaming.youtube.com/channel/${ch.login}/live`);
-            ch.archiveUrl = `https://youtube.com/channel/${ch.login}/videos`;
-            ch.chatUrl = `https://youtube.com/channel/${ch.login}/discussion`;
-            ch.image = {
-                "88": item.snippet.thumbnails.default.url,
-                "240": item.snippet.thumbnails.high.url
-            };
-            ch.uname = item.snippet.title;
-            return ch;
-        }
-
-        throw new Error(`Getting channel details failed: ${data.status}`);
-    }
-
     async getUserFavorites(username) {
         const data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
             {
@@ -460,6 +434,32 @@ class YouTube extends GenericProvider {
         }
 
         throw new Error(`None of the searchresults exist for ${this.name}`);
+    }
+
+    async _getChannelById(channelId) {
+        const data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
+            {
+                part: "snippet",
+                id: channelId,
+                fields: "items(snippet/title,snippet/thumbnails)",
+                key: await apiKey
+            })}`);
+        if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
+            const ch = new Channel(channelId, this._type),
+                [ item ] = data.parsedJSON.items;
+            ch.url.push(`https://youtube.com/channel/${ch.login}/live`);
+            ch.url.push(`https://gaming.youtube.com/channel/${ch.login}/live`);
+            ch.archiveUrl = `https://youtube.com/channel/${ch.login}/videos`;
+            ch.chatUrl = `https://youtube.com/channel/${ch.login}/discussion`;
+            ch.image = {
+                "88": item.snippet.thumbnails.default.url,
+                "240": item.snippet.thumbnails.high.url
+            };
+            ch.uname = item.snippet.title;
+            return ch;
+        }
+
+        throw new Error(`Getting channel details failed: ${data.status}`);
     }
 }
 

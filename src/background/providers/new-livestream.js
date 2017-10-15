@@ -35,24 +35,6 @@ class NewLivestream extends GenericProvider {
         this.initialize();
     }
 
-    async _getChannelStatus(json, channel) {
-        // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
-        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != NO_BROADCAST)) ||
-            (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != NO_BROADCAST));
-
-        if(event) {
-            channel.title = event.full_name;
-            channel.viewers = event.viewer_count;
-            channel.url.push(`https://livestream.com/${channel.login}/events/${event.id}`);
-            const info = await this._qs.queueRequest(`${baseURL + json.id}/events/${event.id}/stream_info`);
-
-            if(info.parsedJSON && !("message" in info.parsedJSON)) {
-                channel.live.setLive(info.parsedJSON.is_live);
-                channel.thumbnail = info.parsedJSON.thumbnail_url;
-            }
-        }
-        return channel;
-    }
     async getUserFavorites(username) {
         const user = await this._qs.queueRequest(baseURL + username);
 
@@ -177,6 +159,25 @@ class NewLivestream extends GenericProvider {
         }
 
         throw new Error(`Couldn't get details for the new livestream channel ${channelname}`);
+    }
+
+    async _getChannelStatus(json, channel) {
+        // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
+        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != NO_BROADCAST)) ||
+            (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != NO_BROADCAST));
+
+        if(event) {
+            channel.title = event.full_name;
+            channel.viewers = event.viewer_count;
+            channel.url.push(`https://livestream.com/${channel.login}/events/${event.id}`);
+            const info = await this._qs.queueRequest(`${baseURL + json.id}/events/${event.id}/stream_info`);
+
+            if(info.parsedJSON && !("message" in info.parsedJSON)) {
+                channel.live.setLive(info.parsedJSON.is_live);
+                channel.thumbnail = info.parsedJSON.thumbnail_url;
+            }
+        }
+        return channel;
     }
 }
 

@@ -49,62 +49,6 @@ export default class ReadChannelList extends EventTarget {
         return DatabaseManager.error;
     }
 
-    /**
-     * Handle indexedDB requests as promise.
-     *
-     * @private
-     * @async
-     * @param {external:IDBRequest} request - Request to wait for.
-     * @returns {?} Whatever the request's success param is.
-     * @throws Error when the request fails.
-     */
-    _waitForRequest(request) { // eslint-disable-line class-methods-use-this
-        return DatabaseManager._waitForRequest(request);
-    }
-
-    /**
-     * @callback CursorIterator
-     * @param {external:IDBCursor} cursor
-     * @returns {Promise?} Can return a promise. When a promise is returned,
-     * the iteration is continued after the promise resolves, else it is
-     * immediately continued.
-     */
-
-    /**
-     * Sibling of _waitForRequest for cursor requests. Iterates over a cursor
-     * and then resolves.
-     *
-     * @private
-     * @async
-     * @param {external:IDBCursorRequest} request - Request to iterate with.
-     * @param {module:read-channel-list~CursorIterator} callback - Callback for each iteration.
-     * @returns {undefined} When the iteration is finished.
-     * @throws When the iteration is aborted due to an error.
-     */
-    _waitForCursor(request, callback) { // eslint-disable-line class-methods-use-this
-        return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
-            request.onsuccess = (event) => {
-                if(event.target.result) {
-                    const r = callback(event.target.result);
-                    if(r && typeof r === "object" && "then" in r) {
-                        r.then(() => event.target.result.continue()).catch(reject);
-                    }
-                    else {
-                        event.target.result.continue();
-                    }
-                }
-                else {
-                    resolve();
-                }
-            };
-            request.onerror = reject;
-        });
-    }
-
-    filterEvents() { // eslint-disable-line class-methods-use-this
-        return true;
-    }
-
     get db() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.db;
     }
@@ -116,6 +60,11 @@ export default class ReadChannelList extends EventTarget {
             }
             throw e;
         });
+    }
+
+    /* eslint-disable sort-class-members/sort-class-members */
+    filterEvents() { // eslint-disable-line class-methods-use-this
+        return true;
     }
 
     /**
@@ -255,7 +204,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - Type all the channels should have. If left out,
      *                             all channels are returned.
-     * @returns {Array.<Object>} Array of all channels for
+     * @returns {[Object]} Array of all channels for
      *          the given type. May be empty.
      */
     async getChannelsByType(type) {
@@ -282,7 +231,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - The type all returned users should have. If left
      *                             out all users are returned.
-     * @returns {Array.<Object>} Array of users for the given
+     * @returns {[Object]} Array of users for the given
      *          type. May be empty.
      */
     async getUsersByType(type) {
@@ -311,7 +260,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - Channel to search users's
      *                                                  favorites for.
-     * @returns {Array.<Object>} List of users that follow the
+     * @returns {[Object]} List of users that follow the
      *          given channel.
      */
     async getUsersByFavorite(channel) {
@@ -323,7 +272,7 @@ export default class ReadChannelList extends EventTarget {
      * Get all channels that are favorited by a user.
      *
      * @param {module:channel/core.User} user - User to get the favorites of.
-     * @returns {Array.<Object>} List of channels a user
+     * @returns {[Object]} List of channels a user
      *          follows.
      */
     async getChannelsByUserFavorites(user) {
@@ -340,5 +289,58 @@ export default class ReadChannelList extends EventTarget {
      */
     close() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.close();
+    }
+    /* eslint-enable sort-class-members/sort-class-members */
+
+    /**
+     * Handle indexedDB requests as promise.
+     *
+     * @private
+     * @async
+     * @param {external:IDBRequest} request - Request to wait for.
+     * @returns {?} Whatever the request's success param is.
+     * @throws Error when the request fails.
+     */
+    _waitForRequest(request) { // eslint-disable-line class-methods-use-this
+        return DatabaseManager._waitForRequest(request);
+    }
+
+    /**
+     * @callback CursorIterator
+     * @param {external:IDBCursor} cursor
+     * @returns {Promise?} Can return a promise. When a promise is returned,
+     * the iteration is continued after the promise resolves, else it is
+     * immediately continued.
+     */
+
+    /**
+     * Sibling of _waitForRequest for cursor requests. Iterates over a cursor
+     * and then resolves.
+     *
+     * @private
+     * @async
+     * @param {external:IDBCursorRequest} request - Request to iterate with.
+     * @param {module:read-channel-list~CursorIterator} callback - Callback for each iteration.
+     * @returns {undefined} When the iteration is finished.
+     * @throws When the iteration is aborted due to an error.
+     */
+    _waitForCursor(request, callback) { // eslint-disable-line class-methods-use-this
+        return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
+            request.onsuccess = (event) => {
+                if(event.target.result) {
+                    const r = callback(event.target.result);
+                    if(r && typeof r === "object" && "then" in r) {
+                        r.then(() => event.target.result.continue()).catch(reject);
+                    }
+                    else {
+                        event.target.result.continue();
+                    }
+                }
+                else {
+                    resolve();
+                }
+            };
+            request.onerror = reject;
+        });
     }
 }

@@ -45,12 +45,6 @@ export default class PauseableQueue extends RequestQueue {
         }
     }
 
-    _cleanup() {
-        for(const l in this._listeners) {
-            window.removeEventListener(l, this._listeners[l]);
-        }
-        this.clear();
-    }
     getWorker() {
         const worker = () => {
             if(this.queue.length && !this.paused) {
@@ -87,5 +81,12 @@ export default class PauseableQueue extends RequestQueue {
             }
             emit(this, "resume");
         }
+    }
+
+    _cleanup() {
+        for(const l in this._listeners) {
+            window.removeEventListener(l, this._listeners[l]);
+        }
+        this.clear();
     }
 }

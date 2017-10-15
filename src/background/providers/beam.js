@@ -88,16 +88,6 @@ class Beam extends GenericProvider {
         this.initialize();
     }
 
-    async _getHostee(channelId) {
-        return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
-            if(response.ok && response.status !== NOT_FOUND && response.parsedJSON) {
-                return getChannelFromJSON(response.parsedJSON);
-            }
-
-            return null;
-        });
-    }
-
     async getUserFavorites(username) {
         const userid = await this._getUserIdFromUsername(username),
             user = await this._qs.queueRequest(`${baseURL}users/${userid}`);
@@ -247,6 +237,16 @@ class Beam extends GenericProvider {
         }
 
         throw new Error(`No results for ${query} on ${this.name}`);
+    }
+
+    async _getHostee(channelId) {
+        return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
+            if(response.ok && response.status !== NOT_FOUND && response.parsedJSON) {
+                return getChannelFromJSON(response.parsedJSON);
+            }
+
+            return null;
+        });
     }
 }
 

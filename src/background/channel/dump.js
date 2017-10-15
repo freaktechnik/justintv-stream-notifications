@@ -30,8 +30,8 @@ export const PREFS_MAPPING = Object.freeze({
  * Frozen
  *
  * @typedef {Object} DataDump
- * @property {Array.<Object>} channels - Serialized channels
- * @property {Array.<Object>} users - Serialized users
+ * @property {[Object]} channels - Serialized channels
+ * @property {[Object]} users - Serialized users
  * @property {Object} prefs - Collection of important preferences
  * @property {Object} meta - System information
  */
@@ -39,8 +39,8 @@ export const PREFS_MAPPING = Object.freeze({
 /**
  * Creates a JSON serialized dump of all importand extension data.
  *
- * @param {Array.<module:channel/core.Channel>} channels - Channels to dump.
- * @param {Array.<module:channel/core.User>} users - Users to dump.
+ * @param {[module:channel/core.Channel]} channels - Channels to dump.
+ * @param {[module:channel/core.User]} users - Users to dump.
  * @returns {module:channel/dump~DataDump} Serialized data dump.
  * @async
  */
@@ -83,8 +83,8 @@ export const create = async (channels, users) => {
 
 /**
  * @typedef {Object} ChannelsAndUsers
- * @property {Array.<module:channel/core.Channel>} channels
- * @property {Array.<module:channel/core.User>} users
+ * @property {[module:channel/core.Channel]} channels
+ * @property {[module:channel/core.User]} users
  */
 
 /**

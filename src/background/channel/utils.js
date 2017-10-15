@@ -95,10 +95,10 @@ export const formatChannel = async (channel, patterns) => {
 /**
  * Optimized version of formatChannel for multiple channels.
  *
- * @param {Array.<module:channel/core.Channel>} channels - Channels to format.
+ * @param {[module:channel/core.Channel]} channels - Channels to format.
  * @param {boolean} [serialize=false] - If the channels should be serialized
  * while we're at it.
- * @returns {Array.<module:channel/core.Channel|module:channel/core~SerializedChannel>} Formatted channels.
+ * @returns {[module:channel/core.Channel|module:channel/core~SerializedChannel]} Formatted channels.
  * @throws When an invalid channel is given.
  */
 export const formatChannels = async (channels, serialize = false) => {
@@ -111,7 +111,7 @@ export const formatChannels = async (channels, serialize = false) => {
  * Filter channels to exclude existing favorites.
  *
  * @param {module:channel/core.User} user - User whose favs should be excluded.
- * @param {Array.<module:channel/core.Channel>} channels - Channels to filter.
- * @returns {Array.<module:channel/core.Channel>} Filtered array of channels.
+ * @param {[module:channel/core.Channel]} channels - Channels to filter.
+ * @returns {[module:channel/core.Channel]} Filtered array of channels.
  */
 export const filterExistingFavs = (user, channels) => channels.filter((ch) => !user.favorites.includes(ch.login));

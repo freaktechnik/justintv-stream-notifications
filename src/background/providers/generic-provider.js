@@ -36,23 +36,23 @@ const _ = browser.i18n.getMessage,
  */
 /**
  * @event module:providers/generic-provider.GenericProvider#newchannels
- * @type {Array.<module:channel/core.Channel>}
+ * @type {[module:channel/core.Channel]}
  */
 /**
  * @event module:providers/generic-provider.GenericProvider#updatedchannels
- * @type {Array.<module:channel/core.Channel>|module:channel/core.Channel}
+ * @type {[module:channel/core.Channel]|module:channel/core.Channel}
  */
 /**
  * @callback GetURLs
  * @async
- * @returns {Array.<string>} Array of URLs to fetch.
+ * @returns {[string]} Array of URLs to fetch.
  */
 /**
  * @callback UpdateOnComplete
  * @async
  * @param {module:queue~Response} data - Request results.
  * @param {string} url
- * @returns {Array.<module:channel/core.Channel>} Channels that were updated.
+ * @returns {[module:channel/core.Channel]} Channels that were updated.
  */
 /**
  * @typedef {Object} UpdateRequestConfig
@@ -65,7 +65,7 @@ const _ = browser.i18n.getMessage,
  * @async
  * @param {module:queue~Response} data - Request results.
  * @param {string} url
- * @returns {Array.<module:channel/core.User, Array.<module:channel/core.Channel>>} Updated user and new channels.
+ * @returns {[module:channel/core.User, [module:channel/core.Channel]]} Updated user and new channels.
  */
 /**
  * @typedef {Object} FavsRequestConfig
@@ -136,6 +136,70 @@ export default class GenericProvider extends EventTarget {
     }*/
 
     /**
+     * Generic base-class for all providers. Implements common patterns and helpers.
+     *
+     * @constructs
+     * @param {string} type - Provider type descriptor.
+     */
+    constructor(type) {
+        super();
+        /**
+         * The type specified to the constructor.
+         *
+         * @type {string}
+         * @protected
+         */
+        this._type = type;
+    }
+
+    /**
+     * Array of URLs to search credentials for.
+     *
+     * @abstract
+     * @type {[string]}
+     */
+    authURL = [];
+
+    /**
+     * If the provider is fully functional and should be enabled. Makes it
+     * impossible to add new channels and users and disables the update
+     * request queueing. Existing channels will be kept around, and could
+     * still be updated. getChannelDetails is also expected to return a
+     * channel that at least sets the login.
+     *
+     * @type {boolean}
+     * @readonly
+     */
+    get enabled() {
+        return this._enabled;
+    }
+    /**
+     * The human readable name of this provider, by default looks for a
+     * translated string with the id "provider_type" where type is the value of
+     * _type.
+     *
+     * @type {string}
+     * @readonly
+     */
+    get name() {
+        return _(`provider${this._type}`);
+    }
+
+    /**
+     * An object based on the _supports properties.
+     *
+     * @type {module:providers/generic-provider~ProviderSupports}
+     * @readonly
+     */
+    get supports() {
+        return Object.freeze({
+            favorites: this._supportsFavorites && this._enabled,
+            credentials: this._supportsCredentials && this._enabled,
+            featured: this._supportsFeatured && this._enabled
+        });
+    }
+
+    /**
      * Internal property if the provider can get the favorites of a user.
      *
      * @type {boolean}
@@ -175,30 +239,21 @@ export default class GenericProvider extends EventTarget {
     _enabled = true;
 
     /**
-     * Array of URLs to search credentials for.
+     * An instance of the QueueService for this provider.
      *
-     * @abstract
-     * @type {Array.<string>}
+     * @type {queueservice.QueueService}
+     * @protected
+     * @readonly
      */
-    authURL = [];
-
-    /**
-     * Generic base-class for all providers. Implements common patterns and helpers.
-     *
-     * @constructs
-     * @param {string} type - Provider type descriptor.
-     */
-    constructor(type) {
-        super();
-        /**
-         * The type specified to the constructor.
-         *
-         * @type {string}
-         * @protected
-         */
-        this._type = type;
+    get _qs() {
+        return queueFor(this);
     }
 
+    get _list() {
+        return listFor(this);
+    }
+
+    /* eslint-disable sort-class-members/sort-class-members */
     /**
      * Initialize the provider after construction. This is primarily a workaround
      * to classes not having a prototype and only defining properties in their
@@ -238,24 +293,156 @@ export default class GenericProvider extends EventTarget {
             }
         }
     }
+
     /**
-     * An instance of the QueueService for this provider.
-     *
-     * @type {queueservice.QueueService}
-     * @protected
-     * @readonly
+     * @returns {string} Localized name of the provider.
+     * @see {@link module:providers/generic-provider.GenericProvider#name}
      */
-    get _qs() {
-        return queueFor(this);
+    toString() {
+        return this.name;
     }
+
+    /**
+     * Frozen
+     *
+     * @typedef {Object} ProviderSupports
+     * @property {boolean} favorites - Provider supports getting a user's favorites
+     * @property {boolean} credentials - Provider supports credential based auto-detect of users
+     * @property {boolean} featured - Provider supports getting featured channels and search
+     */
+
+    /**
+     * Get the favorite channels of a user. Also called the followed channels.
+     *
+     * @async
+     * @param {string} username - The username of the user on the platform
+     *                            (as entered by the user in the channels
+     *                            manager).
+     * @returns {Array} A promise that resolves to an array with to elements in
+     *          this order:
+     *            - the user (an instance of a User object).
+     *            - the favorite channels, an array of Channels objects.
+     * @abstract
+     */
+    getUserFavorites(username) {
+        return methodNotSupported(this.name, "getUserFavorites");
+    }
+    /**
+     * Get a Channel object without the requirement of any live metadata.
+     *
+     * @async
+     * @param {string} channelname - The username of the channel to return
+     *                         (as entered by the user in the channels manager).
+     * @returns {module:channel/core.Channel} Channel object with at least
+     *          username, type, image and urls set.
+     * @abstract
+     */
+    getChannelDetails(channelname) {
+        return methodNotSupported(this.name, "getChannelDetails");
+    }
+    /**
+     * Queues a reocurring update request for updating the favorite channels
+     * of the users.
+     *
+     * @fires module:providers/generic-provider.GenericProvider#updateduser
+     * @fires module:providers/generic-provider.GenericProvider#newchannels
+     * @abstract
+     * @returns {[module:channel/core.User, [module:channel/core.Channel]]} Updated user and new channels.
+     * @async
+     */
+    updateFavsRequest() {
+        return methodNotSupported(this.name, "updateFavsRequest");
+    }
+    /**
+     * Unqueues the reocurring update request for updating the favorite
+     * channels of the users.
+     *
+     * @returns {undefined}
+     */
+    removeFavsRequest() {
+        this._qs.unqueueUpdateRequest(this._qs.LOW_PRIORITY);
+    }
+    /**
+     * Queues a reocurring update request for updating the live status of all
+     * channels for this provider.
+     *
+     * @fires module:providers/generic-provider.GenericProvider#updatedchannels
+     * @abstract
+     * @returns {[module:channel/core.Channel]} Updated channels.
+     * @async
+     */
+    updateRequest() {
+        return methodNotSupported(this.name, "updateRequest");
+    }
+    /**
+     * Unqueues the reocurring update request for updating the live status of
+     * all channels for this provider.
+     *
+     * @returns {undefined}
+     */
+    removeRequest() {
+        this._qs.unqueueUpdateRequest(this._qs.HIGH_PRIORITY);
+    }
+    /**
+     * Updates all info for a channel, including its live metadata. By default
+     * just calls {@link module:providers/generic-provider.GenericProvider#getChannelDetails}.
+     *
+     * @async
+     * @param {string} channelname - The login of the channel.
+     * @returns {module:channel/core.Channel} Updated Channel object.
+     */
+    updateChannel(channelname) {
+        return this.getChannelDetails(channelname);
+    }
+    /**
+     * Updates the information for an array of Channel objects, including
+     * their live metadata. The default implementation calls
+     * {@link module:providers/generic-provider.GenericProvider#updateChannel}
+     * for each item.
+     *
+     * @async
+     * @param {[module:channel/core.Channel]} channels - An array of
+     *                                                      channel objects.
+     * @returns {[module:channel/core.Channel]} Updated Channel objects.
+     */
+    updateChannels(channels) {
+        return Promise.all(channels.map((channel) => this.updateChannel(channel.login)));
+    }
+    /**
+     * Returns channels the provider is featuring. Results should be
+     * filtered if _mature is false. By default calls
+     * {@link module:providers/generic-provider.GenericProvider#search} with
+     * an empty string as argument.
+     *
+     * @async
+     * @returns {[module:channel/core.Channel]} An array of featured
+     *                                                channels.
+     * @see {@link module:providers/generic-provider.GenericProvider#_mature}
+     */
+    getFeaturedChannels() {
+        return this.search("");
+    }
+    /**
+     * Search for live channels. Results should be filtered if _mature is
+     * false.
+     *
+     * @async
+     * @param {string} query - A string to search for.
+     * @returns {[module:channel/core.Channel]} An array of channels
+     *                                                matching the query.
+     * @abstract
+     * @see {@link module:lib/providers/generic-provider.GenericProvider#_mature}
+     */
+    search(query) {
+        return methodNotSupported(this.name, "search");
+    }
+    /* eslint-enable sort-class-members/sort-class-members */
+
     // For testing.
     _setQs(val) {
         queues.set(this, val);
     }
 
-    get _list() {
-        return listFor(this);
-    }
     /**
      * Indicates if exploring features should hold mature results. Respects
      * parental control settings of the OS.
@@ -266,37 +453,6 @@ export default class GenericProvider extends EventTarget {
      */
     _mature() {
         return prefs.get("find_mature").then((value) => value && !ParentalControls.enabled);
-    }
-    /**
-     * If the provider is fully functional and should be enabled. Makes it
-     * impossible to add new channels and users and disables the update
-     * request queueing. Existing channels will be kept around, and could
-     * still be updated. getChannelDetails is also expected to return a
-     * channel that at least sets the login.
-     *
-     * @type {boolean}
-     * @readonly
-     */
-    get enabled() {
-        return this._enabled;
-    }
-    /**
-     * The human readable name of this provider, by default looks for a
-     * translated string with the id "provider_type" where type is the value of
-     * _type.
-     *
-     * @type {string}
-     * @readonly
-     */
-    get name() {
-        return _(`provider${this._type}`);
-    }
-    /**
-     * @returns {string} Localized name of the provider.
-     * @see {@link module:providers/generic-provider.GenericProvider#name}
-     */
-    toString() {
-        return this.name;
     }
 
     /**
@@ -350,152 +506,5 @@ export default class GenericProvider extends EventTarget {
             priority: this._qs.LOW_PRIORITY,
             headers: "headers" in config ? config.headers : {}
         });
-    }
-
-    /**
-     * Frozen
-     *
-     * @typedef {Object} ProviderSupports
-     * @property {boolean} favorites - Provider supports getting a user's favorites
-     * @property {boolean} credentials - Provider supports credential based auto-detect of users
-     * @property {boolean} featured - Provider supports getting featured channels and search
-     */
-    /**
-     * An object based on the _supports properties.
-     *
-     * @type {module:providers/generic-provider~ProviderSupports}
-     * @readonly
-     */
-    get supports() {
-        return Object.freeze({
-            favorites: this._supportsFavorites && this._enabled,
-            credentials: this._supportsCredentials && this._enabled,
-            featured: this._supportsFeatured && this._enabled
-        });
-    }
-    /**
-     * Get the favorite channels of a user. Also called the followed channels.
-     *
-     * @async
-     * @param {string} username - The username of the user on the platform
-     *                            (as entered by the user in the channels
-     *                            manager).
-     * @returns {Array} A promise that resolves to an array with to elements in
-     *          this order:
-     *            - the user (an instance of a User object).
-     *            - the favorite channels, an array of Channels objects.
-     * @abstract
-     */
-    getUserFavorites(username) {
-        return methodNotSupported(this.name, "getUserFavorites");
-    }
-    /**
-     * Get a Channel object without the requirement of any live metadata.
-     *
-     * @async
-     * @param {string} channelname - The username of the channel to return
-     *                         (as entered by the user in the channels manager).
-     * @returns {module:channel/core.Channel} Channel object with at least
-     *          username, type, image and urls set.
-     * @abstract
-     */
-    getChannelDetails(channelname) {
-        return methodNotSupported(this.name, "getChannelDetails");
-    }
-    /**
-     * Queues a reocurring update request for updating the favorite channels
-     * of the users.
-     *
-     * @fires module:providers/generic-provider.GenericProvider#updateduser
-     * @fires module:providers/generic-provider.GenericProvider#newchannels
-     * @abstract
-     * @returns {Array.<module:channel/core.User, Array.<module:channel/core.Channel>>} Updated user and new channels.
-     * @async
-     */
-    updateFavsRequest() {
-        return methodNotSupported(this.name, "updateFavsRequest");
-    }
-    /**
-     * Unqueues the reocurring update request for updating the favorite
-     * channels of the users.
-     *
-     * @returns {undefined}
-     */
-    removeFavsRequest() {
-        this._qs.unqueueUpdateRequest(this._qs.LOW_PRIORITY);
-    }
-    /**
-     * Queues a reocurring update request for updating the live status of all
-     * channels for this provider.
-     *
-     * @fires module:providers/generic-provider.GenericProvider#updatedchannels
-     * @abstract
-     * @returns {Array.<module:channel/core.Channel>} Updated channels.
-     * @async
-     */
-    updateRequest() {
-        return methodNotSupported(this.name, "updateRequest");
-    }
-    /**
-     * Unqueues the reocurring update request for updating the live status of
-     * all channels for this provider.
-     *
-     * @returns {undefined}
-     */
-    removeRequest() {
-        this._qs.unqueueUpdateRequest(this._qs.HIGH_PRIORITY);
-    }
-    /**
-     * Updates all info for a channel, including its live metadata. By default
-     * just calls {@link module:providers/generic-provider.GenericProvider#getChannelDetails}.
-     *
-     * @async
-     * @param {string} channelname - The login of the channel.
-     * @returns {module:channel/core.Channel} Updated Channel object.
-     */
-    updateChannel(channelname) {
-        return this.getChannelDetails(channelname);
-    }
-    /**
-     * Updates the information for an array of Channel objects, including
-     * their live metadata. The default implementation calls
-     * {@link module:providers/generic-provider.GenericProvider#updateChannel}
-     * for each item.
-     *
-     * @async
-     * @param {Array.<module:channel/core.Channel>} channels - An array of
-     *                                                      channel objects.
-     * @returns {Array.<module:channel/core.Channel>} Updated Channel objects.
-     */
-    updateChannels(channels) {
-        return Promise.all(channels.map((channel) => this.updateChannel(channel.login)));
-    }
-    /**
-     * Returns channels the provider is featuring. Results should be
-     * filtered if _mature is false. By default calls
-     * {@link module:providers/generic-provider.GenericProvider#search} with
-     * an empty string as argument.
-     *
-     * @async
-     * @returns {Array.<module:channel/core.Channel>} An array of featured
-     *                                                channels.
-     * @see {@link module:providers/generic-provider.GenericProvider#_mature}
-     */
-    getFeaturedChannels() {
-        return this.search("");
-    }
-    /**
-     * Search for live channels. Results should be filtered if _mature is
-     * false.
-     *
-     * @async
-     * @param {string} query - A string to search for.
-     * @returns {Array.<module:channel/core.Channel>} An array of channels
-     *                                                matching the query.
-     * @abstract
-     * @see {@link module:lib/providers/generic-provider.GenericProvider#_mature}
-     */
-    search(query) {
-        return methodNotSupported(this.name, "search");
     }
 }
