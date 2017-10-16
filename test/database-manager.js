@@ -135,7 +135,7 @@ test.serial('open list error without trying', async (t) => {
         error: new Error()
     });
 
-    const p = DatabaseManager.open(DatabaseManager.name, true); // eslint-disable-line security/detect-non-literal-fs-filename
+    const p = DatabaseManager.open(DatabaseManager.name, true);
 
     onerror(new Error());
 
