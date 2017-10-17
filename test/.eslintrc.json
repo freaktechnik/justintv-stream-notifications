@@ -4,7 +4,11 @@
         "browser": true
     },
     "rules": {
-        "no-console": 2
+        "no-console": 2,
+        "typelint/typelint": 0
     },
-    "extends": "@freaktechnik/eslint-config-test"
+    "extends": [
+        "@freaktechnik/eslint-config-babel",
+        "@freaktechnik/eslint-config-test"
+    ]
 }
