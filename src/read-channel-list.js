@@ -62,7 +62,6 @@ export default class ReadChannelList extends EventTarget {
         });
     }
 
-    /* eslint-disable sort-class-members/sort-class-members */
     filterEvents() { // eslint-disable-line class-methods-use-this
         return true;
     }
@@ -290,7 +289,6 @@ export default class ReadChannelList extends EventTarget {
     close() { // eslint-disable-line class-methods-use-this
         return DatabaseManager.close();
     }
-    /* eslint-enable sort-class-members/sort-class-members */
 
     /**
      * Handle indexedDB requests as promise.

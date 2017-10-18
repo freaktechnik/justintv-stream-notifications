@@ -253,7 +253,6 @@ export default class GenericProvider extends EventTarget {
         return listFor(this);
     }
 
-    /* eslint-disable sort-class-members/sort-class-members */
     /**
      * Initialize the provider after construction. This is primarily a workaround
      * to classes not having a prototype and only defining properties in their
@@ -436,7 +435,6 @@ export default class GenericProvider extends EventTarget {
     search(query) {
         return methodNotSupported(this.name, "search");
     }
-    /* eslint-enable sort-class-members/sort-class-members */
 
     // For testing.
     _setQs(val) {
