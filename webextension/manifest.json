@@ -39,11 +39,8 @@
         "downloads",
         "https://www.googleapis.com/youtube/v3/*",
         "https://livestream.com/api/*",
-        "https://api.twitch.tv/api/*",
         "https://tmi.twitch.tv/*",
-        "https://ptvappapi.picarto.tv/*",
         "http://www.ustream.tv/*",
-        "http://www.douyutv.com/api/v1/*",
         "http://*.api.channel.livestream.com/2.0/*",
         "https://www.majorleaguegaming.com/api/*",
         "https://streamapi.majorleaguegaming.com/service/streams/*"
