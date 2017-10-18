@@ -32,3 +32,19 @@ That's most likely because it hasn't been translated into it yet. You can help t
 I want to hear a sound whenever I get a notification
 ----------------------------------------------------
 Because there seems to be demand for this I've decided to create an extension that plays a sound whenever a notification is shown. You can get it [here](https://addons.mozilla.org/firefox/addon/notification-sound/).
+
+What are all these permissions used for?
+----------------------------------------
+ - **tabs**: Decide if a notification needs to be shown, switch to already opened tabs of streams when opening them
+ - **notifications**: To show notifications when channel states change and when a channel is copied to the clipboard or an error occurs within the extension
+ - **storage**: To save the extension settings
+ - **alarms**: To update channel statuses regularly
+ - **clipboardWrite**: Copy channel URL in a predefined pattern to the clipboard, copy debugging information
+ - **downloads**: Export settings, channels and users
+ - `https://www.googleapis.com/youtube/v3/*`: Check the status of YouTube channels
+ - `https://livestream.com/api/*`: Check the status of livestream.com channels
+ - `https://tmi.twitch.tv/*`: Check the hosting status of Twitch channels
+ - `http://www.ustream.tv/*`: Add UStream channels by username
+ - `http://*.api.channel.livestream.com/2.0/*`: Check the status of old livestream channels
+ - `https://www.majorleaguegaming.com/api/*`: Check the status of MLG.tv channels
+ - `https://streamapi.majorleaguegaming.com/service/streams/*`: Get info of MLG.tv channels
