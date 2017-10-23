@@ -39,7 +39,7 @@
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "babel-preset-react": "^6.24.1",
     "browser-env": "^3.2.0",
-    "codecov": "^2.0.2",
+    "codecov": "^3.0.0",
     "css-loader": "^0.28.7",
     "element-dataset": "^2.2.6",
     "eslint": "^4.7.1",
