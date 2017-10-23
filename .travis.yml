@@ -1,9 +1,10 @@
 language: node_js
 node_js: stable
-install:
-- npm i --no-save
+before_install: npm i -g greenkeeper-lockfile
 before_script:
 - npm run ci-init
+- greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
 after_success: npm run coverage
 branches:
   except:
