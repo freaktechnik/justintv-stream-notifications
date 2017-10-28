@@ -11,6 +11,8 @@ import Navigator from './navigator';
 import EventTarget from 'event-target-shim';
 import execCommand from './exec-command';
 import polyfillDataset from 'element-dataset';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
 // DOM environment
 browserEnv([
@@ -63,3 +65,5 @@ global.browser.notifications.onShown = {
     }
 };
 setup();
+
+configure({ adapter: new Adapter() });

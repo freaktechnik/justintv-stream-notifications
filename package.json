@@ -35,6 +35,8 @@
     "ajv": "^5.2.2",
     "ava": "^0.23.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.5",
+    "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "babel-preset-react": "^6.24.1",
@@ -42,6 +44,8 @@
     "codecov": "^3.0.0",
     "css-loader": "^0.28.7",
     "element-dataset": "^2.2.6",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.2",
     "eslint": "^4.7.1",
     "extract-text-webpack-plugin": "^3.0.0",
     "fake-indexeddb": "^2.0.0",
@@ -83,11 +87,24 @@
   },
   "babel": {
     "presets": [
-      "@ava/stage-4"
+      "@ava/stage-4",
+      "react"
     ],
     "plugins": [
       "transform-es2015-modules-commonjs",
-      "transform-class-properties"
+      "transform-class-properties",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./"
+          ],
+          "alias": {
+            "open-iconic/sprite/open-iconic.min.svg": "test/helpers/assets/open-iconic.js"
+          }
+        }
+      ],
+      "istanbul"
     ]
   },
   "nyc": {
@@ -97,7 +114,12 @@
     ],
     "extension": [
       ".jsx"
-    ]
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
