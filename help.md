@@ -9,8 +9,8 @@ There are a couple of really helpful pages already existing:
 
  - [Channels Manager Help](channels-manager/)
  - [Panel Help](panel/)
- - [Livestreamer Integration Help](livestreamer/)
  - [Accepting Cookies to Fix Extension](accept-cookies/)
+ - [Livestreamer/Streamlink Integration Help](livestreamer/)
  - [FAQ](faq/)
 
 If your problem isn't solved by any of them, feel free to contact me.
