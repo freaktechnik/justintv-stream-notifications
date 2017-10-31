@@ -7,7 +7,7 @@
 [Livestreamer](http://livestreamer.io) is a command-line program that opens
 streams with a native video player like VLC.
 
-Streamlink is a fork of livestreamer, since livestreamer is no longer maintained.
+[Streamlink](https://streamlink.github.io) is a fork of livestreamer, since livestreamer is no longer maintained.
 
 ## How do I use Streamlink with this extension?
 Go to the extension settings and set the stream URL copy pattern to the streamlink
