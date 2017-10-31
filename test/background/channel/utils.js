@@ -100,11 +100,11 @@ test.serial('open chat', async (t) => {
     t.is(browser.tabs.create.lastCall.args[0].url, channel.chatUrl, "Tab was opened with the url for the chat");
 });
 
-test('does not support livestreamer', (t) => {
+test('does support livestreamer', (t) => {
     const channel = getChannel();
     channel.live.setLive(true);
 
-    return t.throws(selectOrOpenTab(channel, 'livestreamer'), Error, 'Not supported');
+    return t.notThrows(selectOrOpenTab(channel, 'livestreamer'));
 });
 
 test('formatChannel without channel', (t) => t.throws(formatChannel('test'), TypeError, 'Invalid channel provided'));

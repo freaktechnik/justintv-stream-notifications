@@ -149,6 +149,9 @@ class ListView extends EventTarget {
             case "openArchive":
                 emit(this, "open", event.payload, "archive");
                 break;
+            case "openLivestreamer":
+                emit(this, "open", event.payload, "livestreamer");
+                break;
             case "refresh":
             case "copied":
             case "remove":

@@ -551,6 +551,10 @@
     },
     "import": {
         "message": "Import configuration",
-        "description": "Button label to import preferences and channel list"
+        "description": "Button label to import preferences and channel list."
+    },
+    "context_livestreamer": {
+        "message": "Open with Streamlink",
+        "description": "Button label for the streamlink opening context panel item."
     }
 }

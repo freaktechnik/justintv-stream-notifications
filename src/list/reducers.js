@@ -132,7 +132,8 @@ const THEMES = [
         loading,
         currentProvider: simpleReducer("setProvider", 'twitch'),
         contextChannel,
-        queueContext
+        queueContext,
+        showLivestreamer: simpleReducer("hasStreamlinkHelper", false)
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

@@ -30,7 +30,7 @@ export async function selectOrOpenTab(channel, what) {
         toCheck = channel.url;
 
         if(what === "livestreamer") {
-            throw new Error("Not supported");
+            return browser.runtime.sendMessage("streamlink.firefox.helper@gmail.com", channel.url);
         }
     }
 

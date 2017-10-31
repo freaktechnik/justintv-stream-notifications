@@ -37,6 +37,7 @@
         "alarms",
         "clipboardWrite",
         "downloads",
+        "management",
         "https://www.googleapis.com/youtube/v3/*",
         "https://livestream.com/api/*",
         "https://tmi.twitch.tv/*",

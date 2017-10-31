@@ -125,7 +125,7 @@
     },
     "import": {
         "message": "Import configuration",
-        "description": "Button label to import preferences and channel list"
+        "description": "Button label to import preferences and channel list."
     },
     "cm_autoAdd.title": {
         "message": "Ajouter",
@@ -242,6 +242,10 @@
     "cm_dialog_submit": {
         "message": "OK",
         "description": "Confirmation action in the dialog to add a channel or user"
+    },
+    "context_livestreamer": {
+        "message": "Open with Streamlink",
+        "description": "Button label for the streamlink opening context panel item."
     },
     "context_refresh": {
         "message": "Rafraîchir l'état de la chaîne",

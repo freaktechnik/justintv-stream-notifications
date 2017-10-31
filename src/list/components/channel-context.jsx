@@ -48,6 +48,9 @@ const ChannelContextPanel = (props) => {
             items.push(<ContextItem label="context_refresh" onClick={ () => props.onRefresh(props.id) }/>);
         }
     }
+    if(props.showLivestreamer) {
+        items.push(<ContextItem label="context_livestreamer" onClick={ () => props.onLivestreamer(props) }/>);
+    }
     return ( <ContextList title={ props.uname } onClose={ props.onClose }>
         <ContextItem label="openChannel" onClick={ () => props.onOpen(props) }/>
         { items }
@@ -58,7 +61,8 @@ const ChannelContextPanel = (props) => {
     </ContextList> );
 };
 ChannelContextPanel.defaultProps = {
-    providerEnabled: true
+    providerEnabled: true,
+    showLivestreamer: false
 };
 ChannelContextPanel.propTypes = {
     uname: PropTypes.string.isRequired,
@@ -79,11 +83,15 @@ ChannelContextPanel.propTypes = {
     onClose: PropTypes.func.isRequired,
     onArchive: PropTypes.func,
     onRefresh: PropTypes.func,
+    onLivestreamer: PropTypes.func,
     url: PropTypes.string.isRequired,
-    chatUrl: PropTypes.string
+    chatUrl: PropTypes.string,
+    showLivestreamer: PropTypes.bool
 };
 
-const mapStateToProps = (state) => state.ui.contextChannel;
+const mapStateToProps = (state) => Object.assign({
+    showLivestreamer: state.ui.showLivestreamer
+}, state.ui.contextChannel);
 
 const mapDispatchToProps = (dispatch) => ({
     onOpen(channel) {
@@ -160,6 +168,17 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onClose() {
         dispatch(closeAction);
+    },
+    onLivestreamer(channel) {
+        let payload = channel.id;
+        if(channel.external) {
+            payload = channel.url;
+        }
+        dispatch({
+            command: "openLivestreamer",
+            payload
+        });
+        window.close();
     }
 });
 

@@ -98,6 +98,20 @@ prefs.addEventListener("change", ({ detail: {
 
 document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().replace("_", "-"));
 
+browser.management.get("streamlink.firefox.helper@gmail.com")
+    .then(() => {
+        store.dispatch({
+            type: "hasStreamlinkHelper",
+            payload: true
+        });
+    })
+    .catch(() => {
+        store.dispatch({
+            type: "hasStreamlinkHelper",
+            payload: false
+        });
+    });
+
 // Actually show something
 
 render(

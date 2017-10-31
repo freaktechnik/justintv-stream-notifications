@@ -125,7 +125,7 @@
     },
     "import": {
         "message": "Import configuration",
-        "description": "Button label to import preferences and channel list"
+        "description": "Button label to import preferences and channel list."
     },
     "cm_autoAdd.title": {
         "message": "Add favorites of users for which the browser has credentials stored.",
@@ -242,6 +242,10 @@
     "cm_dialog_submit": {
         "message": "Ok",
         "description": "Confirmation action in the dialog to add a channel or user"
+    },
+    "context_livestreamer": {
+        "message": "Open with Streamlink",
+        "description": "Button label for the streamlink opening context panel item."
     },
     "context_refresh": {
         "message": "Refresh Channel Status",
