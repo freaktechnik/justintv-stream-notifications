@@ -26,7 +26,7 @@ const THEMES = [
     },
     theme = (state = THEMES[DEFAULT_THEME], event) => {
         switch(event.type) {
-        case "theme":
+        case storeTypes.SET_THEME:
             return THEMES[event.payload];
         default:
             return state;
@@ -34,7 +34,7 @@ const THEMES = [
     },
     style = (state = STYLES[DEFAULT_STYLE], event) => {
         switch(event.type) {
-        case "setStyle":
+        case storeTypes.SET_STYLE:
             return STYLES[event.payload];
         default:
             return state;
@@ -42,11 +42,11 @@ const THEMES = [
     },
     channels = (state = [], event) => {
         switch(event.type) {
-        case "addChannels":
+        case storeTypes.ADD_CHANNELS:
             return state.concat(event.payload);
         case "removeChannel":
             return state.filter((ch) => ch.id !== event.payload);
-        case "updateChannel":
+        case storeType.UPDATE_CHANNEL:
             return state.map((ch) => {
                 if(ch.id !== event.payload.id) {
                     return ch;
@@ -122,9 +122,9 @@ const THEMES = [
         theme,
         style,
         nonLiveDisplay: simpleReducer("setNonLiveDisplay", DEFAULT_NONLIVE),
-        extras: simpleReducer("setExtras", prefs.panel_extras.value),
+        extras: simpleReducer(storyTypes.SET_EXTRAS, prefs.panel_extras.value),
         queue,
-        copyPattern: simpleReducer("setCopyPattern", prefs.copy_pattern.value),
+        copyPattern: simpleReducer(storeTypes.SET_COPY_PATTERN, prefs.copy_pattern.value),
         showMaturThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value)
     }),
     ui = combineReducers({
@@ -135,7 +135,7 @@ const THEMES = [
         currentProvider: simpleReducer("setProvider", 'twitch'),
         contextChannel,
         queueContext,
-        showLivestreamer: simpleReducer("hasStreamlinkHelper", false)
+        showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false)
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

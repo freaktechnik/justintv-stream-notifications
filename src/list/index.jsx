@@ -20,10 +20,10 @@ import '../content/shared.css';
 import './list.css';
 
 const PREFS_MAP = {
-        'copy_pattern': "setCopyPattern",
-        theme: "theme",
-        'panel_extras': "setExtras",
-        'panel_style': "setStyle",
+        'copy_pattern': storeTypes.SET_COPY_PATTERN,
+        theme: storyTypes.SET_THEME,
+        'panel_extras': storeTypes.SET_EXTRAS,
+        'panel_style': storeTypes.SET_STYLE,
         'show_mature_thumbs': storeTypes.SHOW_MATURE_THUMBS
     },
     prefsKeys = Object.keys(PREFS_MAP),
@@ -48,7 +48,7 @@ Promise.all([
     }),
     list.getChannelsByType().then((channels) => {
         store.dispatch({
-            type: "addChannels",
+            type: storeTypes.ADD_CHANNELS,
             payload: channels
         });
     })
@@ -58,7 +58,7 @@ port.addEventListener("message", ({ detail: event }) => {
         Promise.all(event.payload.map((id) => list.getChannel(id)))
             .then((channels) => {
                 store.dispatch({
-                    type: "addChannels",
+                    type: storeTypes.ADD_CHANNELS,
                     payload: channels
                 });
             })
@@ -68,7 +68,7 @@ port.addEventListener("message", ({ detail: event }) => {
         list.getChannel(event.payload)
             .then((channel) => {
                 store.dispatch({
-                    type: "updateChannel",
+                    type: storeType.UPDATE_CHANNEL,
                     payload: channel
                 });
             })
@@ -103,13 +103,13 @@ document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().repla
 browser.management.get("streamlink.firefox.helper@gmail.com")
     .then(() => {
         store.dispatch({
-            type: "hasStreamlinkHelper",
+            type: storeTypes.HAS_STREAMLINK_HELPER,
             payload: true
         });
     })
     .catch(() => {
         store.dispatch({
-            type: "hasStreamlinkHelper",
+            type: storeTypes.HAS_STREAMLINK_HELPER,
             payload: false
         });
     });

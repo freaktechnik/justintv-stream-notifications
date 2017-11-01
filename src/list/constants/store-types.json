@@ -1,3 +1,10 @@
 {
-    "SHOW_MATURE_THUMBS": "setShowMatureThumbs"
+    "SHOW_MATURE_THUMBS": "setShowMatureThumbs",
+    "HAS_STREAMLINK_HELPER": "hasStreamlinkHelper",
+    "UPDATE_CHANNEL": "updateChannel",
+    "ADD_CHANNELS": "addChannels",
+    "SET_COPY_PATTERN": "setCopyPattern",
+    "SET_THEME": "theme",
+    "SET_EXTRAS": "setExtras",
+    "SET_STYLE": "setStyle"
 }
