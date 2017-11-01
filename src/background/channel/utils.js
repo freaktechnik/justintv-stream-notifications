@@ -30,7 +30,8 @@ export async function selectOrOpenTab(channel, what) {
         toCheck = channel.url;
 
         if(what === "livestreamer") {
-            return browser.runtime.sendMessage("streamlink.firefox.helper@gmail.com", channel.url);
+            const [ url ] = toCheck;
+            return browser.runtime.sendMessage("streamlink.firefox.helper@gmail.com", url);
         }
     }
 
