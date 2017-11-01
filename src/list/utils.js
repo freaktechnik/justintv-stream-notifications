@@ -9,7 +9,7 @@ export { SMALL_IMAGE, LARGE_IMAGE };
 
 export const getExternalID = (channel) => `${channel.login}|${channel.type}`;
 
-export const formatChannel = (channel, providers, type, extras = false, style = "default") => {
+export const formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true) => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
@@ -32,7 +32,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         };
     }
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && style !== "compact") {
-        if(style === "thumbnail") {
+        if(style === "thumbnail" && (!channel.mature || showThumbnails)) {
             formattedChannel.thumbnail = channel.thumbnail;
         }
         formattedChannel.title = channel.title;

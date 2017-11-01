@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import prefs from '../prefs.json';
 import { EXTRAS_TAB, LIVE_TAB } from './constants/tabs.json';
+import * as storeTypes from './constants/store-types.json';
 
 const THEMES = [
         "light",
@@ -121,9 +122,10 @@ const THEMES = [
         theme,
         style,
         nonLiveDisplay: simpleReducer("setNonLiveDisplay", DEFAULT_NONLIVE),
-        extras: simpleReducer("setExtras"),
+        extras: simpleReducer("setExtras", prefs['panel_extras'].value),
         queue,
-        copyPattern: simpleReducer("setCopyPattern", '')
+        copyPattern: simpleReducer("setCopyPattern", prefs['copy_pattern'].value),
+        showMaturThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs['show_mature_thumbs'].value)
     }),
     ui = combineReducers({
         tab: simpleReducer("setTab", DEFAULT_TAB),

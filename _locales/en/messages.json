@@ -556,5 +556,9 @@
     "context_livestreamer": {
         "message": "Open with Streamlink",
         "description": "Button label for the streamlink opening context panel item."
+    },
+    "show_mature_thumbs_title": {
+        "message": "Show NSFW thumbnails",
+        "description": "Setting to hide thumbnails of mature streams."
     }
 }

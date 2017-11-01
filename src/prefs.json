@@ -131,5 +131,10 @@
         "type": "string",
         "value": "rerun,rediff,rebroadcast,replay,recap,re-run,re-diff,re-play,re-cap,re-broadcast",
         "hidden": true
+    },
+    "show_mature_thumbs": {
+        "type": "bool",
+        "value": true,
+        "hidden": true
     }
 }

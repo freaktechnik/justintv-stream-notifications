@@ -14,7 +14,8 @@ import Popup from './components/popup.jsx';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
 import middlewareFactory from './middleware';
-import prefs from '../preferences';
+import prefs from '../preferences'
+import * as storeTypes from './constants/store-types.json';
 import '../content/shared.css';
 import './list.css';
 
@@ -22,7 +23,8 @@ const PREFS_MAP = {
         'copy_pattern': "setCopyPattern",
         theme: "theme",
         'panel_extras': "setExtras",
-        'panel_style': "setStyle"
+        'panel_style': "setStyle",
+        'show_mature_thumbs': storeTypes.SHOW_MATURE_THUMBS
     },
     prefsKeys = Object.keys(PREFS_MAP),
     // Set up all the state stuff
