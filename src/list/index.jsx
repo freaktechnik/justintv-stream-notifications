@@ -14,7 +14,7 @@ import Popup from './components/popup.jsx';
 import Port from '../port';
 import ReadChannelList from '../read-channel-list';
 import middlewareFactory from './middleware';
-import prefs from '../preferences'
+import prefs from '../preferences';
 import * as storeTypes from './constants/store-types.json';
 import '../content/shared.css';
 import './list.css';
