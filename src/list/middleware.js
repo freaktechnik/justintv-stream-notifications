@@ -2,6 +2,7 @@ import { formatChannel, getExternalID } from './utils';
 import LiveState from '../live-state.json';
 import { copy } from '../content/utils';
 import { LIVE_TAB, EXTRAS_TAB } from './constants/tabs.json';
+import storeTypes from './constants/store-types.json';
 
 export default (port) => ({
     getState, dispatch
@@ -31,7 +32,7 @@ export default (port) => ({
         port.send(action.command, action.payload);
     }
     // State changes that trigger a backend command (i.e. everything that's wrong with this app)
-    else if(action.type === "setTab") {
+    else if(action.type === storeTypes.SET_TAB) {
         // This has to be aborted, else the loading state is set when payload === 3
         if(state.ui.tab === action.payload) {
             return;
@@ -48,7 +49,7 @@ export default (port) => ({
             }
         }
     }
-    else if(action.type === "search" && state.ui.tab === EXTRAS_TAB) {
+    else if(action.type === storeTypes.SEARCH && state.ui.tab === EXTRAS_TAB) {
         if(action.payload.length) {
             port.send("search", {
                 type: state.ui.currentProvider,
@@ -59,10 +60,10 @@ export default (port) => ({
             port.send("explore", state.ui.currentProvider);
         }
         dispatch({
-            type: "loading"
+            type: storeTypes.LOADING
         });
     }
-    else if(action.type === "setFeatured") {
+    else if(action.type === storeTypes.SET_FEATURED) {
         if((state.ui.search && ((state.ui.query.length && state.ui.query != action.payload.q) || !("q" in action.payload))) || state.ui.currentProvider != action.payload.type) {
             return;
         }
@@ -71,14 +72,14 @@ export default (port) => ({
             payload: action.payload.channels
         };
     }
-    else if(action.type === "toggleSearch" && state.ui.search && state.ui.query.length && state.ui.tab === EXTRAS_TAB) {
+    else if(action.type === storeTypes.TOGGLE_SEARCH && state.ui.search && state.ui.query.length && state.ui.tab === EXTRAS_TAB) {
         port.send("explore", state.ui.currentProvider);
         dispatch({
-            type: "loading"
+            type: storeTypes.LOADING
         });
     }
     // The following code is proof, that the contextChannel model is not optimal:
-    else if(action.type === "updateChannel" && state.contextChannel) {
+    else if(action.type === storeTypes.UPDATE_CHANNEL && state.contextChannel) {
         const updatedChannel = Object.assign({}, action.payload);
         if(!updatedChannel.id) {
             updatedChannel.id = getExternalID(updatedChannel);
@@ -94,7 +95,7 @@ export default (port) => ({
         if(state.contextChannel.id === updatedChannel.id) {
             updatedChannel.redirectors = state.contextChannel.redirectors;
             dispatch({
-                type: "setContextChannel",
+                type: storeTypes.SET_CONTEXT_CHANNEL,
                 payload: formatChannel(updatedChannel, state.providers, LIVE_TAB, state.settings.extras, "compact")
             });
         }
@@ -106,7 +107,7 @@ export default (port) => ({
                 id: updatedChannel.id
             });
             dispatch({
-                type: "setContextChannel",
+                type: storeTypes.SET_CONTEXT_CHANNEL,
                 payload: state.contextChannel
             });
         }
@@ -115,7 +116,7 @@ export default (port) => ({
             if(!updatedChannel.state.alternateChannel || updatedChannel.state.alternateChannel.id !== state.contextChannel.id) {
                 state.contextChannel.redirectors = state.contextChannel.redirectors.filter((r) => r.id !== updatedChannel.id);
                 dispatch({
-                    type: "setContextChannel",
+                    type: storeTypes.SET_CONTEXT_CHANNEL,
                     payload: state.contextChannel
                 });
             }
@@ -132,13 +133,13 @@ export default (port) => ({
                     return r;
                 });
                 dispatch({
-                    type: "setContextChannel",
+                    type: storeTypes.SET_CONTEXT_CHANNEL,
                     payload: state.contextChannel
                 });
             }
         }
     }
-    else if(action.type === "copy") {
+    else if(action.type === storeTypes.COPY) {
         if(copy(state.settings.copyPattern.replace("{URL}", action.payload.url))) {
             dispatch({
                 command: "copied",

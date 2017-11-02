@@ -1,0 +1,11 @@
+import React from 'react';
+import test from 'ava';
+import { shallow } from 'enzyme';
+import NavigateableItem from '../../../src/list/components/navigateable-item.jsx';
+
+test('snapshot', (t) => {
+    const wrapper = shallow(<NavigateableItem onFocusChange={ () => t.fail() }>
+        <div>Foo</div>
+    </NavigateableItem>);
+    t.snapshot(wrapper.html());
+});

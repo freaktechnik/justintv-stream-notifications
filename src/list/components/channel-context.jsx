@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import LiveState from '../../live-state.json';
 import { connect } from 'react-redux';
-import { ContextList, ContextItem, closeAction } from './context-list.jsx';
+import ContextList from './context-list.jsx';
+import ContextItem from './context-item.jsx';
+import storeTypes from '../constants/store-types.json';
 
 //TODO closing the context panel should focus the item it was opened for.
 
@@ -136,14 +138,18 @@ const mapDispatchToProps = (dispatch) => ({
             command: "refresh",
             payload: id
         });
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onCopy(payload) {
         dispatch({
-            type: "copy",
+            type: storeTypes.COPY,
             payload
         });
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onAdd(id) {
         const [
@@ -157,17 +163,23 @@ const mapDispatchToProps = (dispatch) => ({
                 type
             }
         });
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onRemove(id) {
         dispatch({
             command: "remove",
             payload: id
         });
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onClose() {
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onLivestreamer(channel) {
         let payload = channel.id;

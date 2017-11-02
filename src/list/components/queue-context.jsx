@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { ContextList, ContextItem, closeAction } from './context-list.jsx';
+import ContextItem from './context-item.jsx';
+import ContextList from './context-list.jsx';
+import storeTypes from '../constants/store-types.json';
 
 const _ = browser.i18n.getMessage;
 
@@ -47,23 +49,29 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     onResume() {
         dispatch(Object.assign({
-            command: "resume"
-        }, closeAction));
+            command: "resume",
+            type: storeTypes.CLOSE_CONTEXT
+        }));
     },
     onPause() {
         dispatch(Object.assign({
-            command: "pause"
-        }, closeAction));
+            command: "pause",
+            type: storeTypes.CLOSE_CONTEXT
+        }));
     },
     onRefresh() {
         dispatch({
             command: "refresh",
-            type: "loading"
+            type: storeTypes.LOADING
         });
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     },
     onClose() {
-        dispatch(closeAction);
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
     }
 });
 

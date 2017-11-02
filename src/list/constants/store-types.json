@@ -6,5 +6,15 @@
     "SET_COPY_PATTERN": "setCopyPattern",
     "SET_THEME": "theme",
     "SET_EXTRAS": "setExtras",
-    "SET_STYLE": "setStyle"
+    "SET_STYLE": "setStyle",
+    "SET_PROVIDER": "setProvider",
+    "SET_CONTEXT_CHANNEL": "setContextChannel",
+    "COPY": "copy",
+    "SET_TAB": "setTab",
+    "SEARCH": "search",
+    "SET_FEATURED": "setFeatured",
+    "LOADING": "loading",
+    "TOGGLE_SEARCH": "toggleSearch",
+    "CLOSE_CONTEXT": "closeContext",
+    "OPEN_QUEUE_CONTEXT": "openQueueContext"
 }

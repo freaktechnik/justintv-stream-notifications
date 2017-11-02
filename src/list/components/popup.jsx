@@ -1,5 +1,5 @@
 import React from 'react';
-import TabStrip from './tabstrip.jsx';
+import Toolbar from './toolbar.jsx';
 import Channels from './channels.jsx';
 import Context from './context.jsx';
 import { connect } from 'react-redux';
@@ -11,7 +11,7 @@ const Popup = (props) => {
         contextMenu = <Context type={ props.contextMenuType }/>;
     }
     return ( <main className="tabbed">
-        <TabStrip/>
+        <Toolbar/>
         <Channels/>
         { contextMenu }
     </main> );

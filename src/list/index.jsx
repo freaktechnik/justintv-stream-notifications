@@ -15,13 +15,13 @@ import Port from '../port';
 import ReadChannelList from '../read-channel-list';
 import middlewareFactory from './middleware';
 import prefs from '../preferences';
-import * as storeTypes from './constants/store-types.json';
+import storeTypes from './constants/store-types.json';
 import '../content/shared.css';
 import './list.css';
 
 const PREFS_MAP = {
         'copy_pattern': storeTypes.SET_COPY_PATTERN,
-        theme: storyTypes.SET_THEME,
+        theme: storeTypes.SET_THEME,
         'panel_extras': storeTypes.SET_EXTRAS,
         'panel_style': storeTypes.SET_STYLE,
         'show_mature_thumbs': storeTypes.SHOW_MATURE_THUMBS
@@ -68,7 +68,7 @@ port.addEventListener("message", ({ detail: event }) => {
         list.getChannel(event.payload)
             .then((channel) => {
                 store.dispatch({
-                    type: storeType.UPDATE_CHANNEL,
+                    type: storeTypes.UPDATE_CHANNEL,
                     payload: channel
                 });
             })

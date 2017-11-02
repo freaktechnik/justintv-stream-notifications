@@ -1,40 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { NavigateableItem, NavigateableList } from './navigateable-list.jsx';
+import NavigateableList from './navigateable-list.jsx';
 
 const _ = browser.i18n.getMessage;
-
-class ContextItem extends NavigateableItem {
-    static get defaultProps() {
-        return {
-            params: []
-        };
-    }
-
-    static get propTypes() {
-        return {
-            label: PropTypes.string.isRequired,
-            params: PropTypes.arrayOf(PropTypes.string),
-            onClick: PropTypes.func,
-            onFocusChange: PropTypes.func.isRequired
-        };
-    }
-
-    get focusedItem() {
-        return this.button;
-    }
-
-    render() {
-        this.props.children = [ <button onClick={ this.props.onClick } key="a" ref={ (e) => {
-            this.button = e;
-        } }>
-            { _(this.props.label, this.props.params) }
-        </button> ];
-        return React.cloneElement(super.render(), {
-            tabIndex: -1
-        });
-    }
-}
 
 class ContextList extends React.Component {
     static get propTypes() {
@@ -80,8 +48,4 @@ class ContextList extends React.Component {
     }
 }
 
-const closeAction = {
-    type: "closeContext"
-};
-
-export { ContextItem, ContextList, closeAction };
+export default ContextList;

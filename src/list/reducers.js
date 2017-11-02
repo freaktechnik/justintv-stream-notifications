@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import prefs from '../prefs.json';
 import { EXTRAS_TAB, LIVE_TAB } from './constants/tabs.json';
-import * as storeTypes from './constants/store-types.json';
+import storeTypes from './constants/store-types.json';
 
 const THEMES = [
         "light",
@@ -46,7 +46,7 @@ const THEMES = [
             return state.concat(event.payload);
         case "removeChannel":
             return state.filter((ch) => ch.id !== event.payload);
-        case storeType.UPDATE_CHANNEL:
+        case storeTypes.UPDATE_CHANNEL:
             return state.map((ch) => {
                 if(ch.id !== event.payload.id) {
                     return ch;
@@ -59,16 +59,16 @@ const THEMES = [
         }
     },
     loading = (state = false, event) => {
-        if(event.type === "setFeatured") {
+        if(event.type === storeTypes.SET_FEATURED) {
             return false;
         }
-        else if(event.type === "loading") {
+        else if(event.type === storeTypes.LOADING) {
             return true;
         }
-        else if(event.type === "setProvider") {
+        else if(event.type === storeTypes.SET_PROVIDER) {
             return true;
         }
-        else if(event.type === "setTab" && event.payload === EXTRAS_TAB) {
+        else if(event.type === storeTypes.SET_TAB && event.payload === EXTRAS_TAB) {
             return true;
         }
 
@@ -76,9 +76,9 @@ const THEMES = [
     },
     query = (state = "", event) => {
         switch(event.type) {
-        case "search":
+        case storeTypes.SEARCH:
             return event.payload;
-        case "toggleSearch":
+        case storeTypes.TOGGLE_SEARCH:
             if(state.length) {
                 return "";
             }
@@ -88,7 +88,7 @@ const THEMES = [
     },
     search = (state = false, event) => {
         switch(event.type) {
-        case "toggleSearch":
+        case storeTypes.TOGGLE_SEARCH:
             return !state;
         default:
             return state;
@@ -96,9 +96,9 @@ const THEMES = [
     },
     contextChannel = (state = null, event) => {
         switch(event.type) {
-        case "setContextChannel":
+        case storeTypes.SET_CONTEXT_CHANNEL:
             return event.payload;
-        case "closeContext":
+        case storeTypes.CLOSE_CONTEXT:
             return null;
         default:
             return state;
@@ -106,9 +106,9 @@ const THEMES = [
     },
     queueContext = (state = false, event) => {
         switch(event.type) {
-        case "openQueueContext":
+        case storeTypes.OPEN_QUEUE_CONTEXT:
             return true;
-        case "closeContext":
+        case storeTypes.CLOSE_CONTEXT:
             return false;
         default:
             return state;
@@ -122,17 +122,17 @@ const THEMES = [
         theme,
         style,
         nonLiveDisplay: simpleReducer("setNonLiveDisplay", DEFAULT_NONLIVE),
-        extras: simpleReducer(storyTypes.SET_EXTRAS, prefs.panel_extras.value),
+        extras: simpleReducer(storeTypes.SET_EXTRAS, prefs.panel_extras.value),
         queue,
         copyPattern: simpleReducer(storeTypes.SET_COPY_PATTERN, prefs.copy_pattern.value),
         showMaturThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value)
     }),
     ui = combineReducers({
-        tab: simpleReducer("setTab", DEFAULT_TAB),
+        tab: simpleReducer(storeTypes.SET_TAB, DEFAULT_TAB),
         query,
         search,
         loading,
-        currentProvider: simpleReducer("setProvider", 'twitch'),
+        currentProvider: simpleReducer(storeTypes.SET_PROVIDER, 'twitch'),
         contextChannel,
         queueContext,
         showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false)
@@ -140,7 +140,7 @@ const THEMES = [
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),
         settings,
-        featured: simpleReducer("setFeatured", []),
+        featured: simpleReducer(storeTypes.SET_FEATURED, []),
         channels,
         ui
     });

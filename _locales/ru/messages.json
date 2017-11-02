@@ -203,6 +203,10 @@
         "message": "Live Stream Notifier не может прочитать сохраненные каналы. Что бы восстановить дополнение, все каналы и пользователи были удалены.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
+    "show_mature_thumbs_title": {
+        "message": "Show NSFW thumbnails",
+        "description": "Setting to hide thumbnails of mature streams."
+    },
     "errorState1": {
         "message": "Recoverable error with Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"
