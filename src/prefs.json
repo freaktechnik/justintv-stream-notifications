@@ -136,5 +136,35 @@
         "type": "bool",
         "value": true,
         "hidden": true
+    },
+    "click_action": {
+        "type": "radio",
+        "value": "0",
+        "options": [
+            {
+                "value": "0",
+                "label": "open"
+            },
+            {
+                "value": "1",
+                "label": "archive"
+            },
+            {
+                "value": "2",
+                "label": "chat"
+            },
+            {
+                "value": "3",
+                "label": "context"
+            },
+            {
+                "value": "4",
+                "label": "copy"
+            },
+            {
+                "value": "5",
+                "label": "livestreamer"
+            }
+        ]
     }
 }

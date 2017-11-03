@@ -1,5 +1,6 @@
 import LiveState from '../live-state.json';
 import { LIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from './constants/tabs.json';
+import storeTypes from './constants/store-types.json';
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
@@ -191,11 +192,104 @@ const mergeFeatured = (featured, channels) => {
 };
 
 export const getVisibleChannels = (state) => {
-    const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMaturThubms);
+    const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMatureThubms);
     if(state.ui.tab !== EXTRAS_TAB) {
         return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel);
     }
 
     const channels = mergeFeatured(state.featured, state.channels);
     return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel);
+};
+
+export const CHANNEL_ACTIONS = {
+    OPEN: 0,
+    ARCHIVE: 1,
+    CHAT: 2,
+    CONTEXT: 3,
+    COPY: 4,
+    LIVESTREAMER: 5
+};
+
+const ACTION_MAP = [
+    {
+        internal: 'open',
+        external: 'open',
+        internalProp: 'id',
+        externalProp: 'url'
+    },
+    {
+        internal: 'openArchive',
+        external: 'open',
+        internalProp: 'id',
+        externalProp: 'url'
+    },
+    {
+        internal: 'openChat',
+        external: 'open',
+        internalProp: 'id',
+        externalProp: 'chatUrl'
+    },
+    {
+        internal: storeTypes.SET_CONTEXT_CHANNEL,
+        external: storeTypes.SET_CONTEXT_CHANNEL,
+        internalProp: '',
+        externalProp: ''
+    },
+    {
+        internal: storeTypes.COPY,
+        external: storeTypes.COPY,
+        internalProp: '',
+        externalProp: ''
+    },
+    {
+        internal: 'openLivestreamer',
+        external: 'openLivestreamer',
+        internalProp: 'id',
+        externalProp: 'url'
+    }
+];
+const STATE_TYPES = Array.from(Object.values(storeTypes));
+
+const getMessageInfo = (action, channel) => {
+    const spec = ACTION_MAP[parseInt(action, 10)];
+    let type, payload;
+    if(channel.external) {
+        type = spec.external;
+        payload = spec.externalProp;
+    }
+    else {
+        type = spec.internal;
+        payload = spec.internalProp;
+    }
+    return {
+        type,
+        payload
+    };
+};
+
+export const getChannelAction = (action, channel) => {
+    const message = {};
+    const {
+        type,
+        payload
+    } = getMessageInfo(action, channel);
+    if(type in STATE_TYPES) {
+        message.type = type;
+    }
+    else {
+        message.command = type;
+    }
+
+    if(payload.length) {
+        message.payload = channel[payload];
+    }
+    else {
+        message.payload = channel;
+    }
+    return message;
+};
+
+export const shouldClose = (action, channel) => {
+    const { type } = getMessageInfo(action, channel);
+    return !(type in STATE_TYPES);
 };

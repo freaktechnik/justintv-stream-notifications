@@ -16,5 +16,6 @@
     "LOADING": "loading",
     "TOGGLE_SEARCH": "toggleSearch",
     "CLOSE_CONTEXT": "closeContext",
-    "OPEN_QUEUE_CONTEXT": "openQueueContext"
+    "OPEN_QUEUE_CONTEXT": "openQueueContext",
+    "OPENING_MODE": "setOpeningMode"
 }

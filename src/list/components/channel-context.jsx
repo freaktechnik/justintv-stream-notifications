@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ContextList from './context-list.jsx';
 import ContextItem from './context-item.jsx';
 import storeTypes from '../constants/store-types.json';
+import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../utils';
 
 //TODO closing the context panel should focus the item it was opened for.
 
@@ -44,7 +45,7 @@ const ChannelContextPanel = (props) => {
         }
         else {
             if(props.liveState === LiveState.LIVE) {
-                items.push(<ContextItem label="context_open" onClick={ () => props.onArchive(props.id) }/>);
+                items.push(<ContextItem label="context_open" onClick={ () => props.onArchive(props) }/>);
             }
             items.push(<ContextItem label="context_remove" key="remove" onClick={ () => props.onRemove(props.id) }/>);
             items.push(<ContextItem label="context_refresh" onClick={ () => props.onRefresh(props.id) }/>);
@@ -95,43 +96,27 @@ const mapStateToProps = (state) => Object.assign({
     showLivestreamer: state.ui.showLivestreamer
 }, state.ui.contextChannel);
 
+const doChannelAction = (action, channel, dispatch) => {
+    dispatch(getChannelAction(action, channel));
+    if(shouldClose(action, channel)) {
+        window.close();
+    }
+    else {
+        dispatch({
+            type: storeTypes.CLOSE_CONTEXT
+        });
+    }
+};
+
 const mapDispatchToProps = (dispatch) => ({
     onOpen(channel) {
-        if(channel.external) {
-            dispatch({
-                command: "openUrl",
-                payload: channel.url
-            });
-        }
-        else {
-            dispatch({
-                command: "open",
-                payload: channel.id
-            });
-        }
-        window.close();
+        doChannelAction(CHANNEL_ACTIONS.OPEN, channel, dispatch);
     },
-    onArchive(id) {
-        dispatch({
-            command: "openArchive",
-            payload: id
-        });
-        window.close();
+    onArchive(channel) {
+        doChannelAction(CHANNEL_ACTIONS.ARCHIVE, channel, dispatch);
     },
     onChat(channel) {
-        if(channel.external) {
-            dispatch({
-                command: "openUrl",
-                payload: channel.chatUrl
-            });
-        }
-        else {
-            dispatch({
-                command: "openChat",
-                payload: channel.id
-            });
-        }
-        window.close();
+        doChannelAction(CHANNEL_ACTIONS.CHAT, channel, dispatch);
     },
     onRefresh(id) {
         dispatch({
@@ -142,14 +127,8 @@ const mapDispatchToProps = (dispatch) => ({
             type: storeTypes.CLOSE_CONTEXT
         });
     },
-    onCopy(payload) {
-        dispatch({
-            type: storeTypes.COPY,
-            payload
-        });
-        dispatch({
-            type: storeTypes.CLOSE_CONTEXT
-        });
+    onCopy(channel) {
+        doChannelAction(CHANNEL_ACTIONS.COPY, channel, dispatch);
     },
     onAdd(id) {
         const [
@@ -182,15 +161,7 @@ const mapDispatchToProps = (dispatch) => ({
         });
     },
     onLivestreamer(channel) {
-        let payload = channel.id;
-        if(channel.external) {
-            payload = channel.url;
-        }
-        dispatch({
-            command: "openLivestreamer",
-            payload
-        });
-        window.close();
+        doChannelAction(CHANNEL_ACTIONS.LIVESTREAMER, channel, dispatch);
     }
 });
 

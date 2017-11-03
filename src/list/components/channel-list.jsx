@@ -26,14 +26,10 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
-            const onClick = ch.external ? (e) => {
+            const onClick = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    props.onExternalChannel(ch.url);
-                } : (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    props.onChannel(ch.id);
+                    props.onChannel(ch);
                 },
                 onContextMenu = (e) => {
                     e.preventDefault();
@@ -53,7 +49,6 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
 ChannelList.propTypes = {
     channels: channelsShape.isRequired,
     onChannel: PropTypes.func.isRequired,
-    onExternalChannel: PropTypes.func.isRequired,
     onContext: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired
 };

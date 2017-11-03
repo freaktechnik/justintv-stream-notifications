@@ -5,7 +5,7 @@ import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from '../constants/tab
 import ChannelList, { channelsShape } from './channel-list.jsx';
 import ProviderSelector from './provider-selector.jsx';
 import storeTypes from '../constants/store-types.json';
-import { getVisibleChannels } from '../utils';
+import { getVisibleChannels, getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../utils';
 
 const _ = browser.i18n.getMessage;
 
@@ -39,7 +39,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onExternalChannel={ props.onExternalChannel } onContext={ props.onContext } onCopy={ props.onCopy }/>
+        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -61,7 +61,6 @@ Channels.propTypes = {
     onProvider: PropTypes.func.isRequired,
     searching: PropTypes.bool,
     onChannel: PropTypes.func.isRequired,
-    onExternalChannel: PropTypes.func.isRequired,
     onContext: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired
 };
@@ -75,7 +74,8 @@ const mapStateToProps = (state) => ({
     providers: state.providers,
     loading: state.ui.loading,
     currentProvider: state.ui.currentProvider,
-    searching: state.ui.search && !!state.ui.query.length
+    searching: state.ui.search && !!state.ui.query.length,
+    openingMode: state.settings.openingMode
 });
 const mapDispatchToProps = (dispatch) => ({
     onProvider(event) {
@@ -85,32 +85,29 @@ const mapDispatchToProps = (dispatch) => ({
             command: "explore"
         });
     },
-    onChannel(channelId) {
-        dispatch({
-            command: "open",
-            payload: channelId
-        });
-        window.close();
+    onChannel(channel, mode) {
+        dispatch(getChannelAction(mode, channel));
+        if(shouldClose(mode, channel)) {
+            window.close();
+        }
     },
-    onExternalChannel(url) {
-        dispatch({
-            command: "openUrl",
-            payload: url
-        });
-        window.close();
+    onContext(channel, mode) {
+        let action = CHANNEL_ACTIONS.CONTEXT;
+        if(mode === CHANNEL_ACTIONS.CONTEXT) {
+            action = CHANNEL_ACTIONS.OPEN;
+        }
+        dispatch(getChannelAction(action, channel));
+        if(shouldClose(action, channel)) {
+            window.close();
+        }
     },
-    onContext(channel) {
-        dispatch({
-            type: storeTypes.SET_CONTEXT_CHANNEL,
-            payload: channel
-        });
-    },
-    onCopy(payload) {
-        dispatch({
-            type: storeTypes.COPY,
-            payload
-        });
+    onCopy(channel) {
+        dispatch(getChannelAction(CHANNEL_ACTIONS.COPY, channel));
     }
 });
+const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign({}, ownProps, stateProps, dispatchProps, {
+    onChannel: (channel) => dispatchProps.onChannel(channel, stateProps.openingMode),
+    onContext: (channel) => dispatchProps.onContext(channel, stateProps.openingMode)
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Channels);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Channels);

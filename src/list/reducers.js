@@ -125,7 +125,8 @@ const THEMES = [
         extras: simpleReducer(storeTypes.SET_EXTRAS, prefs.panel_extras.value),
         queue,
         copyPattern: simpleReducer(storeTypes.SET_COPY_PATTERN, prefs.copy_pattern.value),
-        showMaturThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value)
+        showMatureThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value),
+        openingMode: simpleReducer(storeTypes.OPENING_MODE, prefs.click_action.value)
     }),
     ui = combineReducers({
         tab: simpleReducer(storeTypes.SET_TAB, DEFAULT_TAB),

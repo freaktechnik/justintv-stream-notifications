@@ -560,5 +560,27 @@
     "show_mature_thumbs_title": {
         "message": "Show NSFW thumbnails",
         "description": "Setting to hide thumbnails of mature streams."
+    },
+    "click_action_title": {
+        "message": "Default Click Action",
+        "description": "Setting title to define what happens when you click a channel in the panel"
+    },
+    "click_action_options.open": {
+        "message": "Open Channel"
+    },
+    "click_action_options.archive": {
+        "message": "Open Channel Archive"
+    },
+    "click_action_options.chat": {
+        "message": "Open Channel Chat"
+    },
+    "click_action_options.context": {
+        "message": "Open Context Panel"
+    },
+    "click_action_options.copy": {
+        "message": "Copy Channel URL"
+    },
+    "click_action_options.livestreamer": {
+        "message": "Open with Streamlink"
     }
 }
