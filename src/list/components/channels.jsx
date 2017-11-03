@@ -5,7 +5,8 @@ import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from '../constants/tab
 import ChannelList, { channelsShape } from './channel-list.jsx';
 import ProviderSelector from './provider-selector.jsx';
 import storeTypes from '../constants/store-types.json';
-import { getVisibleChannels, getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../utils';
+import { getVisibleChannels } from '../utils';
+import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../state/channel-actions';
 
 const _ = browser.i18n.getMessage;
 
