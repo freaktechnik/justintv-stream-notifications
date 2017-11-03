@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import prefs from '../prefs.json';
-import { EXTRAS_TAB, LIVE_TAB } from './constants/tabs.json';
+import { EXPLORE_TAB, LIVE_TAB } from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
 
 const THEMES = [
@@ -68,7 +68,7 @@ const THEMES = [
         else if(event.type === storeTypes.SET_PROVIDER) {
             return true;
         }
-        else if(event.type === storeTypes.SET_TAB && event.payload === EXTRAS_TAB) {
+        else if(event.type === storeTypes.SET_TAB && event.payload === EXPLORE_TAB) {
             return true;
         }
 

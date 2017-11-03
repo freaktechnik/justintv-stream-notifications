@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tab from './tab.jsx';
 import NavigateableList from '../navigateable-list.jsx';
-import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from '../../constants/tabs.json';
+import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from '../../constants/tabs.json';
 
 //TODO space or enter should focus tab panel.
 
@@ -28,7 +28,7 @@ class TabStrip extends NavigateableList {
             children.push(<Tab title="panel_tab_nonlive" onClick={ () => this.props.onTabSelect(NONLIVE_TAB) } active={ this.props.active === NONLIVE_TAB } key={ NONLIVE_TAB }/>);
         }
         children.push(<Tab title="panel_tab_offline" onClick={ () => this.props.onTabSelect(OFFLINE_TAB) } active={ this.props.active === OFFLINE_TAB } key={ OFFLINE_TAB }/>);
-        children.push(<Tab title="panel_tab_explore" onClick={ () => this.props.onTabSelect(EXTRAS_TAB) } active={ this.props.active === EXTRAS_TAB } key={ EXTRAS_TAB }/>);
+        children.push(<Tab title="panel_tab_explore" onClick={ () => this.props.onTabSelect(EXPLORE_TAB) } active={ this.props.active === EXPLORE_TAB } key={ EXPLORE_TAB }/>);
 
         const element = super.render();
         return React.cloneElement(element, {

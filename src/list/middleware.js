@@ -1,7 +1,7 @@
 import { formatChannel, getExternalID } from './utils';
 import LiveState from '../live-state.json';
 import { copy } from '../content/utils';
-import { LIVE_TAB, EXTRAS_TAB } from './constants/tabs.json';
+import { LIVE_TAB, EXPLORE_TAB } from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
 
 export default (port) => ({
@@ -16,7 +16,7 @@ export default (port) => ({
             query: state.ui.query
         });
     }
-    else if(action.command === "refresh" && state.ui.tab === EXTRAS_TAB) {
+    else if(action.command === "refresh" && state.ui.tab === EXPLORE_TAB) {
         if(state.ui.search && state.ui.query.length) {
             port.send("search", {
                 type: state.ui.currentProvider,
@@ -37,7 +37,7 @@ export default (port) => ({
         if(state.ui.tab === action.payload) {
             return;
         }
-        else if(action.payload === EXTRAS_TAB) {
+        else if(action.payload === EXPLORE_TAB) {
             if(!state.ui.search || !state.ui.query.length) {
                 port.send("explore", state.ui.currentProvider);
             }
@@ -49,7 +49,7 @@ export default (port) => ({
             }
         }
     }
-    else if(action.type === storeTypes.SEARCH && state.ui.tab === EXTRAS_TAB) {
+    else if(action.type === storeTypes.SEARCH && state.ui.tab === EXPLORE_TAB) {
         if(action.payload.length) {
             port.send("search", {
                 type: state.ui.currentProvider,
@@ -72,7 +72,7 @@ export default (port) => ({
             payload: action.payload.channels
         };
     }
-    else if(action.type === storeTypes.TOGGLE_SEARCH && state.ui.search && state.ui.query.length && state.ui.tab === EXTRAS_TAB) {
+    else if(action.type === storeTypes.TOGGLE_SEARCH && state.ui.search && state.ui.query.length && state.ui.tab === EXPLORE_TAB) {
         port.send("explore", state.ui.currentProvider);
         dispatch({
             type: storeTypes.LOADING

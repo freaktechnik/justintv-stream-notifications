@@ -1,5 +1,5 @@
 import LiveState from '../live-state.json';
-import { LIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from './constants/tabs.json';
+import { LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from './constants/tabs.json';
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
@@ -192,7 +192,7 @@ const mergeFeatured = (featured, channels) => {
 
 export const getVisibleChannels = (state) => {
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMatureThubms);
-    if(state.ui.tab !== EXTRAS_TAB) {
+    if(state.ui.tab !== EXPLORE_TAB) {
         return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel);
     }
 

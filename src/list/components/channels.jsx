@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXTRAS_TAB } from '../constants/tabs.json';
+import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from '../constants/tabs.json';
 import ChannelList, { channelsShape } from './channels/channel-list.jsx';
 import ProviderSelector from './channels/provider-selector.jsx';
 import storeTypes from '../constants/store-types.json';
@@ -12,7 +12,7 @@ const _ = browser.i18n.getMessage;
 
 const Channels = (props) => {
     let select;
-    if(props.type === EXTRAS_TAB) {
+    if(props.type === EXPLORE_TAB) {
         select = <ProviderSelector providers={ props.providers } currentProvider={ props.currentProvider } onProvider={ props.onProvider }/>;
         if(props.loading) {
             return ( <div className="loading tabcontent">
@@ -22,7 +22,7 @@ const Channels = (props) => {
         }
     }
     if(!props.channels.length) {
-        if(props.searching && props.type !== EXTRAS_TAB) {
+        if(props.searching && props.type !== EXPLORE_TAB) {
             return ( <div className="tabcontent">{ _('panel_no_results') }</div> );
         }
         else if(props.type === LIVE_TAB) {
@@ -31,7 +31,7 @@ const Channels = (props) => {
         else if(props.type === OFFLINE_TAB) {
             return ( <div className="tabcontent">{ _('panel_nothing') }</div> );
         }
-        else if(props.type === EXTRAS_TAB) {
+        else if(props.type === EXPLORE_TAB) {
             return ( <div className="tabcontent">
                 { select }
                 <div>{ _('panel_no_results') }</div>
