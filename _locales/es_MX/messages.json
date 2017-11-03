@@ -11,6 +11,10 @@
         "message": "Twitch Client ID",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
+    "click_action_options.context": {
+        "message": "Open Context Panel",
+        "description": ""
+    },
     "context_resume": {
         "message": "Resume Refresh Queue",
         "description": "Context menu action on the refresh button in the panel to resume the queue"
@@ -47,6 +51,10 @@
         "message": "Open $CHANNEL$",
         "description": "Context panel item to open a redirector."
     },
+    "click_action_options.chat": {
+        "message": "Open Channel Chat",
+        "description": ""
+    },
     "advancedOptions": {
         "message": "Advanced Options",
         "description": "Advanced extension preferences collapsed message"
@@ -58,6 +66,10 @@
     "panel_nonlive_description": {
         "message": "Non-live streams include things like hosted channels or rebroadcasts.",
         "description": "Description of the non-live treatment setting in the preferences"
+    },
+    "click_action_title": {
+        "message": "Default Click Action",
+        "description": "Setting title to define what happens when you click a channel in the panel"
     },
     "providerlivestream": {
         "message": "Original Livestream",
@@ -239,6 +251,10 @@
         "message": "Normal",
         "description": "Label of the normal option of the panel item style setting in the preferences"
     },
+    "click_action_options.copy": {
+        "message": "Copy Channel URL",
+        "description": ""
+    },
     "panel_style_options.Thumbnail": {
         "message": "Big Thumbnail",
         "description": "Label of the thumbnail option of the panel item style setting in the preferences"
@@ -298,6 +314,10 @@
     "nonliveNotification_title": {
         "message": "Show a notification when a stream enters a non-live state",
         "description": "Title of the non-live notifications setting in the preferences"
+    },
+    "click_action_options.open": {
+        "message": "Open Channel",
+        "description": ""
     },
     "providermlg": {
         "message": "MLG.tv",
@@ -370,6 +390,10 @@
     "restore_failed": {
         "message": "Sadly Live Stream Notifier's attempt at restoring its database failed. The only known fix is to reset the profile.",
         "description": "Error while trying to read the DB, no actions from within the extension will work."
+    },
+    "click_action_options.livestreamer": {
+        "message": "Open with Streamlink",
+        "description": ""
     },
     "openChannel": {
         "message": "Open Channel",
@@ -482,6 +506,10 @@
     "updateTab_description": {
         "message": "Una pestaña con información acerca de las nuevas características es abierta cuando la extensión es actualizada.",
         "description": "Description of the update tab setting in the preferences"
+    },
+    "click_action_options.archive": {
+        "message": "Open Channel Archive",
+        "description": ""
     },
     "providerbeam": {
         "message": "Mixer",

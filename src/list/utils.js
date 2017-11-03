@@ -273,7 +273,7 @@ export const getChannelAction = (action, channel) => {
         type,
         payload
     } = getMessageInfo(action, channel);
-    if(type in STATE_TYPES) {
+    if(STATE_TYPES.includes(type)) {
         message.type = type;
     }
     else {
@@ -291,5 +291,5 @@ export const getChannelAction = (action, channel) => {
 
 export const shouldClose = (action, channel) => {
     const { type } = getMessageInfo(action, channel);
-    return !(type in STATE_TYPES);
+    return !STATE_TYPES.includes(type);
 };

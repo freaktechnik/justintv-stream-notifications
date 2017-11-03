@@ -93,7 +93,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onContext(channel, mode) {
         let action = CHANNEL_ACTIONS.CONTEXT;
-        if(mode === CHANNEL_ACTIONS.CONTEXT) {
+        if(parseInt(mode, 10) === CHANNEL_ACTIONS.CONTEXT) {
             action = CHANNEL_ACTIONS.OPEN;
         }
         dispatch(getChannelAction(action, channel));

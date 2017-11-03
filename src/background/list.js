@@ -140,9 +140,6 @@ class ListView extends EventTarget {
         this.port = new Port("list");
         this.port.addEventListener("message", ({ detail: event }) => {
             switch(event.command) {
-            case "openUrl":
-                emit(this, "open", event.payload);
-                break;
             case "openChat":
                 emit(this, "open", event.payload, "chat");
                 break;
