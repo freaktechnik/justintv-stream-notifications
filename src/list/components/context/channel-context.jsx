@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import LiveState from '../../live-state.json';
+import LiveState from '../../../live-state.json';
 import { connect } from 'react-redux';
 import ContextList from './context-list.jsx';
 import ContextItem from './context-item.jsx';
-import storeTypes from '../constants/store-types.json';
-import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../state/channel-actions';
+import storeTypes from '../../constants/store-types.json';
+import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../../state/channel-actions';
 
 //TODO closing the context panel should focus the item it was opened for.
 
@@ -30,7 +30,7 @@ const ChannelContextPanel = (props) => {
     const items = [];
     if(props.redirectors && props.redirectors.length) {
         for(const r of props.redirectors) {
-            items.push(<ContextItem label="context_redirector" params={ [ r.uname ]} onClick={ () => props.onOpen({
+            items.push(<ContextItem label="context_redirector" params={ [ r.uname ] } onClick={ () => props.onOpen({
                 external: false,
                 id: r.id
             }) }/>);

@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import SearchField from '../../../src/list/components/search-field.jsx';
+import SearchField from '../../../src/list/components/toolbar/search-field.jsx';
 
 test('snapshot', (t) => {
     const wrapper = shallow(<SearchField onSearch={ () => t.fail() }/>);

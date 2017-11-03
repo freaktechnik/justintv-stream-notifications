@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NavigateableList from './navigateable-list.jsx';
+import NavigateableList from '../navigateable-list.jsx';
 import Channel from './channel.jsx';
-import LiveState from '../../live-state.json';
+import LiveState from '../../../live-state.json';
 import Extras from './extras.jsx';
 import { redirectorsShape } from './redirecting.jsx';
 

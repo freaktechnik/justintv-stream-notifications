@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import TabStrip from './tab-strip.jsx';
-import Tools from './tools.jsx';
-import SearchField from './search-field.jsx';
+import TabStrip from './toolbar/tab-strip.jsx';
+import Tools from './toolbar/tools.jsx';
+import SearchField from './toolbar/search-field.jsx';
 import prefs from '../../prefs.json';
 import storeTypes from '../constants/store-types.json';
 import { LIVE_TAB } from '../constants/tabs.json';

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import NavigateableList from './navigateable-list.jsx';
+import NavigateableList from '../navigateable-list.jsx';
 
 const _ = browser.i18n.getMessage;
 

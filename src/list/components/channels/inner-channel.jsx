@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Extras from './extras.jsx';
 import Redirecting, { redirectorsShape } from './redirecting.jsx';
 import Avatar from './avatar.jsx';
-import Icon from './icon.jsx';
-import LiveState from '../../live-state.json';
-import { LARGE_IMAGE } from '../utils';
+import Icon from '../icon.jsx';
+import LiveState from '../../../live-state.json';
+import { LARGE_IMAGE } from '../../utils';
 
 const InnerChannel = (props) => {
     let extras,

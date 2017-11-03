@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import Avatar from '../../../src/list/components/avatar.jsx';
+import Avatar from '../../../src/list/components/channels/avatar.jsx';
 
 test('snapshot', (t) => {
     const image = {

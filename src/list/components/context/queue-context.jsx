@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ContextItem from './context-item.jsx';
 import ContextList from './context-list.jsx';
-import storeTypes from '../constants/store-types.json';
+import storeTypes from '../../constants/store-types.json';
 
 const _ = browser.i18n.getMessage;
 

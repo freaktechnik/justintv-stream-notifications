@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './avatar.jsx';
-import { SMALL_IMAGE } from '../utils';
+import { SMALL_IMAGE } from '../../utils';
 
 const CompactChannel = (props) => ( <li title={ props.uname } onClick={ props.onClick } tabIndex={ 0 } onKeyUp={ (e) => {
     if(e.key === ' ' || e.key === 'Enter') {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from './icon.jsx';
+import Icon from '../icon.jsx';
 
 const Extra = (props) => ( <li className={ `${props.type}Wrapper hide-offline` }>
     <Icon type={ Extra.ICONS[props.type] }/>&nbsp;<span className={ props.type }>{ props.value }</span>

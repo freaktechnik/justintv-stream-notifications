@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from './icon.jsx';
+import Icon from '../icon.jsx';
 
 const _ = browser.i18n.getMessage;
 

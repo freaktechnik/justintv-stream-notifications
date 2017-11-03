@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import Extras from '../../../src/list/components/extras.jsx';
+import Extras from '../../../src/list/components/channels/extras.jsx';
 
 test('snapshot', (t) => {
     const wrapper = shallow(<Extras provider="test"/>);

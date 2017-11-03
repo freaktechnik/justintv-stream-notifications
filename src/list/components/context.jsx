@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ChannelContextPanel from './channel-context.jsx';
-import QueueContextPanel from './queue-context.jsx';
+import ChannelContextPanel from './context/channel-context.jsx';
+import QueueContextPanel from './context/queue-context.jsx';
 
 const ContextPanel = (props) => {
     if(props.type === 'queue') {

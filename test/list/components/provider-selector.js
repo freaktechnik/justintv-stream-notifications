@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import ProviderSelector from '../../../src/list/components/provider-selector.jsx';
+import ProviderSelector from '../../../src/list/components/channels/provider-selector.jsx';
 
 test('snapshot', (t) => {
     const wrapper = shallow(<ProviderSelector onProvider={ () => t.fail() }/>);

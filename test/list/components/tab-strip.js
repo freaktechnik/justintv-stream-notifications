@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import TabStrip from '../../../src/list/components/tab-strip.jsx';
+import TabStrip from '../../../src/list/components/toolbar/tab-strip.jsx';
 
 test('snapshot', (t) => {
     const wrapper = shallow(<TabStrip onTabSelect={ () => t.fail() }/>);
