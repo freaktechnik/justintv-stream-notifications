@@ -1,4 +1,4 @@
-import storeTypes from './constants/store-types.json';
+import storeTypes from '../constants/store-types.json';
 
 export const CHANNEL_ACTIONS = {
     OPEN: 0,
