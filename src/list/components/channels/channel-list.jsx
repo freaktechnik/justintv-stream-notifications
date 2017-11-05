@@ -38,13 +38,9 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
                 };
             return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } onCopy={ props.onCopy } key={ ch.id }/> );
         });
-        const element = ( <NavigateableList>
+        return ( <NavigateableList role="tabpanel" className="scrollable">
             { channels }
         </NavigateableList> );
-        return React.cloneElement(element, {
-            role: "tabpanel",
-            className: "scrollable"
-        });
     };
 ChannelList.propTypes = {
     channels: channelsShape.isRequired,

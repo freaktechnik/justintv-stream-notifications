@@ -7,7 +7,16 @@ const FIRST = 0;
 class NavigateableList extends React.Component {
     static get propTypes() {
         return {
-            children: PropTypes.arrayOf(PropTypes.instanceOf(NavigateableItem))
+            children: PropTypes.arrayOf(PropTypes.instanceOf(NavigateableItem)),
+            className: PropTypes.string,
+            role: PropTypes.string
+        };
+    }
+
+    static get defaultProps() {
+        return {
+            className: undefined,
+            role: 'listbox'
         };
     }
 
@@ -63,9 +72,10 @@ class NavigateableList extends React.Component {
     render() {
         const mappedChildren = this.mapChildren();
         return (
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions
             <ul onKeyUp={ (e) => this.handleKey(e) } tabIndex={ 0 } ref={ (e) => {
                 this.list = e;
-            } } role="listbox">
+            } } role={ this.props.role } className={ this.props.className }>
                 { mappedChildren }
             </ul>
         );
