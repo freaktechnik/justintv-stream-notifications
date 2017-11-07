@@ -160,6 +160,6 @@ const endpoints = Object.keys(mockAPIEnpoints);
  *
  * @type {[string]}
  */
-const IGNORE_QSUPDATE_PROVIDERS = [ "beam" ];
+const IGNORE_QSUPDATE_PROVIDERS = [];
 
 export { getMockQS, getMockAPIQS, endpoints as apiEndpoints, IGNORE_QSUPDATE_PROVIDERS };
