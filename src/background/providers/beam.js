@@ -128,7 +128,7 @@ class Beam extends GenericProvider {
 
         throw new Error(`Could not get favorites for user ${username} on ${this.name}`);
     }
-    async updateFavsRequest() {
+    updateFavsRequest() {
         const getURLs = async () => {
             const users = await this._list.getUsers();
             return Promise.all(users.map((user) => this._getUserIdFromUsername(user.login).then((id) => `${baseURL}users/${id}`)));
