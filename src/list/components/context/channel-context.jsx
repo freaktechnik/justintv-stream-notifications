@@ -54,7 +54,7 @@ const ChannelContextPanel = (props) => {
     if(props.showLivestreamer) {
         items.push(<ContextItem label="context_livestreamer" onClick={ () => props.onLivestreamer(props) }/>);
     }
-    return ( <ContextList title={ props.uname } onClose={ props.onClose }>
+    return ( <ContextList title={ props.uname } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
         <ContextItem label="openChannel" onClick={ () => props.onOpen(props) }/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({
@@ -65,7 +65,8 @@ const ChannelContextPanel = (props) => {
 };
 ChannelContextPanel.defaultProps = {
     providerEnabled: true,
-    showLivestreamer: false
+    showLivestreamer: false,
+    focused: 0
 };
 ChannelContextPanel.propTypes = {
     uname: PropTypes.string.isRequired,
@@ -78,6 +79,7 @@ ChannelContextPanel.propTypes = {
         PropTypes.number
     ]).isRequired,
     providerEnabled: PropTypes.bool,
+    focused: PropTypes.number,
     onOpen: PropTypes.func,
     onChat: PropTypes.func,
     onAdd: PropTypes.func,
@@ -89,11 +91,13 @@ ChannelContextPanel.propTypes = {
     onLivestreamer: PropTypes.func,
     url: PropTypes.string.isRequired,
     chatUrl: PropTypes.string,
-    showLivestreamer: PropTypes.bool
+    showLivestreamer: PropTypes.bool,
+    onFocusChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => Object.assign({
-    showLivestreamer: state.ui.showLivestreamer
+    showLivestreamer: state.ui.showLivestreamer,
+    focused: state.ui.focusedContextItem
 }, state.ui.contextChannel);
 
 const doChannelAction = (action, channel, dispatch) => {
@@ -162,6 +166,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onLivestreamer(channel) {
         doChannelAction(CHANNEL_ACTIONS.LIVESTREAMER, channel, dispatch);
+    },
+    onFocusChange(index) {
+        dispatch({
+            type: storeTypes.SET_CONTEXT_FOCUS,
+            payload: index
+        });
     }
 });
 

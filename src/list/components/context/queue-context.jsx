@@ -23,27 +23,31 @@ const QueueContextPanel = (props) => {
             queueItem = <ContextItem label="context_pause" onClick={ props.onPause }/>;
         }
     }
-    return ( <ContextList title={ _('context_queue_title') } onClose={ props.onClose }>
+    return ( <ContextList title={ _('context_queue_title') } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
         <ContextItem label="context_refresh_all" onClick={ props.onRefresh }/>
         { queueItem }
     </ContextList> );
 };
 QueueContextPanel.defaultProps = {
     queueEnabled: false,
-    paused: true
+    paused: true,
+    focused: 0
 };
 QueueContextPanel.propTypes = {
     queueEnabled: PropTypes.bool,
     paused: PropTypes.bool,
+    focused: PropTypes.number,
     onResume: PropTypes.func,
     onPause: PropTypes.func,
     onRefresh: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onFocusChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
     queueEnabled: state.settings.queue.status,
-    paused: state.settings.queue.paused
+    paused: state.settings.queue.paused,
+    focused: state.ui.focusedContextItem
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -71,6 +75,12 @@ const mapDispatchToProps = (dispatch) => ({
     onClose() {
         dispatch({
             type: storeTypes.CLOSE_CONTEXT
+        });
+    },
+    onFocusChange(index) {
+        dispatch({
+            type: storeTypes.SET_CONTEXT_FOCUS,
+            payload: index
         });
     }
 });

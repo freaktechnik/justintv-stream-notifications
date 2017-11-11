@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import NavigateableItem from '../../../src/list/components/navigateable-item.jsx';
 
 test('snapshot', (t) => {
-    const wrapper = shallow(<NavigateableItem onFocusChange={ () => t.fail() }>
+    const wrapper = shallow(<NavigateableItem onFocusChange={ () => t.fail() } focused={ false } onFocus={ () => t.fail() }>
         <div>Foo</div>
     </NavigateableItem>);
     t.snapshot(wrapper.html());

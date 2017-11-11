@@ -16,6 +16,7 @@ const THEMES = [
     DEFAULT_STYLE = parseInt(prefs.panel_style.value, 10),
     DEFAULT_NONLIVE = parseInt(prefs.panel_nonlive.value, 10),
     DEFAULT_TAB = LIVE_TAB,
+    DEFAULT_SELECTED = 0,
     simpleReducer = (setter, defaultValue = false) => (state = defaultValue, event) => {
         switch(event.type) {
         case setter:
@@ -114,6 +115,29 @@ const THEMES = [
             return state;
         }
     },
+    focusedContextItem = (state = DEFAULT_SELECTED, event) => {
+        switch(event.type) {
+        case storeTypes.SET_CONTEXT_FOCUS:
+            return event.payload;
+        case storeTypes.OPEN_QUEUE_CONTEXT:
+        case storeTypes.CLOSE_CONTEXT:
+        case storeTypes.SET_CONTEXT_CHANNEL:
+            return DEFAULT_SELECTED;
+        default:
+            return state;
+        }
+    },
+    focusedChannel = (state = null, event) => {
+        switch(event.type) {
+        case storeTypes.SET_FOCUSED_CHANNEL:
+            return event.payload;
+        case storeTypes.SET_TAB:
+        case storeTypes.LOADING:
+            return null;
+        default:
+            return state;
+        }
+    },
     queue = combineReducers({
         status: simpleReducer("queueStatus", true),
         paused: simpleReducer("queuePaused")
@@ -136,7 +160,9 @@ const THEMES = [
         currentProvider: simpleReducer(storeTypes.SET_PROVIDER, 'twitch'),
         contextChannel,
         queueContext,
-        showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false)
+        focusedContextItem,
+        showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false),
+        focusedChannel
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

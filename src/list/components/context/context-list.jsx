@@ -9,7 +9,15 @@ class ContextList extends React.Component {
         return {
             title: PropTypes.string.isRequired,
             onClose: PropTypes.func.isRequired,
-            children: PropTypes.node.isRequired
+            children: PropTypes.node.isRequired,
+            focused: PropTypes.number,
+            onFocusChange: PropTypes.func.isRequired
+        };
+    }
+
+    static get defaultProps() {
+        return {
+            focused: 0
         };
     }
 
@@ -17,9 +25,6 @@ class ContextList extends React.Component {
         if(this.dialog) {
             document.documentElement.style.height = `${this.dialog.scrollHeight}px`;
             document.documentElement.style.overflow = "hidden";
-        }
-        if(this.button) {
-            this.button.focus();
         }
     }
 
@@ -35,12 +40,10 @@ class ContextList extends React.Component {
                 this.dialog = e;
             } }>
                 <header>
-                    <button title={ _("context_back") } onClick={ this.props.onClose } ref={ (e) => {
-                        this.button = e;
-                    } }>{ "<" }</button>
+                    <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
-                <NavigateableList>
+                <NavigateableList focused={ this.props.focused } onFocusChange={ this.props.onFocusChange }>
                     { this.props.children }
                 </NavigateableList>
             </dialog>

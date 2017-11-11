@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NavigateableItem from './navigateable-item.jsx';
 
-const FIRST = 0;
+const FIRST = 0,
+    LAST = -1;
 
 class NavigateableList extends React.Component {
     static get propTypes() {
         return {
-            children: PropTypes.arrayOf(PropTypes.instanceOf(NavigateableItem)),
+            children: PropTypes.node,
             className: PropTypes.string,
-            role: PropTypes.string
+            role: PropTypes.string,
+            onFocusChange: PropTypes.func.isRequired,
+            focused: PropTypes.number
         };
     }
 
@@ -21,24 +23,19 @@ class NavigateableList extends React.Component {
     }
 
     focusChild(index) {
-        index = Math.max(FIRST, Math.min(--this.childrenInstances.length, index));
-        this.childrenInstances[index].focus();
+        index = Math.max(FIRST, Math.min(this.childCount + LAST, index));
+        this.props.onFocusChange(index);
     }
 
     selectItem(relativeIndex) {
-        if(!this.childrenInstances.length) {
+        if(!this.childCount) {
             return;
         }
-        if(relativeIndex !== FIRST) {
+        if(relativeIndex !== FIRST && typeof this.props.focused === "number") {
             let toFocus;
-            for(const i in this.childrenInstances) {
-                if(this.childrenInstances[i].isEqualNode(document.activeElement)) {
-                    toFocus = (parseInt(i, 10) + relativeIndex) % this.childrenInstances.length;
-                    if(toFocus < FIRST) {
-                        toFocus += this.childrenInstances.length;
-                    }
-                    break;
-                }
+            toFocus = (this.props.focused + relativeIndex) % this.childCount;
+            if(toFocus < FIRST) {
+                toFocus += this.childCount;
             }
             if(toFocus !== undefined) {
                 this.focusChild(toFocus);
@@ -53,24 +50,23 @@ class NavigateableList extends React.Component {
             event.stopPropagation();
         }
         else if(event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "End" || event.key === "PageUp") {
-            this.focusChild(--this.childrenInstances.length);
+            this.focusChild(this.childCount + LAST);
             event.preventDefault();
             event.stopPropagation();
         }
     }
 
-    mapChildren(children = this.props.children) {
-        this.childrenInstances = [];
-        return React.Children.map(children, (c, index) => React.cloneElement(c, {
+    mapChildren(children) {
+        return React.Children.map(children, (child, index) => React.cloneElement(child, {
+            focused: index === this.props.focused,
             onFocusChange: (i) => this.selectItem(i),
-            ref: (e) => {
-                this.childrenInstances[index] = e;
-            }
+            onFocus: () => this.focusItem(index)
         }));
     }
 
     render() {
-        const mappedChildren = this.mapChildren();
+        this.childCount = React.Children.count(this.props.children);
+        const mappedChildren = this.mapChildren(this.props.children);
         return (
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions
             <ul onKeyUp={ (e) => this.handleKey(e) } tabIndex={ 0 } ref={ (e) => {

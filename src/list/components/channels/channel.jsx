@@ -25,7 +25,9 @@ export default class Channel extends NavigateableItem {
             onContextMenu: PropTypes.func.isRequired,
             onCopy: PropTypes.func.isRequired,
             onFocusChange: PropTypes.func.isRequired,
-            tooltip: PropTypes.string.isRequired
+            tooltip: PropTypes.string.isRequired,
+            focused: PropTypes.bool.isRequired,
+            onFocus: PropTypes.func
         };
     }
 

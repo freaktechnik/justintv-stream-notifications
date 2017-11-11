@@ -40,7 +40,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy }/>
+        <ChannelList channels={ props.channels } focused={ props.focused } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy } onFocusChange={ props.onFocusChange }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -59,11 +59,13 @@ Channels.propTypes = {
     loading: PropTypes.bool,
     providers: PropTypes.objectOf(PropTypes.object).isRequired,
     currentProvider: PropTypes.string,
+    focused: PropTypes.number,
     onProvider: PropTypes.func.isRequired,
     searching: PropTypes.bool,
     onChannel: PropTypes.func.isRequired,
     onContext: PropTypes.func.isRequired,
-    onCopy: PropTypes.func.isRequired
+    onCopy: PropTypes.func.isRequired,
+    onFocusChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -76,7 +78,8 @@ const mapStateToProps = (state) => ({
     loading: state.ui.loading,
     currentProvider: state.ui.currentProvider,
     searching: state.ui.search && !!state.ui.query.length,
-    openingMode: state.settings.openingMode
+    openingMode: state.settings.openingMode,
+    focused: state.ui.focusedChannel
 });
 const mapDispatchToProps = (dispatch) => ({
     onProvider(event) {
@@ -104,6 +107,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onCopy(channel) {
         dispatch(getChannelAction(CHANNEL_ACTIONS.COPY, channel));
+    },
+    onFocusChange(index) {
+        dispatch({
+            type: storeTypes.SET_FOCUSED_CHANNEL,
+            payload: index
+        });
     }
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign({}, ownProps, stateProps, dispatchProps, {

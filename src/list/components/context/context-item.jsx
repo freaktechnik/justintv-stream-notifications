@@ -16,7 +16,9 @@ class ContextItem extends NavigateableItem {
             label: PropTypes.string.isRequired,
             params: PropTypes.arrayOf(PropTypes.string),
             onClick: PropTypes.func,
-            onFocusChange: PropTypes.func.isRequired
+            onFocusChange: PropTypes.func.isRequired,
+            focused: PropTypes.bool.isRequired,
+            onFocus: PropTypes.func
         };
     }
 
@@ -25,12 +27,14 @@ class ContextItem extends NavigateableItem {
     }
 
     render() {
-        const children = [ <button onClick={ this.props.onClick } key="a" ref={ (e) => {
+        const children = [ <button onClick={ this.props.onClick } key="a" onFocus={ this.props.onFocus } ref={ (e) => {
             this.button = e;
         } }>
             { _(this.props.label, this.props.params) }
         </button> ];
-        return React.cloneElement(super.render(), {}, ...children);
+        return React.cloneElement(super.render(), {
+            tabIndex: -1
+        }, ...children);
     }
 }
 

@@ -15,7 +15,7 @@ class Tab extends NavigateableItem {
         return {
             title: PropTypes.string.isRequired,
             onClick: PropTypes.func,
-            active: PropTypes.bool,
+            focused: PropTypes.bool.isRequired,
             onFocusChange: PropTypes.func.isRequired
         };
     }
@@ -26,7 +26,7 @@ class Tab extends NavigateableItem {
 
     render() {
         let className;
-        if(this.props.active) {
+        if(this.props.focused) {
             className = "current";
         }
         const child = ( <button role="tab" onClick={ this.props.onClick } onFocus={ this.props.onClick } className={ className } ref={ (e) => {

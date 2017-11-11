@@ -8,7 +8,9 @@ class NavigateableItem extends React.Component {
     static get propTypes() {
         return {
             children: PropTypes.node.isRequired,
-            onFocusChange: PropTypes.func.isRequired
+            onFocusChange: PropTypes.func.isRequired,
+            focused: PropTypes.bool.isRequired,
+            onFocus: PropTypes.func
         };
     }
 
@@ -18,10 +20,6 @@ class NavigateableItem extends React.Component {
 
     focus() {
         this.focusedItem.focus();
-    }
-
-    isEqualNode(node) {
-        return node.isEqualNode(this.focusedItem);
     }
 
     handleKey(event) {
@@ -37,11 +35,17 @@ class NavigateableItem extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if(this.props.focused) {
+            this.focus();
+        }
+    }
+
     render() {
         return (
             <li ref={ (e) => {
                 this.item = e;
-            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) } role="row">
+            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) } role="row" onFocus={ this.props.onFocus }>
                 { this.props.children }
             </li>
         );
