@@ -166,33 +166,14 @@ browser.runtime.onMessage.addListener((message) => {
 });
 
 browser.runtime.onInstalled.addListener(({
-    reason, temporary = false, previousVersion
+    reason,
+    temporary = false
 }) => {
     if(reason == 'install' && !temporary) {
         Tour.onInstalled();
     }
     else if(reason == 'update') {
         Tour.onUpdate();
-        // Update to 3.5.0:
-        if(!previousVersion.startsWith("3.5.0")) {
-            prefs.get([
-                'panel_nonlive',
-                'updateInterval'
-            ]).then(async ([
-                panelNonlive,
-                updateInterval
-            ]) => {
-                const NONLIVE_LIVE = 0,
-                    MIN_INTERVAL = 60;
-                if(panelNonlive > NONLIVE_LIVE) {
-                    await prefs.set('panel_nonlive', --panelNonlive);
-                }
-                if(updateInterval < MIN_INTERVAL) {
-                    await prefs.set('updateInterval', MIN_INTERVAL);
-                }
-            })
-                .catch(console.error);
-        }
     }
 });
 
