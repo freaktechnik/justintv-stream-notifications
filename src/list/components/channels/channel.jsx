@@ -32,10 +32,10 @@ export default class Channel extends NavigateableItem {
     }
 
     render() {
-        this.props.children = [];
+        const children = [];
         let className = this.props.type;
         if(this.props.thumbnail) {
-            this.props.children.push(<img src={ this.props.thumbnail } key="thumb" alt={ `Current thumbnail of ${this.props.uname}` }/>);
+            children.push(<img src={ this.props.thumbnail } key="thumb" alt={ `Current thumbnail of ${this.props.uname}` }/>);
             className += ' thumbnail';
         }
         if(this.props.external) {
@@ -44,7 +44,7 @@ export default class Channel extends NavigateableItem {
         if(this.props.liveState > LiveState.LIVE) {
             className += ' nonlive';
         }
-        this.props.children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
+        children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
         const element = super.render();
         return React.cloneElement(element, {
             title: this.props.tooltip,
@@ -63,6 +63,6 @@ export default class Channel extends NavigateableItem {
                 url: this.props.url,
                 uname: this.props.uname
             })
-        });
+        }, ...children);
     }
 }
