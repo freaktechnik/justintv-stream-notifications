@@ -370,7 +370,7 @@ export default class ChannelList extends ReadChannelList {
          * to reinitialize it afterward.
          */
         await DatabaseManager.delete();
-        await DatabaseManager.open(this.name, true);
+        await DatabaseManager.open(DatabaseManager.name, true);
         return true;
     }
 }
