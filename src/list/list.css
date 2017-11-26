@@ -157,6 +157,7 @@ nav {
 
 .tabcontent > ul > li > div {
     min-height: var(--avatar-size);
+    box-sizing: content-box;
 }
 
 .tabcontent > ul > li > img {
