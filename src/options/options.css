@@ -14,10 +14,6 @@ input:not([type="checkbox"]),
 select {
     vertical-align: top;
     display: inline-block;
-}
-
-input:not([type="checkbox"]),
-select {
     width: 59%;
     margin: 0;
     box-sizing: border-box;

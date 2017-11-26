@@ -89,14 +89,14 @@ body {
     box-sizing: border-box;
 }
 
-.topbar .tabstrip a.current,
-.topbar .toolbar a:hover,
 .topbar a:active,
 .topbar a[aria-pressed="true"],
-.topbar .tabstrip button.current,
 .topbar button:hover,
 .topbar button:active,
-.topbar button[aria-pressed="true"] {
+.topbar button[aria-pressed="true"],
+.topbar .tabstrip a.current,
+.topbar .toolbar a:hover,
+.topbar .tabstrip button.current {
     background: var(--accent-light-bg);
     color: var(--accent-light-text);
 }

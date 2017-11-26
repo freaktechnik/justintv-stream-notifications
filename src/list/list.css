@@ -68,6 +68,69 @@ nav {
     overflow-y: auto;
 }
 
+/* Context panel */
+.context-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+    border: none;
+    width: 100%;
+    min-height: 100%;
+    z-index: 11;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.context-panel button {
+    appearance: none;
+    background: var(--inverted-bg);
+    border: none;
+}
+
+.context-panel header button,
+.context-panel header h1 {
+    display: inline-block;
+    font-size: 2em;
+    font-weight: normal;
+}
+
+.context-panel header button {
+    margin-right: 0.5em;
+}
+
+.context-panel ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.context-panel ul li {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.context-panel ul button {
+    display: block;
+    padding: 0.5em 1em;
+    width: 100%;
+    text-align: left;
+}
+
+.context-panel button:hover,
+.context-panel button:active,
+.context-panel button:focus {
+    background: var(--accent-light-bg);
+    color: var(--accent-light-text);
+}
+
+/* Tab content */
+
 .tabcontent {
     padding: 0;
     margin: 0;
@@ -88,23 +151,8 @@ nav {
     padding: var(--trim);
 }
 
-.tabcontent > ul > li div img {
-    margin-right: var(--trim);
-    float: left;
-}
-
 .compact {
     --avatar-size: var(--small-avatar);
-}
-
-.tabcontent > ul > li div img {
-    width: var(--avatar-size);
-    height: var(--avatar-size);
-    vertical-align: middle;
-}
-
-.tabcontent > ul > li div.compact img {
-    vertical-align: text-bottom;
 }
 
 .tabcontent > ul > li > div {
@@ -114,6 +162,23 @@ nav {
 .tabcontent > ul > li > img {
     width: 100%;
     display: block;
+}
+
+.tabcontent > ul > li div img {
+    margin-right: var(--trim);
+    float: left;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    vertical-align: middle;
+}
+
+.tabcontent > ul > li div.compact img {
+    vertical-align: text-bottom;
+}
+
+.tabcontent.type0 .nonlive div > img,
+.tabcontent:not(.type3) .external div > img {
+    filter: grayscale(100%);
 }
 
 .tabcontent > ul > li.thumbnail {
@@ -174,17 +239,13 @@ nav {
     vertical-align: baseline;
 }
 
-.type0 .nonlive div > img,
-.tabcontent:not(.type3) .external div > img {
-    filter: grayscale(100%);
-}
-
 .title,
 .categoryWrapper {
     hyphens: auto;
 }
 
 /* Type specific styles */
+/* stylelint-disable no-descending-specificity, no-duplicate-selectors */
 
 .tabcontent > ul > li {
     --channel-text-color: var(--inverted-text);
@@ -324,63 +385,4 @@ nav {
     --channel-text-color: white;
 }
 
-/* Context panel */
-.context-panel {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--inverted-bg);
-    color: var(--inverted-text);
-    border: none;
-    width: 100%;
-    min-height: 100%;
-    z-index: 11;
-    font-size: 1rem;
-    padding: 0;
-}
-
-.context-panel button {
-    appearance: none;
-    background: var(--inverted-bg);
-    border: none;
-}
-
-.context-panel button:hover,
-.context-panel button:active,
-.context-panel button:focus {
-    background: var(--accent-light-bg);
-    color: var(--accent-light-text);
-}
-
-.context-panel header button,
-.context-panel header h1 {
-    display: inline-block;
-    font-size: 2em;
-    font-weight: normal;
-}
-
-.context-panel header button {
-    margin-right: 0.5em;
-}
-
-.context-panel ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-
-.context-panel ul li {
-    display: block;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-.context-panel ul button {
-    display: block;
-    padding: 0.5em 1em;
-    width: 100%;
-    text-align: left;
-}
+/* stylelint-enable */

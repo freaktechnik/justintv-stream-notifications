@@ -13,6 +13,63 @@ main {
     width: 100%;
 }
 
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+.popup dialog {
+    display: inline-block;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+    padding: 1em;
+    margin: 8em auto;
+    text-align: initial;
+    max-width: 30em;
+    border: none;
+}
+
+.popup dialog h1 {
+    font-size: 1.2em;
+    margin: 0.2em;
+}
+
+#loadingWrapper progress {
+    width: 100%;
+}
+
+.popup button {
+    font-size: initial;
+    border: none;
+    border-top: 1px solid var(--inverted-separator);
+    margin-bottom: -1em;
+    padding: 1em;
+    background: var(--inverted-bg);
+    color: var(--inverted-text);
+}
+
+.popup button[type="button"] {
+    border-right: 1px solid var(--inverted-separator);
+    margin-left: -1em;
+}
+
+.popup button[type="submit"] {
+    float: right;
+    border-left: 1px solid var(--inverted-separator);
+    margin-right: -1em;
+}
+
+.popup button.fullwidth-button {
+    border-right: none;
+    border-left: none;
+    width: calc(100% + 2em);
+}
+
 .topbar a,
 .topbar button {
     padding: 1em;
@@ -22,9 +79,6 @@ main {
     display: flex;
     flex-direction: row;
     width: 100%;
-}
-
-.actionbar {
     border-bottom: 1px solid var(--inverted-separator);
     background-color: var(--inverted-bg);
     color: var(--inverted-text);
@@ -92,6 +146,11 @@ main {
     color: var(--inverted-text);
 }
 
+.selectableItemsList > option small {
+    margin-left: 0.3em;
+    color: grey;
+}
+
 .selectableItemsList > option:checked {
     background-color: var(--accent-light-bg);
     color: var(--accent-light-text);
@@ -114,66 +173,4 @@ main {
     width: 50px;
     padding: 0.5em;
     vertical-align: middle;
-}
-
-.selectableItemsList > option small {
-    margin-left: 0.3em;
-    color: grey;
-}
-
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    text-align: center;
-}
-
-.popup dialog {
-    display: inline-block;
-    background: var(--inverted-bg);
-    color: var(--inverted-text);
-    padding: 1em;
-    margin: 8em auto;
-    text-align: initial;
-    max-width: 30em;
-    border: none;
-}
-
-.popup dialog h1 {
-    font-size: 1.2em;
-    margin: 0.2em;
-}
-
-#loadingWrapper progress {
-    width: 100%;
-}
-
-.popup button {
-    font-size: initial;
-    border: none;
-    border-top: 1px solid var(--inverted-separator);
-    margin-bottom: -1em;
-    padding: 1em;
-    background: var(--inverted-bg);
-    color: var(--inverted-text);
-}
-
-.popup button[type="button"] {
-    border-right: 1px solid var(--inverted-separator);
-    margin-left: -1em;
-}
-
-.popup button[type="submit"] {
-    float: right;
-    border-left: 1px solid var(--inverted-separator);
-    margin-right: -1em;
-}
-
-.popup button.fullwidth-button {
-    border-right: none;
-    border-left: none;
-    width: calc(100% + 2em);
 }
