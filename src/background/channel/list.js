@@ -77,6 +77,7 @@ export default class ChannelList extends ReadChannelList {
      */
     constructor() {
         DatabaseManager.registerErrorHandler(async (error) => {
+            console.log(error);
             if(typeof error === "object" && error instanceof FixListError) {
                 try {
                     await this.clear();

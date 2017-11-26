@@ -50,6 +50,10 @@ const VERSION = 3,
      * @default "channellist"
      */
     NAME = "channellist",
+    OBJECT_STORES = {
+        users: 'users',
+        channels: 'channels'
+    },
     DatabaseManager = {
         db: null,
         loading: null,
@@ -74,7 +78,7 @@ const VERSION = 3,
         },
         versions: {
             upgrade2: async (e) => {
-                const channels = e.target.transaction.objectStore("channels"),
+                const channels = e.target.transaction.objectStore(OBJECT_STORES.channels),
                     request = channels.openCursor(),
                     savePromise = [];
                 return DatabaseManager._waitForCursor(request, (cursor) => {
@@ -93,11 +97,11 @@ const VERSION = 3,
                 }).then(() => Promise.all(savePromise));
             },
             initialize: async (e) => {
-                const users = e.target.result.createObjectStore("users", {
+                const users = e.target.result.createObjectStore(OBJECT_STORES.users, {
                         keyPath: "id",
                         autoIncrement: true
                     }),
-                    channels = e.target.result.createObjectStore("channels", {
+                    channels = e.target.result.createObjectStore(OBJECT_STORES.channels, {
                         keyPath: "id",
                         autoIncrement: true
                     });
@@ -175,18 +179,22 @@ const VERSION = 3,
                     resolve(this._waitForRequest(request)
                         .then(async (e) => {
                             this.db = e.target.result;
+                            if(!Object.values(OBJECT_STORES).every((store) => this.db.objectStoreNames.contains(store))) {
+                                this.db = null;
+                                throw new FixListError();
+                            }
                             for(const handler of this.successHandlers) {
                                 await handler(this.db);
                             }
                             this.error = null;
                             this.emit("ready");
                         })
-                        .catch(async () => {
+                        .catch(async (error) => {
                             if(dontTry) {
                                 this.db = null;
-                                throw request.error;
+                                throw error;
                             }
-                            let currentResolve = Promise.reject(request.error);
+                            let currentResolve = Promise.reject(error);
                             for(const handler of this.errorHandlers) {
                                 currentResolve = currentResolve.catch(handler);
                             }

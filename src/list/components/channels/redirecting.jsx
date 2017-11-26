@@ -13,7 +13,7 @@ const Redirecting = (props) => {
         const onClick = (e) => {
             e.preventDefault();
             e.stopPropagation();
-            props.onRedirectorClick(ch.id);
+            props.onRedirectorClick(ch);
         };
         return ( <CompactChannel { ...ch } onClick={ onClick } key={ ch.uname }/> );
     });
