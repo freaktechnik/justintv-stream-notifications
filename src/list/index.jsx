@@ -16,6 +16,7 @@ import ReadChannelList from '../read-channel-list';
 import middlewareFactory from './middleware';
 import prefs from '../preferences';
 import storeTypes from './constants/store-types.json';
+import { hasStreamlink } from '../features';
 import '../content/shared.css';
 import './list.css';
 
@@ -101,19 +102,14 @@ prefs.addEventListener("change", ({ detail: {
 
 document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().replace("_", "-"));
 
-browser.management.get("streamlink.firefox.helper@gmail.com")
-    .then(() => {
+hasStreamlink()
+    .then((hasStreamlink) => {
         store.dispatch({
             type: storeTypes.HAS_STREAMLINK_HELPER,
-            payload: true
+            payload: hasStreamlink
         });
     })
-    .catch(() => {
-        store.dispatch({
-            type: storeTypes.HAS_STREAMLINK_HELPER,
-            payload: false
-        });
-    });
+    .catch(console.error);
 
 // Actually show something
 
