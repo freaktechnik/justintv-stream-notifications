@@ -5,6 +5,7 @@ import '../content/l10n';
 import { toggle } from '../content/utils';
 import errorStateWidget from '../content/error-state';
 import saveExport from '../export';
+import { hasStreamlink } from '../features';
 import './options.css';
 import '../content/shared.css';
 
@@ -41,12 +42,19 @@ class OptionsPage {
             .then((...args) => this.attachListeners(...args))
             .catch(console.error);
 
-        browser.runtime.sendMessage("pcStatus").then((status) => {
-            toggle(document.getElementById("hiddenprefs"), !status);
-        })
+        browser.runtime.sendMessage("pcStatus")
+            .then((status) => {
+                toggle(document.getElementById("hiddenprefs"), !status);
+            })
             .catch(console.error);
 
         errorStateWidget(document.getElementById("errorStates"));
+
+        hasStreamlink()
+            .then((hasStreamlink) => {
+                document.querySelector('#click_action option[value="5"]').hidden = !hasStreamlink;
+            })
+            .catch(console.error);
     }
 
     getValue(p) {
