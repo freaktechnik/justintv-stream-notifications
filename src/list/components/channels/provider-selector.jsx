@@ -10,7 +10,7 @@ const ProviderSelector = (props) => {
         }
     }
     return (
-        <select className="exploreprovider browser-style" value={ props.currentProvider } onBlur={ props.onProvider }>
+        <select className="exploreprovider browser-style" value={ props.currentProvider } onInput={ props.onProvider }>
             { options }
         </select>
     );

@@ -59,7 +59,7 @@ class YouTube extends GenericProvider {
             {
                 part: "id,snippet",
                 forUsername: username,
-                fields: "items(id,snippet/title,snippet/thumbnails)",
+                fields: "items(id,snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
                 key: await apiKey
             })}`);
 
@@ -108,6 +108,7 @@ class YouTube extends GenericProvider {
                         "240": sub.snippet.thumbnails.high.url
                     };
                     ret.uname = sub.snippet.title;
+                    ret.language = sub.snippet.defaultLanguage;
                     return ret;
                 });
 
@@ -130,7 +131,7 @@ class YouTube extends GenericProvider {
             {
                 part: "id,snippet",
                 forUsername: username,
-                fields: "items(id,snippet/title,snippet/thumbnails)",
+                fields: "items(id,snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
                 key: await apiKey
             })}`);
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
@@ -144,6 +145,7 @@ class YouTube extends GenericProvider {
                 "240": item.snippet.thumbnails.high.url
             };
             ch.uname = item.snippet.title;
+            ch.language = item.snippet.defaultLanguage;
             return ch;
         }
 
@@ -157,7 +159,7 @@ class YouTube extends GenericProvider {
             return users.map((user) => `${baseURL}channels?${querystring.stringify({
                 part: "id,snippet",
                 id: user.login,
-                fields: "items(id,snippet/title,snippet/thumbnails)",
+                fields: "items(id,snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
                 key
             })}`);
         };
@@ -204,6 +206,7 @@ class YouTube extends GenericProvider {
                                     "240": sub.snippet.thumbnails.high.url
                                 };
                                 ret.uname = sub.snippet.title;
+                                ret.language = sub.snippet.defaultLanguage;
                                 return ret;
                             }));
                         ch.image = {
@@ -250,7 +253,7 @@ class YouTube extends GenericProvider {
                         videos = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
                             part: "id, snippet, liveStreamingDetails",
                             id: item.id.videoId,
-                            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
+                            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
                             key: await apiKey,
                             hl: getLocale()
                         })}`);
@@ -269,6 +272,7 @@ class YouTube extends GenericProvider {
                             channel.thumbnail = video.snippet.thumbnails.medium.url;
                             channel.viewers = video.liveStreamingDetails.concurrentViewers;
                             channel.category = category;
+                            channel.language = video.snippet.defaultLanguage;
                             return channel;
                         }));
                         return channels;
@@ -310,7 +314,7 @@ class YouTube extends GenericProvider {
                     video = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
                         part: "snippet, liveStreamingDetails",
                         id: item.id.videoId,
-                        fields: "items(snippet(categoryId,title,thumbnails/medium/url),liveStreamingDetails/concurrentViewers)",
+                        fields: "items(snippet(categoryId,title,thumbnails/medium/url,defaultLanguage),liveStreamingDetails/concurrentViewers)",
                         key: await apiKey,
                         hl: getLocale()
                     })}`);
@@ -323,6 +327,7 @@ class YouTube extends GenericProvider {
                     ch.thumbnail = videoItem.snippet.thumbnails.medium.url;
                     ch.viewers = videoItem.liveStreamingDetails.concurrentViewers;
                     ch.category = await this._getCategory(videoItem.snippet.categoryId);
+                    ch.language = videoItem.snippet.defaultLanguage;
                 }
             }
             else {
@@ -358,7 +363,7 @@ class YouTube extends GenericProvider {
         const videos = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
             part: "id, snippet, liveStreamingDetails",
             id: streamIds.join(","),
-            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
+            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
             key: await apiKey,
             hl: getLocale()
         })}`);
@@ -377,6 +382,7 @@ class YouTube extends GenericProvider {
                 channel.thumbnail = video.snippet.thumbnails.medium.url;
                 channel.viewers = video.liveStreamingDetails.concurrentViewers;
                 channel.category = category;
+                channel.language = video.snippet.defaultLanguage;
                 return channel;
             })));
         }
@@ -408,7 +414,7 @@ class YouTube extends GenericProvider {
             {
                 part: "id,snippet,liveStreamingDetails",
                 id: streamIds.join(","),
-                fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId),liveStreamingDetails/concurrentViewers)",
+                fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
                 key: (await apiKey),
                 hl: getLocale()
             }
@@ -427,6 +433,7 @@ class YouTube extends GenericProvider {
                 if("liveStreamingDetails" in video) {
                     channel.viewers = video.liveStreamingDetails.concurrentViewers;
                 }
+                channel.language = video.snippet.defaultLanguage;
                 channel.category = await this._getCategory(video.snippet.categoryId);
 
                 return channel;
@@ -441,7 +448,7 @@ class YouTube extends GenericProvider {
             {
                 part: "snippet",
                 id: channelId,
-                fields: "items(snippet/title,snippet/thumbnails)",
+                fields: "items(snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
                 key: await apiKey
             })}`);
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
@@ -456,6 +463,7 @@ class YouTube extends GenericProvider {
                 "240": item.snippet.thumbnails.high.url
             };
             ch.uname = item.snippet.title;
+            ch.language = item.snippet.defaultLanguage;
             return ch;
         }
 

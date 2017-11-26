@@ -22,7 +22,8 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         hasChat: false,
         providerEnabled: providers[channel.type].enabled,
         tooltip: channel.uname,
-        url: channel.url[FIRST_URL]
+        url: channel.url[FIRST_URL],
+        language: channel.language
     };
     if(style === "compact") {
         formattedChannel.imageSize = SMALL_IMAGE;

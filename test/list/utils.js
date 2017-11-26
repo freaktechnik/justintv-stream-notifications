@@ -39,7 +39,8 @@ const channelFormats = [
             id: 7,
             chatUrl: 'https://example.com/chat',
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: 'en'
         },
         formattedChannel: {
             uname: 'foo',
@@ -53,7 +54,8 @@ const channelFormats = [
             title: 'ipsum',
             id: 7,
             external: false,
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: 'en'
         }
     },
     {
@@ -74,7 +76,8 @@ const channelFormats = [
             id: 7,
             chatUrl: 'https://example.com/chat',
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: ''
         },
         formattedChannel: {
             uname: 'foo',
@@ -93,7 +96,8 @@ const channelFormats = [
                 viewers: 1,
                 provider: 'Test'
             },
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     },
     {
@@ -113,7 +117,8 @@ const channelFormats = [
             title: 'ipsum',
             id: 6,
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: undefined
         },
         formattedChannel: {
             uname: 'foo',
@@ -129,7 +134,8 @@ const channelFormats = [
             extras: {
                 provider: 'Twitch'
             },
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: undefined
         }
     },
     {
@@ -149,7 +155,8 @@ const channelFormats = [
             title: 'ipsum',
             id: 5,
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: ''
         },
         formattedChannel: {
             uname: 'foo',
@@ -162,7 +169,8 @@ const channelFormats = [
             tooltip: 'foo',
             id: 5,
             external: false,
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     },
     {
@@ -182,7 +190,8 @@ const channelFormats = [
             title: 'ipsum',
             id: 5,
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: ''
         },
         formattedChannel: {
             uname: 'foo',
@@ -195,7 +204,8 @@ const channelFormats = [
             tooltip: 'foo',
             id: 5,
             external: false,
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     },
     {
@@ -215,7 +225,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             title: 'ipsum',
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: ''
         },
         formattedChannel: {
             chatUrl: '',
@@ -229,7 +240,8 @@ const channelFormats = [
             tooltip: 'foo',
             id: 'foo|test',
             external: true,
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     },
     {
@@ -250,7 +262,8 @@ const channelFormats = [
             id: 7,
             chatUrl: 'https://example.com/chat',
             url: [ 'https://example.com' ],
-            login: 'foo'
+            login: 'foo',
+            language: ''
         },
         formattedChannel: {
             uname: 'foo',
@@ -265,7 +278,8 @@ const channelFormats = [
             id: 7,
             external: false,
             thumbnail: 'lorem',
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     },
     {
@@ -292,7 +306,8 @@ const channelFormats = [
                 image: 'b',
                 id: 'c',
                 login: 'd'
-            } ]
+            } ],
+            language: ''
         },
         formattedChannel: {
             uname: 'foo',
@@ -311,7 +326,8 @@ const channelFormats = [
                 image: 'b',
                 id: 'c'
             } ],
-            url: 'https://example.com'
+            url: 'https://example.com',
+            language: ''
         }
     }
 ];

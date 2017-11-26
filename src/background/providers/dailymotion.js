@@ -40,6 +40,7 @@ const type = "dailymotion",
             p[c] = json[`avatar_${c}_url`];
             return p;
         }, {});
+        ch.language = json.language;
 
         return ch;
     };

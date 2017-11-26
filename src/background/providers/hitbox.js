@@ -16,7 +16,9 @@ const type = "hitbox",
     chatURL = "https://smashcast.tv/embedchat/",
     pageSize = 100,
     baseURL = "https://api.smashcast.tv",
-    cdnURL = "https://edge.sf.hitbox.tv";
+    cdnURL = "https://edge.sf.hitbox.tv",
+    LANG_START = 0,
+    LANG_END = 2;
 
 function getChannelFromJson(json) {
     const cho = new Channel(json.channel.user_name, type);
@@ -164,7 +166,8 @@ class Hitbox extends GenericProvider {
         const data = await this._qs.queueRequest(`${baseURL}/media/live/list?${querystring.stringify({
             publicOnly: true,
             filter: "popular",
-            search: query
+            search: query,
+            language: browser.i18n.getUILanguage().substr(LANG_START, LANG_END)
         })}`);
         if(data.ok && data.parsedJSON && data.parsedJSON.livestream && data.parsedJSON.livestream.length) {
             let chans = data.parsedJSON.livestream;

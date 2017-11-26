@@ -27,7 +27,8 @@ export default class Channel extends NavigateableItem {
             onFocusChange: PropTypes.func.isRequired,
             tooltip: PropTypes.string.isRequired,
             focused: PropTypes.bool.isRequired,
-            onFocus: PropTypes.func
+            onFocus: PropTypes.func,
+            language: PropTypes.string
         };
     }
 
@@ -44,7 +45,18 @@ export default class Channel extends NavigateableItem {
         if(this.props.liveState > LiveState.LIVE) {
             className += ' nonlive';
         }
-        children.push(<InnerChannel image={ this.props.image } uname={ this.props.uname } title={ this.props.title } extras={ this.props.extras } liveState={ this.props.liveState } redirectors={ this.props.redirectors } imageSize={ this.props.imageSize } onRedirectorClick={ this.props.onRedirectorClick } key="inner"/>);
+        children.push(<InnerChannel
+            image={ this.props.image }
+            uname={ this.props.uname }
+            title={ this.props.title }
+            extras={ this.props.extras }
+            liveState={ this.props.liveState }
+            redirectors={ this.props.redirectors }
+            imageSize={ this.props.imageSize }
+            onRedirectorClick={ this.props.onRedirectorClick }
+            language={ this.props.language }
+            key="inner"
+        />);
         const element = super.render();
         return React.cloneElement(element, {
             title: this.props.tooltip,

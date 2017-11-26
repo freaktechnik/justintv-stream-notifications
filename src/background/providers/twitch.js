@@ -62,6 +62,7 @@ function getChannelFromJSON(jsonChannel) {
     ret.title = jsonChannel.status;
     ret.category = jsonChannel.game;
     ret.mature = jsonChannel.mature;
+    ret.language = jsonChannel.broadcaster_language;
 
     return ret;
 }

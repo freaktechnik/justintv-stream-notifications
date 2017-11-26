@@ -353,7 +353,7 @@
                 }
             ]
         },
-        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=": {
+        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=&language=en": {
             "livestream": [
                 {
                     "channel": {
@@ -371,7 +371,7 @@
                 }
             ]
         },
-        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=test": {
+        "https://api.smashcast.tv/media/live/list?publicOnly=true&filter=popular&search=test&language=en": {
             "livestream": [
                 {
                     "channel": {
@@ -736,14 +736,15 @@
                     "is_playlist": false,
                     "stream_type": "live",
                     "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
+                        "broadcaster_language": "en",
+                        "display_name": "live",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "mature": false,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/live"
                     }
                 }
             ]
@@ -758,14 +759,15 @@
                     "is_playlist": false,
                     "stream_type": "live",
                     "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
+                        "broadcaster_language": "en",
+                        "display_name": "live",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "mature": false,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/live"
                     }
                 }
             ]
@@ -780,14 +782,15 @@
                     "is_playlist": false,
                     "stream_type": "live",
                     "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
+                        "broadcaster_language": "en",
+                        "display_name": "live",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "mature": false,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/live"
                     }
                 }
             ]
@@ -802,14 +805,15 @@
                     "is_playlist": false,
                     "stream_type": "live",
                     "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
+                        "broadcaster_language": "en",
+                        "display_name": "live",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "mature": false,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/live"
                     }
                 }
             ]
@@ -826,6 +830,7 @@
                 "is_playlist": false,
                 "stream_type": "live",
                 "channel": {
+                    "broadcaster_language": "en",
                     "display_name": "live",
                     "game": "",
                     "_id": 1,
@@ -849,14 +854,15 @@
                             "medium": ""
                         },
                         "channel": {
-                             "display_name": "featured",
-                             "game": "",
-                             "_id": 1,
-                             "name": "live",
-                             "status": "",
-                             "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                             "url": "http://www.twitch.tv/featured",
-                             "mature": false
+                            "broadcaster_language": "en",
+                            "display_name": "featured",
+                            "game": "",
+                            "_id": 1,
+                            "name": "live",
+                            "status": "",
+                            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                            "url": "http://www.twitch.tv/featured",
+                            "mature": false
                         }
                     }
                 }
@@ -870,14 +876,15 @@
                         "medium": ""
                     },
                     "channel": {
-                         "display_name": "test",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/test",
-                         "mature": false
+                        "broadcaster_language": "en",
+                        "display_name": "test",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/test",
+                        "mature": false
                     }
                 }
             ]

@@ -54,6 +54,7 @@ function getChannelFromJSON(jsonChannel) {
     if(jsonChannel.type !== null) {
         ret.category = jsonChannel.type.name;
     }
+    ret.language = jsonChannel.languageId;
     return ret;
 }
 

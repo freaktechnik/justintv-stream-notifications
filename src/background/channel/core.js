@@ -305,6 +305,13 @@ class Channel extends Item {
      */
     mature = false;
     /**
+     * Language of the channel.
+     *
+     * @type {string}
+     * @default ''
+     */
+    language = '';
+    /**
      * @type {module:channel/live-state.LiveState}
      * @default null
      */
@@ -352,7 +359,8 @@ class Channel extends Item {
             lastModified: this.lastModified,
             category: this.category,
             mature: this.mature,
-            live: this.live.serialize()
+            live: this.live.serialize(),
+            language: this.language
         });
     }
 }

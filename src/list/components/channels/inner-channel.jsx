@@ -19,7 +19,7 @@ const InnerChannel = (props) => {
         redirecting = <Redirecting channels={ props.redirectors } onRedirectorClick={ props.onRedirectorClick }/>;
     }
     if(props.title && props.liveState !== LiveState.OFFLINE) {
-        title = ( <span className="title"><br/>{ props.title }</span> );
+        title = ( <span className="title" lang={ props.language }><br/>{ props.title }</span> );
     }
     if(props.imageSize !== LARGE_IMAGE) {
         className = 'compact';
@@ -45,6 +45,7 @@ InnerChannel.propTypes = {
     extras: PropTypes.shape(Extras.propTypes),
     redirectors: redirectorsShape,
     imageSize: PropTypes.number,
+    language: PropTypes.string,
     onRedirectorClick: PropTypes.func.isRequired
 };
 

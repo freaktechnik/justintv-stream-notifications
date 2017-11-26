@@ -71,6 +71,11 @@ test("Twitch Live Redirects", async (t) => {
     t.is(ret[0].id, 15);
 });
 
+test("Twitch channel language", async (t) => {
+    const channel = await provider.updateChannel('test');
+    t.is(channel.language, 'en');
+});
+
 test.todo("need to mock the result by the provider list");
 /* TODO
 test("Twitch Update Redirects", async (t) => {

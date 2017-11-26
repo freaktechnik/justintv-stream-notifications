@@ -60,7 +60,7 @@ class NavigateableList extends React.Component {
         return React.Children.map(children, (child, index) => React.cloneElement(child, {
             focused: index === this.props.focused,
             onFocusChange: (i) => this.selectItem(i),
-            onFocus: () => this.focusItem(index)
+            onFocus: () => this.focusChild(index)
         }));
     }
 

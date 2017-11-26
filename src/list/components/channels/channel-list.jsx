@@ -22,7 +22,8 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         imageSize: PropTypes.number,
         external: PropTypes.bool,
         url: PropTypes.string.isRequired,
-        tooltip: PropTypes.string.isRequired
+        tooltip: PropTypes.string.isRequired,
+        language: PropTypes.string
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {
