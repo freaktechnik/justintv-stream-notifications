@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { UP_KEYS, DOWN_KEYS } from '../constants/navigateable';
 
 const NEXT = 1,
     PREV = -1;
@@ -14,6 +15,13 @@ class NavigateableItem extends React.Component {
         };
     }
 
+    static preventScrolling(event) {
+        if(DOWN_KEYS.includes(event.key) || UP_KEYS.includes(event.key)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
     get focusedItem() {
         return this.item;
     }
@@ -23,15 +31,13 @@ class NavigateableItem extends React.Component {
     }
 
     handleKey(event) {
-        if(event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown") {
+        if(DOWN_KEYS.includes(event.key)) {
             this.props.onFocusChange(NEXT);
-            event.preventDefault();
-            event.stopPropagation();
+            NavigateableItem.preventScrolling(event);
         }
-        else if(event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
+        else if(UP_KEYS.includes(event.key)) {
             this.props.onFocusChange(PREV);
-            event.preventDefault();
-            event.stopPropagation();
+            NavigateableItem.preventScrolling(event);
         }
     }
 
@@ -45,7 +51,7 @@ class NavigateableItem extends React.Component {
         return (
             <li ref={ (e) => {
                 this.item = e;
-            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) } role="row" onFocus={ this.props.onFocus }>
+            } } tabIndex={ 0 } onKeyUp={ (e) => this.handleKey(e) } onKeyDown={ (e) => NavigateableItem.preventScrolling(e) } role="row" onFocus={ this.props.onFocus }>
                 { this.props.children }
             </li>
         );

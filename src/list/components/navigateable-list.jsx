@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { UP_KEYS, DOWN_KEYS, START_KEYS, END_KEYS } from '../constants/navigateable';
 
 const FIRST = 0,
     LAST = -1;
@@ -20,6 +21,13 @@ class NavigateableList extends React.Component {
             className: undefined,
             role: 'listbox'
         };
+    }
+
+    static preventScrolling(event) {
+        if(DOWN_KEYS.includes(event.key) || UP_KEYS.includes(event.key) || START_KEYS.includes(event.key) || END_KEYS.includes(event.key)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     }
 
     focusChild(index) {
@@ -44,15 +52,13 @@ class NavigateableList extends React.Component {
     }
 
     handleKey(event) {
-        if(event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "Home" || event.key === "PageDown") {
+        if(DOWN_KEYS.includes(event.key) || START_KEYS.includes(event.key)) {
             this.focusChild(FIRST);
-            event.preventDefault();
-            event.stopPropagation();
+            NavigateableList.preventScrolling(event);
         }
-        else if(event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "End" || event.key === "PageUp") {
+        else if(UP_KEYS.includes(event.key) || END_KEYS.includes(event.key)) {
             this.focusChild(this.childCount + LAST);
-            event.preventDefault();
-            event.stopPropagation();
+            NavigateableList.preventScrolling(event);
         }
     }
 
@@ -69,7 +75,7 @@ class NavigateableList extends React.Component {
         const mappedChildren = this.mapChildren(this.props.children);
         return (
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions
-            <ul onKeyUp={ (e) => this.handleKey(e) } tabIndex={ 0 } ref={ (e) => {
+            <ul onKeyUp={ (e) => this.handleKey(e) } onKeyDown={ (e) => NavigateableList.preventScrolling(e) } tabIndex={ 0 } ref={ (e) => {
                 this.list = e;
             } } role={ this.props.role } className={ this.props.className }>
                 { mappedChildren }
