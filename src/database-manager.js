@@ -77,7 +77,7 @@ const VERSION = 3,
             });
         },
         versions: {
-            upgrade2: async (e) => {
+            upgrade2(e) {
                 const channels = e.target.transaction.objectStore(OBJECT_STORES.channels),
                     request = channels.openCursor(),
                     savePromise = [];
@@ -96,7 +96,7 @@ const VERSION = 3,
                     savePromise.push(DatabaseManager._waitForRequest(r));
                 }).then(() => Promise.all(savePromise));
             },
-            initialize: async (e) => {
+            initialize(e) {
                 const users = e.target.result.createObjectStore(OBJECT_STORES.users, {
                         keyPath: "id",
                         autoIncrement: true
@@ -173,7 +173,10 @@ const VERSION = 3,
                         else {
                             handler = this.versions.initialize;
                         }
-                        handler(e).catch(reject);
+                        const res = handler(e);
+                        if(res && "catch" in res) {
+                            res.catch(reject);
+                        }
                     };
 
                     resolve(this._waitForRequest(request)
