@@ -13,11 +13,18 @@ const fs = require("fs"),
         const file = path.join(__dirname, base, lang, FILE_NAME),
             source = await read(file, { encoding }),
             messages = JSON.parse(source);
+        let fixedSomething = false;
         for(const k in placeholders) {
-            messages[k].placeholders = placeholders[k];
+            if(!("placeholders" in messages[k])) {
+                messages[k].placeholders = placeholders[k];
+                fixedSomething = true;
+            }
         }
 
-        return write(file, JSON.stringify(messages, null, INDENT));
+        if(fixedSomething) {
+            console.log("Saving fixed messages for", lang);
+            await write(file, JSON.stringify(messages, null, INDENT));
+        }
     },
     main = async (base, defaultLang = "en") => {
         let files = await rdir(path.join(__dirname, base));

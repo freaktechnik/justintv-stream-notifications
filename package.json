@@ -74,7 +74,7 @@
     "lint:webext": "webpack --hide-modules && web-ext lint -s webextension/",
     "lint:css": "stylelint \"src/**/*.css\"",
     "build": "webpack && npm run fix-i18n && web-ext build -s webextension/",
-    "start": "webpack && web-ext run -s webextension/",
+    "start": "webpack && npm run fix-i18n && ls -al webextension/ && web-ext run -s webextension/",
     "fix-i18n": "node ./scripts/fix-i18n-placeholders.js",
     "ci-init": "node ./scripts/setup-travis.js"
   },
