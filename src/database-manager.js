@@ -115,6 +115,16 @@ const VERSION = 3,
                     "login"
                 ], { unique: true });
                 channels.createIndex("type", "type", { unique: false });
+
+                if(navigator.storage && navigator.storage.persisted) {
+                    navigator.storage.persisted()
+                        .then((persisted) => {
+                            if(!persisted && navigator.storage.persist) {
+                                return navigator.storage.persist();
+                            }
+                        })
+                        .catch(console.error);
+                }
             }
         },
         errorHandlers: [ (e) => {
