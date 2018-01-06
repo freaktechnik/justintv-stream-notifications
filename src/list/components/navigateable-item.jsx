@@ -6,12 +6,19 @@ const NEXT = 1,
     PREV = -1;
 
 class NavigateableItem extends React.Component {
+    static get defaultProps() {
+        return {
+            hasFocus: true
+        };
+    }
+
     static get propTypes() {
         return {
             children: PropTypes.node.isRequired,
             onFocusChange: PropTypes.func.isRequired,
             focused: PropTypes.bool.isRequired,
-            onFocus: PropTypes.func
+            onFocus: PropTypes.func,
+            hasFocus: PropTypes.bool
         };
     }
 
@@ -42,7 +49,7 @@ class NavigateableItem extends React.Component {
     }
 
     componentDidUpdate() {
-        if(this.props.focused) {
+        if(this.props.focused && this.props.hasFocus) {
             this.focus();
         }
     }

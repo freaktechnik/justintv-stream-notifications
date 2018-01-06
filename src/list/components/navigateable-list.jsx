@@ -12,14 +12,16 @@ class NavigateableList extends React.Component {
             className: PropTypes.string,
             role: PropTypes.string,
             onFocusChange: PropTypes.func.isRequired,
-            focused: PropTypes.number
+            focused: PropTypes.number,
+            hasFocus: PropTypes.bool
         };
     }
 
     static get defaultProps() {
         return {
             className: undefined,
-            role: 'listbox'
+            role: 'listbox',
+            hasFocus: true
         };
     }
 
@@ -66,7 +68,8 @@ class NavigateableList extends React.Component {
         return React.Children.map(children, (child, index) => React.cloneElement(child, {
             focused: index === this.props.focused,
             onFocusChange: (i) => this.selectItem(i),
-            onFocus: () => this.focusChild(index)
+            onFocus: () => this.focusChild(index),
+            hasFocus: this.props.hasFocus
         }));
     }
 

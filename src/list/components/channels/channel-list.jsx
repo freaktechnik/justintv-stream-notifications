@@ -39,17 +39,21 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
                 };
             return ( <Channel { ...ch } onClick={ onClick } onRedirectorClick={ props.onChannel } onContextMenu={ onContextMenu } onCopy={ props.onCopy } key={ ch.id }/> );
         });
-        return ( <NavigateableList role="tabpanel" className="scrollable" focused={ props.focused } onFocusChange={ props.onFocusChange }>
+        return ( <NavigateableList role="tabpanel" className="scrollable" focused={ props.focused } onFocusChange={ props.onFocusChange } hasFocus={ props.hasFocus }>
             { channels }
         </NavigateableList> );
     };
+ChannelList.defaultProps = {
+    hasFocus: true
+};
 ChannelList.propTypes = {
     channels: channelsShape.isRequired,
     focused: PropTypes.number,
     onChannel: PropTypes.func.isRequired,
     onContext: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired,
-    onFocusChange: PropTypes.func.isRequired
+    onFocusChange: PropTypes.func.isRequired,
+    hasFocus: PropTypes.bool
 };
 
 export default ChannelList;

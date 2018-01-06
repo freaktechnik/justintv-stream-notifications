@@ -40,13 +40,14 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } focused={ props.focused } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy } onFocusChange={ props.onFocusChange }/>
+        <ChannelList channels={ props.channels } focused={ props.focused } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy } onFocusChange={ props.onFocusChange } hasFocus={ props.hasFocus }/>
     </div> );
 };
 Channels.defaultProps = {
     loading: false,
     searching: false,
-    theme: 'light'
+    theme: 'light',
+    hasFocus: true
 };
 Channels.propTypes = {
     channels: channelsShape.isRequired,
@@ -65,7 +66,8 @@ Channels.propTypes = {
     onChannel: PropTypes.func.isRequired,
     onContext: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired,
-    onFocusChange: PropTypes.func.isRequired
+    onFocusChange: PropTypes.func.isRequired,
+    hasFocus: PropTypes.bool.hasFocus
 };
 
 const mapStateToProps = (state) => ({
@@ -79,7 +81,8 @@ const mapStateToProps = (state) => ({
     currentProvider: state.ui.currentProvider,
     searching: state.ui.search && !!state.ui.query.length,
     openingMode: state.settings.openingMode,
-    focused: state.ui.focusedChannel
+    focused: state.ui.focusedChannel,
+    hasFocus: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext
 });
 const mapDispatchToProps = (dispatch) => ({
     onProvider(event) {

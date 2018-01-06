@@ -17,7 +17,7 @@ const Toolbar = (props) => {
     }
     return ( <nav>
         <div className="topbar">
-            <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect }/>
+            <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect } hasFocus={ props.tabsFocused }/>
             <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch } onRefreshContextMenu={ props.onRefreshContextMenu }/>
         </div>
         { searchField }
@@ -27,7 +27,8 @@ Toolbar.defaultProps = {
     activeTab: LIVE_TAB,
     showNonlive: false,
     query: "",
-    showSearch: false
+    showSearch: false,
+    tabsFocused: false
 };
 Toolbar.propTypes = {
     activeTab: PropTypes.number,
@@ -38,7 +39,8 @@ Toolbar.propTypes = {
     showSearch: PropTypes.bool,
     queuePaused: PropTypes.bool,
     onSearch: PropTypes.func.isRequired,
-    onRefreshContextMenu: PropTypes.func.isRequired
+    onRefreshContextMenu: PropTypes.func.isRequired,
+    tabsFocused: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({
@@ -46,7 +48,8 @@ const mapStateToProps = (state) => ({
     showNonlive: state.settings.nonLiveDisplay === DISPLAY_NONLIVE,
     query: state.ui.query,
     showSearch: state.ui.search,
-    queuePaused: state.settings.queue.paused || !state.settings.queue.status
+    queuePaused: state.settings.queue.paused || !state.settings.queue.status,
+    tabsFocused: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext
 });
 const mapDispatchToProps = (dispatch) => ({
     onTabSelect(index) {
