@@ -22,7 +22,6 @@ const fs = require("fs"),
         }
 
         if(fixedSomething) {
-            console.log("Saving fixed messages for", lang);
             await write(file, JSON.stringify(messages, null, INDENT));
         }
     },
