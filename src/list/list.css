@@ -12,8 +12,13 @@
 
 body {
     background-color: var(--inverted-bg);
-    font-size: 12px;
-    max-width: 400px;
+}
+
+@media (-moz-touch-enabled: 0), (pointer: fine) {
+    body {
+        font-size: 12px;
+        max-width: 400px;
+    }
 }
 
 /* This ensures no horizontal overflow. */
