@@ -1286,6 +1286,9 @@
                 "videos": "https://api.twitch.tv/kraken/channels/pyrionflax/videos"
             }
         },
+        "https://api.twitch.tv/kraken/streams/pyrionflax?stream_type=live": {
+            "stream": null
+        },
         "https://tmi.twitch.tv/hosts?include_logins=1&host=19309473": {
             "hosts": [
                 {
