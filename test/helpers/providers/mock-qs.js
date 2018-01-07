@@ -54,6 +54,8 @@ const getRequest = (type, url) => {
         };
     }
 
+    console.warn("Can't resolve request for", type, url);
+
     return {
         status: 404,
         ok: false

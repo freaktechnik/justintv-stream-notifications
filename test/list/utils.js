@@ -67,7 +67,8 @@ const channelFormats = [
             type: 'test',
             image: 'bar',
             live: {
-                state: LiveState.LIVE
+                state: LiveState.LIVE,
+                created: 2
             },
             category: 'baz',
             viewers: 1,
@@ -94,7 +95,8 @@ const channelFormats = [
             extras: {
                 category: 'baz',
                 viewers: 1,
-                provider: 'Test'
+                provider: 'Test',
+                liveSince: 2
             },
             url: 'https://example.com',
             language: ''

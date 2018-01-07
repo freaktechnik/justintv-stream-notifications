@@ -40,7 +40,8 @@ test('Construction', (t) => {
 test('Serialize', (t) => {
     const expectedResult = {
             state: LiveState.OFFLINE,
-            alternateChannel: undefined
+            alternateChannel: undefined,
+            created: Date.now()
         },
         state = new LiveState(),
         serialized = state.serialize();
@@ -56,7 +57,8 @@ test('Deserialize', (t) => {
                 login: "test",
                 uname: "test",
                 urls: [ "https://example.com/test" ]
-            }
+            },
+            created: Date.now()
         },
         state = LiveState.deserialize(serialized);
 

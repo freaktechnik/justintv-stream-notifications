@@ -184,7 +184,7 @@ class Dailymotion extends GenericProvider {
         };
     }
     updateChannel(username) {
-        return this.getChannelDetails(username).then((channel) => this._getStreamDetailsForChannel(channel));
+        return this._getChannelByID(username).then((channel) => this._getStreamDetailsForChannel(channel));
     }
     async updateChannels(channels) {
         const response = await promisedPaginationHelper({
