@@ -276,7 +276,7 @@ const testMockAPI = async (t, p) => {
                 let [
                     retval,
                     channels
-                ] = await spec.onComplete(result);
+                ] = await spec.onComplete(result, url);
                 if(Array.isArray(retval)) {
                     [ retval ] = retval;
                 }

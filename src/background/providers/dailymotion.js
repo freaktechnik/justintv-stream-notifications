@@ -184,7 +184,7 @@ class Dailymotion extends GenericProvider {
         };
     }
     updateChannel(username) {
-        return this.getChannelDetails(username).then((channel) => this._getStreamDetailsForChannel(channel));
+        return this._getChannelByID(username).then((channel) => this._getStreamDetailsForChannel(channel));
     }
     async updateChannels(channels) {
         const response = await promisedPaginationHelper({
@@ -212,7 +212,7 @@ class Dailymotion extends GenericProvider {
     }
     search(query) {
         const q = {
-            fields: `owner.id,owner.screenname,owner.url,chat_embed_url,title,url,channel.name,thumbnail_240_url,${AVATAR_SIZES.map((s) => `owner.avatar_${s}_url`).join(",")}`,
+            fields: `owner.id,owner.screenname,owner.url,chat_embed_url,title,url,channel.name,thumbnail_240_url,${AVATAR_SIZES.map((s) => `owner.avatar_${s}_url`).join(",")},live_airing_time`,
             sort: "live-audience",
             "live_onair": 1
         };
@@ -235,6 +235,7 @@ class Dailymotion extends GenericProvider {
                         p[s] = json[`owner.avatar_${s}_url`];
                         return p;
                     }, {});
+                    ch.live.created = Date.parse(json.live_airing_time);
 
                     return ch;
                 });
@@ -264,7 +265,7 @@ class Dailymotion extends GenericProvider {
     _getStreamDetailsForChannel(channel) {
         return this._qs.queueRequest(`${baseUrl}user/${channel.login}/videos?${qs.stringify({
             id: channel.login,
-            fields: "chat_embed_url,title,url,channel.name,onair,thumbnail_240_url",
+            fields: "chat_embed_url,title,url,channel.name,onair,thumbnail_240_url,live_airing_time",
             sort: "live-audience",
             limit: 1
         })}`).then((response) => {
@@ -276,6 +277,7 @@ class Dailymotion extends GenericProvider {
                     channel.url = [ item.url ];
                     channel.category = item['channel.name'];
                     channel.live.setLive(item.onair);
+                    channel.live.created = Date.parse(item.live_airing_time);
                     channel.title = item.title;
                 }
                 else {

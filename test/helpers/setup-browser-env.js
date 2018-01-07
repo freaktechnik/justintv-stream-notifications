@@ -54,6 +54,8 @@ polyfillDataset();
 
 window.devicePixelRatio = 1.0;
 
+// navigator.storage -> currently feature detected, so don't need it in tests.
+
 // WebExtension APIs
 //global.chrome = chrome;
 

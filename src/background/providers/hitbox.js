@@ -35,6 +35,7 @@ function getChannelFromJson(json) {
     cho.viewers = json.media_views;
     cho.thumbnail = cdnURL + json.media_thumbnail;
     cho.live.setLive(json.media_is_live != "0");
+    cho.live.created = Date.parse(json.media_live_since);
     cho.mature = json.media_mature === "1";
     return cho;
 }

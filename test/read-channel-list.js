@@ -177,34 +177,17 @@ test.serial('get channels by user favorites', async (t) => {
     });
 });
 
-test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
+test.serial('upgrade from v2 to v3 shouldnt fail opening', async (t) => {
     await t.context.list.close();
     await new Promise((resolve, reject) => {
-        const request = indexedDB.deleteDatabase(ReadChannelList.name);
+        const request = indexedDB.deleteDatabase(DatabaseManager.name);
         request.onerror = reject;
         request.onsuccess = resolve;
     });
 
-    const request = indexedDB.open(ReadChannelList.name, 1);
+    const request = indexedDB.open(DatabaseManager.name, 2);
     request.onupgradeneeded = (e) => {
-        const users = e.target.result.createObjectStore("users", {
-            keyPath: "id",
-            autoIncrement: true
-        });
-        users.createIndex("typename", [
-            "type",
-            "login"
-        ], { unique: true });
-        users.createIndex("type", "type", { unique: false });
-        const channels = e.target.result.createObjectStore("channels", {
-            keyPath: "id",
-            autoIncrement: true
-        });
-        channels.createIndex("typename", [
-            "type",
-            "login"
-        ], { unique: true });
-        channels.createIndex("type", "type", { unique: false });
+        DatabaseManager.versions.initialize(e);
     };
     const { target: { result: db } } = await new Promise((resolve, reject) => {
         request.onsuccess = resolve;
@@ -212,7 +195,7 @@ test.serial('upgrade from v1 to v2 shouldnt fail opening', async (t) => {
     });
     await db.close();
 
-    await t.notThrows(DatabaseManager.open(ReadChannelList.name));
+    await t.notThrows(DatabaseManager.open());
     await t.context.list.close();
     await setupDB();
 });

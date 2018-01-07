@@ -24,6 +24,13 @@ function getChannelFromJSON(jsonChan) {
     ret.archiveUrl = `https://picarto.tv/${ret.uname}`;
     ret.chatUrl = `https://picarto.tv/chatpopout/${ret.uname}/public`;
     ret.live.setLive(jsonChan.online);
+    if("last_live" in jsonChan) {
+        ret.live.created = Date.parse(jsonChan.last_live);
+    }
+    else {
+        // No info on search results.
+        ret.live.created = 0;
+    }
     ret.mature = jsonChan.adult;
     ret.viewers = jsonChan.viewers;
     ret.title = jsonChan.title;

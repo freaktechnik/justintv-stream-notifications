@@ -64,11 +64,11 @@
             "avatar_480_url": "",
             "avatar_720_url": ""
         },
-        "https://api.dailymotion.com/user/test_id/videos?id=test_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url&sort=live-audience&limit=1": {
+        "https://api.dailymotion.com/user/test_id/videos?id=test_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url%2Clive_airing_time&sort=live-audience&limit=1": {
             "has_more": false,
             "list": []
         },
-        "https://api.dailymotion.com/user/live_id/videos?id=live_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url&sort=live-audience&limit=1": {
+        "https://api.dailymotion.com/user/live_id/videos?id=live_id&fields=chat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Conair%2Cthumbnail_240_url%2Clive_airing_time&sort=live-audience&limit=1": {
             "has_more": false,
             "list": [
                 {
@@ -77,7 +77,8 @@
                     "url": "",
                     "channel.name": "",
                     "onair": true,
-                    "thumbnail_240_url": ""
+                    "thumbnail_240_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -96,7 +97,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 },
                 {
                     "screenname": "live",
@@ -110,7 +112,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -129,7 +132,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 },
                 {
                     "screenname": "live",
@@ -143,7 +147,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -162,7 +167,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -181,11 +187,12 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
-        "https://api.dailymotion.com/users?ids=live_id%2Ctest_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url&limit=100&page=1": {
+        "https://api.dailymotion.com/users?ids=live_id%2Ctest_id&fields=screenname%2Curl%2Cid%2Cavatar_25_url%2Cavatar_60_url%2Cavatar_80_url%2Cavatar_120_url%2Cavatar_190_url%2Cavatar_240_url%2Cavatar_360_url%2Cavatar_480_url%2Cavatar_720_url%2Clive_airing_time&limit=100&page=1": {
             "has_more": false,
             "list": [
                 {
@@ -200,7 +207,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 },
                 {
                     "screenname": "live",
@@ -214,11 +222,12 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
-        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url&sort=live-audience&live_onair=1": {
+        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url%2Clive_airing_time&sort=live-audience&live_onair=1": {
             "has_more": false,
             "list": [
                 {
@@ -238,11 +247,12 @@
                     "owner.avatar_240_url": "",
                     "owner.avatar_360_url": "",
                     "owner.avatar_480_url": "",
-                    "owner.avatar_720_url": ""
+                    "owner.avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
-        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url&sort=live-audience&live_onair=1&search=test": {
+        "https://api.dailymotion.com/videos?fields=owner.id%2Cowner.screenname%2Cowner.url%2Cchat_embed_url%2Ctitle%2Curl%2Cchannel.name%2Cthumbnail_240_url%2Cowner.avatar_25_url%2Cowner.avatar_60_url%2Cowner.avatar_80_url%2Cowner.avatar_120_url%2Cowner.avatar_190_url%2Cowner.avatar_240_url%2Cowner.avatar_360_url%2Cowner.avatar_480_url%2Cowner.avatar_720_url%2Clive_airing_time&sort=live-audience&live_onair=1&search=test": {
             "has_more": false,
             "list": [
                 {
@@ -262,7 +272,8 @@
                     "owner.avatar_240_url": "",
                     "owner.avatar_360_url": "",
                     "owner.avatar_480_url": "",
-                    "owner.avatar_720_url": ""
+                    "owner.avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -281,7 +292,8 @@
                     "avatar_240_url": "",
                     "avatar_360_url": "",
                     "avatar_480_url": "",
-                    "avatar_720_url": ""
+                    "avatar_720_url": "",
+                    "live_airing_time": "2017.12.31T00:00:00Z"
                 }
             ]
         }
@@ -331,7 +343,8 @@
                     "category_name": "",
                     "media_views": 0,
                     "media_thumbnail": "",
-                    "media_is_live": 0
+                    "media_is_live": 0,
+                    "media_live_since": ""
                 }
             ]
         },
@@ -349,7 +362,8 @@
                     "category_name": "",
                     "media_views": 0,
                     "media_thumbnail": "",
-                    "media_is_live": 1
+                    "media_is_live": 1,
+                    "media_live_since": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -367,7 +381,8 @@
                     "category_name": "",
                     "media_views": 0,
                     "media_thumbnail": "",
-                    "media_is_live": 1
+                    "media_is_live": 1,
+                    "media_live_since": "2017.12.31T00:00:00Z"
                 }
             ]
         },
@@ -385,7 +400,8 @@
                     "category_name": "",
                     "media_views": 0,
                     "media_thumbnail": "",
-                    "media_is_live": 0
+                    "media_is_live": 0,
+                    "media_live_since": ""
                 }
             ]
         },
@@ -480,7 +496,8 @@
                         "broadcast_id": 0,
                         "full_name": "live",
                         "viewer_count": 0,
-                        "id": 0
+                        "id": 0,
+                        "start_time": "2017.12.31T00:00:00Z"
                     }
                 ]
             },
@@ -492,7 +509,7 @@
             "is_live": true,
             "thumbnail_url": ""
         },
-        "https://livestream.com/api/accounts/0/following?maxITems=50&page=0": {
+        "https://livestream.com/api/accounts/0/following?maxItems=50&page=0": {
             "total": 1,
             "data": [
                 {
@@ -512,7 +529,8 @@
                                 "broadcast_id": 0,
                                 "full_name": "live",
                                 "viewer_count": 0,
-                                "id": 0
+                                "id": 0,
+                                "start_time": "2017.12.31T00:00:00Z"
                             }
                         ]
                     },
@@ -722,7 +740,8 @@
                          "mature": false,
                          "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                          "url": "http://www.twitch.tv/live"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -745,7 +764,8 @@
                         "mature": false,
                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                         "url": "http://www.twitch.tv/live"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -768,7 +788,8 @@
                         "mature": false,
                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                         "url": "http://www.twitch.tv/live"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -791,7 +812,8 @@
                         "mature": false,
                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                         "url": "http://www.twitch.tv/live"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -814,7 +836,8 @@
                         "mature": false,
                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                         "url": "http://www.twitch.tv/live"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -839,7 +862,8 @@
                     "mature": false,
                     "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                     "url": "http://www.twitch.tv/live"
-                }
+                },
+                "created_at": "2011-08-21T18:32:25Z"
             }
         },
         "https://tmi.twitch.tv/hosts?include_logins=1&host=0": {
@@ -863,7 +887,8 @@
                             "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                             "url": "http://www.twitch.tv/featured",
                             "mature": false
-                        }
+                        },
+                        "created_at": "2011-08-21T18:32:25Z"
                     }
                 }
             ]
@@ -885,7 +910,8 @@
                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
                         "url": "http://www.twitch.tv/test",
                         "mature": false
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ]
         },
@@ -999,7 +1025,8 @@
                     "viewers": 5006,
                     "preview": {
                         "medium": "https://example.com/"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ],
             "_total":1,
@@ -1040,7 +1067,8 @@
                     "viewers": 5006,
                     "preview": {
                         "medium": "https://example.com/"
-                    }
+                    },
+                    "created_at": "2011-08-21T18:32:25Z"
                 }
             ],
             "_total":1,
@@ -1258,6 +1286,9 @@
                 "videos": "https://api.twitch.tv/kraken/channels/pyrionflax/videos"
             }
         },
+        "https://api.twitch.tv/kraken/streams/pyrionflax?stream_type=live": {
+            "stream": null
+        },
         "https://tmi.twitch.tv/hosts?include_logins=1&host=19309473": {
             "hosts": [
                 {
@@ -1430,6 +1461,22 @@
                 }
             ]
         },
+        "https://mixer.com/api/v1/users/0/follows?limit=50&page=0": [
+            {
+                "token": "live",
+                "online": true,
+                "name": "",
+                "viewersCurrent": 0,
+                "type": null,
+                "id": 1,
+                "user": {
+                    "id": 1
+                },
+                "thumbnail": {
+                    "url": "https://example.com"
+                }
+            }
+        ],
         "https://mixer.com/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1": [
             {
                 "token": "featured",
@@ -1484,7 +1531,8 @@
                 "stats": {
                     "viewer": 0,
                     "viewer_total": 0
-                }
+                },
+                "last_broadcast_at": 1515356353
             }
         },
         "https://api.ustream.tv/channels/1.json": {
@@ -1503,7 +1551,8 @@
                 "stats": {
                     "viewer": 0,
                     "viewer_total": 0
-                }
+                },
+                "last_broadcast_at": 1515356353
             }
         }
     },
@@ -1711,7 +1760,8 @@
                         "categoryId": "0"
                     },
                     "liveStreamingDetails": {
-                        "concurrentViewers": 0
+                        "concurrentViewers": 0,
+                        "actualStartTime": "2017.12.31T00:00:00Z"
                     }
                 }
             ]
@@ -1731,7 +1781,8 @@
                         "categoryId": "0"
                     },
                     "liveStreamingDetails": {
-                        "concurrentViewers": 0
+                        "concurrentViewers": 0,
+                        "actualStartTime": "2017.12.31T00:00:00Z"
                     }
                 }
             ]
@@ -1751,7 +1802,8 @@
                         "categoryId": "0"
                     },
                     "liveStreamingDetails": {
-                        "concurrentViewers": 0
+                        "concurrentViewers": 0,
+                        "actualStartTime": "2017.12.31T00:00:00Z"
                     }
                 }
             ]
@@ -1817,7 +1869,8 @@
             "multistream": [],
             "viewers": 0,
             "adult": false,
-            "category": ""
+            "category": "",
+            "last_live": "2017.12.31T00:00:00Z"
         },
         "https://api.picarto.tv/v1/channel/id/0": {
             "user_id": 0,
@@ -1827,7 +1880,8 @@
             "multistream": [],
             "viewers": 0,
             "adult": false,
-            "category": ""
+            "category": "",
+            "last_live": "2017.12.31T00:00:00Z"
         },
         "https://api.picarto.tv/v1/channel/name/live": {
             "user_id": 1,
@@ -1837,7 +1891,8 @@
             "multistream": [],
             "viewers": 0,
             "adult": false,
-            "category": ""
+            "category": "",
+            "last_live": "2017.12.31T00:00:00Z"
         },
         "https://api.picarto.tv/v1/channel/id/1": {
             "user_id": 1,
@@ -1847,7 +1902,8 @@
             "multistream": [],
             "viewers": 0,
             "adult": false,
-            "category": ""
+            "category": "",
+            "last_live": "2017.12.31T00:00:00Z"
         },
         "https://api.picarto.tv/v1/online?adult=true&gaming=true": [
             {

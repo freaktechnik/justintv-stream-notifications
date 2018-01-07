@@ -323,22 +323,6 @@ export default class ReadChannelList extends EventTarget {
      * @throws When the iteration is aborted due to an error.
      */
     _waitForCursor(request, callback) { // eslint-disable-line class-methods-use-this
-        return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
-            request.onsuccess = (event) => {
-                if(event.target.result) {
-                    const r = callback(event.target.result);
-                    if(r && typeof r === "object" && "then" in r) {
-                        r.then(() => event.target.result.continue()).catch(reject);
-                    }
-                    else {
-                        event.target.result.continue();
-                    }
-                }
-                else {
-                    resolve();
-                }
-            };
-            request.onerror = reject;
-        });
+        return DatabaseManager._waitForCursor(request, callback);
     }
 }

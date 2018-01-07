@@ -44,6 +44,8 @@ class Livestream extends GenericProvider {
             ch.image = { "100": data.parsedJSON.channel.image.url };
             ch.category = data.parsedJSON.channel.category;
             ch.live.setLive(data.parsedJSON.channel.isLive);
+            //TODO track accross fetches
+            ch.live.created = 0;
             ch.viewers = data.parsedJSON.channel.currentViewerCount;
             ch.archiveUrl = data.parsedJSON.channel.link;
             ch.chatUrl = `${data.parsedJSON.channel.link}/chat`;
@@ -71,6 +73,8 @@ class Livestream extends GenericProvider {
                         channel = await this._list.getChannelByName(requestLogin),
                         thumbnailInfo = await this._qs.queueRequest(`${getChannelAPIUrl(channel.login)}latestclips.json?maxresults=1`);
                     channel.live.setLive(data.parsedJSON.channel.isLive);
+                    //TODO track accross fetches
+                    channel.live.created = 0;
                     channel.viewers = data.parsedJSON.channel.currentViewerCount;
                     if(thumbnailInfo.parsedJSON && "channel" in thumbnailInfo.parsedJSON && thumbnailInfo.parsedJSON.channel.item.length) {
                         const [ thumbnailDetails ] = thumbnailInfo.parsedJSON.channel.item;

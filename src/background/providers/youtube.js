@@ -253,7 +253,7 @@ class YouTube extends GenericProvider {
                         videos = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
                             part: "id, snippet, liveStreamingDetails",
                             id: item.id.videoId,
-                            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
+                            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails(concurrentViewers,actualStartTime))",
                             key: await apiKey,
                             hl: getLocale()
                         })}`);
@@ -262,6 +262,7 @@ class YouTube extends GenericProvider {
                             const category = await this._getCategory(video.snippet.categoryId),
                                 channel = await this._list.getChannelByName(video.snippet.channelId);
                             channel.live.setLive(true);
+                            channel.live.created = Date.parse(video.liveStreamingDetails.actualStartTime);
                             channel.url = [
                                 `https://youtube.com/watch?v=${video.id}`,
                                 `https://gaming.youtube.com/watch?v=${video.id}`,
@@ -314,7 +315,7 @@ class YouTube extends GenericProvider {
                     video = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
                         part: "snippet, liveStreamingDetails",
                         id: item.id.videoId,
-                        fields: "items(snippet(categoryId,title,thumbnails/medium/url,defaultLanguage),liveStreamingDetails/concurrentViewers)",
+                        fields: "items(snippet(categoryId,title,thumbnails/medium/url,defaultLanguage),liveStreamingDetails(concurrentViewers,actualStartTime))",
                         key: await apiKey,
                         hl: getLocale()
                     })}`);
@@ -323,6 +324,7 @@ class YouTube extends GenericProvider {
                 ch.url.push(`https://gaming.youtube.com/watch?v=${item.id.videoId}`);
                 if(video.parsedJSON && video.parsedJSON.items) {
                     const [ videoItem ] = video.parsedJSON.items;
+                    ch.live.created = Date.parse(videoItem.liveStreamingDetails.actualStartTime);
                     ch.title = videoItem.snippet.title;
                     ch.thumbnail = videoItem.snippet.thumbnails.medium.url;
                     ch.viewers = videoItem.liveStreamingDetails.concurrentViewers;
@@ -363,7 +365,7 @@ class YouTube extends GenericProvider {
         const videos = await this._qs.queueRequest(`${baseURL}videos?${querystring.stringify({
             part: "id, snippet, liveStreamingDetails",
             id: streamIds.join(","),
-            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
+            fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails(concurrentViewers,actualStartTime))",
             key: await apiKey,
             hl: getLocale()
         })}`);
@@ -372,6 +374,7 @@ class YouTube extends GenericProvider {
             await Promise.all(videos.parsedJSON.items.map((video) => this._getCategory(video.snippet.categoryId).then((category) => {
                 const channel = channels.find((channel) => channel.login == video.snippet.channelId);
                 channel.live.setLive(true);
+                channel.live.created = Date.parse(video.liveStreamingDetails.actualStartTime);
                 channel.url = [
                     `https://youtube.com/watch?v=${video.id}`,
                     `https://gaming.youtube.com/watch?v=${video.id}`,
@@ -414,7 +417,7 @@ class YouTube extends GenericProvider {
             {
                 part: "id,snippet,liveStreamingDetails",
                 id: streamIds.join(","),
-                fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails/concurrentViewers)",
+                fields: "items(id,snippet(channelId,title,thumbnails/medium/url,categoryId,defaultLanguage),liveStreamingDetails(concurrentViewers,actualStartTime))",
                 key: (await apiKey),
                 hl: getLocale()
             }
@@ -432,6 +435,7 @@ class YouTube extends GenericProvider {
                 channel.thumbnail = video.snippet.thumbnails.medium.url;
                 if("liveStreamingDetails" in video) {
                     channel.viewers = video.liveStreamingDetails.concurrentViewers;
+                    channel.live.created = Date.parse(video.liveStreamingDetails.actualStartTime);
                 }
                 channel.language = video.snippet.defaultLanguage;
                 channel.category = await this._getCategory(video.snippet.categoryId);
