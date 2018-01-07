@@ -323,6 +323,6 @@ export default class ReadChannelList extends EventTarget {
      * @throws When the iteration is aborted due to an error.
      */
     _waitForCursor(request, callback) { // eslint-disable-line class-methods-use-this
-        DatabaseManager._waitForCursor(request, callback);
+        return DatabaseManager._waitForCursor(request, callback);
     }
 }
