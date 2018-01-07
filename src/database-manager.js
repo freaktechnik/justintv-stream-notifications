@@ -76,6 +76,36 @@ const VERSION = 3,
                 request.onerror = reject;
             });
         },
+        /**
+         * Sibling of _waitForRequest for cursor requests. Iterates over a cursor
+         * and then resolves.
+         *
+         * @private
+         * @async
+         * @param {external:IDBCursorRequest} request - Request to iterate with.
+         * @param {module:read-channel-list~CursorIterator} callback - Callback for each iteration.
+         * @returns {undefined} When the iteration is finished.
+         * @throws When the iteration is aborted due to an error.
+         */
+        _waitForCursor(request, callback) {
+            return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
+                request.onsuccess = (event) => {
+                    if(event.target.result) {
+                        const r = callback(event.target.result);
+                        if(r && typeof r === "object" && "then" in r) {
+                            r.then(() => event.target.result.continue()).catch(reject);
+                        }
+                        else {
+                            event.target.result.continue();
+                        }
+                    }
+                    else {
+                        resolve();
+                    }
+                };
+                request.onerror = reject;
+            });
+        },
         versions: {
             upgrade2(e) {
                 const channels = e.target.transaction.objectStore(OBJECT_STORES.channels),
@@ -161,7 +191,7 @@ const VERSION = 3,
                 return Promise.resolve();
             }
             else if(this.loading === null) {
-                this.loading = new Promise((resolve, reject) => {
+                this.loading = new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
                     // Try to open the DB
                     let request;
                     try {
