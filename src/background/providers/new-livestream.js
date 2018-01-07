@@ -41,7 +41,7 @@ class NewLivestream extends GenericProvider {
         if(user.parsedJSON && "id" in user.parsedJSON) {
             const usr = new User(user.parsedJSON.short_name || user.parsedJSON.id, this._type),
                 follows = await promisedPaginationHelper({
-                    url: `${baseURL + user.parsedJSON.id}/following?maxItems=50&page=`,
+                    url: `${baseURL}${user.parsedJSON.id}/following?maxItems=50&page=`,
                     pageSize: 50,
                     request: (url) => this._qs.queueRequest(url),
                     fetchNextPage(data) {
@@ -95,7 +95,7 @@ class NewLivestream extends GenericProvider {
                 if(user.parsedJSON && "id" in user.parsedJSON) {
                     const usr = await this._list.getUserByName(user.parsedJSON.short_name || user.parsedJSON.id),
                         follows = await promisedPaginationHelper({
-                            url: `${baseURL + user.parsedJSON.id}/following?maxItems=50&page=`,
+                            url: `${baseURL}${user.parsedJSON.id}/following?maxItems=50&page=`,
                             pageSize: 50,
                             request: (url) => this._qs.queueRequest(url),
                             fetchNextPage(data) {
@@ -176,6 +176,7 @@ class NewLivestream extends GenericProvider {
                 channel.live.setLive(info.parsedJSON.is_live);
                 channel.thumbnail = info.parsedJSON.thumbnail_url;
             }
+            channel.live.created = Date.parse(event.start_time);
         }
         return channel;
     }

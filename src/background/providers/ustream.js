@@ -8,7 +8,8 @@ import GenericProvider from "./generic-provider";
 const type = "ustream",
     chatURL = "http://ustream.tv/socialstream/",
     baseURL = 'https://api.ustream.tv/',
-    FIRST_MATCH = 1;
+    FIRST_MATCH = 1,
+    UNIX_TO_JS = 1000;
 
 function getChannelFromJSON(jsonChannel) {
     const ret = new Channel(jsonChannel.id, type);
@@ -54,6 +55,9 @@ function getChannelFromJSON(jsonChannel) {
     }
     if("stats" in jsonChannel) {
         ret.viewers = jsonChannel.status == "live" ? jsonChannel.stats.viewer : jsonChannel.stats.viewer_total;
+    }
+    if("last_broadcast_at" in jsonChannel) {
+        ret.live.created = jsonChannel.last_broadcast_at * UNIX_TO_JS;
     }
     return ret;
 }

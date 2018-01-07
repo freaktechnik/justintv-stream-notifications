@@ -8,7 +8,8 @@ const Extra = (props) => ( <li className={ `${props.type}Wrapper hide-offline` }
 Extra.ICONS = Object.freeze({
     "viewers": "eye",
     "category": "tag",
-    "provider": "hard-drive"
+    "provider": "hard-drive",
+    "uptime": "clock"
 });
 Extra.propTypes = {
     type: PropTypes.string.isRequired,

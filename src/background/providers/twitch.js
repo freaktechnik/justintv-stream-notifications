@@ -213,6 +213,7 @@ class Twitch extends GenericProvider {
                         else {
                             cho.live.setLive(true);
                         }
+                        cho.live.created = Date.parse(obj.created_at);
 
                         let oldChan;
                         try {
@@ -272,6 +273,7 @@ class Twitch extends GenericProvider {
             else {
                 channel.live.setLive(true);
             }
+            channel.live.created = Date.parse(data.parsedJSON.stream.created_at);
         }
         else {
             channel = await this.getChannelDetails(channelname);
@@ -315,6 +317,8 @@ class Twitch extends GenericProvider {
                     cho.live.setLive(true);
                 }
 
+                cho.live.created = Date.parse(obj.created_at);
+
                 if(logins.includes(cho.login)) {
                     cho.id = channels[logins.indexOf(cho.login)].id;
                     return Promise.resolve(cho);
@@ -352,6 +356,7 @@ class Twitch extends GenericProvider {
                 channel.viewers = chan.stream.viewers;
                 channel.thumbnail = chan.stream.preview.medium;
                 channel.live.setLive(true);
+                channel.live.created = Date.parse(chan.stream.created_at);
                 return channel;
             });
         }
@@ -371,6 +376,7 @@ class Twitch extends GenericProvider {
                 channel.viewers = chan.viewers;
                 channel.thumbnail = chan.preview.medium;
                 channel.live.setLive(true);
+                channel.live.created = Date.parse(chan.created_at);
                 return channel;
             });
         }

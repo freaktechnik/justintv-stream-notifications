@@ -149,6 +149,7 @@ class LiveState {
     constructor(state = OFFLINE) {
         this._state = state;
         this.alternateChannel = undefined;
+        this.created = Date.now();
     }
     /**
      * The state descriptor of this LiveState.
@@ -168,7 +169,8 @@ class LiveState {
     serialize() {
         return {
             state: this.state,
-            alternateChannel: this.alternateChannel
+            alternateChannel: this.alternateChannel,
+            created: this.created
         };
     }
     /**
@@ -203,6 +205,7 @@ class LiveState {
     setLive(live) {
         this._state = live ? LIVE : OFFLINE;
         this.alternateChannel = undefined;
+        this.created = Date.now();
     }
 
     /**
@@ -214,6 +217,7 @@ class LiveState {
     redirectTo(channel) {
         this._state = REDIRECT;
         this.alternateChannel = channel.serialize();
+        this.created = Date.now();
     }
 
     get alternateUsername() {

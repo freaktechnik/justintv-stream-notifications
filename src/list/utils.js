@@ -32,6 +32,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         formattedChannel.extras = {
             category: channel.category,
             viewers: channel.viewers,
+            liveSince: channel.live.created,
             provider: providers[channel.type].name
         };
     }
@@ -44,6 +45,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     else if(formattedChannel.extras && type === OFFLINE_TYPE) {
         delete formattedChannel.extras.viewers;
         delete formattedChannel.extras.category;
+        delete formattedChannel.extras.liveSince;
     }
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;

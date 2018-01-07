@@ -130,6 +130,8 @@ class MLG extends GenericProvider {
             else {
                 channel.live.setLive(await isLive(data.parsedJSON.data.status));
             }
+            //TODO track accross fetches.
+            channel.live.created = 0;
             channel.viewers = data.parsedJSON.data.viewers;
 
             return channel;
@@ -157,6 +159,8 @@ class MLG extends GenericProvider {
                 else {
                     channel.live.setLive(await isLive(status.status));
                 }
+                //TODO track accross fetches
+                channel.live.created = 0;
                 return channel;
             }));
         }
