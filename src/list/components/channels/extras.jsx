@@ -1,36 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Extra from './extra.jsx';
+import Since from './since.jsx';
 
-const HOUR = 60;
-const MS_TO_MIN = 60000;
-const TWO_DIGITS = 10;
 const EMPTY = 0;
-
-const getDifference = (timestamp) => {
-    const diff = Math.floor((Date.now() - timestamp) / MS_TO_MIN);
-
-    const hours = Math.floor(diff / HOUR);
-    const minutes = diff - (hours * HOUR);
-    let minuteDigit = '';
-    if(minutes < TWO_DIGITS) {
-        minuteDigit = '0';
-    }
-    return `${hours}:${minuteDigit}${minutes}`;
-};
 
 const Extras = (props) => {
     const extras = [];
     if("viewers" in props && props.viewers) {
-        extras.push(<Extra type="viewers" value={ props.viewers.toString() } key="viewers"/>);
+        extras.push(<Extra type="viewers" key="viewers">{ props.viewers.toString() }</Extra>);
     }
     if(props.category) {
-        extras.push(<Extra type="category" value={ props.category } key="category"/>);
+        extras.push(<Extra type="category" key="category">{ props.category }</Extra>);
     }
     if("liveSince" in props && props.liveSince !== EMPTY) {
-        extras.push(<Extra type="uptime" value={ getDifference(props.liveSince) } key="uptime"/>);
+        extras.push(<Extra type="uptime" key="uptime">
+            <Since>{ props.liveSince }</Since>
+        </Extra>);
     }
-    extras.push(<Extra type="provider" value={ props.provider } key="provider"/>);
+    extras.push(<Extra type="provider" key="provider">{ props.provider }</Extra>);
     return ( <aside><ul className="inline-list">{ extras }</ul></aside> );
 };
 Extras.propTypes = {

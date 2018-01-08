@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Icon from '../icon.jsx';
 
 const Extra = (props) => ( <li className={ `${props.type}Wrapper hide-offline` }>
-    <Icon type={ Extra.ICONS[props.type] }/>&nbsp;<span className={ props.type }>{ props.value }</span>
+    <Icon type={ Extra.ICONS[props.type] }/>&nbsp;<span className={ props.type }>{ props.children }</span>
 </li> );
 Extra.ICONS = Object.freeze({
     "viewers": "eye",
@@ -13,7 +13,7 @@ Extra.ICONS = Object.freeze({
 });
 Extra.propTypes = {
     type: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired
+    children: PropTypes.node.isRequired
 };
 
 export default Extra;

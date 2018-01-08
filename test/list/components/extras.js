@@ -2,6 +2,15 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import Extras from '../../../src/list/components/channels/extras.jsx';
+import sinon from 'sinon';
+
+let clock;
+test.before(() => {
+    clock = sinon.useFakeTimers();
+});
+test.after(() => {
+    clock.restore();
+});
 
 const MINUTE = 60000;
 
