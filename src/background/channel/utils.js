@@ -79,7 +79,9 @@ export const formatChannel = async (channel, patterns) => {
             patterns = await getRebroadcastTitlePatterns();
         }
         if(titleIsRebroadcast(channel.title, patterns)) {
+            const liveSince = channel.live.created;
             channel.live = new LiveState(LiveState.REBROADCAST);
+            channel.live.created = liveSince;
         }
     }
     if(channel.live.alternateChannel && channel.live.alternateChannel.live.state === LiveState.REDIRECT && channel.live.alternateChannel.title) {

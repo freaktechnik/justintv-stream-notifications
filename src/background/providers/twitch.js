@@ -450,7 +450,9 @@ class Twitch extends GenericProvider {
                         }
                         if(await hostedChannel.live.isLive(LiveState.TOWARD_BROADCASTING)) {
                             if(!hostedChannel.id && await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
+                                const liveSince = hostedChannel.live.created;
                                 hostedChannel.live = new LiveState(LiveState.REDIRECT);
+                                hostedChannel.live.created = liveSince;
                             }
                             chan.live.redirectTo(hostedChannel);
                         }

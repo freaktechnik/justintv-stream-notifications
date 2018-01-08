@@ -160,6 +160,14 @@ test('formatChannel with default patterns for alternateChannel', async (t) => {
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
 });
 
+test('formatChannel does not destroy live state creation time', async (t) => {
+    const channel = getChannel();
+    channel.title = '[Rerun] title';
+    const liveSince = channel.live.created;
+    const formattedChannel = await formatChannel(channel);
+    t.is(formattedChannel.live.created, liveSince);
+});
+
 test.todo('formatChannels without serialization');
 test.todo('formatChannels with serialization');
 
