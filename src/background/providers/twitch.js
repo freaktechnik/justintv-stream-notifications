@@ -44,7 +44,14 @@ const type = "twitch",
         return a.filter((c) => !ids.includes(c.id));
     },
     LANG_START = 0,
-    LANG_END = 2;
+    LANG_END = 2,
+    REBROADCAST_TYPES = [
+        'watch_party', // vodcast launch name
+        'permiere', // vodcast started after uploading a video
+        'playlist', // pre-vodcast replays
+        'vodcast', // raw vodcast
+        'rerun' // replay of a past vod
+    ];
 
 prefs.get('twitch_clientId').then((id) => {
     headers['Client-ID'] = id;
@@ -207,7 +214,7 @@ class Twitch extends GenericProvider {
                         const cho = getChannelFromJSON(obj.channel);
                         cho.viewers = obj.viewers;
                         cho.thumbnail = obj.preview.medium;
-                        if(obj.stream_type === "watch_party") {
+                        if(REBROADCAST_TYPES.includes(obj.stream_type)) {
                             cho.live = new LiveState(LiveState.REBROADCAST);
                         }
                         else {
@@ -267,7 +274,7 @@ class Twitch extends GenericProvider {
             channel = getChannelFromJSON(data.parsedJSON.stream.channel);
             channel.viewers = data.parsedJSON.stream.viewers;
             channel.thumbnail = data.parsedJSON.stream.preview.medium;
-            if(data.parsedJSON.stream.stream_type === "watch_party") {
+            if(REBROADCAST_TYPES.includes(data.parsedJSON.stream.stream_type)) {
                 channel.live = new LiveState(LiveState.REBROADCAST);
             }
             else {
@@ -310,7 +317,7 @@ class Twitch extends GenericProvider {
                 cho = getChannelFromJSON(obj.channel);
                 cho.viewers = obj.viewers;
                 cho.thumbnail = obj.preview.medium;
-                if(obj.stream_type === "watch_party") {
+                if(REBROADCAST_TYPES.includes(obj.stream_type)) {
                     cho.live = new LiveState(LiveState.REBROADCAST);
                 }
                 else {
