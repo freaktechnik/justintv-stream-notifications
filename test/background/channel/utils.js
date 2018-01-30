@@ -113,7 +113,7 @@ test('formatChannel with patterns', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.setLive(true);
-    const formattedChannel = await formatChannel(channel, [ 'test' ]);
+    const formattedChannel = await formatChannel(channel, () => undefined, [ 'test' ]);
     t.is(formattedChannel.live.state, LiveState.REBROADCAST);
 });
 
@@ -121,7 +121,7 @@ test('formatChannel with patterns that does not match', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.setLive(true);
-    const formattedChannel = await formatChannel(channel, [ 'foo' ]);
+    const formattedChannel = await formatChannel(channel, () => undefined, [ 'foo' ]);
     t.is(formattedChannel.live.state, LiveState.LIVE);
 });
 
@@ -129,7 +129,7 @@ test('formatChannel with default patterns that match with brackets', async (t) =
     const channel = getChannel();
     channel.title = '[REBROADCAST] title';
     channel.live.setLive(true);
-    const formattedChannel = await formatChannel(channel);
+    const formattedChannel = await formatChannel(channel, () => undefined);
     t.is(formattedChannel.live.state, LiveState.REBROADCAST);
 });
 
@@ -137,7 +137,7 @@ test('formatChannel with patterns for alternateChannel', async (t) => {
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.redirectTo(channel);
-    const formattedChannel = await formatChannel(channel, [ 'test' ]);
+    const formattedChannel = await formatChannel(channel, () => undefined, [ 'test' ]);
     t.is(formattedChannel.live.state, LiveState.REDIRECT);
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
 });
@@ -146,7 +146,7 @@ test('formatChannel with patterns for alternateChannel that do not match', async
     const channel = getChannel();
     channel.title = 'test title';
     channel.live.redirectTo(channel);
-    const formattedChannel = await formatChannel(channel, [ 'foo' ]);
+    const formattedChannel = await formatChannel(channel, () => undefined, [ 'foo' ]);
     t.is(formattedChannel.live.state, LiveState.REDIRECT);
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REDIRECT);
 });
@@ -155,7 +155,7 @@ test('formatChannel with default patterns for alternateChannel', async (t) => {
     const channel = getChannel();
     channel.title = ' [Rerun] title ';
     channel.live.redirectTo(channel);
-    const formattedChannel = await formatChannel(channel);
+    const formattedChannel = await formatChannel(channel, () => undefined);
     t.is(formattedChannel.live.state, LiveState.REDIRECT);
     t.is(formattedChannel.live.alternateChannel.live.state, LiveState.REBROADCAST);
 });
@@ -164,7 +164,7 @@ test('formatChannel does not destroy live state creation time', async (t) => {
     const channel = getChannel();
     channel.title = '[Rerun] title';
     const liveSince = channel.live.created;
-    const formattedChannel = await formatChannel(channel);
+    const formattedChannel = await formatChannel(channel, () => undefined);
     t.is(formattedChannel.live.created, liveSince);
 });
 
