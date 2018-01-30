@@ -174,14 +174,14 @@ class ListView extends EventTarget {
                 break;
             case "search":
                 providers[event.payload.type].search(event.payload.query)
-                    .then((channels) => formatChannels(channels, true))
+                    .then((channels) => formatChannels(channels, () => undefined, true))
                     .then((channels) => this.setFeatured(channels, event.payload.type, event.payload.query))
                     .catch(() => this.setFeatured([], event.payload.type, event.payload.query));
                 break;
             case "explore":
                 if(event.payload) {
                     providers[event.payload].getFeaturedChannels()
-                        .then((channels) => formatChannels(channels, true))
+                        .then((channels) => formatChannels(channels, () => undefined, true))
                         .then((channels) => this.setFeatured(channels, event.payload))
                         .catch(() => this.setFeatured([], event.payload));
                 }

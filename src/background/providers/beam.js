@@ -36,16 +36,14 @@ const type = "beam",
 function getChannelFromJSON(jsonChannel) {
     const ret = new Channel(jsonChannel.token, type);
     ret.live.setLive(jsonChannel.online);
-    //TODO track accross fetches
     ret.live.created = 0;
     ret.title = jsonChannel.name;
     ret.viewers = jsonChannel.viewersCurrent;
-    // this is the actual thumbnail and not just the default channel thumbnail thing.
-    //ret.thumbnail = "https://thumbs.beam.pro/channel/" + jsonChannel.id + ".big.jpg";
     if(jsonChannel.thumbnail) {
         ret.thumbnail = jsonChannel.thumbnail.url;
     }
     else {
+        // this is the actual thumbnail and not just the default channel thumbnail thing.
         ret.thumbnail = `https://thumbs.mixer.com/channel/${jsonChannel.id}.big.jpg`;
     }
     ret.url.push(`https://mixer.com/${jsonChannel.token}`);

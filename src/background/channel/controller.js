@@ -197,14 +197,14 @@ export default class ChannelController extends EventTarget {
             this._list.setUser(detail);
         });
         this._eventSink.addEventListener("newchannels", async ({ detail: channels }) => {
-            channels = await formatChannels(filterInapropriateChannels(channels));
+            channels = await formatChannels(filterInapropriateChannels(channels), this._getOldChannel);
             if(channels.length) {
                 this._list.addChannels(channels);
             }
         });
         this._eventSink.addEventListener("updatedchannels", ({ detail: channels }) => {
             if(Array.isArray(channels)) {
-                formatChannels(channels)
+                formatChannels(channels, this._getOldChannel)
                     .then((formattedChannels) => {
                         formattedChannels.forEach((channel) => this._list.setChannel(channel).catch(() => console.warn("Updated a removed channel", channel.login)));
                     })
@@ -216,6 +216,19 @@ export default class ChannelController extends EventTarget {
                     .catch(() => console.warn("Updated a removed channel", channels.login));
             }
         });
+
+        this._getOldChannel = async (channel) => {
+            if(channel.id) {
+                return this.getChannel(channel.id);
+            }
+            try {
+                const ch = await this._list.getChannel(channel.login, channel.type);
+                return ch;
+            }
+            catch(e) {
+                return undefined;
+            }
+        };
     }
 
     /**
@@ -289,7 +302,7 @@ export default class ChannelController extends EventTarget {
             }
 
             if(Array.isArray(channels)) {
-                const formattedChannels = await formatChannels(channels);
+                const formattedChannels = await formatChannels(channels, this._getOldChannel);
                 return Promise.all(formattedChannels.map((c) => this._list.setChannel(c)));
             }
 
@@ -353,7 +366,7 @@ export default class ChannelController extends EventTarget {
                 throw new Error("Canceled");
             }
 
-            channels = await formatChannels(filterInapropriateChannels(channels));
+            channels = await formatChannels(filterInapropriateChannels(channels), this._getOldChannel);
 
             const [ u ] = await Promise.all([
                 this._list.addUser(user),
@@ -482,7 +495,7 @@ export default class ChannelController extends EventTarget {
      * @inheritdoc {module:channel/utils.formatChannel}
      */
     _formatChannel(channel) {
-        return formatChannel(channel);
+        return formatChannel(channel, this._getOldChannel);
     }
 
     /**
@@ -519,7 +532,7 @@ export default class ChannelController extends EventTarget {
                 updatedUser,
                 channels
             ] = await providers[user.type].getUserFavorites(user.login),
-            filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels))),
+            filteredChannels = await formatChannels(filterInapropriateChannels(filterExistingFavs(user, channels)), this._getOldChannel),
             [ finalUser ] = await Promise.all([
                 this._list.setUser(updatedUser),
                 // Can't just call this.addUser(user.login, user.type) because of this.

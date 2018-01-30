@@ -8,6 +8,8 @@ import { Channel } from './core';
 import LiveState from './live-state';
 import prefs from '../../preferences';
 
+const NO_SINCE = 0;
+
 /**
  * Opens the given channel in a new tab, unless there is already a tab open for
  * it.
@@ -58,6 +60,30 @@ const getRebroadcastTitlePatterns = async () => {
     titleIsRebroadcast = (title, patterns) => {
         const lowerCaseTitle = cleanTitle(title);
         return patterns.some((p) => lowerCaseTitle.startsWith(p));
+    },
+    /**
+     * Generate an uptime estimated based on local data if not set explicitly.
+     *
+     * @param {module:channel/core.Channel} channel - Channel to potentially add uptime to.
+     * @param {callback} getOldChannel - Callback resolving to the current version of the channel.
+     * @returns {module:channel/core.Channel} Potentially updated channel.
+     * @throws TypeError when not passing a valid channel.
+     */
+    fillInUptime = async (channel, getOldChannel) => {
+        if(!(channel instanceof Channel)) {
+            throw new TypeError("Invalid channel provided");
+        }
+        if(channel.live.created !== NO_SINCE || !(await channel.live.isLive(LiveState.TOWARD_LIVE))) {
+            return channel;
+        }
+        const oldChannel = await getOldChannel(channel);
+        if(oldChannel && await oldChannel.live.isLive(LiveState.TOWARD_LIVE)) {
+            channel.live.created = oldChannel.live.created;
+        }
+        else {
+            channel.live.created = Date.now();
+        }
+        return channel;
     };
 
 /**
@@ -65,12 +91,13 @@ const getRebroadcastTitlePatterns = async () => {
  * on their title. Modifies the original channel object.
  *
  * @param {module:channel/core.Channel} channel - Channel to check.
+ * @param {callback} getOldChannel - Function to get current channel instance.
  * @param {Arry.<string>} [patterns] - Patterns that start a rebroadcasting title.
  * Defaults to the rebroadcast_title_pattern pref.
  * @returns {module:channel/core.Channel} Potentially modified channel.
  * @throws When an invalid channel is provided.
  */
-export const formatChannel = async (channel, patterns) => {
+export const formatChannel = async (channel, getOldChannel, patterns) => {
     if(!(channel instanceof Channel)) {
         throw new TypeError("Invalid channel provided");
     }
@@ -92,6 +119,7 @@ export const formatChannel = async (channel, patterns) => {
             channel.live.alternateChannel.live.state = LiveState.REBROADCAST;
         }
     }
+    channel = await fillInUptime(channel, getOldChannel);
     return channel;
 };
 
@@ -99,14 +127,15 @@ export const formatChannel = async (channel, patterns) => {
  * Optimized version of formatChannel for multiple channels.
  *
  * @param {[module:channel/core.Channel]} channels - Channels to format.
+ * @param {callback} getOldChannel - Callback to get current version of a channel.
  * @param {boolean} [serialize=false] - If the channels should be serialized
  * while we're at it.
  * @returns {[module:channel/core.Channel|module:channel/core~SerializedChannel]} Formatted channels.
  * @throws When an invalid channel is given.
  */
-export const formatChannels = async (channels, serialize = false) => {
+export const formatChannels = async (channels, getOldChannel, serialize = false) => {
     const patterns = await getRebroadcastTitlePatterns(),
-        cb = serialize ? (c) => formatChannel(c, patterns).then((ch) => ch.serialize()) : (c) => formatChannel(c, patterns);
+        cb = serialize ? (c) => formatChannel(c, getOldChannel, patterns).then((ch) => ch.serialize()) : (c) => formatChannel(c, getOldChannel, patterns);
     return Promise.all(channels.map(cb));
 };
 
