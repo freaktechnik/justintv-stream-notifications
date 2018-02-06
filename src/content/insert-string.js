@@ -1,7 +1,7 @@
 const attrMap = {
         "aria-label": "ariaLabel"
     },
-    attrSeparator = ".",
+    attrSeparator = "_",
     getString = (bundle, id) => {
         const str = bundle[id];
         if(!str || !("message" in str) || !str.message.trim().length) {

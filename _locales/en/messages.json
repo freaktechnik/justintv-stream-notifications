@@ -153,7 +153,7 @@
         "message": "Auto add",
         "description": "Button to automatically add all users the user has credentials stored for"
     },
-    "cm_autoAdd.title": {
+    "cm_autoAdd_title": {
         "message": "Add favorites of users for which the browser has credentials stored.",
         "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
@@ -189,7 +189,7 @@
         "message": "Username:",
         "description": "Label for the username field in the dialog to add a channel or user"
     },
-    "cm_filter.placeholder": {
+    "cm_filter_placeholder": {
         "message": "Filter…",
         "description": "Placeholder in the filter field for the channel manager"
     },
@@ -205,7 +205,7 @@
         "message": "Remove",
         "description": "Label of the button to remove the selected users or channels"
     },
-    "cm_remove.title": {
+    "cm_remove_title": {
         "message": "Remove the selected item(s).",
         "description": "Tooltip of the button to remove the selected users or channels"
     },
@@ -233,7 +233,7 @@
         "message": "Update",
         "description": "Label of the button to update the metadata of the selected users or channels"
     },
-    "cm_update.title": {
+    "cm_update_title": {
         "message": "Update the metadata of the selected item(s).",
         "description": "Tooltip of the button to update the metadata of the selected users or channels"
     },
@@ -269,7 +269,7 @@
         "message": "Loading channels...",
         "description": "Channels are being loaded into the panel"
     },
-    "panel_manage.title": {
+    "panel_manage_title": {
         "message": "Opens the channel management tab",
         "description": "Tooltip on the button to open the channel manager from the panel"
     },
@@ -285,11 +285,11 @@
         "message": "Nobody in your list is live.",
         "description": "Message in the live tab when no channel is live"
     },
-    "panel_refresh.title": {
+    "panel_refresh_title": {
         "message": "Refresh the live statuses of all channels",
         "description": "Tooltip on the refresh button in the panel"
     },
-    "panel_search.title": {
+    "panel_search_title": {
         "message": "Filter channels by a string",
         "description": "Tooltip on the search button in the panel"
     },
@@ -345,15 +345,15 @@
         "message": "Panel item display style",
         "description": "Title of the panel item style setting in the preferences"
     },
-    "panel_style_options.Minimal": {
+    "panel_style_options_Minimal": {
         "message": "Minimal",
         "description": "Label of the minimal option of the panel item style setting in the preferences"
     },
-    "panel_style_options.Normal": {
+    "panel_style_options_Normal": {
         "message": "Normal",
         "description": "Label of the normal option of the panel item style setting in the preferences"
     },
-    "panel_style_options.Thumbnail": {
+    "panel_style_options_Thumbnail": {
         "message": "Big Thumbnail",
         "description": "Label of the thumbnail option of the panel item style setting in the preferences"
     },
@@ -365,15 +365,15 @@
         "message": "Non-live streams include things like hosted channels or rebroadcasts.",
         "description": "Description of the non-live treatment setting in the preferences"
     },
-    "panel_nonlive_options.Livebottom": {
+    "panel_nonlive_options_Livebottom": {
         "message": "Live but sort to bottom",
         "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
     },
-    "panel_nonlive_options.Distinct": {
+    "panel_nonlive_options_Distinct": {
         "message": "Distinct state (adds a tab)",
         "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
-    "panel_nonlive_options.Offline": {
+    "panel_nonlive_options_Offline": {
         "message": "Offline",
         "description": "Offline option of the non-live treatment setting in the preferences"
     },
@@ -397,11 +397,11 @@
         "message": "Theme",
         "description": "Title of the theme setting in the preferences"
     },
-    "theme_options.Light": {
+    "theme_options_Light": {
         "message": "Light",
         "description": "Light option of the theme setting in the preferences"
     },
-    "theme_options.Dark": {
+    "theme_options_Dark": {
         "message": "Dark",
         "description": "Dark option of the theme setting in the preferences"
     },
@@ -565,22 +565,22 @@
         "message": "Default Click Action",
         "description": "Setting title to define what happens when you click a channel in the panel"
     },
-    "click_action_options.open": {
+    "click_action_options_open": {
         "message": "Open Channel"
     },
-    "click_action_options.archive": {
+    "click_action_options_archive": {
         "message": "Open Channel Archive"
     },
-    "click_action_options.chat": {
+    "click_action_options_chat": {
         "message": "Open Channel Chat"
     },
-    "click_action_options.context": {
+    "click_action_options_context": {
         "message": "Open Context Panel"
     },
-    "click_action_options.copy": {
+    "click_action_options_copy": {
         "message": "Copy Channel URL"
     },
-    "click_action_options.livestreamer": {
+    "click_action_options_livestreamer": {
         "message": "Open with Streamlink"
     }
 }

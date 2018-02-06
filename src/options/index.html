@@ -44,7 +44,7 @@
                 if(pref.type == "radio") {
                     let options = "";
                     for(const o of pref.options) {
-                        options += `<option${o.value==pref.value?" selected":""} value="${o.value}"${translateElement(pref.id+"_options."+o.label)}</option>`;
+                        options += `<option${o.value==pref.value?" selected":""} value="${o.value}"${translateElement(pref.id+"_options_"+o.label)}</option>`;
                     }
                     input = `<select class="browser-style" id="${pref.id}">${options}</select>`;
                 }
