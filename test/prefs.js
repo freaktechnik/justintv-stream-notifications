@@ -26,7 +26,7 @@ const translation = (t, prefName, pref) => {
 
     if("options" in pref) {
         for(const { label } of pref.options) {
-            t.true(`${prefName}_options.${label}` in translations);
+            t.true(`${prefName}_options_${label}` in translations);
         }
     }
 };
