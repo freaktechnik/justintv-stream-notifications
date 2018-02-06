@@ -11,10 +11,6 @@
         "message": "ID du client Twitch",
         "description": "Title of the Twitch Client ID setting in the preferences"
     },
-    "click_action_options.context": {
-        "message": "Open Context Panel",
-        "description": ""
-    },
     "context_resume": {
         "message": "Reprendre Rafraîchir File d'attente",
         "description": "Context menu action on the refresh button in the panel to resume the queue"
@@ -26,6 +22,10 @@
     "channellist_cacheTime_title": {
         "message": "Temps de mise en cache des états des chaînes alors que le navigateur est fermé",
         "description": "Title of the cache time setting in the preferences"
+    },
+    "panel_search_title": {
+        "message": "Filtrer les chaînes avec des mots et des chiffres",
+        "description": "Tooltip on the search button in the panel"
     },
     "cm_title": {
         "message": "Gestionnaire de chaînes",
@@ -51,13 +51,13 @@
         "message": "Ouvrir $CHANNEL$",
         "description": "Context panel item to open a redirector."
     },
-    "click_action_options.chat": {
-        "message": "Open Channel Chat",
-        "description": ""
-    },
     "advancedOptions": {
         "message": "Options avancées",
         "description": "Advanced extension preferences collapsed message"
+    },
+    "click_action_options_copy": {
+        "message": "Copy Channel URL",
+        "description": ""
     },
     "cm_dialog_cancel": {
         "message": "Annuler",
@@ -78,6 +78,10 @@
     "context_back": {
         "message": "Retour",
         "description": "Tooltip for closing the context panel in the popup"
+    },
+    "click_action_options_open": {
+        "message": "Ouvrir la chaîne",
+        "description": ""
     },
     "providerhitbox": {
         "message": "Smashcast",
@@ -103,6 +107,10 @@
         "message": "Nombre maximal de tentatives avant de rejeter une demande",
         "description": "Title of the request retry limit setting in the preferences"
     },
+    "panel_nonlive_options_Livebottom": {
+        "message": "En ligne mais ranger vers le bas",
+        "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
+    },
     "cm_remove": {
         "message": "Supprimer",
         "description": "Label of the button to remove the selected users or channels"
@@ -115,10 +123,6 @@
         "message": "Aucune chaîne n'est en ligne pour le moment (Ctrl+Shift+L)",
         "description": "Button tooltip when there are no live channels in the panel"
     },
-    "panel_nonlive_options.Livebottom": {
-        "message": "En ligne mais ranger vers le bas",
-        "description": "Live sorting to bottom option of the non-live treatment setting in the preferences"
-    },
     "context_chat": {
         "message": "Ouvrir le chat",
         "description": "Context menu action to open the chat of a channel in the panel"
@@ -127,10 +131,6 @@
         "message": "Aide",
         "description": "Label of the help button in the channel manager"
     },
-    "panel_nonlive_options.Offline": {
-        "message": "Hors Ligne",
-        "description": "Offline option of the non-live treatment setting in the preferences"
-    },
     "nonliveNotificationStateRebroadcast": {
         "message": "en rediffusion",
         "description": "Rebroadcasting state for nonliveNotification"
@@ -138,10 +138,6 @@
     "import": {
         "message": "Import configuration",
         "description": "Button label to import preferences and channel list."
-    },
-    "cm_autoAdd.title": {
-        "message": "Ajouter",
-        "description": "Tooltip for the auto add button (cm_autoAdd)."
     },
     "context_queue_title": {
         "message": "File d'attente",
@@ -163,10 +159,6 @@
         "message": "Liste séparée par des virgules des chaînes par lesquelles les titres commencent pour qu'un stream soit compté comme une rediffusion. Chaque chaîne est vérifiée contre une version minuscule du titre. Chaque modèle est également vérifié contre le titre inscrit entre des crochets.",
         "description": "Description for the rebroadcast title pattern setting"
     },
-    "panel_style_options.Minimal": {
-        "message": "Minimal",
-        "description": "Label of the minimal option of the panel item style setting in the preferences"
-    },
     "channelManagerLoadError": {
         "message": "Impossible de charger \"$CHANNEL$\" pour $TYPE$. Veuillez vous assurer d'utiliser le bon nom d'utilisateur.",
         "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$."
@@ -182,10 +174,6 @@
     "mlg_showRebroadcasts_title": {
         "message": "Montrer les rediffusions de MLG",
         "description": "Title of the MLG rebroadcasts setting in the preferences"
-    },
-    "panel_nonlive_options.Distinct": {
-        "message": "Etat distinctif (ajouter un onglet)",
-        "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "cm_dialog_user": {
         "message": "Utilisateur",
@@ -211,6 +199,10 @@
         "message": "$CHANNEL$ a actualisé le titre",
         "description": "Notification title when a channel changes the stream title"
     },
+    "panel_style_options_Thumbnail": {
+        "message": "Grosse miniature",
+        "description": "Label of the thumbnail option of the panel item style setting in the preferences"
+    },
     "lost_channels": {
         "message": "Live Stream Notifier n'a pas pu lire les chaînes enregistrées. Pour restaurer le module, toutes les chaînes et les utilisateurs ont été supprimés.",
         "description": "Error while trying to read the DB, however the DB could be cleared"
@@ -222,6 +214,14 @@
     "errorState1": {
         "message": "Erreur restaurable avec Live Stream Notifier",
         "description": "Error title when a recoverable error is blocking the extension"
+    },
+    "theme_options_Dark": {
+        "message": "Sombre",
+        "description": "Dark option of the theme setting in the preferences"
+    },
+    "panel_nonlive_options_Distinct": {
+        "message": "Etat distinctif (ajouter un onglet)",
+        "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "listTooltipLive": {
         "message": "Chaînes actuellement en ligne (Ctrl+Shift+L)",
@@ -243,21 +243,21 @@
         "message": "Pause Rafraîchir File d'attente",
         "description": "Context menu action on the refresh button in the panel to pause the queue"
     },
+    "panel_refresh_title": {
+        "message": "Rafraîchir l'état de toutes les chaînes",
+        "description": "Tooltip on the refresh button in the panel"
+    },
     "providerustream": {
         "message": "Ustream",
         "description": "Provider name for ustream.tv"
     },
-    "panel_style_options.Normal": {
-        "message": "Normal",
-        "description": "Label of the normal option of the panel item style setting in the preferences"
+    "cm_filter_placeholder": {
+        "message": "Filtrer…",
+        "description": "Placeholder in the filter field for the channel manager"
     },
-    "click_action_options.copy": {
-        "message": "Copy Channel URL",
+    "click_action_options_livestreamer": {
+        "message": "Open with Streamlink",
         "description": ""
-    },
-    "panel_style_options.Thumbnail": {
-        "message": "Grosse miniature",
-        "description": "Label of the thumbnail option of the panel item style setting in the preferences"
     },
     "cm_dialog_submit": {
         "message": "OK",
@@ -275,13 +275,13 @@
         "message": "Nouveau Livestream",
         "description": "Provider name for the new livestream.com"
     },
+    "panel_style_options_Normal": {
+        "message": "Normal",
+        "description": "Label of the normal option of the panel item style setting in the preferences"
+    },
     "cookies_disabled": {
         "message": "Impossible de lire votre liste de chaînes, car les cookies sont désactivés pour l'extension",
         "description": "Error message shown, when cookies are not enabled for the extension and it thus can't open the database."
-    },
-    "cm_remove.title": {
-        "message": "Supprimer les objet(s) sélectionnées.",
-        "description": "Tooltip of the button to remove the selected users or channels"
     },
     "panel_no_results": {
         "message": "Aucun résultat.",
@@ -303,21 +303,13 @@
         "message": "Cette option est pertinente seulement quand des streams qui ne sont pas en direct ne sont pas considérés comme en ligne ou hors ligne.",
         "description": "Description of the non-live notifications setting in the preferences"
     },
-    "theme_options.Dark": {
-        "message": "Sombre",
-        "description": "Dark option of the theme setting in the preferences"
-    },
-    "panel_manage.title": {
+    "panel_manage_title": {
         "message": "Ouvre l'onglet de gestion de chaînes",
         "description": "Tooltip on the button to open the channel manager from the panel"
     },
     "nonliveNotification_title": {
         "message": "Afficher une notification quand un stream est dans un état qui n'est pas du direct",
         "description": "Title of the non-live notifications setting in the preferences"
-    },
-    "click_action_options.open": {
-        "message": "Ouvrir la chaîne",
-        "description": ""
     },
     "providermlg": {
         "message": "MLG.tv",
@@ -351,10 +343,6 @@
         "message": "Chargement des chaînes…",
         "description": "Channels are being loaded into the panel"
     },
-    "panel_search.title": {
-        "message": "Filtrer les chaînes avec des mots et des chiffres",
-        "description": "Tooltip on the search button in the panel"
-    },
     "cm_dialog_providers": {
         "message": "Fournisseur:",
         "description": "Label for the type selector"
@@ -375,6 +363,10 @@
         "message": "Me montrer comment",
         "description": "Button leading to instructions how to reset a Firefox profile."
     },
+    "click_action_options_context": {
+        "message": "Open Context Panel",
+        "description": ""
+    },
     "twitch_showHosting_title": {
         "message": "Vérifier si une chaîne Twitch héberge",
         "description": "Title of the Twitch hosting setting in the preferences"
@@ -391,10 +383,6 @@
         "message": "Malheureusement la tentative de Live Stream Notifier pour restaurer sa base de données à échoué. Le seul correctif connu est de réinitialiser le profil.",
         "description": "Error while trying to read the DB, no actions from within the extension will work."
     },
-    "click_action_options.livestreamer": {
-        "message": "Open with Streamlink",
-        "description": ""
-    },
     "openChannel": {
         "message": "Ouvrir la chaîne",
         "description": "Label for context panel action that corresponds to clicking on the channel"
@@ -407,6 +395,10 @@
         "message": "Autoriser le contenu explicite",
         "description": "Title of the mature setting in the preferences"
     },
+    "panel_style_options_Minimal": {
+        "message": "Minimal",
+        "description": "Label of the minimal option of the panel item style setting in the preferences"
+    },
     "panel_nothing_live": {
         "message": "Personne dans votre liste n'est en ligne",
         "description": "Message in the live tab when no channel is live"
@@ -414,10 +406,6 @@
     "onlineNotification_title": {
         "message": "Afficher une notification lorsqu'un stream est en ligne",
         "description": "Title of the online notifications setting in the preferences"
-    },
-    "panel_refresh.title": {
-        "message": "Rafraîchir l'état de toutes les chaînes",
-        "description": "Tooltip on the refresh button in the panel"
     },
     "redirectUpdateNotification": {
         "message": "$REDIRECTTARGET$(redirigé vers $CHANNEL$) a mis à jour le titre",
@@ -435,17 +423,21 @@
         "message": "Modèle de copie d'URL de stream",
         "description": "Title of the copy pattern setting in the preferences"
     },
+    "panel_nonlive_options_Offline": {
+        "message": "Hors Ligne",
+        "description": "Offline option of the non-live treatment setting in the preferences"
+    },
     "onlineNotification": {
         "message": "$CHANNEL$ est en direct !",
         "description": "Notification title when a channel goes live"
     },
-    "cm_update.title": {
-        "message": "Mettre à jour les métadonnées de(s) objet(s) sélectionnée(s)",
-        "description": "Tooltip of the button to update the metadata of the selected users or channels"
-    },
     "cm_secondary_button": {
         "message": "Aller au premier gestionnaire de chaînes",
         "description": "Button to go to the primary channel manager"
+    },
+    "theme_options_Light": {
+        "message": "Clair",
+        "description": "Light option of the theme setting in the preferences"
     },
     "updateTab_title": {
         "message": "Ouvrir un onglet d'informations après une mise à jour",
@@ -458,10 +450,6 @@
     "queue_concurrentRequests_title": {
         "message": "Nombre de requêtes simultanées",
         "description": "Title of the concurrent request count setting."
-    },
-    "cm_filter.placeholder": {
-        "message": "Filtrer…",
-        "description": "Placeholder in the filter field for the channel manager"
     },
     "extensionName": {
         "message": "Live Stream Notifier",
@@ -491,13 +479,17 @@
         "message": "Copier l'URL du stream",
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
+    "click_action_options_archive": {
+        "message": "Open Channel Archive",
+        "description": ""
+    },
+    "click_action_options_chat": {
+        "message": "Open Channel Chat",
+        "description": ""
+    },
     "offlineNotification": {
         "message": "$CHANNEL$ est passé hors ligne !",
         "description": "Notification title when a channel goes offline"
-    },
-    "theme_options.Light": {
-        "message": "Clair",
-        "description": "Light option of the theme setting in the preferences"
     },
     "panel_nothing": {
         "message": "Aucune chaîne ajoutée",
@@ -507,17 +499,25 @@
         "message": "Un onglet d'informations sur les nouveautés est ouvert après la mise à jour de l'extension.",
         "description": "Description of the update tab setting in the preferences"
     },
-    "click_action_options.archive": {
-        "message": "Open Channel Archive",
-        "description": ""
+    "cm_remove_title": {
+        "message": "Supprimer les objet(s) sélectionnées.",
+        "description": "Tooltip of the button to remove the selected users or channels"
     },
     "providerbeam": {
         "message": "Mixer",
         "description": "Provider name of Mixer (formerly beam.pro)"
     },
+    "cm_autoAdd_title": {
+        "message": "Ajouter",
+        "description": "Tooltip for the auto add button (cm_autoAdd)."
+    },
     "providerdailymotion": {
         "message": "Dailymotion",
         "description": "Provider name for dailymotion"
+    },
+    "cm_update_title": {
+        "message": "Mettre à jour les métadonnées de(s) objet(s) sélectionnée(s)",
+        "description": "Tooltip of the button to update the metadata of the selected users or channels"
     },
     "panel_extras_description": {
         "message": "Afficher le nombre de spectateurs, la catégorie et le nom du fournisseur d'une chaîne dans le panneau lorsque cela est possible.",
