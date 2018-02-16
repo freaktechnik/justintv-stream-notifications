@@ -4,6 +4,7 @@
  * @license MPL-2.0
  * @module providers/twitch
  * @todo properly wait for clientID
+ * @todo option to not mark premieres as rebroadcast
  */
 import prefs from "../../preferences";
 import querystring from "../querystring";
