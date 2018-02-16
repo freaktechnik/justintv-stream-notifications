@@ -69,7 +69,7 @@ module.exports = {
         ]
     },
     plugins: [
-		new ExtractTextPlugin({
+        new ExtractTextPlugin({
             filename: "[name]/style.css"
         }),
         new webpack.optimize.CommonsChunkPlugin({
@@ -82,25 +82,26 @@ module.exports = {
             ],
             minChunks: 3
         }),
-		new HtmlWebpackPlugin({
-		    template: 'src/manager/index.html',
-		    filename: 'manager/index.html',
-		    chunks: [
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new HtmlWebpackPlugin({
+            template: 'src/manager/index.html',
+            filename: 'manager/index.html',
+            chunks: [
                 'common',
                 'manager'
             ],
             chunksSortMode: 'dependency',
-		    defaultLanguage
-	    }),
-	    new HtmlWebpackPlugin({
-	        template: 'src/list/index.html',
-	        filename: 'popup/list/index.html',
-	        chunks: [
+            defaultLanguage
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/list/index.html',
+            filename: 'popup/list/index.html',
+            chunks: [
                 'common',
                 'popup/list'
             ],
             chunksSortMode: 'dependency',
-	        defaultLanguage
+            defaultLanguage
         }),
         new HtmlWebpackPlugin({
             template: 'src/options/index.html',
