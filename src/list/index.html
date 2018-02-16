@@ -1,3 +1,5 @@
+<% var requireString = require("../content/insert-string.js"),
+    translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
 <!DOCTYPE html>
 <html lang="en">
     <!--
@@ -6,6 +8,8 @@
     -->
     <head>
         <meta charset="utf-8">
+
+        <title <%= translateElement("extensionName") %></title>
         <link rel="help" href="http://streamnotifier.ch/help/panel" hreflang="en" type="text/html">
         <link rel="license" href="../../LICENSE" hreflang="en" type="text/plain">
 

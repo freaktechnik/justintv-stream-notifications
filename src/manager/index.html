@@ -1,9 +1,10 @@
 <% var requireString = require("../content/insert-string.js"),
-            translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
+    translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
+
         <title <%= translateElement("cm_title") %></title>
         <link rel="help" href="http://streamnotifier.ch/help/channels-manager/" hreflang="en" type="text/html">
         <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">

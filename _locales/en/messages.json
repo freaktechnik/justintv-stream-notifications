@@ -522,5 +522,9 @@
     "panel_extras_description": {
         "message": "Displays the viewer count, category and provider name of a channel in the pannel when available.",
         "description": "Description of the panel extras setting in the preferences"
+    },
+    "options_title": {
+        "message": "Options",
+        "description": "Title of the options page"
     }
 }
