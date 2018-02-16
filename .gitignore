@@ -189,3 +189,4 @@ webextension/*
 !webextension/manifest.json
 webextension/assets/images/open-iconic.min.svg
 web-ext-artifacts
+_locales/*/amo.json
