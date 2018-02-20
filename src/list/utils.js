@@ -65,11 +65,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         formattedChannel.chatUrl = channel.chatUrl;
     }
     if(channel.redirectors) {
-        formattedChannel.redirectors = channel.redirectors.map((ch) => ({
-            uname: ch.uname,
-            image: ch.image,
-            id: ch.id
-        }));
+        formattedChannel.redirectors = channel.redirectors.map((ch) => Object.assign({}, ch));
         delete channel.redirectors;
     }
     if(channel.chatUrl) {

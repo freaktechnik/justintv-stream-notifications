@@ -33,11 +33,25 @@
     },
     "nonliveNotification": {
         "message": "$CHANNEL$ is now $STATE$.",
-        "description": "Notification when a channel changes a non-live state"
+        "description": "Notification when a channel changes a non-live state",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "state": {
+                "content": "$2",
+                "example": "rebroadcasting"
+            }
+        }
     },
     "copyNotification": {
         "message": "Copied the stream URL of $CHANNEL$ to the clipboard",
-        "description": "Notification content after the URL of a stream was copied from the panel context menu"
+        "description": "Notification content after the URL of a stream was copied from the panel context menu",
+        "placeholders": {
+            "channel": "$1",
+            "example": "ec0ke"
+        }
     },
     "panel_style_title": {
         "message": "Panel item display style",
@@ -49,7 +63,13 @@
     },
     "context_redirector": {
         "message": "Open $CHANNEL$",
-        "description": "Context panel item to open a redirector."
+        "description": "Context panel item to open a redirector.",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "advancedOptions": {
         "message": "Advanced Options",
@@ -161,7 +181,17 @@
     },
     "channelManagerLoadError": {
         "message": "Couldn't load \"$CHANNEL$\" for $TYPE$. Please make sure you are using the correct username.",
-        "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$."
+        "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$.",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "type": {
+                "content": "$2",
+                "example": "Twitch"
+            }
+        }
     },
     "cm_dialog_username": {
         "message": "Username:",
@@ -197,7 +227,13 @@
     },
     "updateNotification": {
         "message": "$CHANNEL$ has updated the title",
-        "description": "Notification title when a channel changes the stream title"
+        "description": "Notification title when a channel changes the stream title",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_style_options_Thumbnail": {
         "message": "Big Thumbnail",
@@ -409,7 +445,17 @@
     },
     "redirectUpdateNotification": {
         "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
-        "description": "Notification title when a channel changes the stream title"
+        "description": "Notification title when a channel changes the stream title",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "redirectTarget": {
+                "content": "$2",
+                "example": "Eisenhower"
+            }
+        }
     },
     "context_open": {
         "message": "Open Archive Page",
@@ -429,7 +475,13 @@
     },
     "onlineNotification": {
         "message": "$CHANNEL$ is live!",
-        "description": "Notification title when a channel goes live"
+        "description": "Notification title when a channel goes live",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "cm_secondary_button": {
         "message": "Go to first Channels Manager",
@@ -469,7 +521,13 @@
     },
     "nonliveNotificationStateRedirect": {
         "message": "redirecting to $CHANNEL$",
-        "description": "Redirecting state for nonliveNotification"
+        "description": "Redirecting state for nonliveNotification",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "export": {
         "message": "Export configuration",
@@ -489,7 +547,13 @@
     },
     "offlineNotification": {
         "message": "$CHANNEL$ went offline!",
-        "description": "Notification title when a channel goes offline"
+        "description": "Notification title when a channel goes offline",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_nothing": {
         "message": "No channels added.",
