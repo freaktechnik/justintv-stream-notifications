@@ -9,6 +9,8 @@ import { hasStreamlink } from '../features';
 import './options.css';
 import '../content/shared.css';
 
+const FIRST = 0;
+
 //TODO help button for advanced prefs?
 
 class OptionsPage {
@@ -132,7 +134,7 @@ class OptionsPage {
         document.getElementById("fileImport").addEventListener("input", (e) => {
             browser.runtime.sendMessage({
                 command: "import",
-                payload: e.target.files.shift()
+                payload: e.target.files[FIRST]
             });
         }, {
             passive: true,
