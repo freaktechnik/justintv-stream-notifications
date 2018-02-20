@@ -49,8 +49,10 @@
         "message": "Copied the stream URL of $CHANNEL$ to the clipboard",
         "description": "Notification content after the URL of a stream was copied from the panel context menu",
         "placeholders": {
-            "channel": "$1",
-            "example": "ec0ke"
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
         }
     },
     "panel_style_title": {
