@@ -35,16 +35,20 @@ Because there seems to be demand for this I've decided to create an extension th
 
 What are all these permissions used for?
 ----------------------------------------
- - **tabs**: Decide if a notification needs to be shown, switch to already opened tabs of streams when opening them
- - **notifications**: To show notifications when channel states change and when a channel is copied to the clipboard or an error occurs within the extension
+ - **Access browser tabs**: Decide if a notification needs to be shown, switch to already opened tabs of streams when opening them
+ - **Display notifications to you**: To show notifications when channel states change and when a channel is copied to the clipboard or an error occurs within the extension
  - **storage**: To save the extension settings
  - **alarms**: To update channel statuses regularly
- - **clipboardWrite**: Copy channel URL in a predefined pattern to the clipboard, copy debugging information
- - **downloads**: Export settings, channels and users
- - `https://www.googleapis.com/youtube/v3/*`: Check the status of YouTube channels
- - `https://livestream.com/api/*`: Check the status of livestream.com channels
- - `https://tmi.twitch.tv/*`: Check the hosting status of Twitch channels
- - `http://www.ustream.tv/*`: Add UStream channels by username
- - `http://*.api.channel.livestream.com/2.0/*`: Check the status of old livestream channels
- - `https://www.majorleaguegaming.com/api/*`: Check the status of MLG.tv channels
- - `https://streamapi.majorleaguegaming.com/service/streams/*`: Get info of MLG.tv channels
+ - **Input data to the clipboard**: Copy channel URL in a predefined pattern to the clipboard, copy debugging information
+ - **Download files and read and modify the browser’s download history**: Export settings, channels and users
+ - **Monitor extension usage and manage themes**: Detect the presence of Streamlink Helper
+ - **Store unlimited amount of client-side data**: Ensure the database is not deleted
+ - **Access your data for** `https://www.googleapis.com/youtube/v3/*`: Check the status of YouTube channels
+ - **Access your data for** `https://livestream.com/api/*`: Check the status of livestream.com channels
+ - **Access your data for** `https://tmi.twitch.tv/*`: Check the hosting status of Twitch channels
+ - **Access your data for** `http://www.ustream.tv/*`: Add UStream channels by username
+ - **Access your data for** `http://*.api.channel.livestream.com/2.0/*`: Check the status of old livestream channels
+ - **Access your data for** `https://www.majorleaguegaming.com/api/*`: Check the status of MLG.tv channels
+ - **Access your data for** `https://streamapi.majorleaguegaming.com/service/streams/*`: Get info of MLG.tv channels
+
+See https://support.mozilla.org/kb/permission-request-messages-firefox-extensions for explanations what permissions allow an extension to do in general.

@@ -49,7 +49,19 @@ settings is enabled, each live channel has an extra line of information.
 The extra infos are only shown when the specific meta information is available
 from the provider.
 
-Currently the extras include number of viewers and the category of the stream.
+Currently the extras include number of viewers, the category of the stream, the
+provider type and the uptime of the stream.
+
+## Default click action
+You can change the default action when a channel is clicked in the advanced
+extension settings. You can choose between:
+
+- Open stream in tab (or focus existing tab)
+- Open channel archive in tab (or focus existing tab)
+- Open stream chat in tab (or focus existing tab)
+- Open context panel for channel
+- Copy channel URL
+- *If Streamlink Helper is installed*: Open with Streamlink
 
 ## Search
 When clicking on the magnifying glass icon in the top right of the panel a text

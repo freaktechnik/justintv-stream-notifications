@@ -3,18 +3,12 @@
   permalink: /help/livestreamer/
   layout: page
 ---
-## What is Livestreamer and Streamlink?
-[Livestreamer](http://livestreamer.io) is a command-line program that opens
-streams with a native video player like VLC.
-
-[Streamlink](https://streamlink.github.io) is a fork of livestreamer, since livestreamer is no longer maintained.
+## What is Streamlink?
+[Streamlink](https://github.com/streamlink/streamlink) is a command-line program that opens
+streams with a native video player like VLC. It was forked from Livestreamer.
 
 ## How do I use Streamlink with this extension?
-Go to the extension settings and set the stream URL copy pattern to the streamlink
-command you want to run to open a stream. This would for example look like `streamlink {URL} source`.
+Install the [Streamlink Helper](https://addons.mozilla.org/en-US/firefox/addon/streamlink-helper/) and follow the setup instructions for the native companion. After that, you should see a context item in the popup to open a stream with Streamlink.
 
-You can then copy that command for a channel from the context menu in the panel
-and then execute it in a console to launch Streamlink.
-
-## Will this extension ever support launching Streamlink directly?
-No, but an integration with the [Streamlink Helper Extension](https://addons.mozilla.org/firefox/addon/streamlink-helper) is in development.
+## Can I always open streams with Streamlink?
+You can change the default click action in the popup in the advanced extension settings to be Streamlink. It's currently not possible to make Streamlink the default action for notifications.
