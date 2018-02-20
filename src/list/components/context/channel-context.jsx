@@ -70,7 +70,7 @@ ChannelContextPanel.defaultProps = {
     showLivestreamer: false,
     focused: 0
 };
-ChannelContextPanel.propTypes = {
+ChannelContextPanel.propTypes /* remove-proptypes */ = {
     uname: PropTypes.string.isRequired,
     external: PropTypes.bool.isRequired,
     liveState: PropTypes.oneOf(Object.keys(LiveState)),

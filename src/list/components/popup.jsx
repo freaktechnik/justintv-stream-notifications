@@ -19,7 +19,7 @@ const Popup = (props) => {
 Popup.defaultProps = {
     showContextMenu: false
 };
-Popup.propTypes = {
+Popup.propTypes /* remove-proptypes */ = {
     showContextMenu: PropTypes.bool,
     contextMenuType: PropTypes.string
 };

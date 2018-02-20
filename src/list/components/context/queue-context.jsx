@@ -33,7 +33,7 @@ QueueContextPanel.defaultProps = {
     paused: true,
     focused: 0
 };
-QueueContextPanel.propTypes = {
+QueueContextPanel.propTypes /* remove-proptypes */ = {
     queueEnabled: PropTypes.bool,
     paused: PropTypes.bool,
     focused: PropTypes.number,

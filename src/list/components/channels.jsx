@@ -55,7 +55,7 @@ Channels.defaultProps = {
     theme: 'light',
     hasFocus: true
 };
-Channels.propTypes = {
+Channels.propTypes /* remove-proptypes */ = {
     channels: channelsShape.isRequired,
     type: PropTypes.oneOf([
         LIVE_TAB,

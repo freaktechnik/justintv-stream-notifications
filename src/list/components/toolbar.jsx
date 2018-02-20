@@ -30,7 +30,7 @@ Toolbar.defaultProps = {
     showSearch: false,
     tabsFocused: false
 };
-Toolbar.propTypes = {
+Toolbar.propTypes /* remove-proptypes */ = {
     activeTab: PropTypes.number,
     showNonlive: PropTypes.bool,
     onTabSelect: PropTypes.func.isRequired,

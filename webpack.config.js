@@ -63,6 +63,21 @@ module.exports = {
                     babelrc: false,
                     presets: [
                         'react'
+                    ],
+                    plugins: [
+                        [
+                            "transform-react-remove-prop-types",
+                            {
+                                mode: 'remove',
+                                removeImport: true,
+                                classNameMatchers: [
+                                    "NavigateableItem",
+                                    "NavigateableList"
+                                ]
+                            }
+                        ],
+                        "transform-react-constant-elements",
+                        "transform-react-inline-elements"
                     ]
                 }
             }
@@ -121,7 +136,8 @@ module.exports = {
             ],
             chunksSortMode: 'dependency',
             defaultLanguage
-        })
+        }),
+        new webpack.EnvironmentPlugin([ 'NODE_ENV' ])
     ],
     externals: {
         lodash: '_',

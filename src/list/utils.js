@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import LiveState from '../live-state.json';
 import {
     LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
@@ -65,7 +66,11 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         formattedChannel.chatUrl = channel.chatUrl;
     }
     if(channel.redirectors) {
-        formattedChannel.redirectors = channel.redirectors.map((ch) => Object.assign({}, ch));
+        formattedChannel.redirectors = channel.redirectors.map((ch) => pick(ch, [
+            'uname',
+            'id',
+            'image'
+        ]));
         delete channel.redirectors;
     }
     if(channel.chatUrl) {
