@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UP_KEYS, DOWN_KEYS, START_KEYS, END_KEYS } from '../constants/navigateable';
+import {
+    UP_KEYS, DOWN_KEYS, START_KEYS, END_KEYS
+} from '../constants/navigateable';
 
 const FIRST = 0,
     LAST = -1;

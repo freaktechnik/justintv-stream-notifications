@@ -365,4 +365,6 @@ class Channel extends Item {
     }
 }
 
-export { Channel, User };
+export {
+    Channel, User
+};

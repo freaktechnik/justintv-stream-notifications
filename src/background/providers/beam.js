@@ -6,7 +6,9 @@
  * @module providers/beam
  * @todo checkout socket based events
  */
-import { Channel, User } from '../channel/core';
+import {
+    Channel, User
+} from '../channel/core';
 import { memoize } from "lodash";
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
@@ -17,7 +19,7 @@ import { filterExistingFavs } from '../channel/utils';
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
     baseURL = 'https://mixer.com/api/v1/',
-    pageSize = 50,
+    PAGE_SIZE = 50,
     SIZES = [
         '50',
         '70',
@@ -96,8 +98,8 @@ class Beam extends GenericProvider {
         if(user.parsedJSON) {
             const ch = new User(user.parsedJSON.username, this._type),
                 subscriptions = await promisedPaginationHelper({
-                    url: `${baseURL}users/${userid}/follows?limit=${pageSize}&page=`,
-                    pageSize,
+                    url: `${baseURL}users/${userid}/follows?limit=${PAGE_SIZE}&page=`,
+                    pageSize: PAGE_SIZE,
                     initialPage: 0,
                     request: (url) => this._qs.queueRequest(url),
                     getPageNumber(page) {
@@ -146,8 +148,8 @@ class Beam extends GenericProvider {
                         ] = await Promise.all([
                             this._list.getUserByName(ch.login),
                             promisedPaginationHelper({
-                                url: `${url}/follows?limit=${pageSize}&page=`,
-                                pageSize,
+                                url: `${url}/follows?limit=${PAGE_SIZE}&page=`,
+                                pageSize: PAGE_SIZE,
                                 initialPage: 0,
                                 request: (pageURL) => this._qs.queueRequest(pageURL),
                                 getPageNumber: (page) => ++page,

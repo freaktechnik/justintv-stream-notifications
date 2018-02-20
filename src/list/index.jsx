@@ -8,7 +8,9 @@ import 'file-loader?name=vendor/react-key-handler.[ext]!react-key-handler/dist/i
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import {
+    createStore, applyMiddleware
+} from 'redux';
 import reducers from './reducers';
 import Popup from './components/popup.jsx';
 import Port from '../port';
@@ -103,10 +105,10 @@ prefs.addEventListener("change", ({ detail: {
 document.documentElement.setAttribute("lang", browser.i18n.getUILanguage().replace("_", "-"));
 
 hasStreamlink()
-    .then((hasStreamlink) => {
+    .then((streamlinkAvailable) => {
         store.dispatch({
             type: storeTypes.HAS_STREAMLINK_HELPER,
-            payload: hasStreamlink
+            payload: streamlinkAvailable
         });
     })
     .catch(console.error);

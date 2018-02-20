@@ -1,5 +1,7 @@
 import LiveState from '../live-state.json';
-import { LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from './constants/tabs.json';
+import {
+    LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
+} from './constants/tabs.json';
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
@@ -8,7 +10,9 @@ const FIRST_URL = 0,
     BIGGER = 1,
     SMALLER = -1;
 
-export { SMALL_IMAGE, LARGE_IMAGE };
+export {
+    SMALL_IMAGE, LARGE_IMAGE
+};
 
 export const getExternalID = (channel) => `${channel.login}|${channel.type}`;
 

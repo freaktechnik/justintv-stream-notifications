@@ -7,15 +7,21 @@ import providers from "../providers";
 import ChannelsManager from "./manager";
 import ChannelList from "./list";
 import EventSink from '../providers/events';
-import { emit, pipe } from "../../utils";
+import {
+    emit, pipe
+} from "../../utils";
 import ParentalControls from "../parental-controls";
-import { flatten, debounce } from "lodash";
+import {
+    flatten, debounce
+} from "lodash";
 import * as debugDump from "./dump";
 import prefs from "../../preferences";
 import * as logins from "../logins";
 import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state';
-import { formatChannel, formatChannels, filterExistingFavs } from './utils';
+import {
+    formatChannel, formatChannels, filterExistingFavs
+} from './utils';
 import { CantOpenListError } from '../../database-manager';
 
 /**

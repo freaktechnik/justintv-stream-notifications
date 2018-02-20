@@ -7,7 +7,9 @@
  * @todo Unify Errors that other lists might re-use.
  */
 import { when } from "./utils";
-import DatabaseManager, { ListClosedError } from './database-manager';
+import DatabaseManager, {
+    ListClosedError
+} from './database-manager';
 import EventTarget from 'event-target-shim';
 
 /**

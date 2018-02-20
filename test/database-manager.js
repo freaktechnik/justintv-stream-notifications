@@ -3,7 +3,9 @@
  * @license MPL-2.0
  */
 import test from 'ava';
-import DatabaseManager, { FixListError, CantOpenListError, ListClosedError } from '../src/database-manager';
+import DatabaseManager, {
+    FixListError, CantOpenListError, ListClosedError
+} from '../src/database-manager';
 import sinon from 'sinon';
 
 test.afterEach.always(async () => {

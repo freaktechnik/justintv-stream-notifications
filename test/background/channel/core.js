@@ -4,8 +4,12 @@
  * @todo Test serialize
  */
 import test from "ava";
-import { Channel, User } from '../../../src/background/channel/core';
-import { getUser, getChannel } from "../../helpers/channel-user";
+import {
+    Channel, User
+} from '../../../src/background/channel/core';
+import {
+    getUser, getChannel
+} from "../../helpers/channel-user";
 import LiveState from '../../../src/background/channel/live-state';
 
 test('user base construction stuff', (t) => {

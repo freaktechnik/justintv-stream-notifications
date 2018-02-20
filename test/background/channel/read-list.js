@@ -6,8 +6,12 @@
 import test from 'ava';
 import ChannelList from '../../../src/background/channel/list';
 import ReadChannelList from '../../../src/background/channel/read-list';
-import { User, Channel } from '../../../src/background/channel/core';
-import { getUser, getChannel } from "../../helpers/channel-user";
+import {
+    User, Channel
+} from '../../../src/background/channel/core';
+import {
+    getUser, getChannel
+} from "../../helpers/channel-user";
 import { FixListError } from '../../../src/database-manager';
 import RCL from '../../../src/read-channel-list';
 

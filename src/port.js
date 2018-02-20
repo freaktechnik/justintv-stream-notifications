@@ -6,7 +6,9 @@
  */
 
 import EventTarget from "event-target-shim";
-import { emit, when } from "./utils.js";
+import {
+    emit, when
+} from "./utils.js";
 
 export class NoPortError extends Error {
     constructor() {

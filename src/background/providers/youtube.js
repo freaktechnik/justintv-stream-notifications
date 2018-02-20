@@ -7,7 +7,9 @@
 import prefs from "../../preferences";
 import querystring from "../querystring";
 import { memoize } from "lodash";
-import { Channel, User } from '../channel/core';
+import {
+    Channel, User
+} from '../channel/core';
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { filterExistingFavs } from '../channel/utils';
@@ -77,15 +79,15 @@ class YouTube extends GenericProvider {
                     pageSize: subsOptions.maxResults,
                     initialPage: "",
                     request: (url) => this._qs.queueRequest(url),
-                    getPageNumber(page, pageSize, data) {
-                        return `&pageToken=${data.parsedJSON.nextPageToken}`;
+                    getPageNumber(page, pageSize, d) {
+                        return `&pageToken=${d.parsedJSON.nextPageToken}`;
                     },
-                    fetchNextPage(data) {
-                        return data.parsedJSON && data.parsedJSON.items && "nextPageToken" in data.parsedJSON;
+                    fetchNextPage(d) {
+                        return d.parsedJSON && d.parsedJSON.items && "nextPageToken" in d.parsedJSON;
                     },
-                    getItems(data) {
-                        if(data.parsedJSON && data.parsedJSON.items) {
-                            return data.parsedJSON.items;
+                    getItems(d) {
+                        if(d.parsedJSON && d.parsedJSON.items) {
+                            return d.parsedJSON.items;
                         }
 
                         return [];
@@ -181,15 +183,15 @@ class YouTube extends GenericProvider {
                             pageSize: subsOptions.maxResults,
                             initialPage: "",
                             request: (url) => this._qs.queueRequest(url),
-                            getPageNumber(page, pageSize, data) {
-                                return `&pageToken=${data.parsedJSON.nextPageToken}`;
+                            getPageNumber(p, pageSize, d) {
+                                return `&pageToken=${d.parsedJSON.nextPageToken}`;
                             },
-                            fetchNextPage(data) {
-                                return data.parsedJSON && data.parsedJSON.items && data.parsedJSON.pageInfo.totalResults > data.parsedJSON.pageInfo.resultsPerPage * ++page;
+                            fetchNextPage(d) {
+                                return d.parsedJSON && d.parsedJSON.items && d.parsedJSON.pageInfo.totalResults > d.parsedJSON.pageInfo.resultsPerPage * ++page;
                             },
-                            getItems(data) {
-                                if(data.parsedJSON && data.parsedJSON.items) {
-                                    return data.parsedJSON.items;
+                            getItems(d) {
+                                if(d.parsedJSON && d.parsedJSON.items) {
+                                    return d.parsedJSON.items;
                                 }
 
                                 return [];
@@ -372,7 +374,7 @@ class YouTube extends GenericProvider {
 
         if(videos.parsedJSON && videos.parsedJSON.items) {
             await Promise.all(videos.parsedJSON.items.map((video) => this._getCategory(video.snippet.categoryId).then((category) => {
-                const channel = channels.find((channel) => channel.login == video.snippet.channelId);
+                const channel = channels.find((chan) => chan.login == video.snippet.channelId);
                 channel.live.setLive(true);
                 channel.live.created = Date.parse(video.liveStreamingDetails.actualStartTime);
                 channel.url = [

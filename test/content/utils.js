@@ -1,5 +1,7 @@
 import test from 'ava';
-import { show, hide, toggle, copy } from '../../src/content/utils';
+import {
+    show, hide, toggle, copy
+} from '../../src/content/utils';
 
 test("show", (t) => {
     const e = document.createElement("div");

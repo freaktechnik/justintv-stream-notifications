@@ -7,7 +7,9 @@
  * @module channel/dump
  */
 import prefs from "../../preferences";
-import { Channel, User } from "./core";
+import {
+    Channel, User
+} from "./core";
 
 export const PREFS_MAPPING = Object.freeze({
     queue: Object.freeze({

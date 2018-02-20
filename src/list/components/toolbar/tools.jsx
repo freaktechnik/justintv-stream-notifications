@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tool from './tool.jsx';
-import KeyHandler, { KEYPRESS } from 'react-key-handler';
+import KeyHandler, {
+    KEYPRESS
+} from 'react-key-handler';
 
 const Tools = (props) =>
     //TODO CTRL+F and CTRL+R get captured hard by Firefox, no idea how to get around that.

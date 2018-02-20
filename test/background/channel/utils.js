@@ -3,8 +3,12 @@
  * Licensed under MPL 2.0
  */
 import test from "ava";
-import { selectOrOpenTab, formatChannel, filterExistingFavs } from '../../../src/background/channel/utils';
-import { getChannel, getUser } from "../../helpers/channel-user";
+import {
+    selectOrOpenTab, formatChannel, filterExistingFavs
+} from '../../../src/background/channel/utils';
+import {
+    getChannel, getUser
+} from "../../helpers/channel-user";
 import { setup } from "../../helpers/default-behavior";
 import LiveState from '../../../src/live-state.json';
 

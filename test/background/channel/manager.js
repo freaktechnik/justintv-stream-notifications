@@ -7,7 +7,9 @@ import test from 'ava';
 import ChannelsManager from "../../../src/background/channel/manager";
 import getPort from '../../helpers/port';
 import { when } from '../../../src/utils';
-import { PortGoneError, default as Port } from '../../../src/port';
+import {
+    PortGoneError, default as Port
+} from '../../../src/port';
 
 const FAKE_ITEM = {
         serialize() {

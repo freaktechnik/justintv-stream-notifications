@@ -84,7 +84,7 @@ class Ustream extends GenericProvider {
         }
 
         const htmlPage = await data.text(),
-            channelId = htmlPage.match(/<meta name="ustream:channel_id" content="([0-9]+)">/)[FIRST_MATCH], // eslint-disable-line xss/no-mixed-html
+            channelId = htmlPage.match(/<meta name="ustream:channel_id" content="(\d+)">/)[FIRST_MATCH],
             response = await this._qs.queueRequest(`${baseURL}channels/${channelId}.json`);
 
         if(response.parsedJSON && "channel" in response.parsedJSON) {

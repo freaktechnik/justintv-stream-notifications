@@ -8,7 +8,9 @@
 import test from 'ava';
 import ChannelController from "../../../src/background/channel/controller";
 import providers from "../../../src/background/providers";
-import { getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
+import {
+    getMockAPIQS, IGNORE_QSUPDATE_PROVIDERS
+} from "../../helpers/providers/mock-qs";
 import sinon from 'sinon';
 
 const TESTUSER = {

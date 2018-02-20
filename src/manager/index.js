@@ -5,7 +5,9 @@
  * @license MPL 2.0
  */
 //TODO clicking ok twice shows error panel -> ok sent while loading?
-import { hide, show, copy } from '../content/utils';
+import {
+    hide, show, copy
+} from '../content/utils';
 import { filter } from '../content/filter';
 import Port from '../port';
 import Tabbed from '../content/tabbed';

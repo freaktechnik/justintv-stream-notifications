@@ -1,5 +1,7 @@
 import test from 'ava';
-import { CHANNEL_ACTIONS, getChannelAction, shouldClose } from '../../../src/list/state/channel-actions';
+import {
+    CHANNEL_ACTIONS, getChannelAction, shouldClose
+} from '../../../src/list/state/channel-actions';
 import storeTypes from '../../../src/list/constants/store-types.json';
 
 test('channel actions', (t) => {

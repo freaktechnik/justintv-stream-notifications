@@ -9,7 +9,9 @@
 import prefs from "../../preferences";
 import querystring from "../querystring";
 import LiveState from "../channel/live-state";
-import { Channel, User } from '../channel/core';
+import {
+    Channel, User
+} from '../channel/core';
 import { promisedPaginationHelper } from '../pagination-helper';
 import GenericProvider from "./generic-provider";
 import { not } from '../logic';
@@ -103,12 +105,12 @@ class Twitch extends GenericProvider {
                     url: `${baseURL}/users/${username}/follows/channels?limit=${itemsPerPage}&offset=`,
                     pageSize: itemsPerPage,
                     request: (url) => this._qs.queueRequest(url, headers),
-                    fetchNextPage(data) {
-                        return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
+                    fetchNextPage(d) {
+                        return d.parsedJSON && "follows" in d.parsedJSON && d.parsedJSON.follows.length == itemsPerPage;
                     },
-                    getItems(data) {
-                        if(data.parsedJSON && "follows" in data.parsedJSON) {
-                            return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                    getItems(d) {
+                        if(d.parsedJSON && "follows" in d.parsedJSON) {
+                            return d.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
                         }
 
                         return [];
@@ -153,12 +155,12 @@ class Twitch extends GenericProvider {
                             url: `${baseURL}/users/${user.login}/follows/channels?limit=${itemsPerPage}&offset=`,
                             pageSize: itemsPerPage,
                             request: (url) => this._qs.queueRequest(url, headers),
-                            fetchNextPage(data) {
-                                return data.parsedJSON && "follows" in data.parsedJSON && data.parsedJSON.follows.length == itemsPerPage;
+                            fetchNextPage(d) {
+                                return d.parsedJSON && "follows" in d.parsedJSON && d.parsedJSON.follows.length == itemsPerPage;
                             },
-                            getItems(data) {
-                                if(data.parsedJSON && "follows" in data.parsedJSON) {
-                                    return data.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                            getItems(d) {
+                                if(d.parsedJSON && "follows" in d.parsedJSON) {
+                                    return d.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
                                 }
 
                                 return [];
@@ -199,7 +201,7 @@ class Twitch extends GenericProvider {
                         const otherChannels = await promisedPaginationHelper({
                             url: `${url}&offset=`,
                             pageSize: itemsPerPage,
-                            request: (url) => this._qs.queueRequest(url, headers),
+                            request: (requestUrl) => this._qs.queueRequest(requestUrl, headers),
                             fetchNextPage,
                             getItems: (data) => {
                                 if(data.parsedJSON && "streams" in data.parsedJSON) {

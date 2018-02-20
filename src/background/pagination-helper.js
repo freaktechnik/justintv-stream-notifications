@@ -158,4 +158,6 @@ const promisedPaginationHelper = (options) => new Promise((resolve) => {
     new PaginationHelper(options);
 });
 
-export { promisedPaginationHelper, PaginationHelper };
+export {
+    promisedPaginationHelper, PaginationHelper
+};

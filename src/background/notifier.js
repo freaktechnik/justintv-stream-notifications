@@ -8,7 +8,9 @@
 
 import prefs from '../preferences';
 import LiveState from "./channel/live-state";
-import { and, or, not } from './logic';
+import {
+    and, or, not
+} from './logic';
 import { emit } from '../utils';
 import EventTarget from 'event-target-shim';
 

@@ -5,7 +5,9 @@
  * @license MPL-2.0
  * @module channel/manager
  */
-import { emit, when } from "../../utils";
+import {
+    emit, when
+} from "../../utils";
 import EventTarget from 'event-target-shim';
 import Port from '../../port.js';
 import serializedProviders from "../providers/serialized";

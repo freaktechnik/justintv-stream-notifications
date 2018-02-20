@@ -4,9 +4,15 @@
  */
 import test from "ava";
 import providers from "../../../src/background/providers";
-import { getChannel, getUser } from "../../helpers/channel-user";
-import { Channel, User } from "../../../src/background/channel/core";
-import { getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS } from "../../helpers/providers/mock-qs";
+import {
+    getChannel, getUser
+} from "../../helpers/channel-user";
+import {
+    Channel, User
+} from "../../../src/background/channel/core";
+import {
+    getMockQS, getMockAPIQS, apiEndpoints, IGNORE_QSUPDATE_PROVIDERS
+} from "../../helpers/providers/mock-qs";
 import LiveState from "../../../src/live-state.json";
 import ChannelList from '../../../src/background/channel/list';
 

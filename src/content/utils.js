@@ -45,7 +45,7 @@ export function toggle(node, condition) {
 }
 
 /**
- * Copy a string to the clipboard. Side effects: temporarily appends a textarea
+ * Copy a string to the clipboard. Temporarily appends a textarea
  * to the body of the document.
  *
  * @param {string} string - String to copy to the clipboard.

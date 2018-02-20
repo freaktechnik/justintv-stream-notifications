@@ -1,5 +1,7 @@
 import test from 'ava';
-import { and, or, not } from '../../src/background/logic';
+import {
+    and, or, not
+} from '../../src/background/logic';
 
 const CASES = [
     [

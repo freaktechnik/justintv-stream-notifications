@@ -1,5 +1,7 @@
 import test from 'ava';
-import Port, { NoPortError, PortGoneError } from '../src/port';
+import Port, {
+    NoPortError, PortGoneError
+} from '../src/port';
 import getPort from './helpers/port';
 import { when } from '../src/utils';
 import sinon from 'sinon';

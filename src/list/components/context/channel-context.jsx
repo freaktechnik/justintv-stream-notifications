@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import ContextList from './context-list.jsx';
 import ContextItem from './context-item.jsx';
 import storeTypes from '../../constants/store-types.json';
-import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../../state/channel-actions';
+import {
+    getChannelAction, CHANNEL_ACTIONS, shouldClose
+} from '../../state/channel-actions';
 
 //TODO closing the context panel should focus the item it was opened for.
 

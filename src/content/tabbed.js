@@ -3,7 +3,9 @@
  * @license MPL-2.0
  */
 
-import { show, hide } from './utils';
+import {
+    show, hide
+} from './utils';
 
 const SELECTED_CLASS = "current",
     TABINDEX = {

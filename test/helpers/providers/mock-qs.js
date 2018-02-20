@@ -164,4 +164,6 @@ const endpoints = Object.keys(mockAPIEnpoints);
  */
 const IGNORE_QSUPDATE_PROVIDERS = [];
 
-export { getMockQS, getMockAPIQS, endpoints as apiEndpoints, IGNORE_QSUPDATE_PROVIDERS };
+export {
+    getMockQS, getMockAPIQS, endpoints as apiEndpoints, IGNORE_QSUPDATE_PROVIDERS
+};

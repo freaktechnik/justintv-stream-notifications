@@ -4,7 +4,9 @@
  *
  * Hitbox provider
  */
-import { Channel, User } from '../channel/core';
+import {
+    Channel, User
+} from '../channel/core';
 import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
 import querystring from "../querystring";
@@ -14,7 +16,7 @@ import { filterExistingFavs } from '../channel/utils';
 const type = "hitbox",
     archiveURL = "/videos",
     chatURL = "https://smashcast.tv/embedchat/",
-    pageSize = 100,
+    PAGE_SIZE = 100,
     baseURL = "https://api.smashcast.tv",
     cdnURL = "https://edge.sf.hitbox.tv",
     LANG_START = 0,
@@ -58,8 +60,8 @@ class Hitbox extends GenericProvider {
             user
         ] = await Promise.all([
             promisedPaginationHelper({
-                url: `${baseURL}/following/user?user_name=${username}&limit=${pageSize}&offset=`,
-                pageSize,
+                url: `${baseURL}/following/user?user_name=${username}&limit=${PAGE_SIZE}&offset=`,
+                pageSize: PAGE_SIZE,
                 request: (url) => this._qs.queueRequest(url),
                 fetchNextPage(data, pageSize) {
                     return data.parsedJSON && "following" in data.parsedJSON && data.parsedJSON.following.length == pageSize;
@@ -117,8 +119,8 @@ class Hitbox extends GenericProvider {
                         ] = await Promise.all([
                             this._list.getUserByName(data.parsedJSON.user_name),
                             promisedPaginationHelper({
-                                url: `${baseURL}/following/user?user_name=${data.parsedJSON.user_name}&limit=${pageSize}&offset=`,
-                                pageSize,
+                                url: `${baseURL}/following/user?user_name=${data.parsedJSON.user_name}&limit=${PAGE_SIZE}&offset=`,
+                                pageSize: PAGE_SIZE,
                                 request: (url) => this._qs.queueRequest(url),
                                 fetchNextPage(pageData, pageSize) {
                                     return pageData.parsedJSON && "following" in pageData.parsedJSON && pageData.parsedJSON.following.length == pageSize;

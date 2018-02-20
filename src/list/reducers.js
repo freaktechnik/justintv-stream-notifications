@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import prefs from '../prefs.json';
-import { EXPLORE_TAB, LIVE_TAB } from './constants/tabs.json';
+import {
+    EXPLORE_TAB, LIVE_TAB
+} from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
 
 const THEMES = [

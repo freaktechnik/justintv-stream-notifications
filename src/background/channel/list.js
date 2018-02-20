@@ -11,7 +11,9 @@ import prefs from "../../preferences";
 import { Channel } from "./core";
 import LiveState from "../../live-state";
 import ReadChannelList from './read-list';
-import DatabaseManager, { FixListError } from '../../database-manager';
+import DatabaseManager, {
+    FixListError
+} from '../../database-manager';
 
 /**
  * Whenever one or more channels are added to the ChannelList this event is

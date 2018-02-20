@@ -1,5 +1,7 @@
 import test from 'ava';
-import { getExternalID, formatChannel } from '../../src/list/utils';
+import {
+    getExternalID, formatChannel
+} from '../../src/list/utils';
 import LiveState from '../../src/live-state.json';
 
 test('getExternalID', (t) => {

@@ -67,7 +67,7 @@ const getRebroadcastTitlePatterns = async () => {
      * @param {module:channel/core.Channel} channel - Channel to potentially add uptime to.
      * @param {callback} getOldChannel - Callback resolving to the current version of the channel.
      * @returns {module:channel/core.Channel} Potentially updated channel.
-     * @throws TypeError when not passing a valid channel.
+     * @throws {TypeError} when not passing a valid channel.
      */
     fillInUptime = async (channel, getOldChannel) => {
         if(!(channel instanceof Channel)) {

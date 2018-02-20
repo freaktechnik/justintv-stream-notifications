@@ -7,7 +7,9 @@
  * @requires module:channel/core
  */
 import ReadChannelList from '../../read-channel-list';
-import { Channel, User } from "./core";
+import {
+    Channel, User
+} from "./core";
 
 /**
  * @class module:channel/list.DeserializedReadChannelList

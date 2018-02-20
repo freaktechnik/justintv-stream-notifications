@@ -3,7 +3,9 @@
  * @author Martin Giger
  * @license MPL-2.0
  */
-import { show, hide } from './utils';
+import {
+    show, hide
+} from './utils';
 
 /**
  * @typedef {Object} Rule

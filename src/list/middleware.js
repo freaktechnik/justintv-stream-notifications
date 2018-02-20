@@ -1,7 +1,11 @@
-import { formatChannel, getExternalID } from './utils';
+import {
+    formatChannel, getExternalID
+} from './utils';
 import LiveState from '../live-state.json';
 import { copy } from '../content/utils';
-import { LIVE_TAB, EXPLORE_TAB } from './constants/tabs.json';
+import {
+    LIVE_TAB, EXPLORE_TAB
+} from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
 
 export default (port) => ({

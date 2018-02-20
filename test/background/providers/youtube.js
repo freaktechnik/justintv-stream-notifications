@@ -5,7 +5,9 @@
  */
 import test from 'ava';
 import providers from "../../../src/background/providers";
-import { getMockAPIQS, getMockQS } from "../../helpers/providers/mock-qs";
+import {
+    getMockAPIQS, getMockQS
+} from "../../helpers/providers/mock-qs";
 
 const youtube = providers.youtube;
 

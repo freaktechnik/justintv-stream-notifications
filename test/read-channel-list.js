@@ -6,7 +6,9 @@
 import test from 'ava';
 import ChannelList from '../src/background/channel/list';
 import ReadChannelList from '../src/read-channel-list';
-import { getUser, getChannel } from "./helpers/channel-user";
+import {
+    getUser, getChannel
+} from "./helpers/channel-user";
 import DatabaseManager from '../src/database-manager';
 import sinon from 'sinon';
 

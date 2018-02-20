@@ -2,7 +2,9 @@
  * @author Martin Giger
  * @license MPL-2.0
  */
-import { Channel, User } from '../../src/background/channel/core';
+import {
+    Channel, User
+} from '../../src/background/channel/core';
 const TYPE = "test";
 
 /**
@@ -46,4 +48,6 @@ const getChannel = (login = 'test', type = TYPE, id = null) => {
     return channel;
 };
 
-export { getUser, getChannel };
+export {
+    getUser, getChannel
+};

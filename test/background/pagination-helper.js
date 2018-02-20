@@ -4,7 +4,9 @@
  */
 import test from "ava";
 import sinon from "sinon";
-import { PaginationHelper, promisedPaginationHelper } from "../../src/background/pagination-helper";
+import {
+    PaginationHelper, promisedPaginationHelper
+} from "../../src/background/pagination-helper";
 
 test.cb("PaginationHelper with callbacks", (t) => {
     const URL = "http://example.com/?offset=",

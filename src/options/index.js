@@ -51,14 +51,14 @@ class OptionsPage {
         errorStateWidget(document.getElementById("errorStates"));
 
         hasStreamlink()
-            .then((hasStreamlink) => {
-                document.querySelector('#click_action option[value="5"]').hidden = !hasStreamlink;
+            .then((streamlinkAvailable) => {
+                document.querySelector('#click_action option[value="5"]').hidden = !streamlinkAvailable;
             })
             .catch(console.error);
     }
 
     getValue(p) {
-        const type = prefs[p].type,
+        const { type } = prefs[p],
             formatted = format(document.getElementById(p)[OptionsPage.VALUE_PROPERTY[type]], type);
         if(type === "string" && formatted == '') {
             return prefs[p].value;

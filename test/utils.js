@@ -5,7 +5,11 @@
  */
 import test from "ava";
 import sinon from "sinon";
-import { when, emit, pipe } from "../src/utils";
+import {
+    when,
+    emit,
+    pipe
+} from "../src/utils";
 
 test('when addEventListener', async (t) => {
     const mockEmitter = new EventTarget();
@@ -34,11 +38,11 @@ test('when onproperty', async (t) => {
 
     t.true(mockEmitter.onEvent.addListener.calledOnce);
 
-    const listener = mockEmitter.onEvent.addListener.lastCall.args[0];
+    const [ listener ] = mockEmitter.onEvent.addListener.lastCall.args;
     listener('foo bar');
 
     t.true(mockEmitter.onEvent.removeListener.calledOnce);
-    t.is(mockEmitter.onEvent.removeListener.lastCall.args[0], listener);
+    t.true(mockEmitter.onEvent.removeListener.calledWith(listener));
 
     const result = await p;
 

@@ -4,7 +4,9 @@
  * @license MPL-2.0
  * @module providers/new-livestream
  */
-import { Channel, User } from "../channel/core";
+import {
+    Channel, User
+} from "../channel/core";
 import GenericProvider from "./generic-provider";
 import { promisedPaginationHelper } from "../pagination-helper";
 
@@ -163,8 +165,8 @@ class NewLivestream extends GenericProvider {
 
     async _getChannelStatus(json, channel) {
         // Checks if there are any upcoming or past events and if yes, if one is currently being broadcast.
-        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((event) => event.broadcast_id != NO_BROADCAST)) ||
-            (Array.isArray(json.past_events.data) && json.past_events.data.find((event) => event.broadcast_id != NO_BROADCAST));
+        const event = (Array.isArray(json.upcoming_events.data) && json.upcoming_events.data.find((e) => e.broadcast_id != NO_BROADCAST)) ||
+            (Array.isArray(json.past_events.data) && json.past_events.data.find((e) => e.broadcast_id != NO_BROADCAST));
 
         if(event) {
             channel.title = event.full_name;

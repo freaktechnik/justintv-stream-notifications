@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from '../constants/tabs.json';
-import ChannelList, { channelsShape } from './channels/channel-list.jsx';
+import {
+    LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
+} from '../constants/tabs.json';
+import ChannelList, {
+    channelsShape
+} from './channels/channel-list.jsx';
 import ProviderSelector from './channels/provider-selector.jsx';
 import storeTypes from '../constants/store-types.json';
 import { getVisibleChannels } from '../utils';
-import { getChannelAction, CHANNEL_ACTIONS, shouldClose } from '../state/channel-actions';
+import {
+    getChannelAction, CHANNEL_ACTIONS, shouldClose
+} from '../state/channel-actions';
 
 const _ = browser.i18n.getMessage;
 

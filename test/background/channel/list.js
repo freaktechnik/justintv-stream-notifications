@@ -5,8 +5,12 @@
  */
 import test from 'ava';
 import ChannelList from '../../../src/background/channel/list';
-import { User, Channel } from '../../../src/background/channel/core';
-import { getUser, getChannel } from "../../helpers/channel-user";
+import {
+    User, Channel
+} from '../../../src/background/channel/core';
+import {
+    getUser, getChannel
+} from "../../helpers/channel-user";
 import { when } from "../../../src/utils";
 import prefs from '../../../src/prefs.json';
 import DatabaseManager from '../../../src/database-manager';

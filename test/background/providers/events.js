@@ -6,8 +6,12 @@
 import test from 'ava';
 import EventSink from "../../../src/background/providers/events";
 import providers from "../../../src/background/providers";
-import { getUser, getChannel } from "../../helpers/channel-user";
-import { emit, when } from "../../../src/utils";
+import {
+    getUser, getChannel
+} from "../../helpers/channel-user";
+import {
+    emit, when
+} from "../../../src/utils";
 
 const testUpdateUser = async (t, p) => {
     const sink = new EventSink();

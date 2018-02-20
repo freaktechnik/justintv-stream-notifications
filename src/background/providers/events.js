@@ -4,7 +4,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  */
-import providers from './index';
+import providers from '.';
 import { pipe } from '../../utils';
 import EventTarget from 'event-target-shim';
 

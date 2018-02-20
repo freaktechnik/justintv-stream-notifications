@@ -56,7 +56,7 @@
         "description": "Advanced extension preferences collapsed message"
     },
     "click_action_options_copy": {
-        "message": "Copy Channel URL",
+        "message": "Kanal URL kopieren",
         "description": ""
     },
     "cm_dialog_cancel": {
@@ -68,7 +68,7 @@
         "description": "Description of the non-live treatment setting in the preferences"
     },
     "click_action_title": {
-        "message": "Default Click Action",
+        "message": "Standard Klick-Aktion",
         "description": "Setting title to define what happens when you click a channel in the panel"
     },
     "providerlivestream": {
@@ -208,7 +208,7 @@
         "description": "Error while trying to read the DB, however the DB could be cleared"
     },
     "show_mature_thumbs_title": {
-        "message": "Show NSFW thumbnails",
+        "message": "Zeige nicht jugendfreie Vorschaubilder",
         "description": "Setting to hide thumbnails of mature streams."
     },
     "errorState1": {
@@ -364,7 +364,7 @@
         "description": "Button leading to instructions how to reset a Firefox profile."
     },
     "click_action_options_context": {
-        "message": "Open Context Panel",
+        "message": "Kontextpanel öffnen",
         "description": ""
     },
     "twitch_showHosting_title": {
@@ -480,11 +480,11 @@
         "description": "Context menu action to copy the URL of a channel in the panel"
     },
     "click_action_options_archive": {
-        "message": "Open Channel Archive",
+        "message": "Kanalarchiv öffnen",
         "description": ""
     },
     "click_action_options_chat": {
-        "message": "Open Channel Chat",
+        "message": "Kanalchat öffnen",
         "description": ""
     },
     "offlineNotification": {

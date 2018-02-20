@@ -6,7 +6,9 @@
  * @module providers/dailymotion
  */
 import GenericProvider from "./generic-provider";
-import { Channel, User } from "../channel/core";
+import {
+    Channel, User
+} from "../channel/core";
 import { promisedPaginationHelper } from "../pagination-helper";
 import qs from "../querystring";
 import { filterExistingFavs } from '../channel/utils';

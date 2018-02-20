@@ -2,8 +2,12 @@ import test from 'ava';
 import ProviderChannelList from '../../../src/background/channel/provider-list';
 import ChannelList from '../../../src/background/channel/list';
 import ReadChannelList from '../../../src/background/channel/read-list';
-import { getUser, getChannel } from "../../helpers/channel-user";
-import { User, Channel } from '../../../src/background/channel/core';
+import {
+    getUser, getChannel
+} from "../../helpers/channel-user";
+import {
+    User, Channel
+} from '../../../src/background/channel/core';
 
 const PROVIDER = 'test';
 const NOT_PROVIDER = 'extra';

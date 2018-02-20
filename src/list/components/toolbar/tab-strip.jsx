@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tab from './tab.jsx';
 import NavigateableList from '../navigateable-list.jsx';
-import { LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB } from '../../constants/tabs.json';
+import {
+    LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
+} from '../../constants/tabs.json';
 
 //TODO space or enter should focus tab panel.
 

@@ -164,7 +164,7 @@ export default class GenericProvider extends EventTarget {
      * If the provider is fully functional and should be enabled. Makes it
      * impossible to add new channels and users and disables the update
      * request queueing. Existing channels will be kept around, and could
-     * still be updated. getChannelDetails is also expected to return a
+     * still be updated. GetChannelDetails is also expected to return a
      * channel that at least sets the login.
      *
      * @type {boolean}
