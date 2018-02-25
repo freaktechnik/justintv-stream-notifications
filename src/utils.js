@@ -7,13 +7,13 @@
 
 const FIRST = 0,
     REST = 1,
-    capitalize = (str) => str[FIRST].toUpperCase() + str.substr(REST),
+    /* tree-shaking no-side-effects-when-called */ capitalize = (str) => str[FIRST].toUpperCase() + str.substr(REST),
     getEventPropertyName = (event) => `on${capitalize(event)}`;
 
 export { capitalize };
 
 /* eslint-disable promise/avoid-new */
-export const when = (target, event) => {
+export const /* tree-shaking no-side-effects-when-called */ when = (target, event) => {
     if(target instanceof EventTarget) {
         return new Promise((resolve) => {
             target.addEventListener(event, resolve, {
@@ -45,7 +45,7 @@ export const when = (target, event) => {
  *                     an array as the detail property of the event.
  * @returns {boolean} If the event fully propagated.
  */
-export const emit = (target, event, ...detail) => {
+export const /* tree-shaking no-side-effects-when-called */ emit = (target, event, ...detail) => {
     let eventInstance;
     const init = {
         cancelable: true
@@ -73,6 +73,6 @@ export const emit = (target, event, ...detail) => {
  * @param {module:event-target.EventTarget} target - Target to pipe to.
  * @returns {undefined}
  */
-export const pipe = (source, event, target) => {
+export const /* tree-shaking no-side-effects-when-called */ pipe = (source, event, target) => {
     source.addEventListener(event, (e) => target.dispatchEvent(e), { passive: true });
 };

@@ -9,7 +9,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import {
-    createStore, applyMiddleware
+    createStore,
+    applyMiddleware
 } from 'redux';
 import reducers from './reducers';
 import Popup from './components/popup.jsx';
