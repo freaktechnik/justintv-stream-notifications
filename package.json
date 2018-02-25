@@ -63,7 +63,7 @@
     "stylelint": "^9.0.0",
     "stylelint-config-standard": "^18.1.0",
     "stylelint-no-unsupported-browser-features": "^2.0.0",
-    "transifex-loader": "^4.0.2",
+    "transifex-loader": "^5.0.0",
     "web-ext": "^2.4.0",
     "webpack": "^3.11.0"
   },
