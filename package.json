@@ -54,7 +54,7 @@
     "fake-indexeddb": "^2.0.4",
     "fetch-headers": "^2.0.0",
     "file-loader": "^1.1.9",
-    "html-webpack-plugin": "^2.29.0",
+    "html-webpack-plugin": "^3.0.0",
     "mz": "^2.7.0",
     "nyc": "^11.5.0",
     "sinon": "^4.4.2",
