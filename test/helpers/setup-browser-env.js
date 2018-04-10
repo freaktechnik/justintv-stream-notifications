@@ -60,12 +60,6 @@ window.devicePixelRatio = 1.0;
 //global.chrome = chrome;
 
 global.browser = browser;
-//WORKAROUND REMOVEME
-global.browser.notifications.onShown = {
-    addListener() {
-        // ignore
-    }
-};
 setup();
 
 configure({ adapter: new Adapter() });
