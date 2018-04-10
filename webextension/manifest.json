@@ -6,7 +6,7 @@
     "applications": {
         "gecko": {
             "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-            "strict_min_version": "56.0"
+            "strict_min_version": "61.0"
         }
     },
     "homepage_url": "http://streamnotifier.ch",
@@ -36,7 +36,6 @@
         "storage",
         "alarms",
         "clipboardWrite",
-        "downloads",
         "management",
         "unlimitedStorage",
         "https://www.googleapis.com/youtube/v3/*",
@@ -47,10 +46,14 @@
         "https://www.majorleaguegaming.com/api/*",
         "https://streamapi.majorleaguegaming.com/service/streams/*"
     ],
+    "optional_permissions": [
+        "downloads"
+    ],
     "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none; media-src 'none'",
     "options_ui": {
         "page": "options/index.html",
-        "browser_style": true
+        "browser_style": true,
+        "open_in_tab": true
     },
     "commands": {
         "_execute_browser_action": {

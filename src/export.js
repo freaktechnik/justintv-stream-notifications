@@ -53,9 +53,13 @@ const getChannels = async () => {
         type: 'application/json'
     }),
     saveExport = async () => {
-        const exported = await exportObject(),
+        const requestPermission = browser.permissions.request({
+                permissions: [ 'downloads' ]
+            }),
+            exported = await exportObject(),
             blob = createBlob(exported);
 
+        await requestPermission;
         return browser.downloads.download({
             url: URL.createObjectURL(blob),
             filename: `export-${Date.now()}.sne`
