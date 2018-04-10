@@ -74,10 +74,10 @@
     "lint": "npm run lint:js && npm run lint:json && npm run lint:css && npm run lint:webext",
     "lint:json": "eslint -c src/.eslintrc.json --ext json webextension/manifest.json",
     "lint:js": "eslint test/ src/ scripts/ --ext js,jsx,json",
-    "lint:webext": "NODE_ENV=test webpack --hide-modules && npm run fix-i18n && web-ext lint -s webextension/",
+    "lint:webext": "NODE_ENV=test webpack --hide-modules && npm run fix-i18n && web-ext lint",
     "lint:css": "stylelint \"src/**/*.css\"",
-    "build": "NODE_ENV=production webpack && npm run fix-i18n && web-ext build -s webextension/",
-    "start": "NODE_ENV=development webpack && npm run fix-i18n && web-ext run -s webextension/ --no-reload",
+    "build": "NODE_ENV=production webpack && npm run fix-i18n && web-ext build",
+    "start": "NODE_ENV=development webpack && npm run fix-i18n && web-ext run --no-reload",
     "fix-i18n": "node ./scripts/fix-i18n-placeholders.js",
     "ci-init": "node ./scripts/setup-travis.js"
   },
@@ -143,5 +143,8 @@
   "browserslist": [
     "last 1 Firefox versions",
     "last 1 FirefoxAndroid versions"
-  ]
+  ],
+  "webExt": {
+    "sourceDir": "webextension/"
+  }
 }
