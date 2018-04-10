@@ -118,7 +118,9 @@ hasStreamlink()
 
 render(
     <Provider store={ store }>
-        <Popup/>
+        <React.StrictMode>
+            <Popup/>
+        </React.StrictMode>
     </Provider>,
     document.getElementById("root")
 );
