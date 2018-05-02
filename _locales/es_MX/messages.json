@@ -183,6 +183,10 @@
         "message": "Intervalo de actualización",
         "description": "Title of the update interval setting in the preferences"
     },
+    "options_title": {
+        "message": "Options",
+        "description": "Title of the options page"
+    },
     "context_refresh_all": {
         "message": "Refresh All Channels",
         "description": "Context panel item to refresh all items"
@@ -270,6 +274,10 @@
     "context_refresh": {
         "message": "Refresh Channel Status",
         "description": "Refresh the status of a channel from the context menu in the panel"
+    },
+    "mixer_clientID_title": {
+        "message": "Mixer Client ID",
+        "description": "Title of mixer client ID field on options page"
     },
     "providernewlivestream": {
         "message": "New Livestream",
