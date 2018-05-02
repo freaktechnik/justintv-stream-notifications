@@ -15,10 +15,12 @@ import GenericProvider from "./generic-provider";
 import { not } from '../logic';
 import LiveState from '../channel/live-state';
 import { filterExistingFavs } from '../channel/utils';
+import prefs from "../../preferences";
 
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
     baseURL = 'https://mixer.com/api/v1/',
+    headers = {},
     PAGE_SIZE = 50,
     SIZES = [
         '50',
@@ -34,6 +36,11 @@ const type = "beam",
         });
         return image;
     };
+
+prefs.get('mixer_clientID').then((id) => {
+    headers['Client-ID'] = id;
+})
+    .catch(console.error);
 
 function getChannelFromJSON(jsonChannel) {
     const ret = new Channel(jsonChannel.token, type);
@@ -73,7 +80,7 @@ function getImageFromAvatars(avatars) {
 class Beam extends GenericProvider {
     constructor(type) {
         super(type);
-        this._getUserIdFromUsername = memoize((username) => this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`).then((response) => {
+        this._getUserIdFromUsername = memoize((username) => this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`, headers).then((response) => {
             if(response.ok && response.parsedJSON) {
                 return response.parsedJSON.find((val) => val.username == username).id;
             }
@@ -93,7 +100,7 @@ class Beam extends GenericProvider {
 
     async getUserFavorites(username) {
         const userid = await this._getUserIdFromUsername(username),
-            user = await this._qs.queueRequest(`${baseURL}users/${userid}`);
+            user = await this._qs.queueRequest(`${baseURL}users/${userid}`, headers);
 
         if(user.parsedJSON) {
             const ch = new User(user.parsedJSON.username, this._type),
@@ -101,7 +108,7 @@ class Beam extends GenericProvider {
                     url: `${baseURL}users/${userid}/follows?limit=${PAGE_SIZE}&page=`,
                     pageSize: PAGE_SIZE,
                     initialPage: 0,
-                    request: (url) => this._qs.queueRequest(url),
+                    request: (url) => this._qs.queueRequest(url, headers),
                     getPageNumber(page) {
                         return ++page;
                     },
@@ -139,6 +146,7 @@ class Beam extends GenericProvider {
 
         return {
             getURLs,
+            headers,
             onComplete: async (data, url) => {
                 if(data.parsedJSON) {
                     const ch = new User(data.parsedJSON.username, this._type),
@@ -151,7 +159,7 @@ class Beam extends GenericProvider {
                                 url: `${url}/follows?limit=${PAGE_SIZE}&page=`,
                                 pageSize: PAGE_SIZE,
                                 initialPage: 0,
-                                request: (pageURL) => this._qs.queueRequest(pageURL),
+                                request: (pageURL) => this._qs.queueRequest(pageURL, headers),
                                 getPageNumber: (page) => ++page,
                                 fetchNextPage(pageData, pageSize) {
                                     return pageData.parsedJSON && pageData.parsedJSON.length == pageSize;
@@ -180,7 +188,7 @@ class Beam extends GenericProvider {
         };
     }
     async getChannelDetails(channelname) {
-        const response = await this._qs.queueRequest(`${baseURL}channels/${channelname}`);
+        const response = await this._qs.queueRequest(`${baseURL}channels/${channelname}`, headers);
         if(response.parsedJSON) {
             const channel = getChannelFromJSON(response.parsedJSON);
             if(channel.live.state === LiveState.OFFLINE) {
@@ -200,6 +208,7 @@ class Beam extends GenericProvider {
         };
         return {
             getURLs,
+            headers,
             onComplete: async (data) => {
                 if(data.parsedJSON) {
                     const channel = getChannelFromJSON(data.parsedJSON);
@@ -216,7 +225,7 @@ class Beam extends GenericProvider {
         };
     }
     async getFeaturedChannels() {
-        const data = await this._qs.queueRequest(`${baseURL}channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1`);
+        const data = await this._qs.queueRequest(`${baseURL}channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1`, headers);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {
@@ -229,7 +238,7 @@ class Beam extends GenericProvider {
         throw new Error(`Didn't find any featured channels for ${this.name}`);
     }
     async search(query) {
-        const data = await this._qs.queueRequest(`${baseURL}channels?where=online.eq.1%2Ctoken.eq.${query}`);
+        const data = await this._qs.queueRequest(`${baseURL}channels?where=online.eq.1%2Ctoken.eq.${query}`, headers);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {
@@ -243,7 +252,7 @@ class Beam extends GenericProvider {
     }
 
     async _getHostee(channelId) {
-        return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`).then((response) => {
+        return this._qs.queueRequest(`${baseURL}channels/${channelId}/hostee`, headers).then((response) => {
             if(response.ok && response.status !== NOT_FOUND && response.parsedJSON) {
                 return getChannelFromJSON(response.parsedJSON);
             }

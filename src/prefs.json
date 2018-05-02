@@ -166,5 +166,11 @@
                 "label": "livestreamer"
             }
         ]
+    },
+    "mixer_clientID": {
+        "type": "string",
+        "value": "773cc80c2739ca0c26298fccc800a8a181be5f58d1682e3b",
+        "hidden": true,
+        "hideDefault": true
     }
 }
