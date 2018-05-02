@@ -592,5 +592,9 @@
     "options_title": {
         "message": "Options",
         "description": "Title of the options page"
+    },
+    "mixer_clientID_title": {
+        "message": "Mixer Client ID",
+        "description": "Title of mixer client ID field on options page"
     }
 }
