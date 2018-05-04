@@ -1,7 +1,7 @@
 sudo: false
 group: travis_latest
 language: node_js
-node_js: 9.11.1
+node_js: stable
 before_install: npm i -g greenkeeper-lockfile
 before_script:
 - npm run ci-init
