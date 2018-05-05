@@ -80,7 +80,7 @@ function getImageFromAvatars(avatars) {
 class Beam extends GenericProvider {
     constructor(type) {
         super(type);
-        this._getUserIdFromUsername = memoize((username) => this._qs.queueRequest(`${baseURL}users/search?where=username:eq:${username}`, headers).then((response) => {
+        this._getUserIdFromUsername = memoize((username) => this._qs.queueRequest(`${baseURL}users/search?query=${username}`, headers).then((response) => {
             if(response.ok && response.parsedJSON) {
                 return response.parsedJSON.find((val) => val.username == username).id;
             }
@@ -225,7 +225,7 @@ class Beam extends GenericProvider {
         };
     }
     async getFeaturedChannels() {
-        const data = await this._qs.queueRequest(`${baseURL}channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1`, headers);
+        const data = await this._qs.queueRequest(`${baseURL}channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended:eq:0%2Conline:eq:1`, headers);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {
