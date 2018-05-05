@@ -238,7 +238,7 @@ class Beam extends GenericProvider {
         throw new Error(`Didn't find any featured channels for ${this.name}`);
     }
     async search(query) {
-        const data = await this._qs.queueRequest(`${baseURL}channels?where=online.eq.1%2Ctoken.eq.${query}`, headers);
+        const data = await this._qs.queueRequest(`${baseURL}channels?where=online:eq:1%2Ctoken:eq:${query}`, headers);
         if(data.parsedJSON && data.parsedJSON.length) {
             let chans = data.parsedJSON;
             if(await not(this._mature())) {

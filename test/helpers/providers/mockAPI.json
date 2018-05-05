@@ -1410,13 +1410,13 @@
         }
     },
     "beam": {
-        "https://mixer.com/api/v1/users/search?where=username:eq:test": [
+        "https://mixer.com/api/v1/users/search?query=test": [
             {
                 "username": "test",
                 "id": 0
             }
         ],
-        "https://mixer.com/api/v1/users/search?where=username:eq:live": [
+        "https://mixer.com/api/v1/users/search?query=live": [
             {
                 "username": "live",
                 "id": 1
@@ -1477,7 +1477,7 @@
                 }
             }
         ],
-        "https://mixer.com/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended.eq.0%2Conline.eq.1": [
+        "https://mixer.com/api/v1/channels?limit=8&page=0&order=online%3Adesc%2CviewersCurrent%3Adesc%2CviewersTotal%3Adesc&where=suspended:eq:0%2Conline:eq:1": [
             {
                 "token": "featured",
                 "online": true,
@@ -1494,7 +1494,7 @@
                 }
             }
         ],
-        "https://mixer.com/api/v1/channels?where=online.eq.1%2Ctoken.eq.test": [
+        "https://mixer.com/api/v1/channels?where=online:eq:1%2Ctoken:eq:test": [
             {
                 "token": "test",
                 "online": false,
