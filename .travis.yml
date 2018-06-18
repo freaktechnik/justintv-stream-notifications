@@ -3,6 +3,7 @@ group: travis_latest
 language: node_js
 node_js: stable
 before_install: npm i -g greenkeeper-lockfile
+install: case $TRAVIS_BRANCH in greenkeeper*) npm i;; *) npm ci;; esac;
 before_script:
 - npm run ci-init
 - greenkeeper-lockfile-update
