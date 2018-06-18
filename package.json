@@ -65,7 +65,7 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-no-unsupported-browser-features": "^3.0.0",
     "transifex-loader": "^4.0.2",
-    "web-ext": "^2.6.0",
+    "web-ext": "^2.7.0",
     "webpack": "^3.11.0"
   },
   "scripts": {
