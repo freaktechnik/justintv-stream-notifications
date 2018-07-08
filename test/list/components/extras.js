@@ -2,11 +2,11 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import Extras from '../../../src/list/components/channels/extras.jsx';
-import sinon from 'sinon';
+import { useFakeTimers } from 'sinon';
 
 let clock;
 test.before(() => {
-    clock = sinon.useFakeTimers();
+    clock = useFakeTimers();
 });
 test.after(() => {
     clock.restore();

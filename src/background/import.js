@@ -19,11 +19,11 @@ const importPrefs = (preferences) => Promise.all(Object.entries(preferences).map
     readFile = (file) => {
         const fileReader = new FileReader();
         return new Promise((resolve, reject) => {
-            fileReader.onerror = reject;
-            fileReader.onload = () => {
+            fileReader.addEventListener("error", reject, { once: true });
+            fileReader.addEventListener("load", () => {
                 resolve(JSON.parse(fileReader.result));
-            };
-            fileReader.onabort = reject;
+            }, { once: true });
+            fileReader.addEventListener("abort", reject, { once: true });
 
             fileReader.readAsText(file);
         });

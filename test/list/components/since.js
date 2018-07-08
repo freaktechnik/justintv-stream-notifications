@@ -2,13 +2,13 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import Since from '../../../src/list/components/channels/since.jsx';
-import sinon from 'sinon';
+import { useFakeTimers } from 'sinon';
 
 const INTERVAL = 120000;
 
 let clock;
 test.before(() => {
-    clock = sinon.useFakeTimers();
+    clock = useFakeTimers();
 });
 
 test.after(() => {

@@ -163,32 +163,32 @@ export default class ChannelList extends ReadChannelList {
                         channel.type,
                         channel.login
                     ]);
-                    ireq.onsuccess = () => {
+                    ireq.addEventListener("success", () => {
                         if(!ireq.result) {
                             channel.lastModified = Date.now();
                             const req = store.add(channel.serialize());
-                            req.onerror = () => {
+                            req.addEventListener("error", () => {
                                 console.error(req.error);
-                            };
-                            req.onsuccess = () => {
+                            }, { once: true });
+                            req.addEventListener("success", () => {
                                 channel.id = req.result;
                                 this.idCache.set(channel.type + channel.login, req.result);
                                 addedChannels.push(channel);
-                            };
+                            }, { once: true });
                         }
                         else {
                             console.warn(`Channel ${channel.login} has already been added`);
                         }
-                    };
+                    }, { once: true });
                 }
                 return new Promise((resolve, reject) => {
-                    transaction.oncomplete = () => {
+                    transaction.addEventListener("complete", () => {
                         if(addedChannels.length) {
                             DatabaseManager.emit("channelsadded", addedChannels);
                         }
                         resolve(addedChannels);
-                    };
-                    transaction.onabort = () => reject(new Error('Transaction aborted'));
+                    }, { once: true });
+                    transaction.addEventListener("abort", () => reject(new Error('Transaction aborted')), { once: true });
                 });
             }
         }

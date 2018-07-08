@@ -72,8 +72,8 @@ const VERSION = 3,
          */
         _waitForRequest(request) {
             return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
-                request.onsuccess = resolve;
-                request.onerror = reject;
+                request.addEventListener("success", resolve, { once: true });
+                request.addEventListener("error", reject, { once: true });
             });
         },
         /**
@@ -89,7 +89,7 @@ const VERSION = 3,
          */
         _waitForCursor(request, callback) {
             return new Promise((resolve, reject) => { // eslint-disable-line promise/avoid-new
-                request.onsuccess = (event) => {
+                request.addEventListener("success", (event) => {
                     if(event.target.result) {
                         const r = callback(event.target.result);
                         if(r && typeof r === "object" && "then" in r) {
@@ -102,8 +102,8 @@ const VERSION = 3,
                     else {
                         resolve();
                     }
-                };
-                request.onerror = reject;
+                });
+                request.addEventListener("error", reject, { once: true });
             });
         },
         versions: {
@@ -194,7 +194,7 @@ const VERSION = 3,
                         throw error;
                     }
 
-                    request.onupgradeneeded = (e) => {
+                    request.addEventListener("upgradeneeded", (e) => {
                         let handler;
                         const upgradeHandlerName = `upgrade${e.oldVersion}`;
                         if(upgradeHandlerName in this.versions) {
@@ -207,7 +207,7 @@ const VERSION = 3,
                         if(res && "catch" in res) {
                             res.catch(reject);
                         }
-                    };
+                    }, { once: true });
 
                     resolve(this._waitForRequest(request)
                         .then(async (e) => {

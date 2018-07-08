@@ -181,20 +181,14 @@ test.serial('get channels by user favorites', async (t) => {
 
 test.serial('upgrade from v2 to v3 shouldnt fail opening', async (t) => {
     await t.context.list.close();
-    await new Promise((resolve, reject) => {
-        const request = indexedDB.deleteDatabase(DatabaseManager.name);
-        request.onerror = reject;
-        request.onsuccess = resolve;
-    });
+    const delRequest = indexedDB.deleteDatabase(DatabaseManager.name);
+    await DatabaseManager._waitForRequest(delRequest);
 
     const request = indexedDB.open(DatabaseManager.name, 2);
     request.onupgradeneeded = (e) => {
         DatabaseManager.versions.initialize(e);
     };
-    const { target: { result: db } } = await new Promise((resolve, reject) => {
-        request.onsuccess = resolve;
-        request.onerror = reject;
-    });
+    const { target: { result: db } } = await DatabaseManager._waitForRequest(request);
     await db.close();
 
     await t.notThrows(DatabaseManager.open());
@@ -207,7 +201,11 @@ test("event filtering", (t) => {
 });
 
 test('_waitForCursor error', async (t) => {
-    const request = {};
+    const request = {
+        addEventListener(event, listener) {
+            this[`on${event}`] = listener;
+        }
+    };
     const cbk = sinon.spy();
     const p = t.context.list._waitForCursor(request, cbk);
 

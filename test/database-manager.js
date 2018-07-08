@@ -110,8 +110,10 @@ test.serial('open list error', async (t) => {
     let onerror;
     const { open } = window.indexedDB;
     window.indexedDB.open = () => ({
-        set onerror(val) {
-            onerror = val;
+        addEventListener(event, val) {
+            if(event === "error") {
+                onerror = val;
+            }
         }
     });
 
@@ -131,8 +133,10 @@ test.serial('open list error without trying', async (t) => {
     let onerror;
     const { open } = window.indexedDB;
     window.indexedDB.open = () => ({
-        set onerror(val) {
-            onerror = val;
+        addEventListener(event, val) {
+            if(event === 'error') {
+                onerror = val;
+            }
         },
         error: new Error()
     });
