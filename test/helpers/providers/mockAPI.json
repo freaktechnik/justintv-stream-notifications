@@ -732,14 +732,14 @@
                     "is_playlist": false,
                     "stream_type": "live",
                     "channel": {
-                         "display_name": "live",
-                         "game": "",
-                         "_id": 1,
-                         "name": "live",
-                         "status": "",
-                         "mature": false,
-                         "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                         "url": "http://www.twitch.tv/live"
+                        "display_name": "live",
+                        "game": "",
+                        "_id": 1,
+                        "name": "live",
+                        "status": "",
+                        "mature": false,
+                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                        "url": "http://www.twitch.tv/live"
                     },
                     "created_at": "2011-08-21T18:32:25Z"
                 }

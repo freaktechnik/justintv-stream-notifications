@@ -3,6 +3,7 @@
 const fs = require("fs"),
     util = require("util"),
     path = require("path"),
+    os = require("os"),
     rdir = util.promisify(fs.readdir),
     read = util.promisify(fs.readFile),
     write = util.promisify(fs.writeFile),
@@ -13,7 +14,7 @@ const fs = require("fs"),
         const file = path.join(__dirname, base, lang, FILE_NAME),
             source = await read(file, { encoding }),
             messages = JSON.parse(source);
-        let fixedSomething = false;
+        let fixedSomething = true;
         for(const k in placeholders) {
             if(!("placeholders" in messages[k])) {
                 messages[k].placeholders = placeholders[k];
@@ -22,7 +23,8 @@ const fs = require("fs"),
         }
 
         if(fixedSomething) {
-            await write(file, JSON.stringify(messages, null, INDENT));
+            console.log("updating", lang);
+            await write(file, JSON.stringify(messages, null, INDENT) + os.EOL + os.EOL);
         }
     },
     main = async (base, defaultLang = "en") => {

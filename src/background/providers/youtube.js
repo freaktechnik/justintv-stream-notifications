@@ -121,7 +121,7 @@ class YouTube extends GenericProvider {
             }
 
             /** @todo Sometimes needs oAuth for some reason, I guess privacy
-                  * settings. This also triggers when the user follows noone. */
+             *        settings. This also triggers when the user follows noone. */
             throw new Error(`Can't get favorites for youtube user ${username} without oAuth as somebody with reading rights of this user's subs.`);
         }
         else {

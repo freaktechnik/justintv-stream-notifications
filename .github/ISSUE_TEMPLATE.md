@@ -2,9 +2,9 @@ Describe your issue. Try to be as precise as possible and describe how to produc
 
 ## System Info
 
- - *Operating System*: [enter your OS here]
- - *Firefox Version*: [please provide the version of Firefox you're using]
- - *Extension Version*: [version of the extension the issue happens in]
+- *Operating System*: [enter your OS here]
+- *Firefox Version*: [please provide the version of Firefox you're using]
+- *Extension Version*: [version of the extension the issue happens in]
 
 ## Debug Dump
 
