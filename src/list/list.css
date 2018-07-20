@@ -92,6 +92,7 @@ nav {
 .context-panel button {
     appearance: none;
     background: var(--inverted-bg);
+    color: var(--inverted-text);
     border: none;
 }
 
