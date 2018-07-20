@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const manifest = require("./webextension/manifest.json");
 const webpack = require("webpack");
 const path = require("path");
@@ -43,17 +44,26 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: 'css-loader'
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ]
             },
             {
                 test: /_locales\/[a-zA-Z_]{2,5}\/messages\.json$/,
+                issuer: {
+                    exclude: /insert-string\.js$/,
+                },
                 use: [
-                    'file-loader?name=[path][name].[ext]',
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].[ext]'
+                        }
+                    },
                     'transifex-loader'
-                ]
+                ],
+                type: "javascript/auto"
             },
             {
                 test: /\.jsx$/,
@@ -83,25 +93,26 @@ module.exports = {
             }
         ]
     },
+    // resolve: {
+    //     enforceExtension: true
+    // },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            name: 'common'
+        },
+        runtimeChunk: 'single'
+    },
+    devtool: 'inline-source-map',
     plugins: [
-        new ExtractTextPlugin({
+        new MiniCssExtractPlugin({
             filename: "[name]/style.css"
         }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "common",
-            chunks: [
-                'options',
-                'manager',
-                'popup/list',
-                'background'
-            ],
-            minChunks: 3
-        }),
-        new webpack.optimize.ModuleConcatenationPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/manager/index.html',
             filename: 'manager/index.html',
             chunks: [
+                'runtime',
                 'common',
                 'manager'
             ],
@@ -112,6 +123,7 @@ module.exports = {
             template: 'src/list/index.html',
             filename: 'popup/list/index.html',
             chunks: [
+                'runtime',
                 'common',
                 'popup/list'
             ],
@@ -122,6 +134,7 @@ module.exports = {
             template: 'src/options/index.html',
             filename: 'options/index.html',
             chunks: [
+                'runtime',
                 'common',
                 'options'
             ],
@@ -132,10 +145,39 @@ module.exports = {
             template: 'src/errorState/index.html',
             filename: "popup/errorState/index.html",
             chunks: [
+                'runtime',
                 'popup/errorState'
             ],
             chunksSortMode: 'dependency',
             defaultLanguage
+        }),
+        new HtmlWebpackIncludeAssetsPlugin({
+            files: [
+                'popup/list/index.html',
+                'manager/index.html',
+                'options/index.html'
+            ],
+            assets: [
+                'event-target-shim.umd.js',
+            ],
+            append: false,
+            publicPath: '/vendor/',
+        }),
+        new HtmlWebpackIncludeAssetsPlugin({
+            files: [
+                'popup/list/index.html'
+            ],
+            assets: [
+                'lodash.min.js',
+                'react.production.min.js',
+                'react-dom.production.min.js',
+                'redux.min.js',
+                'react-redux.min.js',
+                'prop-types.min.js',
+                'react-key-handler.js'
+            ],
+            append: false,
+            publicPath: '/vendor/'
         }),
         new webpack.EnvironmentPlugin([ 'NODE_ENV' ])
     ],

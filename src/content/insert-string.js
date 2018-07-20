@@ -44,7 +44,7 @@ const attrMap = {
     };
 
 module.exports = (defaultLanguage) => {
-    const bundle = require(`!!json-loader!../../_locales/${defaultLanguage}/messages.json`);
+    const bundle = require(`../../_locales/${defaultLanguage}/messages.json`);
 
     return translateElement.bind(null, bundle);
 };

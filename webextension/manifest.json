@@ -26,6 +26,7 @@
         "scripts": [
             "vendor/lodash.min.js",
             "vendor/event-target-shim.umd.js",
+            "runtime/index.js",
             "common/index.js",
             "background/index.js"
         ]
