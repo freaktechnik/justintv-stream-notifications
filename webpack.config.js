@@ -97,13 +97,14 @@ module.exports = {
     //     enforceExtension: true
     // },
     optimization: {
+        minimize: false,
         splitChunks: {
             chunks: 'all',
             name: 'common'
         },
         runtimeChunk: 'single'
     },
-    devtool: 'inline-source-map',
+    devtool: false,
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name]/style.css"
@@ -190,5 +191,9 @@ module.exports = {
         redux: 'Redux',
         'prop-types': 'PropTypes',
         'react-key-handler': 'ReactKeyHandler'
+    },
+    performance: {
+        maxEntrypointSize: 800000,
+        maxAssetSize: 800000
     }
 };
