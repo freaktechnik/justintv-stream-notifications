@@ -4,8 +4,8 @@
  * @author Martin Giger
  * @license MPL-2.0
  */
-import providers from '.';
-import { pipe } from '../../utils';
+import providers from './index.js';
+import { pipe } from '../../utils.js';
 import EventTarget from 'event-target-shim';
 
 const USER_EVENTS = [

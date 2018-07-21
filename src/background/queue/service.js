@@ -8,8 +8,8 @@
  * @requires module:queue/update
  */
 
-import UpdateQueue from "./update";
-import prefs from "../../preferences";
+import UpdateQueue from "./update.js";
+import prefs from "../../preferences.js";
 
 const queue = new UpdateQueue(),
     services = {},

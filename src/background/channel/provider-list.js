@@ -1,4 +1,4 @@
-import ReadChannelList from "./read-list";
+import ReadChannelList from "./read-list.js";
 
 export default class ProviderChannelList extends ReadChannelList {
     constructor(type) {

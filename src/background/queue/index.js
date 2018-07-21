@@ -5,7 +5,7 @@
  * @module queue
  */
 import EventTarget from 'event-target-shim';
-import prefs from '../../preferences';
+import prefs from '../../preferences.js';
 
 /**
  * @typedef {external:Response} Response

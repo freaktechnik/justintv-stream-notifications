@@ -5,7 +5,7 @@
  * @license MPL-2.0
  * @module database-manager
  */
-import { emit } from "./utils";
+import { emit } from "./utils.js";
 
 /**
  * The ChannelList is ready to be used.

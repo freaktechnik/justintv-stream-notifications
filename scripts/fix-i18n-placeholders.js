@@ -23,7 +23,6 @@ const fs = require("fs"),
         }
 
         if(fixedSomething) {
-            console.log("updating", lang);
             await write(file, JSON.stringify(messages, null, INDENT) + os.EOL + os.EOL);
         }
     },

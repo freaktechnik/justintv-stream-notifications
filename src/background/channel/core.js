@@ -6,8 +6,8 @@
  * @module channel/core
  */
 import { omit } from "lodash";
-import LiveState from "./live-state";
-import { capitalize } from '../../utils';
+import LiveState from "./live-state.js";
+import { capitalize } from '../../utils.js';
 
 const ITEM_ARGS = [
         "login",

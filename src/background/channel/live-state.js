@@ -6,7 +6,7 @@
  * @module channel/live-state
  */
 import { omit } from "lodash";
-import prefs from "../../preferences";
+import prefs from "../../preferences.js";
 import LiveStateConst from '../../live-state.json';
 
 /**

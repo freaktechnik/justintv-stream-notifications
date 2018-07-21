@@ -4,8 +4,8 @@
  * @license MPL-2.0
  * @module providers/livestream
  */
-import { Channel } from '../channel/core';
-import GenericProvider from "./generic-provider";
+import { Channel } from '../channel/core.js';
+import GenericProvider from "./generic-provider.js";
 
 const type = "livestream",
     baseURL = ".api.channel.livestream.com/2.0/",

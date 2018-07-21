@@ -6,10 +6,10 @@
  * @module read-channel-list
  * @todo Unify Errors that other lists might re-use.
  */
-import { when } from "./utils";
+import { when } from "./utils.js";
 import DatabaseManager, {
     ListClosedError
-} from './database-manager';
+} from './database-manager.js';
 import EventTarget from 'event-target-shim';
 
 /**

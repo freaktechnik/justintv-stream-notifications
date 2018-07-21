@@ -5,7 +5,7 @@
  */
 
 import EventTarget from 'event-target-shim';
-import { emit } from '../utils';
+import { emit } from '../utils.js';
 import ErrorStateConsts from '../error-state.json';
 
 const FIRST_ACTION = 0;

@@ -6,8 +6,8 @@
  * @module providers/douyutv
  * @todo support adding by url slug name
  */
-import { Channel } from '../channel/core';
-import GenericProvider from "./generic-provider";
+import { Channel } from '../channel/core.js';
+import GenericProvider from "./generic-provider.js";
 //import md5 from 'md5';
 
 const type = "douyutv",

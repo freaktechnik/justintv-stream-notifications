@@ -7,13 +7,13 @@
 //TODO clicking ok twice shows error panel -> ok sent while loading?
 import {
     hide, show, copy
-} from '../content/utils';
-import { filter } from '../content/filter';
-import Port from '../port';
-import Tabbed from '../content/tabbed';
-import ReadChannelList from '../read-channel-list';
+} from '../content/utils.js';
+import { filter } from '../content/filter.js';
+import Port from '../port.js';
+import Tabbed from '../content/tabbed.js';
+import ReadChannelList from '../read-channel-list.js';
 import prefs from '../prefs.json';
-import '../content/l10n';
+import '../content/l10n.js';
 import './channels-manager.css';
 import '../content/shared.css';
 

@@ -5,7 +5,7 @@
 
 import {
     show, hide
-} from './utils';
+} from './utils.js';
 
 const SELECTED_CLASS = "current",
     TABINDEX = {

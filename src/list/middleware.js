@@ -1,8 +1,8 @@
 import {
     formatChannel, getExternalID
-} from './utils';
+} from './utils.js';
 import LiveState from '../live-state.json';
-import { copy } from '../content/utils';
+import { copy } from '../content/utils.js';
 import {
     LIVE_TAB, EXPLORE_TAB
 } from './constants/tabs.json';

@@ -7,17 +7,17 @@
  * @todo only initialize the providers that have items in the list.
  */
 
-import twitch from "./twitch";
-import hitbox from "./hitbox";
-import ustream from "./ustream";
-import youtube from "./youtube";
-import livestream from "./livestream";
-import mlg from "./mlg";
-import beam from "./beam";
-import picarto from "./picarto";
-import newlivestream from "./new-livestream";
-import douyutv from "./douyutv";
-import dailymotion from "./dailymotion";
+import twitch from "./twitch.js";
+import hitbox from "./hitbox.js";
+import ustream from "./ustream.js";
+import youtube from "./youtube.js";
+import livestream from "./livestream.js";
+import mlg from "./mlg.js";
+import beam from "./beam.js";
+import picarto from "./picarto.js";
+import newlivestream from "./new-livestream.js";
+import douyutv from "./douyutv.js";
+import dailymotion from "./dailymotion.js";
 
 export default {
     twitch,

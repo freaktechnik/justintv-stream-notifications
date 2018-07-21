@@ -4,9 +4,9 @@
  * @module channel/utils
  */
 
-import { Channel } from './core';
-import LiveState from './live-state';
-import prefs from '../../preferences';
+import { Channel } from './.js';
+import LiveState from './live-state.js';
+import prefs from '../../preferences.js';
 
 const NO_SINCE = 0;
 

@@ -5,7 +5,7 @@
  * @module providers/serialized
  * @see {@link module:providers}
  */
-import allProviders from '.';
+import allProviders from './index.js';
 
 /**
  * Frozen.

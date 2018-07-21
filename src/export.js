@@ -3,8 +3,8 @@
  * @license MPL-2.0
  * @module export
  */
-import ReadChannelList from './read-channel-list';
-import prefs from './preferences';
+import ReadChannelList from './read-channel-list.js';
+import prefs from './preferences.js';
 import prefInfo from './prefs.json';
 
 

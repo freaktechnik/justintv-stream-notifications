@@ -2,8 +2,8 @@
  * Created by Martin Giger
  * Licensed under MPL 2.0
  */
-import { Channel } from '../channel/core';
-import GenericProvider from "./generic-provider";
+import { Channel } from '../channel/core.js';
+import GenericProvider from "./generic-provider.js";
 
 const type = "ustream",
     chatURL = "http://ustream.tv/socialstream/",

@@ -3,26 +3,26 @@
  * @license MPL-2.0
  * @module channel/controller
  */
-import providers from "../providers";
-import ChannelsManager from "./manager";
-import ChannelList from "./list";
-import EventSink from '../providers/events';
+import providers from "../providers.js";
+import ChannelsManager from "./manager.js";
+import ChannelList from "./list.js";
+import EventSink from '../providers/events.js';
 import {
     emit, pipe
-} from "../../utils";
-import ParentalControls from "../parental-controls";
+} from "../../utils.js";
+import ParentalControls from "../parental-controls.js";
 import {
     flatten, debounce
 } from "lodash";
-import * as debugDump from "./dump";
-import prefs from "../../preferences";
-import * as logins from "../logins";
+import * as debugDump from "./dump.js";
+import prefs from "../../preferences.js";
+import * as logins from "../logins.js";
 import EventTarget from 'event-target-shim';
-import ErrorState from '../error-state';
+import ErrorState from '../error-state.js';
 import {
     formatChannel, formatChannels, filterExistingFavs
-} from './utils';
-import { CantOpenListError } from '../../database-manager';
+} from './utils.js';
+import { CantOpenListError } from '../../database-manager.js';
 
 /**
  * @event module:channel/controller.ChannelController#channelsadded

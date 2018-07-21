@@ -1,15 +1,20 @@
 {
     "rules": {
-        "typelint/typelint": 0
+        "typelint/typelint": 0,
+        "import/no-nodejs-modules": "error",
+        "import/extensions": [
+            "error",
+            "ignorePackages"
+        ],
+        "import/no-useless-path-segments": "error",
+        "import/no-unresolved": 0,
+        "unicorn/import-index": 0
     },
     "settings": {
-        "typelint": {
-            "models": {
-                "redux": {
-                    "reducerPath": "./src/list/reducers.js"
-                }
-            },
-            "useCache":  true
+        "import/resolver": {
+            "webpack": {
+                "config": "webpack.config.js"
+            }
         }
     },
     "extends": [

@@ -8,15 +8,15 @@
  * @requires module:list/firefox
  */
 // setup event handling
-import { emit } from "../utils";
-import prefs from "../preferences";
-import LiveState from "./channel/live-state";
-import providers from './providers';
+import { emit } from "../utils.js";
+import prefs from "../preferences.js";
+import LiveState from "./channel/live-state.js";
+import providers from './providers.js';
 import EventTarget from 'event-target-shim';
-import Port from '../port';
-import serializedProviders from "./providers/serialized";
-import { errorStateManager } from './error-state';
-import { formatChannels } from './channel/utils';
+import Port from '../port.js';
+import serializedProviders from "./providers/serialized.js";
+import { errorStateManager } from './error-state.js';
+import { formatChannels } from './channel/utils.js';
 
 /**
  * Should open the ChannelsManager.

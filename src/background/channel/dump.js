@@ -6,10 +6,10 @@
  * @license MPL-2.0
  * @module channel/dump
  */
-import prefs from "../../preferences";
+import prefs from "../../preferences.js";
 import {
     Channel, User
-} from "./core";
+} from "./core.js";
 
 export const PREFS_MAPPING = Object.freeze({
     queue: Object.freeze({

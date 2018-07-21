@@ -6,10 +6,10 @@
  * @module channel/list
  * @requires module:channel/core
  */
-import ReadChannelList from '../../read-channel-list';
+import ReadChannelList from '../../read-channel-list.js';
 import {
     Channel, User
-} from "./core";
+} from "./core.js";
 
 /**
  * @class module:channel/list.DeserializedReadChannelList

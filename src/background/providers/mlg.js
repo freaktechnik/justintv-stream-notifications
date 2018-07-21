@@ -30,10 +30,10 @@ https://accounts.majorleaguegaming.com/follows/retrieve returns all the channel 
 There are also the actions to follow and unfollow a channel, but I am not sure how they work, as I don't care.
 
 */
-import { Channel } from '../channel/core';
-import prefs from "../../preferences";
-import GenericProvider from "./generic-provider";
-import LiveState from "../channel/live-state";
+import { Channel } from '../channel/core.js';
+import prefs from "../../preferences.js";
+import GenericProvider from "./generic-provider.js";
+import LiveState from "../channel/live-state.js";
 
 const type = "mlg",
     chatURL = "https://chat.majorleaguegaming.com/",

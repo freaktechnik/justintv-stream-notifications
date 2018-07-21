@@ -5,13 +5,13 @@
  * @license MPL-2.0
  * @module providers/dailymotion
  */
-import GenericProvider from "./generic-provider";
+import GenericProvider from "./generic-provider.js";
 import {
     Channel, User
-} from "../channel/core";
-import { promisedPaginationHelper } from "../pagination-helper";
-import qs from "../querystring";
-import { filterExistingFavs } from '../channel/utils';
+} from "../channel/core.js";
+import { promisedPaginationHelper } from "../pagination-helper.js";
+import qs from "../querystring.js";
+import { filterExistingFavs } from '../channel/utils.js';
 
 const type = "dailymotion",
     baseUrl = "https://api.dailymotion.com/",

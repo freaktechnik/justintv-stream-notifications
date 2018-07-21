@@ -6,12 +6,12 @@
  * @module notifier
  */
 
-import prefs from '../preferences';
-import LiveState from "./channel/live-state";
+import prefs from '../preferences.js';
+import LiveState from "./channel/live-state.js";
 import {
     and, or, not
-} from './logic';
-import { emit } from '../utils';
+} from './logic.js';
+import { emit } from '../utils.js';
 import EventTarget from 'event-target-shim';
 
 const _ = browser.i18n.getMessage,

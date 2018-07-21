@@ -6,7 +6,7 @@
  * @module queue/update
  * @requires module:queue/pauseable
  */
-import PauseableQueue from "./pauseable";
+import PauseableQueue from "./pauseable.js";
 
 /**
  * A queue with priorized and less often fetched requests.

@@ -7,13 +7,13 @@
  * @requires module:channel/core
  */
 // setup event handling
-import prefs from "../../preferences";
-import { Channel } from "./core";
-import LiveState from "../../live-state";
-import ReadChannelList from './read-list';
+import prefs from "../../preferences.js";
+import { Channel } from "./core.js";
+import LiveState from "../../live-state.js";
+import ReadChannelList from './read-list.js';
 import DatabaseManager, {
     FixListError
-} from '../../database-manager';
+} from '../../database-manager.js';
 
 /**
  * Whenever one or more channels are added to the ChannelList this event is

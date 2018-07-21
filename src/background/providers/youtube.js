@@ -4,15 +4,15 @@
  * @license MPL-2.0
  * @module providers/youtube
  */
-import prefs from "../../preferences";
-import querystring from "../querystring";
+import prefs from "../../preferences.js";
+import querystring from "../querystring.js";
 import { memoize } from "lodash";
 import {
     Channel, User
-} from '../channel/core';
-import { promisedPaginationHelper } from '../pagination-helper';
-import GenericProvider from "./generic-provider";
-import { filterExistingFavs } from '../channel/utils';
+} from '../channel/core.js';
+import { promisedPaginationHelper } from '../pagination-helper.js';
+import GenericProvider from "./generic-provider.js";
+import { filterExistingFavs } from '../channel/utils.js';
 
 const type = "youtube",
     apiKey = prefs.get('youtube_apiKey'),

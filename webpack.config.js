@@ -93,9 +93,9 @@ module.exports = {
             }
         ]
     },
-    // resolve: {
-    //     enforceExtension: true
-    // },
+    resolve: {
+        enforceExtension: true
+    },
     optimization: {
         minimize: false,
         splitChunks: {

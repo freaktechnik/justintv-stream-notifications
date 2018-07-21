@@ -8,14 +8,14 @@
  */
 import {
     Channel, User
-} from '../channel/core';
+} from '../channel/core.js';
 import { memoize } from "lodash";
-import { promisedPaginationHelper } from '../pagination-helper';
-import GenericProvider from "./generic-provider";
-import { not } from '../logic';
-import LiveState from '../channel/live-state';
-import { filterExistingFavs } from '../channel/utils';
-import prefs from "../../preferences";
+import { promisedPaginationHelper } from '../pagination-helper.js';
+import GenericProvider from "./generic-provider.js";
+import { not } from '../logic.js';
+import LiveState from '../channel/live-state.js';
+import { filterExistingFavs } from '../channel/utils.js';
+import prefs from "../../preferences.js";
 
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",

@@ -4,8 +4,8 @@
  * @license MPL-2.0
  * @module providers/picarto
  */
-import { Channel } from '../channel/core';
-import GenericProvider from "./generic-provider";
+import { Channel } from '../channel/core.js';
+import GenericProvider from "./generic-provider.js";
 
 const type = "picarto",
     baseURL = 'https://api.picarto.tv/v1/',

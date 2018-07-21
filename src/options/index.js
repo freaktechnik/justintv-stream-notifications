@@ -1,11 +1,11 @@
-import prefs from '../prefs.json';
-import preferences from '../preferences';
-import { format } from '../format-pref';
-import '../content/l10n';
-import { toggle } from '../content/utils';
-import errorStateWidget from '../content/error-state';
-import saveExport from '../export';
-import { hasStreamlink } from '../features';
+import prefs from '../prefs.json.js';
+import preferences from '../preferences.js';
+import { format } from '../format-pref.js';
+import '../content/l10n.js';
+import { toggle } from '../content/utils.js';
+import errorStateWidget from '../content/error-state.js';
+import saveExport from '../export.js';
+import { hasStreamlink } from '../features.js';
 import './options.css';
 import '../content/shared.css';
 

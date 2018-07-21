@@ -6,16 +6,16 @@
  * @todo properly wait for clientID
  * @todo option to not mark premieres as rebroadcast
  */
-import prefs from "../../preferences";
-import querystring from "../querystring";
-import LiveState from "../channel/live-state";
+import prefs from "../../preferences.js";
+import querystring from "../querystring.js";
+import LiveState from "../channel/live-state.js";
 import {
     Channel, User
-} from '../channel/core';
-import { promisedPaginationHelper } from '../pagination-helper';
-import GenericProvider from "./generic-provider";
-import { not } from '../logic';
-import { filterExistingFavs } from '../channel/utils';
+} from '../channel/core.js';
+import { promisedPaginationHelper } from '../pagination-helper.js';
+import GenericProvider from "./generic-provider.js";
+import { not } from '../logic.js';
+import { filterExistingFavs } from '../channel/utils.js';
 
 const type = "twitch",
     archiveURL = "/videos/all",

@@ -6,12 +6,12 @@
  * @module providers/generic-provider
  * @requires module:queue/service
  */
-import prefs from "../../preferences";
-import ParentalControls from "../parental-controls";
-import * as qs from "../queue/service";
+import prefs from "../../preferences.js";
+import ParentalControls from "../parental-controls.js";
+import * as qs from "../queue/service.js";
 import EventTarget from 'event-target-shim';
-import ProviderChannelList from '../channel/provider-list';
-import { emit } from '../../utils';
+import ProviderChannelList from '../channel/provider-list.js';
+import { emit } from '../../utils.js';
 
 const _ = browser.i18n.getMessage,
     methodNotSupported = (type, method) => Promise.reject(new Error(`${type}.${method} is not supported`)),

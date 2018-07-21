@@ -5,7 +5,7 @@
     },
     "rules": {
         "no-console": 2,
-        "typelint/typelint": 0
+        "import/no-unresolved": 0
     },
     "extends": [
         "@freaktechnik/eslint-config-babel",

@@ -5,7 +5,7 @@
  */
 import {
     show, hide
-} from './utils';
+} from './utils.js';
 
 /**
  * @typedef {Object} Rule

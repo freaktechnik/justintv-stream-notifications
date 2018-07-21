@@ -5,7 +5,7 @@
  * @requires module:queue
  */
 import RequestQueue from '.';
-import { emit } from "../../utils";
+import { emit } from "../../utils.js";
 
 /**
  * @typedef {Object} QueueOptions

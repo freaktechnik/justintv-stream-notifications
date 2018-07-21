@@ -7,8 +7,8 @@
 import {
     Channel, User
 } from "../channel/core";
-import GenericProvider from "./generic-provider";
-import { promisedPaginationHelper } from "../pagination-helper";
+import GenericProvider from "./generic-provider.js";
+import { promisedPaginationHelper } from "../pagination-helper.js";
 
 const type = "newlivestream",
     baseURL = "https://livestream.com/api/accounts/",

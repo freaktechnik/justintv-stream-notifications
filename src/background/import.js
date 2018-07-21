@@ -3,7 +3,7 @@
  * @license MPL-2.0
  * @module import
  */
-import prefs from '../preferences';
+import prefs from '../preferences.js';
 
 const importPrefs = (preferences) => Promise.all(Object.entries(preferences).map(([
         key,

@@ -6,12 +6,12 @@
  */
 import {
     Channel, User
-} from '../channel/core';
-import GenericProvider from "./generic-provider";
-import { promisedPaginationHelper } from "../pagination-helper";
-import querystring from "../querystring";
-import { not } from '../logic';
-import { filterExistingFavs } from '../channel/utils';
+} from '../channel/core.js';
+import GenericProvider from "./generic-provider.js";
+import { promisedPaginationHelper } from "../pagination-helper.js";
+import querystring from "../querystring.js";
+import { not } from '../logic.js';
+import { filterExistingFavs } from '../channel/utils.js';
 
 const type = "hitbox",
     archiveURL = "/videos",

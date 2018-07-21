@@ -1,7 +1,8 @@
 {
     "rules": {
         "jsx-a11y/no-noninteractive-element-to-interactive-role": 0,
-        "tree-shaking/no-side-effects-in-initialization": 0
+        "tree-shaking/no-side-effects-in-initialization": 0,
+        "import/no-unresolved": 0
     },
     "extends": [
         "@freaktechnik/eslint-config-react"

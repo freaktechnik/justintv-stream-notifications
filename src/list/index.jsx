@@ -12,14 +12,14 @@ import {
     createStore,
     applyMiddleware
 } from 'redux';
-import reducers from './reducers';
+import reducers from './reducers.js';
 import Popup from './components/popup.jsx';
-import Port from '../port';
-import ReadChannelList from '../read-channel-list';
-import middlewareFactory from './middleware';
-import prefs from '../preferences';
+import Port from '../port.js';
+import ReadChannelList from '../read-channel-list.js';
+import middlewareFactory from './middleware.js';
+import prefs from '../preferences.js';
 import storeTypes from './constants/store-types.json';
-import { hasStreamlink } from '../features';
+import { hasStreamlink } from '../features.js';
 import '../content/shared.css';
 import './list.css';
 

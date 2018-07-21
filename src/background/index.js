@@ -9,18 +9,18 @@ import '../../_locales/fr/messages.json';
 import '../../_locales/ru/messages.json';
 
 // Load module deps
-import { selectOrOpenTab } from "./channel/utils";
-import ChannelController from "./channel/controller";
-import prefs from '../preferences';
-import LiveState from './channel/live-state';
-import ListView from './list';
-import * as qs from './queue/service';
-import Notifier from "./notifier";
+import { selectOrOpenTab } from "./channel/utils.js";
+import ChannelController from "./channel/controller.js";
+import prefs from '../preferences.js';
+import LiveState from './channel/live-state.js';
+import ListView from './list.js';
+import * as qs from './queue/service.js';
+import Notifier from "./notifier.js";
 import prefInfo from '../prefs.json';
-import Tour from './tour';
-import ParentalControls from './parental-controls';
-import { errorStateManager } from './error-state';
-import importFile from './import';
+import Tour from './tour.js';
+import ParentalControls from './parental-controls.js';
+import { errorStateManager } from './error-state.js';
+import importFile from './import.js';
 
 const qsPause = () => qs.pause(),
     qsResume = () => qs.resume(),

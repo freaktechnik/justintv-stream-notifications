@@ -7,10 +7,10 @@
  */
 import {
     emit, when
-} from "../../utils";
+} from "../../utils.js";
 import EventTarget from 'event-target-shim';
 import Port from '../../port.js';
-import serializedProviders from "../providers/serialized";
+import serializedProviders from "../providers/serialized.js";
 
 /**
  * Store a channel. Listeners should call

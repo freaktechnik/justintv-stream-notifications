@@ -7,7 +7,7 @@ import Redirecting, {
 import Avatar from './avatar.jsx';
 import Icon from '../icon.jsx';
 import LiveState from '../../../live-state.json';
-import { LARGE_IMAGE } from '../../utils';
+import { LARGE_IMAGE } from '../../utils.js';
 
 const InnerChannel = (props) => {
     let extras,
