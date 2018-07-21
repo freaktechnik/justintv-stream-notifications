@@ -3,7 +3,7 @@
  * @license MPL-2.0
  * @module channel/controller
  */
-import providers from "../providers.js";
+import providers from "../providers/index.js";
 import ChannelsManager from "./manager.js";
 import ChannelList from "./list.js";
 import EventSink from '../providers/events.js';

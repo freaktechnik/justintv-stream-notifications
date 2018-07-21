@@ -9,7 +9,7 @@
 // setup event handling
 import prefs from "../../preferences.js";
 import { Channel } from "./core.js";
-import LiveState from "../../live-state.js";
+import LiveState from "../../live-state.json";
 import ReadChannelList from './read-list.js';
 import DatabaseManager, {
     FixListError

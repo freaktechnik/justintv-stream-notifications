@@ -4,8 +4,7 @@
         "browser": true
     },
     "rules": {
-        "no-console": 2,
-        "import/no-unresolved": 0
+        "no-console": 2
     },
     "extends": [
         "@freaktechnik/eslint-config-babel",

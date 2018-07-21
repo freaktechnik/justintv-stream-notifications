@@ -1,4 +1,4 @@
-import prefs from '../prefs.json.js';
+import prefs from '../prefs.json';
 import preferences from '../preferences.js';
 import { format } from '../format-pref.js';
 import '../content/l10n.js';

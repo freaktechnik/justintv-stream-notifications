@@ -4,7 +4,7 @@
  * @module channel/utils
  */
 
-import { Channel } from './.js';
+import { Channel } from './core.js';
 import LiveState from './live-state.js';
 import prefs from '../../preferences.js';
 

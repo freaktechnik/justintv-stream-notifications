@@ -7,7 +7,6 @@
             "ignorePackages"
         ],
         "import/no-useless-path-segments": "error",
-        "import/no-unresolved": 0,
         "unicorn/import-index": 0
     },
     "settings": {
