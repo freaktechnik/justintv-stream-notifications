@@ -9,10 +9,10 @@ import ChannelList, {
 } from './channels/channel-list.jsx';
 import ProviderSelector from './channels/provider-selector.jsx';
 import storeTypes from '../constants/store-types.json';
-import { getVisibleChannels } from '../utils';
+import { getVisibleChannels } from '../utils.js';
 import {
     getChannelAction, CHANNEL_ACTIONS, shouldClose
-} from '../state/channel-actions';
+} from '../state/channel-actions.js';
 
 const _ = browser.i18n.getMessage;
 

@@ -4,7 +4,7 @@
  * @module queue/pauseable
  * @requires module:queue
  */
-import RequestQueue from '.';
+import RequestQueue from './index.js';
 import { emit } from "../../utils.js";
 
 /**

@@ -6,7 +6,7 @@
  */
 import {
     Channel, User
-} from "../channel/core";
+} from "../channel/core.js";
 import GenericProvider from "./generic-provider.js";
 import { promisedPaginationHelper } from "../pagination-helper.js";
 

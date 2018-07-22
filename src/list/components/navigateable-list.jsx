@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
     UP_KEYS, DOWN_KEYS, START_KEYS, END_KEYS
-} from '../constants/navigateable';
+} from '../constants/navigateable.js';
 
 const FIRST = 0,
     LAST = -1;

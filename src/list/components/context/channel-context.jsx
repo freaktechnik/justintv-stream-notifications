@@ -7,7 +7,7 @@ import ContextItem from './context-item.jsx';
 import storeTypes from '../../constants/store-types.json';
 import {
     getChannelAction, CHANNEL_ACTIONS, shouldClose
-} from '../../state/channel-actions';
+} from '../../state/channel-actions.js';
 
 //TODO closing the context panel should focus the item it was opened for.
 

@@ -101,6 +101,10 @@ module.exports = {
         },
         runtimeChunk: 'single'
     },
+    resolve: {
+        extensions: [],
+        mainFiles: []
+    },
     devtool: false,
     plugins: [
         new MiniCssExtractPlugin({
