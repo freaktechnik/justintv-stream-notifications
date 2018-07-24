@@ -46,8 +46,16 @@ const THEMES = [
     },
     channels = (state = [], event) => {
         switch(event.type) {
-        case storeTypes.ADD_CHANNELS:
-            return state.concat(event.payload);
+        case storeTypes.ADD_CHANNELS: {
+            const newState = state.slice();
+            const currIds = newState.map((s) => s.id);
+            for(const newChan of event.payload) {
+                if(!currIds.includes(newChan.id)) {
+                    newState.push(newChan);
+                }
+            }
+            return newState;
+        }
         case "removeChannel":
             return state.filter((ch) => ch.id !== event.payload);
         case storeTypes.UPDATE_CHANNEL:
