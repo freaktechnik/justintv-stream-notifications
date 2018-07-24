@@ -280,7 +280,7 @@ function showError(msg) {
     popup.querySelector('[data-l10n-id="cm_dialog_submit"]').click();
 }
 
-if(tabbed.querySelector("a.current") && tabbed.querySelector("a.current").dataset.tab == CHANNELS_TAB) {
+if(tabbed.querySelector("button.current") && tabbed.querySelector("button.current").dataset.tab == CHANNELS_TAB) {
     hide(document.querySelector("#autoAdd").parentNode);
     checkChannel();
 }

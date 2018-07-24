@@ -596,5 +596,18 @@
     "mixer_clientID_title": {
         "message": "Mixer Client ID",
         "description": "Title of mixer client ID field on options page"
+    },
+    "omniboxSuggestion": {
+        "message": "$USERNAME$ on $TYPE$",
+        "placeholders": {
+            "type": {
+                "content": "$1",
+                "example": "Twitch"
+            },
+            "username": {
+                "content": "$2",
+                "example": "ec0ke"
+            }
+        }
     }
 }

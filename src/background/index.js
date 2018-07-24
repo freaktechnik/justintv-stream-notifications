@@ -21,6 +21,7 @@ import Tour from './tour.js';
 import ParentalControls from './parental-controls.js';
 import { errorStateManager } from './error-state.js';
 import importFile from './import.js';
+import Omnibox from './omnibox.js';
 
 const qsPause = () => qs.pause(),
     qsResume = () => qs.resume(),
@@ -28,6 +29,7 @@ const qsPause = () => qs.pause(),
     notifier = new Notifier(),
     controller = new ChannelController(),
     list = new ListView(),
+    omnibox = new Omnibox(),
     usedPrefs = {
         "theme": [ controller.setTheme.bind(controller) ],
         "panel_nonlive": [ list.setNonLiveDisplay.bind(list) ],
@@ -107,7 +109,7 @@ list.addEventListener("copied", async ({ detail }) => {
 
 notifier.addEventListener("click", async ({ detail: channelId }) => {
     const channel = await controller.getChannel(channelId);
-    selectOrOpenTab(channel);
+    await selectOrOpenTab(channel);
 });
 
 controller.addEventListener("channelupdated", ({ detail: channel }) => {
@@ -147,6 +149,13 @@ prefs.addEventListener("change", ({ detail: {
     if(pref in usedPrefs) {
         applyValue(pref, value);
     }
+});
+
+omnibox.addEventListener("open", async ({ detail: {
+    id, disposition
+} }) => {
+    const channel = await controller.getChannel(id);
+    await selectOrOpenTab(channel, undefined, disposition);
 });
 
 // Handle options page things.

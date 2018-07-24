@@ -17,9 +17,11 @@ const NO_SINCE = 0;
  * @param {module:channel/core.Channel} channel - The channel to open.
  * @param {string} [what] - Specifies the action to take. "chat" opens the
  *         channel's chat, "archive" opens the archive.
+ * @param {string} [disposition='newForegroundTab'] - Omnibox-style disposition
+ *                 on where to open the channel.
  * @returns {number?} The channel should now be visible for the user.
  */
-export async function selectOrOpenTab(channel, what) {
+export async function selectOrOpenTab(channel, what, disposition = 'newForegroundTab') {
     let toCheck = [];
 
     if(what === "chat") {
@@ -42,13 +44,30 @@ export async function selectOrOpenTab(channel, what) {
     });
     if(tabs.length) {
         const [ tab ] = tabs;
+        if(disposition == 'newForegroundTab') {
+            return browser.tabs.update(tab.id, {
+                active: true
+            });
+        }
+        else if(disposition == 'newBackgroundTab') {
+            return;
+        }
+    }
+    const [ url ] = toCheck;
+    if(disposition == 'currentTab') {
+        const tab = await browser.tabs.query({
+            active: true,
+            lastFocusedWindow: true
+        });
         return browser.tabs.update(tab.id, {
-            active: true
+            url
         });
     }
     // There's no tab open for the channel
-    const [ url ] = toCheck;
-    return browser.tabs.create({ url });
+    return browser.tabs.create({
+        active: disposition == 'newForegroundTab',
+        url
+    });
 }
 
 const getRebroadcastTitlePatterns = async () => {

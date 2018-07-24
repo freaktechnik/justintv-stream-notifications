@@ -61,5 +61,8 @@
                 "default": "Ctrl+Shift+L"
             }
         }
+    },
+    "omnibox": {
+        "keyword": "live"
     }
 }

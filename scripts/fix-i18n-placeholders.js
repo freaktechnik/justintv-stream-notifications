@@ -16,7 +16,7 @@ const fs = require("fs"),
             messages = JSON.parse(source);
         let fixedSomething = true;
         for(const k in placeholders) {
-            if(!("placeholders" in messages[k])) {
+            if(messages.hasOwnProperty(k) && !("placeholders" in messages[k])) {
                 messages[k].placeholders = placeholders[k];
                 fixedSomething = true;
             }
