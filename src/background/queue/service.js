@@ -168,18 +168,25 @@ class QueueService {
 
         this[requestListener] = async (alarm) => {
             if(alarm.name === alarmName) {
-                const urls = await getURLs();
-                if(!urls.length) {
-                    this.unqueueUpdateRequest(priority);
-                    return;
+                try {
+                    const urls = await getURLs();
+                    if(!urls.length) {
+                        this.unqueueUpdateRequest(priority);
+                        return;
+                    }
+                    const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => onComplete(result, url))
+                        .catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
+                    await Promise.all(promises);
                 }
-                const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => onComplete(result, url))
-                    .catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
-                await Promise.all(promises);
-                const interval = await this.interval;
-                browser.alarms.create(alarmName, {
-                    when: Date.now() + (interval * intervalModifier)
-                });
+                catch(e) {
+                    console.error("Error during", priority, "uipdate request for", this.type, ":", e);
+                }
+                finally {
+                    const interval = await this.interval;
+                    browser.alarms.create(alarmName, {
+                        when: Date.now() + (interval * intervalModifier)
+                    });
+                }
             }
         };
         browser.alarms.onAlarm.addListener(this[requestListener]);
