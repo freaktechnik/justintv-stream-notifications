@@ -6,7 +6,12 @@ import Tools from './toolbar/tools.jsx';
 import SearchField from './toolbar/search-field.jsx';
 import prefs from '../../prefs.json';
 import storeTypes from '../constants/store-types.json';
-import { LIVE_TAB } from '../constants/tabs.json';
+import {
+    LIVE_TAB,
+    NONLIVE_TAB,
+    OFFLINE_TAB
+} from '../constants/tabs.json';
+import { getChannelCount } from '../utils.js';
 
 const DISPLAY_NONLIVE = parseInt(prefs.panel_nonlive.options.find((o) => o.label === "Distinct").value, 10);
 
@@ -17,7 +22,7 @@ const Toolbar = (props) => {
     }
     return ( <nav>
         <div className="topbar">
-            <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect } hasFocus={ props.tabsFocused }/>
+            <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect } hasFocus={ props.tabsFocused } counts={ props.counts }/>
             <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch } onRefreshContextMenu={ props.onRefreshContextMenu }/>
         </div>
         { searchField }
@@ -40,7 +45,12 @@ Toolbar.propTypes /* remove-proptypes */ = {
     queuePaused: PropTypes.bool,
     onSearch: PropTypes.func.isRequired,
     onRefreshContextMenu: PropTypes.func.isRequired,
-    tabsFocused: PropTypes.bool
+    tabsFocused: PropTypes.bool,
+    counts: PropTypes.shape({
+        live: PropTypes.number,
+        nonlive: PropTypes.number,
+        offline: PropTypes.number
+    })
 };
 
 const mapStateToProps = (state) => ({
@@ -49,7 +59,12 @@ const mapStateToProps = (state) => ({
     query: state.ui.query,
     showSearch: state.ui.search,
     queuePaused: state.settings.queue.paused || !state.settings.queue.status,
-    tabsFocused: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext
+    tabsFocused: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext,
+    counts: state.ui.badges ? {
+        live: getChannelCount(state, LIVE_TAB),
+        nonlive: state.ui.nonLiveDisplay === DISPLAY_NONLIVE ? getChannelCount(state, NONLIVE_TAB) : undefined,
+        offline: getChannelCount(state, OFFLINE_TAB)
+    } : {}
 });
 const mapDispatchToProps = (dispatch) => ({
     onTabSelect(index) {

@@ -12,7 +12,7 @@ const TabStrip = (props) => {
     const nonlive = [];
     let focused = props.active;
     if(props.showNonlive) {
-        nonlive.push( <Tab title="panel_tab_nonlive" onClick={ () => props.onTabSelect(NONLIVE_TAB) } key={ NONLIVE_TAB }/> );
+        nonlive.push( <Tab title="panel_tab_nonlive" onClick={ () => props.onTabSelect(NONLIVE_TAB) } key={ NONLIVE_TAB } count={ props.counts.nonlive }/> );
     }
     else if(focused >= NONLIVE_TAB) {
         // Skip the non live tab when it's not shown
@@ -29,9 +29,9 @@ const TabStrip = (props) => {
 
     return (
         <NavigateableList className="tabstrip inline-list" role="tablist" focused={ focused } onFocusChange= { onFocusChange } hasFocus={ props.hasFocus }>
-            <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(LIVE_TAB) } key={ LIVE_TAB }/>
+            <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(LIVE_TAB) } key={ LIVE_TAB } count={ props.counts.live }/>
             { nonlive }
-            <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(OFFLINE_TAB) } key={ OFFLINE_TAB }/>
+            <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(OFFLINE_TAB) } key={ OFFLINE_TAB } count={ props.counts.offline }/>
             <Tab title="panel_tab_explore" onClick={ () => props.onTabSelect(EXPLORE_TAB) } key={ EXPLORE_TAB }/>
         </NavigateableList>
     );
@@ -39,13 +39,19 @@ const TabStrip = (props) => {
 TabStrip.defaultProps = {
     active: LIVE_TAB,
     showNonlive: false,
-    hasFocus: false
+    hasFocus: false,
+    counts: {}
 };
 TabStrip.propTypes = {
     active: PropTypes.number,
     showNonlive: PropTypes.bool,
     onTabSelect: PropTypes.func.isRequired,
-    hasFocus: PropTypes.bool
+    hasFocus: PropTypes.bool,
+    counts: PropTypes.shape({
+        live: PropTypes.number,
+        nonlive: PropTypes.number,
+        offline: PropTypes.number
+    })
 };
 
 export default TabStrip;

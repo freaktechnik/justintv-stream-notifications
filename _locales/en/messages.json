@@ -609,5 +609,9 @@
                 "example": "ec0ke"
             }
         }
+    },
+    "panel_badges_title": {
+        "message": "Show channel count on panel tabs",
+        "description": "Setting to toggle visibility of count badges on panel tabs"
     }
 }

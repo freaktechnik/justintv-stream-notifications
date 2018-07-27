@@ -173,7 +173,8 @@ const THEMES = [
         queueContext,
         focusedContextItem,
         showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false),
-        focusedChannel
+        focusedChannel,
+        badges: simpleReducer(storeTypes.SET_BADGES, false)
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

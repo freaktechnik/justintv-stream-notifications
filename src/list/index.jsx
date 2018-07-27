@@ -29,7 +29,8 @@ const PREFS_MAP = {
         'panel_extras': storeTypes.SET_EXTRAS,
         'panel_style': storeTypes.SET_STYLE,
         'show_mature_thumbs': storeTypes.SHOW_MATURE_THUMBS,
-        'click_action': storeTypes.OPENING_MODE
+        'click_action': storeTypes.OPENING_MODE,
+        'panel_badges': storeTypes.SET_BADGES
     },
     prefsKeys = Object.keys(PREFS_MAP),
     // Set up all the state stuff

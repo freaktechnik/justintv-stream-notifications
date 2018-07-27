@@ -59,6 +59,10 @@
         "type": "bool",
         "value": false
     },
+    "panel_badges": {
+        "type": "bool",
+        "value": false
+    },
     "panel_badge": {
         "type": "bool",
         "value": false

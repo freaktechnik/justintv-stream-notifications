@@ -207,3 +207,11 @@ export const getVisibleChannels = (state) => {
     const channels = mergeFeatured(state.featured, state.channels);
     return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel);
 };
+
+export const getChannelCount = (state, tab) => {
+    if(tab != EXPLORE_TAB) {
+        //TODO cache that count somewhere?
+        return getChannelList(state.channels, tab, state.settings.nonLiveDisplay).length;
+    }
+    return 0;
+}

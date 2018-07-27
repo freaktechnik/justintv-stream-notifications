@@ -16,7 +16,8 @@ class Tab extends NavigateableItem {
             title: PropTypes.string.isRequired,
             onClick: PropTypes.func,
             focused: PropTypes.bool.isRequired,
-            onFocusChange: PropTypes.func.isRequired
+            onFocusChange: PropTypes.func.isRequired,
+            count: PropTypes.number
         };
     }
 
@@ -25,13 +26,16 @@ class Tab extends NavigateableItem {
     }
 
     render() {
-        let className;
+        let className, badge;
         if(this.props.focused) {
             className = "current";
         }
+        if(this.props.count) {
+            badge = ( <span className="badge">{ this.props.count }</span> );
+        }
         const child = ( <button role="tab" onClick={ this.props.onClick } onFocus={ this.props.onClick } className={ className } ref={ (e) => {
             this.button = e;
-        } } tabIndex={ -1 }>{ _(this.props.title) }</button> );
+        } } tabIndex={ -1 }>{ _(this.props.title) }{ badge }</button> );
         const element = super.render();
         return React.cloneElement(element, {
             role: "presentation",
