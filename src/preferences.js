@@ -52,13 +52,14 @@ class Preferences extends EventTarget {
             }
 
             return value[pref];
-        }).catch((e) => {
-            console.error(e);
-            if(Array.isArray(pref)) {
-                return pref.map((p) => request[p]);
-            }
-            return request[pref];
-        });
+        })
+            .catch((e) => {
+                console.error(e);
+                if(Array.isArray(pref)) {
+                    return pref.map((p) => request[p]);
+                }
+                return request[pref];
+            });
     }
 
     set(pref, value) {

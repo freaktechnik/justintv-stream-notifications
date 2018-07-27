@@ -30,7 +30,8 @@ class Omnibox extends EventTarget {
         super();
         this.list = new ReadChannelList(true);
         browser.omnibox.onInputChanged.addListener((query, suggest) => {
-            this.suggestChannels(query.toLowerCase()).then(suggest).catch(console.error);
+            this.suggestChannels(query.toLowerCase()).then(suggest)
+                .catch(console.error);
         });
         browser.omnibox.onInputEntered.addListener((id, disposition) => {
             emit(this, "open", {
@@ -41,8 +42,8 @@ class Omnibox extends EventTarget {
     }
 
     async suggestChannels(query) {
-        const channels = await this.list.getChannelsByType();
-        const fields = Omnibox.FIELDS;
+        const channels = await this.list.getChannelsByType(),
+            fields = Omnibox.FIELDS;
         return channels.map((ch) => {
             let score = NEUTRAL_SCORE;
             if(ch.id.toString(BASE_TEN).startsWith(query)) {
