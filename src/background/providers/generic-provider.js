@@ -9,7 +9,6 @@
 import prefs from "../../preferences.js";
 import ParentalControls from "../parental-controls.js";
 import * as qs from "../queue/service.js";
-import EventTarget from 'event-target-shim';
 import ProviderChannelList from '../channel/provider-list.js';
 import { emit } from '../../utils.js';
 

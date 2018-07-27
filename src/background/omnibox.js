@@ -7,7 +7,6 @@
  */
 
 import ReadChannelList from './channel/read-list.js';
-import EventTarget from 'event-target-shim';
 import { emit } from '../utils.js';
 
 const NEUTRAL_SCORE = 0,

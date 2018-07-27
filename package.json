@@ -14,9 +14,24 @@
   "engines": {
     "node": ">= 8.0.0"
   },
+  "files": [
+    "webextension/assets/images/*",
+    "webextension/manifest.json",
+    "src/*",
+    "scripts/*",
+    "_locales/*/messages.json",
+    ".tx/config",
+    "webpack.config.js",
+    "package-lock.json",
+    "!*.eslintrc.json",
+    "!webextension/assets/images/open-iconic.min.svg"
+  ],
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
   "dependencies": {
     "@freaktechnik/eslint-config-base": "^6.4.4",
-    "event-target-shim": "^3.0.2",
     "lodash": "^4.17.10",
     "open-iconic": "^1.1.1",
     "prop-types": "^15.6.2",
@@ -52,6 +67,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^5.1.0",
+    "event-target-shim": "^3.0.2",
     "fake-indexeddb": "^2.0.4",
     "fetch-headers": "^2.0.0",
     "file-loader": "^1.1.9",
@@ -80,7 +96,7 @@
     "lint:webext": "NODE_ENV=test webpack --hide-modules --mode development && npm run fix-i18n && web-ext lint",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:ec": "eclint check $(git ls-files | grep -vEe \"_locales/([^e][^n]|e.{2,})/.*\" -e=\"*/snapshots/*\")",
-    "build": "NODE_ENV=production webpack --mode production && npm run fix-i18n && web-ext build",
+    "build": "NODE_ENV=production webpack --mode production && npm run fix-i18n && web-ext build && npm pack",
     "start": "NODE_ENV=development webpack --mode development && npm run fix-i18n && web-ext run --no-reload",
     "fix-i18n": "node ./scripts/fix-i18n-placeholders.js",
     "ci-init": "node ./scripts/setup-travis.js"
@@ -150,5 +166,6 @@
   ],
   "webExt": {
     "sourceDir": "webextension/"
-  }
+  },
+  "private": true
 }

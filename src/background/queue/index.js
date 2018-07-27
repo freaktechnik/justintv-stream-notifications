@@ -4,7 +4,6 @@
  * @license MPL-2.0
  * @module queue
  */
-import EventTarget from 'event-target-shim';
 import prefs from '../../preferences.js';
 
 /**

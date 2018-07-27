@@ -155,18 +155,6 @@ module.exports = {
         }),
         new HtmlWebpackIncludeAssetsPlugin({
             files: [
-                'popup/list/index.html',
-                'manager/index.html',
-                'options/index.html'
-            ],
-            assets: [
-                'event-target-shim.umd.js',
-            ],
-            append: false,
-            publicPath: '/vendor/',
-        }),
-        new HtmlWebpackIncludeAssetsPlugin({
-            files: [
                 'popup/list/index.html'
             ],
             assets: [
@@ -185,7 +173,6 @@ module.exports = {
     ],
     externals: {
         lodash: '_',
-        'event-target-shim': 'EventTargetShim',
         react: 'React',
         'react-dom': 'ReactDOM',
         'react-redux': 'ReactRedux',

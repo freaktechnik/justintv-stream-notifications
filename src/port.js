@@ -4,8 +4,6 @@
  * @license MPL-2.0
  * @author Martin Giger
  */
-
-import EventTarget from "event-target-shim";
 import {
     emit, when
 } from "./utils.js";

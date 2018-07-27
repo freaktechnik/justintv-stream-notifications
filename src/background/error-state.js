@@ -4,7 +4,6 @@
  * @module error-state
  */
 
-import EventTarget from 'event-target-shim';
 import { emit } from '../utils.js';
 import ErrorStateConsts from '../error-state.json';
 

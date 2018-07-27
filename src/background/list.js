@@ -12,7 +12,6 @@ import { emit } from "../utils.js";
 import prefs from "../preferences.js";
 import LiveState from "./channel/live-state.js";
 import providers from './providers/index.js';
-import EventTarget from 'event-target-shim';
 import Port from '../port.js';
 import serializedProviders from "./providers/serialized.js";
 import { errorStateManager } from './error-state.js';

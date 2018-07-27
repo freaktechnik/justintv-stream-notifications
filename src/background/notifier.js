@@ -12,7 +12,6 @@ import {
     and, or, not
 } from './logic.js';
 import { emit } from '../utils.js';
-import EventTarget from 'event-target-shim';
 
 const _ = browser.i18n.getMessage,
 

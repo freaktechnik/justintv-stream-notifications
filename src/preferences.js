@@ -1,5 +1,4 @@
 import { emit } from "./utils.js";
-import EventTarget from 'event-target-shim';
 import prefInfo from './prefs.json';
 import { format } from './format-pref.js';
 

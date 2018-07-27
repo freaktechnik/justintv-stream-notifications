@@ -10,7 +10,6 @@ import { when } from "./utils.js";
 import DatabaseManager, {
     ListClosedError
 } from './database-manager.js';
-import EventTarget from 'event-target-shim';
 
 /**
  * @class module:read-channel-list.ReadChannelList

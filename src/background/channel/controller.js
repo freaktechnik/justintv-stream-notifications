@@ -17,7 +17,6 @@ import {
 import * as debugDump from "./dump.js";
 import prefs from "../../preferences.js";
 import * as logins from "../logins.js";
-import EventTarget from 'event-target-shim';
 import ErrorState from '../error-state.js';
 import {
     formatChannel, formatChannels, filterExistingFavs
