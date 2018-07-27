@@ -8,6 +8,7 @@ import storeTypes from '../../constants/store-types.json';
 import {
     getChannelAction, CHANNEL_ACTIONS, shouldClose
 } from '../../state/channel-actions.js';
+import ChannelContextHeader from './channel-context-header.jsx';
 
 //TODO closing the context panel should focus the item it was opened for.
 
@@ -56,7 +57,7 @@ const ChannelContextPanel = (props) => {
     if(props.showLivestreamer) {
         items.push(<ContextItem label="context_livestreamer" onClick={ () => props.onLivestreamer(props) }/>);
     }
-    return ( <ContextList title={ props.uname } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
+    return ( <ContextList title={ props.uname } header={ <ChannelContextHeader { ...props }/> } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
         <ContextItem label="openChannel" onClick={ () => props.onOpen(props) }/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({

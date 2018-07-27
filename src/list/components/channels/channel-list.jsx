@@ -23,7 +23,10 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         external: PropTypes.bool,
         url: PropTypes.string.isRequired,
         tooltip: PropTypes.string.isRequired,
-        language: PropTypes.string
+        language: PropTypes.string,
+        showExtras: PropTypes.bool,
+        showTitle: PropTypes.bool,
+        showThumbnail: PropTypes.bool
     })),
     ChannelList = (props) => {
         const channels = props.channels.map((ch) => {

@@ -9,7 +9,10 @@ Extra.ICONS = Object.freeze({
     "viewers": "eye",
     "category": "tag",
     "provider": "hard-drive",
-    "uptime": "clock"
+    "uptime": "clock",
+    "liveState_-1": "power-standby", //media-pause
+    "liveState_0": "audio", //media-record
+    "liveState_2": "loop"
 });
 Extra.propTypes = {
     type: PropTypes.string.isRequired,

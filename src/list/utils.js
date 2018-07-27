@@ -28,29 +28,28 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         providerEnabled: providers[channel.type].enabled,
         tooltip: channel.uname,
         url: channel.url[FIRST_URL],
-        language: channel.language
-    };
-    if(style === "compact") {
-        formattedChannel.imageSize = SMALL_IMAGE;
-    }
-    if(extras) {
-        formattedChannel.extras = {
+        language: channel.language,
+        extras: {
             category: channel.category,
             viewers: channel.viewers,
             liveSince: channel.live.created,
             provider: providers[channel.type].name
-        };
+        },
+        title: channel.title,
+        thumbnail: channel.thumbnail,
+        showExtras: extras && type !== OFFLINE_TYPE,
+        showTitle: false,
+        showThumbnail: false
+    };
+    if(style === "compact") {
+        formattedChannel.imageSize = SMALL_IMAGE;
     }
+    formattedChannel.showExtras = extras;
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && style !== "compact") {
         if(style === "thumbnail" && (!channel.mature || showThumbnails)) {
-            formattedChannel.thumbnail = channel.thumbnail;
+            formattedChannel.showThumbnail = true;
         }
-        formattedChannel.title = channel.title;
-    }
-    else if(formattedChannel.extras && type === OFFLINE_TYPE) {
-        delete formattedChannel.extras.viewers;
-        delete formattedChannel.extras.category;
-        delete formattedChannel.extras.liveSince;
+        formattedChannel.showTitle = true;
     }
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;

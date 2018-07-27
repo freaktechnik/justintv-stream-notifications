@@ -613,5 +613,14 @@
     "panel_badges_title": {
         "message": "Show channel count on panel tabs",
         "description": "Setting to toggle visibility of count badges on panel tabs"
+    },
+    "liveState_-1": {
+        "message": "Offline"
+    },
+    "liveState_0": {
+        "message": "Live"
+    },
+    "liveState_2": {
+        "message": "Rebroadcasting"
     }
 }

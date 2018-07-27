@@ -11,6 +11,7 @@ class ContextList extends React.Component {
             onClose: PropTypes.func.isRequired,
             children: PropTypes.node.isRequired,
             focused: PropTypes.number,
+            header: PropTypes.node,
             onFocusChange: PropTypes.func.isRequired
         };
     }
@@ -43,6 +44,7 @@ class ContextList extends React.Component {
                     <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
+                { this.props.header }
                 <NavigateableList focused={ this.props.focused } onFocusChange={ this.props.onFocusChange }>
                     { this.props.children }
                 </NavigateableList>

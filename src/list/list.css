@@ -107,6 +107,36 @@ nav {
     margin-right: 0.5em;
 }
 
+.context-panel .details {
+    margin: 0 1em 0.5em;
+    line-height: 1.2;
+}
+
+.context-panel .details h2 {
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+.context-panel .details .headerImages {
+    width: 100vw;
+    margin: 0 -1em;
+}
+
+.headerImages {
+    position: relative;
+}
+
+.headerImages .back {
+    width: 100%;
+}
+
+.headerImages img:not(.back) {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
+}
+
 .context-panel ul {
     list-style-type: none;
     padding: 0;

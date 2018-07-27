@@ -20,6 +20,9 @@ export default class Channel extends NavigateableItem {
             imageSize: PropTypes.number,
             external: PropTypes.bool,
             url: PropTypes.string.isRequired,
+            showExtras: PropTypes.bool,
+            showTitle: PropTypes.bool,
+            showThumbnail: PropTypes.bool,
             onClick: PropTypes.func.isRequired,
             onRedirectorClick: PropTypes.func.isRequired,
             onContextMenu: PropTypes.func.isRequired,
@@ -35,7 +38,7 @@ export default class Channel extends NavigateableItem {
     render() {
         const children = [];
         let className = this.props.type;
-        if(this.props.thumbnail) {
+        if(this.props.showThumbnail && this.props.thumbnail) {
             children.push(<img src={ this.props.thumbnail } key="thumb" alt={ `Current thumbnail of ${this.props.uname}` }/>);
             className += ' thumbnail';
         }
@@ -48,8 +51,8 @@ export default class Channel extends NavigateableItem {
         children.push(<InnerChannel
             image={ this.props.image }
             uname={ this.props.uname }
-            title={ this.props.title }
-            extras={ this.props.extras }
+            title={ this.props.showTitle && this.props.title }
+            extras={ this.props.showExtras && this.props.extras }
             liveState={ this.props.liveState }
             redirectors={ this.props.redirectors }
             imageSize={ this.props.imageSize }
