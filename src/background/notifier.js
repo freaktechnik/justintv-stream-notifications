@@ -23,7 +23,7 @@ const _ = browser.i18n.getMessage,
     NOTIFICATION_ICON_SIZE = 100;
 
 browser.notifications.onShown.addListener(() => {
-    browser.runtime.sendMessage("@notification-sound", "new-notification");
+    browser.runtime.sendMessage("@notification-sound", "new-notification").catch(console.warn);
 });
 
 /**
