@@ -118,25 +118,6 @@ nav {
     font-weight: normal;
 }
 
-.context-panel .details .headerImages {
-    width: 100vw;
-    margin: 0 -1em;
-}
-
-.headerImages {
-    position: relative;
-}
-
-.headerImages .back {
-    width: 100%;
-}
-
-.headerImages img:not(.back) {
-    position: absolute;
-    bottom: 1em;
-    left: 1em;
-}
-
 .context-panel ul {
     list-style-type: none;
     padding: 0;
@@ -291,6 +272,22 @@ nav {
     display: inline-block;
     margin-top: -0.2em;
     vertical-align: middle;
+}
+
+.context-panel .details > figure {
+    width: 100vw;
+    margin: 0 -1em;
+    position: relative;
+}
+
+.context-panel .details > figure > .back {
+    width: 100%;
+}
+
+.context-panel .details > figure > img:not(.back) {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
 }
 
 /* Type specific styles */

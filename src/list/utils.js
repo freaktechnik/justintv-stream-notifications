@@ -37,7 +37,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         },
         title: channel.title,
         thumbnail: channel.thumbnail,
-        showExtras: extras && type !== OFFLINE_TYPE,
+        showExtras: extras,
         showTitle: false,
         showThumbnail: false
     };
@@ -53,6 +53,10 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     }
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;
+    }
+    else if(type === OFFLINE_TYPE) {
+        delete formattedChannel.extras.viewers;
+        delete formattedChannel.extras.liveSince;
     }
 
     if("id" in channel) {
@@ -212,5 +216,5 @@ export const getChannelCount = (state, tab) => {
         //TODO cache that count somewhere?
         return getChannelList(state.channels, tab, state.settings.nonLiveDisplay).length;
     }
-    return 0;
-}
+    return FIRST_URL;
+};

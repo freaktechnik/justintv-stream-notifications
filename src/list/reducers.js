@@ -20,6 +20,7 @@ const THEMES = [
     DEFAULT_NONLIVE = parseInt(prefs.panel_nonlive.value, 10),
     DEFAULT_TAB = LIVE_TAB,
     DEFAULT_SELECTED = 0,
+    ONE_ITEM = 1,
     simpleReducer = (setter, defaultValue = false) => (state = defaultValue, event) => {
         switch(event.type) {
         case setter:
@@ -52,7 +53,7 @@ const THEMES = [
             for(const newChan of event.payload) {
                 // If the ID already exists, treat this as an update.
                 if(currIds.includes(newChan.id)) {
-                    newState.splice(currIds.indexOf(newChan.id), 1, newChan);
+                    newState.splice(currIds.indexOf(newChan.id), ONE_ITEM, newChan);
                 }
                 else {
                     newState.push(newChan);

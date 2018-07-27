@@ -112,8 +112,11 @@ test('pipe', (t) => {
     t.is(source.addEventListener.lastCall.args[0], 'event');
     t.true(target.dispatchEvent.notCalled);
 
-    source.addEventListener.lastCall.args[1]('foo bar');
+    source.addEventListener.lastCall.args[1]({
+        type: 'event',
+        detail: 'foo bar'
+    });
 
     t.true(target.dispatchEvent.calledOnce);
-    t.is(target.dispatchEvent.lastCall.args[0], 'foo bar');
+    t.is(target.dispatchEvent.lastCall.args[0].detail, 'foo bar');
 });

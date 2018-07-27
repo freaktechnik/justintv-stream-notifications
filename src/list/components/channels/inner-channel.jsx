@@ -15,7 +15,8 @@ const InnerChannel = (props) => {
         title,
         className = '';
     if(props.extras) {
-        extras = <Extras { ...props.extras }/>;
+        const e = props.liveState !== LiveState.OFFLINE ? props.extras : { provider: props.extras.provider };
+        extras = <Extras { ...e }/>;
     }
     if(props.redirectors) {
         redirecting = <Redirecting channels={ props.redirectors } onRedirectorClick={ props.onRedirectorClick }/>;

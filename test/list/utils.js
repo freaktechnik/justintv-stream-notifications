@@ -57,7 +57,17 @@ const channelFormats = [
             id: 7,
             external: false,
             url: 'https://example.com',
-            language: 'en'
+            language: 'en',
+            extras: {
+                category: 'baz',
+                viewers: 1,
+                provider: 'Test',
+                liveSince: undefined
+            },
+            thumbnail: 'lorem',
+            showExtras: false,
+            showTitle: true,
+            showThumbnail: false
         }
     },
     {
@@ -101,7 +111,11 @@ const channelFormats = [
                 liveSince: 2
             },
             url: 'https://example.com',
-            language: ''
+            language: '',
+            thumbnail: 'lorem',
+            showExtras: true,
+            showThumbnail: false,
+            showTitle: true
         }
     },
     {
@@ -136,10 +150,16 @@ const channelFormats = [
             id: 6,
             external: false,
             extras: {
-                provider: 'Twitch'
+                provider: 'Twitch',
+                category: 'baz'
             },
             url: 'https://example.com',
-            language: undefined
+            language: undefined,
+            title: 'ipsum',
+            thumbnail: 'lorem',
+            showExtras: true,
+            showTitle: false,
+            showThumbnail: false
         }
     },
     {
@@ -174,7 +194,16 @@ const channelFormats = [
             id: 5,
             external: false,
             url: 'https://example.com',
-            language: ''
+            language: '',
+            extras: {
+                provider: 'Test',
+                category: 'baz'
+            },
+            title: 'ipsum',
+            thumbnail: 'lorem',
+            showExtras: false,
+            showTitle: false,
+            showThumbnail: false
         }
     },
     {
@@ -209,7 +238,16 @@ const channelFormats = [
             id: 5,
             external: false,
             url: 'https://example.com',
-            language: ''
+            language: '',
+            extras: {
+                provider: 'Test',
+                category: 'baz'
+            },
+            title: 'ipsum',
+            thumbnail: 'lorem',
+            showExtras: false,
+            showTitle: false,
+            showThumbnail: false
         }
     },
     {
@@ -245,7 +283,16 @@ const channelFormats = [
             id: 'foo|test',
             external: true,
             url: 'https://example.com',
-            language: ''
+            language: '',
+            title: 'ipsum',
+            thumbnail: 'lorem',
+            extras: {
+                provider: 'Test',
+                category: 'baz'
+            },
+            showTitle: false,
+            showThumbnail: false,
+            showExtras: false
         }
     },
     {
@@ -283,7 +330,16 @@ const channelFormats = [
             external: false,
             thumbnail: 'lorem',
             url: 'https://example.com',
-            language: ''
+            language: '',
+            extras: {
+                provider: 'Test',
+                category: 'baz',
+                viewers: 1,
+                liveSince: undefined
+            },
+            showThumbnail: true,
+            showTitle: true,
+            showExtras: false
         }
     },
     {
@@ -331,7 +387,17 @@ const channelFormats = [
                 id: 'c'
             } ],
             url: 'https://example.com',
-            language: ''
+            language: '',
+            extras: {
+                provider: 'Test',
+                category: 'baz',
+                viewers: 1,
+                liveSince: undefined
+            },
+            thumbnail: 'lorem',
+            showTitle: true,
+            showThumbnail: false,
+            showExtras: false
         }
     }
 ];
