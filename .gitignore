@@ -190,3 +190,6 @@ webextension/*
 webextension/assets/images/open-iconic.min.svg
 web-ext-artifacts
 _locales/*/amo.json
+
+*.tgz
+*.zip
