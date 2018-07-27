@@ -25,7 +25,7 @@ class ContextList extends React.Component {
     componentDidMount() {
         if(this.dialog) {
             document.documentElement.style.height = `${this.dialog.scrollHeight}px`;
-            document.documentElement.style.overflow = "hidden";
+            document.documentElement.style.overflow = "none";
         }
     }
 
@@ -44,7 +44,9 @@ class ContextList extends React.Component {
                     <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
-                { this.props.header }
+                { React.cloneElement(this.props.header, {
+                    onUpdated: () => window.requestIdleCallback(() => this.componentDidMount())
+                }) }
                 <NavigateableList focused={ this.props.focused } onFocusChange={ this.props.onFocusChange }>
                     { this.props.children }
                 </NavigateableList>

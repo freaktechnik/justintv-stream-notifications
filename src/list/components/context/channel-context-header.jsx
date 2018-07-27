@@ -16,7 +16,7 @@ const ChannelContextHeader = (props) => {
     if(props.liveState != LiveState.OFFLINE) {
         thumbnail = (
             <figure>
-                <img src={ props.thumbnail } className="back" alt={ `Current thumbnail of ${props.uname}` }/>
+                <img src={ props.thumbnail } className="back" alt={ `Current thumbnail of ${props.uname}` } onLoad={ props.onUpdated }/>
                 <Avatar image={ props.image } size={ LARGE_IMAGE }/>
             </figure>
         );
@@ -43,7 +43,8 @@ ChannelContextHeader.propTypes = {
         provider: PropTypes.string.isRequired,
         viewers: PropTypes.number,
         liveSince: PropTypes.number
-    })
+    }),
+    onUpdated: PropTypes.func
 };
 
 export default ChannelContextHeader;

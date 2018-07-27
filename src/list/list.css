@@ -75,7 +75,7 @@ nav {
 
 /* Context panel */
 .context-panel {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -87,6 +87,7 @@ nav {
     z-index: 11;
     font-size: 1rem;
     padding: 0;
+    overflow-y: hidden;
 }
 
 .context-panel button {
@@ -275,7 +276,7 @@ nav {
 }
 
 .context-panel .details > figure {
-    width: 100vw;
+    width: calc(100% + 2em);
     margin: 0 -1em;
     position: relative;
 }
