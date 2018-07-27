@@ -156,7 +156,11 @@ class QueueService {
      * @returns {undefined}
      */
     queueUpdateRequest({
-        getURLs, priority = QueueService.HIGH_PRIORITY, onComplete, headers = {}, requeue = defaultRequeue
+        getURLs,
+        priority = QueueService.HIGH_PRIORITY,
+        onComplete,
+        headers = {},
+        requeue = defaultRequeue
     }) {
         if(this.hasUpdateRequest(priority)) {
             this.unqueueUpdateRequest(priority);
@@ -179,7 +183,7 @@ class QueueService {
                     await Promise.all(promises);
                 }
                 catch(e) {
-                    console.error("Error during", priority, "uipdate request for", this.type, ":", e);
+                    console.error("Error during", priority, "update request for", this.type, ":", e);
                 }
                 finally {
                     const interval = await this.interval;
@@ -190,12 +194,7 @@ class QueueService {
             }
         };
         browser.alarms.onAlarm.addListener(this[requestListener]);
-        this[requestListener]({ name: alarmName });
-        return this.interval.then((interval) => {
-            browser.alarms.create(alarmName, {
-                when: Date.now() + (interval * intervalModifier)
-            });
-        });
+        return this[requestListener]({ name: alarmName });
     }
 
     hasUpdateRequest(priority) {
