@@ -74,5 +74,5 @@ export const /* tree-shaking no-side-effects-when-called */ emit = (target, even
  * @returns {undefined}
  */
 export const /* tree-shaking no-side-effects-when-called */ pipe = (source, event, target) => {
-    source.addEventListener(event, (e) => target.dispatchEvent(e), { passive: true });
+    source.addEventListener(event, (e) => emit(target, event, e.detail), { passive: true });
 };

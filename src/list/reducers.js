@@ -50,7 +50,11 @@ const THEMES = [
             const newState = state.slice();
             const currIds = newState.map((s) => s.id);
             for(const newChan of event.payload) {
-                if(!currIds.includes(newChan.id)) {
+                // If the ID already exists, treat this as an update.
+                if(currIds.includes(newChan.id)) {
+                    newState.splice(currIds.indexOf(newChan.id), 1, newChan);
+                }
+                else {
                     newState.push(newChan);
                 }
             }
