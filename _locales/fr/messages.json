@@ -183,6 +183,10 @@
         "message": "Intervalle de mise à jour",
         "description": "Title of the update interval setting in the preferences"
     },
+    "panel_badges_title": {
+        "message": "Show channel count on panel tabs",
+        "description": "Setting to toggle visibility of count badges on panel tabs"
+    },
     "options_title": {
         "message": "Options",
         "description": "Title of the options page"
@@ -222,6 +226,10 @@
     "theme_options_Dark": {
         "message": "Sombre",
         "description": "Dark option of the theme setting in the preferences"
+    },
+    "liveState_-1": {
+        "message": "Hors Ligne",
+        "description": ""
     },
     "panel_nonlive_options_Distinct": {
         "message": "Etat distinctif (ajouter un onglet)",
@@ -343,13 +351,25 @@
         "message": "Traiter les streams qui ne sont pas en direct comme",
         "description": "Title of the non-live treatment setting in the preferences"
     },
+    "liveState_0": {
+        "message": "En Ligne",
+        "description": ""
+    },
     "copy_pattern_description": {
         "message": "Modifie le lien copié avec l'action de copie de l'URL du stream dans le menu contextuel du panneau. L'{URL} est remplacée par l'URL du stream.",
         "description": "Description of the copy pattern setting in the preferences"
     },
+    "liveState_2": {
+        "message": "Rebroadcasting",
+        "description": ""
+    },
     "panel_loading": {
         "message": "Chargement des chaînes…",
         "description": "Channels are being loaded into the panel"
+    },
+    "omniboxSuggestion": {
+        "message": "$USERNAME$ on $TYPE$",
+        "description": ""
     },
     "cm_dialog_providers": {
         "message": "Fournisseur:",

@@ -183,8 +183,12 @@
         "message": "Aktualisierungsabstand",
         "description": "Title of the update interval setting in the preferences"
     },
+    "panel_badges_title": {
+        "message": "Zeige Anzahl Kanäle auf den Tabs",
+        "description": "Setting to toggle visibility of count badges on panel tabs"
+    },
     "options_title": {
-        "message": "Options",
+        "message": "Optionen",
         "description": "Title of the options page"
     },
     "context_refresh_all": {
@@ -222,6 +226,10 @@
     "theme_options_Dark": {
         "message": "Dunkel",
         "description": "Dark option of the theme setting in the preferences"
+    },
+    "liveState_-1": {
+        "message": "Offline",
+        "description": ""
     },
     "panel_nonlive_options_Distinct": {
         "message": "Eigener Tab",
@@ -276,7 +284,7 @@
         "description": "Refresh the status of a channel from the context menu in the panel"
     },
     "mixer_clientID_title": {
-        "message": "Mixer Client ID",
+        "message": "Mixer ClientID",
         "description": "Title of mixer client ID field on options page"
     },
     "providernewlivestream": {
@@ -343,13 +351,25 @@
         "message": "Behandle nicht-live Streams als",
         "description": "Title of the non-live treatment setting in the preferences"
     },
+    "liveState_0": {
+        "message": "Live",
+        "description": ""
+    },
     "copy_pattern_description": {
         "message": "Bestimmt den Satz, der mit der Stream URL kopiert wird. {URL} wird durch die URL des Streams ersetzt.",
         "description": "Description of the copy pattern setting in the preferences"
     },
+    "liveState_2": {
+        "message": "Wiederausstrahlung",
+        "description": ""
+    },
     "panel_loading": {
         "message": "Laden...",
         "description": "Channels are being loaded into the panel"
+    },
+    "omniboxSuggestion": {
+        "message": "$USERNAME$ auf $TYPE$",
+        "description": ""
     },
     "cm_dialog_providers": {
         "message": "Dienst:",

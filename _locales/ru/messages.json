@@ -183,6 +183,10 @@
         "message": "Интервал обновления",
         "description": "Title of the update interval setting in the preferences"
     },
+    "panel_badges_title": {
+        "message": "Show channel count on panel tabs",
+        "description": "Setting to toggle visibility of count badges on panel tabs"
+    },
     "options_title": {
         "message": "Options",
         "description": "Title of the options page"
@@ -222,6 +226,10 @@
     "theme_options_Dark": {
         "message": "Темная",
         "description": "Dark option of the theme setting in the preferences"
+    },
+    "liveState_-1": {
+        "message": "Не в сети",
+        "description": ""
     },
     "panel_nonlive_options_Distinct": {
         "message": "Отделить (добавить вкладку) ",
@@ -343,13 +351,25 @@
         "message": "Рассматривать не онлайн стримы как ",
         "description": "Title of the non-live treatment setting in the preferences"
     },
+    "liveState_0": {
+        "message": "В сети",
+        "description": ""
+    },
     "copy_pattern_description": {
         "message": "Изменить строчку которая копируется действием копирования адреса стрима в контекстном меню на панели. {Адрес} заменяется на адрес стрима.",
         "description": "Description of the copy pattern setting in the preferences"
     },
+    "liveState_2": {
+        "message": "Rebroadcasting",
+        "description": ""
+    },
     "panel_loading": {
         "message": "Loading channels...",
         "description": "Channels are being loaded into the panel"
+    },
+    "omniboxSuggestion": {
+        "message": "$USERNAME$ on $TYPE$",
+        "description": ""
     },
     "cm_dialog_providers": {
         "message": "Provider:",
