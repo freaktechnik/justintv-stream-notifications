@@ -25,7 +25,7 @@ class ContextList extends React.Component {
     componentDidMount() {
         if(this.dialog) {
             document.documentElement.style.height = `${this.dialog.scrollHeight}px`;
-            document.documentElement.style.overflow = "none";
+            document.documentElement.style.overflow = "hidden";
         }
     }
 
