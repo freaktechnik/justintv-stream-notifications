@@ -100,7 +100,7 @@ nav {
 
 .context-panel header {
     position: sticky;
-    top: 0px;
+    top: 0;
     width: 100%;
     background: var(--inverted-bg);
     z-index: 1;
