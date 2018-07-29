@@ -200,7 +200,9 @@ const channelFormats = [
             language: '',
             extras: {
                 provider: 'Test',
-                category: 'baz'
+                category: 'baz',
+                viewers: 2,
+                liveSince: undefined
             },
             title: 'ipsum',
             thumbnail: 'lorem',
@@ -245,7 +247,9 @@ const channelFormats = [
             language: '',
             extras: {
                 provider: 'Test',
-                category: 'baz'
+                category: 'baz',
+                viewers: 2,
+                liveSince: undefined
             },
             title: 'ipsum',
             thumbnail: 'lorem',
