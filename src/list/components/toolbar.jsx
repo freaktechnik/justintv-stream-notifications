@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import TabStrip from './toolbar/tab-strip.jsx';
 import Tools from './toolbar/tools.jsx';
 import SearchField from './toolbar/search-field.jsx';
-import prefs from '../../prefs.json';
 import storeTypes from '../constants/store-types.json';
 import {
     LIVE_TAB,
@@ -13,8 +12,6 @@ import {
 } from '../constants/tabs.json';
 import { getChannelCount } from '../utils.js';
 import SortBar from './toolbar/sort-bar.jsx';
-
-const DISPLAY_NONLIVE = parseInt(prefs.panel_nonlive.options.find((o) => o.label === "Distinct").value, 10);
 
 const Toolbar = (props) => {
     const searchField = [];
@@ -65,14 +62,14 @@ Toolbar.propTypes /* remove-proptypes */ = {
 
 const mapStateToProps = (state) => ({
     activeTab: state.ui.tab,
-    showNonlive: state.settings.nonLiveDisplay === DISPLAY_NONLIVE,
+    showNonlive: state.settings.nonLiveDisplay === NONLIVE_TAB,
     query: state.ui.query,
     showSearch: state.ui.search,
     queuePaused: state.settings.queue.paused || !state.settings.queue.status,
     tabsFocused: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext,
     counts: state.ui.badges ? {
         live: getChannelCount(state, LIVE_TAB),
-        nonlive: state.ui.nonLiveDisplay === DISPLAY_NONLIVE ? getChannelCount(state, NONLIVE_TAB) : undefined,
+        nonlive: state.settings.nonLiveDisplay === NONLIVE_TAB ? getChannelCount(state, NONLIVE_TAB) : undefined,
         offline: getChannelCount(state, OFFLINE_TAB)
     } : {},
     showSort: state.ui.sorting,
