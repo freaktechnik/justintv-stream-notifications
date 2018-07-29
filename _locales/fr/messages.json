@@ -139,6 +139,10 @@
         "message": "en rediffusion",
         "description": "Rebroadcasting state for nonliveNotification"
     },
+    "liveState_1": {
+        "message": "Redirecting",
+        "description": ""
+    },
     "import": {
         "message": "Import configuration",
         "description": "Button label to import preferences and channel list."

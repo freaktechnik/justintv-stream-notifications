@@ -139,6 +139,10 @@
         "message": "strahlt einen alten Stream wieder aus",
         "description": "Rebroadcasting state for nonliveNotification"
     },
+    "liveState_1": {
+        "message": "Weiterleitung",
+        "description": ""
+    },
     "import": {
         "message": "Konfiguration importieren",
         "description": "Button label to import preferences and channel list."
