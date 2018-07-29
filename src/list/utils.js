@@ -108,7 +108,7 @@ const filterChannels = (channels, query, providers) => {
     return channels;
 };
 
-const getChannelList = (channels, type, nonLiveDisplay) => {
+const getChannelList = (channels, type, nonLiveDisplay, calculateRedirecting = true) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
@@ -139,17 +139,19 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
         return shownChannels.concat(internalRedirects, externalRedirects);
     }
 
-    for(const redirecting of internalRedirects) {
-        if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type === LIVE_TAB) || redirecting.live.alternateChannel.live.state === LiveState.REDIRECT) {
-            const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
-            if(!target) {
-                console.warn("Somehow", redirecting, "still has no target");
-            }
-            else if(!target.redirectors) {
-                target.redirectors = [ redirecting ];
-            }
-            else if(!target.redirectors.some((r) => r.id === redirecting.id)) {
-                target.redirectors.push(redirecting);
+    if(calculateRedirecting) {
+        for(const redirecting of internalRedirects) {
+            if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type === LIVE_TAB) || redirecting.live.alternateChannel.live.state === LiveState.REDIRECT) {
+                const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
+                if(!target) {
+                    console.warn("Somehow", redirecting, "still has no target");
+                }
+                else if(!target.redirectors) {
+                    target.redirectors = [ redirecting ];
+                }
+                else if(!target.redirectors.some((r) => r.id === redirecting.id)) {
+                    target.redirectors.push(redirecting);
+                }
             }
         }
     }
@@ -160,10 +162,12 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
             const target = externals.find((ch) => ch.login === redirecting.live.alternateChannel.login && ch.type === redirecting.live.alternateChannel.type);
             if(!target) {
                 const external = redirecting.live.alternateChannel;
-                external.redirectors = [ redirecting ];
+                if(calculateRedirecting) {
+                    external.redirectors = [ redirecting ];
+                }
                 externals.push(external);
             }
-            else {
+            else if(calculateRedirecting && !target.redirectors.some((r) => r.id === redirecting.id)) {
                 target.redirectors.push(redirecting);
             }
         }
@@ -253,7 +257,7 @@ export const getVisibleChannels = (state) => {
 export const getChannelCount = (state, tab) => {
     if(tab != EXPLORE_TAB) {
         //TODO cache that count somewhere?
-        return getChannelList(state.channels, tab, state.settings.nonLiveDisplay).length;
+        return getChannelList(state.channels, tab, state.settings.nonLiveDisplay, false).length;
     }
     return FIRST_URL;
 };
