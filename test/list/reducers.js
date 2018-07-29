@@ -397,6 +397,7 @@ test('queue context close', (t) => {
 test.todo('focused channel');
 test.todo('focused context item');
 test.todo('context channel');
+test.todo('channels');
 
 test('set search query', (t) => {
     const newState = reducer(t.context.initial, {
