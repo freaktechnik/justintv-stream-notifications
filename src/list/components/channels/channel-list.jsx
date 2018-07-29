@@ -31,7 +31,8 @@ const channelsShape = PropTypes.arrayOf(PropTypes.shape({
         language: PropTypes.string,
         showExtras: PropTypes.bool,
         showTitle: PropTypes.bool,
-        showThumbnail: PropTypes.bool
+        showThumbnail: PropTypes.bool,
+        showState: PropTypes.bool
     })),
     ChannelList = (props) => {
         let lastVal;
