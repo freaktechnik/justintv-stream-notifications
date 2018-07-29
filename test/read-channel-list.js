@@ -115,9 +115,11 @@ test.serial('get invalid channel', (t) => Promise.all([
 ]));
 
 test.serial('get channel id', async (t) => {
-    const referenceChannel = await t.context.list.getChannel(t.context.referenceChannel),
-        channelId = await t.context.list.getChannelId(referenceChannel.login, referenceChannel.type);
+    const referenceChannel = await t.context.list.getChannel(t.context.referenceChannel);
+    t.context.list.idCache.delete(referenceChannel.type + referenceChannel.login);
+    const channelId = await t.context.list.getChannelId(referenceChannel.login, referenceChannel.type);
     t.is(referenceChannel.id, channelId);
+    t.is(t.context.list.idCache.get(referenceChannel.type + referenceChannel.login), channelId);
 });
 
 test.serial('channel exists', async (t) => {

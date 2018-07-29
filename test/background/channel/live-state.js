@@ -7,6 +7,7 @@ import test from "ava";
 import LiveState from "../../../src/background/channel/live-state";
 import prefs from '../../../src/prefs.json';
 import { getChannel } from '../../helpers/channel-user';
+import sinon from 'sinon';
 
 test('exports', (t) => {
     t.true("deserialize" in LiveState, "deserialize is in LiveState");
@@ -37,7 +38,8 @@ test('Construction', (t) => {
     t.is(state.state, LiveState.REBROADCAST, "Constructing with rebroadcast sets the state to rebroadcast");
 });
 
-test('Serialize', (t) => {
+test.serial('Serialize', (t) => {
+    const c = sinon.useFakeTimers();
     const expectedResult = {
             state: LiveState.OFFLINE,
             alternateChannel: undefined,
@@ -48,9 +50,12 @@ test('Serialize', (t) => {
 
     t.deepEqual(serialized, expectedResult, "The serialized object matches the expected structure");
     t.is(JSON.stringify(serialized), JSON.stringify(expectedResult), "Stringified objects are equal");
+
+    c.restore();
 });
 
-test('Deserialize', (t) => {
+test.serial('Deserialize', (t) => {
+    const c = sinon.useFakeTimers();
     const serialized = {
             state: LiveState.REDIRECT,
             alternateChannel: {
@@ -65,6 +70,8 @@ test('Deserialize', (t) => {
     t.is(state.state, serialized.state, "State was correctly deserialized");
     t.deepEqual(state.alternateChannel, serialized.alternateChannel, "alternate username was correctly deserialized");
     t.deepEqual(state.serialize(), serialized, "Serializing the deserialized object holds the same result");
+
+    c.restore();
 });
 
 const statesToTest = [

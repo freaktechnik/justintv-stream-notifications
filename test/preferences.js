@@ -146,3 +146,28 @@ test.serial('reset all prefs', async (t) => {
 
     browser.storage.local.remove.flush();
 });
+
+test.serial('gracefully handle rejected get', async (t) => {
+    browser.storage.local.get.rejects();
+
+    const val = await prefs.get(SINGLE_PREF);
+    t.is(val, defaults[SINGLE_PREF].value);
+
+    browser.storage.local.get.flush();
+});
+
+test.serial('gracefully handle rejected get multiple', async (t) => {
+    browser.storage.local.get.rejects();
+
+    const request = [
+        SINGLE_PREF,
+        'twitch_clientId'
+    ];
+
+    const val = await prefs.get(request);
+
+    const expected = request.map((p) => defaults[p].value);
+    t.deepEqual(val, expected);
+
+    browser.storage.local.get.flush();
+});
