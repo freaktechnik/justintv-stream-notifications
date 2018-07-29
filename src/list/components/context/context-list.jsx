@@ -40,7 +40,7 @@ class ContextList extends React.Component {
         if(this.props.header) {
             header = React.cloneElement(this.props.header, {
                 onUpdated: () => window.requestIdleCallback(() => this.componentDidMount())
-            })
+            });
         }
         return (
             <dialog className="context-panel" open ref={ (e) => {
