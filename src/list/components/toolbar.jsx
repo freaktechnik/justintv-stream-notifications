@@ -27,7 +27,7 @@ const Toolbar = (props) => {
     return ( <nav>
         <div className="topbar">
             <TabStrip active={ props.activeTab } showNonlive={ props.showNonlive } onTabSelect={ props.onTabSelect } hasFocus={ props.tabsFocused } counts={ props.counts }/>
-            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch } onRefreshContextMenu={ props.onRefreshContextMenu }/>
+            <Tools onToolClick={ props.onToolClick } queuePaused={ props.queuePaused } searching={ props.showSearch } onRefreshContextMenu={ props.onRefreshContextMenu } sorting={ props.showSort }/>
         </div>
         { searchField }
     </nav> );
