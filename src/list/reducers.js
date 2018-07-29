@@ -21,6 +21,7 @@ const THEMES = [
     DEFAULT_NONLIVE = parseInt(prefs.panel_nonlive.value, 10),
     DEFAULT_TAB = LIVE_TAB,
     DEFAULT_SELECTED = 0,
+    DEFAULT_SORT_DIRECTION = prefs.panel_sort_direction.value !== '0',
     ONE_ITEM = 1,
     simpleReducer = (setter, defaultValue = false) => (state = defaultValue, event) => {
         switch(event.type) {
@@ -163,7 +164,7 @@ const THEMES = [
             return state;
         }
     },
-    sortDirection = (state = false, event) => {
+    sortDirection = (state = DEFAULT_SORT_DIRECTION, event) => {
         switch(event.type) {
         case storeTypes.SET_SORT_DIRECTION:
             return event.payload && event.payload !== '0';
@@ -182,7 +183,7 @@ const THEMES = [
         extras: simpleReducer(storeTypes.SET_EXTRAS, prefs.panel_extras.value),
         queue,
         copyPattern: simpleReducer(storeTypes.SET_COPY_PATTERN, prefs.copy_pattern.value),
-        showMatureThubms: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value),
+        showMatureThumbs: simpleReducer(storeTypes.SHOW_MATURE_THUMBS, prefs.show_mature_thumbs.value),
         openingMode: simpleReducer(storeTypes.OPENING_MODE, prefs.click_action.value)
     }),
     ui = combineReducers({
@@ -196,7 +197,7 @@ const THEMES = [
         focusedContextItem,
         showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false),
         focusedChannel,
-        badges: simpleReducer(storeTypes.SET_BADGES, false),
+        badges: simpleReducer(storeTypes.SET_BADGES, prefs.panel_badges.value),
         sorting,
         sortField: simpleReducer(storeTypes.SET_SORT_FIELD, DEFAULT_SORT),
         sortDirection
