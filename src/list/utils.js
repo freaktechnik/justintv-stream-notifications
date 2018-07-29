@@ -245,6 +245,9 @@ const mergeFeatured = (featured, channels) => {
 };
 
 export const getVisibleChannels = (state) => {
+    if(state.ui.loading) {
+        return [];
+    }
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMatureThumbs);
     if(state.ui.tab !== EXPLORE_TAB) {
         return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel, state.ui.sortField, state.ui.sortDirection);
