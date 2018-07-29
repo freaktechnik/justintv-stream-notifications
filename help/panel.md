@@ -70,6 +70,17 @@ strings, [like in the channels manager](/help/channels-manager#find-a-certain-it
 just that it searches in all potentially displayed information - even in the
 extras when they're hidden.
 
+## Sorting
+By clicking the up/down arrows the sorting options are toggled. The channels can
+be sorted by multiple fields, and at that both ascending and descending. The
+available fields depend on the tab.
+
+For some sort fields, sub headings are displayed whenever the value changes for
+easier navigation.
+
+the default field to sort by and the default direction to use can be chosen in
+the extension options.
+
 ## The <samp>Explore</samp> tab
 The panel's third tab is a special tab with content that is not controlled by
 the user, but the selected provider. There is a drop-down to switch between

@@ -11,6 +11,7 @@ There are a couple of really helpful pages already existing:
  - [Panel Help](panel/)
  - [Accepting Cookies to Fix Extension](accept-cookies/)
  - [Livestreamer/Streamlink Integration Help](livestreamer/)
+ - [Navigation Bar](navigation-bar/)
  - [FAQ](faq/)
 
 If your problem isn't solved by any of them, feel free to contact me.
