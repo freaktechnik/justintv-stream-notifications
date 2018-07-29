@@ -224,6 +224,14 @@ test.serial("Click listener not triggered", (t) => {
     t.true(cbk.notCalled);
 });
 
+test.serial("onShown triggers notification sound", (t) => {
+    browser.runtime.sendMessage.resolves();
+    browser.notifications.onShown.dispatch("");
+
+    t.true(browser.runtime.sendMessage.calledWith("@notification-sound", "new-notification"));
+    browser.runtime.sendMessage.flush();
+});
+
 test.beforeEach(() => {
     browser.tabs.query.resolves([]);
     resetPrefs();
