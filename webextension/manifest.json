@@ -36,7 +36,6 @@
         "storage",
         "alarms",
         "clipboardWrite",
-        "management",
         "unlimitedStorage",
         "https://www.googleapis.com/youtube/v3/*",
         "https://livestream.com/api/*",
@@ -47,6 +46,7 @@
         "https://streamapi.majorleaguegaming.com/service/streams/*"
     ],
     "optional_permissions": [
+        "management",
         "downloads"
     ],
     "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none; media-src 'none'",

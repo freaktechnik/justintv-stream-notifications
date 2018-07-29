@@ -52,9 +52,47 @@ class OptionsPage {
 
         errorStateWidget(document.getElementById("errorStates"));
 
-        hasStreamlink()
-            .then((streamlinkAvailable) => {
-                document.querySelector('#click_action option[value="5"]').hidden = !streamlinkAvailable;
+        browser.permissions.contains({
+            permissions: [
+                'management'
+            ]
+        })
+            .then((hasManagement) => {
+                if(!hasManagement) {
+                    const clickAction = document.getElementById("click_action"),
+                        listener = (e) => {
+                            if(e.target.value == "5") {
+                                browser.permissions.request({
+                                    permissions: [
+                                        'management'
+                                    ]
+                                })
+                                    .then((granted) => {
+                                        if(granted) {
+                                            clickAction.removeEventListener("input", listener);
+                                            return hasStreamlink();
+                                        }
+                                        clickAction.value = prefs.click_action.value;
+                                        throw new Error("permission denied");
+                                    })
+                                    .then((streamlinkInstalled) => {
+                                        if(!streamlinkInstalled) {
+                                            clickAction.querySelector('option[value="5"]').hidden = true;
+                                            clickAction.value = prefs.click_action.value;
+                                        }
+                                    })
+                                    .catch(console.error);
+                            }
+                        };
+                    clickAction.addEventListener("input", listener, {
+                        passive: true
+                    });
+                }
+                else {
+                    return hasStreamlink().then((streamlinkInstalled) => {
+                        document.querySelector('#click_action option[value="5"]').hidden = !streamlinkInstalled;
+                    });
+                }
             })
             .catch(console.error);
     }
