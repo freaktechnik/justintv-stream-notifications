@@ -207,7 +207,7 @@ const sortChannels = (channels, type, formatChannelCbk, sortField = DEFAULT_SORT
             return NEUTRAL;
         };
         sorter = (a, b) => {
-            if(!sortFieldDesc.distinct) {
+            if(!sortFieldDesc.discrete) {
                 const liveStateVal = liveStateSort(a, b);
                 if(liveStateVal !== NEUTRAL) {
                     return liveStateVal;
