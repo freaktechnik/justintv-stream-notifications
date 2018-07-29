@@ -36,6 +36,12 @@ class ContextList extends React.Component {
 
     render() {
         //TODO make esc close the panel
+        let header;
+        if(this.props.header) {
+            header = React.cloneElement(this.props.header, {
+                onUpdated: () => window.requestIdleCallback(() => this.componentDidMount())
+            })
+        }
         return (
             <dialog className="context-panel" open ref={ (e) => {
                 this.dialog = e;
@@ -44,9 +50,7 @@ class ContextList extends React.Component {
                     <button title={ _("context_back") } onClick={ this.props.onClose }>{ "<" }</button>
                     <h1>{ this.props.title }</h1>
                 </header>
-                { React.cloneElement(this.props.header, {
-                    onUpdated: () => window.requestIdleCallback(() => this.componentDidMount())
-                }) }
+                { header }
                 <NavigateableList focused={ this.props.focused } onFocusChange={ this.props.onFocusChange }>
                     { this.props.children }
                 </NavigateableList>
