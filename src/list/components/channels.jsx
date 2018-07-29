@@ -46,7 +46,7 @@ const Channels = (props) => {
     }
     return ( <div className={ `type${props.type} tabcontent` }>
         { select }
-        <ChannelList channels={ props.channels } focused={ props.focused } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy } onFocusChange={ props.onFocusChange } hasFocus={ props.hasFocus }/>
+        <ChannelList channels={ props.channels } focused={ props.focused } onChannel={ props.onChannel } onContext={ props.onContext } onCopy={ props.onCopy } onFocusChange={ props.onFocusChange } hasFocus={ props.hasFocus } sortField={ props.sortField }/>
     </div> );
 };
 Channels.defaultProps = {
@@ -73,7 +73,8 @@ Channels.propTypes /* remove-proptypes */ = {
     onContext: PropTypes.func.isRequired,
     onCopy: PropTypes.func.isRequired,
     onFocusChange: PropTypes.func.isRequired,
-    hasFocus: PropTypes.bool.hasFocus
+    hasFocus: PropTypes.bool.hasFocus,
+    sortField: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -88,7 +89,8 @@ const mapStateToProps = (state) => ({
     searching: state.ui.search && !!state.ui.query.length,
     openingMode: state.settings.openingMode,
     focused: state.ui.focusedChannel,
-    hasFocus: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext
+    hasFocus: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext,
+    sortField: state.ui.sortField
 });
 const mapDispatchToProps = (dispatch) => ({
     onProvider(event) {

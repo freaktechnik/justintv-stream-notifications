@@ -12,13 +12,17 @@ import {
     OFFLINE_TAB
 } from '../constants/tabs.json';
 import { getChannelCount } from '../utils.js';
+import SortBar from './toolbar/sort-bar.jsx';
 
 const DISPLAY_NONLIVE = parseInt(prefs.panel_nonlive.options.find((o) => o.label === "Distinct").value, 10);
 
 const Toolbar = (props) => {
-    let searchField;
+    const searchField = [];
     if(props.showSearch) {
-        searchField = <SearchField value={ props.query } onSearch={ props.onSearch }/>;
+        searchField.push(<SearchField value={ props.query } onSearch={ props.onSearch } key="search"/>);
+    }
+    if(props.showSort) {
+        searchField.push(<SortBar sortField={ props.sortField } sortDirection={ props.sortDirection } onSortChange={ props.onSortChange } onReverseOrder={ () => props.onReverseOrder(!props.sortDirection) } activeTab={ props.activeTab } key="sort"/>);
     }
     return ( <nav>
         <div className="topbar">
@@ -33,7 +37,8 @@ Toolbar.defaultProps = {
     showNonlive: false,
     query: "",
     showSearch: false,
-    tabsFocused: false
+    tabsFocused: false,
+    showSort: false
 };
 Toolbar.propTypes /* remove-proptypes */ = {
     activeTab: PropTypes.number,
@@ -50,7 +55,12 @@ Toolbar.propTypes /* remove-proptypes */ = {
         live: PropTypes.number,
         nonlive: PropTypes.number,
         offline: PropTypes.number
-    })
+    }),
+    showSort: PropTypes.bool,
+    sortField: PropTypes.string.isRequired,
+    sortDirection: PropTypes.bool.isRequired,
+    onReverseOrder: PropTypes.func.isRequired,
+    onSortChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -64,7 +74,10 @@ const mapStateToProps = (state) => ({
         live: getChannelCount(state, LIVE_TAB),
         nonlive: state.ui.nonLiveDisplay === DISPLAY_NONLIVE ? getChannelCount(state, NONLIVE_TAB) : undefined,
         offline: getChannelCount(state, OFFLINE_TAB)
-    } : {}
+    } : {},
+    showSort: state.ui.sorting,
+    sortField: state.ui.sortField,
+    sortDirection: state.ui.sortDirection
 });
 const mapDispatchToProps = (dispatch) => ({
     onTabSelect(index) {
@@ -75,8 +88,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onToolClick(tool) {
         //TODO actually, most of this handler shouldn't be in here, there should just be dispatching here
-        if(tool === "toggleSearch") {
-            dispatch({ type: storeTypes.TOGGLE_SEARCH });
+        if(tool === storeTypes.TOGGLE_SEARCH || tool === storeTypes.TOGGLE_SORT) {
+            dispatch({ type: tool });
         }
         else if(tool === "refresh") {
             dispatch({
@@ -104,6 +117,18 @@ const mapDispatchToProps = (dispatch) => ({
         e.stopPropagation();
         dispatch({
             type: storeTypes.OPEN_QUEUE_CONTEXT
+        });
+    },
+    onSortChange(e) {
+        dispatch({
+            type: storeTypes.SET_SORT_FIELD,
+            payload: e.target.value
+        });
+    },
+    onReverseOrder(direction) {
+        dispatch({
+            type: storeTypes.SET_SORT_DIRECTION,
+            payload: direction
         });
     }
 });

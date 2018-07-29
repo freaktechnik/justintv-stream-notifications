@@ -1,13 +1,15 @@
 .label {
     width: 40%;
-    text-align: right;
+    text-align: end;
     display: inline-block;
     margin-bottom: 0.5em;
+    margin-right: 1em;
 }
 
 .label small,
 .label label {
     display: block;
+    text-align: end;
 }
 
 input:not([type="checkbox"]),

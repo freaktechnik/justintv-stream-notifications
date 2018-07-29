@@ -1,0 +1,75 @@
+{
+    "uname": {
+        "discrete": false,
+        "fieldPath": "uname",
+        "formattedPath": "uname",
+        "type": "string",
+        "direction": false,
+        "tabs": [
+            0,
+            1,
+            2,
+            3
+        ]
+    },
+    "provider": {
+        "discrete": true,
+        "fieldPath": "type",
+        "formattedPath": "extras.provider",
+        "type": "string",
+        "direction": false,
+        "tabs": [
+            0,
+            1,
+            2
+        ]
+    },
+    "category": {
+        "discrete": true,
+        "fieldPath": "category",
+        "formattedPath": "extras.category",
+        "type": "string",
+        "direction": false,
+        "tabs": [
+            0,
+            1,
+            3
+        ]
+    },
+    "title": {
+        "discrete": false,
+        "fieldPath": "title",
+        "formattedPath": "title",
+        "type": "string",
+        "direction": false,
+        "tabs": [
+            0,
+            1,
+            3
+        ]
+    },
+    "viewers": {
+        "discrete": false,
+        "fieldPath": "viewers",
+        "formattedPath": "extras.viewers",
+        "type": "number",
+        "direction": false,
+        "tabs": [
+            0,
+            1,
+            3
+        ]
+    },
+    "liveSince": {
+        "discrete": true,
+        "fieldPath": "live.created",
+        "formattedPath": "extras.liveSince",
+        "type": "number",
+        "direction": true,
+        "tabs": [
+            0,
+            1,
+            3
+        ]
+    }
+}

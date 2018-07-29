@@ -622,5 +622,44 @@
     },
     "liveState_2": {
         "message": "Rebroadcasting"
+    },
+    "panel_sort_title": {
+        "message": "Sort channels"
+    },
+    "panel_sort_field_title": {
+        "message": "Sort chanels by"
+    },
+    "panel_sort_field_description": {
+        "message": "Attribute to sort channels by in the panel by default."
+    },
+    "panel_sort_field_options_uname": {
+        "message": "Username"
+    },
+    "panel_sort_field_options_provider": {
+        "message": "Provider"
+    },
+    "panel_sort_field_options_category": {
+        "message": "Category"
+    },
+    "panel_sort_field_options_title": {
+        "message": "Title"
+    },
+    "panel_sort_field_options_viewers": {
+        "message": "View count"
+    },
+    "panel_sort_field_options_liveSince": {
+        "message": "Uptime"
+    },
+    "panel_sort_direction_title": {
+        "message": "Sort direction"
+    },
+    "panel_sort_direction_description": {
+        "message": "Direction to sort channels in panel in."
+    },
+    "panel_sort_direction_options_Descending": {
+        "message": "Descending"
+    },
+    "panel_sort_direction_options_Ascending": {
+        "message": "Ascending"
     }
 }

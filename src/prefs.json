@@ -55,6 +55,50 @@
             }
         ]
     },
+    "panel_sort_field": {
+        "type": "radio",
+        "value": "uname",
+        "options": [
+            {
+                "value": "uname",
+                "label": "uname"
+            },
+            {
+                "value": "provider",
+                "label": "provider"
+            },
+            {
+                "value": "category",
+                "label": "category"
+            },
+            {
+                "value": "title",
+                "label": "title"
+            },
+            {
+                "value": "viewers",
+                "label": "viewers"
+            },
+            {
+                "value": "liveSince",
+                "label": "liveSince"
+            }
+        ]
+    },
+    "panel_sort_direction": {
+        "type": "radio",
+        "value": "0",
+        "options": [
+            {
+                "value": "0",
+                "label": "Descending"
+            },
+            {
+                "value": "1",
+                "label": "Ascending"
+            }
+        ]
+    },
     "panel_extras": {
         "type": "bool",
         "value": false

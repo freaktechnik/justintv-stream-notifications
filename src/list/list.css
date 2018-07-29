@@ -73,6 +73,18 @@ nav {
     overflow-y: auto;
 }
 
+.flexSelect {
+    display: flex;
+}
+
+.flexSelect select {
+    flex-grow: 1;
+}
+
+.flexSelect button {
+    flex-grow: 0;
+}
+
 /* Context panel */
 .context-panel {
     position: absolute;
@@ -284,6 +296,16 @@ nav {
     vertical-align: middle;
 }
 
+.tabcontent > ul > li.subheading {
+    padding: var(--trim);
+    position: sticky;
+    top: 0;
+    background-color: var(--inverted-bg);
+    display: block;
+    border-bottom: 1px solid var(--accent-dark-bg);
+    z-index: 2;
+}
+
 .context-panel .details > figure {
     width: calc(100% + 2em);
     margin: 0 -1em;
@@ -316,7 +338,7 @@ nav {
     transition: 0.2s 0.01s background-color;
 }
 
-.tabcontent > ul > li:hover,
+.tabcontent > ul > li:hover:not(.subheading),
 .thumbnail:hover > div {
     background-color: rgb(var(--channel-bg-color-r), var(--channel-bg-color-g), var(--channel-bg-color-b)) !important;
     color: var(--channel-text-color) !important;

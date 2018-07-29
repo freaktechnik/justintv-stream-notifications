@@ -5,7 +5,7 @@ import Icon from '../icon.jsx';
 const _ = browser.i18n.getMessage;
 
 const Tool = (props) => ( <li>
-    <button title={ _(`${props.title}.title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" } className={ props.className } onContextMenu={ props.onContextMenu }>
+    <button title={ _(`${props.title}_title`) } onClick={ props.onClick } aria-pressed={ props.active ? "true" : "false" } className={ props.className } onContextMenu={ props.onContextMenu }>
         <Icon type={ props.icon }/>
     </button>
 </li> );

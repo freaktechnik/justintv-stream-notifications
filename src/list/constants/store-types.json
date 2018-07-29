@@ -20,5 +20,8 @@
     "OPENING_MODE": "setOpeningMode",
     "SET_CONTEXT_FOCUS": "setContextFocus",
     "SET_FOCUSED_CHANNEL": "setFocusedChannel",
-    "SET_BADGES": "setBadges"
+    "SET_BADGES": "setBadges",
+    "TOGGLE_SORT": "toggleSort",
+    "SET_SORT_FIELD": "setSortField",
+    "SET_SORT_DIRECTION": "setSortDirection"
 }

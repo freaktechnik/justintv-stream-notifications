@@ -47,6 +47,10 @@
         "message": "Clé de l'API YouTube",
         "description": "Title of the YouTube API key setting in the preferences"
     },
+    "panel_sort_field_options_category": {
+        "message": "Category",
+        "description": ""
+    },
     "context_redirector": {
         "message": "Ouvrir $CHANNEL$",
         "description": "Context panel item to open a redirector."
@@ -171,6 +175,10 @@
         "message": "Réinitialiser les réglages par défaut",
         "description": "Button to reset all preferences to their default value"
     },
+    "panel_sort_title": {
+        "message": "Sort channels",
+        "description": ""
+    },
     "mlg_showRebroadcasts_title": {
         "message": "Montrer les rediffusions de MLG",
         "description": "Title of the MLG rebroadcasts setting in the preferences"
@@ -178,6 +186,10 @@
     "cm_dialog_user": {
         "message": "Utilisateur",
         "description": "Select label for adding a user"
+    },
+    "panel_sort_field_options_uname": {
+        "message": "Username",
+        "description": ""
     },
     "updateInterval_title": {
         "message": "Intervalle de mise à jour",
@@ -247,6 +259,10 @@
         "message": "Youtube",
         "description": "Provider name for youtube.com"
     },
+    "panel_sort_direction_options_Descending": {
+        "message": "Descending",
+        "description": ""
+    },
     "panel_extras_title": {
         "message": "Informations supplémentaires dans la fenêtre",
         "description": "Title of the panel extras setting in the preferences"
@@ -287,6 +303,10 @@
         "message": "Mixer Client ID",
         "description": "Title of mixer client ID field on options page"
     },
+    "panel_sort_field_options_title": {
+        "message": "Title",
+        "description": ""
+    },
     "providernewlivestream": {
         "message": "Nouveau Livestream",
         "description": "Provider name for the new livestream.com"
@@ -298,6 +318,14 @@
     "cookies_disabled": {
         "message": "Impossible de lire votre liste de chaînes, car les cookies sont désactivés pour l'extension",
         "description": "Error message shown, when cookies are not enabled for the extension and it thus can't open the database."
+    },
+    "panel_sort_direction_description": {
+        "message": "Direction to sort channels in panel in.",
+        "description": ""
+    },
+    "panel_sort_field_title": {
+        "message": "Sort chanels by",
+        "description": ""
     },
     "panel_no_results": {
         "message": "Aucun résultat.",
@@ -383,6 +411,10 @@
         "message": "Une erreur est survenue.",
         "description": "An unknown error was encountered while trying to fetch a channel or user."
     },
+    "panel_sort_field_description": {
+        "message": "Attribute to sort channels by in the panel by default.",
+        "description": ""
+    },
     "updateInterval_description": {
         "message": "Intervalle de rafraichissement du module lorsque le stream est en direct (en secondes). 0 : pas de rafraichissement automatique",
         "description": "Description of the update interval setting in the preferences"
@@ -407,6 +439,10 @@
         "message": "En Ligne",
         "description": "Label of the tab with the live channels in the panel"
     },
+    "panel_sort_direction_options_Ascending": {
+        "message": "Ascending",
+        "description": ""
+    },
     "restore_failed": {
         "message": "Malheureusement la tentative de Live Stream Notifier pour restaurer sa base de données à échoué. Le seul correctif connu est de réinitialiser le profil.",
         "description": "Error while trying to read the DB, no actions from within the extension will work."
@@ -414,6 +450,10 @@
     "openChannel": {
         "message": "Ouvrir la chaîne",
         "description": "Label for context panel action that corresponds to clicking on the channel"
+    },
+    "panel_sort_direction_title": {
+        "message": "Sort direction",
+        "description": ""
     },
     "cm_tab_channels": {
         "message": "Chaînes",
@@ -491,9 +531,17 @@
         "message": "Ajouter une chaîne",
         "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
+    "panel_sort_field_options_liveSince": {
+        "message": "Uptime",
+        "description": ""
+    },
     "panel_tab_nonlive": {
         "message": "Pas en direct",
         "description": "Label of the optional non-live tab in the panel"
+    },
+    "panel_sort_field_options_viewers": {
+        "message": "View count",
+        "description": ""
     },
     "nonliveNotificationStateRedirect": {
         "message": "en train de rediriger vers $CHANNEL$",
@@ -542,6 +590,10 @@
     "providerdailymotion": {
         "message": "Dailymotion",
         "description": "Provider name for dailymotion"
+    },
+    "panel_sort_field_options_provider": {
+        "message": "Provider",
+        "description": ""
     },
     "cm_update_title": {
         "message": "Mettre à jour les métadonnées de(s) objet(s) sélectionnée(s)",

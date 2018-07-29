@@ -3,16 +3,19 @@ import LiveState from '../live-state.json';
 import {
     LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
 } from './constants/tabs.json';
+import SORT_FIELDS from './constants/sort.json';
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
     SMALL_IMAGE = 12,
     LARGE_IMAGE = 30,
     BIGGER = 1,
-    SMALLER = -1;
+    SMALLER = -1,
+    NEUTRAL = 0,
+    DEFAULT_SORT = 'uname';
 
 export {
-    SMALL_IMAGE, LARGE_IMAGE
+    SMALL_IMAGE, LARGE_IMAGE, DEFAULT_SORT
 };
 
 export const getExternalID = (channel) => `${channel.login}|${channel.type}`;
@@ -168,21 +171,56 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
     return shownChannels;
 };
 
-const sortChannels = (channels, type, formatChannelCbk) => {
+export const getFieldValue = (obj, path) => {
+    const steps = path.split('.');
+    if(steps.length > BIGGER) {
+        return getFieldValue(obj[steps.shift()], steps.join('.'));
+    }
+    return obj[path];
+};
+
+const sortChannels = (channels, type, formatChannelCbk, sortField = DEFAULT_SORT, sortDirection = false) => {
     let sorter;
+    const sortFieldDesc = SORT_FIELDS[sortField],
+        sortType = sortFieldDesc.type == 'number' ? (a, b) => a - b : (a, b) => a.localeCompare(b),
+        fieldPath = sortFieldDesc.fieldPath,
+        basicSort = (a, b) => {
+            const aVal = getFieldValue(a, fieldPath),
+                bVal = getFieldValue(b, fieldPath);
+            if(sortDirection === sortFieldDesc.direction) {
+                return sortType(aVal, bVal);
+            }
+            return sortType(bVal, aVal);
+        };
     if(type !== LIVE_TAB) {
-        sorter = (a, b) => a.uname.localeCompare(b.uname);
+        sorter = basicSort;
     }
     else {
-        sorter = (a, b) => {
+        const liveStateSort = (a, b) => {
             if(a.live.state > LiveState.LIVE && b.live.state <= LiveState.LIVE) {
                 return BIGGER;
             }
             else if(b.live.state > LiveState.LIVE && a.live.state <= LiveState.LIVE) {
                 return SMALLER;
             }
+            return NEUTRAL;
+        };
+        sorter = (a, b) => {
+            if(!sortFieldDesc.distinct) {
+                const liveStateVal = liveStateSort(a, b);
+                if(liveStateVal !== NEUTRAL) {
+                    return liveStateVal;
+                }
+            }
+            else {
+                const basicVal = basicSort(a, b);
+                if(basicVal === NEUTRAL) {
+                    return liveStateSort(a, b);
+                }
+                return basicVal;
+            }
 
-            return a.uname.localeCompare(b.uname);
+            return basicSort(a, b);
         };
     }
     return channels.sort(sorter).map(formatChannelCbk);
@@ -204,11 +242,11 @@ const mergeFeatured = (featured, channels) => {
 export const getVisibleChannels = (state) => {
     const saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMatureThubms);
     if(state.ui.tab !== EXPLORE_TAB) {
-        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel);
+        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel, state.ui.sortField, state.ui.sortDirection);
     }
 
     const channels = mergeFeatured(state.featured, state.channels);
-    return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel);
+    return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel, state.ui.sortField, state.ui.sortDirection);
 };
 
 export const getChannelCount = (state, tab) => {

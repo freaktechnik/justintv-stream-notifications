@@ -5,6 +5,7 @@ import {
     LIVE_TAB
 } from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
+import { DEFAULT_SORT } from './utils.js';
 
 const THEMES = [
         "light",
@@ -154,6 +155,22 @@ const THEMES = [
             return state;
         }
     },
+    sorting = (state = false, event) => {
+        switch(event.type) {
+        case storeTypes.TOGGLE_SORT:
+            return !state;
+        default:
+            return state;
+        }
+    },
+    sortDirection = (state = false, event) => {
+        switch(event.type) {
+        case storeTypes.SET_SORT_DIRECTION:
+            return event.payload && event.payload !== '0';
+        default:
+            return state;
+        }
+    },
     queue = combineReducers({
         status: simpleReducer("queueStatus", true),
         paused: simpleReducer("queuePaused")
@@ -179,7 +196,10 @@ const THEMES = [
         focusedContextItem,
         showLivestreamer: simpleReducer(storeTypes.HAS_STREAMLINK_HELPER, false),
         focusedChannel,
-        badges: simpleReducer(storeTypes.SET_BADGES, false)
+        badges: simpleReducer(storeTypes.SET_BADGES, false),
+        sorting,
+        sortField: simpleReducer(storeTypes.SET_SORT_FIELD, DEFAULT_SORT),
+        sortDirection
     }),
     handler = combineReducers({
         providers: simpleReducer("setProviders", {}),

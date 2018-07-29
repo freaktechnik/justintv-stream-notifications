@@ -1,5 +1,5 @@
 import {
-    formatChannel, getExternalID
+    formatChannel, getExternalID, DEFAULT_SORT
 } from './utils.js';
 import LiveState from '../live-state.json';
 import { copy } from '../content/utils.js';
@@ -7,6 +7,7 @@ import {
     LIVE_TAB, EXPLORE_TAB
 } from './constants/tabs.json';
 import storeTypes from './constants/store-types.json';
+import SORT_FIELDS from './constants/sort.json';
 
 export default (port) => ({
     getState, dispatch
@@ -54,6 +55,12 @@ export default (port) => ({
                         query: state.ui.query
                     });
                 }
+            }
+            if(!SORT_FIELDS[state.ui.sortField].tabs.includes(action.payload)) {
+                dispatch({
+                    type: storeTypes.SET_SORT_FIELD,
+                    payload: DEFAULT_SORT
+                });
             }
         }
         else if(action.type === storeTypes.SEARCH && state.ui.tab === EXPLORE_TAB) {
