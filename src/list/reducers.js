@@ -77,8 +77,11 @@ const THEMES = [
             return state;
         }
     },
-    loading = (state = false, event) => {
+    loading = (state = true, event) => {
         if(event.type === storeTypes.SET_FEATURED) {
+            return false;
+        }
+        else if(event.type === 'setProviders') {
             return false;
         }
         else if(event.type === storeTypes.LOADING) {

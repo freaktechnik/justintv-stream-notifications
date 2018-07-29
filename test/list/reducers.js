@@ -34,7 +34,7 @@ const getInitialState = () => ({
         tab: LIVE_TAB,
         query: '',
         search: false,
-        loading: false,
+        loading: true,
         currentProvider: 'twitch',
         contextChannel: null,
         queueContext: false,
@@ -100,13 +100,13 @@ test('toggle sort off again', (t) => {
 });
 
 test('set tab', (t) => {
+    t.context.initial.ui.loading = false;
     const newState = reducer(t.context.initial, {
         type: storeTypes.SET_TAB,
         payload: EXPLORE_TAB
     });
     const expectedState = getInitialState();
     expectedState.ui.tab = EXPLORE_TAB;
-    expectedState.ui.loading = true;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);
@@ -122,6 +122,7 @@ test('set providers', (t) => {
     });
     const expectedState = getInitialState();
     expectedState.providers = providers;
+    expectedState.ui.loading = false;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);
@@ -138,30 +139,31 @@ test('set featured', (t) => {
     });
     const expectedState = getInitialState();
     expectedState.featured = featured;
+    expectedState.ui.loading = false;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);
 });
 
 test('loading after featured', (t) => {
-    t.context.initial.ui.loading = true;
     const newState = reducer(t.context.initial, {
         type: storeTypes.SET_FEATURED,
         payload: 'foo'
     });
     const expectedState = getInitialState();
     expectedState.featured = 'foo';
+    expectedState.ui.loading = false;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);
 });
 
 test('loading', (t) => {
+    t.context.initial.ui.loading = false;
     const newState = reducer(t.context.initial, {
         type: storeTypes.LOADING
     });
     const expectedState = getInitialState();
-    expectedState.ui.loading = true;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);
@@ -206,6 +208,7 @@ test('show livestreamer', (t) => {
 });
 
 test('current provider', (t) => {
+    t.context.initial.ui.loading = false;
     const provider = 'youtube';
     const newState = reducer(t.context.initial, {
         type: storeTypes.SET_PROVIDER,
@@ -213,7 +216,6 @@ test('current provider', (t) => {
     });
     const expectedState = getInitialState();
     expectedState.ui.currentProvider = provider;
-    expectedState.ui.loading = true;
 
     t.not(newState, t.context.initial);
     t.deepEqual(newState, expectedState);

@@ -424,94 +424,101 @@ document.getElementById("options").addEventListener("click", (e) => {
     port.send("showoptions");
 }, false);
 
-Promise.all([
-    list.getChannelsByType().then((channelsObj) => {
-        channelsObj.forEach(addChannel);
-    }),
-    list.getUsersByType().then((usersObj) => {
-        usersObj.forEach(addUser);
-    })
-]).catch(console.error);
+const promisedProviders = new Promise((resolve) => {
+    port.addEventListener("message", async ({ detail: message }) => {
+        switch(message.command) {
+        case "secondary":
+            show(document.querySelector("#secondary-manager"));
+            document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
+                e.preventDefault();
+                port.send("focus");
+            });
+            break;
+        case "reload":
+            location.reload();
+            break;
+        case "add": {
+            const channel = await list.getChannel(message.payload);
+            addChannel(channel);
+            break;
+        }
+        case "remove":
+            removeChannel(message.payload);
+            break;
+        case "update": {
+            const channel = await list.getChannel(message.payload);
+            updateChannel(channel);
+            break;
+        }
+        case "adduser": {
+            const user = await list.getUser(message.payload);
+            addUser(user);
+            break;
+        }
+        case "removeuser":
+            removeUser(message.payload);
+            break;
+        case "updateuser": {
+            const user = await list.getUser(message.payload);
+            updateUser(user);
+            break;
+        }
+        case "addproviders": {
+            providers = message.payload;
+            const providerDropdown = document.querySelector("#providerDropdown");
+            for(const provider in providers) {
+                if(!hasOption(provider)) {
+                    const opt = new Option(providers[provider].name, provider);
+                    opt.disabled = !providers[provider].enabled;
+                    providerDropdown.add(opt);
+                }
+            }
+            resolve(providers);
+            break;
+        }
+        case "isloading":
+            document.querySelector("main").classList.add("loading");
+            users.classList.add("loading");
+            channels.classList.add("loading");
+            break;
+        case "doneloading":
+            document.querySelector("main").classList.remove("loading");
+            users.classList.remove("loading");
+            channels.classList.remove("loading");
+            break;
+        case "error": {
+            let msg;
+            if(message.payload) {
+                msg = browser.i18n.getMessage("channelManagerLoadError", message.payload);
+            }
+            else {
+                msg = browser.i18n.getMessage("channelManagerGenericError");
+            }
+            showError(msg);
+            break;
+        }
+        case "theme":
+            document.body.classList.toggle("dark", message.payload === DARK_THEME);
+            break;
+        default:
+            // Do nothing
+        }
+    });
+});
+
+promisedProviders
+    .then(() =>
+        Promise.all([
+            list.getChannelsByType().then((channelsObj) => {
+                channelsObj.forEach(addChannel);
+            }),
+            list.getUsersByType().then((usersObj) => {
+                usersObj.forEach(addUser);
+            })
+        ])
+    )
+    .catch(console.error);
 
 // Add-on communication backend
 
 port.send("ready");
-
-port.addEventListener("message", async ({ detail: message }) => {
-    switch(message.command) {
-    case "secondary":
-        show(document.querySelector("#secondary-manager"));
-        document.querySelector("#secondary-manager button").addEventListener("click", (e) => {
-            e.preventDefault();
-            port.send("focus");
-        });
-        break;
-    case "reload":
-        location.reload();
-        break;
-    case "add": {
-        const channel = await list.getChannel(message.payload);
-        addChannel(channel);
-        break;
-    }
-    case "remove":
-        removeChannel(message.payload);
-        break;
-    case "update": {
-        const channel = await list.getChannel(message.payload);
-        updateChannel(channel);
-        break;
-    }
-    case "adduser": {
-        const user = await list.getUser(message.payload);
-        addUser(user);
-        break;
-    }
-    case "removeuser":
-        removeUser(message.payload);
-        break;
-    case "updateuser": {
-        const user = await list.getUser(message.payload);
-        updateUser(user);
-        break;
-    }
-    case "addproviders": {
-        providers = message.payload;
-        const providerDropdown = document.querySelector("#providerDropdown");
-        for(const provider in providers) {
-            if(!hasOption(provider)) {
-                const opt = new Option(providers[provider].name, provider);
-                opt.disabled = !providers[provider].enabled;
-                providerDropdown.add(opt);
-            }
-        }
-        break;
-    }
-    case "isloading":
-        document.querySelector("main").classList.add("loading");
-        users.classList.add("loading");
-        channels.classList.add("loading");
-        break;
-    case "doneloading":
-        document.querySelector("main").classList.remove("loading");
-        users.classList.remove("loading");
-        channels.classList.remove("loading");
-        break;
-    case "error": {
-        let msg;
-        if(message.payload) {
-            msg = browser.i18n.getMessage("channelManagerLoadError", message.payload);
-        }
-        else {
-            msg = browser.i18n.getMessage("channelManagerGenericError");
-        }
-        showError(msg);
-        break;
-    }
-    case "theme":
-        document.body.classList.toggle("dark", message.payload === DARK_THEME);
-        break;
-    default:
-        // Do nothing
-    }
-});
