@@ -67,7 +67,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showExtras: false,
             showTitle: true,
-            showThumbnail: false
+            showThumbnail: false,
+            showState: true
         }
     },
     {
@@ -115,7 +116,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showExtras: true,
             showThumbnail: false,
-            showTitle: true
+            showTitle: true,
+            showState: true
         }
     },
     {
@@ -159,7 +161,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showExtras: true,
             showTitle: false,
-            showThumbnail: false
+            showThumbnail: false,
+            showState: false
         }
     },
     {
@@ -203,7 +206,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showExtras: false,
             showTitle: false,
-            showThumbnail: false
+            showThumbnail: false,
+            showState: false
         }
     },
     {
@@ -247,7 +251,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showExtras: false,
             showTitle: false,
-            showThumbnail: false
+            showThumbnail: false,
+            showState: false
         }
     },
     {
@@ -292,7 +297,8 @@ const channelFormats = [
             },
             showTitle: false,
             showThumbnail: false,
-            showExtras: false
+            showExtras: false,
+            showState: false
         }
     },
     {
@@ -339,7 +345,8 @@ const channelFormats = [
             },
             showThumbnail: true,
             showTitle: true,
-            showExtras: false
+            showExtras: false,
+            showState: true
         }
     },
     {
@@ -397,7 +404,8 @@ const channelFormats = [
             thumbnail: 'lorem',
             showTitle: true,
             showThumbnail: false,
-            showExtras: false
+            showExtras: false,
+            showState: true
         }
     }
 ];

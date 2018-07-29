@@ -12,6 +12,7 @@ Extra.ICONS = Object.freeze({
     "uptime": "clock",
     "liveState_-1": "power-standby", //media-pause
     "liveState_0": "audio", //media-record
+    "liveState_1": "share",
     "liveState_2": "loop"
 });
 Extra.propTypes = {

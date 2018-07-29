@@ -43,7 +43,8 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         thumbnail: channel.thumbnail,
         showExtras: extras,
         showTitle: false,
-        showThumbnail: false
+        showThumbnail: false,
+        showState: type !== OFFLINE_TYPE
     };
     if(style === "compact") {
         formattedChannel.imageSize = SMALL_IMAGE;
@@ -58,7 +59,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && channel.title) {
         formattedChannel.tooltip += ` - "${channel.title}"`;
     }
-    else if(type === OFFLINE_TYPE) {
+    else if(channel.live.state === LiveState.OFFLINE) {
         delete formattedChannel.extras.viewers;
         delete formattedChannel.extras.liveSince;
     }

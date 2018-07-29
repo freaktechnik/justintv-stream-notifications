@@ -23,6 +23,7 @@ export default class Channel extends NavigateableItem {
             showExtras: PropTypes.bool,
             showTitle: PropTypes.bool,
             showThumbnail: PropTypes.bool,
+            showState: PropTypes.bool,
             onClick: PropTypes.func.isRequired,
             onRedirectorClick: PropTypes.func.isRequired,
             onContextMenu: PropTypes.func.isRequired,
@@ -56,6 +57,7 @@ export default class Channel extends NavigateableItem {
             liveState={ this.props.liveState }
             redirectors={ this.props.redirectors }
             imageSize={ this.props.imageSize }
+            showState={ this.props.showState }
             onRedirectorClick={ this.props.onRedirectorClick }
             language={ this.props.language }
             key="inner"

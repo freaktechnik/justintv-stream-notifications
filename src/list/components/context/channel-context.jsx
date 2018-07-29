@@ -57,7 +57,11 @@ const ChannelContextPanel = (props) => {
     if(props.showLivestreamer) {
         items.push(<ContextItem label="context_livestreamer" onClick={ () => props.onLivestreamer(props) }/>);
     }
-    return ( <ContextList title={ props.uname } header={ <ChannelContextHeader { ...props }/> } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
+    const headerProps = Object.assign({}, props);
+    if(headerProps.external && headerProps.liveState == LiveState.REDIRECT) {
+        headerProps.liveState = LiveState.LIVE;
+    }
+    return ( <ContextList title={ props.uname } header={ <ChannelContextHeader { ...headerProps }/> } onClose={ props.onClose } focused={ props.focused } onFocusChange={ props.onFocusChange }>
         <ContextItem label="openChannel" onClick={ () => props.onOpen(props) }/>
         { items }
         <ContextItem label="context_copy" onClick={ () => props.onCopy({
@@ -74,7 +78,7 @@ ChannelContextPanel.defaultProps = {
 ChannelContextPanel.propTypes /* remove-proptypes */ = {
     uname: PropTypes.string.isRequired,
     external: PropTypes.bool.isRequired,
-    liveState: PropTypes.oneOf(Object.keys(LiveState)),
+    liveState: PropTypes.oneOf(Object.values(LiveState)),
     redirectors: redirectorsShape,
     hasChat: PropTypes.bool.isRequired,
     id: PropTypes.oneOfType([

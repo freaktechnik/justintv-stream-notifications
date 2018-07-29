@@ -620,6 +620,9 @@
     "liveState_0": {
         "message": "Live"
     },
+    "liveState_1": {
+        "message": "Redirecting"
+    },
     "liveState_2": {
         "message": "Rebroadcasting"
     },

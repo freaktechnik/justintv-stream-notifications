@@ -15,10 +15,10 @@ const InnerChannel = (props) => {
         title,
         className = '';
     if(props.extras) {
-        const e = props.liveState !== LiveState.OFFLINE ? props.extras : { provider: props.extras.provider };
+        const e = props.liveState !== LiveState.OFFLINE && props.showState ? props.extras : { provider: props.extras.provider };
         extras = <Extras { ...e }/>;
     }
-    if(props.redirectors) {
+    if(props.showState && props.redirectors) {
         redirecting = <Redirecting channels={ props.redirectors } onRedirectorClick={ props.onRedirectorClick }/>;
     }
     if(props.title && props.liveState !== LiveState.OFFLINE) {
@@ -31,7 +31,7 @@ const InnerChannel = (props) => {
         <Avatar image={ props.image } size={ props.imageSize }/>
         <div className="align-right">
             { redirecting }
-            <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST }>
+            <span className="rebroadcast" hidden={ props.liveState !== LiveState.REBROADCAST || !props.showState }>
                 <Icon type="loop"/>
             </span>
             <span className="name">{ props.uname }</span>
@@ -49,6 +49,7 @@ InnerChannel.propTypes = {
     redirectors: redirectorsShape,
     imageSize: PropTypes.number,
     language: PropTypes.string,
+    showState: PropTypes.bool,
     onRedirectorClick: PropTypes.func.isRequired
 };
 

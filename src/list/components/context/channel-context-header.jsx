@@ -10,10 +10,11 @@ const ChannelContextHeader = (props) => {
         viewers: 0,
         category: props.extras.category,
         liveState: props.liveState,
-        provider: props.extras.provider
+        provider: props.extras.provider,
+        liveSince: 0
     };
     let thumbnail;
-    if(props.liveState != LiveState.OFFLINE) {
+    if(props.liveState != LiveState.OFFLINE && props.liveState != LiveState.REDIRECT) {
         thumbnail = (
             <figure>
                 <img src={ props.thumbnail } className="back" alt={ `Current thumbnail of ${props.uname}` } onLoad={ props.onUpdated }/>
@@ -33,7 +34,7 @@ const ChannelContextHeader = (props) => {
 };
 ChannelContextHeader.propTypes = {
     uname: PropTypes.string.isRequired,
-    liveState: PropTypes.number.isRequired,
+    liveState: PropTypes.oneOf(Object.values(LiveState)),
     language: PropTypes.string,
     title: PropTypes.string,
     thumbnail: PropTypes.string,
