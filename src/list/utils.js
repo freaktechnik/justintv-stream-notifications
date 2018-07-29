@@ -148,7 +148,7 @@ const getChannelList = (channels, type, nonLiveDisplay) => {
             else if(!target.redirectors) {
                 target.redirectors = [ redirecting ];
             }
-            else {
+            else if(!target.redirectors.some((r) => r.id === redirecting.id)) {
                 target.redirectors.push(redirecting);
             }
         }
