@@ -1,6 +1,6 @@
 import test from 'ava';
 import {
-    getExternalID, formatChannel
+    getExternalID, formatChannel, getFieldValue
 } from '../../src/list/utils';
 import LiveState from '../../src/live-state.json';
 
@@ -414,3 +414,40 @@ for(const info of channelFormats) {
 }
 
 test.todo('formatChannel default params');
+
+const TEST_OBJ = {
+    foo: 'bar',
+    baz: {
+        lorem: 'ipsum',
+        dolor: {
+            sit: 'amet'
+        }
+    }
+};
+const TEST_PATHS = [
+    {
+        path: 'foo',
+        value: TEST_OBJ.foo
+    },
+    {
+        path: 'baz.lorem',
+        value: TEST_OBJ.baz.lorem
+    },
+    {
+        path: 'baz.dolor.sit',
+        value: TEST_OBJ.baz.dolor.sit
+    },
+    {
+        path: 'baz.dolor',
+        value: TEST_OBJ.baz.dolor
+    }
+];
+const testGetFieldValue = (t, obj, p) => {
+    const val = getFieldValue(obj, p.path);
+    t.is(val, p.value);
+};
+testGetFieldValue.title = (t, obj, p) => `${t}: ${p.path}`;
+
+for(const p of TEST_PATHS) {
+    test('getFieldValue', testGetFieldValue, TEST_OBJ, p);
+}
