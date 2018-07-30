@@ -63,7 +63,7 @@ const THEMES = [
             }
             return newState;
         }
-        case "removeChannel":
+        case storeTypes.REMOVE_CHANNEL:
             return state.filter((ch) => ch.id !== event.payload);
         case storeTypes.UPDATE_CHANNEL:
             return state.map((ch) => {
@@ -92,6 +92,9 @@ const THEMES = [
         }
         else if(event.type === storeTypes.SET_TAB && event.payload === EXPLORE_TAB) {
             return true;
+        }
+        else if(event.type === storeTypes.DONE_LOADING) {
+            return false;
         }
 
         return state;

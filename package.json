@@ -39,7 +39,8 @@
     "react-dom": "^16.4.1",
     "react-key-handler": "^1.0.1",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "reselect": "^3.0.1"
   },
   "devDependencies": {
     "@freaktechnik/eslint-config-babel": "^6.4.2",

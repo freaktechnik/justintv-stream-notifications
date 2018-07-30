@@ -396,6 +396,17 @@ test('queue context close', (t) => {
     t.deepEqual(newState, expectedState);
 });
 
+test('done loading', (t) => {
+    const newState = reducer(t.context.initial, {
+        type: storeTypes.DONE_LOADING
+    });
+    const expectedState = getInitialState();
+    expectedState.ui.loading = false;
+
+    t.not(newState, t.context.initial);
+    t.deepEqual(newState, expectedState);
+});
+
 test.todo('focused channel');
 test.todo('focused context item');
 test.todo('context channel');

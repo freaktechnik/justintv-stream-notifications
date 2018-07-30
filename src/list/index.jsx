@@ -4,6 +4,7 @@ import 'file-loader?name=vendor/[name].[ext]!react-dom/umd/react-dom.production.
 import 'file-loader?name=vendor/[name].[ext]!react-redux/dist/react-redux.min.js';
 import 'file-loader?name=vendor/[name].[ext]!prop-types/prop-types.min.js';
 import 'file-loader?name=vendor/react-key-handler.[ext]!react-key-handler/dist/index.js';
+import 'file-loader?name=vendor/reselect.[ext]!reselect/dist/reselect.js';
 
 import React from 'react';
 import { render } from 'react-dom';

@@ -164,7 +164,8 @@ module.exports = {
                 'redux.min.js',
                 'react-redux.min.js',
                 'prop-types.min.js',
-                'react-key-handler.js'
+                'react-key-handler.js',
+                'reselect.js'
             ],
             append: false,
             publicPath: '/vendor/'
@@ -178,7 +179,8 @@ module.exports = {
         'react-redux': 'ReactRedux',
         redux: 'Redux',
         'prop-types': 'PropTypes',
-        'react-key-handler': 'ReactKeyHandler'
+        'react-key-handler': 'ReactKeyHandler',
+        'reselect': 'Reselect'
     },
     performance: {
         maxEntrypointSize: 800000,

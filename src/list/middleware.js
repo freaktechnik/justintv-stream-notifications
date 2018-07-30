@@ -93,63 +93,70 @@ export default (port) => ({
             });
         }
         // The following code is proof, that the contextChannel model is not optimal:
-        else if(action.type === storeTypes.UPDATE_CHANNEL && state.contextChannel) {
-            const updatedChannel = Object.assign({}, action.payload);
-            if(!updatedChannel.id) {
-                updatedChannel.id = getExternalID(updatedChannel);
+        else if(action.type === storeTypes.UPDATE_CHANNEL) {
+            if(state.ui.tab !== EXPLORE_TAB && state.ui.loading) {
+                dispatch({
+                    type: storeTypes.DONE_LOADING
+                });
             }
-            if(updatedChannel.state.alternateChannel) {
-                updatedChannel.state = Object.assign({}, action.payload.state);
-                updatedChannel.state.alternateChannel = Object.assign({}, action.payload.state.alternateChannel);
-                if(!updatedChannel.state.alternateChannel.id) {
-                    updatedChannel.state.alternateChannel.id = getExternalID(updatedChannel.state.alternateChannel);
+            if(state.contextChannel) {
+                const updatedChannel = Object.assign({}, action.payload);
+                if(!updatedChannel.id) {
+                    updatedChannel.id = getExternalID(updatedChannel);
                 }
-            }
-            // Is the contextChannel
-            if(state.contextChannel.id === updatedChannel.id) {
-                updatedChannel.redirectors = state.contextChannel.redirectors;
-                dispatch({
-                    type: storeTypes.SET_CONTEXT_CHANNEL,
-                    payload: formatChannel(updatedChannel, state.providers, LIVE_TAB, state.settings.extras, "compact")
-                });
-            }
-            // Started redirecting to the contextChannel
-            else if(updatedChannel.live.state === LiveState.REDIRECT && state.contextChanel.id === updatedChannel.state.alternateChannel.id && state.contextChannel.redirectors.every((r) => r.id !== updatedChannel.id)) {
-                state.contextChanel.redirectors.push({
-                    uname: updatedChannel.uname,
-                    image: updatedChannel.image,
-                    id: updatedChannel.id
-                });
-                dispatch({
-                    type: storeTypes.SET_CONTEXT_CHANNEL,
-                    payload: state.contextChannel
-                });
-            }
-            else if(state.contextChannel.redirectors.some((r) => r.id === updatedChannel.id)) {
-                // Stopped redirecting to the contextChannel
-                if(!updatedChannel.state.alternateChannel || updatedChannel.state.alternateChannel.id !== state.contextChannel.id) {
-                    state.contextChannel.redirectors = state.contextChannel.redirectors.filter((r) => r.id !== updatedChannel.id);
+                if(updatedChannel.state.alternateChannel) {
+                    updatedChannel.state = Object.assign({}, action.payload.state);
+                    updatedChannel.state.alternateChannel = Object.assign({}, action.payload.state.alternateChannel);
+                    if(!updatedChannel.state.alternateChannel.id) {
+                        updatedChannel.state.alternateChannel.id = getExternalID(updatedChannel.state.alternateChannel);
+                    }
+                }
+                // Is the contextChannel
+                if(state.contextChannel.id === updatedChannel.id) {
+                    updatedChannel.redirectors = state.contextChannel.redirectors;
+                    dispatch({
+                        type: storeTypes.SET_CONTEXT_CHANNEL,
+                        payload: formatChannel(updatedChannel, state.providers, LIVE_TAB, state.settings.extras, "compact")
+                    });
+                }
+                // Started redirecting to the contextChannel
+                else if(updatedChannel.live.state === LiveState.REDIRECT && state.contextChanel.id === updatedChannel.state.alternateChannel.id && state.contextChannel.redirectors.every((r) => r.id !== updatedChannel.id)) {
+                    state.contextChanel.redirectors.push({
+                        uname: updatedChannel.uname,
+                        image: updatedChannel.image,
+                        id: updatedChannel.id
+                    });
                     dispatch({
                         type: storeTypes.SET_CONTEXT_CHANNEL,
                         payload: state.contextChannel
                     });
                 }
-                // Redirector updated
-                else {
-                    state.contextChannel.redirectors = state.contextChannel.redirectors.map((r) => {
-                        if(r.id === updatedChannel.id) {
-                            return {
-                                uname: updatedChannel.uname,
-                                image: updatedChannel.image,
-                                id: updatedChannel.id
-                            };
-                        }
-                        return r;
-                    });
-                    dispatch({
-                        type: storeTypes.SET_CONTEXT_CHANNEL,
-                        payload: state.contextChannel
-                    });
+                else if(state.contextChannel.redirectors.some((r) => r.id === updatedChannel.id)) {
+                    // Stopped redirecting to the contextChannel
+                    if(!updatedChannel.state.alternateChannel || updatedChannel.state.alternateChannel.id !== state.contextChannel.id) {
+                        state.contextChannel.redirectors = state.contextChannel.redirectors.filter((r) => r.id !== updatedChannel.id);
+                        dispatch({
+                            type: storeTypes.SET_CONTEXT_CHANNEL,
+                            payload: state.contextChannel
+                        });
+                    }
+                    // Redirector updated
+                    else {
+                        state.contextChannel.redirectors = state.contextChannel.redirectors.map((r) => {
+                            if(r.id === updatedChannel.id) {
+                                return {
+                                    uname: updatedChannel.uname,
+                                    image: updatedChannel.image,
+                                    id: updatedChannel.id
+                                };
+                            }
+                            return r;
+                        });
+                        dispatch({
+                            type: storeTypes.SET_CONTEXT_CHANNEL,
+                            payload: state.contextChannel
+                        });
+                    }
                 }
             }
         }
@@ -161,6 +168,11 @@ export default (port) => ({
                 });
             }
             return;
+        }
+        else if((action.type === storeTypes.ADD_CHANNELS || action.type === storeTypes.REMOVE_CHANNEL) && state.ui.tab !== EXPLORE_TAB && state.ui.loading) {
+            dispatch({
+                type: storeTypes.DONE_LOADING
+            });
         }
 
         // Finally your default middleware end and no more ugly hacks.

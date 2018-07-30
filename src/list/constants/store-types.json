@@ -23,5 +23,7 @@
     "SET_BADGES": "setBadges",
     "TOGGLE_SORT": "toggleSort",
     "SET_SORT_FIELD": "setSortField",
-    "SET_SORT_DIRECTION": "setSortDirection"
+    "SET_SORT_DIRECTION": "setSortDirection",
+    "DONE_LOADING": "doneLoading",
+    "REMOVE_CHANNEL": "removeChannel"
 }

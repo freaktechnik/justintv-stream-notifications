@@ -28,6 +28,11 @@ const Channels = (props) => {
         }
     }
     if(!props.channels.length) {
+        if(props.loading) {
+            return ( <div className="loading tabcontent">
+                <div>{ _('panel_loading') }</div>
+            </div> );
+        }
         if(props.searching && props.type !== EXPLORE_TAB) {
             return ( <div className="tabcontent">{ _('panel_no_results') }</div> );
         }

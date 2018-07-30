@@ -5,6 +5,8 @@ import {
 } from './constants/tabs.json';
 import SORT_FIELDS from './constants/sort.json';
 import prefs from '../prefs.json';
+//import { createSelector } from 'reselect';
+//TODO make selectors
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
@@ -142,7 +144,7 @@ const getChannelList = (channels, type, nonLiveDisplay, calculateRedirecting = t
 
     if(calculateRedirecting) {
         for(const redirecting of internalRedirects) {
-            if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type === LIVE_TAB) || redirecting.live.alternateChannel.live.state === LiveState.REDIRECT) {
+            if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type !== OFFLINE_TAB) || (redirecting.live.alternateChannel.live.state === LiveState.REBROADCAST && nonLiveDisplay === type)) {
                 const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
                 if(!target) {
                     console.warn("Somehow", redirecting, "still has no target");
