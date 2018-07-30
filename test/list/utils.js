@@ -357,6 +357,12 @@ const channelFormats = [
         extras: false,
         type: 0,
         style: "default",
+        redirectors: [ {
+            uname: 'a',
+            image: 'b',
+            id: 'c',
+            login: 'd'
+        } ],
         channel: {
             uname: 'foo',
             type: 'test',
@@ -372,12 +378,6 @@ const channelFormats = [
             chatUrl: 'https://example.com/chat',
             url: [ 'https://example.com' ],
             login: 'foo',
-            redirectors: [ {
-                uname: 'a',
-                image: 'b',
-                id: 'c',
-                login: 'd'
-            } ],
             language: ''
         },
         formattedChannel: {
@@ -415,9 +415,14 @@ const channelFormats = [
 ];
 
 const testFormatChannel = (t, info, providers) => {
-    const result = formatChannel(info.channel, providers, info.type, info.extras, info.style);
+    const redirected = new Map();
+    if(info.redirectors) {
+        redirected.set(info.channel.id, new Set(info.redirectors));
+    }
+    const preFormatClone = Object.assign({}, info.channel);
+    const result = formatChannel(info.channel, providers, info.type, info.extras, info.style, true, redirected);
     t.deepEqual(result, info.formattedChannel);
-    t.false("redirectors" in info.channel, "Side effect of formatChannel");
+    t.deepEqual(info.channel, preFormatClone);
 };
 testFormatChannel.title = (title, info) => `${title}: ${info.type},${info.style},${info.extras} - ${info.channel.login}`;
 
@@ -426,6 +431,8 @@ for(const info of channelFormats) {
 }
 
 test.todo('formatChannel default params');
+test.todo('format channel without mature thumbnails');
+test.todo('format external');
 
 const TEST_OBJ = {
     foo: 'bar',
