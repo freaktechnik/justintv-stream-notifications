@@ -27,7 +27,12 @@ const testGetChannelAction = (t, channel, action) => {
     if("type" in message) {
         const STATE_TYPES = Array.from(Object.values(storeTypes));
         t.true(STATE_TYPES.includes(message.type));
-        t.is(message.payload, channel);
+        if(action === 'CONTEXT') {
+            t.is(message.payload, channel.id);
+        }
+        else {
+            t.deepEqual(message.payload, channel);
+        }
     }
     else {
         t.true("command" in message);

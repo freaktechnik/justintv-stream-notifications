@@ -14,7 +14,7 @@ test.after(() => {
 });
 
 const getInitialState = () => ({
-    providers: {},
+    providers: null,
     settings: {
         theme: 'light',
         style: 'default',

@@ -31,8 +31,8 @@ const ACTION_MAP = [
     {
         internal: storeTypes.SET_CONTEXT_CHANNEL,
         external: storeTypes.SET_CONTEXT_CHANNEL,
-        internalProp: '',
-        externalProp: ''
+        internalProp: 'id',
+        externalProp: 'id'
     },
     {
         internal: storeTypes.COPY,

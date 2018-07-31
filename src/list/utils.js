@@ -1,27 +1,29 @@
 import { pick } from 'lodash';
 import LiveState from '../live-state.json';
 import {
-    LIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
+    LIVE_TAB, OFFLINE_TAB
 } from './constants/tabs.json';
-import SORT_FIELDS from './constants/sort.json';
 import prefs from '../prefs.json';
-//import { createSelector } from 'reselect';
-//TODO make selectors
 
 const FIRST_URL = 0,
     OFFLINE_TYPE = 2,
     SMALL_IMAGE = 12,
     LARGE_IMAGE = 30,
-    BIGGER = 1,
-    SMALLER = -1,
-    NEUTRAL = 0,
+    ONE_ITEM = 1,
     DEFAULT_SORT = prefs.panel_sort_field.value;
 
 export {
     SMALL_IMAGE, LARGE_IMAGE, DEFAULT_SORT
 };
 
-export const getExternalID = (channel) => `${channel.login}|${channel.type}`;
+export const /* tree-shaking no-side-effects-when-called */ getExternalID = (channel) => `${channel.login}|${channel.type}`;
+
+export const compareFormattedIDToRawChannel = (id, channel) => {
+    if(typeof id === 'string' || !('id' in channel)) {
+        return id === getExternalID(channel);
+    }
+    return channel.id === id;
+};
 
 export const formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
     const formattedChannel = {
@@ -75,7 +77,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
         formattedChannel.id = getExternalID(channel);
         formattedChannel.chatUrl = channel.chatUrl;
     }
-    if(redirected && redirected.has(formattedChannel.id)) {
+    if(channel.live.state !== LiveState.OFFLINE && type !== OFFLINE_TYPE && redirected && redirected.has(formattedChannel.id)) {
         formattedChannel.redirectors = Array.from(redirected.get(formattedChannel.id).values(), (ch) => pick(ch, [
             'uname',
             'id',
@@ -88,29 +90,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     return formattedChannel;
 };
 
-const filterChannels = (channels, query, providers) => {
-    query = query.trim();
-    if(query) {
-        const queries = query.toLowerCase().split(" ");
-        return channels.filter((ch) => {
-            const tempChannel = [
-                providers[ch.type].name.toLowerCase(),
-                ch.uname.toLowerCase()
-            ];
-            if(ch.title) {
-                tempChannel.push(ch.title.toLowerCase());
-            }
-            if(ch.category) {
-                tempChannel.push(ch.category.toLowerCase());
-            }
-
-            return queries.every((q) => tempChannel.some((t) => t.includes(q)) || ch.viewers === q || (ch.redirectors && ch.redirectors.some((r) => r.uname.toLowerCase().includes(q))));
-        });
-    }
-    return channels;
-};
-
-const getChannelList = (channels, type, nonLiveDisplay, redirected) => {
+export const getChannelList = (channels, type, nonLiveDisplay) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
@@ -138,101 +118,43 @@ const getChannelList = (channels, type, nonLiveDisplay, redirected) => {
     }
 
     if(type === OFFLINE_TAB && nonLiveDisplay === OFFLINE_TAB) {
-        return shownChannels.concat(internalRedirects, externalRedirects);
+        return {
+            channels: shownChannels.concat(internalRedirects, externalRedirects),
+            redirects: []
+        };
     }
 
-    if(redirected) {
-        for(const redirecting of internalRedirects) {
-            if((redirecting.live.alternateChannel.live.state === LiveState.LIVE && type !== OFFLINE_TAB) || (redirecting.live.alternateChannel.live.state === LiveState.REBROADCAST && nonLiveDisplay === type)) {
-                const target = shownChannels.find((ch) => ch.id === redirecting.live.alternateChannel.id);
-                if(!target) {
-                    console.warn("Somehow", redirecting, "still has no target");
-                }
-                else if(!redirected.has(target.id)) {
-                    redirected.set(target.id, new Set());
-                }
-                redirected.get(target.id).add(redirecting);
-            }
-        }
-    }
-
+    const redirects = internalRedirects.concat(externalRedirects);
     if(type === nonLiveDisplay) {
         const externals = [];
         for(const redirecting of externalRedirects) {
-            let target = externals.find((ch) => ch.login === redirecting.live.alternateChannel.login && ch.type === redirecting.live.alternateChannel.type);
+            const target = externals.find((ch) => ch.login === redirecting.live.alternateChannel.login && ch.type === redirecting.live.alternateChannel.type);
             if(!target) {
                 const external = redirecting.live.alternateChannel;
-                if(redirected) {
-                    redirected.set(getExternalID(external), new Set());
-                }
                 externals.push(external);
-                target = external;
-            }
-            if(redirected) {
-                redirected.get(getExternalID(target)).add(redirecting);
             }
         }
-        return shownChannels.concat(externals);
+        return {
+            channels: shownChannels.concat(externals),
+            redirects
+        };
     }
-    return shownChannels;
+    return {
+        channels: shownChannels,
+        redirects
+    };
 };
 
-export const getFieldValue = (obj, path) => {
+export const /* tree-shaking no-side-effects-when-called */ getFieldValue = (obj, path) => {
     const steps = path.split('.');
-    if(steps.length > BIGGER) {
+    if(steps.length > ONE_ITEM) {
         return getFieldValue(obj[steps.shift()], steps.join('.'));
     }
     return obj[path];
 };
 
-const sortChannels = (channels, type, formatChannelCbk, sortField = DEFAULT_SORT, sortDirection = false) => {
-    let sorter;
-    const sortFieldDesc = SORT_FIELDS[sortField],
-        sortType = sortFieldDesc.type == 'number' ? (a, b) => a - b : (a, b) => a.localeCompare(b),
-        fieldPath = sortFieldDesc.fieldPath,
-        basicSort = (a, b) => {
-            const aVal = getFieldValue(a, fieldPath),
-                bVal = getFieldValue(b, fieldPath);
-            if(sortDirection === sortFieldDesc.direction) {
-                return sortType(aVal, bVal);
-            }
-            return sortType(bVal, aVal);
-        };
-    if(type !== LIVE_TAB) {
-        sorter = basicSort;
-    }
-    else {
-        const liveStateSort = (a, b) => {
-            if(a.live.state > LiveState.LIVE && b.live.state <= LiveState.LIVE) {
-                return BIGGER;
-            }
-            else if(b.live.state > LiveState.LIVE && a.live.state <= LiveState.LIVE) {
-                return SMALLER;
-            }
-            return NEUTRAL;
-        };
-        sorter = (a, b) => {
-            if(!sortFieldDesc.discrete) {
-                const liveStateVal = liveStateSort(a, b);
-                if(liveStateVal !== NEUTRAL) {
-                    return liveStateVal;
-                }
-            }
-            else {
-                const basicVal = basicSort(a, b);
-                if(basicVal === NEUTRAL) {
-                    return liveStateSort(a, b);
-                }
-                return basicVal;
-            }
-
-            return basicSort(a, b);
-        };
-    }
-    return channels.sort(sorter).map(formatChannelCbk);
-};
-
-const mergeFeatured = (featured, channels) => {
+//TODO this is naughty and modifies the featured channels.
+export const /* tree-shaking no-side-effects-when-called */ mergeFeatured = (featured, channels) => {
     for(const channel of featured) {
         const internalChannel = channels.find((ch) => ch.login === channel.login && ch.type === channel.type);
         if(internalChannel) {
@@ -243,26 +165,4 @@ const mergeFeatured = (featured, channels) => {
         }
     }
     return featured;
-};
-
-export const getVisibleChannels = (state) => {
-    if(state.ui.loading) {
-        return [];
-    }
-    const redirected = new Map(),
-        saltedFormatChannel = (channel) => formatChannel(channel, state.providers, state.ui.tab, state.settings.extras, state.settings.style, state.settings.showMatureThumbs, redirected);
-    if(state.ui.tab !== EXPLORE_TAB) {
-        return sortChannels(filterChannels(getChannelList(state.channels, state.ui.tab, state.settings.nonLiveDisplay, redirected), state.ui.query, state.providers), state.settings.nonLiveDisplay, saltedFormatChannel, state.ui.sortField, state.ui.sortDirection);
-    }
-
-    const channels = mergeFeatured(state.featured, state.channels);
-    return sortChannels(channels, state.settings.nonLiveDisplay, saltedFormatChannel, state.ui.sortField, state.ui.sortDirection);
-};
-
-export const getChannelCount = (state, tab) => {
-    if(tab != EXPLORE_TAB) {
-        //TODO cache that count somewhere?
-        return getChannelList(state.channels, tab, state.settings.nonLiveDisplay, false).length;
-    }
-    return FIRST_URL;
 };

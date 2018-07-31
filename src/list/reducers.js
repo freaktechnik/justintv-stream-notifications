@@ -125,6 +125,10 @@ const THEMES = [
             return event.payload;
         case storeTypes.CLOSE_CONTEXT:
             return null;
+        case storeTypes.REMOVE_CHANNEL:
+            if(event.payload.id === state) {
+                return null;
+            }
         default:
             return state;
         }
@@ -209,7 +213,7 @@ const THEMES = [
         sortDirection
     }),
     handler = combineReducers({
-        providers: simpleReducer("setProviders", {}),
+        providers: simpleReducer("setProviders", null),
         settings,
         featured: simpleReducer(storeTypes.SET_FEATURED, []),
         channels,

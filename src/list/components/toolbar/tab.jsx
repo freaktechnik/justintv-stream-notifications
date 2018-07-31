@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NavigateableItem from '../navigateable-item.jsx';
 
-const _ = browser.i18n.getMessage;
+const _ = browser.i18n.getMessage,
+    NO_CHANNELS = 0;
 
 class Tab extends NavigateableItem {
     static get defaultProps() {
         return {
-            active: false
+            active: false,
+            count: undefined
         };
     }
 
@@ -30,7 +32,7 @@ class Tab extends NavigateableItem {
         if(this.props.focused) {
             className = "current";
         }
-        if(this.props.count) {
+        if(this.props.count || this.props.count === NO_CHANNELS) {
             badge = ( <span className="badge">{ this.props.count }</span> );
         }
         const child = ( <button role="tab" onClick={ this.props.onClick } onFocus={ this.props.onClick } className={ className } ref={ (e) => {

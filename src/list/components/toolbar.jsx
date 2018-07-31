@@ -7,10 +7,9 @@ import SearchField from './toolbar/search-field.jsx';
 import storeTypes from '../constants/store-types.json';
 import {
     LIVE_TAB,
-    NONLIVE_TAB,
-    OFFLINE_TAB
+    NONLIVE_TAB
 } from '../constants/tabs.json';
-import { getChannelCount } from '../utils.js';
+import { getChannelCounts } from '../selectors.js';
 import SortBar from './toolbar/sort-bar.jsx';
 
 const Toolbar = (props) => {
@@ -67,11 +66,7 @@ const mapStateToProps = (state) => ({
     showSearch: state.ui.search,
     queuePaused: state.settings.queue.paused || !state.settings.queue.status,
     tabsFocused: !state.ui.search && !state.ui.contextChannel && !state.ui.queueContext,
-    counts: state.ui.badges ? {
-        live: getChannelCount(state, LIVE_TAB),
-        nonlive: state.settings.nonLiveDisplay === NONLIVE_TAB ? getChannelCount(state, NONLIVE_TAB) : undefined,
-        offline: getChannelCount(state, OFFLINE_TAB)
-    } : {},
+    counts: getChannelCounts(state),
     showSort: state.ui.sorting,
     sortField: state.ui.sortField,
     sortDirection: state.ui.sortDirection

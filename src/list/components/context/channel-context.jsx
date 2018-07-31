@@ -9,6 +9,7 @@ import {
     getChannelAction, CHANNEL_ACTIONS, shouldClose
 } from '../../state/channel-actions.js';
 import ChannelContextHeader from './channel-context-header.jsx';
+import { getContextChannel } from '../../selectors.js';
 
 //TODO closing the context panel should focus the item it was opened for.
 
@@ -87,6 +88,16 @@ ChannelContextPanel.propTypes /* remove-proptypes */ = {
     ]).isRequired,
     providerEnabled: PropTypes.bool,
     focused: PropTypes.number,
+    language: PropTypes.string,
+    title: PropTypes.string,
+    thumbnail: PropTypes.string,
+    image: PropTypes.objectOf(PropTypes.string).isRequired,
+    extras: PropTypes.shape({
+        category: PropTypes.string,
+        provider: PropTypes.string.isRequired,
+        viewers: PropTypes.number,
+        liveSince: PropTypes.number
+    }),
     onOpen: PropTypes.func,
     onChat: PropTypes.func,
     onAdd: PropTypes.func,
@@ -105,7 +116,7 @@ ChannelContextPanel.propTypes /* remove-proptypes */ = {
 const mapStateToProps = (state) => Object.assign({
     showLivestreamer: state.ui.showLivestreamer,
     focused: state.ui.focusedContextItem
-}, state.ui.contextChannel);
+}, getContextChannel(state));
 
 const doChannelAction = (action, channel, dispatch) => {
     dispatch(getChannelAction(action, channel));
