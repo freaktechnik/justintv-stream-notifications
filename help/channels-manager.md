@@ -75,10 +75,15 @@ Note that this currently only works with Twitch, Mixer and Smashcast due to API 
  - Select channel in the list by clicking on it
  - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd class="single">Delete</kbd> key
 
+## I removed a channel and now a user is gone
+If a user follows a channel and the channel is removed, the user is removed too, because the channel would be re-added if the user's folowees would be refreshed.
+
 ## Remove a user
  - Switch to the <samp>Users</samp> tab at the top
  - Select the user to remove by clicking on it
  - Click the <samp>Remove</samp> button in the toolbar or hit the <kbd class="single">Delete</kbd> key
+ 
+Holding the <kbd class="single">Shift</kbd> key while removing the channel will also remove all channels the user follows. This can potentially remove other users, since they may follow a channel that is removed.
 
 ## Refreshing the channels a user follows
  - Switch to the <samp>Users</samp> tab at the top
@@ -86,9 +91,6 @@ Note that this currently only works with Twitch, Mixer and Smashcast due to API 
  - Hit the <samp>Update</samp> button in the toolbar
 
 Note that this will never remove a channel. This is also done every so often for each user in the background while the browser is running.
-
-## I removed a channel and now a user is gone
-If a user follows a channel and the channel is removed, the user is removed too, because the channel would be re-added if the user's folowees would be refreshed.
 
 ## Removing multiple items
 You can select multiple items in the channels or users list with the <kbd class="single">Shift</kbd> and <kbd class="single">Ctrl</kbd> key modifiers, as well as using <kbd><kbd>Ctrl</kbd> + <kbd>A</kbd></kbd>.
