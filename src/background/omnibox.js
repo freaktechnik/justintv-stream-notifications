@@ -53,7 +53,7 @@ class Omnibox extends EventTarget {
                 score += BEST_SCORE;
             }
             score += fields.reduce((a, c, i) => {
-                if(c in ch && ch[c] && (ch[c].toLowerCase().includes(query) || collator.compare(ch[c], query) === 0)) {
+                if(c in ch && ch[c] && (ch[c].toLowerCase().includes(query) || collator.compare(ch[c], query) === NEUTRAL_SCORE)) {
                     return a + fields.length - i;
                 }
                 return a;
