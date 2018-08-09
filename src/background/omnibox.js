@@ -43,14 +43,17 @@ class Omnibox extends EventTarget {
 
     async suggestChannels(query) {
         const channels = await this.list.getChannelsByType(),
-            fields = Omnibox.FIELDS;
+            fields = Omnibox.FIELDS,
+            collator = new Intl.Collator(undefined, {
+                usage: 'search'
+            });
         return channels.map((ch) => {
             let score = NEUTRAL_SCORE;
             if(ch.id.toString(BASE_TEN).startsWith(query)) {
                 score += BEST_SCORE;
             }
             score += fields.reduce((a, c, i) => {
-                if(c in ch && ch[c] && ch[c].toLowerCase().includes(query)) {
+                if(c in ch && ch[c] && (ch[c].toLowerCase().includes(query) || collator.compare(ch[c], query) === 0)) {
                     return a + fields.length - i;
                 }
                 return a;

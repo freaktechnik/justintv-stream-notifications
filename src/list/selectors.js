@@ -153,7 +153,8 @@ const getSortedChannels = createSelector(
     (channels, type, field, direction) => {
         let sorter;
         const sortFieldDesc = SORT_FIELDS[field],
-            sortType = sortFieldDesc.type == 'number' ? (a, b) => a - b : (a, b) => a.localeCompare(b),
+            collator = new Intl.Collator(),
+            sortType = sortFieldDesc.type == 'number' ? (a, b) => a - b : (a, b) => collator.compare(a, b),
             fieldPath = sortFieldDesc.fieldPath,
             basicSort = (a, b) => {
                 const aVal = getFieldValue(a, fieldPath),
