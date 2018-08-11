@@ -98,7 +98,7 @@ function getSelectedItemIds() {
     }
     else {
         for(let i = 0; i < users.selectedOptions.length; ++i) {
-            items.push(parseInt(users.selectedOptions[i].id.substring(CHANNEL_PREFIX.length), 10));
+            items.push(parseInt(users.selectedOptions[i].id.substring(USER_PREFIX.length), 10));
         }
     }
     return items;
