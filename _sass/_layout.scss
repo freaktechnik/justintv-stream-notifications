@@ -282,3 +282,13 @@
     font-size: 2em;
     text-decoration: none;
 }
+
+.picgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.picgrid .thumbnail {
+    display: inline-block;
+    margin: .1em auto;
+}
