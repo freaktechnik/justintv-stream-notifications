@@ -289,7 +289,7 @@ else {
 }
 updateSelect();
 
-document.addEventListener("keypress", (evt) => {
+document.addEventListener("keydown", (evt) => {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
         if(evt.key == "a" && evt.ctrlKey) {
             //TODO broken
@@ -326,7 +326,10 @@ document.addEventListener("keypress", (evt) => {
     else if(evt.key == "f" && evt.ctrlKey) {
         evt.preventDefault();
     }
-}, true);
+}, {
+    capture: true,
+    passive: false
+});
 
 tabbed.addEventListener("tabchanged", (evt) => {
     if(evt.detail == CHANNELS_TAB) {
