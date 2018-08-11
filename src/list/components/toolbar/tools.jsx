@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tool from './tool.jsx';
 import KeyHandler, {
-    KEYPRESS
+    KEYDOWN
 } from 'react-key-handler';
 import storeTypes from '../../constants/store-types.json';
 
 const Tools = (props) =>
     //TODO CTRL+F and CTRL+R get captured hard by Firefox, no idea how to get around that.
     ( <ul className="toolbar inline-list right" role="toolbar">
-        <KeyHandler keyValue="F5" keyEventName={ KEYPRESS } onKeyHandle={ (e) => {
+        <KeyHandler keyValue="F5" keyEventName={ KEYDOWN } onKeyHandle={ (e) => {
             e.preventDefault();
             e.stopPropagation();
             props.onToolClick("refresh");
