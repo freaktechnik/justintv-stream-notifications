@@ -12,20 +12,26 @@ Get started
 -----------
 First thing to do is adding the channels you'd like to get notified about.
 
-The easiest way is to have the Add-on guess your favorite channels by looking at your logins, however this only works for a few of the available [providers](/providers/) and still needs a click on a button in the channels manager.
+<!-- The easiest way is to have the Add-on guess your favorite channels by looking at your logins, however this only works for a few of the available [providers](/providers/) and still needs a click on a button in the channels manager. -->
 
-You don't have an account for Twitch or any of the other [providers](/providers/)? No problem, you can also enter a list of channels the add-on should check in the channels manager.
+Add the first channel to monitor from one of the supported [providers](/providers/) in the channels manager.
 
-To add channels, open the channels manager either via the panel or the extension settings.
+You can open the channels manager via wrench button in the panel that pops up when you click on the extension icon in the toolbar above. You can quickly access all monitored channels from that panel, too.
 
-In the channels manager you can add channels directly, add all channels a user follows or automatically add all the followed channels of all users you've saved the credentials for in Firefox.
+When selecting <samp>User</samp> instead of <samp>Channel</samp>, all channels a user follows are added.
 
 How do I go to the settings?
 ----------------------------
- - Open the Add-ons manager in Firefox. To open it, click on the menu button and then "Add-ons" or open a new tab and type `about:addons`.
- - In the add-ons manager you click on the "Options" button for "Live Stream Notifier".
+ - Right click on the extension icon in the toolbar above.
+ - Select <samp>Manage Extension</samp>
  - That's it! You are now on the settings page!
 
-This extension is missing a supercool feature!
+Detailed Help
+-------------
+You can find detailed step-by-step guides for specific actions in the help section of this site.
+
+You can always return to this site by going to the channels manager and clicking on the <samp>Help</samp> button.
+
+This extension is missing a super cool feature!
 -----------------------------------------
 I guess I've forgot to add it then. Remind me via [e-Mail](mailto:{{ site.email }}) or [Twitter](https://twitter.com/{{ site.twitter_username }}).

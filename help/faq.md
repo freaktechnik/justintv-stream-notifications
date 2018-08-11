@@ -19,7 +19,9 @@ You probably haven't added any channels to the channels manager yet. To open it,
 
 How do I go to the extension's settings?
 ----------------------------------------
-Open the Add-ons manager in Firefox. To open it, click on the menu button and then <samp>Add-ons</samp> or open a new tab and type `about:addons` in the URL-bar. Click the <samp>Preferences</samp> button in the row of this extension in the Add-ons manager and you're done.
+Right click the extension icon in the toolbar above and select <samp>Manage Extension</samp>.
+
+Alternatively open the Add-ons manager in Firefox. To open it, click on the menu button and then <samp>Add-ons</samp> or open a new tab and type `about:addons` in the URL-bar. Click the <samp>Preferences</samp> button in the row of this extension in the Add-ons manager and you're done.
 
 When I add a channel, it doesn't add the channel but a lot of other channels
 ----------------------------------------------------------------------------
