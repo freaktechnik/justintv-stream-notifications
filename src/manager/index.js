@@ -292,6 +292,7 @@ updateSelect();
 document.addEventListener("keypress", (evt) => {
     if(!popup.querySelector("dialog").hasAttribute("open")) {
         if(evt.key == "a" && evt.ctrlKey) {
+            //TODO broken
             evt.preventDefault();
             let listEl;
             if(users.hasAttribute("hidden")) {

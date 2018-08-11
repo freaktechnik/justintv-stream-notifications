@@ -230,6 +230,7 @@ nav {
     position: absolute;
     width: 100%;
     bottom: 0;
+    box-sizing: border-box;
 }
 
 .align-right {
