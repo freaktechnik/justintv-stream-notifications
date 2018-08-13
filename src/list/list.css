@@ -321,6 +321,8 @@ nav {
     position: absolute;
     bottom: 1em;
     left: 1em;
+    height: var(--big-avatar);
+    width: var(--big-avatar);
 }
 
 /* Type specific styles */
