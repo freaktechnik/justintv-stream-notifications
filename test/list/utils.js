@@ -1,6 +1,10 @@
 import test from 'ava';
 import {
-    getExternalID, formatChannel, getFieldValue
+    getExternalID,
+    compareFormattedIDToRawChannel,
+    formatChannel,
+    getFieldValue,
+    mergeFeatured
 } from '../../src/list/utils';
 import LiveState from '../../src/live-state.json';
 
@@ -9,6 +13,28 @@ test('getExternalID', (t) => {
         login: 'foo',
         type: 'bar'
     }), 'foo|bar');
+});
+
+test('compareFormattedIDToRawChannel external', (t) => {
+    const channel = {
+        login: 'foo',
+        type: 'bar',
+        id: 1
+    };
+    t.true(compareFormattedIDToRawChannel(getExternalID(channel), channel));
+});
+
+test('compareFormattedIDToRawChannel internal', (t) => {
+    t.true(compareFormattedIDToRawChannel(1, {
+        id: 1
+    }));
+});
+
+test('compareFormattedIDToRawChannel internal id to external', (t) => {
+    t.false(compareFormattedIDToRawChannel(1, {
+        login: 'foo',
+        type: 'bar'
+    }));
 });
 
 const providers = {
@@ -470,3 +496,57 @@ testGetFieldValue.title = (t, obj, p) => `${t}: ${p.path}`;
 for(const p of TEST_PATHS) {
     test('getFieldValue', testGetFieldValue, TEST_OBJ, p);
 }
+
+test('merge featured', (t) => {
+    const internal = [
+        {
+            login: 'foo',
+            type: 'bar',
+            id: 1
+        },
+        {
+            login: 'baz',
+            type: 'bar',
+            id: 2
+        },
+        {
+            login: 'lorem',
+            type: 'ipsum',
+            id: 3
+        }
+    ];
+    const external = [
+        {
+            login: 'lorem',
+            type: 'bar',
+            id: 'a'
+        },
+        {
+            login: 'foo',
+            type: 'bar',
+            id: 'b'
+        },
+        {
+            login: 'ipsum',
+            type: 'bar',
+            id: 'c'
+        }
+    ];
+    const merged = mergeFeatured(external, internal);
+    t.deepEqual(merged, [
+        {
+            login: 'lorem',
+            type: 'bar'
+        },
+        {
+            login: 'foo',
+            type: 'bar',
+            id: 1
+        },
+        {
+            login: 'ipsum',
+            type: 'bar'
+        }
+    ]);
+    t.is(merged, external);
+});

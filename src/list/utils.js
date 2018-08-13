@@ -18,7 +18,7 @@ export {
 
 export const /* tree-shaking no-side-effects-when-called */ getExternalID = (channel) => `${channel.login}|${channel.type}`;
 
-export const compareFormattedIDToRawChannel = (id, channel) => {
+export const /* tree-shaking no-side-effects-when-called */ compareFormattedIDToRawChannel = (id, channel) => {
     if(typeof id === 'string' || !('id' in channel)) {
         return id === getExternalID(channel);
     }
