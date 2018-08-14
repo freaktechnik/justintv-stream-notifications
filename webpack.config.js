@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const manifest = require("./webextension/manifest.json");
 const webpack = require("webpack");
 const path = require("path");
+const WebpackDeepScopeAnalysisPlugin = require("webpack-deep-scope-plugin").default;
 
 const defaultLanguage = manifest.default_locale;
 
@@ -170,7 +171,8 @@ module.exports = {
             append: false,
             publicPath: '/vendor/'
         }),
-        new webpack.EnvironmentPlugin([ 'NODE_ENV' ])
+        new webpack.EnvironmentPlugin([ 'NODE_ENV' ]),
+        new WebpackDeepScopeAnalysisPlugin()
     ],
     externals: {
         lodash: '_',

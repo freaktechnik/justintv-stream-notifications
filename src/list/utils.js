@@ -25,7 +25,7 @@ export const /* tree-shaking no-side-effects-when-called */ compareFormattedIDTo
     return channel.id === id;
 };
 
-export const formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
+export const /* tree-shaking no-side-effects-when-called */ formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
@@ -90,7 +90,7 @@ export const formatChannel = (channel, providers, type, extras = false, style = 
     return formattedChannel;
 };
 
-export const getChannelList = (channels, type, nonLiveDisplay) => {
+export const /* tree-shaking no-side-effects-when-called */ getChannelList = (channels, type, nonLiveDisplay) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
