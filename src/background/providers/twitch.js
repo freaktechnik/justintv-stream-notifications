@@ -97,6 +97,10 @@ class Twitch extends GenericProvider {
         this.initialize();
     }
 
+    get optionalPermissions() {
+        return [ "https://tmi.twitch.tv/*" ];
+    }
+
     async getUserFavorites(username) {
         const data = await this._qs.queueRequest(`${baseURL}/users/${username}`, headers);
 

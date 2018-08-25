@@ -27,6 +27,10 @@ class Livestream extends GenericProvider {
         this.initialize();
     }
 
+    get optionalPermissions() {
+        return [ "http://*.api.channel.livestream.com/2.0/*" ];
+    }
+
     async getChannelDetails(username) {
         const ch = new Channel(username.toLowerCase(), this._type),
             [

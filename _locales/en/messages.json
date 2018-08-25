@@ -664,5 +664,8 @@
     },
     "panel_sort_direction_options_Ascending": {
         "message": "Ascending"
+    },
+    "permissionRequired": {
+        "message": "Permissions required to communicate with provider"
     }
 }

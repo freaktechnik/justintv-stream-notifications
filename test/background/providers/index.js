@@ -46,6 +46,11 @@ const testProviders = (t, p) => {
     t.is(typeof (provider.getFeaturedChannels), "function", "getFeaturedChannels is implemented");
     t.is(typeof (provider.search), "function", "search is implemented");
 
+    const manifest = browser.runtime.getManifest();
+    for(const host of provider.optionalPermissions) {
+        t.true(manifest.optional_permissions.includes(host));
+    }
+
     if(!provider.enabled) {
         t.false(provider.supports.favorites, "Doesn't support favorites when disabled");
         t.false(provider.supports.credentials, "Doesn't support credentials when disabled");

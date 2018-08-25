@@ -71,6 +71,10 @@ class Ustream extends GenericProvider {
         this.initialize();
     }
 
+    get optionalPermissions() {
+        return [ "http://www.ustream.tv/*" ];
+    }
+
     async getChannelDetails(channelname) {
         let data = await this._qs.queueRequest(`http://www.ustream.tv/${channelname}`),
             retried = false;

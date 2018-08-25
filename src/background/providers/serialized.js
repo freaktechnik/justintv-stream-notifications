@@ -14,6 +14,7 @@ import allProviders from './index.js';
  * @property {string} name
  * @property {module:providers/generic-provider~ProviderSupports} supports
  * @property {boolean} enabled
+ * @property {string[]} optionalPermissions
  */
 
 /**
@@ -30,7 +31,8 @@ const serializeProviders = (providers) => {
         ret[p] = Object.freeze({
             name: providers[p].name,
             supports: providers[p].supports,
-            enabled: providers[p].enabled
+            enabled: providers[p].enabled,
+            optionalPermissions: providers[p].optionalPermissions
         });
     }
     Object.freeze(ret);

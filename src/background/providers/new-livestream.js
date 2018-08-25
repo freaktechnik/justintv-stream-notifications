@@ -37,6 +37,10 @@ class NewLivestream extends GenericProvider {
         this.initialize();
     }
 
+    get optionalPermissions() {
+        return [ "https://livestream.com/api/*" ];
+    }
+
     async getUserFavorites(username) {
         const user = await this._qs.queueRequest(baseURL + username);
 

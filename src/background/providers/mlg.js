@@ -72,6 +72,13 @@ class MLG extends GenericProvider {
         this.initialize();
     }
 
+    get optionalPermissions() {
+        return [
+            "https://www.majorleaguegaming.com/api/*",
+            "https://streamapi.majorleaguegaming.com/service/streams/*"
+        ];
+    }
+
     async getChannelDetails(channelname) {
         const data = await this._qs.queueRequest(infoURL + infoArgs);
         if(data.ok && data.parsedJSON.status_code == REQUEST_OK) {

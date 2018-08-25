@@ -27,7 +27,7 @@ List of supported providers with some explanation on what they are can be found 
 
 To build this extension you need npm, which will install webpack and web-ext. Open a command line and type
 ```
-npm i
+npm ci
 npm run build
 ```
 to build an in about:debugging loadable .xpi file. You can use `npm start` to launch Firefox with the extension pre-installed.

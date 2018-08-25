@@ -172,7 +172,7 @@ module.exports = {
             publicPath: '/vendor/'
         }),
         new webpack.EnvironmentPlugin([ 'NODE_ENV' ]),
-        new WebpackDeepScopeAnalysisPlugin()
+        //new WebpackDeepScopeAnalysisPlugin()
     ],
     externals: {
         lodash: '_',

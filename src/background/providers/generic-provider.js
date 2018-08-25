@@ -185,6 +185,16 @@ export default class GenericProvider extends EventTarget {
     }
 
     /**
+     * Array of hosts that are required when adding a channel or user from this
+     * provider.
+     *
+     * @type {string[]}
+     */
+    get optionalPermissions() {
+        return [];
+    }
+
+    /**
      * An object based on the _supports properties.
      *
      * @type {module:providers/generic-provider~ProviderSupports}

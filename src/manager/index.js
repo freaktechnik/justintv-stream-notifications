@@ -401,25 +401,40 @@ popup.querySelector("#providerDropdown").addEventListener("change", hideError, f
 
 popup.querySelector("form").addEventListener("submit", (evt) => {
     evt.preventDefault();
-    if(!popup.querySelector("#loadingWrapper").hidden) {
+    const field = popup.querySelector("#channelNameField");
+    if(!popup.querySelector("#loadingWrapper").hidden || !field.value.length) {
         return;
     }
-    const field = popup.querySelector("#channelNameField");
     hideError();
+
+    if(!field.value.length) {
+        return;
+    }
+
     show(popup.querySelector("#loadingWrapper"));
-    if(field.value.length) {
-        if(popup.querySelector("#channelRadio").checked) {
-            port.send("addchannel", {
-                username: field.value,
-                type: popup.querySelector("#providerDropdown").value
-            });
-        }
-        else {
-            port.send("adduser", {
-                username: field.value,
-                type: popup.querySelector("#providerDropdown").value
-            });
-        }
+    const p = popup.querySelector("#providerDropdown").value;
+    const provider = providers[p];
+    const sendMsg = () => {
+        const message = popup.querySelector("#channelRadio").checked ? "channel" : "user";
+        port.send(`add${message}`, {
+            username: field.value,
+            type: p
+        });
+    };
+    if(provider.optionalPermissions.length) {
+        browser.permissions.request({
+            origins: provider.optionalPermissions
+        }).then((wasGranted) => {
+            if(wasGranted) {
+                sendMsg();
+            }
+            else {
+                showError(browser.i18n.getMessage("permissionRequired"));
+            }
+        });
+    }
+    else {
+        sendMsg();
     }
 }, false);
 

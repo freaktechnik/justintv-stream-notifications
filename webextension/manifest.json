@@ -6,12 +6,12 @@
     "applications": {
         "gecko": {
             "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
-            "strict_min_version": "61.0"
+            "strict_min_version": "63.0"
         }
     },
     "homepage_url": "http://streamnotifier.ch",
     "author": "freaktechnik",
-    "version": "3.9.7",
+    "version": "3.10.0",
     "icons": {
         "48": "assets/images/icon.svg",
         "64": "assets/images/icon.svg"
@@ -38,16 +38,16 @@
         "clipboardWrite",
         "management",
         "unlimitedStorage",
-        "https://www.googleapis.com/youtube/v3/*",
-        "https://livestream.com/api/*",
-        "https://tmi.twitch.tv/*",
-        "http://www.ustream.tv/*",
-        "http://*.api.channel.livestream.com/2.0/*",
-        "https://www.majorleaguegaming.com/api/*",
-        "https://streamapi.majorleaguegaming.com/service/streams/*"
+        "https://www.googleapis.com/youtube/v3/*"
     ],
     "optional_permissions": [
-        "downloads"
+        "downloads",
+        "http://www.ustream.tv/*",
+        "http://*.api.channel.livestream.com/2.0/*",
+        "https://livestream.com/api/*",
+        "https://tmi.twitch.tv/*",
+        "https://www.majorleaguegaming.com/api/*",
+        "https://streamapi.majorleaguegaming.com/service/streams/*"
     ],
     "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none; media-src 'none'",
     "options_ui": {
