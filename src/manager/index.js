@@ -431,7 +431,7 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
             else {
                 showError(browser.i18n.getMessage("permissionRequired"));
             }
-        });
+        }).catch(showError);
     }
     else {
         sendMsg();
