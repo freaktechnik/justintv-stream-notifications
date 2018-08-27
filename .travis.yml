@@ -12,13 +12,7 @@ notifications:
   email:
     on_failure: change
 env:
-  global:
-    - CI_NODE_TOTAL=4
-  matrix:
-    - CI_NODE_INDEX=0
-    - CI_NODE_INDEX=1
-    - CI_NODE_INDEX=2
-    - CI_NODE_INDEX=3
+  - CI_NODE_TOTAL=4
 stages:
   - dependencies
   - lint
@@ -29,32 +23,36 @@ jobs:
     - stage: dependencies
       name: "Update deps cache"
       script: skip
-      env: CI_NODE_INDEX=none
     - stage: lint
       name: "Lint JS"
       script: npm run lint:js
-      env: CI_NODE_INDEX=none
     - script: npm run lint:css
       name: "Lint CSS"
-      env: CI_NODE_INDEX=none
     - script: npm run lint:webext
       before_script: npm run ci-init
       name: "Lint Extension"
-      env: CI_NODE_INDEX=none
     - script: npm run lint:ec
       name: "Lint by editorconfig"
-      env: CI_NODE_INDEX=none
     - script: npm run lint:json
       name: "Lint JSON"
-      env: CI_NODE_INDEX=none
     - stage: test
+      name: "Unit tests"
       script: npm run test:ava
       after_success: npm run coverage
+      env: CI_NODE_INDEX=0
+    - script: npm run test:ava
+      after_success: npm run coverage
+      env: CI_NODE_INDEX=1
+    - script: npm run test:ava
+      after_success: npm run coverage
+      env: CI_NODE_INDEX=2
+    - script: npm run test:ava
+      after_success: npm run coverage
+      env: CI_NODE_INDEX=3
     - stage: greenkeeper
       if: branch =~ /^greenkeeper.*$/ # only run if in a greenkeeper branch
       before_install: npm i -g greenkeeper-lockfile
       install: npm i # always run full install for greenkeeper
-      env: CI_NODE_INDEX=none
       script:
         - greenkeeper-lockfile-update
         - greenkeeper-lockfile-upload
