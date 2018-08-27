@@ -58,6 +58,7 @@ const testFormat = (t, data) => {
     const result = format(data.value, data.type);
     t.true(result === data.returnVal);
 };
+testFormat.title = (title, data) => `${title}: ${data.type} = ${data.value} -> ${data.returnVal}`;
 
 for(const data of TEST_DATA) {
     test('test format', testFormat, data);

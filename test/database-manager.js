@@ -25,7 +25,7 @@ test.serial('opening open list', async (t) => {
 });
 
 test.serial("Close closed db", async (t) => {
-    await t.notThrows(DatabaseManager.close());
+    await t.notThrowsAsync(DatabaseManager.close());
 
     await DatabaseManager.open();
 });
@@ -51,7 +51,7 @@ test.serial('Cant open list', async (t) => {
         throw new Error();
     };
 
-    const error = await t.throws(DatabaseManager.open());
+    const error = await t.throwsAsync(DatabaseManager.open());
     t.is(DatabaseManager.error, error);
 
     window.indexedDB.open = open;
@@ -121,7 +121,7 @@ test.serial('open list error', async (t) => {
 
     onerror(new Error());
 
-    const error = await t.throws(p, FixListError);
+    const error = await t.throwsAsync(p, FixListError);
 
     t.is(DatabaseManager.db, null);
     t.is(DatabaseManager.error, error);
@@ -145,7 +145,7 @@ test.serial('open list error without trying', async (t) => {
 
     onerror(new Error());
 
-    const error = await t.throws(p, Error);
+    const error = await t.throwsAsync(p, Error);
 
     t.is(DatabaseManager.db, null);
     t.is(DatabaseManager.error, error);

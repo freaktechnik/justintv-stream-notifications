@@ -412,15 +412,15 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
     }
 
     show(popup.querySelector("#loadingWrapper"));
-    const p = popup.querySelector("#providerDropdown").value;
-    const provider = providers[p];
-    const sendMsg = () => {
-        const message = popup.querySelector("#channelRadio").checked ? "channel" : "user";
-        port.send(`add${message}`, {
-            username: field.value,
-            type: p
-        });
-    };
+    const p = popup.querySelector("#providerDropdown").value,
+        provider = providers[p],
+        sendMsg = () => {
+            const message = popup.querySelector("#channelRadio").checked ? "channel" : "user";
+            port.send(`add${message}`, {
+                username: field.value,
+                type: p
+            });
+        };
     if(provider.optionalPermissions.length) {
         browser.permissions.request({
             origins: provider.optionalPermissions
@@ -431,7 +431,8 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
             else {
                 showError(browser.i18n.getMessage("permissionRequired"));
             }
-        }).catch(showError);
+        })
+            .catch(showError);
     }
     else {
         sendMsg();

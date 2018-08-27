@@ -67,7 +67,7 @@ test("getUser", async (t) => {
 
 test("getUser with wrong type", async (t) => {
     const { notUser } = t.context;
-    await t.throws(t.context.list.getUser(notUser.id));
+    await t.throwsAsync(t.context.list.getUser(notUser.id));
 });
 
 test("getUserByName", async (t) => {
@@ -101,7 +101,7 @@ test.todo("getUsersByFavorite");
 
 test("getUsersByFavorite with wrong type", async (t) => {
     const { notChannel } = t.context;
-    await t.throws(t.context.list.getUsersByFavorite(notChannel));
+    await t.throwsAsync(t.context.list.getUsersByFavorite(notChannel));
 });
 
 test("getChannelId", async (t) => {
@@ -121,7 +121,7 @@ test("getChannel", async (t) => {
 
 test("getChannel with wrong type", async (t) => {
     const { notChannel } = t.context;
-    await t.throws(t.context.list.getChannel(notChannel.id));
+    await t.throwsAsync(t.context.list.getChannel(notChannel.id));
 });
 
 test("getChannelByName", async (t) => {
@@ -159,15 +159,15 @@ test.todo("getChannelsByUserFavorites");
 
 test("getChannelsByUserFavorites with wrong type", async (t) => {
     const { notUser } = t.context;
-    await t.throws(t.context.list.getChannelsByUserFavorites(notUser));
+    await t.throwsAsync(t.context.list.getChannelsByUserFavorites(notUser));
 });
 
 test("getChannelsByType", async (t) => {
-    await t.throws(t.context.list.getChannelsByType());
+    await t.throwsAsync(t.context.list.getChannelsByType());
 });
 
 test("getUsersByType", async (t) => {
-    await t.throws(t.context.list.getUsersByType());
+    await t.throwsAsync(t.context.list.getUsersByType());
 });
 
 test("getChannelsByType with type is equal to getChannels", async (t) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import Icon from '../../../src/list/components/icon.jsx';
-import openIconic from 'open-iconic/sprite/open-iconic.min.svg';
+import openIconic from '../../helpers/assets/open-iconic';
 
 test('has icon class', (t) => {
     const wrapper = shallow(

@@ -42,9 +42,9 @@ test("FixListError", (t) => {
 });
 
 test.serial('get invalid users', (t) => Promise.all([
-    t.throws(t.context.list.getUser(), Error, 'Missing ID'),
-    t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
-    t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+    t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
+    t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
+    t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
 ]));
 
 test.serial('get user by login and type', async (t) => {
@@ -125,9 +125,9 @@ test.serial('get channel by id', async (t) => {
 });
 
 test.serial('get invalid channel', (t) => Promise.all([
-    t.throws(t.context.list.getChannel(), Error, 'No ID'),
-    t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-    t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
+    t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+    t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
 ]));
 
 test.serial('get channel id', async (t) => {

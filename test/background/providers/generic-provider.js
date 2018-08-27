@@ -21,12 +21,12 @@ test("GenericProvider", async (t) => {
     t.is(genericProvider.supports.featured, genericProvider.enabled);
     t.true(Array.isArray(genericProvider.authURL));
     t.is(genericProvider.authURL.length, 0);
-    await t.throws(genericProvider.getUserFavorites(), Error, "cannot getUserFavorites");
-    await t.throws(genericProvider.getChannelDetails(), Error, "cannot getChannelDetails");
+    await t.throwsAsync(genericProvider.getUserFavorites(), Error, "cannot getUserFavorites");
+    await t.throwsAsync(genericProvider.getChannelDetails(), Error, "cannot getChannelDetails");
     t.throws(genericProvider.updateFavsRequest, Error, "cannot updateFavsRequest");
     t.throws(genericProvider.updateRequest, Error, "cannot updateReq");
-    await t.throws(genericProvider.updateChannel(), Error, "cannot updateChannel");
-    await t.throws(genericProvider.updateChannels([ { login: "asdf" } ]), Error, "cannot updateChannels");
+    await t.throwsAsync(genericProvider.updateChannel(), Error, "cannot updateChannel");
+    await t.throwsAsync(genericProvider.updateChannels([ { login: "asdf" } ]), Error, "cannot updateChannels");
 
     // Test forwards
     let name = await new Promise((resolve) => {
@@ -43,8 +43,8 @@ test("GenericProvider", async (t) => {
     });
     t.is(name, "test", "updateChannels forwards to updateChannel");
 
-    await t.throws(genericProvider.getFeaturedChannels(), Error, "cannot getFeaturedChannels");
-    await t.throws(genericProvider.search(), Error, "cannot search");
+    await t.throwsAsync(genericProvider.getFeaturedChannels(), Error, "cannot getFeaturedChannels");
+    await t.throwsAsync(genericProvider.search(), Error, "cannot search");
 });
 
 test.todo("generic provider queueUpdateRequest");

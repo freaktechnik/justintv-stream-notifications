@@ -62,7 +62,7 @@ testProviders.title = (title, p) => `Basic properties of ${p}`;
 const testNotSupportsFavorites = async (t, p) => {
     const provider = providers[p];
 
-    await t.throws(provider.getUserFavorites(), Error, "doesn't implement getUserFavorites");
+    await t.throwsAsync(provider.getUserFavorites(), Error, "doesn't implement getUserFavorites");
     t.throws(provider.updateFavsRequest, Error, "doesn't implement updateFavsRequest");
 };
 testNotSupportsFavorites.title = (title, p) => `Support favorites false implementation of ${p}`;
@@ -77,8 +77,8 @@ testSupportsCredentials.title = (title, p) => `Support credentials implementatio
 const testNotSupportsFeatured = async (t, p) => {
     const provider = providers[p];
 
-    await t.throws(provider.getFeaturedChannels(), Error, "doesn't implement getFeaturedChannels");
-    await t.throws(provider.search(), Error, "doesn't implement search");
+    await t.throwsAsync(provider.getFeaturedChannels(), Error, "doesn't implement getFeaturedChannels");
+    await t.throwsAsync(provider.search(), Error, "doesn't implement search");
 };
 testNotSupportsFeatured.title = (title, p) => `Support featured false implementation of ${p}`;
 
@@ -90,12 +90,12 @@ const testRequests = async (t, p) => {
     let prom;
 
     provider._setQs(getMockQS(originalQS));
-    await t.throws(provider.getChannelDetails("test"), Error, 'getChannelDetails throws');
+    await t.throwsAsync(provider.getChannelDetails("test"), Error, 'getChannelDetails throws');
     prom = await provider._qs.promise;
     t.is(typeof prom, "string");
 
     provider._setQs(getMockQS(originalQS));
-    await t.throws(provider.updateChannel("test"), Error, 'updateChannel throws');
+    await t.throwsAsync(provider.updateChannel("test"), Error, 'updateChannel throws');
     prom = await provider._qs.promise;
     t.is(typeof prom, "string");
 
@@ -134,7 +134,7 @@ const testRequests = async (t, p) => {
 
     if(provider.supports.favorites) {
         provider._setQs(getMockQS(originalQS));
-        await t.throws(provider.getUserFavorites("test"), Error, 'getUserFavorrites throws');
+        await t.throwsAsync(provider.getUserFavorites("test"), Error, 'getUserFavorrites throws');
         prom = await provider._qs.promise;
         t.is(typeof prom, "string");
 
@@ -167,12 +167,12 @@ const testRequests = async (t, p) => {
 
     if(provider.supports.featured) {
         provider._setQs(getMockQS(originalQS));
-        await t.throws(provider.getFeaturedChannels(), Error, 'getFeaturedChannels throws');
+        await t.throwsAsync(provider.getFeaturedChannels(), Error, 'getFeaturedChannels throws');
         prom = await provider._qs.promise;
         t.is(typeof prom, "string");
 
         provider._setQs(getMockQS(originalQS));
-        await t.throws(provider.search("test"), Error, 'search throws');
+        await t.throwsAsync(provider.search("test"), Error, 'search throws');
         prom = await provider._qs.promise;
         t.is(typeof prom, "string");
     }

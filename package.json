@@ -43,6 +43,8 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.0.0-rc.3",
+    "@babel/register": "^7.0.0-rc.3",
     "@freaktechnik/eslint-config-babel": "^6.4.2",
     "@freaktechnik/eslint-config-extension": "^6.4.4",
     "@freaktechnik/eslint-config-node": "^6.4.4",
@@ -50,12 +52,11 @@
     "@freaktechnik/eslint-config-test": "^6.4.4",
     "@freaktechnik/eslint-config-webpack": "^6.4.2",
     "ajv": "^6.5.3",
-    "ava": "^0.25.0",
+    "ava": "^1.0.0-beta.7",
     "babel-loader": "^7.1.5",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
-    "babel-plugin-transform-es2015-modules-commonjs-simple": "^6.7.4",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-inline-elements": "^6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.15",
@@ -65,8 +66,8 @@
     "css-loader": "^1.0.0",
     "eclint": "^2.8.0",
     "element-dataset": "^2.2.6",
-    "enzyme": "^3.4.4",
-    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme": "^3.5.0",
+    "enzyme-adapter-react-16": "^1.3.0",
     "eslint": "^5.4.0",
     "event-target-shim": "^3.0.2",
     "fake-indexeddb": "^2.0.4",
@@ -86,7 +87,7 @@
     "web-ext": "^2.8.0",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
-    "webpack-deep-scope-plugin": "^1.4.1"
+    "webpack-deep-scope-plugin": "^1.5.0"
   },
   "scripts": {
     "test:ava": "NODE_ENV=test nyc ava",
@@ -104,19 +105,25 @@
     "ci-init": "node ./scripts/setup-travis.js"
   },
   "ava": {
-    "babel": "inherit",
+    "babel": {
+      "testOptions": {
+        "babelrc": false,
+        "presets": [
+          "@babel/preset-react"
+        ]
+      }
+    },
     "require": [
-      "babel-core/register",
+      "./test/helpers/register.js",
       "./test/helpers/setup-browser-env.js"
     ]
   },
   "babel": {
     "presets": [
       "@ava/stage-4",
-      "react"
+      "@babel/preset-react"
     ],
     "plugins": [
-      "transform-es2015-modules-commonjs",
       "transform-class-properties",
       [
         "module-resolver",
@@ -138,7 +145,7 @@
       ".jsx"
     ],
     "require": [
-      "babel-register"
+      "./test/helpers/register.js"
     ],
     "sourceMap": false,
     "instrument": false

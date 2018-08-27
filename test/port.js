@@ -48,7 +48,7 @@ test.serial("port disconnect", async (t) => {
     port.onDisconnect.dispatch();
 
     await promise;
-    await t.throws(p.disconnectPromise, PortGoneError);
+    await t.throwsAsync(p.disconnectPromise, PortGoneError);
     t.falsy(p.port);
 });
 
@@ -181,13 +181,13 @@ test.serial("request rejected due to disconnect", (t) => {
     const promise = p.request("test");
 
     port.onDisconnect.dispatch();
-    return t.throws(promise, PortGoneError);
+    return t.throwsAsync(promise, PortGoneError);
 });
 
 test("request rejected due to no port", (t) => {
     const p = new Port("test-port");
 
-    return t.throws(p.request("test"), NoPortError);
+    return t.throwsAsync(p.request("test"), NoPortError);
 });
 
 test.serial("request rejected due to error", async (t) => {
@@ -200,11 +200,11 @@ test.serial("request rejected due to error", async (t) => {
 
     port.onMessage.dispatch({
         command: `test${Port.REPLY_SUFFIX}`,
-        error: "foo baz"
+        error: new Error("foo baz")
     });
 
-    const error = await t.throws(promise);
-    t.is(error, "foo baz");
+    const error = await t.throwsAsync(promise);
+    t.is(error.message, "foo baz");
 });
 
 test.serial("prevent default of command event prevents message event", async (t) => {

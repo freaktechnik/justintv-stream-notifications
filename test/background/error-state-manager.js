@@ -71,7 +71,7 @@ test('register event', async (t) => {
 
     await errorStateManager.register('bar', 0, [], 'foo');
 
-    await t.notThrows(p);
+    await t.notThrowsAsync(p);
 });
 
 test.serial('empty event', async (t) => {

@@ -49,6 +49,7 @@ const andTest = async (t, args) => {
 
     t.is(result, expect);
 };
+andTest.title = (title, t) => `${title}: ${t.join(' && ')}`;
 const orTest = async (t, args) => {
     let expect = false;
     const p = [];
@@ -61,6 +62,7 @@ const orTest = async (t, args) => {
 
     t.is(result, expect);
 };
+orTest.title = (title, t) => `${title}: ${t.join(' || ')}`;
 
 for(const h of CASES) {
     test('and', andTest, h);
@@ -75,8 +77,8 @@ test('not', async (t) => {
     t.false(await not(tp));
 });
 
-test('and reject', (t) => t.throws(and(Promise.resolve(true), Promise.reject(new Error())), Error));
+test('and reject', (t) => t.throwsAsync(and(Promise.resolve(true), Promise.reject(new Error())), Error));
 
-test('or reject', (t) => t.throws(or(Promise.resolve(false), Promise.reject(new Error())), Error));
+test('or reject', (t) => t.throwsAsync(or(Promise.resolve(false), Promise.reject(new Error())), Error));
 
-test('not reject', (t) => t.throws(not(Promise.reject(new Error())), Error));
+test('not reject', (t) => t.throwsAsync(not(Promise.reject(new Error())), Error));

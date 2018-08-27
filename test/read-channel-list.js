@@ -35,9 +35,9 @@ test("Static properties", (t) => {
 
 
 test.serial('get invalid users', (t) => Promise.all([
-    t.throws(t.context.list.getUser(), Error, 'Missing ID'),
-    t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
-    t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+    t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
+    t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
+    t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
 ]));
 
 test.serial('get user by login and type', async (t) => {
@@ -109,9 +109,9 @@ test.serial('get channel by id', async (t) => {
 });
 
 test.serial('get invalid channel', (t) => Promise.all([
-    t.throws(t.context.list.getChannel(), Error, 'No ID'),
-    t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-    t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
+    t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+    t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
 ]));
 
 test.serial('get channel id', async (t) => {
@@ -193,7 +193,7 @@ test.serial('upgrade from v2 to v3 shouldnt fail opening', async (t) => {
     const { target: { result: db } } = await DatabaseManager._waitForRequest(request);
     await db.close();
 
-    await t.notThrows(DatabaseManager.open());
+    await t.notThrowsAsync(DatabaseManager.open());
     await t.context.list.close();
     await setupDB();
 });
@@ -212,7 +212,7 @@ test('_waitForCursor error', async (t) => {
     const p = t.context.list._waitForCursor(request, cbk);
 
     request.onerror(new Error());
-    await t.throws(p);
+    await t.throwsAsync(p);
 });
 
 test.before(setupDB);

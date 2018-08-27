@@ -67,7 +67,7 @@ test.serial('resolve resolvable state', async (t) => {
 test('resolve unresolvable state', (t) => {
     const es = new ErrorState('foo', ErrorState.UNRECOVERABLE);
 
-    return t.throws(es.resolve());
+    return t.throwsAsync(es.resolve());
 });
 
 test('action events', async (t) => {

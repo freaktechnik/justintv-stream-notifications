@@ -179,7 +179,7 @@ test.serial("Detaching Worker Without Closing Tab", async (t) => {
 
     port.onDisconnect.dispatch();
 
-    await t.throws(cm.port.disconnectPromise, PortGoneError);
+    await t.throwsAsync(cm.port.disconnectPromise, PortGoneError);
     t.is(cm.tabID, null);
 });
 
@@ -236,7 +236,7 @@ test.serial("Additional Manager to Primary", async (t) => {
     t.true(browser.tabs.update.calledOnce);
 
     port.onDisconnect.dispatch();
-    await t.throws(cm.port.disconnectPromise, PortGoneError);
+    await t.throwsAsync(cm.port.disconnectPromise, PortGoneError);
 
     fp = when(spw, 'focus');
     secondPort.onMessage.dispatch({
@@ -246,7 +246,7 @@ test.serial("Additional Manager to Primary", async (t) => {
 
     t.is(secondPort.postMessage.lastCall.args[0].command, 'reload');
     secondPort.onDisconnect.dispatch();
-    await t.throws(spw.disconnectPromise, PortGoneError);
+    await t.throwsAsync(spw.disconnectPromise, PortGoneError);
 
     const spr = when(cm.port, 'connect');
     browser.runtime.onConnect.dispatch(secondPort);

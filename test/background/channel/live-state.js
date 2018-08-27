@@ -127,7 +127,7 @@ const testDefaultInterpretation = async (t, i, interpretation) => {
     browser.storage.local.get.reset();
     browser.storage.local.get.callsFake((props) => Promise.resolve(props));
 };
-test.defaultInterpretation = (title, i, state) => `${title} with ${i} intepreted as ${state}`;
+testDefaultInterpretation.title = (title, i, state) => `${title} with ${i} intepreted as ${state}`;
 const expectedStates = [
     LiveState.TOWARD_LIVE,
     LiveState.TOWARD_LIVE,

@@ -450,7 +450,7 @@ const testFormatChannel = (t, info, providers) => {
     t.deepEqual(result, info.formattedChannel);
     t.deepEqual(info.channel, preFormatClone);
 };
-testFormatChannel.title = (title, info) => `${title}: ${info.type},${info.style},${info.extras} - ${info.channel.login}`;
+testFormatChannel.title = (title, info) => `${title}: ${info.type},${info.style},${info.extras},${info.formattedChannel.external},${info.channel.live.state} - ${info.channel.login}`;
 
 for(const info of channelFormats) {
     test('formatChannel', testFormatChannel, info, providers);

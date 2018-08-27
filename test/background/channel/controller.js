@@ -36,7 +36,7 @@ const testProviderCredentials = async (t, p) => {
         }
     }
     else {
-        await t.throws(cc.autoAddUsers(p));
+        await t.throwsAsync(cc.autoAddUsers(p));
     }
 };
 testProviderCredentials.title = (title, p) => `${title} for ${p}`;
@@ -69,7 +69,7 @@ test.serial.failing("Credentials", async (t) => {
 test("Add User", async (t) => {
     const cc = new ChannelController();
 
-    await t.throws(cc.addUser("test", "test"));
+    await t.throwsAsync(cc.addUser("test", "test"));
 });
 
 test.serial("User Methods", async (t) => {
@@ -84,7 +84,7 @@ test.serial("User Methods", async (t) => {
     let channels = await cc.getChannelsByType();
     t.is(channels.length, 1, "All followed channels were added");
 
-    await t.throws(cc.addUser(TESTUSER.name, TESTUSER.type, () => true));
+    await t.throwsAsync(cc.addUser(TESTUSER.name, TESTUSER.type, () => true));
 
     let users = await cc.getUsersByType(TESTUSER.type);
     t.is(users.length, 1, "Get users by type for the user's type holds one result");
@@ -134,13 +134,13 @@ test.serial("Remove User", async (t) => {
 test("AddChannel", async (t) => {
     const cc = new ChannelController();
 
-    await t.throws(cc.addChannel("test", "test"));
+    await t.throwsAsync(cc.addChannel("test", "test"));
 });
 
 test.serial("CancelAddChannel", async (t) => {
     const cc = new ChannelController();
 
-    await t.throws(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
+    await t.throwsAsync(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
 
     const channel = await cc.addChannel(TESTUSER.name, TESTUSER.type, () => false);
     t.is(channel.login, TESTUSER.name);
@@ -229,7 +229,7 @@ test("Disabled Provider", async (t) => {
     if(p) {
         const cc = new ChannelController();
 
-        await t.throws(cc.addChannel(TESTUSER.name, p));
+        await t.throwsAsync(cc.addChannel(TESTUSER.name, p));
 
         //TODO place a channel in the channel list so we can test this
         //const r = await cc.updateChannel(channel.id);
@@ -241,7 +241,7 @@ test("Disabled Provider", async (t) => {
         //TODO make sure removeChannel doesn't throw
         //await cc.removeChannel(channel.id);
 
-        await t.throws(cc.addUser(TESTUSER.name, p));
+        await t.throwsAsync(cc.addUser(TESTUSER.name, p));
 
         //TODO also test user functions.
     }
@@ -254,7 +254,7 @@ test("Disabled Provider", async (t) => {
 test('getExternalChannel throws with unknown type', (t) => {
     const cc = new ChannelController();
 
-    return t.throws(cc.getExternalChannel('foo', 'bar'));
+    return t.throwsAsync(cc.getExternalChannel('foo', 'bar'));
 });
 
 test('getExternalChannel', async (t) => {

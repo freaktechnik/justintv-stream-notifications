@@ -1,8 +1,4 @@
 {
-    "cm_tab_users": {
-        "message": "Benutzer",
-        "description": "Label of the tab that contains all users in the channel manager"
-    },
     "cm_add": {
         "message": "Hinzufügen…",
         "description": "Label on button that opens a dialog to add a channel or user."
@@ -46,10 +42,6 @@
     "youtube_apiKey_title": {
         "message": "YouTube API Schlüssel",
         "description": "Title of the YouTube API key setting in the preferences"
-    },
-    "panel_sort_field_options_category": {
-        "message": "Kategorie",
-        "description": ""
     },
     "context_redirector": {
         "message": "$CHANNEL$ öffnen",
@@ -139,10 +131,6 @@
         "message": "strahlt einen alten Stream wieder aus",
         "description": "Rebroadcasting state for nonliveNotification"
     },
-    "liveState_1": {
-        "message": "Weiterleitung",
-        "description": ""
-    },
     "import": {
         "message": "Konfiguration importieren",
         "description": "Button label to import preferences and channel list."
@@ -179,10 +167,6 @@
         "message": "Standardeinstellungen wiederherstellen",
         "description": "Button to reset all preferences to their default value"
     },
-    "panel_sort_title": {
-        "message": "Kanäle sortieren",
-        "description": ""
-    },
     "mlg_showRebroadcasts_title": {
         "message": "Zeige MLG Wiederausstrahlungen",
         "description": "Title of the MLG rebroadcasts setting in the preferences"
@@ -191,21 +175,9 @@
         "message": "Benutzer",
         "description": "Select label for adding a user"
     },
-    "panel_sort_field_options_uname": {
-        "message": "Benutzername",
-        "description": ""
-    },
     "updateInterval_title": {
         "message": "Aktualisierungsabstand",
         "description": "Title of the update interval setting in the preferences"
-    },
-    "panel_badges_title": {
-        "message": "Zeige Anzahl Kanäle auf den Tabs",
-        "description": "Setting to toggle visibility of count badges on panel tabs"
-    },
-    "options_title": {
-        "message": "Optionen",
-        "description": "Title of the options page"
     },
     "context_refresh_all": {
         "message": "Alle Kanäle aktualisieren",
@@ -243,10 +215,6 @@
         "message": "Dunkel",
         "description": "Dark option of the theme setting in the preferences"
     },
-    "liveState_-1": {
-        "message": "Offline",
-        "description": ""
-    },
     "panel_nonlive_options_Distinct": {
         "message": "Eigener Tab",
         "description": "Distinct state option of the non-live treatment setting in the preferences"
@@ -262,10 +230,6 @@
     "provideryoutube": {
         "message": "YouTube",
         "description": "Provider name for youtube.com"
-    },
-    "panel_sort_direction_options_Descending": {
-        "message": "Absteigend",
-        "description": ""
     },
     "panel_extras_title": {
         "message": "Zusätzliche Infos im Panel",
@@ -303,14 +267,6 @@
         "message": "Kanalstatus aktualisieren",
         "description": "Refresh the status of a channel from the context menu in the panel"
     },
-    "mixer_clientID_title": {
-        "message": "Mixer ClientID",
-        "description": "Title of mixer client ID field on options page"
-    },
-    "panel_sort_field_options_title": {
-        "message": "Titel",
-        "description": ""
-    },
     "providernewlivestream": {
         "message": "Neues Livestream",
         "description": "Provider name for the new livestream.com"
@@ -322,14 +278,6 @@
     "cookies_disabled": {
         "message": "Konnte die Kanäle nicht lesen, da Cookies für die Erweiterung deaktiviert sind.",
         "description": "Error message shown, when cookies are not enabled for the extension and it thus can't open the database."
-    },
-    "panel_sort_direction_description": {
-        "message": "Richtung, in die Kanäle sortiert werden.",
-        "description": ""
-    },
-    "panel_sort_field_title": {
-        "message": "Kanäle sortieren nach",
-        "description": ""
     },
     "panel_no_results": {
         "message": "Keine Resultate.",
@@ -383,25 +331,13 @@
         "message": "Behandle nicht-live Streams als",
         "description": "Title of the non-live treatment setting in the preferences"
     },
-    "liveState_0": {
-        "message": "Live",
-        "description": ""
-    },
     "copy_pattern_description": {
         "message": "Bestimmt den Satz, der mit der Stream URL kopiert wird. {URL} wird durch die URL des Streams ersetzt.",
         "description": "Description of the copy pattern setting in the preferences"
     },
-    "liveState_2": {
-        "message": "Wiederausstrahlung",
-        "description": ""
-    },
     "panel_loading": {
         "message": "Laden...",
         "description": "Channels are being loaded into the panel"
-    },
-    "omniboxSuggestion": {
-        "message": "$USERNAME$ auf $TYPE$",
-        "description": ""
     },
     "cm_dialog_providers": {
         "message": "Dienst:",
@@ -414,10 +350,6 @@
     "channelManagerGenericError": {
         "message": "Ein Fehler ist passiert.",
         "description": "An unknown error was encountered while trying to fetch a channel or user."
-    },
-    "panel_sort_field_description": {
-        "message": "Eigenschaft, nach der Kanäle sortiert werden.",
-        "description": ""
     },
     "updateInterval_description": {
         "message": "Das Zeitintervall, in dem das Add-on den Status der Kanäle überprüft in Sekunden. Null beduetet, dass der Status der Kanäle nicht aktualisiert wird.",
@@ -443,10 +375,6 @@
         "message": "Live",
         "description": "Label of the tab with the live channels in the panel"
     },
-    "panel_sort_direction_options_Ascending": {
-        "message": "Aufsteigend",
-        "description": ""
-    },
     "restore_failed": {
         "message": "Leider schlug der Versuch von Life Stream Notifier seine Datenbank wiederherzustellen fehl. Die einzige bekannte Lösung ist das Profil zurückzusetzen.",
         "description": "Error while trying to read the DB, no actions from within the extension will work."
@@ -454,10 +382,6 @@
     "openChannel": {
         "message": "Kanal öffnen",
         "description": "Label for context panel action that corresponds to clicking on the channel"
-    },
-    "panel_sort_direction_title": {
-        "message": "Sortierungsrichtung",
-        "description": ""
     },
     "cm_tab_channels": {
         "message": "Kanäle",
@@ -535,17 +459,9 @@
         "message": "Kanal hinzufügen",
         "description": "Context menu action to add a channel from the explore tab in the context menu"
     },
-    "panel_sort_field_options_liveSince": {
-        "message": "Laufzeit",
-        "description": ""
-    },
     "panel_tab_nonlive": {
         "message": "Nicht-live",
         "description": "Label of the optional non-live tab in the panel"
-    },
-    "panel_sort_field_options_viewers": {
-        "message": "Zuschauer",
-        "description": ""
     },
     "nonliveNotificationStateRedirect": {
         "message": "leitet nun zu $CHANNEL$ weiter",
@@ -595,10 +511,6 @@
         "message": "Dailymotion",
         "description": "Provider name for dailymotion"
     },
-    "panel_sort_field_options_provider": {
-        "message": "Dienst",
-        "description": ""
-    },
     "cm_update_title": {
         "message": "Aktualisiert die Eigenschafter der ausgewählten Benutzer.",
         "description": "Tooltip of the button to update the metadata of the selected users or channels"
@@ -606,5 +518,97 @@
     "panel_extras_description": {
         "message": "Zeigt die Anzahl Zuschauer, die Kategorie und den Typ der Kanäle im Panel an, wenn verfügbar.",
         "description": "Description of the panel extras setting in the preferences"
+    },
+    "options_title": {
+        "message": "Optionen",
+        "description": "Title of the options page"
+    },
+    "mixer_clientID_title": {
+        "message": "Mixer ClientID",
+        "description": "Title of mixer client ID field on options page"
+    },
+    "omniboxSuggestion": {
+        "message": "$USERNAME$ auf $TYPE$",
+        "description": ""
+    },
+    "panel_badges_title": {
+        "message": "Zeige Anzahl Kanäle auf den Tabs",
+        "description": "Setting to toggle visibility of count badges on panel tabs"
+    },
+    "liveState_-1": {
+        "message": "Offline",
+        "description": ""
+    },
+    "liveState_0": {
+        "message": "Live",
+        "description": ""
+    },
+    "liveState_1": {
+        "message": "Weiterleitung",
+        "description": ""
+    },
+    "liveState_2": {
+        "message": "Wiederausstrahlung",
+        "description": ""
+    },
+    "panel_sort_title": {
+        "message": "Kanäle sortieren",
+        "description": ""
+    },
+    "panel_sort_field_title": {
+        "message": "Kanäle sortieren nach",
+        "description": ""
+    },
+    "panel_sort_field_description": {
+        "message": "Eigenschaft, nach der Kanäle sortiert werden.",
+        "description": ""
+    },
+    "panel_sort_field_options_uname": {
+        "message": "Benutzername",
+        "description": ""
+    },
+    "panel_sort_field_options_provider": {
+        "message": "Dienst",
+        "description": ""
+    },
+    "panel_sort_field_options_category": {
+        "message": "Kategorie",
+        "description": ""
+    },
+    "panel_sort_field_options_title": {
+        "message": "Titel",
+        "description": ""
+    },
+    "panel_sort_field_options_viewers": {
+        "message": "Zuschauer",
+        "description": ""
+    },
+    "panel_sort_field_options_liveSince": {
+        "message": "Laufzeit",
+        "description": ""
+    },
+    "panel_sort_direction_title": {
+        "message": "Sortierungsrichtung",
+        "description": ""
+    },
+    "panel_sort_direction_description": {
+        "message": "Richtung, in die Kanäle sortiert werden.",
+        "description": ""
+    },
+    "panel_sort_direction_options_Descending": {
+        "message": "Absteigend",
+        "description": ""
+    },
+    "panel_sort_direction_options_Ascending": {
+        "message": "Aufsteigend",
+        "description": ""
+    },
+    "permissionRequired": {
+        "message": "Permissions required to communicate with provider",
+        "description": ""
+    },
+    "cm_tab_users": {
+        "message": "Benutzer",
+        "description": "Label of the tab that contains all users in the channel manager"
     }
 }

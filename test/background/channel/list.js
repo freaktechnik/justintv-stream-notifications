@@ -16,9 +16,9 @@ import prefs from '../../../src/prefs.json';
 import DatabaseManager from '../../../src/database-manager';
 
 test.serial('get invalid users', (t) => Promise.all([
-    t.throws(t.context.list.getUser(), Error, 'Missing ID'),
-    t.throws(t.context.list.getUser(-1), Error, 'unavailable ID'),
-    t.throws(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+    t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
+    t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
+    t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
 ]));
 
 test.serial('add-remove user', async (t) => {
@@ -29,7 +29,7 @@ test.serial('add-remove user', async (t) => {
     t.true("id" in user, "The user has an ID");
     t.is(user.uname, referenceUser.uname);
 
-    await t.throws(t.context.list.addUser(referenceUser));
+    await t.throwsAsync(t.context.list.addUser(referenceUser));
 
     user = getUser();
     user.uname = 'foo bar';
@@ -45,7 +45,7 @@ test.serial('add-remove user', async (t) => {
     t.true(nuser instanceof User);
     t.is(nuser.id, user.id);
 
-    await t.throws(t.context.list.getUser(user.id));
+    await t.throwsAsync(t.context.list.getUser(user.id));
 });
 
 test.serial('get user by login and type', async (t) => {
@@ -127,7 +127,7 @@ test.serial('add channel', async (t) => {
     t.is(channel.type, referenceChannel.type);
     t.is(channel.login, referenceChannel.login);
 
-    await t.throws(t.context.list.addChannel(referenceChannel));
+    await t.throwsAsync(t.context.list.addChannel(referenceChannel));
 });
 
 test.serial('remove channel by id', async (t) => {
@@ -272,9 +272,9 @@ test.serial('get channel by id', async (t) => {
 });
 
 test.serial('get invalid channel', (t) => Promise.all([
-    t.throws(t.context.list.getChannel(), Error, 'No ID'),
-    t.throws(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-    t.throws(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
+    t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+    t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
 ]));
 
 test.serial('set channel', async (t) => {
@@ -472,7 +472,7 @@ test.serial('upgrade from v2 to v3 shouldnt fail opening', async (t) => {
     });
     db.close();
 
-    await t.notThrows(DatabaseManager.open());
+    await t.notThrowsAsync(DatabaseManager.open());
 });
 
 test.todo("event forwarding");

@@ -159,7 +159,7 @@ test("getTabByIndex throws with invalid index", (t) => {
 
         t.is(parseInt(content.getAttribute("data-tab"), 10), index);
     };
-    testContentIndex.title = (title, index) => `${title} for index ${index}`;
+    testContentIndex.title = (title, i, index) => `${title} for index ${index}`;
     const tabbed = getTabbed(4);
     const instance = new Tabbed(tabbed);
 

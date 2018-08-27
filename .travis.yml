@@ -32,6 +32,13 @@ jobs:
     - stage: test
       script: npm run test:ava
       after_success: npm run coverage
+      env:
+        - CI_NODE_TOTAL=4
+      matric:
+        - CI_NODE_INDEX=0
+        - CI_NODE_INDEX=1
+        - CI_NODE_INDEX=2
+        - CI_NODE_INDEX=3
     - stage: greenkeeper
       if: branch =~ /^greenkeeper.*$/ # only run if in a greenkeeper branch
       before_install: npm i -g greenkeeper-lockfile

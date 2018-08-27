@@ -108,10 +108,10 @@ test('does support livestreamer', (t) => {
     const channel = getChannel();
     channel.live.setLive(true);
 
-    return t.notThrows(selectOrOpenTab(channel, 'livestreamer'));
+    return t.notThrowsAsync(selectOrOpenTab(channel, 'livestreamer'));
 });
 
-test('formatChannel without channel', (t) => t.throws(formatChannel('test'), TypeError, 'Invalid channel provided'));
+test('formatChannel without channel', (t) => t.throwsAsync(formatChannel('test'), TypeError, 'Invalid channel provided'));
 
 test('formatChannel with patterns', async (t) => {
     const channel = getChannel();

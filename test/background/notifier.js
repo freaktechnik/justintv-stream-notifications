@@ -57,7 +57,18 @@ const testNotifierNotifications = async (t, f) => {
         t.true(browser.notifications.create.notCalled, 'no notification shown');
     }
 };
-testNotifierNotifications.title = (title, fixture) => `${title} with a ${fixture.expected} notification`;
+testNotifierNotifications.title = (title, fixture) => {
+    let testTitle = `${title} with a ${fixture.expected} notification under ${JSON.stringify(fixture.prefs)}`;
+    if(fixture.initial.length) {
+        const [ initial ] = fixture.initial;
+        testTitle += ` from ${initial.live.state} - "${initial.title}"`;
+    }
+    if(fixture.updated.length) {
+        const [ updated ] = fixture.updated;
+        testTitle += ` to ${updated.live.state} - "${updated.title}"`;
+    }
+    return testTitle;
+};
 
 test("Prefs", async (t) => {
     const notifier = new Notifier();
@@ -600,7 +611,7 @@ const fixture = [
         expected: "live"
     },
     {
-        pref: {
+        prefs: {
             live: true,
             offline: true,
             title: true,
@@ -621,7 +632,7 @@ const fixture = [
         expected: "none"
     },
     {
-        pref: {
+        prefs: {
             live: true,
             offline: false,
             title: true,

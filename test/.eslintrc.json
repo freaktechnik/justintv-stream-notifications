@@ -4,7 +4,8 @@
         "browser": true
     },
     "rules": {
-        "no-console": 2
+        "no-console": 2,
+        "ava/use-t-well": 0
     },
     "extends": [
         "@freaktechnik/eslint-config-babel",
