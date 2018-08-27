@@ -40,15 +40,21 @@ const getShowBadges = (state) => state.ui.badges;
 const getContextChannelID = (state) => state.ui.contextChannel;
 const getQueueContext = (state) => state.ui.queueContext;
 
+const getMergedFeatured = createSelector(
+    getFeatured,
+    getChannels,
+    (featured, channels) => mergeFeatured(featured, channels)
+);
+
 const makeChannelsSelector = (tabGetter) => createSelector(
     getChannels,
-    getFeatured,
+    getMergedFeatured,
     getNonliveDisplay,
     tabGetter,
     (channels, featured, nonLiveDisplay, tab) => {
         if(tab === EXPLORE_TAB) {
             return {
-                channels: mergeFeatured(featured, channels),
+                channels: featured,
                 redirects: []
             };
         }
@@ -238,9 +244,9 @@ const getListContextChannel = createSelector(
 );
 const getExploreContextChannel = createSelector(
     getContextChannelID,
-    getFeatured,
+    getMergedFeatured,
     (id, featured) => {
-        if(id && typeof id === 'string') {
+        if(id) {
             return featured.find((ch) => compareFormattedIDToRawChannel(id, ch));
         }
     }
