@@ -2,16 +2,40 @@ sudo: false
 group: travis_latest
 language: node_js
 node_js: stable
-before_install: npm i -g greenkeeper-lockfile
-install: case $TRAVIS_BRANCH in greenkeeper*) npm i;; *) npm ci;; esac;
-before_script:
-- npm run ci-init
-- greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
-after_success: npm run coverage
+cache:
+  directories:
+    - $HOME/.npm
 branches:
   except:
   - gh-pages
 notifications:
   email:
     on_failure: change
+stages:
+  - lint
+  - test
+  - greenkeeper
+jobs:
+  include:
+    - stage: lint
+      name: "Lint JS"
+      script: npm run lint:js
+    - script: npm run lint:css
+      name: "Lint CSS"
+    - script: npm run lint:webext
+      before_script: npm run ci-init
+      name: "Lint Extension"
+    - script: npm run lint:ec
+      name: "Lint by editorconfig"
+    - script: npm run lint:json
+      name: "Lint JSON"
+    - stage: test
+      script: npm run test:ava
+      after_success: npm run coverage
+    - stage: greenkeeper
+      if: branch =~ /^greenkeeper.*$/ # only run if in a greenkeeper branch
+      before_install: npm i -g greenkeeper-lockfile
+      install: npm i # always run full install for greenkeeper
+      script:
+        - greenkeeper-lockfile-update
+        - greenkeeper-lockfile-upload
