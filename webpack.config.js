@@ -29,7 +29,7 @@ module.exports = {
                 options: {
                     babelrc: false,
                     plugins: [
-                        "transform-class-properties"
+                        "@babel/plugin-proposal-class-properties"
                     ]
                 }
             },
@@ -73,7 +73,7 @@ module.exports = {
                 options: {
                     babelrc: false,
                     presets: [
-                        'react'
+                        '@babel/preset-react'
                     ],
                     plugins: [
                         [
@@ -87,8 +87,8 @@ module.exports = {
                                 ]
                             }
                         ],
-                        "transform-react-constant-elements",
-                        "transform-react-inline-elements"
+                        "@babel/plugin-transform-react-constant-elements",
+                        "@babel/plugin-transform-react-inline-elements"
                     ]
                 }
             }
@@ -172,7 +172,7 @@ module.exports = {
             publicPath: '/vendor/'
         }),
         new webpack.EnvironmentPlugin([ 'NODE_ENV' ]),
-        //new WebpackDeepScopeAnalysisPlugin()
+        new WebpackDeepScopeAnalysisPlugin()
     ],
     externals: {
         lodash: '_',

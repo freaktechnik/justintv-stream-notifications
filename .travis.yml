@@ -17,12 +17,18 @@ stages:
   - dependencies
   - lint
   - test
-  - greenkeeper
 jobs:
   include:
     - stage: dependencies
+      name: "Greenkeeper"
+      if: branch =~ /^greenkeeper.*$/ # only run if in a greenkeeper branch
+      before_install: npm i -g greenkeeper-lockfile
+      install: npm i # always run full install for greenkeeper
+      script:
+        - greenkeeper-lockfile-update
+        - greenkeeper-lockfile-upload
+    - script: skip
       name: "Update deps cache"
-      script: skip
     - stage: lint
       name: "Lint JS"
       script: npm run lint:js
@@ -49,10 +55,3 @@ jobs:
     - script: npm run test:ava
       after_success: npm run coverage
       env: CI_NODE_INDEX=3
-    - stage: greenkeeper
-      if: branch =~ /^greenkeeper.*$/ # only run if in a greenkeeper branch
-      before_install: npm i -g greenkeeper-lockfile
-      install: npm i # always run full install for greenkeeper
-      script:
-        - greenkeeper-lockfile-update
-        - greenkeeper-lockfile-upload

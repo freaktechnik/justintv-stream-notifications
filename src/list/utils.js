@@ -16,16 +16,16 @@ export {
     SMALL_IMAGE, LARGE_IMAGE, DEFAULT_SORT
 };
 
-export const /* tree-shaking no-side-effects-when-called */ getExternalID = (channel) => `${channel.login}|${channel.type}`;
+export const /*#__PURE__*/ getExternalID = (channel) => `${channel.login}|${channel.type}`;
 
-export const /* tree-shaking no-side-effects-when-called */ compareFormattedIDToRawChannel = (id, channel) => {
+export const /*#__PURE__*/ compareFormattedIDToRawChannel = (id, channel) => {
     if(typeof id === 'string' || !('id' in channel)) {
         return id === getExternalID(channel);
     }
     return channel.id === id;
 };
 
-export const /* tree-shaking no-side-effects-when-called */ formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
+export const /*#__PURE__*/ formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
@@ -90,7 +90,7 @@ export const /* tree-shaking no-side-effects-when-called */ formatChannel = (cha
     return formattedChannel;
 };
 
-export const /* tree-shaking no-side-effects-when-called */ getChannelList = (channels, type, nonLiveDisplay) => {
+export const /*#__PURE__*/ getChannelList = (channels, type, nonLiveDisplay) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
@@ -145,7 +145,7 @@ export const /* tree-shaking no-side-effects-when-called */ getChannelList = (ch
     };
 };
 
-export const /* tree-shaking no-side-effects-when-called */ getFieldValue = (obj, path) => {
+export const /*#__PURE__*/ getFieldValue = (obj, path) => {
     const steps = path.split('.');
     if(steps.length > ONE_ITEM) {
         return getFieldValue(obj[steps.shift()], steps.join('.'));
@@ -154,7 +154,7 @@ export const /* tree-shaking no-side-effects-when-called */ getFieldValue = (obj
 };
 
 //TODO this is naughty and modifies the featured channels.
-export const /* tree-shaking no-side-effects-when-called */ mergeFeatured = (featured, channels) => {
+export const /*#__PURE__*/ mergeFeatured = (featured, channels) => {
     for(const channel of featured) {
         const internalChannel = channels.find((ch) => ch.login === channel.login && ch.type === channel.type);
         if(internalChannel) {

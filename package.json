@@ -31,7 +31,6 @@
     "test": "test"
   },
   "dependencies": {
-    "@freaktechnik/eslint-config-base": "^6.4.4",
     "lodash": "^4.17.10",
     "open-iconic": "^1.1.1",
     "prop-types": "^15.6.2",
@@ -43,24 +42,24 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.0.0-rc.3",
-    "@babel/register": "^7.0.0-rc.3",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-transform-react-constant-elements": "^7.0.0",
+    "@babel/plugin-transform-react-inline-elements": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "@freaktechnik/eslint-config-babel": "^6.4.2",
+    "@freaktechnik/eslint-config-base": "^6.4.4",
     "@freaktechnik/eslint-config-extension": "^6.4.4",
     "@freaktechnik/eslint-config-node": "^6.4.4",
     "@freaktechnik/eslint-config-react": "^6.4.4",
     "@freaktechnik/eslint-config-test": "^6.4.4",
     "@freaktechnik/eslint-config-webpack": "^6.4.2",
     "ajv": "^6.5.3",
-    "ava": "^1.0.0-beta.7",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-istanbul": "^4.1.6",
+    "ava": "1.0.0-beta.8",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-istanbul": "^5.0.1",
     "babel-plugin-module-resolver": "^3.1.1",
-    "babel-plugin-transform-class-properties": "^6.11.5",
-    "babel-plugin-transform-react-constant-elements": "^6.23.0",
-    "babel-plugin-transform-react-inline-elements": "^6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.15",
-    "babel-preset-react": "^6.24.1",
     "browser-env": "^3.2.5",
     "codecov": "^3.0.4",
     "css-loader": "^1.0.0",
@@ -77,17 +76,17 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.2",
     "mz": "^2.7.0",
-    "nyc": "^12.0.2",
+    "nyc": "^13.0.1",
     "sinon": "^6.1.5",
     "sinon-chrome": "^2.3.2",
     "stylelint": "^9.5.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-no-unsupported-browser-features": "^3.0.1",
     "transifex-loader": "^5.0.0",
-    "web-ext": "^2.8.0",
+    "web-ext": "^2.9.0",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
-    "webpack-deep-scope-plugin": "^1.5.0"
+    "webpack-deep-scope-plugin": "^1.5.2"
   },
   "scripts": {
     "test:ava": "NODE_ENV=test nyc ava",
@@ -124,7 +123,7 @@
       "@babel/preset-react"
     ],
     "plugins": [
-      "transform-class-properties",
+      "@babel/plugin-proposal-class-properties",
       [
         "module-resolver",
         {
@@ -143,9 +142,6 @@
     ],
     "extension": [
       ".jsx"
-    ],
-    "require": [
-      "./test/helpers/register.js"
     ],
     "sourceMap": false,
     "instrument": false

@@ -7,7 +7,7 @@ import 'file-loader?name=vendor/react-key-handler.[ext]!react-key-handler/dist/i
 import 'file-loader?name=vendor/reselect.[ext]!reselect/dist/reselect.js';
 
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import {
     createStore,
@@ -120,7 +120,7 @@ hasStreamlink()
 
 // Actually show something
 
-render(
+ReactDOM.render(
     <Provider store={ store }>
         <React.StrictMode>
             <Popup/>
