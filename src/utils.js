@@ -7,13 +7,13 @@
 
 const FIRST = 0,
     REST = 1,
-    /*#__PURE__*/ capitalize = (str) => str[FIRST].toUpperCase() + str.substr(REST),
-    getEventPropertyName = (event) => `on${capitalize(event)}`;
+    capitalize = /*#__PURE__*/ (str) => str[FIRST].toUpperCase() + str.substr(REST),
+    getEventPropertyName = /*#__PURE__*/ (event) => `on${capitalize(event)}`;
 
 export { capitalize };
 
 /* eslint-disable promise/avoid-new */
-export const /*#__PURE__*/ when = (target, event) => {
+export const when = /*#__PURE__*/ (target, event) => {
     if(target instanceof EventTarget) {
         return new Promise((resolve) => {
             target.addEventListener(event, resolve, {
@@ -45,7 +45,7 @@ export const /*#__PURE__*/ when = (target, event) => {
  *                     an array as the detail property of the event.
  * @returns {boolean} If the event fully propagated.
  */
-export const /*#__PURE__*/ emit = (target, event, ...detail) => {
+export const emit = /*#__PURE__*/ (target, event, ...detail) => {
     let eventInstance;
     const init = {
         cancelable: true
@@ -73,6 +73,6 @@ export const /*#__PURE__*/ emit = (target, event, ...detail) => {
  * @param {module:event-target.EventTarget} target - Target to pipe to.
  * @returns {undefined}
  */
-export const /*#__PURE__*/ pipe = (source, event, target) => {
+export const pipe = /*#__PURE__*/ (source, event, target) => {
     source.addEventListener(event, (e) => emit(target, event, e.detail), { passive: true });
 };

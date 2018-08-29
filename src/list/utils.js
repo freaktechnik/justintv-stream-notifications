@@ -16,16 +16,16 @@ export {
     SMALL_IMAGE, LARGE_IMAGE, DEFAULT_SORT
 };
 
-export const /*#__PURE__*/ getExternalID = (channel) => `${channel.login}|${channel.type}`;
+export const getExternalID = /*#__PURE__*/ (channel) => `${channel.login}|${channel.type}`;
 
-export const /*#__PURE__*/ compareFormattedIDToRawChannel = (id, channel) => {
+export const compareFormattedIDToRawChannel = /*#__PURE__*/ (id, channel) => {
     if(typeof id === 'string' || !('id' in channel)) {
         return id === getExternalID(channel);
     }
     return channel.id === id;
 };
 
-export const /*#__PURE__*/ formatChannel = (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
+export const formatChannel = /*#__PURE__*/ (channel, providers, type, extras = false, style = "default", showThumbnails = true, redirected) => {
     const formattedChannel = {
         uname: channel.uname,
         type: channel.type,
@@ -90,7 +90,7 @@ export const /*#__PURE__*/ formatChannel = (channel, providers, type, extras = f
     return formattedChannel;
 };
 
-export const /*#__PURE__*/ getChannelList = (channels, type, nonLiveDisplay) => {
+export const getChannelList = /*#__PURE__*/ (channels, type, nonLiveDisplay) => {
     const internalRedirects = [],
         externalRedirects = [],
         shownChannels = [];
@@ -145,7 +145,7 @@ export const /*#__PURE__*/ getChannelList = (channels, type, nonLiveDisplay) => 
     };
 };
 
-export const /*#__PURE__*/ getFieldValue = (obj, path) => {
+export const getFieldValue = /*#__PURE__*/ (obj, path) => {
     const steps = path.split('.');
     if(steps.length > ONE_ITEM) {
         return getFieldValue(obj[steps.shift()], steps.join('.'));
@@ -154,7 +154,7 @@ export const /*#__PURE__*/ getFieldValue = (obj, path) => {
 };
 
 //TODO this is naughty and modifies the featured channels.
-export const /*#__PURE__*/ mergeFeatured = (featured, channels) => {
+export const mergeFeatured = /*#__PURE__*/ (featured, channels) => {
     for(const channel of featured) {
         const internalChannel = channels.find((ch) => ch.login === channel.login && ch.type === channel.type);
         if(internalChannel) {
