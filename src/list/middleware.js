@@ -99,12 +99,13 @@ export default (port) => ({
             }
         }
         else if(action.type === storeTypes.COPY) {
-            if(copy(state.settings.copyPattern.replace("{URL}", action.payload.url))) {
+            copy(state.settings.copyPattern.replace("{URL}", action.payload.url)).then(() => {
                 dispatch({
                     command: "copied",
                     payload: action.payload.uname
                 });
-            }
+            })
+                .catch(console.error);
             return;
         }
         else if((action.type === storeTypes.ADD_CHANNELS || action.type === storeTypes.REMOVE_CHANNEL) && state.ui.tab !== EXPLORE_TAB && state.ui.loading && state.providers) {

@@ -48,19 +48,10 @@ export function toggle(node, condition) {
  * Copy a string to the clipboard. Temporarily appends a textarea
  * to the body of the document.
  *
+ * @async
  * @param {string} string - String to copy to the clipboard.
  * @returns {boolean} If the operation was successfull.
  */
 export function copy(string) {
-    const input = document.createElement("textarea");
-    input.value = string;
-    input.style.height = '0px';
-    input.style.width = '0px';
-    input.tabIndex = -1;
-    input.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(input);
-    input.select();
-    const result = document.execCommand("copy"); // eslint-disable-line one-var
-    input.remove();
-    return result;
+    return navigator.clipboard.writeText(string);
 }

@@ -1,4 +1,4 @@
-let clipboard;
+let clipboard = "";
 
 export default (command) => {
     switch(command) {
@@ -7,6 +7,16 @@ export default (command) => {
         return true;
     case "clipboard":
         return clipboard;
+    case "clipboardObj":
+        return Object.freeze({
+            writeText(text) {
+                clipboard = text;
+                return Promise.resolve();
+            },
+            readText() {
+                return Promise.resolve(clipboard);
+            }
+        });
     default:
         // nothing
     }

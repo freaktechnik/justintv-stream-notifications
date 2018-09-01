@@ -360,11 +360,7 @@ document.querySelector("a[rel='help']").addEventListener("click", (e) => {
     if(e.shiftKey) {
         e.preventDefault();
         port.request("debugdump")
-            .then((dump) => {
-                if(!copy(dump)) {
-                    console.warn("Could not copy debug dump", JSON.parse(dump));
-                }
-            })
+            .then((dump) => copy(dump).catch((e) => console.warn("Could not copy debug dump", JSON.parse(dump), e)))
             .catch(console.error);
     }
 });

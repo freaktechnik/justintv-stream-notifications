@@ -1,5 +1,6 @@
 import EventTarget from 'event-target-shim';
 import { emit } from '../../src/utils';
+import execCommand from './exec-command';
 
 export default class NavigatorOnLine extends EventTarget {
     constructor() {
@@ -8,6 +9,7 @@ export default class NavigatorOnLine extends EventTarget {
             'offline'
         ]);
         this._online = true;
+        this.clipboard = execCommand("clipboardObj");
     }
 
     get onLine() {

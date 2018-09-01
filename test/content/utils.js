@@ -51,8 +51,9 @@ test("toggle", (t) => {
     t.false(e.hidden);
 });
 
-test("copy", (t) => {
-    t.true(copy("foo"));
+test("copy", async (t) => {
+    await t.notThrowsAsync(copy("foo"));
+    const text = await navigator.clipboard.readText();
 
-    t.is(document.execCommand("clipboard"), "foo");
+    t.is(text, "foo");
 });
