@@ -97,7 +97,8 @@ export default class RequestQueue extends EventTarget {
         try {
             const response = await fetch(request.url, {
                 headers: request.headers,
-                redirect: "follow"
+                redirect: "follow",
+                credentials: "omit"
             });
             // Can't do mime type detection here because some APIs don't feel the need to declare that.
             try {
