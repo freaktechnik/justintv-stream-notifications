@@ -1,0 +1,22 @@
+{
+  "projectName": "justintv-stream-notifications",
+  "projectOwner": "freaktechnik",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "maekclena",
+      "name": "maekclena",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7942850?v=4",
+      "profile": "https://github.com/maekclena",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
+}

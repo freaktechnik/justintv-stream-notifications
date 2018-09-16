@@ -43,3 +43,15 @@ For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.
 | ![](https://avatars3.githubusercontent.com/u/7942850?v=4&s=150) | ![](https://avatars3.githubusercontent.com/u/640949?v=4&s=150) | ![](https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=150&d=identicon) |
 | - | - | - |
 | [maekclena](https://github.com/maekclena) | [freaktechnik](https://github.com/freaktechnik) | [wolstrom](https://www.transifex.com/user/profile/wolstrom/) |
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars3.githubusercontent.com/u/7942850?v=4" width="100px;"/><br /><sub><b>maekclena</b></sub>](https://github.com/maekclena)<br />[💻](https://github.com/freaktechnik/justintv-stream-notifications/commits?author=maekclena "Code") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
