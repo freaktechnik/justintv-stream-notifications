@@ -37,7 +37,7 @@
     {
       "login": "wolstrom",
       "name": "wolstrom",
-      "avatar_url": "https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=150&d=identico",
+      "avatar_url": "https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=100&d=identico",
       "profile": "https://www.transifex.com/user/profile/wolstrom/",
       "contributions": [
         "translation"
@@ -89,6 +89,24 @@
       "contributions": [
         "bug",
         "test"
+      ]
+    },
+    {
+      "login": "jsutbenq",
+      "name": "Nikita Devyatov",
+      "avatar_url": "https://secure.gravatar.com/avatar/2452b16cb0531512b2eb0cdcd8ecedec?s=100&d=identicon",
+      "profile": "https://vk.com/nikita.devyatov",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "Sappa",
+      "name": "Volodymyr Savchuk",
+      "avatar_url": "https://secure.gravatar.com/avatar/55bf08708678aec22d186b4074b719e3?s=100&d=identicon",
+      "profile": "https://www.transifex.com/user/profile/Sappa/",
+      "contributions": [
+        "translation"
       ]
     }
   ]
