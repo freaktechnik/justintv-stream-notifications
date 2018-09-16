@@ -19,7 +19,8 @@ stages:
   - test
 jobs:
   include:
-    - script: skip
+    - stage: dependencies
+      script: skip
       name: "Update deps cache"
     - stage: lint
       name: "Lint JS"
