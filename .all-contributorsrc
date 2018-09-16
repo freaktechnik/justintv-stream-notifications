@@ -30,6 +30,24 @@
         "doc",
         "translation"
       ]
+    },
+    {
+      "login": "wolstrom",
+      "name": "wolstrom",
+      "avatar_url": "https://secure.gravatar.com/avatar/9a552874c4033ee5658da8351500c0ca?s=150&d=identico",
+      "profile": "https://www.transifex.com/user/profile/wolstrom/",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "LeLobster",
+      "name": "lelobster",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11016915?v=4",
+      "profile": "https://github.com/LeLobster",
+      "contributions": [
+        "bug"
+      ]
     }
   ]
 }
