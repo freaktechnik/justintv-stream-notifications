@@ -50,8 +50,8 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars3.githubusercontent.com/u/7942850?v=4" width="100px;"/><br /><sub><b>maekclena</b></sub>](https://github.com/maekclena)<br />[💻](https://github.com/freaktechnik/justintv-stream-notifications/commits?author=maekclena "Code") |
-| :---: |
+| [<img src="https://avatars3.githubusercontent.com/u/7942850?v=4" width="100px;"/><br /><sub><b>maekclena</b></sub>](https://github.com/maekclena)<br />[💻](https://github.com/freaktechnik/justintv-stream-notifications/commits?author=maekclena "Code") | [<img src="https://avatars0.githubusercontent.com/u/640949?v=4" width="100px;"/><br /><sub><b>Martin Giger</b></sub>](https://humanoids.be)<br />[💻](https://github.com/freaktechnik/justintv-stream-notifications/commits?author=freaktechnik "Code") |
+| :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
