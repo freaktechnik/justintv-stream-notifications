@@ -1,6 +1,7 @@
 # ![](webextension/assets/images/icon.svg) Live Stream Notifier
 
-[![Add-On Version](https://img.shields.io/amo/v/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghversion) [![AMO Rating](https://img.shields.io/amo/stars/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghrating) [![AMO User Count](https://img.shields.io/amo/users/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghusers) [![AMO Download Count](https://img.shields.io/amo/d/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghdownloads)<br>
+[![Add-On Version](https://img.shields.io/amo/v/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghversion) [![AMO Rating](https://img.shields.io/amo/stars/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghrating) [![AMO User Count](https://img.shields.io/amo/users/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghusers) [![AMO Download Count](https://img.shields.io/amo/d/justintv-stream-notificatio.svg)](https://addons.mozilla.org/firefox/addon/justintv-stream-notificatio/?src=external-ghdownloads)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreaktechnik%2Fjustintv-stream-notifications.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreaktechnik%2Fjustintv-stream-notifications?ref=badge_shield)
+<br>
 [![Greenkeeper badge](https://badges.greenkeeper.io/freaktechnik/justintv-stream-notifications.svg)](https://greenkeeper.io/)
 [![Travis CI Builds](https://travis-ci.org/freaktechnik/justintv-stream-notifications.svg)](https://travis-ci.org/freaktechnik/justintv-stream-notifications) [![codecov.io](https://codecov.io/github/freaktechnik/justintv-stream-notifications/coverage.svg?branch=master)](https://codecov.io/github/freaktechnik/justintv-stream-notifications?branch=master) [![Dependencies](https://david-dm.org/freaktechnik/justintv-stream-notifications.svg)](https://github.com/freaktechnik/justintv-stream-notifications/network/dependencies)
 
@@ -35,6 +36,9 @@ to build an in about:debugging loadable .xpi file. You can use `npm start` to la
 ## License
 
 See [LICENSE](LICENSE).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffreaktechnik%2Fjustintv-stream-notifications.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffreaktechnik%2Fjustintv-stream-notifications?ref=badge_large)
 
 ## Contribute
 For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
