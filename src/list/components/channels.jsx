@@ -57,7 +57,6 @@ const Channels = (props) => {
 Channels.defaultProps = {
     loading: false,
     searching: false,
-    theme: 'light',
     hasFocus: true
 };
 Channels.propTypes /* remove-proptypes */ = {
@@ -85,7 +84,6 @@ Channels.propTypes /* remove-proptypes */ = {
 const mapStateToProps = (state) => ({
     channels: getVisibleChannels(state),
     extras: state.settings.extras,
-    style: state.settings.style,
     type: state.ui.tab,
     nonLiveDisplay: state.settings.nonLiveDisplay,
     providers: state.providers,

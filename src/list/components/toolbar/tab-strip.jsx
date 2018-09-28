@@ -28,7 +28,7 @@ const TabStrip = (props) => {
     };
 
     return (
-        <NavigateableList className="tabstrip inline-list" role="tablist" focused={ focused } onFocusChange= { onFocusChange } hasFocus={ props.hasFocus }>
+        <NavigateableList className="tabstrip inline-list" role="tablist" focused={ focused } onFocusChange={ onFocusChange } hasFocus={ props.hasFocus }>
             <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(LIVE_TAB) } key={ LIVE_TAB } count={ props.counts.live }/>
             { nonlive }
             <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(OFFLINE_TAB) } key={ OFFLINE_TAB } count={ props.counts.offline }/>

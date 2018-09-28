@@ -12,7 +12,7 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 10.0.0"
   },
   "files": [
     "webextension/assets/images/*",
@@ -47,16 +47,16 @@
     "@babel/plugin-transform-react-inline-elements": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "@freaktechnik/eslint-config-babel": "^6.4.2",
-    "@freaktechnik/eslint-config-base": "^6.4.4",
-    "@freaktechnik/eslint-config-extension": "^6.4.4",
-    "@freaktechnik/eslint-config-node": "^6.4.4",
-    "@freaktechnik/eslint-config-react": "^6.4.4",
-    "@freaktechnik/eslint-config-test": "^6.4.4",
-    "@freaktechnik/eslint-config-webpack": "^6.4.2",
-    "ajv": "^6.5.3",
+    "@freaktechnik/eslint-config-babel": "^6.5.0",
+    "@freaktechnik/eslint-config-base": "^6.5.0",
+    "@freaktechnik/eslint-config-extension": "^6.5.0",
+    "@freaktechnik/eslint-config-node": "^6.5.0",
+    "@freaktechnik/eslint-config-react": "^6.5.3",
+    "@freaktechnik/eslint-config-test": "^6.5.2",
+    "@freaktechnik/eslint-config-webpack": "^6.5.0",
+    "ajv": "^6.5.4",
     "ava": "1.0.0-beta.8",
-    "babel-loader": "^8.0.2",
+    "babel-loader": "^8.0.4",
     "babel-plugin-istanbul": "^5.0.1",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.18",
@@ -79,13 +79,13 @@
     "nyc": "^13.0.1",
     "sinon": "^6.3.4",
     "sinon-chrome": "^2.3.2",
-    "stylelint": "^9.5.0",
+    "stylelint": "^9.6.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-no-unsupported-browser-features": "^3.0.1",
     "transifex-loader": "^5.0.1",
     "web-ext": "^2.9.1",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
     "webpack-deep-scope-plugin": "^1.6.0"
   },
   "scripts": {
