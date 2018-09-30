@@ -39,7 +39,7 @@
     "react-key-handler": "^1.1.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "reselect": "^3.0.1"
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.1.0",
