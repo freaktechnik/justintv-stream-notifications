@@ -38,13 +38,21 @@ jobs:
       name: "Unit tests"
       script: npm run test:ava
       after_success: npm run coverage
-      env: CI_NODE_INDEX=0
+      env:
+        - CI_NODE_TOTAL=4
+        - CI_NODE_INDEX=0
     - script: npm run test:ava
       after_success: npm run coverage
-      env: CI_NODE_INDEX=1
+      env:
+        - CI_NODE_TOTAL=4
+        - CI_NODE_INDEX=1
     - script: npm run test:ava
       after_success: npm run coverage
-      env: CI_NODE_INDEX=2
+      env:
+        - CI_NODE_TOTAL=4
+        - CI_NODE_INDEX=2
     - script: npm run test:ava
       after_success: npm run coverage
-      env: CI_NODE_INDEX=3
+      env:
+        - CI_NODE_TOTAL=4
+        - CI_NODE_INDEX=3
