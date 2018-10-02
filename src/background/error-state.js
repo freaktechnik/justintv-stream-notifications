@@ -187,10 +187,18 @@ export default class ErrorState extends EventTarget {
                 if(message.command === "errorState-action" && message.id === this.id) {
                     this.triggerAction(message.action);
                 }
+                else if(message.command === "errorState-resolve" && message.id === this.id) {
+                    return this.resolve();
+                }
             };
             browser.runtime.onMessage.addListener(this.runtimeListener);
             this.notificationListener = (notificationId) => {
                 if(notificationId === ErrorState.NOTIFICATION_ID + this.id) {
+                    const [ firstAction ] = this.actions;
+                    if(firstAction.hasOwnProperty("permissions")) {
+                        // Open options page, since we can actually request permissions from there (not a user action)
+                        browser.runtime.openOptionsPage().catch(console.error);
+                    }
                     this.triggerAction(FIRST_ACTION);
                 }
             };

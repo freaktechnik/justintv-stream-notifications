@@ -3,9 +3,12 @@ import '../content/shared.css';
 import './errorState.css';
 
 // TODO share code with the global error state info bar.
-
 const list = document.getElementById("errors"),
-    sendAction = (errorStateId, actionId) => {
+    sendAction = (errorStateId, actionId, action) => {
+        if(action.hasOwnProperty("permissions")) {
+            // Open options page, since we can actually request permissions from there.
+            browser.runtime.openOptionsPage().catch(console.error);
+        }
         browser.runtime.sendMessage({
             command: 'errorState-action',
             id: errorStateId,
@@ -30,10 +33,10 @@ const list = document.getElementById("errors"),
             for(const actionId in errorState.actions) {
                 const action = errorState.actions[actionId],
                     button = document.createElement("button");
-                button.textContent = action;
-                button.value = action;
+                button.textContent = action.label;
+                button.value = action.label;
                 button.classList.add("browser-style");
-                button.addEventListener("click", sendAction.bind(null, errorState.id, actionId), {
+                button.addEventListener("click", sendAction.bind(null, errorState.id, actionId, action), {
                     passive: true,
                     capture: false
                 });

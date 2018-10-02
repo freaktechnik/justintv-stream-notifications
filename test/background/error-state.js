@@ -71,7 +71,7 @@ test('resolve unresolvable state', (t) => {
 });
 
 test('action events', async (t) => {
-    const es = new ErrorState('foo', ErrorState.RECOVERABLE, [ 'test' ]);
+    const es = new ErrorState('foo', ErrorState.RECOVERABLE, [ { label: 'test' } ]);
 
     let p = when(es, 'action');
 

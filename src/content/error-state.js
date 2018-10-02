@@ -82,11 +82,22 @@ class ErrorStateView {
         }
     }
 
-    sendAction(id, action) {
+    sendAction(id, actionId, action) {
+        if(action.hasOwnProperty("permissions")) {
+            browser.permissions.request(action.permissions).then((granted) => {
+                if(granted) {
+                    return browser.runtime.sendMessage({
+                        command: 'errorState-resolve',
+                        id
+                    });
+                }
+            })
+                .catch(console.error);
+        }
         browser.runtime.sendMessage({
             command: 'errorState-action',
             id,
-            action
+            action: actionId
         });
     }
 
@@ -108,9 +119,9 @@ class ErrorStateView {
                 const action = errorState.actions[actionId],
                     button = document.createElement("button");
                 button.classList.add("browser-style");
-                button.textContent = action;
-                button.value = action;
-                button.addEventListener("click", () => this.sendAction(errorState.id, actionId), {
+                button.textContent = action.label;
+                button.value = action.label;
+                button.addEventListener("click", () => this.sendAction(errorState.id, actionId, action), {
                     passive: true,
                     capture: false
                 });

@@ -93,12 +93,12 @@ export default class ChannelController extends EventTarget {
                 const actions = [];
                 if(e instanceof CantOpenListError) {
                     message = browser.i18n.getMessage("cookies_disabled");
-                    actions.push(browser.i18n.getMessage("enable_cookies"));
+                    actions.push({ label: browser.i18n.getMessage("enable_cookies") });
                     actionsListener = () => browser.tabs.create({ url: ACCEPT_COOKIES_URL });
                 }
                 else {
                     message = browser.i18n.getMessage("restore_failed");
-                    actions.push(browser.i18n.getMessage("restore_action"));
+                    actions.push({ label: browser.i18n.getMessage("restore_action") });
                     actionsListener = () => browser.tabs.create({ url: REFRESH_PROFILE_URL });
                 }
                 const es = new ErrorState(message, ErrorState.UNRECOVERABLE, actions);
@@ -180,7 +180,9 @@ export default class ChannelController extends EventTarget {
         });
         this._list.addEventListener("clear", ({ detail: hard }) => {
             if(hard) {
-                const es = new ErrorState(browser.i18n.getMessage("lost_channels"), ErrorState.RECOVERABLE, [ browser.i18n.getMessage("manageChannels_label") ]);
+                const es = new ErrorState(browser.i18n.getMessage("lost_channels"), ErrorState.RECOVERABLE, [ {
+                    label: browser.i18n.getMessage("manageChannels_label")
+                } ]);
                 es.addEventListener("action", async () => {
                     await this.showManager();
                     es.resolve();
@@ -494,6 +496,30 @@ export default class ChannelController extends EventTarget {
             throw new Error("Specified type is not known");
         }
         return providers[type].updateChannel(login);
+    }
+
+    async ensurePermissionsGranted() {
+        const channels = await this.getChannelsByType(),
+            types = new Set(channels.map((c) => c.type));
+        let requiredPermissions = [];
+        for(const type of types) {
+            const permissions = providers[type].optionalPermissions;
+            if(permissions.length) {
+                requiredPermissions = requiredPermissions.concat(permissions);
+            }
+        }
+        if(requiredPermissions.length) {
+            const permissions = {
+                    origins: requiredPermissions
+                },
+                hasPermissions = await browser.permissions.contains(permissions);
+            if(!hasPermissions) {
+                new ErrorState(browser.i18n.getMessage("permissionsRequired", requiredPermissions.join(", ")), ErrorState.RECOVERABLE, [ {
+                    label: browser.i18n.getMessage("grantPermissions"),
+                    permissions
+                } ]);
+            }
+        }
     }
 
     /**

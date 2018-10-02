@@ -667,5 +667,17 @@
     },
     "permissionRequired": {
         "message": "Permissions required to communicate with provider"
+    },
+    "permissionsRequired": {
+        "message": "Permissions required to update channels and users: $PERMISSIONS$",
+        "placeholders": {
+            "permissions": {
+                "content": "$1",
+                "example": "https://tmi.twitch.tv, https://example.com"
+            }
+        }
+    },
+    "grantPermissions": {
+        "message": "Grant permissions"
     }
 }

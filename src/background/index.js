@@ -185,5 +185,8 @@ browser.runtime.onInstalled.addListener(({
     }
 });
 
+// Add channels for the badge and icon management.
 controller.getChannelsByType().then((channels) => list.addChannels(channels))
     .catch(console.error);
+
+controller.ensurePermissionsGranted();

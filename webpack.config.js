@@ -149,6 +149,7 @@ module.exports = {
             filename: "popup/errorState/index.html",
             chunks: [
                 'runtime',
+                'common',
                 'popup/errorState'
             ],
             chunksSortMode: 'dependency',
