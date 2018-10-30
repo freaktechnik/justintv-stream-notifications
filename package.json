@@ -95,12 +95,11 @@
     "lint": "npm run lint:js && npm run lint:json && npm run lint:css && npm run lint:webext && npm run lint:ec",
     "lint:json": "eslint -c src/.eslintrc.json --ext json webextension/manifest.json",
     "lint:js": "eslint test/* src/* scripts/* --ext js,jsx,json",
-    "lint:webext": "NODE_ENV=test webpack --hide-modules --mode development && npm run fix-i18n && web-ext lint",
+    "lint:webext": "NODE_ENV=test webpack --hide-modules --mode development && web-ext lint",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:ec": "eclint check $(git ls-files | grep -vEe \"_locales/([^e][^n]|e.{2,})/.*\" -e=\"*/snapshots/*\")",
-    "build": "NODE_ENV=production webpack --mode production && npm run fix-i18n && web-ext build && npm pack",
-    "start": "NODE_ENV=development webpack --mode development && npm run fix-i18n && web-ext run --no-reload",
-    "fix-i18n": "node ./scripts/fix-i18n-placeholders.js",
+    "build": "NODE_ENV=production webpack --mode production && web-ext build && npm pack",
+    "start": "NODE_ENV=development webpack --mode development && web-ext run --no-reload",
     "ci-init": "node ./scripts/setup-travis.js"
   },
   "ava": {

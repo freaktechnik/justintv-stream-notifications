@@ -1,4 +1,8 @@
 {
+    "cm_tab_users": {
+        "message": "Users",
+        "description": "Label of the tab that contains all users in the channel manager"
+    },
     "cm_add": {
         "message": "Add…",
         "description": "Label on button that opens a dialog to add a channel or user."
@@ -29,11 +33,27 @@
     },
     "nonliveNotification": {
         "message": "$CHANNEL$ is now $STATE$.",
-        "description": "Notification when a channel changes a non-live state"
+        "description": "Notification when a channel changes a non-live state",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "state": {
+                "content": "$2",
+                "example": "rebroadcasting"
+            }
+        }
     },
     "copyNotification": {
         "message": "Copied the stream URL of $CHANNEL$ to the clipboard",
-        "description": "Notification content after the URL of a stream was copied from the panel context menu"
+        "description": "Notification content after the URL of a stream was copied from the panel context menu",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_style_title": {
         "message": "Panel item display style",
@@ -45,7 +65,13 @@
     },
     "context_redirector": {
         "message": "Open $CHANNEL$",
-        "description": "Context panel item to open a redirector."
+        "description": "Context panel item to open a redirector.",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "advancedOptions": {
         "message": "Advanced Options",
@@ -157,7 +183,17 @@
     },
     "channelManagerLoadError": {
         "message": "Couldn't load \"$CHANNEL$\" for $TYPE$. Please make sure you are using the correct username.",
-        "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$."
+        "description": "A network error was encountered while trying to load information on $CHANNEL$ (which can also be a user) from $TYPE$.",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "type": {
+                "content": "$2",
+                "example": "Twitch"
+            }
+        }
     },
     "cm_dialog_username": {
         "message": "Username:",
@@ -193,7 +229,13 @@
     },
     "updateNotification": {
         "message": "$CHANNEL$ ha actualizado el título",
-        "description": "Notification title when a channel changes the stream title"
+        "description": "Notification title when a channel changes the stream title",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_style_options_Thumbnail": {
         "message": "Big Thumbnail",
@@ -405,7 +447,17 @@
     },
     "redirectUpdateNotification": {
         "message": "$REDIRECTTARGET$ (redirected to by $CHANNEL$) has updated the title",
-        "description": "Notification title when a channel changes the stream title"
+        "description": "Notification title when a channel changes the stream title",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            },
+            "redirectTarget": {
+                "content": "$2",
+                "example": "Eisenhower"
+            }
+        }
     },
     "context_open": {
         "message": "Open Archive Page",
@@ -425,7 +477,13 @@
     },
     "onlineNotification": {
         "message": "¡$CHANNEL$ es en vivo!",
-        "description": "Notification title when a channel goes live"
+        "description": "Notification title when a channel goes live",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "cm_secondary_button": {
         "message": "Go to first Channels Manager",
@@ -465,7 +523,13 @@
     },
     "nonliveNotificationStateRedirect": {
         "message": "redirecting to $CHANNEL$",
-        "description": "Redirecting state for nonliveNotification"
+        "description": "Redirecting state for nonliveNotification",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "export": {
         "message": "Export configuration",
@@ -485,7 +549,13 @@
     },
     "offlineNotification": {
         "message": "¡$CHANNEL$ fuera de línea!",
-        "description": "Notification title when a channel goes offline"
+        "description": "Notification title when a channel goes offline",
+        "placeholders": {
+            "channel": {
+                "content": "$1",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_nothing": {
         "message": "No channels added.",
@@ -529,86 +599,85 @@
     },
     "omniboxSuggestion": {
         "message": "$USERNAME$ on $TYPE$",
-        "description": ""
+        "placeholders": {
+            "type": {
+                "content": "$1",
+                "example": "Twitch"
+            },
+            "username": {
+                "content": "$2",
+                "example": "ec0ke"
+            }
+        }
     },
     "panel_badges_title": {
         "message": "Show channel count on panel tabs",
         "description": "Setting to toggle visibility of count badges on panel tabs"
     },
     "liveState_-1": {
-        "message": "Offline",
-        "description": ""
+        "message": "Offline"
     },
     "liveState_0": {
-        "message": "Live",
-        "description": ""
+        "message": "Live"
     },
     "liveState_1": {
-        "message": "Redirecting",
-        "description": ""
+        "message": "Redirecting"
     },
     "liveState_2": {
-        "message": "Rebroadcasting",
-        "description": ""
+        "message": "Rebroadcasting"
     },
     "panel_sort_title": {
-        "message": "Sort channels",
-        "description": ""
+        "message": "Sort channels"
     },
     "panel_sort_field_title": {
-        "message": "Sort chanels by",
-        "description": ""
+        "message": "Sort chanels by"
     },
     "panel_sort_field_description": {
-        "message": "Attribute to sort channels by in the panel by default.",
-        "description": ""
+        "message": "Attribute to sort channels by in the panel by default."
     },
     "panel_sort_field_options_uname": {
-        "message": "Username",
-        "description": ""
+        "message": "Username"
     },
     "panel_sort_field_options_provider": {
-        "message": "Provider",
-        "description": ""
+        "message": "Provider"
     },
     "panel_sort_field_options_category": {
-        "message": "Category",
-        "description": ""
+        "message": "Category"
     },
     "panel_sort_field_options_title": {
-        "message": "Title",
-        "description": ""
+        "message": "Title"
     },
     "panel_sort_field_options_viewers": {
-        "message": "View count",
-        "description": ""
+        "message": "View count"
     },
     "panel_sort_field_options_liveSince": {
-        "message": "Uptime",
-        "description": ""
+        "message": "Uptime"
     },
     "panel_sort_direction_title": {
-        "message": "Sort direction",
-        "description": ""
+        "message": "Sort direction"
     },
     "panel_sort_direction_description": {
-        "message": "Direction to sort channels in panel in.",
-        "description": ""
+        "message": "Direction to sort channels in panel in."
     },
     "panel_sort_direction_options_Descending": {
-        "message": "Descending",
-        "description": ""
+        "message": "Descending"
     },
     "panel_sort_direction_options_Ascending": {
-        "message": "Ascending",
-        "description": ""
+        "message": "Ascending"
     },
     "permissionRequired": {
-        "message": "Permissions required to communicate with provider",
-        "description": ""
+        "message": "Permissions required to communicate with provider"
     },
-    "cm_tab_users": {
-        "message": "Users",
-        "description": "Label of the tab that contains all users in the channel manager"
+    "permissionsRequired": {
+        "message": "Permissions required to update channels and users: $PERMISSIONS$",
+        "placeholders": {
+            "permissions": {
+                "content": "$1",
+                "example": "https://tmi.twitch.tv, https://example.com"
+            }
+        }
+    },
+    "grantPermissions": {
+        "message": "Grant permissions"
     }
 }
