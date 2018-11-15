@@ -530,7 +530,6 @@ const promisedProviders = new Promise((resolve) => {
             document.body.classList.toggle("dark", message.payload === DARK_THEME);
             break;
         case "requestpermission": {
-            console.log(message.payload);
             const [
                 provider,
                 name,

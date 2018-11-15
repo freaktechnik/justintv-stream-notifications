@@ -70,11 +70,14 @@ test.serial.failing("Credentials", async (t) => {
 test("Add User", async (t) => {
     const cc = new ChannelController();
 
+    browser.permissions.contains.resolves(true);
+
     await t.throwsAsync(cc.addUser("test", "test"));
 });
 
 test.serial("User Methods", async (t) => {
     const cc = new ChannelController();
+    browser.permissions.contains.resolves(true);
 
     const user = await cc.addUser(TESTUSER.slug, TESTUSER.type);
 
@@ -122,6 +125,7 @@ test.serial("User Methods", async (t) => {
 
 test.serial("Remove User", async (t) => {
     const cc = new ChannelController();
+    browser.permissions.contains.resolves(true);
 
     const user = await cc.addUser(TESTUSER.slug, TESTUSER.type);
 
@@ -136,11 +140,14 @@ test.serial("Remove User", async (t) => {
 test("AddChannel", async (t) => {
     const cc = new ChannelController();
 
+    browser.permissions.contains.resolves(true);
+
     await t.throwsAsync(cc.addChannel("test", "test"));
 });
 
 test.serial("CancelAddChannel", async (t) => {
     const cc = new ChannelController();
+    browser.permissions.contains.resolves(true);
 
     await t.throwsAsync(cc.addChannel(TESTUSER.name, TESTUSER.type, () => true));
 
@@ -155,6 +162,7 @@ test.serial("CancelAddChannel", async (t) => {
 
 test.serial("Channel Methods", async (t) => {
     const cc = new ChannelController();
+    browser.permissions.contains.resolves(true);
 
     let channel = await cc.addChannel(TESTUSER.name, TESTUSER.type);
 
@@ -230,6 +238,7 @@ test("Disabled Provider", async (t) => {
 
     if(p) {
         const cc = new ChannelController();
+        browser.permissions.contains.resolves(true);
 
         await t.throwsAsync(cc.addChannel(TESTUSER.name, p));
 
@@ -280,12 +289,19 @@ test('set theme', (t) => {
     t.is(cc._manager.setTheme.lastCall.args[0], 'foo');
 });
 
+test.todo("add channel opens channels manager if permissions were not granted");
+test.todo("add user opens channels manager if permissions were not granted");
+
 let oldQS;
 test.before(() => {
     const provider = providers[TESTUSER.type];
     oldQS = provider._qs;
 
     provider._setQs(getMockAPIQS(oldQS, TESTUSER.type, false));
+});
+
+test.afterEach(() => {
+    browser.permissions.contains.flush();
 });
 
 test.after(() => {
