@@ -6,6 +6,7 @@
  */
 import { Channel } from '../channel/core.js';
 import GenericProvider from "./generic-provider.js";
+import { emit } from '../../utils.js';
 
 const type = "picarto",
     baseURL = 'https://api.picarto.tv/v1/',
@@ -14,12 +15,13 @@ const type = "picarto",
     requeue = (resp) => !resp.ok && (resp.status >= SERVER_ERROR || resp.status < REQUEST_OK);
 
 function getChannelFromJSON(jsonChan) {
-    const ret = new Channel(jsonChan.name.toLowerCase(), type);
+    const ret = new Channel(jsonChan.user_id, type);
     ret.uname = jsonChan.name;
+    ret.slug = jsonChan.name.toLowerCase();
     ret.image = {
-        100: `https://picarto.tv/user_data/usrimg/${jsonChan.name}/dsdefault.jpg`
+        "100": jsonChan.avatar || `https://picarto.tv/user_data/usrimg/${jsonChan.name}/dsdefault.jpg`
     };
-    ret.thumbnail = `https://thumb-us1.picarto.tv/thumbnail/${jsonChan.name}.jpg`;
+    ret.thumbnail = jsonChan.thumbnails ? jsonChan.thumbnails.web : `https://thumb-us-west1.picarto.tv/thumbnail/${jsonChan.name}.jpg`;
     ret.url.push(`https://picarto.tv/${ret.uname}`);
     ret.archiveUrl = `https://picarto.tv/${ret.uname}`;
     ret.chatUrl = `https://picarto.tv/chatpopout/${ret.uname}/public`;
@@ -44,23 +46,50 @@ class Picarto extends GenericProvider {
 
         this.authURL = [ "https://picarto.tv" ];
         this._supportsFeatured = true;
+        this._hasUniqueSlug = true;
 
         this.initialize();
     }
 
+    updateLogin(item) {
+        this._qs.queueRequest(`${baseURL}channel/name/${item.slug}`, {}, requeue)
+            .then((res) => {
+                if(res.ok) {
+                    return Promise.all([
+                        this._list.getChannelByName(item.slug),
+                        res
+                    ]);
+                }
+            })
+            .then((data) => {
+                if(data.length) {
+                    const [
+                        chan,
+                        res
+                    ] = data;
+                    chan._login = res.parsedJSON.user_id;
+                    emit(this, 'updatedchannels', [ chan ]);
+                }
+            })
+            .catch(console.error);
+    }
+
     getChannelDetails(channelname) {
+        if(typeof channelname === 'number') {
+            return this._getChannelByID(channelname);
+        }
         return this._qs.queueRequest(`${baseURL}channel/name/${channelname.toLowerCase()}`, {}, requeue)
             .then((resp) => {
                 if(resp.ok) {
                     return getChannelFromJSON(resp.parsedJSON);
                 }
-                throw new Error(`Channel ${channelname} does not exist for ${this.name}`);
+                return this._getChannelByID(channelname);
             });
     }
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => `${baseURL}channel/name/${channel.login}`);
+            return channels.map((channel) => `${baseURL}channel/id/${channel.login}`);
         };
         return {
             getURLs,
@@ -86,6 +115,16 @@ class Picarto extends GenericProvider {
             return channels.filter((c) => c.uname.toLowerCase().includes(query) || c.title.toLowerCase().includes(query) || c.category.toLowerCase().includes(query));
         }
         return channels;
+    }
+
+    _getChannelByID(id) {
+        return this._qs.queueRequest(`${baseURL}channel/id/${id}`, {}, requeue)
+            .then((resp) => {
+                if(resp.ok) {
+                    return getChannelFromJSON(resp.parsedJSON);
+                }
+                throw new Error(`Channel ${id} does not exist for ${this.name}`);
+            });
     }
 }
 

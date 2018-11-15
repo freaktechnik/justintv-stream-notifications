@@ -3,8 +3,6 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/twitch
- * @todo properly wait for clientID
- * @todo option to not mark premieres as rebroadcast
  */
 import prefs from "../../preferences.js";
 import querystring from "../querystring.js";
@@ -16,18 +14,22 @@ import { promisedPaginationHelper } from '../pagination-helper.js';
 import GenericProvider from "./generic-provider.js";
 import { not } from '../logic.js';
 import { filterExistingFavs } from '../channel/utils.js';
+import { emit } from '../../utils.js';
+
+//TODO helix is missing search
+//TODO helix is missing rebroadcasts
+//TODO helix is missing mature annotations
+//TODO stop doing requests on 429 -> custom requeue
 
 const type = "twitch",
     archiveURL = "/videos/all",
     chatURL = "/chat",
-    baseURL = 'https://api.twitch.tv/kraken',
+    baseURL = 'https://api.twitch.tv/helix',
     headers = {
-        'Client-ID': '',
-        'Accept': 'application/vnd.twitchtv.v3+json'
+        'Client-ID': ''
     },
     defaultAvatar = "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_300x300.png",
     itemsPerPage = 100,
-    idOfChannel = new Map(),
     SIZES = [
         '50',
         '70',
@@ -43,8 +45,8 @@ const type = "twitch",
         return ret;
     },
     dedupe = (a, b) => {
-        const ids = b.map((c) => c.id);
-        return a.filter((c) => !ids.includes(c.id));
+        const ids = b.map((c) => c.login);
+        return a.filter((c) => !ids.includes(c.login));
     },
     LANG_START = 0,
     LANG_END = 2,
@@ -54,7 +56,9 @@ const type = "twitch",
         'playlist', // pre-vodcast replays
         'vodcast', // raw vodcast
         'rerun' // replay of a past vod
-    ];
+    ],
+    THUMBNAIL_WIDTH = 640,
+    THUMBNAIL_HEIGHT = 360;
 
 prefs.get('twitch_clientId').then((id) => {
     headers['Client-ID'] = id;
@@ -62,23 +66,20 @@ prefs.get('twitch_clientId').then((id) => {
     .catch(console.error);
 
 function getChannelFromJSON(jsonChannel) {
-    const ret = new Channel(jsonChannel.name, type);
+    const ret = new Channel(jsonChannel.id, type),
+        url = `https://twitch.tv/${jsonChannel.login}`;
+    ret.slug = jsonChannel.login;
     ret.uname = jsonChannel.display_name;
-    ret.url.push(jsonChannel.url);
-    ret.url.push(`https://go.twitch.tv/${jsonChannel.name}`);
-    ret.archiveUrl = jsonChannel.url + archiveURL;
-    ret.chatUrl = jsonChannel.url + chatURL;
-    ret.image = getImageObj(jsonChannel.logo ? jsonChannel.logo : defaultAvatar);
-    ret.title = jsonChannel.status;
-    ret.category = jsonChannel.game;
-    ret.mature = jsonChannel.mature;
-    ret.language = jsonChannel.broadcaster_language;
+    ret.url.push(url);
+    ret.archiveUrl = url + archiveURL;
+    ret.chatUrl = url + chatURL;
+    ret.image = getImageObj(jsonChannel.profile_image_url ? jsonChannel.profile_image_url : defaultAvatar);
+    //ret.title = jsonChannel.status;
+    //ret.category = jsonChannel.game;
+    //ret.mature = jsonChannel.mature;
+    //ret.language = jsonChannel.broadcaster_language;
 
     return ret;
-}
-
-function getStreamTypeParam(delim = "&") {
-    return Promise.resolve(`${delim}stream_type=live`);
 }
 
 class Twitch extends GenericProvider {
@@ -93,92 +94,158 @@ class Twitch extends GenericProvider {
         this._supportsFavorites = true;
         this._supportsCredentials = true;
         this._supportsFeatured = true;
+        this._hasUniqueSlug = true;
 
-        this.initialize();
+        this._loginsToUpdate = new Set();
+        this._games = {};
+
+        this.initialize()
+            .then(() => this.updateLogins())
+            .catch(console.error);
     }
 
     get optionalPermissions() {
         return [ "https://tmi.twitch.tv/*" ];
     }
 
-    async getUserFavorites(username) {
-        const data = await this._qs.queueRequest(`${baseURL}/users/${username}`, headers);
+    updateLogin(item) {
+        this._loginsToUpdate.add(item);
+    }
 
-        if(data.parsedJSON && !data.parsedJSON.error) {
-            const channels = await promisedPaginationHelper({
-                    url: `${baseURL}/users/${username}/follows/channels?limit=${itemsPerPage}&offset=`,
+    updateLogins() {
+        if(this._loginsToUpdate.size) {
+            return this._getUsers(this._loginsToUpdate.values(), 'login')
+                .then((result) => Promise.all(this._loginsToUpdate.values().map(async (i) => {
+                    const item = await this._list.getChannelByName(i.slug);
+                    item._login = result.find((u) => u.login == item.slug).id;
+                    if(item instanceof User) {
+                        emit(this, "updateduser", item);
+                    }
+                    else {
+                        return item;
+                    }
+                })))
+                .then((updatedItems) => {
+                    const updatedChannels = updatedItems.filter();
+                    if(updatedChannels.length) {
+                        emit(this, "updatedchannels", updatedChannels);
+                    }
+                });
+        }
+    }
+
+    async getUserFavorites(username) {
+        let data;
+        try {
+            data = await this._qs.queueRequest(`${baseURL}/users?login=${username}&id=${username}`, headers);
+        }
+        catch(e) {
+            // Fall-through
+        }
+
+        if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
+            const [ helixUser ] = data.parsedJSON.data,
+                channels = await promisedPaginationHelper({
+                    url: `${baseURL}/users/follows?first=${itemsPerPage}&from_id=${helixUser.id}`,
                     pageSize: itemsPerPage,
+                    getPageNumber(page, pageSize, d) {
+                        return `&after=${d.parsedJSON.pagination.cursor}`;
+                    },
+                    initialPage: '',
                     request: (url) => this._qs.queueRequest(url, headers),
                     fetchNextPage(d) {
-                        return d.parsedJSON && "follows" in d.parsedJSON && d.parsedJSON.follows.length == itemsPerPage;
+                        return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == itemsPerPage && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
                     },
                     getItems(d) {
-                        if(d.parsedJSON && "follows" in d.parsedJSON) {
-                            return d.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                        if(d.parsedJSON && "data" in d.parsedJSON) {
+                            return d.parsedJSON.data;
                         }
 
                         return [];
                     }
                 }),
-                user = new User(data.parsedJSON.name, this._type);
-            user.uname = data.parsedJSON.display_name;
-            user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
-            user.favorites = channels.map((channel) => channel.login);
+                user = new User(helixUser.id, this._type);
+            let following = [];
+            if(channels.length) {
+                following = await this._getUsers(channels, 'to_id');
+            }
+            user.slug = helixUser.login;
+            user.uname = helixUser.display_name;
+            user.image = getImageObj(helixUser.profile_image_url ? helixUser.profile_image_url : defaultAvatar);
+            user.favorites = channels.map((c) => c.to_id);
 
             return [
                 user,
-                channels
+                following.map((c) => getChannelFromJSON(c))
             ];
         }
 
         throw new Error(`Couldn't fetch ${this.name} user ${username}`);
     }
     getChannelDetails(channelname) {
-        return this._qs.queueRequest(`${baseURL}/channels/${channelname}`, headers).then((data) => {
-            if(data.parsedJSON && !data.parsedJSON.error) {
-                idOfChannel.set(data.parsedJSON.name, data.parsedJSON._id);
-                return getChannelFromJSON(data.parsedJSON);
-            }
-
-            throw new Error(data.parsedJSON ? data.parsedJSON.error : `Could not fetch details for ${this.name} channel ${channelname}`);
-        });
+        return this._qs.queueRequest(`${baseURL}/users?login=${channelname}&id=${channelname}`, headers)
+            .then((data) => {
+                if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
+                    const [ helixChannel ] = data.parsedJSON.data;
+                    return getChannelFromJSON(helixChannel);
+                }
+                throw new Error(data.parsedJSON ? data.parsedJSON.error : `Could not fetch details for ${this.name} channel ${channelname}`);
+            });
     }
     updateFavsRequest() {
         const getURLs = async () => {
-            const users = await this._list.getUsers();
-            return users.map((user) => `${baseURL}/users/${user.login}`);
+            const users = await this._list.getUsers(),
+                urls = [];
+            let offset = 0;
+            while(offset < users.length) {
+                const slice = users.slice(offset, offset + itemsPerPage);
+                urls.push(`${baseURL}/users?id=${slice.map((u) => u.login).join('&id=')}`);
+                offset += itemsPerPage;
+            }
+            return urls;
         };
 
         return {
             getURLs,
             headers,
             onComplete: async (data) => {
-                if(data.parsedJSON && !data.parsedJSON.error) {
-                    const user = await this._list.getUserByName(data.parsedJSON.name),
-                        follows = await promisedPaginationHelper({
-                            url: `${baseURL}/users/${user.login}/follows/channels?limit=${itemsPerPage}&offset=`,
-                            pageSize: itemsPerPage,
-                            request: (url) => this._qs.queueRequest(url, headers),
-                            fetchNextPage(d) {
-                                return d.parsedJSON && "follows" in d.parsedJSON && d.parsedJSON.follows.length == itemsPerPage;
-                            },
-                            getItems(d) {
-                                if(d.parsedJSON && "follows" in d.parsedJSON) {
-                                    return d.parsedJSON.follows.map((c) => getChannelFromJSON(c.channel));
+                if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
+                    for(const helixUser of data.parsedJSON.data) {
+                        const user = await this._list.getUserByName(helixUser.id),
+                            follows = await promisedPaginationHelper({
+                                url: `${baseURL}/users/follows?first=${itemsPerPage}&from_id=${user.login}`,
+                                pageSize: itemsPerPage,
+                                getPageNumber(page, pageSize, d) {
+                                    return `&after=${d.parsedJSON.pagination.cursor}`;
+                                },
+                                initialPage: '',
+                                request: (url) => this._qs.queueRequest(url, headers),
+                                fetchNextPage(d) {
+                                    return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == itemsPerPage && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
+                                },
+                                getItems(d) {
+                                    if(d.parsedJSON && "follows" in d.parsedJSON) {
+                                        return d.parsedJSON.data.map((c) => c.to_id);
+                                    }
+
+                                    return [];
                                 }
+                            }),
+                            newUsers = filterExistingFavs(user, follows).map((id) => ({ id }));
+                        let newChannels = [];
+                        if(newUsers.length) {
+                            newChannels = await this._getUsers(newUsers, 'id');
+                        }
 
-                                return [];
-                            }
-                        }),
-                        newChannels = filterExistingFavs(user, follows);
-
-                    user.uname = data.parsedJSON.display_name;
-                    user.image = getImageObj(data.parsedJSON.logo ? data.parsedJSON.logo : defaultAvatar);
-                    user.favorites = follows.map((c) => c.login);
-                    return [
-                        user,
-                        newChannels
-                    ];
+                        user.slug = helixUser.login;
+                        user.uname = helixUser.display_name;
+                        user.image = getImageObj(helixUser.profile_image_url ? helixUser.profile_image_url : defaultAvatar);
+                        user.favorites = follows;
+                        return [
+                            user,
+                            newChannels.map((c) => getChannelFromJSON(c))
+                        ];
+                    }
                 }
                 return [];
             }
@@ -188,8 +255,14 @@ class Twitch extends GenericProvider {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
             if(channels.length) {
-                const channelsString = channels.map((c) => c.login).join(",");
-                return [ `${baseURL}/streams?channel=${channelsString}&stream_type=live&limit=${itemsPerPage}` ];
+                const urls = [];
+                let offset = 0;
+                while(offset < channels.length) {
+                    const slice = channels.slice(offset, offset + itemsPerPage);
+                    urls.push(`${baseURL}/streams?first=${itemsPerPage}&user_id=${slice.map((u) => u.login).join('&user_id=')}`);
+                    offset += itemsPerPage;
+                }
+                return urls;
             }
             return channels;
         };
@@ -197,188 +270,193 @@ class Twitch extends GenericProvider {
             getURLs,
             headers,
             onComplete: async (firstPage, url) => {
-                if(firstPage.parsedJSON && "streams" in firstPage.parsedJSON) {
-                    const fetchNextPage = (data, pageSize) => data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length == pageSize,
-                        oldChans = await this._list.getChannels();
-                    let channels = firstPage.parsedJSON.streams;
-                    if(fetchNextPage(firstPage, itemsPerPage)) {
-                        const otherChannels = await promisedPaginationHelper({
-                            url: `${url}&offset=`,
-                            pageSize: itemsPerPage,
-                            request: (requestUrl) => this._qs.queueRequest(requestUrl, headers),
-                            fetchNextPage,
-                            getItems: (data) => {
-                                if(data.parsedJSON && "streams" in data.parsedJSON) {
-                                    return data.parsedJSON.streams;
+                if(firstPage.parsedJSON && "data" in firstPage.parsedJSON) {
+                    const jsonChannels = firstPage.parsedJSON.data,
+                        // cache games
+                        [ updatedChannels ] = await Promise.all([
+                            this._qs.queueRequest(url.replace('/streams', '/users').replace(/user_id/g, 'id'), headers),
+                            this._getGames(jsonChannels.map((c) => c.game_id))
+                        ]),
+                        liveChannels = [];
+                    if(updatedChannels.parsedJSON && updatedChannels.parsedJSON.data) {
+                        const channels = await Promise.all(updatedChannels.parsedJSON.data.map(async (obj) => {
+                            const oldCho = await this._list.getChannelByName(obj.id),
+                                stream = jsonChannels.find((s) => s.user_id === obj.id),
+                                cho = getChannelFromJSON(obj);
+                            cho.id = oldCho.id;
+                            if(stream) {
+                                cho.viewers = stream.viewer_count;
+                                cho.category = await this._getGame(stream.game_id);
+                                cho.language = stream.language;
+                                cho.title = stream.title;
+                                cho.thumbnail = this._formatThumbnail(stream.thumbnail_url);
+                                if(REBROADCAST_TYPES.includes(stream.type)) {
+                                    cho.live = new LiveState(LiveState.REBROADCAST);
                                 }
-
-                                return [];
-                            }
-                        });
-                        channels = channels.concat(otherChannels);
-                    }
-                    channels = await Promise.all(channels.map(async (obj) => {
-                        const cho = getChannelFromJSON(obj.channel);
-                        cho.viewers = obj.viewers;
-                        cho.thumbnail = obj.preview.medium;
-                        if(REBROADCAST_TYPES.includes(obj.stream_type)) {
-                            cho.live = new LiveState(LiveState.REBROADCAST);
-                        }
-                        else {
-                            cho.live.setLive(true);
-                        }
-                        cho.live.created = Date.parse(obj.created_at);
-
-                        let oldChan;
-                        try {
-                            oldChan = await this._list.getChannelByName(cho.login);
-                        }
-                        catch(e) {
-                            if(oldChan === undefined) {
-                                for(const [
-                                    login,
-                                    id
-                                ] of idOfChannel.entries()) {
-                                    if(id == obj.channel._id) {
-                                        try {
-                                            oldChan = await this._list.getChannelByName(login);
-                                            idOfChannel.set(cho.login, obj.channel_id);
-                                            idOfChannel.delete(login);
-                                            break;
-                                        }
-                                        catch(err) {
-                                            // ignore, no result
-                                        }
-                                    }
+                                else {
+                                    cho.live.setLive(true);
                                 }
+                                cho.live.created = Date.parse(stream.started_at);
+                                liveChannels.push(cho);
                             }
+                            return cho;
+                        }));
+                        if(liveChannels.length < channels.length) {
+                            const offlineChans = dedupe(channels, liveChannels),
+                                chans = await this._getHostedChannels(offlineChans, liveChannels);
+                            return liveChannels.concat(chans);
                         }
-                        if(oldChan !== undefined) {
-                            cho.id = oldChan.id;
-                        }
-                        else {
-                            console.warn("Old channel not found for", cho.login);
-                        }
-                        return cho;
-                    }));
-                    if(channels.length != oldChans.length) {
-                        const offlineChans = dedupe(oldChans, channels),
-                            chans = await this._getHostedChannels(offlineChans, channels);
-                        return chans.concat(channels);
+                        return channels;
                     }
-                    return channels;
                 }
             }
         };
     }
     async updateChannel(channelname, ignoreHosted = false) {
-        const typeParam = await getStreamTypeParam("?"),
-            data = await this._qs.queueRequest(`${baseURL}/streams/${channelname}${typeParam}`, headers);
-
-        let channel;
-        if(data.parsedJSON && data.parsedJSON.stream !== null) {
-            idOfChannel.set(data.parsedJSON.stream.channel.name, data.parsedJSON.stream.channel._id);
-            channel = getChannelFromJSON(data.parsedJSON.stream.channel);
-            channel.viewers = data.parsedJSON.stream.viewers;
-            channel.thumbnail = data.parsedJSON.stream.preview.medium;
-            if(REBROADCAST_TYPES.includes(data.parsedJSON.stream.stream_type)) {
-                channel.live = new LiveState(LiveState.REBROADCAST);
+        const [
+            data,
+            userData
+        ] = await Promise.all([
+            this._qs.queueRequest(`${baseURL}/streams?user_id=${channelname}`, headers),
+            this._qs.queueRequest(`${baseURL}/users?id=${channelname}`, headers)
+        ]);
+        if(userData.parsedJSON && userData.parsedJSON.data && userData.parsedJSON.data.length) {
+            const [ jsonChannel ] = userData.parsedJSON.data,
+                channel = getChannelFromJSON(jsonChannel);
+            if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
+                const [ obj ] = data.parsedJSON.data;
+                channel.viewers = obj.viewer_count;
+                channel.category = await this._getGame(obj.game_id);
+                channel.language = obj.language;
+                channel.title = obj.title;
+                channel.thumbnail = this._formatThumbnail(obj.thumbnail_url);
+                if(REBROADCAST_TYPES.includes(obj.type)) {
+                    channel.live = new LiveState(LiveState.REBROADCAST);
+                }
+                else {
+                    channel.live.setLive(true);
+                }
+                channel.live.created = Date.parse(obj.started_at);
             }
-            else {
-                channel.live.setLive(true);
+
+            if((await channel.live.isLive(LiveState.TOWARD_LIVE)) || ignoreHosted) {
+                return channel;
             }
-            channel.live.created = Date.parse(data.parsedJSON.stream.created_at);
-        }
-        else {
-            channel = await this.getChannelDetails(channelname);
-        }
 
-        if((await channel.live.isLive(LiveState.TOWARD_LIVE)) || ignoreHosted) {
-            return channel;
+            return this._getHostedChannel(channel);
         }
-
-        return this._getHostedChannel(channel);
+        throw new Error(`Could not load user details for ${channelname}`);
     }
-    async updateChannels(channels) {
+    async updateChannels(channels, ignoreHosted = false) {
+        let offset = 0;
         const logins = channels.map((c) => c.login),
-            channelsString = logins.join(","),
-            streamTypeParam = await getStreamTypeParam(),
+            getPageNumber = (page, pageSize) => {
+                const pageParams = `&user_id=${logins.slice(offset, offset + pageSize).join('&user_id=')}`;
+                ++offset;
+                return pageParams;
+            },
             liveChannels = await promisedPaginationHelper({
-                url: `${baseURL}/streams?channel=${channelsString}${streamTypeParam}&limit=${itemsPerPage}&offset=`,
+                url: `${baseURL}/streams?first=${itemsPerPage}`,
                 pageSize: itemsPerPage,
+                getPageNumber,
+                initialPage: getPageNumber(offset, itemsPerPage),
                 request: (url) => this._qs.queueRequest(url, headers),
-                fetchNextPage(data) {
-                    return data.parsedJSON && !data.parsedJSON.error && data.parsedJSON.streams.length == itemsPerPage;
+                fetchNextPage(data, pageSize) {
+                    return offset + pageSize < logins.length;
                 },
                 getItems(data) {
                     if(data.parsedJSON && !data.parsedJSON.error) {
-                        return data.parsedJSON.streams;
+                        return data.parsedJSON.data;
                     }
 
                     return [];
                 }
             });
 
-        let cho,
-            ret = await Promise.all(liveChannels.map((obj) => {
-                cho = getChannelFromJSON(obj.channel);
-                cho.viewers = obj.viewers;
-                cho.thumbnail = obj.preview.medium;
-                if(REBROADCAST_TYPES.includes(obj.stream_type)) {
+        let ret = [];
+        if(liveChannels.length) {
+            // cache games
+            const [ mergedData ] = await Promise.all([
+                this._getUsers(liveChannels),
+                this._getGames(liveChannels.map((c) => c.game_id))
+            ]);
+            ret = await Promise.all(mergedData.map(async (obj) => {
+                const cho = getChannelFromJSON(obj);
+                try {
+                    const oldCho = await this._list.getChannelByName(obj.id);
+                    cho.id = oldCho.id;
+                }
+                catch(e) {
+                    // Not a channel in the list.
+                }
+                cho.viewers = obj.stream.viewer_count;
+                cho.thumbnail = this._formatThumbnail(obj.stream.thumbnail_url);
+                cho.title = obj.stream.title;
+                cho.language = obj.stream.langauge;
+                cho.category = await this._getGame(obj.stream.game_id);
+                if(REBROADCAST_TYPES.includes(obj.stream.type)) {
                     cho.live = new LiveState(LiveState.REBROADCAST);
                 }
                 else {
                     cho.live.setLive(true);
                 }
 
-                cho.live.created = Date.parse(obj.created_at);
-
-                if(logins.includes(cho.login)) {
-                    cho.id = channels[logins.indexOf(cho.login)].id;
-                    return Promise.resolve(cho);
-                }
-
-                return Promise.all(channels.map((c) => this._getChannelId(c))).then((ids) => {
-                    ids.some((id, i) => {
-                        if(id === obj.channel._id) {
-                            cho.id = channels[i].id;
-                            return true;
-                        }
-                        return false;
-                    });
-                    return cho;
-                });
+                cho.live.created = Date.parse(obj.stream.started_at);
+                return cho;
             }));
+        }
         if(ret.length != channels.length) {
-            const offlineChans = dedupe(channels, ret),
-                offChans = await this._getHostedChannels(offlineChans, ret);
-            ret = ret.concat(offChans);
+            const offlineChans = dedupe(channels, ret);
+            if(!ignoreHosted) {
+                const offChans = await this._getHostedChannels(offlineChans, ret);
+                ret = ret.concat(offChans);
+            }
+            else {
+                const offChans = await this._getUsers(offlineChans, 'login');
+                ret = ret.concat(offChans.map((c) => getChannelFromJSON(c)));
+            }
         }
 
         return ret;
     }
     async getFeaturedChannels() {
-        const data = await this._qs.queueRequest(`${baseURL}/streams/featured?broadcaster_language=${browser.i18n.getUILanguage().substr(LANG_START, LANG_END)}`, headers);
-        if(data.parsedJSON && "featured" in data.parsedJSON && data.parsedJSON.featured.length) {
-            let chans = data.parsedJSON.featured;
+        const data = await this._qs.queueRequest(`${baseURL}/streams?language=${browser.i18n.getUILanguage().substr(LANG_START, LANG_END)}`, headers);
+        if(data.parsedJSON && "data" in data.parsedJSON && data.parsedJSON.data.length) {
+            //TODO fetch user data for all streams
+            let chans = data.parsedJSON.data;
             if(await not(this._mature())) {
                 chans = chans.filter((chan) => !chan.stream.channel.mature);
             }
 
-            return chans.map((chan) => {
-                const channel = getChannelFromJSON(chan.stream.channel);
-                channel.viewers = chan.stream.viewers;
-                channel.thumbnail = chan.stream.preview.medium;
-                channel.live.setLive(true);
-                channel.live.created = Date.parse(chan.stream.created_at);
+            const [ mergedData ] = await Promise.all([
+                this._getUsers(chans),
+                this._getGames(chans.map((c) => c.game_id))
+            ]);
+            return Promise.all(mergedData.map(async (obj) => {
+                const channel = getChannelFromJSON(obj);
+                channel.thumbnail = this._formatThumbnail(obj.stream.thumbnail_url);
+                channel.viewers = obj.stream.viewer_count;
+                channel.category = await this._getGame(obj.stream.game_id);
+                channel.language = obj.stream.language;
+                channel.title = obj.stream.title;
+                if(REBROADCAST_TYPES.includes(obj.stream.type)) {
+                    channel.live = new LiveState(LiveState.REBROADCAST);
+                }
+                else {
+                    channel.live.setLive(true);
+                }
+                channel.live.created = Date.parse(obj.stream.started_at);
                 return channel;
-            });
+            }));
         }
 
         throw new Error(`Could not get any featured channel for ${this.name}`);
     }
     async search(query) {
-        const data = await this._qs.queueRequest(`${baseURL}/search/streams?${querystring.stringify({ q: query })}`, headers);
+        const v5Headers = Object.assign({
+                Accept: 'application/vnd.twitchtv.v5+json'
+            }, headers),
+            data = await this._qs.queueRequest(`https://api.twitch.tv/kraken/search/streams?${querystring.stringify({ query })}`, v5Headers);
         if(data.parsedJSON && "streams" in data.parsedJSON && data.parsedJSON.streams.length) {
             let chans = data.parsedJSON.streams;
             if(await not(this._mature())) {
@@ -386,10 +464,25 @@ class Twitch extends GenericProvider {
             }
 
             return chans.map((chan) => {
-                const channel = getChannelFromJSON(chan.channel);
+                const channel = new Channel(chan.channel._id, type);
+                channel.slug = chan.channel.name;
+                channel.uname = chan.channel.display_name;
+                channel.image = {
+                    "300": chan.channel.logo
+                };
+                channel.language = chan.channel.language;
+                channel.mature = chan.channel.mature;
+                channel.url.push(chan.channel.url);
+                channel.title = chan.channel.status;
+                channel.category = chan.game;
                 channel.viewers = chan.viewers;
-                channel.thumbnail = chan.preview.medium;
-                channel.live.setLive(true);
+                channel.thumbnail = chan.preview.large;
+                if(chan.is_playlist || REBROADCAST_TYPES.includes(chan.stream_type)) {
+                    channel.live = new LiveState(LiveState.REBROADCAST);
+                }
+                else {
+                    channel.live.setLive(true);
+                }
                 channel.live.created = Date.parse(chan.created_at);
                 return channel;
             });
@@ -397,92 +490,62 @@ class Twitch extends GenericProvider {
 
         throw new Error(`No results for the search ${query} on ${this.name}`);
     }
-    _getChannelId(channel) {
-        // get the internal id for each channel.
-        if(idOfChannel.has(channel.login)) {
-            return Promise.resolve(idOfChannel.get(channel.login));
-        }
-
-        return this._qs.queueRequest(`${baseURL}/channels/${channel.login}`, headers).then((resp) => {
-            if(resp.parsedJSON && "_id" in resp.parsedJSON) {
-                idOfChannel.set(channel.login, resp.parsedJSON._id);
-                if(channel.login != resp.parsedJSON.name) {
-                    idOfChannel.set(resp.parsedJSON.name, resp.parsedJSON._id);
-                }
-                return resp.parsedJSON._id;
-            }
-
-            return null;
-        }, () => null);
-    }
     async _getHostedChannels(channels, liveChans) {
         if(await prefs.get("twitch_showHosting")) {
-            let channelIds = await Promise.all(channels.map((channel) => this._getChannelId(channel)));
-            channelIds = channelIds.filter((id) => id !== null);
+            const channelIds = channels.map((channel) => channel.login),
 
-            const data = await this._qs.queueRequest(`https://tmi.twitch.tv/hosts?${querystring.stringify({
-                "include_logins": 1,
-                host: channelIds.join(",")
-            })}`, headers);
+                data = await this._qs.queueRequest(`https://tmi.twitch.tv/hosts?${querystring.stringify({
+                    host: channelIds.join(",")
+                })}`, headers);
 
             if(data.parsedJSON && "hosts" in data.parsedJSON && data.parsedJSON.hosts.length) {
-                const existingChans = Array.isArray(liveChans) ? channels.concat(liveChans) : channels;
-                // Check each hosted channel for his status
-                return Promise.all(data.parsedJSON.hosts.map(async (hosting) => {
-                    let chan = channels.find((ch) => ch.login === hosting.host_login);
-                    if(chan === undefined) {
-                        chan = await this.updateChannel(hosting.host_login, true);
-                        chan.id = await Promise.all(channels.map((c) => this._getChannelId(c))).then((ids) => {
-                            let chid;
-                            ids.some((id, i) => {
-                                if(id === hosting.host_login) {
-                                    chid = channels[i].id;
-                                    return true;
-                                }
-                                return false;
-                            });
-                            return chid;
-                        });
-                    }
-
-                    if(hosting.target_login) {
+                const existingChans = Array.isArray(liveChans) ? channels.concat(liveChans) : channels,
+                    // Check each hosted channel for his status
+                    externalHosts = new Map(),
+                    hosts = await Promise.all(data.parsedJSON.hosts.map(async (hosting) => {
+                        const chan = channels.find((ch) => ch.login == hosting.host_id);
+                        if(hosting.target_id) {
                         // Check the hosted channel's status, since he isn't a channel we already have in our lists.
-                        let hostedChannel = existingChans.find((ch) => ch.login === hosting.target_login);
-                        if(hostedChannel && !hostedChannel.id) {
-                            hostedChannel = null;
-                        }
-                        if(!hostedChannel) {
-                            try {
-                                hostedChannel = await this.updateChannel(hosting.target_login, true);
+                            let hostedChannel = existingChans.find((ch) => ch.login == hosting.target_id);
+                            if(hostedChannel && !hostedChannel.id) {
+                                hostedChannel = null;
                             }
-                            catch(e) {
-                                if(chan.live.state !== LiveState.REBROADCAST) {
-                                    chan.live.setLive(false);
-                                }
-                                return chan;
+                            if(!hostedChannel) {
+                                externalHosts.set(hosting.target_id.toString(), chan);
                             }
-                        }
-                        if(await hostedChannel.live.isLive(LiveState.TOWARD_BROADCASTING)) {
-                            if(!hostedChannel.id && await hostedChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
-                                const liveSince = hostedChannel.live.created;
-                                hostedChannel.live = new LiveState(LiveState.REDIRECT);
-                                hostedChannel.live.created = liveSince;
+                            else if(await hostedChannel.live.isLive(LiveState.TOWARD_BROADCASTING)) {
+                                chan.live.redirectTo(hostedChannel);
                             }
-                            chan.live.redirectTo(hostedChannel);
+                            else if(chan.live.state != LiveState.REBROADCAST) {
+                                chan.live.setLive(false);
+                            }
+                            return chan;
                         }
-                        else {
+
+                        if(chan.live.state != LiveState.REBROADCAST) {
                             chan.live.setLive(false);
                         }
 
                         return chan;
+                    }));
+                if(externalHosts.size) {
+                    const externalChannels = await this.updateChannels(Array.from(externalHosts.keys(), (login) => ({
+                        login
+                    })), true);
+                    for(const externalChannel of externalChannels) {
+                        const hoster = externalHosts.get(externalChannel.login);
+                        if(await externalChannel.live.isLive(LiveState.TOWARD_OFFLINE)) {
+                            const liveSince = externalChannel.live.created;
+                            externalChannel.live = new LiveState(LiveState.REDIRECT);
+                            externalChannel.live.created = liveSince;
+                            hoster.live.redirectTo(externalChannel);
+                        }
+                        else if(hoster.live.state != LiveState.REBROADCAST) {
+                            hoster.live.setLive(false);
+                        }
                     }
-
-                    if(chan.live.state != LiveState.REBROADCAST) {
-                        chan.live.setLive(false);
-                    }
-
-                    return chan;
-                }));
+                }
+                return hosts;
             }
         }
         channels.forEach((chan) => {
@@ -493,7 +556,90 @@ class Twitch extends GenericProvider {
         return channels;
     }
     _getHostedChannel(channel) {
-        return this._getHostedChannels([ channel ]).then((chs) => chs.shift());
+        return this._getHostedChannels([ channel ]).then((chs) => {
+            const [ ch ] = chs;
+            return ch;
+        });
+    }
+    _formatThumbnail(thumbnailUrl) {
+        return thumbnailUrl.replace('{width}', THUMBNAIL_WIDTH).replace('{height}', THUMBNAIL_HEIGHT);
+    }
+    _getUsers(streams, property = 'user_id') {
+        let offset = 0;
+        const userIds = streams.map((s) => s[property]),
+            getPageNumber = (page, pageSize) => {
+                const pageParams = `&id=${userIds.slice(offset, offset + pageSize).join('&id=')}`;
+                ++offset;
+                return pageParams;
+            };
+        return promisedPaginationHelper({
+            url: `${baseURL}/users?first=${itemsPerPage}`,
+            pageSize: itemsPerPage,
+            getPageNumber,
+            initialPage: getPageNumber(offset, itemsPerPage),
+            request: (url) => this._qs.queueRequest(url, headers),
+            fetchNextPage(data, pageSize) {
+                return offset + pageSize < userIds.length;
+            },
+            getItems(data) {
+                if(data.parsedJSON && !data.parsedJSON.error) {
+                    return data.parsedJSON.data.map((u) => {
+                        const stream = streams.find((s) => s[property] === u.id);
+                        if(stream) {
+                            u.stream = stream;
+                        }
+                        return u;
+                    });
+                }
+
+                return [];
+            }
+        });
+    }
+    async _getGame(id) {
+        if(!this._games.hasOwnProperty(id)) {
+            const res = await this._qs.queueRequest(`${baseURL}/games?id=${id}`, headers);
+            if(res.ok && res.parsedJSON.data && res.parsedJSON.data.length) {
+                const [ game ] = res.parsedJSON.data;
+                this._games[id] = game.name;
+            }
+            else {
+                throw new Error(`Could not fetch details for game ${id}`);
+            }
+        }
+        return this._games[id];
+    }
+    async _getGames(ids) {
+        const unknownIds = ids.filter((id) => !this._games.hasOwnProperty(id));
+        if(unknownIds.length) {
+            let offset = 0;
+            const getPageNumber = (page, pageSize) => {
+                    const pageParams = `?id=${unknownIds.slice(offset, offset + pageSize).join('&id=')}`;
+                    ++offset;
+                    return pageParams;
+                },
+                games = await promisedPaginationHelper({
+                    url: `${baseURL}/games`,
+                    pageSize: itemsPerPage,
+                    getPageNumber,
+                    initialPage: getPageNumber(offset, itemsPerPage),
+                    request: (url) => this._qs.queueRequest(url, headers),
+                    fetchNextPage(data, pageSize) {
+                        return offset + pageSize < unknownIds.length;
+                    },
+                    getItems(data) {
+                        if(data.parsedJSON && !data.parsedJSON.error) {
+                            return data.parsedJSON.data;
+                        }
+
+                        return [];
+                    }
+                });
+            for(const game of games) {
+                this._games[game.id] = game.name;
+            }
+        }
+        return ids.map((id) => this._games[id]);
     }
 }
 

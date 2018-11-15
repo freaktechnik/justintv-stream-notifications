@@ -213,13 +213,12 @@ const testMockAPI = async (t, p) => {
     t.is(live.type, p, "Type of channel is still correct after update of a live channel");
     t.true(await live.live.isLive(LiveState.TOWARD_OFFLINE), "Live channel is live after update");
 
-    ret.id = 1;
-    live.id = 2;
-
-    ret = await provider.updateChannels([
+    const updateChannels = await list.addChannels([
         ret,
         live
     ]);
+
+    ret = await provider.updateChannels(updateChannels);
     t.is(ret.length, 2, "Both channels were updated");
     await Promise.all(ret.map(async (chan) => {
         t.true(chan instanceof Channel, "updateChannels resolves to a channel");
@@ -228,7 +227,7 @@ const testMockAPI = async (t, p) => {
     }));
 
     if(!IGNORE_QSUPDATE_PROVIDERS.includes(p)) {
-        await list.addChannels(ret);
+        await Promise.all(ret.map((c) => list.setChannel(c)));
         const spec = provider.updateRequest();
         if("headers" in spec) {
             t.is(typeof spec.headers, 'object');
@@ -366,3 +365,5 @@ for(const p in providers) {
         test(testNotSupportsFeatured, p);
     }
 }
+
+test.todo("Slug conversion");

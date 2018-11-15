@@ -198,7 +198,7 @@ function addChannel(channel) {
             small = document.createElement("small"),
             span = document.createElement("span"),
             title = document.createTextNode(getChannelUname(channel)),
-            type = document.createTextNode(`${channel.login} | ${providers[channel.type].name} | ${channel.id}`),
+            type = document.createTextNode(`${channel.slug} | ${providers[channel.type].name} | ${channel.id}`),
             evObj = new CustomEvent("itemadded", { detail: channelNode });
         image.sizes = "50px";
         image.srcset = Object.keys(channel.image)
@@ -223,7 +223,7 @@ function addUser(user) {
             small = document.createElement("small"),
             span = document.createElement("span"),
             title = document.createTextNode(user.uname),
-            type = document.createTextNode(`${user.login} | ${providers[user.type].name}`),
+            type = document.createTextNode(`${user.slug} | ${providers[user.type].name}`),
             evObj = new CustomEvent("itemadded", { detail: userNode });
         image.sizes = "50w";
         image.srcset = Object.keys(user.image)

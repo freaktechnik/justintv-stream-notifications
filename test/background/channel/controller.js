@@ -14,7 +14,8 @@ import {
 import sinon from 'sinon';
 
 const TESTUSER = {
-    name: "freaktechnik",
+    name: "24261394",
+    slug: "freaktechnik",
     type: "twitch"
 };
 
@@ -75,16 +76,17 @@ test("Add User", async (t) => {
 test.serial("User Methods", async (t) => {
     const cc = new ChannelController();
 
-    const user = await cc.addUser(TESTUSER.name, TESTUSER.type);
+    const user = await cc.addUser(TESTUSER.slug, TESTUSER.type);
 
     t.is(user.login, TESTUSER.name, "Added user has correct login");
+    t.is(user.slug, TESTUSER.slug, "Added user has correct slug");
     t.is(user.type, TESTUSER.type, "Added user has correct type");
     t.true("id" in user, "Added user has an ID");
 
     let channels = await cc.getChannelsByType();
     t.is(channels.length, 1, "All followed channels were added");
 
-    await t.throwsAsync(cc.addUser(TESTUSER.name, TESTUSER.type, () => true));
+    await t.throwsAsync(cc.addUser(TESTUSER.slug, TESTUSER.type, () => true));
 
     let users = await cc.getUsersByType(TESTUSER.type);
     t.is(users.length, 1, "Get users by type for the user's type holds one result");
@@ -121,7 +123,7 @@ test.serial("User Methods", async (t) => {
 test.serial("Remove User", async (t) => {
     const cc = new ChannelController();
 
-    const user = await cc.addUser(TESTUSER.name, TESTUSER.type);
+    const user = await cc.addUser(TESTUSER.slug, TESTUSER.type);
 
     await cc.removeUser(user.id);
 
@@ -188,7 +190,7 @@ test.serial("Channel Methods", async (t) => {
     channels.forEach((chans) => t.true(Array.isArray(chans), "Each of the items is an array"));
 
     // Flatten the arrays, so we have all the channels in one array.
-    channels = [].concat(...channels);
+    channels = [].concat(...channels); //node 11+: turn this into .flat()
     t.is(channels.length, 1, "Updating all channels updated one channel");
     t.is(channels[0].login, TESTUSER.name, "Updated channel has the correct login");
     t.is(channels[0].type, TESTUSER.type, "Updated channel has the correct type");

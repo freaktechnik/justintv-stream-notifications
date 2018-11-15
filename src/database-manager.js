@@ -126,6 +126,17 @@ const VERSION = 3,
                     savePromise.push(DatabaseManager._waitForRequest(r));
                 }).then(() => Promise.all(savePromise));
             },
+            upgrade3(e) {
+                const channels = e.target.transaction.objectStore(OBJECT_STORES.channels),
+                    request = channels.openCursor(),
+                    savePromise = [];
+                return DatabaseManager._waitForCursor(request, (cursor) => {
+                    const channel = cursor.value;
+                    channel.slug = channel.login;
+                    const r = cursor.update(channel);
+                    savePromise.push(DatabaseManager._waitForRequest(r));
+                }).then(() => Promise.all(savePromise));
+            },
             initialize(e) {
                 const users = e.target.result.createObjectStore(OBJECT_STORES.users, {
                         keyPath: "id",

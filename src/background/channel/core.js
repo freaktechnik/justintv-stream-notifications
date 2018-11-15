@@ -30,6 +30,8 @@ class Item {
     constructor(login, type, id) {
         this._login = login;
         this._type = type;
+        this._uname = "";
+        this._slug = "";
         /**
          * An object with user avatars, by their size in pixels as property name.
          * @type {Object.<(string|number)>}
@@ -50,7 +52,7 @@ class Item {
             return this._uname;
         }
 
-        return this.login;
+        return this.slug;
     }
     set uname(val) {
         if(val) {
@@ -77,7 +79,19 @@ class Item {
         return this._type;
     }
 
-    _uname = "";
+    get slug() {
+        if(this._slug != "") {
+            return this._slug;
+        }
+        return this.login;
+    }
+
+    set slug(val) {
+        if(val) {
+            this._slug = val;
+        }
+    }
+
     //methods
     /**
      * Retuns the URL to the best image for displaying at the specified size.
@@ -125,6 +139,7 @@ class Item {
      * @typedef {Object} SerializedItem
      * @property {string} uname
      * @property {string} login
+     * @property {string} slug
      * @property {Object.<(string|number),string>} image
      * @property {string} type
      * @property {number} [id]
@@ -140,6 +155,7 @@ class Item {
         const obj = {
             uname: this.uname,
             login: this.login,
+            slug: this.slug,
             image: this.image,
             type: this.type
         };
@@ -164,6 +180,7 @@ class User extends Item {
     static deserialize(properties) {
         const props = omit(properties, ITEM_ARGS);
         props._uname = properties.uname;
+        props._slug = properties.slug;
         return Object.assign(new User(...ITEM_ARGS.map((a) => properties[a])), props);
     }
 
@@ -215,6 +232,7 @@ class Channel extends Item {
     static deserialize(properties) {
         const props = omit(properties, ITEM_ARGS);
         props._uname = properties.uname;
+        props._slug = properties.slug;
         return Object.assign(new Channel(...ITEM_ARGS.map((a) => properties[a])), props);
     }
 

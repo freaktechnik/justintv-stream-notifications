@@ -16,6 +16,7 @@ import { not } from '../logic.js';
 import LiveState from '../channel/live-state.js';
 import { filterExistingFavs } from '../channel/utils.js';
 import prefs from "../../preferences.js";
+import { emit } from '../../utils.js';
 
 const type = "beam",
     chatURL = "https://mixer.com/embed/chat/",
@@ -43,7 +44,8 @@ prefs.get('mixer_clientID').then((id) => {
     .catch(console.error);
 
 function getChannelFromJSON(jsonChannel) {
-    const ret = new Channel(jsonChannel.token, type);
+    const ret = new Channel(jsonChannel.id, type);
+    ret.slug = jsonChannel.token;
     ret.live.setLive(jsonChannel.online);
     ret.live.created = 0;
     ret.title = jsonChannel.name;
@@ -59,7 +61,14 @@ function getChannelFromJSON(jsonChannel) {
     ret.archiveUrl = `https://mixer.com/${jsonChannel.token}`;
     ret.chatUrl = chatURL + jsonChannel.token;
     ret.mature = jsonChannel.audience === "18+";
-    ret.image = getImageFromUserID(jsonChannel.user.id);
+    if(jsonChannel.user.hasOwnProperty("avatarUrl")) {
+        ret.image = {
+            "300": jsonChannel.user.avatarUrl
+        };
+    }
+    else {
+        ret.image = getImageFromUserID(jsonChannel.user.id);
+    }
     if(jsonChannel.type !== null) {
         ret.category = jsonChannel.type.name;
     }
@@ -94,8 +103,32 @@ class Beam extends GenericProvider {
         this._supportsFavorites = true;
         this._supportsCredentials = true;
         this._supportsFeatured = true;
+        this._hasUniqueSlug = true;
 
         this.initialize();
+    }
+
+    updateLogin(item) {
+        this._getUserIdFromUsername(item.slug)
+            .then((id) => {
+                const isUser = item instanceof User;
+                return Promise.all([
+                    id,
+                    isUser,
+                    isUser ? this._list.getUserByName(item.slug) : this._list.getChannelByName(item.slug)
+                ]);
+            })
+            .then(([
+                id,
+                isUser,
+                chan
+            ]) => {
+                chan._login = id;
+                const event = isUser ? 'updateduser' : 'updatedchannels',
+                    payload = isUser ? chan : [ chan ];
+                emit(this, event, payload);
+            })
+            .catch(console.error);
     }
 
     async getUserFavorites(username) {
@@ -103,7 +136,7 @@ class Beam extends GenericProvider {
             user = await this._qs.queueRequest(`${baseURL}users/${userid}`, headers);
 
         if(user.parsedJSON) {
-            const ch = new User(user.parsedJSON.username, this._type),
+            const ch = new User(user.parsedJSON.id, this._type),
                 subscriptions = await promisedPaginationHelper({
                     url: `${baseURL}users/${userid}/follows?limit=${PAGE_SIZE}&page=`,
                     pageSize: PAGE_SIZE,
@@ -121,10 +154,16 @@ class Beam extends GenericProvider {
                 }),
                 channels = await Promise.all(subscriptions.map((sub) => this.getChannelDetails(sub.token)));
 
+            ch.slug = user.parsedJSON.username;
             ch.favorites = subscriptions.map((sub) => sub.token);
 
             if("avatars" in user.parsedJSON) {
                 ch.image = getImageFromAvatars(user.parsedJSON.avatars);
+            }
+            else if(user.parsedJSON.hasOwnProperty("avatarUrl")) {
+                ch.image = {
+                    "300": user.parsedJSON.avatarUrl
+                };
             }
             else {
                 ch.image = getImageFromUserID(user.parsedJSON.id);
@@ -141,7 +180,7 @@ class Beam extends GenericProvider {
     updateFavsRequest() {
         const getURLs = async () => {
             const users = await this._list.getUsers();
-            return Promise.all(users.map((user) => this._getUserIdFromUsername(user.login).then((id) => `${baseURL}users/${id}`)));
+            return users.map((user) => `${baseURL}users/${user.login}`);
         };
 
         return {
@@ -149,7 +188,7 @@ class Beam extends GenericProvider {
             headers,
             onComplete: async (data, url) => {
                 if(data.parsedJSON) {
-                    const ch = new User(data.parsedJSON.username, this._type),
+                    const ch = new User(data.parsedJSON.id, this._type),
                         [
                             oldUser,
                             follows
@@ -169,11 +208,17 @@ class Beam extends GenericProvider {
                         ]),
                         channels = await Promise.all(follows.map((sub) => this.getChannelDetails(sub.token))),
                         newChannels = filterExistingFavs(oldUser, channels);
+                    ch.slug = data.parsedJSON.username;
                     ch.favorites = follows.map((sub) => sub.token);
                     ch.id = oldUser.id;
 
                     if("avatars" in data.parsedJSON) {
                         ch.image = getImageFromAvatars(data.parsedJSON.avatars);
+                    }
+                    else if(data.parsedJSON.hasOwnProperty("avatarUrl")) {
+                        ch.image = {
+                            "300": data.parsedJSON.avatarUrl
+                        };
                     }
                     else {
                         ch.image = getImageFromUserID(data.parsedJSON.id);

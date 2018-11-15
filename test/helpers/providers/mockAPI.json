@@ -664,236 +664,186 @@
         }
     },
     "twitch": {
-        "https://api.twitch.tv/kraken/channels/test": {
-            "mature": false,
-            "status": "Offline.",
-            "broadcaster_language": "en",
-            "display_name": "test",
-            "game": "",
-            "language": "en",
-            "_id": 0,
-            "name": "test",
-            "created_at": "2011-08-21T18:32:25Z",
-            "updated_at": "2015-10-31T19:53:15Z",
-            "delay": null,
-            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-            "banner": null,
-            "video_banner": "",
-            "background": null,
-            "profile_banner": "",
-            "profile_banner_background_color": null,
-            "partner": false,
-            "url": "http://www.twitch.tv/test",
-            "views": 0,
-            "followers": 0,
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/channels/test",
-                "follows": "https://api.twitch.tv/kraken/channels/test/follows",
-                "commercial": "https://api.twitch.tv/kraken/channels/test/commercial",
-                "stream_key": "https://api.twitch.tv/kraken/channels/test/stream_key",
-                "chat": "https://api.twitch.tv/kraken/chat/test",
-                "features": "https://api.twitch.tv/kraken/channels/test/features",
-                "subscriptions": "https://api.twitch.tv/kraken/channels/test/subscriptions",
-                "editors": "https://api.twitch.tv/kraken/channels/test/editors",
-                "teams": "https://api.twitch.tv/kraken/channels/test/teams",
-                "videos": "https://api.twitch.tv/kraken/channels/test/videos"
-            }
-        },
-        "https://api.twitch.tv/kraken/channels/live": {
-            "mature": false,
-            "status": "",
-            "broadcaster_language": "en",
-            "display_name": "live",
-            "game": "",
-            "language": "en",
-            "_id": 1,
-            "name": "live",
-            "created_at": "2011-08-21T18:32:25Z",
-            "updated_at": "2015-10-31T19:53:15Z",
-            "delay": null,
-            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-            "banner": null,
-            "video_banner": "",
-            "background": null,
-            "profile_banner": "",
-            "profile_banner_background_color": null,
-            "partner": false,
-            "url": "http://www.twitch.tv/live",
-            "views": 0,
-            "followers": 0
-        },
-        "https://api.twitch.tv/kraken/streams?channel=live,test&stream_type=live&limit=100&offset=0": {
-            "streams": [
+        "https://api.twitch.tv/helix/users?login=test&id=test": {
+            "data": [
                 {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "stream_type": "live",
-                    "channel": {
-                        "display_name": "live",
-                        "game": "",
-                        "_id": 1,
-                        "name": "live",
-                        "status": "",
-                        "mature": false,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "http://www.twitch.tv/live"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
+                    "id": "0",
+                    "login": "test",
+                    "display_name": "test",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams?channel=test,live&stream_type=live&limit=100&offset=0": {
-            "streams": [
+        "https://api.twitch.tv/helix/users?id=0": {
+            "data": [
                 {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "stream_type": "live",
-                    "channel": {
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "_id": 1,
-                        "name": "live",
-                        "status": "",
-                        "mature": false,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "http://www.twitch.tv/live"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
+                    "id": "0",
+                    "login": "test",
+                    "display_name": "test",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams?channel=test,live&stream_type=live&limit=100": {
-            "streams": [
+        "https://api.twitch.tv/helix/users?login=live&id=live": {
+            "data": [
                 {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "stream_type": "live",
-                    "channel": {
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "_id": 1,
-                        "name": "live",
-                        "status": "",
-                        "mature": false,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "http://www.twitch.tv/live"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
-                }
-            ]
-        },
-        "https://api.twitch.tv/kraken/streams?channel=live,test&stream_type=live&limit=100": {
-            "streams": [
-                {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "stream_type": "live",
-                    "channel": {
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "_id": 1,
-                        "name": "live",
-                        "status": "",
-                        "mature": false,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "http://www.twitch.tv/live"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
-                }
-            ]
-        },
-        "https://api.twitch.tv/kraken/streams?channel=live&stream_type=live&limit=100&offset=0": {
-            "streams": [
-                {
-                    "viewers": 0,
-                    "preview": {
-                        "medium": ""
-                    },
-                    "is_playlist": false,
-                    "stream_type": "live",
-                    "channel": {
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "_id": 1,
-                        "name": "live",
-                        "status": "",
-                        "mature": false,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "url": "http://www.twitch.tv/live"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
-                }
-            ]
-        },
-        "https://api.twitch.tv/kraken/streams/test?stream_type=live": {
-            "stream": null
-        },
-        "https://api.twitch.tv/kraken/streams/live?stream_type=live": {
-            "stream": {
-                "viewers": 0,
-                "preview": {
-                    "medium": ""
-                },
-                "is_playlist": false,
-                "stream_type": "live",
-                "channel": {
-                    "broadcaster_language": "en",
+                    "id": "1",
+                    "login": "live",
                     "display_name": "live",
-                    "game": "",
-                    "_id": 1,
-                    "name": "live",
-                    "status": "",
-                    "mature": false,
-                    "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                    "url": "http://www.twitch.tv/live"
-                },
-                "created_at": "2011-08-21T18:32:25Z"
-            }
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
+                }
+            ]
         },
-        "https://tmi.twitch.tv/hosts?include_logins=1&host=0": {
+        "https://api.twitch.tv/helix/users?id=1": {
+            "data": [
+                {
+                    "id": "1",
+                    "login": "live",
+                    "display_name": "live",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users?first=100&id=1": {
+            "data": [
+                {
+                    "id": "1",
+                    "login": "live",
+                    "display_name": "live",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users?first=100&id=0&id=1": {
+            "data": [
+                {
+                    "id": "0",
+                    "login": "test",
+                    "display_name": "test",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
+                },
+                {
+                    "id": "1",
+                    "login": "live",
+                    "display_name": "live",
+                    "type": "",
+                    "broadcaster_type": "",
+                    "description": "",
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users/follows?first=100&from_id=0": {
+            "data": [
+                {
+                    "from_id": "0",
+                    "from_name": "test",
+                    "to_id": "1",
+                    "to_name": "live",
+                    "followed_at": "2017-08-22T22:55:24Z"
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/streams?user_id=0": {
+            "data": []
+        },
+        "https://api.twitch.tv/helix/streams?first=100&user_id=0&user_id=1": {
+            "data": [
+                {
+                    "viewer_count": 0,
+                    "thumbnail_url": "",
+                    "game_id": "0",
+                    "type": "live",
+                    "language": "en",
+                    "user_id": "1",
+                    "user_name": "live",
+                    "title": "",
+                    "started_at": "2011-08-21T18:32:25Z"
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/streams?user_id=1": {
+            "data": [
+                {
+                    "viewer_count": 0,
+                    "thumbnail_url": "",
+                    "game_id": "0",
+                    "type": "live",
+                    "language": "en",
+                    "user_id": "1",
+                    "user_name": "live",
+                    "title": "",
+                    "started_at": "2011-08-21T18:32:25Z"
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/streams?language=en": {
+            "data": [
+                {
+                    "viewer_count": 0,
+                    "thumbnail_url": "",
+                    "game_id": "0",
+                    "type": "live",
+                    "language": "en",
+                    "user_id": "2",
+                    "user_name": "featured",
+                    "title": "",
+                    "started_at": "2011-08-21T18:32:25Z"
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users?first=100&id=2": {
+            "data": [
+                {
+                    "id": "2",
+                    "name": "featured",
+                    "display_name": "featured",
+                    "view_count": 0,
+                    "description": 0,
+                    "profile_image_url": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
+                    "offline_image_url": ""
+                }
+            ]
+        },
+        "https://tmi.twitch.tv/hosts?host=0": {
             "hosts": []
         },
-        "https://api.twitch.tv/kraken/streams/featured?broadcaster_language=en": {
-            "featured": [
-                {
-                    "stream": {
-                        "viewers": 0,
-                        "preview": {
-                            "medium": ""
-                        },
-                        "channel": {
-                            "broadcaster_language": "en",
-                            "display_name": "featured",
-                            "game": "",
-                            "_id": 1,
-                            "name": "live",
-                            "status": "",
-                            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                            "url": "http://www.twitch.tv/featured",
-                            "mature": false
-                        },
-                        "created_at": "2011-08-21T18:32:25Z"
-                    }
-                }
-            ]
+        "https://tmi.twitch.tv/hosts?host=0%2C1": {
+            "hosts": []
         },
-        "https://api.twitch.tv/kraken/search/streams?q=test": {
+        "https://api.twitch.tv/kraken/search/streams?query=test": {
             "streams": [
                 {
                     "viewers": 0,
@@ -915,496 +865,162 @@
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams/mlg_live?stream_type=live": {
-            "stream": null
-        },
-        "https://api.twitch.tv/kraken/channels/mlg_live": {
-            "mature":false,
-            "status":"CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
-            "broadcaster_language":"en",
-            "display_name":"MLG",
-            "game":"Counter-Strike: Global Offensive",
-            "language":"en",
-            "_id":22212874,
-            "name":"mlg",
-            "created_at":"2011-05-05T02:47:23Z",
-            "updated_at":"2016-01-21T13:17:16Z",
-            "delay":null,
-            "logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
-            "banner":null,
-            "video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
-            "background":null,
-            "profile_banner":null,
-            "profile_banner_background_color":null,
-            "partner":true,
-            "url":"http://www.twitch.tv/mlg",
-            "views":5729858,
-            "followers":58522,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/channels/mlg",
-                "follows":"https://api.twitch.tv/kraken/channels/mlg/follows",
-                "commercial":"https://api.twitch.tv/kraken/channels/mlg/commercial",
-                "stream_key":"https://api.twitch.tv/kraken/channels/mlg/stream_key",
-                "chat":"https://api.twitch.tv/kraken/chat/mlg",
-                "features":"https://api.twitch.tv/kraken/channels/mlg/features",
-                "subscriptions":"https://api.twitch.tv/kraken/channels/mlg/subscriptions",
-                "editors":"https://api.twitch.tv/kraken/channels/mlg/editors",
-                "teams":"https://api.twitch.tv/kraken/channels/mlg/teams",
-                "videos":"https://api.twitch.tv/kraken/channels/mlg/videos"
-            }
-        },
-        "https://tmi.twitch.tv/hosts?include_logins=1&host=22212874": {
-            "hosts": [
+        "https://api.twitch.tv/helix/users?login=24261394&id=24261394": {
+            "data": [
                 {
-                    "host_id": 22212874,
-                    "host_login": "mlg"
+                    "display_name": "freaktechnik",
+                    "id": "24261394",
+                    "login": "freaktechnik",
+                    "type": "user",
+                    "broadcaster_type": "",
+                    "description": "Things and stuff.",
+                    "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/freaktechnik-profile_image-24ef419620c54608-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/channels/mlg": {
-            "mature":false,
-            "status":"CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
-            "broadcaster_language":"en",
-            "display_name":"MLG",
-            "game":"Counter-Strike: Global Offensive",
-            "language":"en",
-            "_id":22212874,
-            "name":"mlg",
-            "created_at":"2011-05-05T02:47:23Z",
-            "updated_at":"2016-01-21T13:17:16Z",
-            "delay":null,
-            "logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
-            "banner":null,
-            "video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
-            "background":null,
-            "profile_banner":null,
-            "profile_banner_background_color":null,
-            "partner":true,
-            "url":"http://www.twitch.tv/mlg",
-            "views":5729858,
-            "followers":58522,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/channels/mlg",
-                "follows":"https://api.twitch.tv/kraken/channels/mlg/follows",
-                "commercial":"https://api.twitch.tv/kraken/channels/mlg/commercial",
-                "stream_key":"https://api.twitch.tv/kraken/channels/mlg/stream_key",
-                "chat":"https://api.twitch.tv/kraken/chat/mlg",
-                "features":"https://api.twitch.tv/kraken/channels/mlg/features",
-                "subscriptions":"https://api.twitch.tv/kraken/channels/mlg/subscriptions",
-                "editors":"https://api.twitch.tv/kraken/channels/mlg/editors",
-                "teams":"https://api.twitch.tv/kraken/channels/mlg/teams",
-                "videos":"https://api.twitch.tv/kraken/channels/mlg/videos"
-            }
-        },
-        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=live&limit=100&offset=0": {
-            "streams": [
+        "https://api.twitch.tv/helix/users?id=24261394": {
+            "data": [
                 {
-                    "channel": {
-                        "mature": false,
-                        "status": "CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
-                        "broadcaster_language": "en",
-                        "display_name": "MLG",
-                        "game": "Counter-Strike: Global Offensive",
-                        "language": "en",
-                        "_id": 22212874,
-                        "name": "mlg",
-                        "created_at": "2011-05-05T02:47:23Z",
-                        "updated_at": "2016-01-21T13:17:16Z",
-                        "delay": null,
-                        "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
-                        "banner": null,
-                        "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
-                        "background": null,
-                        "profile_banner": null,
-                        "profile_banner_background_color": null,
-                        "partner": true,
-                        "url": "http://www.twitch.tv/mlg",
-                        "views": 5729858,
-                        "followers": 58522
-                    },
-                    "viewers": 5006,
-                    "preview": {
-                        "medium": "https://example.com/"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
-                }
-            ],
-            "_total":1,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=0",
-                "next":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=25",
-                "featured":"https://api.twitch.tv/kraken/streams/featured",
-                "summary":"https://api.twitch.tv/kraken/streams/summary",
-                "followed":"https://api.twitch.tv/kraken/streams/followed"
-            }
-        },
-        "https://api.twitch.tv/kraken/streams?channel=mlg_live&stream_type=live&limit=100": {
-            "streams": [
-                {
-                    "channel": {
-                        "mature": false,
-                        "status": "CSGO Americas Minor - Grand Final: EnemyGG vs Splyce ",
-                        "broadcaster_language": "en",
-                        "display_name": "MLG",
-                        "game": "Counter-Strike: Global Offensive",
-                        "language": "en",
-                        "_id": 22212874,
-                        "name": "mlg",
-                        "created_at": "2011-05-05T02:47:23Z",
-                        "updated_at": "2016-01-21T13:17:16Z",
-                        "delay": null,
-                        "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-profile_image-a12e3e8aec03e20c-300x300.png",
-                        "banner": null,
-                        "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/mlg-channel_offline_image-ce8904e0c0801815-1920x1080.png",
-                        "background": null,
-                        "profile_banner": null,
-                        "profile_banner_background_color": null,
-                        "partner": true,
-                        "url": "http://www.twitch.tv/mlg",
-                        "views": 5729858,
-                        "followers": 58522
-                    },
-                    "viewers": 5006,
-                    "preview": {
-                        "medium": "https://example.com/"
-                    },
-                    "created_at": "2011-08-21T18:32:25Z"
-                }
-            ],
-            "_total":1,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=0",
-                "next":"https://api.twitch.tv/kraken/streams?channel=mlg_live\u0026limit=25\u0026offset=25",
-                "featured":"https://api.twitch.tv/kraken/streams/featured",
-                "summary":"https://api.twitch.tv/kraken/streams/summary",
-                "followed":"https://api.twitch.tv/kraken/streams/followed"
-            }
-        },
-        "https://api.twitch.tv/kraken/users/freaktechnik": {
-            "display_name": "freaktechnik",
-            "_id": 24261394,
-            "name": "freaktechnik",
-            "type": "user",
-            "bio": "Things and stuff.",
-            "created_at": "2011-08-21T18:32:25Z",
-            "updated_at": "2016-01-10T19:52:42Z",
-            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/freaktechnik-profile_image-24ef419620c54608-300x300.png",
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/users/freaktechnik"
-            }
-        },
-        "https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?limit=100&offset=0": {
-            "follows": [
-                {
-                    "channel": {
-                        "mature": false,
-                        "status": "",
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "language": "en",
-                        "_id": 1,
-                        "name": "live",
-                        "created_at": "2011-08-21T18:32:25Z",
-                        "updated_at": "2015-10-31T19:53:15Z",
-                        "delay": null,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "banner": null,
-                        "video_banner": "",
-                        "background": null,
-                        "profile_banner": "",
-                        "profile_banner_background_color": null,
-                        "partner": true,
-                        "url": "http://www.twitch.tv/live",
-                        "views": 0,
-                        "followers": 0
-                    }
-                }
-            ],
-            "_total": 1,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
-                "next":"https://api.twitch.tv/kraken/users/freaktechnik/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
-            }
-        },
-        "https://api.twitch.tv/kraken/channels/freaktechnik": {
-            "mature": false,
-            "status": "Offline.",
-            "broadcaster_language": "en",
-            "display_name": "freaktechnik",
-            "game": "nano",
-            "language": "en",
-            "_id": 16,
-            "name": "freaktechnik",
-            "created_at": "2011-08-21T18:32:25Z",
-            "updated_at": "2015-10-31T19:53:15Z",
-            "delay": null,
-            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-            "banner": null,
-            "video_banner": "",
-            "background": null,
-            "profile_banner": "",
-            "profile_banner_background_color": null,
-            "partner": false,
-            "url": "http://www.twitch.tv/freaktechnik",
-            "views": 15,
-            "followers": 5
-        },
-        "https://api.twitch.tv/kraken/streams/freaktechnik?stream_type=live": {
-            "stream": null
-        },
-        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100&offset=0": {
-            "streams": [],
-            "total": 0
-        },
-        "https://api.twitch.tv/kraken/streams?channel=freaktechnik&stream_type=live&limit=100": {
-            "streams": [],
-            "total": 0
-        },
-        "https://tmi.twitch.tv/hosts?include_logins=1&host=16": {
-            "hosts": [
-                {
-                    "host_id": 16,
-                    "host_login": "freaktechnik"
+                    "display_name": "freaktechnik",
+                    "id": "24261394",
+                    "login": "freaktechnik",
+                    "type": "user",
+                    "broadcaster_type": "",
+                    "description": "Things and stuff.",
+                    "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/freaktechnik-profile_image-24ef419620c54608-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/users/test": {
-            "display_name": "test",
-            "_id": 999,
-            "name": "test",
-            "type": "user",
-            "bio": "",
-            "created_at": "2011-08-21T18:32:25Z",
-            "updated_at": "2016-01-10T19:52:42Z",
-            "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/users/test"
-            }
-        },
-        "https://api.twitch.tv/kraken/users/test/follows/channels?limit=100&offset=0": {
-            "follows": [
+        "https://api.twitch.tv/helix/users?login=freaktechnik&id=freaktechnik": {
+            "data": [
                 {
-                    "channel": {
-                        "mature": false,
-                        "status": "",
-                        "broadcaster_language": "en",
-                        "display_name": "live",
-                        "game": "",
-                        "language": "en",
-                        "_id": 1,
-                        "name": "live",
-                        "created_at": "2011-08-21T18:32:25Z",
-                        "updated_at": "2015-10-31T19:53:15Z",
-                        "delay": null,
-                        "logo": "http://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png",
-                        "banner": null,
-                        "video_banner": "",
-                        "background": null,
-                        "profile_banner": "",
-                        "profile_banner_background_color": null,
-                        "partner": false,
-                        "url": "http://www.twitch.tv/live",
-                        "views": 0,
-                        "followers": 0
-                    }
+                    "display_name": "freaktechnik",
+                    "id": "24261394",
+                    "login": "freaktechnik",
+                    "type": "user",
+                    "broadcaster_type": "",
+                    "description": "Things and stuff.",
+                    "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/freaktechnik-profile_image-24ef419620c54608-300x300.png",
+                    "offline_image_url": "",
+                    "view_count": 0
                 }
-            ],
-            "_total": 0,
-            "_links": {
-                "self":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=0&sortby=created_at",
-                "next":"https://api.twitch.tv/kraken/users/test/follows/channels?direction=DESC&limit=100&offset=100&sortby=created_at"
-            }
+            ]
         },
-        "https://api.twitch.tv/kraken/channels/totalbiscuit": {
-            "mature": true,
-            "status": "Strema Title",
-            "broadcaster_language": "en",
-            "display_name": "Totalbiscuit",
-            "game": "Gaming Talk Shows",
-            "language": "en",
-            "_id": 12616386,
-            "name": "totalbiscuit",
-            "created_at": "2010-05-14T16:54:15Z",
-            "updated_at": "2016-04-21T21:46:21Z",
-            "delay": null,
-            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_image-502dcf27f785c632-300x300.png",
-            "banner": null,
-            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-channel_offline_image-3c127ba9b0ae7fec-1920x1080.png",
-            "background": null,
-            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/totalbiscuit-profile_banner-1bd08282a8f11f71-480.png",
-            "profile_banner_background_color": null,
-            "partner": true,
-            "url": "https://www.twitch.tv/totalbiscuit",
-            "views": 45961644,
-            "followers": 435612,
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/channels/totalbiscuit",
-                "follows": "https://api.twitch.tv/kraken/channels/totalbiscuit/follows",
-                "commercial": "https://api.twitch.tv/kraken/channels/totalbiscuit/commercial",
-                "stream_key": "https://api.twitch.tv/kraken/channels/totalbiscuit/stream_key",
-                "chat": "https://api.twitch.tv/kraken/chat/totalbiscuit",
-                "features": "https://api.twitch.tv/kraken/channels/totalbiscuit/features",
-                "subscriptions": "https://api.twitch.tv/kraken/channels/totalbiscuit/subscriptions",
-                "editors": "https://api.twitch.tv/kraken/channels/totalbiscuit/editors",
-                "teams": "https://api.twitch.tv/kraken/channels/totalbiscuit/teams",
-                "videos": "https://api.twitch.tv/kraken/channels/totalbiscuit/videos"
-            }
+        "https://api.twitch.tv/helix/streams?first=100&user_id=24261394": {
+            "data": []
         },
-        "https://api.twitch.tv/kraken/channels/pyrionflax": {
-            "mature": true,
-            "status": "Stream Title",
-            "broadcaster_language": "en",
-            "display_name": "PyrionFlax",
-            "game": "Dota 2",
-            "language": "en",
-            "_id": 19309473,
-            "name": "pyrionflax",
-            "created_at": "2010-05-14T16:54:15Z",
-            "updated_at": "2016-04-21T21:46:21Z",
-            "delay": null,
-            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_image-502dcf27f785c632-300x300.png",
-            "banner": null,
-            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-channel_offline_image-3c127ba9b0ae7fec-1920x1080.png",
-            "background": null,
-            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_banner-1bd08282a8f11f71-480.png",
-            "profile_banner_background_color": null,
-            "partner": true,
-            "url": "https://www.twitch.tv/pyrionflax",
-            "views": 45961644,
-            "followers": 435612,
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/channels/pyrionflax",
-                "follows": "https://api.twitch.tv/kraken/channels/pyrionflax/follows",
-                "commercial": "https://api.twitch.tv/kraken/channels/pyrionflax/commercial",
-                "stream_key": "https://api.twitch.tv/kraken/channels/pyrionflax/stream_key",
-                "chat": "https://api.twitch.tv/kraken/chat/pyrionflax",
-                "features": "https://api.twitch.tv/kraken/channels/pyrionflax/features",
-                "subscriptions": "https://api.twitch.tv/kraken/channels/pyrionflax/subscriptions",
-                "editors": "https://api.twitch.tv/kraken/channels/pyrionflax/editors",
-                "teams": "https://api.twitch.tv/kraken/channels/pyrionflax/teams",
-                "videos": "https://api.twitch.tv/kraken/channels/pyrionflax/videos"
-            }
+        "https://api.twitch.tv/helix/users/follows?first=100&from_id=24261394": {
+            "data": [
+                {
+                    "from_id": "24261394",
+                    "from_name": "freaktechnik",
+                    "to_id": "1",
+                    "to_name": "live"
+                }
+            ]
         },
-        "https://api.twitch.tv/kraken/streams/pyrionflax?stream_type=live": {
-            "stream": null
+        "https://api.twitch.tv/helix/streams?user_id=24261394": {
+            "data": []
         },
-        "https://tmi.twitch.tv/hosts?include_logins=1&host=19309473": {
+        "https://tmi.twitch.tv/hosts?host=24261394": {
+            "hosts": [
+                {
+                    "host_id": 24261394
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users?id=19309473": {
+            "data": [
+                {
+                    "id":"19309473",
+                    "login":"pyrionflax",
+                    "display_name":"Pyrionflax",
+                    "type":"",
+                    "broadcaster_type":"partner",
+                    "description":"It's Pflax, live and uncensored as you've never seen him before! Curse words! Overly elaborate analogies! Harmonica! Wait...that sounds like the usual PFlax crap fest. Ah well. As you were.",
+                    "profile_image_url":"https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_image-y5IqI45Wd001C0a-300x300.jpg",
+                    "offline_image_url":"https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-channel_offline_image-2149334ea4557c94-1920x1080.jpeg",
+                    "view_count":6997359
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/users?first=100&id=19309473": {
+            "data": [
+                {
+                    "id": "19309473",
+                    "login": "pyrionflax",
+                    "display_name": "Pyrionflax",
+                    "type": "",
+                    "broadcaster_type": "partner",
+                    "description": "It's Pflax, live and uncensored as you've never seen him before! Curse words! Overly elaborate analogies! Harmonica! Wait...that sounds like the usual PFlax crap fest. Ah well. As you were.",
+                    "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-profile_image-y5IqI45Wd001C0a-300x300.jpg",
+                    "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/pyrionflax-channel_offline_image-2149334ea4557c94-1920x1080.jpeg",
+                    "view_count": 6997359
+                }
+            ]
+        },
+        "https://api.twitch.tv/helix/streams?user_id=19309473": {
+            "data": []
+        },
+        "https://api.twitch.tv/helix/streams?first=100&user_id=19309473": {
+            "data": []
+        },
+        "https://tmi.twitch.tv/hosts?host=19309473": {
             "hosts": [
                 {
                     "host_id": 19309473,
-                    "host_login": "pyrionflax",
-                    "target_id": "38970168",
-                    "target_login": "nvidia"
+                    "target_id": 38970168
                 }
             ]
         },
-        "https://api.twitch.tv/kraken/streams/nvidia?stream_type=live": {
-            "stream": {
-                "_id": 20929063952,
-                "game": "Rust",
-                "viewers": 1329,
-                "created_at": "2016-04-21T22:00:46Z",
-                "video_height": 1080,
-                "average_fps": 60.0100857287,
-                "delay": 0,
-                "stream_type": "live",
-                "is_playlist": false,
-                "_links": {
-                    "self": "https://api.twitch.tv/kraken/streams/nvidia"
-                },
-                "preview": {
-                    "small": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-80x45.jpg",
-                    "medium": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-320x180.jpg",
-                    "large": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-640x360.jpg",
-                    "template": "https://static-cdn.jtvnw.net/previews-ttv/live_user_nvidia-{width}x{height}.jpg"
-                },
-                "channel": {
-                    "mature": true,
-                    "status": "Pyrionflax | 12PM - 3PM PT | Team NVIDIA",
-                    "broadcaster_language": "en",
-                    "display_name": "NVIDIA",
-                    "game": "Rust",
-                    "language": "en",
-                    "_id": 38970168,
-                    "name": "nvidia",
-                    "created_at": "2013-01-02T16:19:37Z",
-                    "updated_at": "2016-04-21T22:46:17Z",
-                    "delay": null,
-                    "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_image-cdaec58ce0a142e2-300x300.jpeg",
-                    "banner": null,
-                    "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-channel_offline_image-91c1829e3b07b747-1920x1080.jpeg",
-                    "background": null,
-                    "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_banner-e6254d63954e7d02-480.jpeg",
-                    "profile_banner_background_color": "#000000",
-                    "partner": true,
-                    "url": "https://www.twitch.tv/nvidia",
-                    "views": 6979602,
-                    "followers": 183565,
-                    "_links": {
-                        "self": "http://api.twitch.tv/kraken/channels/nvidia",
-                        "follows": "http://api.twitch.tv/kraken/channels/nvidia/follows",
-                        "commercial": "http://api.twitch.tv/kraken/channels/nvidia/commercial",
-                        "stream_key": "http://api.twitch.tv/kraken/channels/nvidia/stream_key",
-                        "chat": "http://api.twitch.tv/kraken/chat/nvidia",
-                        "features": "http://api.twitch.tv/kraken/channels/nvidia/features",
-                        "subscriptions": "http://api.twitch.tv/kraken/channels/nvidia/subscriptions",
-                        "editors": "http://api.twitch.tv/kraken/channels/nvidia/editors",
-                        "teams": "http://api.twitch.tv/kraken/channels/nvidia/teams",
-                        "videos": "http://api.twitch.tv/kraken/channels/nvidia/videos"
-                    }
+        "https://api.twitch.tv/helix/streams?first=100&user_id=38970168": {
+            "data": [
+                {
+                    "user_id": "38970168",
+                    "user_name": "nvidia",
+                    "type": "live",
+                    "thumbnail_url": "",
+                    "viewer_count": 100,
+                    "id": "0",
+                    "game_id": "0",
+                    "title": "Dota 2",
+                    "started_at": "2011-08-21T18:32:25Z",
+                    "language": "en"
                 }
-            },
-            "_links": {
-                "self": "https://api.twitch.tv/kraken/streams/nvidia",
-                "channel": "https://api.twitch.tv/kraken/channels/nvidia"
-            }
+            ]
         },
-        "https://api.twitch.tv/kraken/channels/nvidia": {
-            "mature": true,
-            "status": "Pyrionflax | 12PM - 3PM PT | Team NVIDIA",
-            "broadcaster_language": "en",
-            "display_name": "NVIDIA",
-            "game": "Rust",
-            "language": "en",
-            "_id": 38970168,
-            "name": "nvidia",
-            "created_at": "2013-01-02T16:19:37Z",
-            "updated_at": "2016-04-21T22:46:17Z",
-            "delay": null,
-            "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_image-cdaec58ce0a142e2-300x300.jpeg",
-            "banner": null,
-            "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-channel_offline_image-91c1829e3b07b747-1920x1080.jpeg",
-            "background": null,
-            "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/nvidia-profile_banner-e6254d63954e7d02-480.jpeg",
-            "profile_banner_background_color": "#000000",
-            "partner": true,
-            "url": "https://www.twitch.tv/nvidia",
-            "views": 6979602,
-            "followers": 183565,
-            "_links": {
-                "self": "http://api.twitch.tv/kraken/channels/nvidia",
-                "follows": "http://api.twitch.tv/kraken/channels/nvidia/follows",
-                "commercial": "http://api.twitch.tv/kraken/channels/nvidia/commercial",
-                "stream_key": "http://api.twitch.tv/kraken/channels/nvidia/stream_key",
-                "chat": "http://api.twitch.tv/kraken/chat/nvidia",
-                "features": "http://api.twitch.tv/kraken/channels/nvidia/features",
-                "subscriptions": "http://api.twitch.tv/kraken/channels/nvidia/subscriptions",
-                "editors": "http://api.twitch.tv/kraken/channels/nvidia/editors",
-                "teams": "http://api.twitch.tv/kraken/channels/nvidia/teams",
-                "videos": "http://api.twitch.tv/kraken/channels/nvidia/videos"
-            }
+        "https://api.twitch.tv/helix/users?first=100&id=38970168": {
+            "data": [
+                {
+                    "id": "38970168",
+                    "login": "nvidia",
+                    "display_name":"NVIDIA",
+                    "type": "",
+                    "broadcaster_type": "partner",
+                    "description": "Everything is about to change. #BeForTheGame",
+                    "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/ca1bd10f-735c-4d39-a674-49355c458553-profile_image-300x300.png",
+                    "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/4d4bf46e-93f9-485e-acb8-4b60d4046f53-channel_offline_image-1920x1080.png",
+                    "view_count": 13573346
+                }
+            ]
         },
-        "https://api.twitch.tv/kraken/channels/host-test": {
-            "_id": 17
+        "https://api.twitch.tv/helix/games?id=0": {
+            "data": [
+                {
+                    "id": 0,
+                    "name": "Dota 2"
+                }
+            ]
         },
-        "https://tmi.twitch.tv/hosts?include_logins=1&host=17": {
+        "https://tmi.twitch.tv/hosts?host=17": {
             "hosts": [
                 {
                     "target_id": 19309473,
-                    "target_login": "pyrionflax",
-                    "host_id": 17,
-                    "host_login": "host-test"
+                    "host_id": 17
                 }
             ]
         }
@@ -1436,7 +1052,35 @@
                 "url": "https://example.com"
             }
         },
+        "https://mixer.com/api/v1/channels/0": {
+            "token": "test",
+            "online": false,
+            "name": "",
+            "viewersCurrent": 0,
+            "type": null,
+            "id": 0,
+            "user": {
+                "id": 0
+            },
+            "thumbnail": {
+                "url": "https://example.com"
+            }
+        },
         "https://mixer.com/api/v1/channels/live": {
+            "token": "live",
+            "online": true,
+            "name": "",
+            "viewersCurrent": 0,
+            "type": null,
+            "id": 1,
+            "user": {
+                "id": 1
+            },
+            "thumbnail": {
+                "url": "https://example.com"
+            }
+        },
+        "https://mixer.com/api/v1/channels/1": {
             "token": "live",
             "online": true,
             "name": "",
@@ -1452,6 +1096,7 @@
         },
         "https://mixer.com/api/v1/users/0": {
             "username": "test",
+            "id": 0,
             "avatars": [
                 {
                     "meta": {

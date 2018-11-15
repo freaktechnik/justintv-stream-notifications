@@ -10,6 +10,7 @@ import providers from "../../../src/background/providers";
 import { getMockAPIQS } from "../../helpers/providers/mock-qs";
 import { getChannel } from "../../helpers/channel-user";
 import LiveState from "../../../src/background/channel/live-state";
+import DatabaseManager from '../../../src/database-manager';
 
 const provider = providers.twitch;
 
@@ -24,7 +25,7 @@ test.after(() => {
 
 test("Hosting to offline 1", async (t) => {
     // hosting endpoint is empty
-    const hostingChannel = getChannel("test", "twitch");
+    const hostingChannel = getChannel("0", "twitch");
     hostingChannel.live = new LiveState(LiveState.REDIRECT);
 
     const channel = await provider._getHostedChannel(hostingChannel);
@@ -33,7 +34,7 @@ test("Hosting to offline 1", async (t) => {
 
 test("Hosting to offline 2", async (t) => {
     // hosting endpoint doesn't return a hosting target (not hosting)
-    const hostingChannel = await provider.updateChannel("freaktechnik");
+    const hostingChannel = await provider.updateChannel("24261394");
     hostingChannel.live = new LiveState(LiveState.REDIRECT);
 
     const channel = await provider._getHostedChannel(hostingChannel);
@@ -42,37 +43,27 @@ test("Hosting to offline 2", async (t) => {
 
 test("Hosting to offline 3", async (t) => {
     // hosting but host target is offline
-    const hostingChannel = getChannel('host-test', 'twitch');
-    hostingChannel.live.redirectTo(getChannel('pyrionflax', 'twitch'));
+    const hostingChannel = getChannel('17', 'twitch');
+    hostingChannel.live.redirectTo(getChannel('19309473', 'twitch'));
 
     const channel = await provider._getHostedChannel(hostingChannel);
     t.false(await channel.live.isLive(LiveState.TOWARD_LIVE), "Channel is now marked as offline because the hosted channel is offline");
 });
 
-test("Hosting", async (t) => {
-    const ret = await provider.updateChannel('pyrionflax');
+test.serial("Hosting", async (t) => {
+    await DatabaseManager.open();
+
+    const ret = await provider.updateChannel('19309473');
     t.is(ret.live.state, LiveState.REDIRECT);
     t.is(ret.live.alternateUsername, "NVIDIA");
-});
 
-test("Twitch Hosting Redirects", async (t) => {
-    const ret = await provider.updateChannel('mlg_live');
-    t.is(ret.login, 'mlg');
-    t.false(await ret.live.isLive(LiveState.TOWARD_LIVE));
-});
-
-test("Twitch Live Redirects", async (t) => {
-    const channel = getChannel('mlg_live', 'twitch', 15);
-    channel.uname = "MLG";
-    const ret = await provider.updateChannels([ channel ]);
-    t.is(ret.length, 1);
-    t.is(ret[0].login, 'mlg');
-    t.true(await ret[0].live.isLive(LiveState.TOWARD_LIVE));
-    t.is(ret[0].id, 15);
+    await DatabaseManager.close();
+    DatabaseManager.loading = null;
+    DatabaseManager.error = null;
 });
 
 test("Twitch channel language", async (t) => {
-    const channel = await provider.updateChannel('test');
+    const channel = await provider.updateChannel('1');
     t.is(channel.language, 'en');
 });
 
@@ -98,4 +89,4 @@ test("Twitch Update Redirects", async (t) => {
 });
 */
 
-test.todo("Vodcasts");
+test.todo("game resolution");
