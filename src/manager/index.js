@@ -17,7 +17,8 @@ import '../content/l10n.js';
 import './channels-manager.css';
 import '../content/shared.css';
 
-let providers;
+let providers,
+    permissionRequest = false;
 const CHANNELS_TAB = 1,
     USERS_TAB = 2,
     CHANNEL_PREFIX = "channel",
@@ -133,11 +134,13 @@ function hideDialog() {
     popup.querySelector("dialog").removeAttribute("open");
     hide(popup);
     document.querySelector("main").removeAttribute("aria-hidden");
+    permissionRequest = false;
 }
 
 function resetDialogForms() {
     popup.querySelector("#channelNameField").value = "";
     hide(popup.querySelector("#loadingWrapper"));
+    hide(popup.querySelector("#permissionsInfo"));
     hideError();
 }
 
@@ -319,8 +322,7 @@ document.addEventListener("keydown", (evt) => {
         }
     }
     else if((evt.key == "w" && evt.ctrlKey) || evt.key == "Escape") {
-        hideDialog();
-        resetDialogForms();
+        popup.querySelector("button[type='button']").click();
         evt.preventDefault();
     }
     else if(evt.key == "f" && evt.ctrlKey) {
@@ -383,11 +385,16 @@ document.querySelector("#channelRadio").addEventListener("change", updateSelect)
 document.querySelector("#userRadio").addEventListener("change", updateSelect);
 
 popup.querySelector("button[type='button']").addEventListener("click", () => {
-    port.send("cancel", [
-        popup.querySelector("#channelRadio").checked ? "channel" : "user",
-        popup.querySelector("#providerDropdown").value,
-        popup.querySelector("#channelNameField").value
-    ]);
+    if(!permissionRequest) {
+        port.send("cancel", [
+            popup.querySelector("#channelRadio").checked ? "channel" : "user",
+            popup.querySelector("#providerDropdown").value,
+            popup.querySelector("#channelNameField").value
+        ]);
+    }
+    else {
+        port.reply("requestpermission", false);
+    }
     hideDialog();
     resetDialogForms();
 });
@@ -411,11 +418,17 @@ popup.querySelector("form").addEventListener("submit", (evt) => {
     const p = popup.querySelector("#providerDropdown").value,
         provider = providers[p],
         sendMsg = () => {
-            const message = popup.querySelector("#channelRadio").checked ? "channel" : "user";
-            port.send(`add${message}`, {
-                username: field.value,
-                type: p
-            });
+            if(!permissionRequest) {
+                const message = popup.querySelector("#channelRadio").checked ? "channel" : "user";
+                port.send(`add${message}`, {
+                    username: field.value,
+                    type: p
+                });
+            }
+            else {
+                port.reply("requestpermission", true);
+                permissionRequest = false;
+            }
         };
     if(provider.optionalPermissions.length) {
         browser.permissions.request({
@@ -516,6 +529,27 @@ const promisedProviders = new Promise((resolve) => {
         case "theme":
             document.body.classList.toggle("dark", message.payload === DARK_THEME);
             break;
+        case "requestpermission": {
+            console.log(message.payload);
+            const [
+                provider,
+                name,
+                type
+            ] = message.payload;
+            popup.querySelector("#channelNameField").value = name;
+            if(type === "channel") {
+                popup.querySelector("#channelRadio").checked = true;
+            }
+            else {
+                popup.querySelector("#userRadio").checked = true;
+            }
+            popup.querySelector("#providerDropdown").value = provider;
+            show(popup.querySelector("#permissionsInfo"));
+            permissionRequest = true;
+            //TODO also show some helpful message that they have to manually add it from there in order to grant the required permissions
+            showDialog();
+            break;
+        }
         default:
             // Do nothing
         }

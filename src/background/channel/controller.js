@@ -249,6 +249,14 @@ export default class ChannelController extends EventTarget {
      */
     async addChannel(name, type, canceled = () => false) {
         if(type in providers && providers[type].enabled) {
+            if(providers[type].optionalPermissions.length && !(await browser.permissions.contains({
+                origins: providers[type].optionalPermissions
+            }))) {
+                await this._manager.open();
+                if(!(await this._manager.requestPermissions(type, name, "channel"))) {
+                    throw new Error("Permissions required for type were not granted");
+                }
+            }
             const channel = await providers[type].getChannelDetails(name);
             if(ParentalControls.enabled && channel.mature) {
                 throw new Error("Not allowed to add this channel");
@@ -261,6 +269,8 @@ export default class ChannelController extends EventTarget {
             }
 
             return this._list.addChannel(formattedChannel);
+
+            //TODO close dialog in channels manager if it was opened for permission prompting
         }
 
         throw new Error("Provider is disabled");
@@ -362,6 +372,14 @@ export default class ChannelController extends EventTarget {
      */
     async addUser(username, type, canceled = () => false) {
         if(type in providers && providers[type].supports.favorites) {
+            if(providers[type].optionalPermissions.length && !(await browser.permissions.contains({
+                origins: providers[type].optionalPermissions
+            }))) {
+                await this._manager.open();
+                if(!(await this._manager.requestPermissions(type, name, "user"))) {
+                    throw new Error("Permissions required for type were not granted");
+                }
+            }
             let [
                 user,
                 channels
@@ -378,6 +396,8 @@ export default class ChannelController extends EventTarget {
                 this._list.addChannels(channels)
             ]);
             return u;
+
+            //TODO hide dialog in channel manager if it was opened for a permission prompt
         }
 
         throw new Error(`Can't add users for provider ${type}`);

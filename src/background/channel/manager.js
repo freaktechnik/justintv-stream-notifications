@@ -109,6 +109,7 @@ export default class ChannelsManager extends EventTarget {
         this.port.addEventListener("disconnect", () => {
             this.tabID = null;
         });
+        this.ready = when(this.port, 'ready');
         this.port.addEventListener("message", ({ detail: message }) => {
             switch(message.command) {
             case "ready":
@@ -292,6 +293,24 @@ export default class ChannelsManager extends EventTarget {
         this.loading = false;
         this._emitToWorker("updateuser", user.id);
     }
+
+    /**
+     * Request a permission to add a channel in the channel manager.
+     *
+     * @param {string} provider - Provider to request the permissions for.
+     * @param {string} name - Channel or user to add.
+     * @param {string} type - Type of thing to add.
+     * @returns {boolean} If the required permissions were granted.
+     */
+    async requestPermissions(provider, name, type) {
+        await this.ready;
+        return this.port.request("requestpermission", [
+            provider,
+            name,
+            type
+        ]);
+    }
+
     /**
      * Callback when an error occurs while adding something.
      *
