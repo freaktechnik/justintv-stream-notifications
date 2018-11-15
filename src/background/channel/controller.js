@@ -376,7 +376,7 @@ export default class ChannelController extends EventTarget {
                 origins: providers[type].optionalPermissions
             }))) {
                 await this._manager.open();
-                if(!(await this._manager.requestPermissions(type, name, "user"))) {
+                if(!(await this._manager.requestPermissions(type, username, "user"))) {
                     throw new Error("Permissions required for type were not granted");
                 }
             }

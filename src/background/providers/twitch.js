@@ -100,7 +100,6 @@ class Twitch extends GenericProvider {
         this._games = {};
 
         this.initialize()
-            .then(() => this.updateLogins())
             .catch(console.error);
     }
 
@@ -126,7 +125,7 @@ class Twitch extends GenericProvider {
                     }
                 })))
                 .then((updatedItems) => {
-                    const updatedChannels = updatedItems.filter();
+                    const updatedChannels = updatedItems.filter((i) => i);
                     if(updatedChannels.length) {
                         emit(this, "updatedchannels", updatedChannels);
                     }
@@ -137,7 +136,8 @@ class Twitch extends GenericProvider {
     async getUserFavorites(username) {
         let data;
         try {
-            data = await this._qs.queueRequest(`${baseURL}/users?login=${username}&id=${username}`, headers);
+            const idParam = isNaN(username) ? '' : `&id=${username}`;
+            data = await this._qs.queueRequest(`${baseURL}/users?login=${username}${idParam}`, headers);
         }
         catch(e) {
             // Fall-through
@@ -153,8 +153,8 @@ class Twitch extends GenericProvider {
                     },
                     initialPage: '',
                     request: (url) => this._qs.queueRequest(url, headers),
-                    fetchNextPage(d) {
-                        return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == itemsPerPage && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
+                    fetchNextPage(d, pageSize) {
+                        return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == pageSize && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
                     },
                     getItems(d) {
                         if(d.parsedJSON && "data" in d.parsedJSON) {
@@ -183,7 +183,8 @@ class Twitch extends GenericProvider {
         throw new Error(`Couldn't fetch ${this.name} user ${username}`);
     }
     getChannelDetails(channelname) {
-        return this._qs.queueRequest(`${baseURL}/users?login=${channelname}&id=${channelname}`, headers)
+        const idParam = isNaN(channelname) ? '' : `&id=${channelname}`;
+        return this._qs.queueRequest(`${baseURL}/users?login=${channelname}${idParam}`, headers)
             .then((data) => {
                 if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
                     const [ helixChannel ] = data.parsedJSON.data;
@@ -220,8 +221,8 @@ class Twitch extends GenericProvider {
                                 },
                                 initialPage: '',
                                 request: (url) => this._qs.queueRequest(url, headers),
-                                fetchNextPage(d) {
-                                    return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == itemsPerPage && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
+                                fetchNextPage(d, pageSize) {
+                                    return d.parsedJSON && "data" in d.parsedJSON && d.parsedJSON.data.length == pageSize && "pagination" in d.parsedJSON && "cursor" in d.parsedJSON.pagination;
                                 },
                                 getItems(d) {
                                     if(d.parsedJSON && "follows" in d.parsedJSON) {

@@ -664,7 +664,7 @@
         }
     },
     "twitch": {
-        "https://api.twitch.tv/helix/users?login=test&id=test": {
+        "https://api.twitch.tv/helix/users?login=test": {
             "data": [
                 {
                     "id": "0",
@@ -694,7 +694,7 @@
                 }
             ]
         },
-        "https://api.twitch.tv/helix/users?login=live&id=live": {
+        "https://api.twitch.tv/helix/users?login=live": {
             "data": [
                 {
                     "id": "1",
@@ -895,7 +895,7 @@
                 }
             ]
         },
-        "https://api.twitch.tv/helix/users?login=freaktechnik&id=freaktechnik": {
+        "https://api.twitch.tv/helix/users?login=freaktechnik": {
             "data": [
                 {
                     "display_name": "freaktechnik",

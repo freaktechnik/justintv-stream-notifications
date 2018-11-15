@@ -313,7 +313,13 @@ export default class GenericProvider extends EventTarget {
                             });
                     }
                 })
-                .catch((e) => console.error("Error intializing users for", this._type, e));
+                .catch((e) => console.error("Error intializing users for", this._type, e))
+                .then(() => {
+                    if(this._hasUniqueSlug) {
+                        return this.updateLogins();
+                    }
+                })
+                .catch(console.error);
 
             this._list.addEventListener("channelsadded", () => {
                 if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
@@ -348,6 +354,13 @@ export default class GenericProvider extends EventTarget {
      */
     updateLogin(channel) {
         throw new Error("updateLogin is not supported");
+    }
+
+    /**
+     * Method called after all logins have been updated.
+     */
+    updateLogins() {
+        // no-op
     }
 
     /**
