@@ -465,7 +465,7 @@ class Twitch extends GenericProvider {
             }
 
             return chans.map((chan) => {
-                const channel = new Channel(chan.channel._id, type);
+                const channel = new Channel(chan.channel._id.toString(), type);
                 channel.slug = chan.channel.name;
                 channel.uname = chan.channel.display_name;
                 channel.image = {
