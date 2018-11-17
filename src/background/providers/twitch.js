@@ -598,6 +598,9 @@ class Twitch extends GenericProvider {
         });
     }
     async _getGame(id) {
+        if(!id) {
+            return null;
+        }
         if(!this._games.hasOwnProperty(id)) {
             const res = await this._qs.queueRequest(`${baseURL}/games?id=${id}`, headers);
             if(res.ok && res.parsedJSON.data && res.parsedJSON.data.length) {
@@ -611,7 +614,7 @@ class Twitch extends GenericProvider {
         return this._games[id];
     }
     async _getGames(ids) {
-        const unknownIds = ids.filter((id) => !this._games.hasOwnProperty(id));
+        const unknownIds = ids.filter((id) => id && !this._games.hasOwnProperty(id));
         if(unknownIds.length) {
             let offset = 0;
             const getPageNumber = (page, pageSize) => {
@@ -640,7 +643,12 @@ class Twitch extends GenericProvider {
                 this._games[game.id] = game.name;
             }
         }
-        return ids.map((id) => this._games[id]);
+        return ids.map((id) => {
+            if(id) {
+                return this._games[id];
+            }
+            return null;
+        });
     }
 }
 

@@ -185,7 +185,10 @@ class ListView extends EventTarget {
                     providers[event.payload].getFeaturedChannels()
                         .then((channels) => formatChannels(channels, () => undefined, true))
                         .then((channels) => this.setFeatured(channels, event.payload))
-                        .catch(() => this.setFeatured([], event.payload));
+                        .catch((e) => {
+                            console.warn(e);
+                            return this.setFeatured([], event.payload);
+                        });
                 }
                 break;
             default:
