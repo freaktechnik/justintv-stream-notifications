@@ -54,7 +54,7 @@
     "@freaktechnik/eslint-config-react": "^6.5.4",
     "@freaktechnik/eslint-config-test": "^6.5.4",
     "@freaktechnik/eslint-config-webpack": "^6.5.4",
-    "ajv": "^6.5.5",
+    "ajv": "^6.6.1",
     "ava": "^1.0.0-rc.2",
     "babel-loader": "^8.0.4",
     "babel-plugin-istanbul": "^5.1.0",
