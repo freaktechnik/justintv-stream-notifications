@@ -68,7 +68,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "eslint": "^5.9.0",
-    "event-target-shim": "^3.0.2",
+    "event-target-shim": "^4.0.0",
     "fake-indexeddb": "^2.0.4",
     "fetch-headers": "^2.0.0",
     "file-loader": "^2.0.0",
