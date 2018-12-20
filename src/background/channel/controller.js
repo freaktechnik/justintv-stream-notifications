@@ -269,8 +269,6 @@ export default class ChannelController extends EventTarget {
             }
 
             return this._list.addChannel(formattedChannel);
-
-            //TODO close dialog in channels manager if it was opened for permission prompting
         }
 
         throw new Error("Provider is disabled");
@@ -396,8 +394,6 @@ export default class ChannelController extends EventTarget {
                 this._list.addChannels(channels)
             ]);
             return u;
-
-            //TODO hide dialog in channel manager if it was opened for a permission prompt
         }
 
         throw new Error(`Can't add users for provider ${type}`);
