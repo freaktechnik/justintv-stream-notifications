@@ -40,9 +40,9 @@ export class ListClosedError extends Error {
  * IndexedDB version.
  *
  * @const {number}
- * @default 3
+ * @default 4
  */
-const VERSION = 3,
+const VERSION = 4,
     /**
      * Database name.
      *

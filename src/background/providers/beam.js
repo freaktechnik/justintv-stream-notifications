@@ -108,27 +108,21 @@ class Beam extends GenericProvider {
         this.initialize();
     }
 
-    updateLogin(item) {
-        this._getUserIdFromUsername(item.slug)
-            .then((id) => {
-                const isUser = item instanceof User;
-                return Promise.all([
-                    id,
-                    isUser,
-                    isUser ? this._list.getUserByName(item.slug) : this._list.getChannelByName(item.slug)
-                ]);
-            })
-            .then(([
-                id,
-                isUser,
-                chan
-            ]) => {
-                chan._login = id;
-                const event = isUser ? 'updateduser' : 'updatedchannels',
-                    payload = isUser ? chan : [ chan ];
-                emit(this, event, payload);
-            })
-            .catch(console.error);
+    async updateLogin(item) {
+        try {
+            const id = await this._getUserIdFromUsername(item.slug),
+                isUser = item instanceof User,
+                chan = await (isUser ? this._list.getUserByName(item.slug) : this._list.getChannelByName(item.slug)),
+                event = isUser ? 'updateduser' : 'updatedchannels',
+                payload = isUser ? chan : [ chan ];
+
+            chan.slug = chan.login;
+            chan._login = id;
+            emit(this, event, payload);
+        }
+        catch(e) {
+            console.error(e);
+        }
     }
 
     async getUserFavorites(username) {
@@ -255,7 +249,7 @@ class Beam extends GenericProvider {
             getURLs,
             headers,
             onComplete: async (data) => {
-                if(data.parsedJSON) {
+                if(data.parsedJSON && data.parsedJSON.statusCode !== NOT_FOUND) {
                     const channel = getChannelFromJSON(data.parsedJSON);
 
                     if(channel.live.state === LiveState.OFFLINE) {

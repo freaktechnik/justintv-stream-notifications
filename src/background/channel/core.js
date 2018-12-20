@@ -80,7 +80,7 @@ class Item {
     }
 
     get slug() {
-        if(this._slug != "") {
+        if(this._slug) { // truthy check, since it's undefined after the migration and not an empty string
             return this._slug;
         }
         return this.login;

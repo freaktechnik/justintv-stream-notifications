@@ -11,8 +11,10 @@ import ParentalControls from "../parental-controls.js";
 import * as qs from "../queue/service.js";
 import ProviderChannelList from '../channel/provider-list.js';
 import { emit } from '../../utils.js';
+import { debounce } from 'lodash';
 
 const _ = browser.i18n.getMessage,
+    DEBOUNCE_INTERVAL = 500,
     methodNotSupported = (type, method) => Promise.reject(new Error(`${type}.${method} is not supported`)),
     queues = new WeakMap(),
     queueFor = (provider) => {
@@ -283,53 +285,81 @@ export default class GenericProvider extends EventTarget {
     initialize() {
         if(this.enabled) {
             let hadUniqueSlugs = true;
+            let isReady = false;
             const ready = this._list.getChannels()
-                .then((channels) => {
-                    if(channels.length) {
-                        if(this._hasUniqueSlug) {
-                            for(const channel of channels) {
-                                if(channel.slug === channel.login) {
-                                    hadUniqueSlugs = false;
-                                    this.updateLogin(channel);
-                                }
+                .then(async (channels) => {
+                    if(channels.length && this._hasUniqueSlug) {
+                        for(const channel of channels) {
+                            if(channel.slug === channel.login) {
+                                hadUniqueSlugs = false;
+                                await this.updateLogin(channel);
+                            }
+                            else {
+                                break;
                             }
                         }
-                        this._queueUpdateRequest();
                     }
+                    return channels.length;
                 })
                 .catch((e) => console.error("Error intializing channels for", this._type, e))
-                .then(() => {
+                .then(async (hasChannels) => {
                     if(this.supports.credentials) {
-                        return this._list.getUsers()
-                            .then((users) => {
-                                if(users.length) {
-                                    if(!hadUniqueSlugs) {
-                                        for(const user of users) {
-                                            this.updateLogin(user);
-                                        }
-                                    }
-                                    this._queueFavsRequest();
-                                }
-                            });
+                        const users = await this._list.getUsers();
+                        if(!hadUniqueSlugs && users.length) {
+                            for(const user of users) {
+                                await this.updateLogin(user);
+                            }
+                        }
+                        return [
+                            hasChannels,
+                            users.length
+                        ];
                     }
+                    return [
+                        hasChannels,
+                        false
+                    ];
                 })
                 .catch((e) => console.error("Error intializing users for", this._type, e))
-                .then(() => {
-                    if(this._hasUniqueSlug) {
-                        return this.updateLogins();
+                .then(async ([
+                    hasChannels,
+                    hasUsers
+                ]) => {
+                    if(!hadUniqueSlugs) {
+                        await this.updateLogins();
+                    }
+
+                    isReady = true;
+                    if(hasChannels) {
+                        this._queueUpdateRequest();
+                    }
+                    if(hasUsers) {
+                        this._queueFavsRequest();
                     }
                 })
                 .catch(console.error);
 
+            const queueUpdate = debounce(() => this._queueUpdateRequest(), DEBOUNCE_INTERVAL);
             this._list.addEventListener("channelsadded", () => {
-                if(!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY)) {
-                    this._queueUpdateRequest();
+                if(isReady && (!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY) || this._qs.paused)) {
+                    queueUpdate();
+                }
+            });
+            this._list.addEventListener("channelupdated", () => {
+                if(isReady && this._qs.paused) {
+                    queueUpdate();
                 }
             });
             if(this.supports.credentials) {
+                const queueFavs = debounce(() => this._queueFavsRequest(), DEBOUNCE_INTERVAL);
                 this._list.addEventListener("useradded", () => {
-                    if(!this._qs.hasUpdateRequest(this._qs.LOW_PRIORITY)) {
-                        this._queueFavsRequest();
+                    if((!this._qs.hasUpdateRequest(this._qs.LOW_PRIORITY) || this._qs.paused) && isReady) {
+                        queueFavs();
+                    }
+                });
+                this._list.addEventListener("userupdated", () => {
+                    if(isReady && this._qs.paused) {
+                        queueFavs();
                     }
                 });
             }

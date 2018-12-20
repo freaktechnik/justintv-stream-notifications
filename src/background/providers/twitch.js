@@ -113,9 +113,16 @@ class Twitch extends GenericProvider {
 
     updateLogins() {
         if(this._loginsToUpdate.size) {
-            return this._getUsers(this._loginsToUpdate.values(), 'login')
-                .then((result) => Promise.all(this._loginsToUpdate.values().map(async (i) => {
-                    const item = await this._list.getChannelByName(i.slug);
+            return this._getUsers(Array.from(this._loginsToUpdate.values()), 'slug', 'login')
+                .then((result) => Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
+                    let item;
+                    if(i instanceof User) {
+                        item = await this._list.getUserByName(i.slug);
+                    }
+                    else {
+                        item = await this._list.getChannelByName(i.slug);
+                    }
+                    item.slug = item.login;
                     item._login = result.find((u) => u.login == item.slug).id;
                     if(item instanceof User) {
                         emit(this, "updateduser", item);
@@ -565,11 +572,12 @@ class Twitch extends GenericProvider {
     _formatThumbnail(thumbnailUrl) {
         return thumbnailUrl.replace('{width}', THUMBNAIL_WIDTH).replace('{height}', THUMBNAIL_HEIGHT);
     }
-    _getUsers(streams, property = 'user_id') {
+    _getUsers(streams, property = 'user_id', type = 'id') {
         let offset = 0;
         const userIds = streams.map((s) => s[property]),
+            param = `&${type}=`,
             getPageNumber = (page, pageSize) => {
-                const pageParams = `&id=${userIds.slice(offset, offset + pageSize).join('&id=')}`;
+                const pageParams = param + userIds.slice(offset, offset + pageSize).join(param);
                 ++offset;
                 return pageParams;
             };

@@ -20,7 +20,9 @@ const queue = new UpdateQueue(),
     S_TO_MS = 1000,
     NO_ATTEMPTS = 0,
     HIGH_PRIORITY_TIME_FACTOR = 1,
-    LOW_PRIORITY_TIME_FACTOR = 4;
+    LOW_PRIORITY_TIME_FACTOR = 4,
+    ONE_ITEM = 1,
+    NO_RESULT = -1;
 
 
 /**
@@ -48,6 +50,10 @@ class QueueService {
     static LOW_PRIORITY = "low";
     constructor(type) {
         this.type = type;
+        this.queuedUrls = {
+            [this.HIGH_PRIORITY]: [],
+            [this.LOW_PRIORITY]: []
+        };
     }
 
     HIGH_PRIORITY = QueueService.HIGH_PRIORITY;
@@ -80,6 +86,10 @@ class QueueService {
      */
     get interval() {
         return prefs.get('updateInterval').then((i) => i * S_TO_MS);
+    }
+
+    get paused() {
+        return queue.paused;
     }
 
     /**
@@ -146,7 +156,10 @@ class QueueService {
             browser.alarms.onAlarm.removeListener(this[requestListener]);
             browser.alarms.clear(this.getAlarmName(priority));
             this[requestListener] = undefined;
-            //TODO should also remove requests that were already queued and pending.
+            for(const url of this.queuedUrls[priority]) {
+                queue.removeRequest(url);
+            }
+            this.queuedUrls[priority].length = 0;
         }
     }
     /**
@@ -179,8 +192,19 @@ class QueueService {
                         this.unqueueUpdateRequest(priority);
                         return;
                     }
-                    const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false).then((result) => onComplete(result, url))
-                        .catch((e) => console.error("Error during", priority, "update request", url, "for", this.type, ":", e)));
+                    this.queuedUrls[priority] = urls;
+                    const promises = urls.map((url) => this.queueRequest(url, headers, requeue, false)
+                        .then((result) => {
+                            this.queuedUrls[priority].splice(this.queuedUrls[priority].indexOf(url), ONE_ITEM);
+                            return onComplete(result, url);
+                        })
+                        .catch((e) => {
+                            const index = this.queuedUrls[priority].indexOf(url);
+                            if(index > NO_RESULT) {
+                                this.queuedUrls[priority].splice(index, ONE_ITEM);
+                            }
+                            console.error("Error during", priority, "update request", url, "for", this.type, ":", e);
+                        }));
                     await Promise.all(promises);
                 }
                 catch(e) {

@@ -67,6 +67,7 @@ class Picarto extends GenericProvider {
                         chan,
                         res
                     ] = data;
+                    chan.slug = chan.login;
                     chan._login = res.parsedJSON.user_id;
                     emit(this, 'updatedchannels', [ chan ]);
                 }
