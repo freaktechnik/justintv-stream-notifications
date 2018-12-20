@@ -284,62 +284,62 @@ export default class GenericProvider extends EventTarget {
      */
     initialize() {
         if(this.enabled) {
-            let hadUniqueSlugs = true;
-            let isReady = false;
+            let hadUniqueSlugs = true,
+                isReady = false;
             const ready = this._list.getChannels()
-                .then(async (channels) => {
-                    if(channels.length && this._hasUniqueSlug) {
-                        for(const channel of channels) {
-                            if(channel.slug === channel.login) {
-                                hadUniqueSlugs = false;
-                                await this.updateLogin(channel);
-                            }
-                            else {
-                                break;
+                    .then(async (channels) => {
+                        if(channels.length && this._hasUniqueSlug) {
+                            for(const channel of channels) {
+                                if(channel.slug === channel.login) {
+                                    hadUniqueSlugs = false;
+                                    await this.updateLogin(channel);
+                                }
+                                else {
+                                    break;
+                                }
                             }
                         }
-                    }
-                    return channels.length;
-                })
-                .catch((e) => console.error("Error intializing channels for", this._type, e))
-                .then(async (hasChannels) => {
-                    if(this.supports.credentials) {
-                        const users = await this._list.getUsers();
-                        if(!hadUniqueSlugs && users.length) {
-                            for(const user of users) {
-                                await this.updateLogin(user);
+                        return channels.length;
+                    })
+                    .catch((e) => console.error("Error intializing channels for", this._type, e))
+                    .then(async (hasChannels) => {
+                        if(this.supports.credentials) {
+                            const users = await this._list.getUsers();
+                            if(!hadUniqueSlugs && users.length) {
+                                for(const user of users) {
+                                    await this.updateLogin(user);
+                                }
                             }
+                            return [
+                                hasChannels,
+                                users.length
+                            ];
                         }
                         return [
                             hasChannels,
-                            users.length
+                            false
                         ];
-                    }
-                    return [
+                    })
+                    .catch((e) => console.error("Error intializing users for", this._type, e))
+                    .then(async ([
                         hasChannels,
-                        false
-                    ];
-                })
-                .catch((e) => console.error("Error intializing users for", this._type, e))
-                .then(async ([
-                    hasChannels,
-                    hasUsers
-                ]) => {
-                    if(!hadUniqueSlugs) {
-                        await this.updateLogins();
-                    }
+                        hasUsers
+                    ]) => {
+                        if(!hadUniqueSlugs) {
+                            await this.updateLogins();
+                        }
 
-                    isReady = true;
-                    if(hasChannels) {
-                        this._queueUpdateRequest();
-                    }
-                    if(hasUsers) {
-                        this._queueFavsRequest();
-                    }
-                })
-                .catch(console.error);
+                        isReady = true;
+                        if(hasChannels) {
+                            this._queueUpdateRequest();
+                        }
+                        if(hasUsers) {
+                            this._queueFavsRequest();
+                        }
+                    })
+                    .catch(console.error),
 
-            const queueUpdate = debounce(() => this._queueUpdateRequest(), DEBOUNCE_INTERVAL);
+                queueUpdate = debounce(() => this._queueUpdateRequest(), DEBOUNCE_INTERVAL);
             this._list.addEventListener("channelsadded", () => {
                 if(isReady && (!this._qs.hasUpdateRequest(this._qs.HIGH_PRIORITY) || this._qs.paused)) {
                     queueUpdate();
