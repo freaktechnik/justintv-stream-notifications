@@ -40,7 +40,8 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Monitoring the status of channels
 
 ### New Livestream
-[Livestream](http://livestream.com) is an event based live streaming platform.
+[Livestream](http://livestream.com) is an event based live streaming platform and
+streaming consultant. Owned by Vimeo.
 
 #### Features
 
