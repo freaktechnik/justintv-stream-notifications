@@ -97,7 +97,9 @@ class Twitch extends GenericProvider {
         this._hasUniqueSlug = true;
 
         this._loginsToUpdate = new Set();
-        this._games = {};
+        this._games = {
+            "0": ''
+        };
 
         this.initialize()
             .catch(console.error);
