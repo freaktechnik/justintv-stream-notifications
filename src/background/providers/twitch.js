@@ -19,7 +19,6 @@ import { emit } from '../../utils.js';
 //TODO helix is missing search
 //TODO helix is missing rebroadcasts
 //TODO helix is missing mature annotations
-//TODO stop doing requests on 429 -> custom requeue
 
 const type = "twitch",
     archiveURL = "/videos/all",
