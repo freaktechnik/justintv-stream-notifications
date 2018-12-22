@@ -6,7 +6,7 @@
 import prefs from '../preferences.js';
 import providers from './providers/index.js';
 
-//TODO somehow batch up imports, so we don't hit the twitch rate limits as easily when importing lots of single channels
+//TODO somehow batch up imports, so we don't hit the twitch rate limits as easily when importing lots of single channels -> workaround: prompt user in channelmanager to continue import to create some time inbetween?
 
 const importPrefs = (preferences) => Promise.all(Object.entries(preferences).map(([
         key,

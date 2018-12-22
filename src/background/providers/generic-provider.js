@@ -294,9 +294,6 @@ export default class GenericProvider extends EventTarget {
                                     hadUniqueSlugs = false;
                                     await this.updateLogin(channel);
                                 }
-                                else {
-                                    break;
-                                }
                             }
                         }
                         return channels.length;
@@ -305,9 +302,12 @@ export default class GenericProvider extends EventTarget {
                     .then(async (hasChannels) => {
                         if(this.supports.credentials) {
                             const users = await this._list.getUsers();
-                            if(!hadUniqueSlugs && users.length) {
+                            if(users.length && this._hasUniqueSlug) {
                                 for(const user of users) {
-                                    await this.updateLogin(user);
+                                    if(user.slug === user.login) {
+                                        hadUniqueSlugs = false;
+                                        await this.updateLogin(user);
+                                    }
                                 }
                             }
                             return [
