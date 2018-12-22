@@ -193,3 +193,4 @@ _locales/*/amo.json
 
 *.tgz
 *.zip
+*.tar.gz
