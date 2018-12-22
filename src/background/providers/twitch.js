@@ -116,15 +116,25 @@ class Twitch extends GenericProvider {
         if(this._loginsToUpdate.size) {
             return this._getUsers(Array.from(this._loginsToUpdate.values()), 'slug', 'login')
                 .then((result) => Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
+                    const itemId = result.find((u) => u.login == i.slug).id;
                     let item;
+                    //TODO ensure that rejections aren't bad here.
                     if(i instanceof User) {
+                        const existingUser = await this._list.getUserByName(itemId);
+                        if(existingUser) {
+                            return null;
+                        }
                         item = await this._list.getUserByName(i.slug);
                     }
                     else {
+                        const existingChannel = await this._list.getChannelByName(itemId);
+                        if(existingChannel) {
+                            return null;
+                        }
                         item = await this._list.getChannelByName(i.slug);
                     }
                     item.slug = item.login;
-                    item._login = result.find((u) => u.login == item.slug).id;
+                    item._login = itemId;
                     if(item instanceof User) {
                         emit(this, "updateduser", item);
                     }

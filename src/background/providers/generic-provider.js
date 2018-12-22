@@ -291,6 +291,11 @@ export default class GenericProvider extends EventTarget {
                         if(channels.length && this._hasUniqueSlug) {
                             for(const channel of channels) {
                                 if(channel.slug === channel.login) {
+                                    const alreadyExists = channels.find((c) => c.slug === channel.login && c.login !== channel.login);
+                                    if(alreadyExists) {
+                                        //TODO remove
+                                        continue;
+                                    }
                                     hadUniqueSlugs = false;
                                     await this.updateLogin(channel);
                                 }
@@ -305,6 +310,11 @@ export default class GenericProvider extends EventTarget {
                             if(users.length && this._hasUniqueSlug) {
                                 for(const user of users) {
                                     if(user.slug === user.login) {
+                                        const alreadyExists = users.find((u) => u.slug === user.slug && u.login !== user.login);
+                                        if(alreadyExists) {
+                                            //TODO remove
+                                            continue;
+                                        }
                                         hadUniqueSlugs = false;
                                         await this.updateLogin(user);
                                     }
