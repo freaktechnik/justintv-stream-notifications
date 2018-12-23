@@ -221,7 +221,22 @@ export default class ChannelController extends EventTarget {
                     .catch((e) => console.warn("Updated a removed channel", channels.login, e.message));
             }
         });
+        this._eventSink.addEventListener("dedupe", () => {
+            //TODO i18n messages
+            const es = new ErrorState(browser.i18n.getMessage("dupes"), ErrorState.RECOVERABLE, [ {
+                    label: browser.i18n.getMessage("removeDupes")
+                } ]);
+                es.addEventListener("action", async () => {
+                    await this._removeDupes();
+                    es.resolve();
+                }, {
+                    once: true,
+                    passive: true,
+                    capture: false
+                });
+        });
 
+        // Bound methods
         this._getOldChannel = async (channel) => {
             if(channel.id) {
                 return this.getChannel(channel.id);
@@ -584,5 +599,37 @@ export default class ChannelController extends EventTarget {
                 this._list.addChannels(filteredChannels)
             ]);
         return finalUser;
+    }
+
+    async _dedupeList(list, cbk) {
+        let dedupedList = list.slice();
+        for(const item of list) {
+            if(item.slug === item.login) {
+                const otherItem = dedupedList.find((i) => i.slug === item.slug && i.id !== item.id);
+                await cbk(item);
+                dedupedList = dedupedList.filter((i) => i.id !== item.id);
+            }
+        }
+    }
+
+    async _dedupeChannels() {
+        const channels = await this._list.getChannelsByType();
+        return this._dedupeList(channels, (i) => this.removeChannel(i));
+    }
+
+    async _dedupeUsers() {
+        const users = await this._list.getChannelsByType();
+        return this._dedupeList(users, (i) => this.removeUser(i));
+    }
+
+    /**
+     * @private
+     * @async
+     */
+    async _removeDupes() {
+        return Promise.all([
+            this._dedupeChannels(),
+            this._dedupeUsers()
+        ]);
     }
 }

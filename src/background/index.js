@@ -100,7 +100,7 @@ list.addEventListener("open", ({ detail }) => {
 });
 list.addEventListener("pause", qsPause);
 list.addEventListener("resume", qsResume);
-list.addEventListener("copied", async ({ detail }) => {
+list.addEventListener("copied", ({ detail }) => {
     notifier.notifyCopied(detail);
 });
 

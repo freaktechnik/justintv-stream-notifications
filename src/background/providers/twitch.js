@@ -114,24 +114,32 @@ class Twitch extends GenericProvider {
 
     updateLogins() {
         if(this._loginsToUpdate.size) {
+            this._qs.pause();
             return this._getUsers(Array.from(this._loginsToUpdate.values()), 'slug', 'login')
                 .then((result) => Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
                     const itemId = result.find((u) => u.login == i.slug).id;
                     let item;
-                    //TODO ensure that rejections aren't bad here.
                     if(i instanceof User) {
-                        const existingUser = await this._list.getUserByName(itemId);
-                        if(existingUser) {
-                            return null;
+                        try {
+                            const existingUser = await this._list.getUserByName(itemId);
+                            if(existingUser) {
+                                return null;
+                            }
                         }
-                        item = await this._list.getUserByName(i.slug);
+                        catch(e) {
+                            item = await this._list.getUserByName(i.slug);
+                        }
                     }
                     else {
-                        const existingChannel = await this._list.getChannelByName(itemId);
-                        if(existingChannel) {
-                            return null;
+                        try {
+                            const existingChannel = await this._list.getChannelByName(itemId);
+                            if(existingChannel) {
+                                return null;
+                            }
                         }
-                        item = await this._list.getChannelByName(i.slug);
+                        catch(e) {
+                            item = await this._list.getChannelByName(i.slug);
+                        }
                     }
                     item.slug = item.login;
                     item._login = itemId;
@@ -147,6 +155,7 @@ class Twitch extends GenericProvider {
                     if(updatedChannels.length) {
                         emit(this, "updatedchannels", updatedChannels);
                     }
+                    this._qs.resume();
                 });
         }
     }
