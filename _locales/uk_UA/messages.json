@@ -687,5 +687,7 @@
     "dupes": {
         "message": "Your channel list contains duplicate channels that haven't been removed after being migrated. They likely break updates for the service they're from."
     },
-    "removeDupes": "Remove unnecessary duplicates"
+    "removeDupes": {
+        "message": "Remove unnecessary duplicates"
+    }
 }
