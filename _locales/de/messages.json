@@ -683,5 +683,9 @@
     "cm_dialog_permission_request": {
         "message": "Zusätzliche Berechtigungen werden benötigt, um den Status dieses Kanals oder Benutzers abzurufen. Bitte Bestätigen Sie diesen Dialog um die Berechtigungen zu erteilen.",
         "description": "Info test shown when adding a panel from the channel that requires additional optional permissions. This info is shown in the add dialog in the channel manager, which is opened to get a valid target to request the permission from."
-    }
+    },
+    "dupes": {
+        "message": "Your channel list contains duplicate channels that haven't been removed after being migrated. They likely break updates for the service they're from."
+    },
+    "removeDupes": "Remove unnecessary duplicates"
 }

@@ -683,5 +683,9 @@
     "cm_dialog_permission_request": {
         "message": "Additional permissions are required to update this channel or user. Please confirm this dialog to grant these permissions.",
         "description": "Info test shown when adding a panel from the channel that requires additional optional permissions. This info is shown in the add dialog in the channel manager, which is opened to get a valid target to request the permission from."
-    }
+    },
+    "dupes": {
+        "message": "Your channel list contains duplicate channels that haven't been removed after being migrated. They likely break updates for the service they're from."
+    },
+    "removeDupes": "Remove unnecessary duplicates"
 }
