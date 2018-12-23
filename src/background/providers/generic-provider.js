@@ -274,61 +274,6 @@ export default class GenericProvider extends EventTarget {
         return listFor(this);
     }
 
-    async _migrateSlugs() {
-        const { providersMigratedToSlugs = [] } = await browser.storage.local.get("providersMigratedToSlugs");
-        if(this._hasUniqueSlug && !providersMigratedToSlugs.includes(this._type)) {
-            let hadUniqueSlugs = true;
-            try {
-                const channels = await this._list.getChannels();
-                if(channels.length) {
-                    for(const channel of channels) {
-                        if(channel.slug === channel.login) {
-                            const alreadyExists = channels.find((c) => c.slug === channel.slug && c.id !== channel.id);
-                            if(alreadyExists) {
-                                emit(this, "dedupe");
-                                continue;
-                            }
-                            hadUniqueSlugs = false;
-                            await this.updateLogin(channel);
-                        }
-                    }
-                }
-            }
-            catch(e) {
-                console.error("Error intializing channels for", this._type, e);
-            }
-            if(this.supports.credentials) {
-                try {
-                    const users = await this._list.getUsers();
-                    if(users.length) {
-                        for(const user of users) {
-                            if(user.slug === user.login) {
-                                const alreadyExists = users.find((u) => u.slug === user.slug && u.id !== user.id);
-                                if(alreadyExists) {
-                                    emit(this, "dedupe");
-                                    continue;
-                                }
-                                hadUniqueSlugs = false;
-                                await this.updateLogin(user);
-                            }
-                        }
-                    }
-                }
-                catch(e) {
-                    console.error("Error intializing users for", this._type, e);
-                }
-            }
-            if(!hadUniqueSlugs) {
-                await this.updateLogins();
-            }
-            else {
-                const { providersMigratedToSlugs: p = [] } = await browser.storage.local.get("providersMigratedToSlugs");
-                p.push(this._type);
-                browser.storage.local.set({ providersMigratedToSlugs: p });
-            }
-        }
-    }
-
     /**
      * Initialize the provider after construction. This is primarily a workaround
      * to classes not having a prototype and only defining properties in their
@@ -340,20 +285,18 @@ export default class GenericProvider extends EventTarget {
     initialize() {
         if(this.enabled) {
             let isReady = false;
-            const readyPromises = [
-                this._list.getChannels()
-                    .then(async (channels) => {
-                        if(channels.length > 0) {
-                            this._queueUpdateRequest();
-                        }
-                    })
-                    .catch((e) => console.error("Error intializing channels for", this._type, e))
-            ];
+            const readyPromises = [ this._list.getChannels()
+                .then(async (channels) => {
+                    if(channels.length) {
+                        this._queueUpdateRequest();
+                    }
+                })
+                .catch((e) => console.error("Error intializing channels for", this._type, e)) ];
 
             if(this.supports.credentials) {
                 readyPromises.push(this._list.getUsers()
                     .then((users) => {
-                        if(users.length > 0) {
+                        if(users.length) {
                             this._queueFacsRequest();
                         }
                     })
@@ -623,5 +566,60 @@ export default class GenericProvider extends EventTarget {
             priority: this._qs.LOW_PRIORITY,
             headers: "headers" in config ? config.headers : {}
         });
+    }
+
+    async _migrateSlugs() {
+        const { providersMigratedToSlugs = [] } = await browser.storage.local.get("providersMigratedToSlugs");
+        if(this._hasUniqueSlug && !providersMigratedToSlugs.includes(this._type)) {
+            let hadUniqueSlugs = true;
+            try {
+                const channels = await this._list.getChannels();
+                if(channels.length) {
+                    for(const channel of channels) {
+                        if(channel.slug === channel.login) {
+                            const alreadyExists = channels.find((c) => c.slug === channel.slug && c.id !== channel.id);
+                            if(alreadyExists) {
+                                emit(this, "dedupe");
+                                continue;
+                            }
+                            hadUniqueSlugs = false;
+                            await this.updateLogin(channel);
+                        }
+                    }
+                }
+            }
+            catch(e) {
+                console.error("Error intializing channels for", this._type, e);
+            }
+            if(this.supports.credentials) {
+                try {
+                    const users = await this._list.getUsers();
+                    if(users.length) {
+                        for(const user of users) {
+                            if(user.slug === user.login) {
+                                const alreadyExists = users.find((u) => u.slug === user.slug && u.id !== user.id);
+                                if(alreadyExists) {
+                                    emit(this, "dedupe");
+                                    continue;
+                                }
+                                hadUniqueSlugs = false;
+                                await this.updateLogin(user);
+                            }
+                        }
+                    }
+                }
+                catch(e) {
+                    console.error("Error intializing users for", this._type, e);
+                }
+            }
+            if(!hadUniqueSlugs) {
+                await this.updateLogins();
+            }
+            else {
+                const { providersMigratedToSlugs: p = [] } = await browser.storage.local.get("providersMigratedToSlugs");
+                p.push(this._type);
+                browser.storage.local.set({ providersMigratedToSlugs: p });
+            }
+        }
     }
 }

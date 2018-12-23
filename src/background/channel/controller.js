@@ -224,16 +224,16 @@ export default class ChannelController extends EventTarget {
         this._eventSink.addEventListener("dedupe", () => {
             //TODO i18n messages
             const es = new ErrorState(browser.i18n.getMessage("dupes"), ErrorState.RECOVERABLE, [ {
-                    label: browser.i18n.getMessage("removeDupes")
-                } ]);
-                es.addEventListener("action", async () => {
-                    await this._removeDupes();
-                    es.resolve();
-                }, {
-                    once: true,
-                    passive: true,
-                    capture: false
-                });
+                label: browser.i18n.getMessage("removeDupes")
+            } ]);
+            es.addEventListener("action", async () => {
+                await this._removeDupes();
+                es.resolve();
+            }, {
+                once: true,
+                passive: true,
+                capture: false
+            });
         });
 
         // Bound methods
@@ -606,8 +606,10 @@ export default class ChannelController extends EventTarget {
         for(const item of list) {
             if(item.slug === item.login) {
                 const otherItem = dedupedList.find((i) => i.slug === item.slug && i.id !== item.id);
-                await cbk(item);
-                dedupedList = dedupedList.filter((i) => i.id !== item.id);
+                if(otherItem) {
+                    await cbk(item);
+                    dedupedList = dedupedList.filter((i) => i.id !== item.id);
+                }
             }
         }
     }
