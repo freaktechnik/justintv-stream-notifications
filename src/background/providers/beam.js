@@ -243,7 +243,7 @@ class Beam extends GenericProvider {
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => `${baseURL}channels/${channel.login}`);
+            return channels.map((channel) => `${baseURL}channels/${channel.slug}`);
         };
         return {
             getURLs,
