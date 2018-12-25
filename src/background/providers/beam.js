@@ -126,8 +126,14 @@ class Beam extends GenericProvider {
     }
 
     async getUserFavorites(username) {
-        const userid = await this._getUserIdFromUsername(username),
-            user = await this._qs.queueRequest(`${baseURL}users/${userid}`, headers);
+        let userid;
+        try {
+            userid = await this._getUserIdFromUsername(username);
+        }
+        catch(e) {
+            userid = username;
+        }
+        const user = await this._qs.queueRequest(`${baseURL}users/${userid}`, headers);
 
         if(user.parsedJSON) {
             const ch = new User(user.parsedJSON.id, this._type),
@@ -243,7 +249,7 @@ class Beam extends GenericProvider {
     updateRequest() {
         const getURLs = async () => {
             const channels = await this._list.getChannels();
-            return channels.map((channel) => `${baseURL}channels/${channel.slug}`);
+            return channels.map((channel) => `${baseURL}channels/${channel.login}`);
         };
         return {
             getURLs,
