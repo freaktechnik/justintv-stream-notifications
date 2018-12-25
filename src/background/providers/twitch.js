@@ -8,13 +8,18 @@ import prefs from "../../preferences.js";
 import querystring from "../querystring.js";
 import LiveState from "../channel/live-state.js";
 import {
-    Channel, User
+    Channel,
+    User
 } from '../channel/core.js';
 import { promisedPaginationHelper } from '../pagination-helper.js';
 import GenericProvider from "./generic-provider.js";
 import { not } from '../logic.js';
 import { filterExistingFavs } from '../channel/utils.js';
 import { emit } from '../../utils.js';
+import {
+    pause,
+    resume
+} from '../queue/service.js';
 
 //TODO helix is missing search
 //TODO helix is missing rebroadcasts
@@ -114,7 +119,7 @@ class Twitch extends GenericProvider {
 
     updateLogins() {
         if(this._loginsToUpdate.size) {
-            this._qs.pause();
+            pause();
             return this._getUsers(Array.from(this._loginsToUpdate.values()), 'slug', 'login')
                 .then((result) => Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
                     const itemId = result.find((u) => u.login == i.slug).id;
@@ -155,7 +160,7 @@ class Twitch extends GenericProvider {
                     if(updatedChannels.length) {
                         emit(this, "updatedchannels", updatedChannels);
                     }
-                    this._qs.resume();
+                    resume();
                 });
         }
     }

@@ -297,7 +297,7 @@ export default class GenericProvider extends EventTarget {
                 readyPromises.push(this._list.getUsers()
                     .then((users) => {
                         if(users.length) {
-                            this._queueFacsRequest();
+                            this._queueFavsRequest();
                         }
                     })
                     .catch((e) => console.error("Error intializing users for", this._type, e)));
