@@ -172,6 +172,8 @@ class Twitch extends GenericProvider {
 
         if(data.parsedJSON && data.parsedJSON.data && data.parsedJSON.data.length) {
             const [ helixUser ] = data.parsedJSON.data,
+                //TODO calculate how many requests we can safely paginate within the rate limit and only paginate if the first page
+                //     confirms that we won't need more than those requests to get everything.
                 channels = await promisedPaginationHelper({
                     url: `${baseURL}/users/follows?first=${itemsPerPage}&from_id=${helixUser.id}`,
                     pageSize: itemsPerPage,
@@ -225,6 +227,9 @@ class Twitch extends GenericProvider {
             const users = await this._list.getUsers(),
                 urls = [];
             let offset = 0;
+            //TODO only return the amount of users that are safe to paginate, including getting their favs.
+            // Calculate the remaining requests in the rate limit and save exactly where we left off last
+            // time in a property.
             while(offset < users.length) {
                 const slice = users.slice(offset, offset + itemsPerPage);
                 urls.push(`${baseURL}/users?id=${slice.map((u) => u.login).join('&id=')}`);
@@ -380,7 +385,7 @@ class Twitch extends GenericProvider {
         const logins = channels.map((c) => c.login),
             getPageNumber = (page, pageSize) => {
                 const pageParams = `&user_id=${logins.slice(offset, offset + pageSize).join('&user_id=')}`;
-                ++offset;
+                offset += pageSize;
                 return pageParams;
             },
             liveChannels = await promisedPaginationHelper({
@@ -594,11 +599,11 @@ class Twitch extends GenericProvider {
     }
     _getUsers(streams, property = 'user_id', type = 'id') {
         let offset = 0;
-        const userIds = streams.map((s) => s[property]),
+        const userIds = Array.from(new Set(streams.map((s) => s[property]))),
             param = `&${type}=`,
             getPageNumber = (page, pageSize) => {
                 const pageParams = param + userIds.slice(offset, offset + pageSize).join(param);
-                ++offset;
+                offset += pageSize;
                 return pageParams;
             };
         return promisedPaginationHelper({
@@ -647,7 +652,7 @@ class Twitch extends GenericProvider {
             let offset = 0;
             const getPageNumber = (page, pageSize) => {
                     const pageParams = `?id=${unknownIds.slice(offset, offset + pageSize).join('&id=')}`;
-                    ++offset;
+                    offset += pageSize;
                     return pageParams;
                 },
                 games = await promisedPaginationHelper({

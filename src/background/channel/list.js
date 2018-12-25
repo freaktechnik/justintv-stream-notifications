@@ -66,7 +66,9 @@ import DatabaseManager, {
  * @type {Error}
  */
 
-const ONE_ITEM = 1;
+const ONE_ITEM = 1,
+    START = 0,
+    MAX_ITEMS_PER_TRANSACTION = 250;
 
 /**
  * @class module:channel/list.ChannelList
@@ -153,6 +155,10 @@ export default class ChannelList extends ReadChannelList {
             }
             else if(channels.length > ONE_ITEM) {
                 await this._ready;
+                if(channels.length > MAX_ITEMS_PER_TRANSACTION) {
+                    await this.addChannels(channels.slice(MAX_ITEMS_PER_TRANSACTION));
+                    channels = channels.slice(START, MAX_ITEMS_PER_TRANSACTION);
+                }
                 const transaction = this.db.transaction("channels", "readwrite"),
                     store = transaction.objectStore("channels"),
                     index = store.index("typename"),
