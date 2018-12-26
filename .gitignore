@@ -194,3 +194,6 @@ _locales/*/amo.json
 *.tgz
 *.zip
 *.tar.gz
+
+# web assets generated for release
+changes/
