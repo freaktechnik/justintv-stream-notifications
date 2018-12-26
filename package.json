@@ -12,7 +12,7 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "engines": {
-    "node": ">= 10.0.0"
+    "node": ">= 10.1.0"
   },
   "files": [
     "webextension/assets/images/*",
@@ -205,7 +205,18 @@
           "npmPublish": false
         }
       ],
-      "@semantic-release/git",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "_locales/**/messages.json",
+            "!_locales/en/messages.json",
+            "webextension/manifest.json"
+          ]
+        }
+      ],
       [
         "@semantic-release/github",
         {

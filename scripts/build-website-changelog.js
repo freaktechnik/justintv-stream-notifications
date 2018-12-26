@@ -1,23 +1,47 @@
 "use strict";
 
-const conventionalChangelog = require("conventional-changelog");
-const pkg = require("../package.json");
-const stp = require("stream-to-promise");
-const fs = require("fs").promises;
-const path = require("path");
-const git = require("simple-git");
+const conventionalChangelog = require("conventional-changelog"),
+    pkg = require("../package.json"),
+    stp = require("stream-to-promise"),
+    fs = require("fs").promises,
+    path = require("path"),
+    git = require("simple-git"),
 
-git(path.resolve(__dirname, '..')).checkout('gh-pages', () => {
-    stp(conventionalChangelog({
+    repo = git(path.resolve(__dirname, '..')),
+    file = path.join(__dirname, '..', 'changes', `${pkg.version}.md`),
+    promisify = (res, rej) => (err, result) => {
+        if(err) {
+            rej(err);
+        }
+        else {
+            res(result);
+        }
+    };
+
+new Promise((resolve, reject) => {
+    repo.checkout('gh-pages', promisify(resolve, reject));
+})
+    .then(() => stp(conventionalChangelog({
         preset: 'angular',
         releaseCount: 2
     }, null, null, null, {
         headerPartial: `---
-      title: You've upgraded Live Stream Notifier
-      version: v${pkg.version}
-      permalink: /changes/${pkg.version}
-    ---`
+  title: You've upgraded Live Stream Notifier
+  version: v${pkg.version}
+  permalink: /changes/${pkg.version}
+---`
+    })))
+    .then((res) => fs.writeFile(file, res))
+    .then(() => new Promise((resolve, reject) => {
+        repo.add(file, promisify(resolve, reject));
     }))
-        .then((res) => fs.writeFile(path.join(__dirname, '..', 'changes', `${pkg.version}.md`), res))
-        .catch(console.error);
-});
+    .then(() => new Promise((resolve, reject) => {
+        repo.commit(`chore(release): ${pkg.version}`, promisify(resolve, reject));
+    }))
+    .then(() => new Promise((resolve, reject) => {
+        repo.push('origin', 'gh-pages', promisify(resolve, reject));
+    }))
+    .then(() => new Promise((resolve, reject) => {
+        repo.checkout('master', promisify(resolve, reject));
+    }))
+    .catch(console.error);
