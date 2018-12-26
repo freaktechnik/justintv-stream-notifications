@@ -119,42 +119,44 @@ class Twitch extends GenericProvider {
 
     updateLogins() {
         if(this._loginsToUpdate.size) {
-            pause();
             return this._getUsers(Array.from(this._loginsToUpdate.values()), 'slug', 'login')
-                .then((result) => Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
-                    const itemId = result.find((u) => u.login == i.slug).id;
-                    let item;
-                    if(i instanceof User) {
-                        try {
-                            const existingUser = await this._list.getUserByName(itemId);
-                            if(existingUser) {
-                                return null;
+                .then((result) => {
+                    pause();
+                    return Promise.all(Array.from(this._loginsToUpdate.values(), async (i) => {
+                        const itemId = result.find((u) => u.login == i.slug).id;
+                        let item;
+                        if(i instanceof User) {
+                            try {
+                                const existingUser = await this._list.getUserByName(itemId);
+                                if(existingUser) {
+                                    return null;
+                                }
+                            }
+                            catch(e) {
+                                item = await this._list.getUserByName(i.slug);
                             }
                         }
-                        catch(e) {
-                            item = await this._list.getUserByName(i.slug);
-                        }
-                    }
-                    else {
-                        try {
-                            const existingChannel = await this._list.getChannelByName(itemId);
-                            if(existingChannel) {
-                                return null;
+                        else {
+                            try {
+                                const existingChannel = await this._list.getChannelByName(itemId);
+                                if(existingChannel) {
+                                    return null;
+                                }
+                            }
+                            catch(e) {
+                                item = await this._list.getChannelByName(i.slug);
                             }
                         }
-                        catch(e) {
-                            item = await this._list.getChannelByName(i.slug);
+                        item.slug = item.login;
+                        item._login = itemId;
+                        if(item instanceof User) {
+                            emit(this, "updateduser", item);
                         }
-                    }
-                    item.slug = item.login;
-                    item._login = itemId;
-                    if(item instanceof User) {
-                        emit(this, "updateduser", item);
-                    }
-                    else {
-                        return item;
-                    }
-                })))
+                        else {
+                            return item;
+                        }
+                    }));
+                })
                 .then((updatedItems) => {
                     const updatedChannels = updatedItems.filter((i) => i);
                     if(updatedChannels.length) {
