@@ -3,7 +3,7 @@
  * @license MPL-2.0
  */
 import test from "ava";
-import fs from "mz/fs";
+import { promises as fs } from "fs";
 import path from "path";
 import providers from "../../src/background/providers";
 
