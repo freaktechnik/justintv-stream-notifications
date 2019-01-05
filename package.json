@@ -207,6 +207,13 @@
         }
       ],
       [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "node ./scripts/bump-manifest.js && npm run build",
+          "successCmd": "node ./scripts/build-website-changelog.js"
+        }
+      ],
+      [
         "@semantic-release/git",
         {
           "assets": [
@@ -224,13 +231,6 @@
           "failComment": false,
           "failTitle": false,
           "releasedLabels": false
-        }
-      ],
-      [
-        "@semantic-release/exec",
-        {
-          "prepareCmd": "node ./scripts/bump-manifest.js && npm run build",
-          "successCmd": "node ./scripts/build-website-changelog.js"
         }
       ]
     ]
