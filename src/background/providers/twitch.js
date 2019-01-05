@@ -401,8 +401,8 @@ class Twitch extends GenericProvider {
                 getPageNumber,
                 initialPage: getPageNumber(offset, itemsPerPage),
                 request: (url) => this._qs.queueRequest(url, headers),
-                fetchNextPage(data, pageSize) {
-                    return offset + pageSize < logins.length;
+                fetchNextPage() {
+                    return offset < logins.length;
                 },
                 getItems(data) {
                     if(data.parsedJSON && !data.parsedJSON.error) {
@@ -619,8 +619,8 @@ class Twitch extends GenericProvider {
             getPageNumber,
             initialPage: getPageNumber(offset, itemsPerPage),
             request: (url) => this._qs.queueRequest(url, headers),
-            fetchNextPage(data, pageSize) {
-                return offset + pageSize < userIds.length;
+            fetchNextPage() {
+                return offset < userIds.length;
             },
             getItems(data) {
                 if(data.parsedJSON && !data.parsedJSON.error) {
@@ -668,8 +668,8 @@ class Twitch extends GenericProvider {
                     getPageNumber,
                     initialPage: getPageNumber(offset, itemsPerPage),
                     request: (url) => this._qs.queueRequest(url, headers),
-                    fetchNextPage(data, pageSize) {
-                        return offset + pageSize < unknownIds.length;
+                    fetchNextPage() {
+                        return offset < unknownIds.length;
                     },
                     getItems(data) {
                         if(data.parsedJSON && !data.parsedJSON.error) {
