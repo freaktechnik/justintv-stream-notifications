@@ -10,6 +10,6 @@ const path = require("path"),
 fs.readFile(manifest).then((f) => {
     const json = JSON.parse(f);
     json.version = pkg.version;
-    return fs.writeFile(manifest, JSON.stringify(json, null, MANIFEST_INDENT));
+    return fs.writeFile(manifest, JSON.stringify(json, null, MANIFEST_INDENT) + "\n");
 })
     .catch(console.error);
