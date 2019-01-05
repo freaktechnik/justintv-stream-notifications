@@ -2,7 +2,7 @@
   "homepage": "http://streamnotifier.ch/",
   "author": "freaktechnik (https://humanoids.be)",
   "name": "justintv-stream-notifications",
-  "version": "3.10.6",
+  "version": "3.10.7",
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
@@ -196,6 +196,7 @@
   },
   "release": {
     "ci": false,
+    "repositoryUrl": "git@github.com:freaktechnik/justintv-stream-notifications.git",
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
