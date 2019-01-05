@@ -10,7 +10,7 @@ const pkg = require("../package.json"),
     content = `---
 title: You've upgraded Live Stream Notifier
 version: v${pkg.version}
-permalink: /changes/${pkg.version}
+permalink: /changes/${pkg.version}/
 ---`,
     promisify = (res, rej) => (err, result) => {
         if(err) {
