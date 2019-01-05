@@ -20,6 +20,7 @@ const type = "youtube",
     getLocale = () => browser.i18n.getUILanguage().replace("-", "_"),
     FIRST_MATCH = 1,
     LANG_START = 0,
+    FIRST_ITEM = 0,
     LANG_END = 2;
 
 class YouTube extends GenericProvider {
@@ -57,13 +58,25 @@ class YouTube extends GenericProvider {
     }
 
     async getUserFavorites(username) {
-        const data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
+        let data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
             {
                 part: "id,snippet",
                 forUsername: username,
                 fields: "items(id,snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
                 key: await apiKey
             })}`);
+        if(!data.parsedJSON || !data.parsedJSON.items || !data.parsedJSON.items.length) {
+            data = await this._qs.queueRequest(`${baseURL}channels?${querystring.stringify(
+                {
+                    part: "id,snippet",
+                    id: username,
+                    fields: "items(snippet/title,snippet/thumbnails,snippet/defaultLanguage)",
+                    key: await apiKey
+                })}`);
+            if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
+                data.parsedJSON.items[FIRST_ITEM].id = username;
+            }
+        }
 
         if(data.parsedJSON && data.parsedJSON.items && data.parsedJSON.items.length) {
             const [ item ] = data.parsedJSON.items,
