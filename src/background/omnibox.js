@@ -22,7 +22,8 @@ class Omnibox extends EventTarget {
             'login',
             'title',
             'category',
-            'type'
+            'type',
+            'slug'
         ];
     }
 
@@ -30,7 +31,8 @@ class Omnibox extends EventTarget {
         super();
         this.list = new ReadChannelList(true);
         browser.omnibox.onInputChanged.addListener((query, suggest) => {
-            this.suggestChannels(query.toLowerCase()).then(suggest)
+            this.suggestChannels(query.toLowerCase())
+                .then(suggest)
                 .catch(console.error);
         });
         browser.omnibox.onInputEntered.addListener((id, disposition) => {
