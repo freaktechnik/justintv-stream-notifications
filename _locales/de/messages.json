@@ -142,7 +142,7 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "Keine Kanäle sind im Moment live (Strg+Umschalt+L)",
+        "message": "Keine Kanäle sind live im Moment",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "context_chat": {
@@ -262,7 +262,7 @@
         "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "listTooltipLive": {
-        "message": "Aktuell streamende Kanäle (Strg+Umschalt+L)",
+        "message": "Aktuell streamende Kanäle",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
@@ -685,9 +685,12 @@
         "description": "Info test shown when adding a panel from the channel that requires additional optional permissions. This info is shown in the add dialog in the channel manager, which is opened to get a valid target to request the permission from."
     },
     "dupes": {
-        "message": "Your channel list contains duplicate channels that haven't been removed after being migrated. They likely break updates for the service they're from."
+        "message": "Einige Ihre Kanäle werden von der Erweiterung mehrmals verfolgt nach der Migration. Dies führt zu abnormaler Aktulisierung ihres Statusses."
     },
     "removeDupes": {
-        "message": "Remove unnecessary duplicates"
+        "message": "Unnötige Duplikate entfernen."
+    },
+    "shortcutDescription": {
+        "message": "Panel mit streamenden Kanälen öffnen"
     }
 }

@@ -142,7 +142,7 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "Aucune chaîne n'est en ligne pour le moment (Ctrl+Shift+L)",
+        "message": "Aucune chaîne n'est en ligne pour le moment",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "context_chat": {
@@ -262,7 +262,7 @@
         "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "listTooltipLive": {
-        "message": "Chaînes actuellement en ligne (Ctrl+Shift+L)",
+        "message": "Chaînes actuellement en direct",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
@@ -689,5 +689,8 @@
     },
     "removeDupes": {
         "message": "Remove unnecessary duplicates"
+    },
+    "shortcutDescription": {
+        "message": "Open live channels panel"
     }
 }
