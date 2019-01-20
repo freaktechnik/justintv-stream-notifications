@@ -142,7 +142,7 @@
         "description": "Title of the theme setting in the preferences"
     },
     "listTooltipOffline": {
-        "message": "No channel is live at the moment (Ctrl+Shift+L)",
+        "message": "No channel is live at the moment",
         "description": "Button tooltip when there are no live channels in the panel"
     },
     "context_chat": {
@@ -262,7 +262,7 @@
         "description": "Distinct state option of the non-live treatment setting in the preferences"
     },
     "listTooltipLive": {
-        "message": "Currently live channels (Ctrl+Shift+L)",
+        "message": "Currently live channels",
         "description": "Button tooltip for the panel when there are channels live"
     },
     "cm_dialog_title": {
