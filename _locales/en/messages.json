@@ -689,5 +689,8 @@
     },
     "removeDupes": {
         "message": "Remove unnecessary duplicates"
+    },
+    "shortcutDescription": {
+        "message": "Open live channels panel"
     }
 }
