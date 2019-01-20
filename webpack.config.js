@@ -12,8 +12,7 @@ module.exports = {
     entry: {
         background: "./src/background/index.js",
         "popup/list": "./src/list/index.jsx",
-        manager: "./src/manager/index.js",
-        options: "./src/options/index.js",
+        // settings: "./src/settings/index.jsx",
         "popup/errorState": "./src/errorState/index.js"
     },
     output: {
@@ -69,7 +68,7 @@ module.exports = {
             {
                 test: /\.jsx$/,
                 loader: 'babel-loader',
-                include: path.resolve(__dirname, './src/list'),
+                include: path.resolve(__dirname, './src/'),
                 options: {
                     babelrc: false,
                     presets: [
@@ -112,17 +111,6 @@ module.exports = {
             filename: "[name]/style.css"
         }),
         new HtmlWebpackPlugin({
-            template: 'src/manager/index.html',
-            filename: 'manager/index.html',
-            chunks: [
-                'runtime',
-                'common',
-                'manager'
-            ],
-            chunksSortMode: 'dependency',
-            defaultLanguage
-        }),
-        new HtmlWebpackPlugin({
             template: 'src/list/index.html',
             filename: 'popup/list/index.html',
             chunks: [
@@ -134,12 +122,12 @@ module.exports = {
             defaultLanguage
         }),
         new HtmlWebpackPlugin({
-            template: 'src/options/index.html',
-            filename: 'options/index.html',
+            template: 'src/settings/index.html',
+            filename: 'settings/index.html',
             chunks: [
                 'runtime',
                 'common',
-                'options'
+                'settings'
             ],
             chunksSortMode: 'dependency',
             defaultLanguage

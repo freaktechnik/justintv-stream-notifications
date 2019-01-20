@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tab from './tab.jsx';
-import NavigateableList from '../navigateable-list.jsx';
+import Tabs from '../../../content/components/tab-strip.jsx';
 import {
     LIVE_TAB, NONLIVE_TAB, OFFLINE_TAB, EXPLORE_TAB
 } from '../../constants/tabs.json';
@@ -28,12 +28,12 @@ const TabStrip = (props) => {
     };
 
     return (
-        <NavigateableList className="tabstrip inline-list" role="tablist" focused={ focused } onFocusChange={ onFocusChange } hasFocus={ props.hasFocus }>
+        <Tabs active={ focused } onTabSelect={ onFocusChange } hasFocus={ props.hasFocus }>
             <Tab title="panel_tab_live" onClick={ () => props.onTabSelect(LIVE_TAB) } key={ LIVE_TAB } count={ props.counts.live }/>
             { nonlive }
             <Tab title="panel_tab_offline" onClick={ () => props.onTabSelect(OFFLINE_TAB) } key={ OFFLINE_TAB } count={ props.counts.offline }/>
             <Tab title="panel_tab_explore" onClick={ () => props.onTabSelect(EXPLORE_TAB) } key={ EXPLORE_TAB }/>
-        </NavigateableList>
+        </Tabs>
     );
 };
 TabStrip.defaultProps = {
