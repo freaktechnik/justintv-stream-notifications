@@ -19,11 +19,11 @@ class Omnibox extends EventTarget {
     static get FIELDS() {
         return [
             'uname',
+            'slug',
             'login',
             'title',
             'category',
-            'type',
-            'slug'
+            'type'
         ];
     }
 
