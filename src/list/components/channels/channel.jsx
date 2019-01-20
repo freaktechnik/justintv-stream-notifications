@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NavigateableItem from '../navigateable-item.jsx';
+import NavigateableItem from '../../../content/components/navigateable-item.jsx';
 import InnerChannel from './inner-channel.jsx';
 import LiveState from '../../../live-state.json';
 import Extras from './extras.jsx';
