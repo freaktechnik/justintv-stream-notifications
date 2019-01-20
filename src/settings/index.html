@@ -1,0 +1,23 @@
+<% var requireString = require("../content/insert-string.js"),
+    translateElement = requireString(htmlWebpackPlugin.options.defaultLanguage); %>
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+        Created by Martin Giger
+        Licensed under the MPL 2.0
+    -->
+    <head>
+        <meta charset="utf-8">
+
+        <title <%= translateElement("extensionName") %></title>
+        <link rel="help" href="http://streamnotifier.ch/help/channel-manager" hreflang="en" type="text/html">
+        <link rel="license" href="../LICENSE" hreflang="en" type="text/plain">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" sizes="any" href="../assets/images/icon.svg">
+    </head>
+    <body>
+        <div id="root">
+        </div>
+    </body>
+</html>
