@@ -7,7 +7,7 @@
     "README.md"
   ],
   "imageSize": 100,
-  "commit": true,
+  "commit": false,
   "contributors": [
     {
       "login": "maekclena",
@@ -105,6 +105,15 @@
       "name": "Volodymyr Savchuk",
       "avatar_url": "https://secure.gravatar.com/avatar/55bf08708678aec22d186b4074b719e3?s=100&d=identicon",
       "profile": "https://www.transifex.com/user/profile/Sappa/",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "Vistaus",
+      "name": "Heimen Stoffels",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1716229?v=4",
+      "profile": "https://github.com/Vistaus",
       "contributions": [
         "translation"
       ]
