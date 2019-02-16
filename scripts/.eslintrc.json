@@ -3,7 +3,8 @@
         "ecmaVersion": 2017
     },
     "rules": {
-        "tree-shaking/no-side-effects-in-initialization": 0
+        "tree-shaking/no-side-effects-in-initialization": 0,
+        "node/no-unpublished-require": 0
     },
     "extends": "@freaktechnik/eslint-config-node"
 }
