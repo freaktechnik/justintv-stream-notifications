@@ -290,7 +290,7 @@ test.serial('set channel', async (t) => {
 test.serial('set channel without id', async (t) => {
     const referenceChannel = getChannel(),
         storedChannel = await t.context.list.addChannel(referenceChannel),
-        id = storedChannel.id;
+        { id } = storedChannel;
     referenceChannel.uname = 'foo bar';
     delete referenceChannel.id;
     const channel = await t.context.list.setChannel(referenceChannel);

@@ -208,12 +208,12 @@ function addChannel(channel) {
             .map((s) => `${channel.image[s]} ${s}w`)
             .join(",");
         channelNode.id = `${CHANNEL_PREFIX}${channel.id}`;
-        small.appendChild(type);
-        span.appendChild(title);
-        channelNode.appendChild(image);
-        channelNode.appendChild(span);
-        channelNode.appendChild(small);
-        channels.appendChild(channelNode);
+        small.append(type);
+        span.append(title);
+        channelNode.append(image);
+        channelNode.append(span);
+        channelNode.append(small);
+        channels.append(channelNode);
         channels.dispatchEvent(evObj);
     }
 }
@@ -233,12 +233,12 @@ function addUser(user) {
             .map((s) => `${user.image[s]} ${s}w`)
             .join(",");
         userNode.id = `${USER_PREFIX}${user.id}`;
-        small.appendChild(type);
-        span.appendChild(title);
-        userNode.appendChild(image);
-        userNode.appendChild(span);
-        userNode.appendChild(small);
-        users.appendChild(userNode);
+        small.append(type);
+        span.append(title);
+        userNode.append(image);
+        userNode.append(span);
+        userNode.append(small);
+        users.append(userNode);
         users.dispatchEvent(evObj);
     }
 }

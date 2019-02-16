@@ -11,12 +11,15 @@ This is an add-on for Firefox, using the modern WebExtension APIs.
 This extension shows you a notification, whenever a followed channel on Twitch, Smashcast, Ustream, Livestream, MLG.tv, Mixer, Dailymotion or YouTube goes live. It can also show notifications when a stream changes the title, hosts another channel, replays a past broadcast or goes offline.
 
 ### Channel Management
+
 You can manage the followed channels with a powerful channels manager, which lets you auto import all the channels you follow with one click, add all channels a user follows or just add a single channel. Of course it also lets you remove channels.
 
 ### Panel
+
 Sometimes you miss notifications, but thanks to the handy panel, accessed by a button, which has a red dot if any channel is live, you always have access to all the channels the extension is monitoring. You can open their archive page or refresh them. The panel has three different styles, a compact one, if you follow a lot of people, a more spaceous one and a layout with thumbnails of the live streams. Each channel has a context menu, which lets you refresh the channel's status, go directly to its chat or go to its VOD archive, if it's live. The panel has a filter function, so you can quickly find a channel. You can add the category name and viewer count, if it's supported by the network.
 
 ### Providers
+
 List of supported providers with some explanation on what they are can be found on [streamnotifier.ch/providers](https://streamnotifier.ch/providers/).
 
 ## Official Download
@@ -26,10 +29,12 @@ List of supported providers with some explanation on what they are can be found 
 ## Build it yourslef
 
 To build this extension you need npm, which will install webpack and web-ext. Open a command line and type
-```
+
+```shell
 npm ci
 npm run build
 ```
+
 to build an in about:debugging loadable .xpi file. You can use `npm start` to launch Firefox with the extension pre-installed.
 
 ## License
@@ -37,6 +42,7 @@ to build an in about:debugging loadable .xpi file. You can use `npm start` to la
 See [LICENSE](LICENSE).
 
 ## Contribute
+
 For contribution instructions, check out [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ## Contributors

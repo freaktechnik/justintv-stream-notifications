@@ -9,7 +9,7 @@ import {
     getMockAPIQS, getMockQS
 } from "../../helpers/providers/mock-qs";
 
-const youtube = providers.youtube;
+const { youtube } = providers;
 
 test.serial("Get Channel ID Fallback", async (t) => {
     const oldQS = youtube._qs;

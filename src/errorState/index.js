@@ -24,7 +24,7 @@ const list = document.getElementById("errors"),
         root.id = `es${errorState.id}`;
         message.textContent = errorState.message;
 
-        root.appendChild(message);
+        root.append(message);
 
         if(errorState.actions.length) {
             const buttons = document.createElement("div");
@@ -41,12 +41,12 @@ const list = document.getElementById("errors"),
                     capture: false
                 });
 
-                buttons.appendChild(button);
+                buttons.append(button);
             }
 
-            root.appendChild(buttons);
+            root.append(buttons);
         }
-        list.appendChild(root);
+        list.append(root);
     },
     removeErrorState = (errorState) => {
         const root = document.getElementById(`es${errorState.id}`);

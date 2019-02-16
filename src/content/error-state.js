@@ -27,11 +27,11 @@ class ErrorStateView {
 
         this.title = document.createElement("summary");
 
-        this.root.appendChild(this.title);
+        this.root.append(this.title);
 
         this.list = document.createElement("ul");
 
-        this.root.appendChild(this.list);
+        this.root.append(this.list);
 
         browser.storage.local.get(ErrorStateConsts.STORE)
             .then(({ [ErrorStateConsts.STORE]: values }) => {
@@ -39,7 +39,7 @@ class ErrorStateView {
                     this.addError(es);
                 }
                 this.updateTitle();
-                hook.appendChild(this.root);
+                hook.append(this.root);
             })
             .catch(console.error);
 
@@ -109,7 +109,7 @@ class ErrorStateView {
 
         message.textContent = errorState.message;
 
-        root.appendChild(message);
+        root.append(message);
 
         if(errorState.actions.length) {
             const buttons = document.createElement("div");
@@ -126,12 +126,12 @@ class ErrorStateView {
                     capture: false
                 });
 
-                buttons.appendChild(button);
+                buttons.append(button);
             }
 
-            root.appendChild(buttons);
+            root.append(buttons);
         }
-        this.list.appendChild(root);
+        this.list.append(root);
     }
 
     removeError(id) {
