@@ -388,7 +388,8 @@ class Twitch extends GenericProvider {
         throw new Error(`Could not load user details for ${channelname}`);
     }
     async updateChannels(channels, ignoreHosted = false) {
-        let offset = 0;
+        let offset = 0,
+            ret = [];
         const logins = channels.map((c) => c.login),
             getPageNumber = (page, pageSize) => {
                 const pageParams = `&user_id=${logins.slice(offset, offset + pageSize).join('&user_id=')}`;
@@ -413,7 +414,6 @@ class Twitch extends GenericProvider {
                 }
             });
 
-        let ret = [];
         if(liveChannels.length) {
             // cache games
             const [ mergedData ] = await Promise.all([
