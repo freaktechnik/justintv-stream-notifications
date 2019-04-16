@@ -8,6 +8,8 @@ This extension can use your stored usernames for certain sites to auto-detect yo
 
 The extension has to regularly send requests to the API endpoints of the sites you have channels for to check for their live status and to update their metadata. These include the usernames of the channels you have added and the usernames of your user and may contain your preferred locale and parental control setting (to filter results). The APIs will send back details about the requested channels and users, which are at least partially stored on your machine for later display within the extension and can be removed by no longer tracking the associated channel or user.
 
+For questions or data issues, contact jtvnotificationssupport@humanoids.be
+
 ## YouTube features
 When using the YouTube features of the extension, the same applies: requests are sent to the YouTube API Services to get information on channels and their live streams or subscriptions. Never are those requests made in a manner that indicates your YouTube or Google account over the API.
 The data returned by those requests (username, profile picture, subscribers, video title, video category, video thumbnail, channel IDs, viewer count) will be stored by the extension on your machine and may be removed as soon as associated channels and or users are no longer tracked using the extension.
