@@ -6,6 +6,8 @@
 ---
 You will never miss your favorite streams ever again!
 
+Let's get this out of the way: by using this extension you accept its [EULA](/eula).
+
 But now don't just close this page! It is here to help you getting started with the extension. If you don't want this extension to open any tab itself when the browser starts, be sure to uncheck the "Open a tab with update info after an update" setting.
 
 Get started
