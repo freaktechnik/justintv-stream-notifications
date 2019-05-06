@@ -379,15 +379,10 @@ nav {
 }
 
 .tabcontent > ul > .youtube {
-    --channel-bg-color-r: 204;
-    --channel-bg-color-g: 24;
-    --channel-bg-color-b: 30;
+    --channel-bg-color-r: 255;
+    --channel-bg-color-g: 0;
+    --channel-bg-color-b: 0;
     --channel-text-color: white;
-}
-
-.tabcontent > ul > .youtube:hover,
-.thumbnail.youtube:hover > div {
-    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .tabcontent > ul > .livestream {
