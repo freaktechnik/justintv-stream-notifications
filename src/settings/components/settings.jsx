@@ -9,7 +9,7 @@ const Settings = (props) => {
     return (
         <main className="tabbed">
             <TabStrip active={ props.active } onTabSelect={ props.onTabSelect }/>
-            <SettingPage active={ props.active }/> //TODO actual tabs: channels, users, actions, notifications, options. Eventually also providers?
+            <SettingPage active={ props.active }/>
         </main>
     );
 };

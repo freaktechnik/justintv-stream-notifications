@@ -9,7 +9,7 @@ const Tab = (props) => {
     if(props.count || props.count === NO_CHANNELS) {
         badge = ( <span className="badge">{ props.count }</span> );
     }
-    return (<TabButton {...props}>{ badge }</TabButton>);
+    return (<TabButton { ...props }>{ badge }</TabButton>);
 };
 Tab.defaultProps = {
     active: false,
@@ -21,7 +21,8 @@ Tab.propTypes = {
     onClick: PropTypes.func,
     focused: PropTypes.bool.isRequired,
     onFocusChange: PropTypes.func.isRequired,
-    count: PropTypes.number
+    count: PropTypes.number,
+    active: PropTypes.bool
 };
 
 export default Tab;

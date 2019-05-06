@@ -9,7 +9,12 @@ const main = combineReducers({
             return event.payload;
         }
         return state;
-    }
+    },
+    channels,
+    users,
+    selected,
+    searchTerm,
+    options
 });
 
 export default main;
