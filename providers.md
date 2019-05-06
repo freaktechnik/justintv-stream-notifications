@@ -121,7 +121,7 @@ streaming consultant. Owned by Vimeo.
  - Separate chat page
  - Monitoring the status of channels
 
-![YouTube logo](/img/YouTube-logo-full_color.png)
+![YouTube logo](/img/yt_logo_rgb_light.png)
 -------
 [YouTube](https://youtube.com) is the leading VOD platform and added livestreams, that can also be watched prettified on [YouTube Gaming](https://gaming.youtube.com). This extension supports streams on YouTube Gaming, but they aren't opened on Gaming.
 
