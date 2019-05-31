@@ -48,7 +48,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
     "@commitlint/cli": "^7.5.2",
-    "@commitlint/config-conventional": "^7.5.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@freaktechnik/eslint-config-babel": "^6.6.2",
     "@freaktechnik/eslint-config-base": "^6.6.2",
     "@freaktechnik/eslint-config-extension": "^6.6.3",
