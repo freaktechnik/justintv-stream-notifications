@@ -62,7 +62,7 @@
     "@semantic-release/github": "^5.2.10",
     "@semantic-release/release-notes-generator": "^7.1.4",
     "ajv": "^6.10.0",
-    "ava": "^1.4.1",
+    "ava": "^2.0.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-istanbul": "^5.1.1",
     "babel-plugin-module-resolver": "^3.2.0",
