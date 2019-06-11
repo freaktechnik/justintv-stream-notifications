@@ -69,7 +69,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "browser-env": "^3.2.6",
     "codecov": "^3.3.0",
-    "css-loader": "^2.1.1",
+    "css-loader": "^3.0.0",
     "eclint": "^2.8.1",
     "element-dataset": "^2.2.6",
     "enzyme": "^3.9.0",
