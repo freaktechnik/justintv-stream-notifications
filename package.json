@@ -74,7 +74,7 @@
     "element-dataset": "^2.2.6",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "eslint": "^5.16.0",
+    "eslint": "^6.0.0",
     "event-target-shim": "^5.0.1",
     "fake-indexeddb": "^2.1.0",
     "fetch-headers": "^2.0.0",
