@@ -6,7 +6,9 @@
 # Extension
 This extension can use your stored usernames for certain sites to auto-detect your username. It will only do so when explicitly commanded to. The found usernames are then (without password) sent to API endpoints of the respective site to gather your followed channels.
 
-The extension has to regularly send requests to the API endpoints of the sites you have channels for to check for their live status and to update their metadata. These include the usernames of the channels you have added and the usernames of your user and may contain your preferred locale and parental control setting (to filter results). The APIs will send back details about the requested channels and users, which are at least partially stored on your machine for later display within the extension and can be removed by no longer tracking the associated channel or user.
+The extension has to regularly send requests to the API endpoints of the sites you have channels for to check for their live status and to update their metadata. These include the usernames or unique identifiera of the channels you have added and the usernames or unique identifiers of your user and may contain your preferred locale and parental control setting (to filter results). Contacting the API servers will give their operators information like your IP, which they may collect. Please refer to their privacy policy and terms of use. The APIs will send back details about the requested channels and users, which are at least partially stored on your machine for later display within the extension and can be removed by no longer tracking the associated channel or user.
+
+There is no other (user, usage and other) data collected, processed or explicitly sent to other devices by this extension.
 
 For questions or data issues, contact jtvnotificationssupport@humanoids.be
 
