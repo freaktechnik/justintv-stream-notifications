@@ -10,6 +10,10 @@ The extension has to regularly send requests to the API endpoints of the sites y
 
 There is no other (user, usage and other) data collected, processed or explicitly sent to other devices by this extension.
 
+The extension uses real-time info to decide directly on your machine if it should show a notification, or when a channel is opened, if it should instead switch to an existing tab and such features. However this will never lead to any information leaving your browser.
+
+When using the streamlink integration, the URL of the stream is sent to the streamlink integration extension. No other data is sent to that extension. If the notification sound extension is installed, it will be informed whenever the extension shows a notification. However no notification contents are sent to the notification sound extension.
+
 For questions or data issues, contact jtvnotificationssupport@humanoids.be
 
 ## YouTube features
