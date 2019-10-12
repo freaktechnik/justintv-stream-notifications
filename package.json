@@ -49,7 +49,7 @@
     "@babel/register": "^7.4.0",
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
-    "@freaktechnik/eslint-config-babel": "^6.6.2",
+    "@freaktechnik/eslint-config-babel": "^7.0.0",
     "@freaktechnik/eslint-config-base": "^6.6.2",
     "@freaktechnik/eslint-config-extension": "^6.6.3",
     "@freaktechnik/eslint-config-node": "^6.6.2",
