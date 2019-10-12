@@ -51,7 +51,7 @@
     "@commitlint/config-conventional": "^8.0.0",
     "@freaktechnik/eslint-config-babel": "^6.6.2",
     "@freaktechnik/eslint-config-base": "^6.6.2",
-    "@freaktechnik/eslint-config-extension": "^6.6.3",
+    "@freaktechnik/eslint-config-extension": "^7.0.0",
     "@freaktechnik/eslint-config-node": "^6.6.2",
     "@freaktechnik/eslint-config-react": "^6.6.3",
     "@freaktechnik/eslint-config-test": "^6.6.2",
