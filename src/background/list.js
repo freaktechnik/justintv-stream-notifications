@@ -155,7 +155,7 @@ class ListView extends EventTarget {
                 emit(this, event.command, event.payload);
                 break;
             case "configure":
-                emit(this, "opencm");
+                browser.runtime.openOptionsPage();
                 break;
             case "add":
                 emit(this, "addchannel", event.payload.login, event.payload.type);

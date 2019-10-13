@@ -10,11 +10,23 @@ const main = combineReducers({
         }
         return state;
     },
-    channels,
-    users,
-    selected,
-    searchTerm,
-    options
+    channels: (state = [], event) => {
+        if(event.type === storeTypes.SET_CHANNELS) {
+            return event.payload;
+        }
+        //TODO incremental updates
+        return state;
+    },
+    users: (state = [], event) => {
+        if(event.type === storeTypes.SET_USERS) {
+            return event.payload;
+        }
+        //TODO incremental updates
+        return state;
+    }//,
+    // selected,
+    // searchTerm,
+    // options
 });
 
 export default main;

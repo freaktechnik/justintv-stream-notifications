@@ -12,7 +12,7 @@ module.exports = {
     entry: {
         background: "./src/background/index.js",
         "popup/list": "./src/list/index.jsx",
-        // settings: "./src/settings/index.jsx",
+        settings: "./src/settings/index.jsx",
         "popup/errorState": "./src/errorState/index.js"
     },
     output: {
@@ -149,6 +149,23 @@ module.exports = {
             ],
             assets: [
                 'lodash.min.js',
+                'react.production.min.js',
+                'react-dom.production.min.js',
+                'redux.min.js',
+                'react-redux.min.js',
+                'prop-types.min.js',
+                'react-key-handler.js',
+                'reselect.js'
+            ],
+            append: false,
+            publicPath: '/vendor/'
+        }),
+        new HtmlWebpackIncludeAssetsPlugin({
+            files: [
+                'settings/index.html'
+            ],
+            assets: [
+                // 'lodash.min.js',
                 'react.production.min.js',
                 'react-dom.production.min.js',
                 'redux.min.js',

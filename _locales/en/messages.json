@@ -692,5 +692,20 @@
     },
     "shortcutDescription": {
         "message": "Open live channels panel"
+    },
+    "settings_tab_providers": {
+        "message": "Providers"
+    },
+    "settings_tab_actions": {
+        "message": "Actions"
+    },
+    "settings_tab_notifications": {
+        "message": "Notifications"
+    },
+    "settings_tab_options": {
+        "message": "Options"
+    },
+    "settings_tab_backup": {
+        "message": "Backup"
     }
 }

@@ -1,0 +1,9 @@
+{
+    "CHANNELS_TAB": 0,
+    "USERS_TAB": 1,
+    "PROVIDERS_TAB": 2,
+    "NOTIFICATIONS_TAB": 3,
+    "ACTIONS_TAB": 4,
+    "OPTIONS_TAB": 5,
+    "BACKUP_TAB": 6
+}

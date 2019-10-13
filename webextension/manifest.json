@@ -51,7 +51,7 @@
     ],
     "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'",
     "options_ui": {
-        "page": "options/index.html",
+        "page": "settings/index.html",
         "browser_style": true
     },
     "commands": {
