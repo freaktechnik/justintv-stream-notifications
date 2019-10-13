@@ -1,5 +1,8 @@
 import Rule from './rule.js';
 
+const NOTIFICATION_PREFIX = 'cn',
+    NOTIFICATION_ICON_SIZE = 100;
+
 export default class Notification extends Rule {
     //TODO also has the change condition available and would probably implement the logic for it?
 
@@ -9,7 +12,11 @@ export default class Notification extends Rule {
     }
 
     buildID(context) {
-        return `${NOTIFICATION_PREFIX}:${context.id}:${this.action}`;
+        return [
+            NOTIFICATION_PREFIX,
+            context.id,
+            this.action
+        ].join(':');
     }
 
     showNotification(context) {

@@ -1,5 +1,5 @@
 /**
- * @todo implement favorites stuff
+ * @todo Implement favorites stuff.
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/livestream

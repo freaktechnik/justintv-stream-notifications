@@ -13,7 +13,9 @@ const PROPERTIES = {
         viewers: 'viewers',
         language: 'language',
         mature: 'mature'
-    };
+    },
+    FIRST = 0,
+    BIGGEST_IMAGE = 300;
 
 export default class Rule {
     static get PROPERTIES() {
@@ -31,7 +33,7 @@ export default class Rule {
     }
 
     buildTarget(context) {
-        let target = this.target;
+        let { target } = this;
         for(const property in PROPERTIES) {
             if(!target.includes('{')) {
                 break;
@@ -39,10 +41,10 @@ export default class Rule {
             if(PROPERTIES.hasOwnProperty(property)) {
                 let val = context[PROPERTIES[property]];
                 if(Array.isArray(val)) {
-                    val = val[0];
+                    val = val[FIRST];
                 }
                 else if(property == 'image') {
-                    val = context.getBestImageForSize(300);
+                    val = context.getBestImageForSize(BIGGEST_IMAGE);
                 }
                 else if(typeof val === 'boolean') {
                     val = val ? 'true' : 'false';

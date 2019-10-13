@@ -13,7 +13,7 @@ import LiveStateConst from '../../live-state.json';
  * @typedef {number} LiveStateIndicator
  */
 /**
- * @typedef {Object} SerializedLiveState
+ * @typedef {object} SerializedLiveState
  * @property {module:channel/live-state~LiveStateIndicator} state
  * @property {module:channel/core~SerializedChannel} alternateChannel
  * @see {@link module:channel/live-state.LiveState}

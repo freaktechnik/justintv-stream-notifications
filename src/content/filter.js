@@ -1,5 +1,6 @@
 /**
- * Node filtering script
+ * Node filtering script.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  */
@@ -8,7 +9,7 @@ import {
 } from './utils.js';
 
 /**
- * @typedef {Object} Rule
+ * @typedef {object} Rule
  * @property {string} [attribute="textContent"] - The attribute this rule checks,
  *                                                if it's "class", individual
  *                                                classes on the Node are
@@ -86,17 +87,17 @@ export function matches(node, query, rules) {
 export function filter(query, root, rules) {
     const nodes = root.children;
 
-    for(let i = 0; i < nodes.length; ++i) {
+    for(const element of nodes) {
         if(query) {
-            if(matches(nodes[i], query, rules)) {
-                show(nodes[i]);
+            if(matches(element, query, rules)) {
+                show(element);
             }
             else {
-                hide(nodes[i]);
+                hide(element);
             }
         }
         else {
-            show(nodes[i]);
+            show(element);
         }
     }
 }

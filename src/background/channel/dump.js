@@ -29,13 +29,13 @@ export const PREFS_MAPPING = Object.freeze({
 });
 
 /**
- * Frozen
+ * Frozen.
  *
- * @typedef {Object} DataDump
- * @property {[Object]} channels - Serialized channels
- * @property {[Object]} users - Serialized users
- * @property {Object} prefs - Collection of important preferences
- * @property {Object} meta - System information
+ * @typedef {object} DataDump
+ * @property {[object]} channels - Serialized channels.
+ * @property {[object]} users - Serialized users.
+ * @property {object} prefs - Collection of important preferences.
+ * @property {object} meta - System information.
  */
 
 /**
@@ -84,7 +84,7 @@ export const create = async (channels, users) => {
 };
 
 /**
- * @typedef {Object} ChannelsAndUsers
+ * @typedef {object} ChannelsAndUsers
  * @property {[module:channel/core.Channel]} channels
  * @property {[module:channel/core.User]} users
  */

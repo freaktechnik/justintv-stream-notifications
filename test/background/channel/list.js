@@ -15,11 +15,13 @@ import { when } from "../../../src/utils";
 import prefs from '../../../src/prefs.json';
 import DatabaseManager from '../../../src/database-manager';
 
-test.serial('get invalid users', (t) => Promise.all([
-    t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
-    t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
-    t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
-]));
+test.serial('get invalid users', (t) => {
+    return Promise.all([
+        t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
+        t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
+        t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+    ]);
+});
 
 test.serial('add-remove user', async (t) => {
     const referenceUser = getUser();
@@ -271,11 +273,13 @@ test.serial('get channel by id', async (t) => {
     t.is(referenceChannel.id, channel.id);
 });
 
-test.serial('get invalid channel', (t) => Promise.all([
-    t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
-    t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-    t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
-]));
+test.serial('get invalid channel', (t) => {
+    return Promise.all([
+        t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
+        t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+        t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    ]);
+});
 
 test.serial('set channel', async (t) => {
     const referenceChannel = await t.context.list.addChannel(getChannel());

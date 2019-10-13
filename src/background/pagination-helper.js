@@ -1,5 +1,6 @@
 /**
- * Pagination helper for APIs with pagination
+ * Pagination helper for APIs with pagination.
+ *
  * @module pagination-helper
  * @author Martin Giger
  * @license MPL-2.0
@@ -7,12 +8,14 @@
 
 /**
  * An SDK request for executing HTTP request.
+ *
  * @external sdk/request
  * @requires sdk/request
  * @see {@link https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/request}
  */
 /**
- * Add-on SDK Response object
+ * Add-on SDK Response object.
+ *
  * @class Response
  * @memberof external:sdk/request
  * @inner
@@ -69,40 +72,40 @@ PaginationHelper.prototype.getPageNumber = function(page, pageSize) {
  * {@link external:sdk/request~Response}.
  *
  * @callback request
- * @argument {string} url
- * @argument {function} callback
- * @argument {boolean} initial - Indicating if this is the first request ran.
- * @return {?Promise} Optionally returns a promise instead of calling the
+ * @param {string} url
+ * @param {Function} callback
+ * @param {boolean} initial - Indicating if this is the first request ran.
+ * @returns {?Promise} Optionally returns a promise instead of calling the
  *         callback function.
  */
 /**
  * A function determining, if the next page should be fetched.
  *
  * @callback fetchNextPage
- * @argument {?} data - Whatever {@link module:pagination-helper~request} returned.
- * @argument {number} pageSize - The expected size of a page.
- * @return {boolean}
+ * @param {?} data - Whatever {@link module:pagination-helper~request} returned.
+ * @param {number} pageSize - The expected size of a page.
+ * @returns {boolean}
  */
 /**
  * @callback completeCallback
- * @argument {Array} data - All the fetched items
+ * @param {Array} data - All the fetched items.
  */
 /**
  * Extracts the items from a page out of an Add-on SDK Response object.
  *
  * @callback getItems
- * @argument {?} data - Whatever {@link module:pagination-helper~request} returned.
- * @return {Array} The extracted items.
+ * @param {?} data - Whatever {@link module:pagination-helper~request} returned.
+ * @returns {Array} The extracted items.
  */
 /**
  * @callback getPageNumber
- * @argument {number|string} page - The current page.
- * @argument {number} pageSize - The size of a page.
- * @argument {?} data - Whatever {@link module:pagination-helper~request} returned.
- * @return {number|string} The next page to fetch.
+ * @param {number|string} page - The current page.
+ * @param {number} pageSize - The size of a page.
+ * @param {?} data - Whatever {@link module:pagination-helper~request} returned.
+ * @returns {number|string} The next page to fetch.
  */
 /**
- * @typedef {Object} PaginationHelperOptions
+ * @typedef {object} PaginationHelperOptions
  * @property {string} url - The base URL to call.
  * @property {number} [pageSize=100] - The number of expected items per full page.
  * @property {module:pagination-helper~request} request

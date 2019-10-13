@@ -1,5 +1,5 @@
 /**
- * Concurrent logic utils
+ * Concurrent logic utils.
  *
  * @author Martin Giger
  * @license MPL-2.0

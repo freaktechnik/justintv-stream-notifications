@@ -19,7 +19,9 @@ class ChangeCondition extends Condition {
         ]);
     }
 
-    checkParam(context, param) {
+    checkParam(context, param) { // eslint-disable-line no-unused-vars
         //TODO who does the change detection? This or is that the context?
     }
 }
+
+export default ChangeCondition;

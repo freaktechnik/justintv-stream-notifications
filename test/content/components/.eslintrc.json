@@ -1,0 +1,9 @@
+{
+    "rules": {
+        "tree-shaking/no-side-effects-in-initialization": 0
+    },
+    "settings": {
+        "import/resolver": "node"
+    },
+    "extends": "@freaktechnik/eslint-config-react"
+}

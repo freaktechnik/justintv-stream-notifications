@@ -128,7 +128,7 @@ class Dailymotion extends GenericProvider {
                             this._list.getUserByName(user.login),
                             this._getFavs(user.login)
                         ]);
-                        user.favorites = favChannels.map((ch) => ch.login);
+                        user.favorites = favChannels.map((ch) => ch.login); // eslint-disable-line require-atomic-updates
                         users.push(user);
 
                         channels.push(...filterExistingFavs(oldUser, favChannels));

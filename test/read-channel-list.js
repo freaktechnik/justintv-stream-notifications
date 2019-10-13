@@ -28,17 +28,37 @@ const setupDB = async () => {
     await Promise.all(users.map((u) => list.addUser(u)));
 };
 
+test.before(setupDB);
+
+test.serial.beforeEach(async (t) => {
+    if(!t.context.list) {
+        t.context.list = new ReadChannelList();
+        t.context.extraChannels = 4;
+        t.context.extraUsers = 2;
+    }
+    t.context.referenceChannel = await t.context.list.getChannelId('foo', 'extra'); // eslint-disable-line require-atomic-updates
+    t.context.referenceUser = await t.context.list.getUserId('foo', 'extra'); // eslint-disable-line require-atomic-updates
+});
+
+test.after.always(async () => {
+    const list = new ChannelList();
+    await list.clear();
+    return list.close();
+});
+
 test("Static properties", (t) => {
     t.true("name" in ReadChannelList);
     t.is(typeof ReadChannelList.name, "string");
 });
 
 
-test.serial('get invalid users', (t) => Promise.all([
-    t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
-    t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
-    t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
-]));
+test.serial('get invalid users', (t) => {
+    return Promise.all([
+        t.throwsAsync(t.context.list.getUser(), Error, 'Missing ID'),
+        t.throwsAsync(t.context.list.getUser(-1), Error, 'unavailable ID'),
+        t.throwsAsync(t.context.list.getUser('doesnot', 'exist'), Error, 'Unavailable user info')
+    ]);
+});
 
 test.serial('get user by login and type', async (t) => {
     const referenceUser = await t.context.list.getUser(t.context.referenceUser),
@@ -108,11 +128,13 @@ test.serial('get channel by id', async (t) => {
     t.is(t.context.referenceChannel, channel.id);
 });
 
-test.serial('get invalid channel', (t) => Promise.all([
-    t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
-    t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
-    t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
-]));
+test.serial('get invalid channel', (t) => {
+    return Promise.all([
+        t.throwsAsync(t.context.list.getChannel(), Error, 'No ID'),
+        t.throwsAsync(t.context.list.getChannel(-1), Error, 'Invalid ID'),
+        t.throwsAsync(t.context.list.getChannel('doesnot', 'exist'), Error, 'Invalid info')
+    ]);
+});
 
 test.serial('get channel id', async (t) => {
     const referenceChannel = await t.context.list.getChannel(t.context.referenceChannel);
@@ -213,22 +235,4 @@ test('_waitForCursor error', async (t) => {
 
     request.onerror(new Error());
     await t.throwsAsync(p);
-});
-
-test.before(setupDB);
-
-test.serial.beforeEach(async (t) => {
-    if(!t.context.list) {
-        t.context.list = new ReadChannelList();
-        t.context.extraChannels = 4;
-        t.context.extraUsers = 2;
-    }
-    t.context.referenceChannel = await t.context.list.getChannelId('foo', 'extra');
-    t.context.referenceUser = await t.context.list.getUserId('foo', 'extra');
-});
-
-test.after.always(async () => {
-    const list = new ChannelList();
-    await list.clear();
-    return list.close();
 });

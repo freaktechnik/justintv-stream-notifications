@@ -12,7 +12,7 @@
     "url": "https://github.com/freaktechnik/justintv-stream-notifications/issues"
   },
   "engines": {
-    "node": ">= 10.1.0"
+    "node": ">= 11.14.0"
   },
   "files": [
     "webextension/assets/images/*",
@@ -47,22 +47,24 @@
     "@babel/plugin-transform-react-inline-elements": "^7.2.0",
     "@babel/preset-react": "^7.6.3",
     "@babel/register": "^7.6.2",
+    "@babel/traverse": "^7.1.6",
+    "@babel/types": "^7.2.0",
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
-    "@freaktechnik/eslint-config-babel": "^6.6.2",
-    "@freaktechnik/eslint-config-base": "^6.6.2",
-    "@freaktechnik/eslint-config-extension": "^6.6.3",
-    "@freaktechnik/eslint-config-node": "^6.6.2",
-    "@freaktechnik/eslint-config-react": "^6.6.3",
-    "@freaktechnik/eslint-config-test": "^6.6.2",
-    "@freaktechnik/eslint-config-webpack": "^6.6.2",
+    "@freaktechnik/eslint-config-babel": "^7.0.0",
+    "@freaktechnik/eslint-config-base": "^7.0.0",
+    "@freaktechnik/eslint-config-extension": "^7.0.0",
+    "@freaktechnik/eslint-config-node": "^7.0.0",
+    "@freaktechnik/eslint-config-react": "^7.0.0",
+    "@freaktechnik/eslint-config-test": "^7.0.0",
+    "@freaktechnik/eslint-config-webpack": "^7.0.0",
     "@semantic-release/commit-analyzer": "^6.3.0",
     "@semantic-release/exec": "^3.3.7",
     "@semantic-release/git": "^7.0.16",
     "@semantic-release/github": "^5.5.3",
     "@semantic-release/release-notes-generator": "^7.3.0",
     "ajv": "^6.10.2",
-    "ava": "^1.4.1",
+    "ava": "^2.4.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-module-resolver": "^3.2.0",
@@ -74,7 +76,7 @@
     "element-dataset": "^2.2.6",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
-    "eslint": "^5.16.0",
+    "eslint": "^6.5.1",
     "event-target-shim": "^5.0.1",
     "fake-indexeddb": "^2.1.1",
     "fetch-headers": "^2.0.0",
@@ -125,6 +127,9 @@
     "require": [
       "./test/helpers/register.js",
       "./test/helpers/setup-browser-env.js"
+    ],
+    "helpers": [
+      "test/helpers/**/*"
     ]
   },
   "babel": {

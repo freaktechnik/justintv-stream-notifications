@@ -19,6 +19,23 @@ const TESTUSER = {
     type: "twitch"
 };
 
+let oldQS;
+test.before(() => {
+    const provider = providers[TESTUSER.type];
+    oldQS = provider._qs;
+
+    provider._setQs(getMockAPIQS(oldQS, TESTUSER.type, false));
+});
+
+test.after(() => {
+    providers[TESTUSER.type]._setQs(oldQS);
+});
+
+test.afterEach(() => {
+    browser.permissions.contains.flush();
+});
+
+
 const testProviderCredentials = async (t, p) => {
     const cc = new ChannelController();
 
@@ -291,19 +308,3 @@ test('set theme', (t) => {
 
 test.todo("add channel opens channels manager if permissions were not granted");
 test.todo("add user opens channels manager if permissions were not granted");
-
-let oldQS;
-test.before(() => {
-    const provider = providers[TESTUSER.type];
-    oldQS = provider._qs;
-
-    provider._setQs(getMockAPIQS(oldQS, TESTUSER.type, false));
-});
-
-test.afterEach(() => {
-    browser.permissions.contains.flush();
-});
-
-test.after(() => {
-    providers[TESTUSER.type]._setQs(oldQS);
-});

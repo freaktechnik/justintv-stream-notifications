@@ -19,6 +19,7 @@ const ITEM_ARGS = [
 
 /**
  * A generic thing.
+ *
  * @class
  */
 class Item {
@@ -34,7 +35,8 @@ class Item {
         this._slug = "";
         /**
          * An object with user avatars, by their size in pixels as property name.
-         * @type {Object.<(string|number)>}
+         *
+         * @type {object.<(string|number)>}
          */
         this.image = {};
         if(id) {
@@ -134,13 +136,13 @@ class Item {
         return capitalize(this.uname);
     }
     /**
-     * Serialized version of {@link module:channel/core~Item}
+     * Serialized version of {@link module:channel/core~Item}.
      *
-     * @typedef {Object} SerializedItem
+     * @typedef {object} SerializedItem
      * @property {string} uname
      * @property {string} login
      * @property {string} slug
-     * @property {Object.<(string|number),string>} image
+     * @property {object.<(string|number), string>} image
      * @property {string} type
      * @property {number} [id]
      */
@@ -194,6 +196,7 @@ class User extends Item {
 
         /**
          * The favorite channels of this user as an array of logins.
+         *
          * @type {[string]}
          */
         this.favorites = [];
@@ -250,6 +253,7 @@ class Channel extends Item {
          * An array of URLs that will contain a player of the stream. The first one is
          * treated as the main channel page and opened when the user clicks on the
          * stream.
+         *
          * @type {[string]}
          */
         this.url = [];

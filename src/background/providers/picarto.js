@@ -1,5 +1,6 @@
 /**
  * Provider for picarto.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/picarto

@@ -1,5 +1,5 @@
 /**
- * Omnibox view controller
+ * Omnibox view controller.
  *
  * @author Martin Giger
  * @license MPL-2.0

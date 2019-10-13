@@ -10,8 +10,8 @@ import sinon from 'sinon';
 
 test.afterEach.always(async () => {
     await DatabaseManager.close();
-    DatabaseManager.loading = null;
-    DatabaseManager.error = null;
+    DatabaseManager.loading = null; // eslint-disable-line require-atomic-updates
+    DatabaseManager.error = null; // eslint-disable-line require-atomic-updates
 });
 
 test.serial('opening open list', async (t) => {
@@ -54,7 +54,7 @@ test.serial('Cant open list', async (t) => {
     const error = await t.throwsAsync(DatabaseManager.open());
     t.is(DatabaseManager.error, error);
 
-    window.indexedDB.open = open;
+    window.indexedDB.open = open; // eslint-disable-line require-atomic-updates
 });
 
 test.serial('registration list', (t) => {
@@ -103,7 +103,7 @@ test.serial('close list', async (t) => {
 
     t.true(DatabaseManager.emit.calledOnce);
 
-    DatabaseManager.emit = oldEmit;
+    DatabaseManager.emit = oldEmit; // eslint-disable-line require-atomic-updates
 });
 
 test.serial('open list error', async (t) => {
@@ -126,7 +126,7 @@ test.serial('open list error', async (t) => {
     t.is(DatabaseManager.db, null);
     t.is(DatabaseManager.error, error);
 
-    window.indexedDB.open = open;
+    window.indexedDB.open = open; // eslint-disable-line require-atomic-updates
 });
 
 test.serial('open list error without trying', async (t) => {
@@ -150,7 +150,7 @@ test.serial('open list error without trying', async (t) => {
     t.is(DatabaseManager.db, null);
     t.is(DatabaseManager.error, error);
 
-    window.indexedDB.open = open;
+    window.indexedDB.open = open; // eslint-disable-line require-atomic-updates
 });
 
 test.todo('close event - fake idb doesnt allow close events');

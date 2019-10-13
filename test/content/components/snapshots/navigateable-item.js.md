@@ -1,4 +1,4 @@
-# Snapshot report for `test/list/components/navigateable-item.js`
+# Snapshot report for `test/content/components/navigateable-item.js`
 
 The actual snapshot is saved in `navigateable-item.js.snap`.
 

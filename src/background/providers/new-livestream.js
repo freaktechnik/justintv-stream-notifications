@@ -1,5 +1,6 @@
 /**
- * New livestream provider. For API reverseenigneering see Issue #99
+ * New livestream provider. For API reverseenigneering see Issue #99.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/new-livestream
@@ -180,9 +181,9 @@ class NewLivestream extends GenericProvider {
 
             if(info.parsedJSON && !("message" in info.parsedJSON)) {
                 channel.live.setLive(info.parsedJSON.is_live);
-                channel.thumbnail = info.parsedJSON.thumbnail_url;
+                channel.thumbnail = info.parsedJSON.thumbnail_url; // eslint-disable-line require-atomic-updates
             }
-            channel.live.created = Date.parse(event.start_time);
+            channel.live.created = Date.parse(event.start_time); // eslint-disable-line require-atomic-updates
         }
         return channel;
     }

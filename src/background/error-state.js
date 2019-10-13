@@ -145,7 +145,7 @@ export default class ErrorState extends EventTarget {
         if(!ErrorState.currentGravity || ErrorState.currentGravity < gravity) {
             ErrorState.currentGravity = gravity;
             ErrorState.replaceIcon();
-            ErrorState.oldPopupURL = await ErrorState.replacePanel("popup/errorState/index.html");
+            ErrorState.oldPopupURL = await ErrorState.replacePanel("popup/errorState/index.html"); // eslint-disable-line require-atomic-updates
         }
     }
 

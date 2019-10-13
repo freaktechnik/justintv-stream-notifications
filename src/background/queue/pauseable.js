@@ -8,7 +8,7 @@ import RequestQueue from './index.js';
 import { emit } from "../../utils.js";
 
 /**
- * @typedef {Object} QueueOptions
+ * @typedef {object} QueueOptions
  * @property {number} interval - Interval to fetch batches in.
  * @property {number} amount - Percentage of the queue to fetch per batch.
  * @property {number} maxSize - Maximum number of requests per batch.

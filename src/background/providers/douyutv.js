@@ -4,7 +4,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/douyutv
- * @todo support adding by url slug name
+ * @todo Support adding by url slug name.
  */
 import { Channel } from '../channel/core.js';
 import GenericProvider from "./generic-provider.js";

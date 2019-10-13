@@ -11,10 +11,12 @@ class SaveStateCondition extends Condition {
     }
 
     getContextDescriptor(context) {
-        return `${(context.id ? 'saved' : 'unsaved')}:${context.live ? 'channel' : 'user'}`;
+        return `${(context.id ? 'saved' : 'unsaved')}:${(context.live ? 'channel' : 'user')}`;
     }
 
     checkParam(context, param) {
         return this.getContextDescriptor(context) === param;
     }
 }
+
+export default SaveStateCondition;

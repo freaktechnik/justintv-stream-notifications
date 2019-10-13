@@ -1,5 +1,6 @@
 /**
- * MLG.tv Provider
+ * MLG.tv Provider.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/mlg
@@ -179,7 +180,7 @@ class MLG extends GenericProvider {
         if(!game) {
             const data = await this._qs.queueRequest(gameURL);
             if(data.parsedJSON && data.parsedJSON.data.items && data.parsedJSON.data.items.length) {
-                games = data.parsedJSON.data.items;
+                games = data.parsedJSON.data.items; // eslint-disable-line require-atomic-updates
                 return data.parsedJSON.data.items.find((g) => g.id == id).name;
             }
 

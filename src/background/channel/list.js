@@ -132,7 +132,7 @@ export default class ChannelList extends ReadChannelList {
             store = transaction.objectStore("channels"),
             req = store.add(channel.serialize());
         await this._waitForRequest(req);
-        channel.id = req.result;
+        channel.id = req.result; // eslint-disable-line require-atomic-updates
         this.idCache.set(channel.type + channel.login, channel.id);
         DatabaseManager.emit("channelsadded", [ channel ]);
         return channel;
@@ -207,7 +207,7 @@ export default class ChannelList extends ReadChannelList {
      * @param {module:channel/core.User} user - The channel to add.
      * @fires module:channel/list.ChannelList#useradded
      * @returns {module:channel/core.User} The newly added User with ID.
-     * @throws {Error} if the user already exists.
+     * @throws {Error} If the user already exists.
      */
     async addUser(user) {
         await this._ready;
@@ -219,7 +219,7 @@ export default class ChannelList extends ReadChannelList {
             store = transaction.objectStore("users"),
             req = store.add(user.serialize());
         await this._waitForRequest(req);
-        user.id = req.result;
+        user.id = req.result; // eslint-disable-line require-atomic-updates
         DatabaseManager.emit("useradded", user);
         return user;
     }
@@ -234,17 +234,18 @@ export default class ChannelList extends ReadChannelList {
     async setChannel(channel) {
         await this._ready;
         if(!("id" in channel)) {
-            channel.id = await this.getChannelId(channel.login, channel.type);
+            channel.id = await this.getChannelId(channel.login, channel.type); // eslint-disable-line require-atomic-updates
         }
         const transaction = this.db.transaction("channels", "readwrite"),
             store = transaction.objectStore("channels");
 
-        channel.lastModified = Date.now();
+        channel.lastModified = Date.now(); // eslint-disable-line require-atomic-updates
 
         const req = store.put(channel.serialize());
         await this._waitForRequest(req);
         this.idCache.set(channel.type + channel.login, req.result);
-        channel.id = req.result; //TODO was there a reason to fetch the channel here?
+        //TODO was there a reason to fetch the channel here?
+        channel.id = req.result; // eslint-disable-line require-atomic-updates
         DatabaseManager.emit("channelupdated", channel);
         return channel;
     }
@@ -260,13 +261,13 @@ export default class ChannelList extends ReadChannelList {
     async setUser(user) {
         await this._ready;
         if(!("id" in user)) {
-            user.id = await this.getUserId(user.login, user.type);
+            user.id = await this.getUserId(user.login, user.type); // eslint-disable-line require-atomic-updates
         }
         const transaction = this.db.transaction("users", "readwrite"),
             store = transaction.objectStore("users"),
             req = store.put(user.serialize());
         await this._waitForRequest(req);
-        user.id = req.result;
+        user.id = req.result; // eslint-disable-line require-atomic-updates
         DatabaseManager.emit("userupdated", user);
         return user;
     }

@@ -1,5 +1,5 @@
 import Condition from './condition.js';
-import LiveState from '../../live-state.json';
+import LiveState from '../../../live-state.json';
 
 export default class LiveStateCondition extends Condition {
     static get options() {

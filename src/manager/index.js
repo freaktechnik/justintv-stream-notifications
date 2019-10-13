@@ -1,5 +1,5 @@
 /**
- * Channels Manager content script
+ * Channels Manager content script.
  *
  * @author Martin Giger
  * @license MPL 2.0
@@ -146,17 +146,17 @@ function resetDialogForms() {
 
 function showOptions() {
     const { options } = document.querySelector("#providerDropdown");
-    for(let i = 0; i < options.length; ++i) {
-        options[i].disabled = !providers[options[i].value].enabled;
+    for(const element of options) {
+        element.disabled = !providers[element.value].enabled;
     }
 }
 
 function hideOptions() {
     const { options } = document.querySelector("#providerDropdown");
-    for(let i = 0; i < options.length; ++i) {
-        if(!providers[options[i].value].supports.favorites) {
-            options[i].disabled = true;
-            options[i].selected = false;
+    for(const element of options) {
+        if(!providers[element.value].supports.favorites) {
+            element.disabled = true;
+            element.selected = false;
         }
     }
 }
@@ -306,8 +306,8 @@ document.addEventListener("keydown", (evt) => {
             }
 
             const items = listEl.querySelectorAll("option:not([hidden])");
-            for(let i = 0; i < items.length; ++i) {
-                items[i].selected = true;
+            for(const element of items) {
+                element.selected = true;
             }
         }
         else if(evt.key == "Delete") {

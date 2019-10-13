@@ -15,7 +15,7 @@ test("GenericProvider", async (t) => {
     t.is(genericProvider._supportsFavorites, genericProvider.supports.favorites);
     t.is(genericProvider._supportsCredentials, genericProvider.supports.credentials);
     t.is(genericProvider._supportsFeatured, genericProvider.supports.featured);
-    genericProvider._enabled = false;
+    genericProvider._enabled = false; // eslint-disable-line require-atomic-updates
     t.is(genericProvider.supports.favorites, genericProvider.enabled);
     t.is(genericProvider.supports.credentials, genericProvider.enabled);
     t.is(genericProvider.supports.featured, genericProvider.enabled);

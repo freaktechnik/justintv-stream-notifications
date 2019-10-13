@@ -37,6 +37,11 @@ const PREFS = {
         browser.storage.local.get.callsFake((props) => Promise.resolve(props));
     };
 
+test.beforeEach(() => {
+    browser.tabs.query.resolves([]);
+    resetPrefs();
+});
+
 let id = 0;
 const testNotifierNotifications = async (t, f) => {
     const n = new Notifier();
@@ -241,11 +246,6 @@ test.serial("onShown triggers notification sound", (t) => {
 
     t.true(browser.runtime.sendMessage.calledWith("@notification-sound", "new-notification"));
     browser.runtime.sendMessage.flush();
-});
-
-test.beforeEach(() => {
-    browser.tabs.query.resolves([]);
-    resetPrefs();
 });
 
 const fixture = [

@@ -58,6 +58,7 @@ const REFRESH_PROFILE_URL = "https://support.mozilla.org/kb/refresh-firefox-rese
 /**
  * Controller for all the channel stuff. Handles getting info from providers
  * and abstracts the {@link module:channel/list.ChannelList} complications away.
+ *
  * @extends external:EventTarget
  */
 export default class ChannelController extends EventTarget {
@@ -518,7 +519,7 @@ export default class ChannelController extends EventTarget {
      * @param {string} type - Provider of the channel.
      * @returns {module:channel/core.Channel} Channel object for the
      *          requested channel.
-     * @throws {Error} when the specified type is not known.
+     * @throws {Error} When the specified type is not known.
      */
     async getExternalChannel(login, type) {
         if(!(type in providers)) {

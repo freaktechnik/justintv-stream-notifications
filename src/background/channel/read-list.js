@@ -75,7 +75,7 @@ export default class DeserializedReadChannelList extends ReadChannelList {
      *
      * @param {string} [type] - Check the live state of just the channels of the
      *                             specified type.
-     * @todo make live an index and then get all the channels that are live and
+     * @todo Make live an index and then get all the channels that are live and
      *       count those. That should be slightly faster than this O(n)
      *       operation on the array of all channels.
      * @returns {boolean} Resolves to a boolean indicating, if there are any live

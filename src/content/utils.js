@@ -1,5 +1,6 @@
 /**
  * Helper function script.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  */

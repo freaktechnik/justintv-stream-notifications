@@ -77,8 +77,14 @@ test('not', async (t) => {
     t.false(await not(tp));
 });
 
-test('and reject', (t) => t.throwsAsync(and(Promise.resolve(true), Promise.reject(new Error())), Error));
+test('and reject', (t) => {
+    return t.throwsAsync(and(Promise.resolve(true), Promise.reject(new Error())), Error);
+});
 
-test('or reject', (t) => t.throwsAsync(or(Promise.resolve(false), Promise.reject(new Error())), Error));
+test('or reject', (t) => {
+    return t.throwsAsync(or(Promise.resolve(false), Promise.reject(new Error())), Error);
+});
 
-test('not reject', (t) => t.throwsAsync(not(Promise.reject(new Error())), Error));
+test('not reject', (t) => {
+    return t.throwsAsync(not(Promise.reject(new Error())), Error);
+});

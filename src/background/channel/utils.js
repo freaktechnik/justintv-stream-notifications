@@ -86,7 +86,7 @@ const getRebroadcastTitlePatterns = async () => {
      * @param {module:channel/core.Channel} channel - Channel to potentially add uptime to.
      * @param {callback} getOldChannel - Callback resolving to the current version of the channel.
      * @returns {module:channel/core.Channel} Potentially updated channel.
-     * @throws {TypeError} when not passing a valid channel.
+     * @throws {TypeError} When not passing a valid channel.
      */
     fillInUptime = async (channel, getOldChannel) => {
         if(!(channel instanceof Channel)) {
@@ -97,10 +97,10 @@ const getRebroadcastTitlePatterns = async () => {
         }
         const oldChannel = await getOldChannel(channel);
         if(oldChannel && await oldChannel.live.isLive(LiveState.TOWARD_LIVE)) {
-            channel.live.created = oldChannel.live.created;
+            channel.live.created = oldChannel.live.created; // eslint-disable-line require-atomic-updates
         }
         else {
-            channel.live.created = Date.now();
+            channel.live.created = Date.now(); // eslint-disable-line require-atomic-updates
         }
         return channel;
     };
@@ -126,8 +126,8 @@ export const formatChannel = async (channel, getOldChannel, patterns) => {
         }
         if(titleIsRebroadcast(channel.title, patterns)) {
             const liveSince = channel.live.created;
-            channel.live = new LiveState(LiveState.REBROADCAST);
-            channel.live.created = liveSince;
+            channel.live = new LiveState(LiveState.REBROADCAST); // eslint-disable-line require-atomic-updates
+            channel.live.created = liveSince; // eslint-disable-line require-atomic-updates
         }
     }
     if(channel.live.alternateChannel && channel.live.alternateChannel.live.state === LiveState.REDIRECT && channel.live.alternateChannel.title) {
@@ -135,7 +135,7 @@ export const formatChannel = async (channel, getOldChannel, patterns) => {
             patterns = await getRebroadcastTitlePatterns();
         }
         if(titleIsRebroadcast(channel.live.alternateChannel.title, patterns)) {
-            channel.live.alternateChannel.live.state = LiveState.REBROADCAST;
+            channel.live.alternateChannel.live.state = LiveState.REBROADCAST; // eslint-disable-line require-atomic-updates
         }
     }
     channel = await fillInUptime(channel, getOldChannel);

@@ -28,8 +28,15 @@ test.before(async () => {
     await Promise.all(users.map((u) => list.addUser(u)));
 });
 
+test.after.always(async () => {
+    const list = new ChannelList();
+    await list.clear();
+    return list.close();
+});
+
 test.beforeEach(async (t) => {
     if(!t.context.list) {
+        /* eslint-disable require-atomic-updates */
         t.context.list = new ProviderChannelList(PROVIDER);
         t.context.extraChannels = 2;
         t.context.extraUsers = 1;
@@ -38,13 +45,8 @@ test.beforeEach(async (t) => {
         const allList = new ReadChannelList();
         t.context.notUser = await allList.getUser('bar', NOT_PROVIDER);
         t.context.notChannel = await allList.getChannel('lorem', NOT_PROVIDER);
+        /* eslint-enable require-atomic-updates */
     }
-});
-
-test.after.always(async () => {
-    const list = new ChannelList();
-    await list.clear();
-    return list.close();
 });
 
 test("constructor", (t) => {

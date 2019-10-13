@@ -1,5 +1,5 @@
 /**
- * Model for the Notifications
+ * Model for the Notifications.
  *
  * @author Martin Giger
  * @license MPL-2.0
@@ -17,6 +17,7 @@ const _ = browser.i18n.getMessage,
 
     /**
      * Size of the image shown in the notification.
+     *
      * @const {number}
      * @default 100
      */

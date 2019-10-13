@@ -1,5 +1,5 @@
 import test from 'ava';
-import * as navigateableKeys from '../../../src/list/constants/navigateable';
+import * as navigateableKeys from '../../../src/content/constants/navigateable';
 
 test('keys only occur in one constant', (t) => {
     const keys = new Set();

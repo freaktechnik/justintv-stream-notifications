@@ -49,7 +49,9 @@ test('when onproperty', async (t) => {
     t.is(result, 'foo bar');
 });
 
-test('when non-emitter', (t) => t.notThrowsAsync(when({}, 'event')));
+test('when non-emitter', (t) => {
+    return t.notThrowsAsync(when({}, 'event'));
+});
 
 test('emit', (t) => {
     const emitter = {

@@ -1,19 +1,17 @@
 export default class Condition {
     static get options() {
-        return [
-            'any'
-        ];
+        return [ 'any' ];
     }
 
     static get defaultValue() {
         return 'any';
     }
 
-    constructor(param) {
+    constructor(params) {
         this.params = params;
     }
 
-    checkParam(context, param) {
+    checkParam(context, param) { // eslint-disable-line no-unused-vars
         throw new Error("Not implemented");
     }
 

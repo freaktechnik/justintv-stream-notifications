@@ -226,7 +226,7 @@ export default class ChannelsManager extends EventTarget {
     /**
      * Add providers to the list of available providers in the manager.
      *
-     * @param {Object.<module:providers/generic-provider.GenericProvider>} providers
+     * @param {object.<module:providers/generic-provider.GenericProvider>} providers
      *                                  - Availabe providers in serialized form.
      * @returns {undefined}
      */

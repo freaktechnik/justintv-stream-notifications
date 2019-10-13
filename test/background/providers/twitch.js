@@ -58,8 +58,8 @@ test.serial("Hosting", async (t) => {
     t.is(ret.live.alternateUsername, "NVIDIA");
 
     await DatabaseManager.close();
-    DatabaseManager.loading = null;
-    DatabaseManager.error = null;
+    DatabaseManager.loading = null; // eslint-disable-line require-atomic-updates
+    DatabaseManager.error = null; // eslint-disable-line require-atomic-updates
 });
 
 test("Twitch channel language", async (t) => {

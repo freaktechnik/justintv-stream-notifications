@@ -1,0 +1,22 @@
+.label {
+    width: 40%;
+    text-align: end;
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-right: 1em;
+}
+
+.label small,
+.label label {
+    display: block;
+    text-align: end;
+}
+
+input:not([type="checkbox"]),
+select {
+    vertical-align: top;
+    display: inline-block;
+    width: 59%;
+    margin: 0;
+    box-sizing: border-box;
+}

@@ -1,10 +1,11 @@
 /**
  * Exports each provider as a property named after the provider's type. Each
  * provider is assumed to be frozen.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers
- * @todo only initialize the providers that have items in the list.
+ * @todo Only initialize the providers that have items in the list.
  */
 
 import twitch from "./twitch.js";

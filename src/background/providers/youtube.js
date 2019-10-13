@@ -1,5 +1,6 @@
 /**
- * YouTube provider
+ * YouTube provider.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/youtube
@@ -29,10 +30,10 @@ class YouTube extends GenericProvider {
         /**
          * Get the name for a category. Does caching.
          *
-         * @argument {string} categoryId
-         * @return {string}
+         * @param {string} categoryId
+         * @returns {string}
          * @async
-         * @method
+         * @function
          */
         this._getCategory = memoize(async (categoryId) => {
             const data = await this._qs.queueRequest(`${baseURL}videoCategories?${querystring.stringify({
@@ -224,6 +225,7 @@ class YouTube extends GenericProvider {
                                 ret.language = sub.snippet.defaultLanguage;
                                 return ret;
                             }));
+                        /* eslint-disable require-atomic-updates */
                         ch.image = {
                             "88": item.snippet.thumbnails.default.url,
                             "240": item.snippet.thumbnails.high.url
@@ -231,6 +233,7 @@ class YouTube extends GenericProvider {
                         ch.uname = item.snippet.title;
                         ch.id = oldUser.id;
                         ch.favorites = subscriptions.map((sub) => sub.snippet.resourceId.channelId);
+                        /* eslint-enable require-atomic-updates */
 
                         return [
                             ch,
@@ -368,7 +371,7 @@ class YouTube extends GenericProvider {
             })}`);
             if(!response.parsedJSON || !response.parsedJSON.items || !response.parsedJSON.items.length) {
                 channel.live.setLive(false);
-                channel.url = [ `https://youtube.com/channel/${channel.login}` ];
+                channel.url = [ `https://youtube.com/channel/${channel.login}` ]; // eslint-disable-line require-atomic-updates
                 return null;
             }
             const [ item ] = response.parsedJSON.items;

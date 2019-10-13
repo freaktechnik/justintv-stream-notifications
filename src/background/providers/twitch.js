@@ -1,5 +1,6 @@
 /**
  * Twitch Provider.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/twitch

@@ -1,5 +1,6 @@
 /**
  * Serializes the providers so they can be sent over a message port.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/serialized
@@ -10,7 +11,7 @@ import allProviders from './index.js';
 /**
  * Frozen.
  *
- * @typedef {Object} SerializedProvider
+ * @typedef {object} SerializedProvider
  * @property {string} name
  * @property {module:providers/generic-provider~ProviderSupports} supports
  * @property {boolean} enabled
@@ -20,9 +21,9 @@ import allProviders from './index.js';
 /**
  * Serializes the providers objects so they can get passed as a message.
  *
- * @param {Object.<module:providers/generic-provider.GenericProvider>} providers
+ * @param {object.<module:providers/generic-provider.GenericProvider>} providers
  *                                              - Providers object to serialize.
- * @returns {Object<module:providers/serialized~SerializedProvider>}
+ * @returns {object<module:providers/serialized~SerializedProvider>}
  *         Frozen Object of serialized providers by id.
  */
 const serializeProviders = (providers) => {
@@ -41,6 +42,6 @@ const serializeProviders = (providers) => {
 
 /**
  * @see {@link module:providers/serialized~serializeProviders}
- * @type {Object<string, module:providers/serialized~SerializedProvider>}
+ * @type {object<string, module:providers/serialized~SerializedProvider>}
  */
 export default serializeProviders(allProviders);

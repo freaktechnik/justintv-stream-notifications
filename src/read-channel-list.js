@@ -124,7 +124,7 @@ export default class ReadChannelList extends EventTarget {
      * @param {(number|string)} id - ID of login of the channel.
      * @param {string} [type] - Type of the channel if a login was passed as
      *                             first argument.
-     * @returns {Object} Requested channel instance.
+     * @returns {object} Requested channel instance.
      * @throws The channel doesn't exist or no arguments passed.
      */
     async getChannel(id, type) {
@@ -152,7 +152,7 @@ export default class ReadChannelList extends EventTarget {
      * @param {(number|string)} id - ID of login of the user.
      * @param {string} [type] - Type of the user if a login was passed as first
      *                             argument.
-     * @returns {Object} Requested user instance.
+     * @returns {object} Requested user instance.
      * @throws The user doesn't exist or no arguments passed.
      */
     async getUser(id, type) {
@@ -204,7 +204,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - Type all the channels should have. If left out,
      *                             all channels are returned.
-     * @returns {[Object]} Array of all channels for
+     * @returns {[object]} Array of all channels for
      *          the given type. May be empty.
      */
     async getChannelsByType(type) {
@@ -231,7 +231,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {string} [type] - The type all returned users should have. If left
      *                             out all users are returned.
-     * @returns {[Object]} Array of users for the given
+     * @returns {[object]} Array of users for the given
      *          type. May be empty.
      */
     async getUsersByType(type) {
@@ -260,7 +260,7 @@ export default class ReadChannelList extends EventTarget {
      *
      * @param {module:channel/core.Channel} channel - Channel to search users's
      *                                                  favorites for.
-     * @returns {[Object]} List of users that follow the
+     * @returns {[object]} List of users that follow the
      *          given channel.
      */
     async getUsersByFavorite(channel) {
@@ -272,7 +272,7 @@ export default class ReadChannelList extends EventTarget {
      * Get all channels that are favorited by a user.
      *
      * @param {module:channel/core.User} user - User to get the favorites of.
-     * @returns {[Object]} List of channels a user
+     * @returns {[object]} List of channels a user
      *          follows.
      */
     async getChannelsByUserFavorites(user) {

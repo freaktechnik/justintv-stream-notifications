@@ -4,7 +4,7 @@
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/beam
- * @todo checkout socket based events
+ * @todo Checkout socket based events.
  */
 import {
     Channel, User

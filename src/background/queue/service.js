@@ -31,11 +31,11 @@ const queue = new UpdateQueue(),
  * @param {string} url
  */
 /**
- * @typedef {Object} UpdateReuqest
+ * @typedef {object} UpdateReuqest
  * @property {module:providers/generic-provider~GetURLs} getURLs
  * @property {module:queue/service~updateRequestCallback} onComplete
  * @property {module:queue/service~QueuePriority} [priority=QueueService.HIGH_PRIORITY]
- * @property {Object} [headers={}]
+ * @property {object} [headers={}]
  * @property {module:queue/service~requeue} [requeue=defaultRequeue]
  */
 
@@ -103,7 +103,7 @@ class QueueService {
      * Immediately run a request to the given URL.
      *
      * @param {string} url - The URL to request.
-     * @param {Object.<string>} [headers={}] - An object with the headers
+     * @param {object.<string>} [headers={}] - An object with the headers
      *                                                 to send.
      * @param {module:queue/service~requeue} [requeue=(r) => r.status > 499]
      *                             - Determines if the request should be re-run.
@@ -259,9 +259,9 @@ export const resume = () => {
 };
 
 /**
- * @typedef {Object} QueueServiceListener
- * @property {function} paused
- * @property {function} resumed
+ * @typedef {object} QueueServiceListener
+ * @property {Function} paused
+ * @property {Function} resumed
  */
 
 /**

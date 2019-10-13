@@ -99,12 +99,14 @@ class ListView extends EventTarget {
 
     /**
      * Display non-live channels as live but sort them to the bottom if possible.
+     *
      * @const {module:list~NonLiveDisplay}
      * @default 1
      */
     static LIVE_BOTTOM = LIVE_BOTTOM;
     /**
      * Display non-live channels in their own category.
+     *
      * @const {module:list~NonLiveDisplay}
      * @default 2
      */
@@ -112,6 +114,7 @@ class ListView extends EventTarget {
     /**
      * Display non-live channels as offline (ignore their liveness). This is handled
      * directly in this module, so the channel gets passed as going offline.
+     *
      * @const {module:list~NonLiveDisplay}
      * @default 3
      */

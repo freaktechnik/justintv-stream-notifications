@@ -5,14 +5,12 @@ import SettingPage from './setting-page.jsx';
 import { connect } from 'react-redux';
 import storeTypes from '../store-types.json';
 
-const Settings = (props) => {
-    return (
-        <main className="tabbed">
-            <TabStrip active={ props.active } onTabSelect={ props.onTabSelect }/>
-            <SettingPage active={ props.active }/>
-        </main>
-    );
-};
+const Settings = (props) => (
+    <main className="tabbed">
+        <TabStrip active={ props.active } onTabSelect={ props.onTabSelect }/>
+        <SettingPage active={ props.active }/>
+    </main>
+);
 
 Settings.propTypes = {
     onTabSelect: PropTypes.func,

@@ -1,5 +1,5 @@
 /**
- * Build query strings from an Object
+ * Build query strings from an Object.
  *
  * @author Martin Giger
  * @license MPL-2.0

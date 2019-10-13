@@ -1,5 +1,6 @@
 /**
- * Queue infrastructure for updating info
+ * Queue infrastructure for updating info.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module queue
@@ -8,7 +9,7 @@ import prefs from '../../preferences.js';
 
 /**
  * @typedef {external:Response} Response
- * @property {Object} parsedJSON - Parsed JSON response.
+ * @property {object} parsedJSON - Parsed JSON response.
  */
 
 /**
@@ -16,11 +17,11 @@ import prefs from '../../preferences.js';
  * @param {module:queue~Response} response
  */
 /**
- * @typedef {Object} Request
+ * @typedef {object} Request
  * @property {string} url
- * @property {Object} [headers]
+ * @property {object} [headers]
  * @property {module:queue~OnComplete} onComplete
- * @property {function} [onError]
+ * @property {Function} [onError]
  */
 /**
  * @typedef {module:queue~Request} RequestInfo
@@ -44,7 +45,7 @@ export default class RequestQueue extends EventTarget {
          */
         this.queue = [];
         /**
-         * @type {[function]}
+         * @type {[Function]}
          * @protected
          */
         this.workers = new Set();

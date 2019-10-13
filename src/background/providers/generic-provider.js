@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars,eslint-comments/disable-enable-pair */
 /**
- * A generic provider class
+ * A generic provider class.
+ *
  * @author Martin Giger
  * @license MPL-2.0
  * @module providers/generic-provider
@@ -56,10 +57,10 @@ const _ = browser.i18n.getMessage,
  * @returns {[module:channel/core.Channel]} Channels that were updated.
  */
 /**
- * @typedef {Object} UpdateRequestConfig
+ * @typedef {object} UpdateRequestConfig
  * @property {module:providers/generic-provider~GetURLs} getURLs - Returns a promise that resolves to the URLs to fetch.
  * @property {module:providers/generic-provider~UpdateOnComplete} onComplete - Returns the update channels from the request result.
- * @property {Object} [headers={}] - Headers to send with the request.
+ * @property {object} [headers={}] - Headers to send with the request.
  */
 /**
  * @callback FavsOnComplete
@@ -69,10 +70,10 @@ const _ = browser.i18n.getMessage,
  * @returns {[module:channel/core.User, [module:channel/core.Channel]]} Updated user and new channels.
  */
 /**
- * @typedef {Object} FavsRequestConfig
+ * @typedef {object} FavsRequestConfig
  * @property {module:providers/generic-provider~GetURLs} getURLs - Returns a promise that resolves to the URLs to fetch.
  * @property {module:providers/generic-provider~FavsOnComplete} onComplete - Returns the update channels from the request result.
- * @property {Object} [headers={}] - Headers to send with the request.
+ * @property {object} [headers={}] - Headers to send with the request.
  */
 
 /**
@@ -364,12 +365,12 @@ export default class GenericProvider extends EventTarget {
     }
 
     /**
-     * Frozen
+     * Frozen.
      *
-     * @typedef {Object} ProviderSupports
-     * @property {boolean} favorites - Provider supports getting a user's favorites
-     * @property {boolean} credentials - Provider supports credential based auto-detect of users
-     * @property {boolean} featured - Provider supports getting featured channels and search
+     * @typedef {object} ProviderSupports
+     * @property {boolean} favorites - Provider supports getting a user's favorites.
+     * @property {boolean} credentials - Provider supports credential based auto-detect of users.
+     * @property {boolean} featured - Provider supports getting featured channels and search.
      */
 
     /**
