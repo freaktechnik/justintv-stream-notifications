@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
+const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const manifest = require("./webextension/manifest.json");
 const webpack = require("webpack");
@@ -143,11 +143,11 @@ module.exports = {
             chunksSortMode: 'dependency',
             defaultLanguage
         }),
-        new HtmlWebpackIncludeAssetsPlugin({
+        new HtmlWebpackTagsPlugin({
             files: [
                 'popup/list/index.html'
             ],
-            assets: [
+            tags: [
                 'lodash.min.js',
                 'react.production.min.js',
                 'react-dom.production.min.js',
@@ -160,11 +160,11 @@ module.exports = {
             append: false,
             publicPath: '/vendor/'
         }),
-        new HtmlWebpackIncludeAssetsPlugin({
+        new HtmlWebpackTagsPlugin({
             files: [
                 'settings/index.html'
             ],
-            assets: [
+            tags: [
                 // 'lodash.min.js',
                 'react.production.min.js',
                 'react-dom.production.min.js',
