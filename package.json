@@ -91,7 +91,7 @@
     "sinon-chrome": "^3.0.1",
     "stylelint": "^10.0.0",
     "stylelint-config-standard": "^18.3.0",
-    "stylelint-no-unsupported-browser-features": "^3.0.2",
+    "stylelint-no-unsupported-browser-features": "^4.0.0",
     "transifex-loader": "^5.0.1",
     "web-ext": "^3.0.0",
     "webpack": "^4.30.0",
