@@ -76,7 +76,7 @@
     "enzyme-adapter-react-16": "^1.12.1",
     "eslint": "^5.16.0",
     "event-target-shim": "^5.0.1",
-    "fake-indexeddb": "^2.1.0",
+    "fake-indexeddb": "^3.0.0",
     "fetch-headers": "^2.0.0",
     "file-loader": "^4.0.0",
     "html-webpack-include-assets-plugin": "^2.0.0",
