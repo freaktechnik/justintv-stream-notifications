@@ -42,11 +42,11 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-transform-react-constant-elements": "^7.2.0",
-    "@babel/plugin-transform-react-inline-elements": "^7.2.0",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-transform-react-constant-elements": "^7.7.4",
+    "@babel/plugin-transform-react-inline-elements": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/register": "^7.7.4",
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@freaktechnik/eslint-config-babel": "^6.6.2",
