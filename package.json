@@ -64,7 +64,7 @@
     "ajv": "^6.10.0",
     "ava": "^1.4.1",
     "babel-loader": "^8.0.5",
-    "babel-plugin-istanbul": "^5.1.1",
+    "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "browser-env": "^3.2.6",
