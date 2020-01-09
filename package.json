@@ -85,7 +85,7 @@
     "mini-css-extract-plugin": "^0.7.0",
     "mz": "^2.7.0",
     "nyc": "^14.0.0",
-    "semantic-release": "^15.13.3",
+    "semantic-release": "^16.0.0",
     "simple-git": "^1.110.0",
     "sinon": "^7.3.2",
     "sinon-chrome": "^3.0.1",
