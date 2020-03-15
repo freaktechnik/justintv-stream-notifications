@@ -39,7 +39,8 @@
     "react-key-handler": "^1.1.0",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "snyk": "^1.298.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.7.4",
@@ -62,13 +63,13 @@
     "@semantic-release/github": "^5.2.10",
     "@semantic-release/release-notes-generator": "^7.1.4",
     "ajv": "^6.10.0",
-    "ava": "^1.4.1",
+    "ava": "^3.0.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-istanbul": "^5.1.1",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "browser-env": "^3.2.6",
-    "codecov": "^3.3.0",
+    "codecov": "^3.6.5",
     "css-loader": "^3.0.0",
     "eclint": "^2.8.1",
     "element-dataset": "^2.2.6",
@@ -84,16 +85,16 @@
     "husky": "^2.0.0",
     "mini-css-extract-plugin": "^0.7.0",
     "mz": "^2.7.0",
-    "nyc": "^14.0.0",
-    "semantic-release": "^15.13.3",
+    "nyc": "^15.0.0",
+    "semantic-release": "^15.13.19",
     "simple-git": "^1.110.0",
     "sinon": "^7.3.2",
     "sinon-chrome": "^3.0.1",
-    "stylelint": "^10.0.0",
+    "stylelint": "^11.0.0",
     "stylelint-config-standard": "^18.3.0",
     "stylelint-no-unsupported-browser-features": "^3.0.2",
     "transifex-loader": "^5.0.1",
-    "web-ext": "^3.0.0",
+    "web-ext": "^4.0.0",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-deep-scope-plugin": "^1.6.0"
@@ -111,7 +112,9 @@
     "build": "NODE_ENV=production webpack --mode production && web-ext build && npm pack",
     "start": "NODE_ENV=development webpack --mode development && web-ext run --no-reload",
     "ci-init": "node ./scripts/setup-travis.js",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "ava": {
     "babel": {
@@ -233,5 +236,6 @@
       ]
     ]
   },
-  "private": true
+  "private": true,
+  "snyk": true
 }
