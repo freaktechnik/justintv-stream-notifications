@@ -1,0 +1,190 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/register > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - eclint > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - eslint > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - html-webpack-plugin > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - semantic-release > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon-chrome > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint-no-unsupported-browser-features > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@commitlint/cli > @commitlint/load > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-base > eslint-plugin-jsdoc > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-webpack > eslint-import-resolver-webpack > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-test > eslint-plugin-import > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@semantic-release/release-notes-generator > conventional-commits-parser > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - semantic-release > @semantic-release/npm > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@semantic-release/release-notes-generator > conventional-changelog-writer > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @babel/core > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - enzyme > cheerio > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - eslint > inquirer > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - eslint > table > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > table > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-reporter > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > fx-runner > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/plugin-transform-react-inline-elements > @babel/helper-builder-react-jsx > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - babel-plugin-istanbul > istanbul-lib-instrument > @babel/traverse > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-node > @freaktechnik/eslint-config-base > eslint-plugin-jsdoc > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-webpack > eslint-import-resolver-webpack > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-webpack > eslint-plugin-import > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-test > eslint-plugin-ava > enhance-visitors > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-commits-parser > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-changelog-writer > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @babel/core > @babel/traverse > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - eclint > gulp-reporter > junit-report-builder > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > cheerio > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon-chrome > sinon > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > archiver > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > async > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@commitlint/cli > @commitlint/lint > @commitlint/parse > conventional-commits-parser > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - babel-plugin-istanbul > istanbul-lib-instrument > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @ava/babel-preset-transform-test-files > babel-plugin-espower > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-test > @freaktechnik/eslint-config-node > @freaktechnik/eslint-config-base > eslint-plugin-jsdoc > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@semantic-release/release-notes-generator > conventional-changelog-writer > handlebars > async > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @babel/core > @babel/helpers > @babel/traverse > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint > inquirer > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint > table > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon-chrome > sinon > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > @babel/traverse > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > dispensary > async > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > archiver > async > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint-plugin-no-unsafe-innerhtml > eslint > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > archiver > archiver-utils > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > archiver > zip-stream > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - babel-plugin-istanbul > istanbul-lib-instrument > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @ava/babel-preset-transform-test-files > babel-plugin-espower > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @babel/core > @babel/helpers > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-changelog-writer > handlebars > async > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - browser-env > window > jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - sinon-chrome > sinon > nise > @sinonjs/formatio > @sinonjs/samsam > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint-plugin-no-unsafe-innerhtml > eslint > inquirer > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > addons-linter > eslint-plugin-no-unsafe-innerhtml > eslint > table > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - web-ext > firefox-profile > archiver > zip-stream > archiver-utils > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - babel-plugin-istanbul > istanbul-lib-instrument > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > @babel/traverse > @babel/generator > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @ava/babel-preset-stage-4 > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@freaktechnik/eslint-config-react > @freaktechnik/eslint-config-babel > babel-eslint > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @ava/babel-preset-stage-4 > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - stylelint > postcss-jsx > @babel/core > @babel/helpers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - ava > @ava/babel-preset-stage-4 > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
+    - '@babel/plugin-proposal-class-properties > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-05-03T03:23:03.455Z'
