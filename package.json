@@ -39,7 +39,8 @@
     "react-key-handler": "^1.1.0",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "snyk": "^1.316.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.7.4",
@@ -111,7 +112,9 @@
     "build": "NODE_ENV=production webpack --mode production && web-ext build && npm pack",
     "start": "NODE_ENV=development webpack --mode development && web-ext run --no-reload",
     "ci-init": "node ./scripts/setup-travis.js",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "ava": {
     "babel": {
@@ -233,5 +236,6 @@
       ]
     ]
   },
-  "private": true
+  "private": true,
+  "snyk": true
 }
