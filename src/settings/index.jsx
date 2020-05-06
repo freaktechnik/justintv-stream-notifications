@@ -16,8 +16,8 @@ import './settings.css';
 import Settings from './components/settings.jsx';
 
 const store = createStore(reducers);
-
-// Actually show something
+//TODO intercept pref changes and store in storage
+//TODO intercept channel/user mutations and send to bg page
 
 ReactDOM.render(
     <Provider store={ store }>

@@ -118,7 +118,6 @@ module.exports = {
                 'common',
                 'popup/list'
             ],
-            chunksSortMode: 'dependency',
             defaultLanguage
         }),
         new HtmlWebpackPlugin({
@@ -129,7 +128,6 @@ module.exports = {
                 'common',
                 'settings'
             ],
-            chunksSortMode: 'dependency',
             defaultLanguage
         }),
         new HtmlWebpackPlugin({
@@ -140,7 +138,6 @@ module.exports = {
                 'common',
                 'popup/errorState'
             ],
-            chunksSortMode: 'dependency',
             defaultLanguage
         }),
         new HtmlWebpackTagsPlugin({

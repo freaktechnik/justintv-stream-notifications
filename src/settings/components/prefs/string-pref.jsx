@@ -5,7 +5,7 @@ const _ = browser.i18n.getMessage;
 const PREF_VALUE_HIDDEN = 'pref_value_hidden';
 
 const StringPref = (props) => (
-    <input type="text" value={ props.value } placeholder={ props.hideDefault ? _(PREF_VALUE_HIDDEN) : props.defaultValue }/>
+    <input type="text" value={ props.value } placeholder={ props.hideDefault ? _(PREF_VALUE_HIDDEN) : props.defaultValue } onInput={ props.onChange }/>
 );
 
 StringPref.defaultProps = {
@@ -13,10 +13,10 @@ StringPref.defaultProps = {
 };
 
 StringPref.propTypes = {
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     hideDefault: PropTypes.bool,
-    defaultValue: PropTypes.string.isRequired
+    defaultValue: PropTypes.string.isRequired,
+    onChange: PropTypes.func
 };
-//TODO change listener
 
 export default StringPref;

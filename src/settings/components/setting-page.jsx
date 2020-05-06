@@ -9,34 +9,41 @@ import {
     OPTIONS_TAB,
     BACKUP_TAB
 } from '../constants/tabs.json';
+import ChannelsTab from './tabs/channels.jsx';
+import UsersTab from './tabs/users.jsx';
+import OptionsTab from './tabs/options.jsx';
 
-const SettingPage = (props) => {
-    let pageContent;
-    switch(props.active) {
+const SettingPage = (properties) => {
+    let content;
+    switch(properties.active) {
     case USERS_TAB:
-        pageContent = 'Users tab';
+        content = <UsersTab/>;
         break;
     case PROVIDERS_TAB:
-        pageContent = 'Providers tab';
+        content = 'Providers tab';
         break;
     case NOTIFICATIONS_TAB:
-        pageContent = 'Notifications tab';
+        content = 'Notifications tab';
         break;
     case ACTIONS_TAB:
-        pageContent = 'Actions tab';
-        break;
-    case OPTIONS_TAB:
-        pageContent = 'Options tab';
+        content = 'Actions tab';
         break;
     case BACKUP_TAB:
-        pageContent = 'Backup tab';
+        content = 'Backup tab';
         break;
     case CHANNELS_TAB:
+        content = <ChannelsTab/>;
+        break;
     default:
-        pageContent = 'Here be settings';
+        content = <OptionsTab/>;
+        break;
     }
 
-    return (<div className="tabcontent" role="tabpanel">{ pageContent }</div>);
+    return (<div className="tabcontent" role="tabpanel">{ content }</div>);
+};
+
+SettingPage.defaultProps = {
+    active: OPTIONS_TAB
 };
 
 SettingPage.propTypes = {

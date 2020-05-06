@@ -19,6 +19,7 @@ const simpleReducer = (setter, defaultValue = false) => (state = defaultValue, e
                 reducers[pref] = simpleReducer(pref, prefs[pref].value);
             }
         }
+        return reducers;
     },
     main = combineReducers({
         tab: (state = DEFAULT_TAB, event) => { //TODO shared base reducer for the two?

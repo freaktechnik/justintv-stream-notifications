@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 const BoolPref = (props) => (
     <div className="browser-style">
-        <input type="checkbox" checked={ props.value || props.defaultValue }/>
+        <input type="checkbox" checked={ props.value || props.defaultValue } onChange={ props.onChange }/>
     </div>
 );
 
 BoolPref.propTypes = {
-    value: PropTypes.bool.isRequired,
-    defaultValue: PropTypes.bool.isRequired
+    value: PropTypes.bool,
+    defaultValue: PropTypes.bool.isRequired,
+    onChange: PropTypes.func
 };
-//TODO change listener
 
 export default BoolPref;
