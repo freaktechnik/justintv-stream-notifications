@@ -184,7 +184,6 @@ coverage/
 .eslintcache
 .nyc_output
 
-webextension/*
 !webextension/assets
 !webextension/manifest.json
 webextension/assets/images/open-iconic.min.svg

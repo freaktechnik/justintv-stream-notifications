@@ -1,68 +1,32 @@
 {
     "manifest_version": 2,
-    "name": "__MSG_extensionName__",
-    "description": "__MSG_extensionDescription__",
-    "default_locale": "en",
+    "name": "Stream Notifier",
+    "description": "This extension is discontinued",
     "applications": {
         "gecko": {
             "id": "jid0-z2wAjbeFD5dTCgsj70eQ6UAqQl4@jetpack",
             "strict_min_version": "63.0"
         }
     },
-    "homepage_url": "http://streamnotifier.ch",
+    "homepage_url": "http://freaktechnik.github.io/justintv-stream-notifications",
     "author": "freaktechnik",
-    "version": "3.11.1",
+    "version": "3.12.0",
     "icons": {
         "48": "assets/images/icon.svg",
         "64": "assets/images/icon.svg"
     },
     "browser_action": {
-        "browser_style": true,
-        "default_icon": "assets/images/offline.svg",
-        "default_popup": "popup/list/index.html",
-        "default_title": "__MSG_listTooltipOffline__"
+        "default_icon": "assets/images/offline.svg"
     },
     "background": {
         "scripts": [
-            "vendor/lodash.min.js",
-            "runtime/index.js",
-            "common/index.js",
             "background/index.js"
         ]
     },
     "permissions": [
         "tabs",
-        "notifications",
-        "storage",
-        "alarms",
-        "clipboardWrite",
-        "management",
-        "unlimitedStorage",
-        "https://www.googleapis.com/youtube/v3/*"
+        "management"
     ],
-    "optional_permissions": [
-        "downloads",
-        "http://www.ustream.tv/*",
-        "http://*.api.channel.livestream.com/2.0/*",
-        "https://livestream.com/api/*",
-        "https://tmi.twitch.tv/*",
-        "https://www.majorleaguegaming.com/api/*",
-        "https://streamapi.majorleaguegaming.com/service/streams/*"
-    ],
-    "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'",
-    "options_ui": {
-        "page": "options/index.html",
-        "browser_style": true
-    },
-    "commands": {
-        "_execute_browser_action": {
-            "suggested_key": {
-                "default": "Ctrl+Shift+L"
-            },
-            "description": "__MSG_shortcutDescription__"
-        }
-    },
-    "omnibox": {
-        "keyword": "live"
-    }
+    "optional_permissions": [],
+    "content_security_policy": "script-src 'self'; object-src 'none'; style-src 'self'; font-src 'none'; frame-src 'none'; worker-src 'none'; media-src 'none'"
 }
