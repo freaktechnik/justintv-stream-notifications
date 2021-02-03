@@ -1,2 +1,1 @@
 User-agent: *
-Sitemap: http://streamnotifier.ch/sitemap.xml
