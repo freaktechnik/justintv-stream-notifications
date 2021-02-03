@@ -30,7 +30,7 @@ Sadly Justin.tv got shut down before 3.0.0 was finished and I had to pull that
 code out. I also decided to do the rebranding to "Live Stream Notifier" and the
 new icon already.
 
-From there on all the providers now listed on the [Providers](/providers) page
+From there on all the providers now listed on the [Providers](/justintv-stream-notifications/providers) page
 were added. Some were already removed again, because they ceased to exist since.
 Many other features started to come in, once 3.0.0 was finally finished.
 

@@ -16,9 +16,9 @@ The button shows if channels are live. It can even show a little counter of how
 many channels are live. This can be enabled in the add-on preferences with
 <samp>Show counter badge</samp>.
 
-If there are live channels the button looks like ![](/img/icon18.png) (with a
+If there are live channels the button looks like ![](/justintv-stream-notifications/img/icon18.png) (with a
 red dot in the middle) and if all are offline it looks like
-![](/img/offline18.png) (with a white dot in the middle).
+![](/justintv-stream-notifications/img/offline18.png) (with a white dot in the middle).
 
 ## Channels in the panel
 The panel is designed to always show a list of channels. At the top, you can
@@ -66,7 +66,7 @@ extension settings. You can choose between:
 ## Search
 When clicking on the magnifying glass icon in the top right of the panel a text
 input field for search is shown. It filters the current list with the given
-strings, [like in the channels manager](/help/channels-manager#find-a-certain-item),
+strings, [like in the channels manager](/justintv-stream-notifications/help/channels-manager#find-a-certain-item),
 just that it searches in all potentially displayed information - even in the
 extras when they're hidden.
 

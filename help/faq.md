@@ -25,7 +25,7 @@ Alternatively open the Add-ons manager in Firefox. To open it, click on the menu
 
 When I add a channel, it doesn't add the channel but a lot of other channels
 ----------------------------------------------------------------------------
-See [Adding a singe channel](/help/channels-manager/#adding-a-singe-channel).
+See [Adding a singe channel](/justintv-stream-notifications/help/channels-manager/#adding-a-singe-channel).
 
 Why isn't the extension in the language my browser is in?
 ---------------------------------------------------------

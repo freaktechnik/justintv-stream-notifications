@@ -6,7 +6,7 @@
 ---
 The term "provider" is used for a streaming service like Twitch in this extension. As not all providers offer the same features, this page lists what each provider can do.
 
-![Dailymotion icon](/img/dailymotion.png)
+![Dailymotion icon](/justintv-stream-notifications/img/dailymotion.png)
 ------
 [Dailymotion](https://www.dailymotion.com) is a video upload site comparable to YouTube that also offers livestreams.
 
@@ -17,7 +17,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Adding a user's favorites (followees)
  - Exploring featured channels and global search
 
-![DouyuTV icon](/img/douyutv.png)
+![DouyuTV icon](/justintv-stream-notifications/img/douyutv.png)
 ------
 **This provider is currently unavailable**
 
@@ -27,7 +27,7 @@ The term "provider" is used for a streaming service like Twitch in this extensio
  - Stream page
  - Monitoring the status of channels
 
-![Livestream icon](/img/livestream-logo.png)
+![Livestream icon](/justintv-stream-notifications/img/livestream-logo.png)
 ----------
 
 ### Old Livestream
@@ -49,7 +49,7 @@ streaming consultant. Owned by Vimeo.
  - Monitoring the status of channels
  - Adding a user's favorites (followees)
 
-![Majorleaguegaming icon](/img/mlg-logo.png)
+![Majorleaguegaming icon](/justintv-stream-notifications/img/mlg-logo.png)
 ------
 [MLG.tv](http://tv.majorleaguegaming.com) is another eSports streaming platform owned by Activision-Blizzard.
 
@@ -60,7 +60,7 @@ streaming consultant. Owned by Vimeo.
  - Separate chat page
  - Monitoring the status of channels
 
-![Mixer icon](/img/MixerLogo_Light.svg)
+![Mixer icon](/justintv-stream-notifications/img/MixerLogo_Light.svg)
 ------
 [Mixer](https://mixer.com) is a game streaming platform focussing on low-latency streams. It was acquired by Microsoft and renamed from its former name "Beam.pro".
 
@@ -73,7 +73,7 @@ streaming consultant. Owned by Vimeo.
  - Automatically adding the browser user's favorites
  - Exploring featured channels and global search
 
-![Picarto.TV icon](/img/picarto.png)
+![Picarto.TV icon](/justintv-stream-notifications/img/picarto.png)
 ------
 [Picarto.TV](http://picarto.tv) is a streaming platform for visual artists.
 
@@ -82,7 +82,7 @@ streaming consultant. Owned by Vimeo.
  - Stream page
  - Monitoring the status of channels
 
-![Smashcast icon](/img/Smashcast-Logo.png)
+![Smashcast icon](/justintv-stream-notifications/img/Smashcast-Logo.png)
 ------
 
 [Smashcast](https://smashcast.tv) is a game streaming competitor, mainly to Twitch. It is the merged efforts of the previous services of Hitbox and Azubu.
@@ -97,7 +97,7 @@ streaming consultant. Owned by Vimeo.
  - Automatically adding the browser user's favorites
  - Exploring featured channels and global search
 
-![Twitch textmark](/img/twitch-icon.png)
+![Twitch textmark](/justintv-stream-notifications/img/twitch-icon.png)
 ------
 [Twitch](https://twitch.tv) is the initial provider of the extension and focusses on games. It is owned by Amazon.
 
@@ -111,7 +111,7 @@ streaming consultant. Owned by Vimeo.
  - Monitoring the status of channels
  - Exploring featured channels and global search
 
-![Ustream logo](/img/ustream.png)
+![Ustream logo](/justintv-stream-notifications/img/ustream.png)
 -------
 [Ustream](http://ustream.tv) is another one of the age-old providers without any content focus. It was aquired by IBM.
 
@@ -121,7 +121,7 @@ streaming consultant. Owned by Vimeo.
  - Separate chat page
  - Monitoring the status of channels
 
-![YouTube logo](/img/yt_logo_rgb_light.png)
+![YouTube logo](/justintv-stream-notifications/img/yt_logo_rgb_light.png)
 -------
 [YouTube](https://youtube.com) is the leading VOD platform and added livestreams, that can also be watched prettified on [YouTube Gaming](https://gaming.youtube.com). This extension supports streams on YouTube Gaming, but they aren't opened on Gaming.
 
